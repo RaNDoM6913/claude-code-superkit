@@ -146,6 +146,30 @@ This toolkit is **complementary** to the [Superpowers plugin](https://github.com
 
 Install both for the complete experience.
 
+## Recommended Companion Tools
+
+### Skills (install separately)
+
+| Skill | What | Link |
+|-------|------|------|
+| ui-ux-pro-max | Design system generation (161 rules, 71 styles, 73 fonts) | [GitHub](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
+| app-store-preflight | iOS/macOS App Store review validator | [GitHub](https://github.com/truongduy2611/app-store-preflight-skills) |
+
+### MCP Servers (add to .mcp.json)
+
+| Server | What | Package |
+|--------|------|---------|
+| 21st.dev magic | UI component search/generation | `@21st-dev/magic@latest` |
+| shadcn | shadcn/ui component library | `shadcn-mcp@latest` |
+| playwright | Browser automation/screenshots | Plugin (built-in) |
+| context7 | Library docs lookup | Plugin (built-in) |
+
+### Platforms
+
+| Platform | What | Link |
+|----------|------|------|
+| 21st.dev | AI agent deployment + community UI components | [21st.dev](https://21st.dev) |
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and hooks.
