@@ -83,7 +83,42 @@ git log --name-only --pretty=format: -n 5 | sort -u | grep '<doc_path>'
 
 If the doc file is NOT in the changed files list, it is potentially stale.
 
-## Step 5 — Spot-Check Content
+## Step 5 — Tree Staleness
+
+Check if project tree documentation is up to date:
+
+- Check if `docs/trees/` files exist
+- Compare tree file dates vs recent code changes:
+```bash
+# Last modified time of tree files
+stat -f "%m %N" docs/trees/*.md 2>/dev/null || stat -c "%Y %n" docs/trees/*.md 2>/dev/null
+```
+- Get directories added or removed in recent commits:
+```bash
+git diff --name-only --diff-filter=A HEAD~5..HEAD | grep '/' | cut -d'/' -f1-2 | sort -u
+git diff --name-only --diff-filter=D HEAD~5..HEAD | grep '/' | cut -d'/' -f1-2 | sort -u
+```
+- If directories were added/removed but tree files were not updated in the same commits → flag as **STALE**
+- If `docs/trees/` does not exist at all → flag as **MISSING** (suggest running `/docs-init` or `tree-generator` agent)
+
+## Step 6 — Architecture Doc Coverage
+
+Check whether architecture docs exist for major code areas:
+
+| Code Signal | Expected Doc | Check |
+|-------------|-------------|-------|
+| Backend code (`cmd/`, `internal/`, `src/main.*`) | `docs/architecture/backend-layers.md` | Grep for go/python/node entry points |
+| Migration files (`migrations/`, `prisma/`) | `docs/architecture/database-schema.md` | Glob for `*.sql`, `schema.prisma` |
+| Auth code (files with `auth`, `session`, `jwt` in name) | `docs/architecture/auth-and-sessions.md` | Grep filenames |
+| Frontend code (`src/`, `app/`, `pages/`) + `package.json` | `docs/architecture/frontend-state.md` | Check for React/Vue/Svelte deps |
+| API handlers/controllers | `docs/architecture/api-reference.md` | Grep for handler/controller dirs |
+| Docker/CI files | `docs/architecture/deployment.md` | Check for Dockerfile, docker-compose, CI configs |
+
+For each missing doc:
+- **WARN**: `Backend code exists but no backend-layers.md — consider running /docs-init`
+- Only warn, do not fail — some projects intentionally skip certain docs
+
+## Step 7 — Spot-Check Content
 
 For each potentially stale doc:
 1. Read the first 50 lines of the changed code file to understand the nature of the change
@@ -120,8 +155,25 @@ For each STALE doc:
 - **What changed**: brief description of the code change
 - **Likely doc section**: which section of the doc is affected
 
+### Tree Staleness
+
+| Tree File | Last Updated | Dirs Changed Since? | Status |
+|-----------|-------------|---------------------|--------|
+| `docs/trees/tree-monorepo.md` | 2025-01-15 | Yes (new `services/billing/`) | STALE |
+
+Or: `docs/trees/` directory does not exist → **MISSING** (run `/docs-init` or `tree-generator` agent)
+
+### Architecture Doc Coverage
+
+| Code Area | Expected Doc | Status |
+|-----------|-------------|--------|
+| Backend (Go) | `docs/architecture/backend-layers.md` | OK |
+| Migrations | `docs/architecture/database-schema.md` | MISSING |
+| Auth | `docs/architecture/auth-and-sessions.md` | OK |
+| Frontend | `docs/architecture/frontend-state.md` | MISSING |
+
 ### Summary
 
-**X docs OK, Y potentially stale** out of Z checked.
+**X docs OK, Y potentially stale, Z missing** out of W checked.
 
 IMPORTANT: Not all code changes require doc updates. Pure refactors, bug fixes in existing behavior, and internal implementation changes typically do NOT need doc updates. Only flag docs as STALE when the public behavior, API, or architecture has changed.

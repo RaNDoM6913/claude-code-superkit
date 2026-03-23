@@ -6,12 +6,12 @@ Production-tested agents, commands, hooks & skills for [Claude Code](https://cla
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 16 | Code review, security scan, testing, audit, debugging, health checks |
+| **Core Agents** | 17 | Code review, security scan, testing, audit, debugging, health checks, tree generation |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specific reviewers |
 | **Extra Agents** | 2 | Bot reviewer (Telegram/Discord/Slack), design system reviewer |
-| **Commands** | 8 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit` |
+| **Commands** | 9 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init` |
 | **Hooks** | 7 + Stop | Git safety, format-on-edit, typecheck, context injection, session continuity |
-| **Rules** | 3 | Coding style, security, git workflow |
+| **Rules** | 4 | Coding style, security, git workflow, documentation |
 | **Skills** | 3 | Project architecture template, writing-agents guide, writing-commands guide |
 
 ## Quick Start
@@ -77,7 +77,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 
 ## Documentation
 
-### Guide (9 chapters)
+### Guide (11 chapters)
 
 | Chapter | Topic |
 |---------|-------|
@@ -91,6 +91,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | [08 — Orchestration](docs/guide/08-orchestration.md) | Full pipeline: /dev → agents → report |
 | [09 — Advanced Patterns](docs/guide/09-advanced-patterns.md) | Profiles, session continuity, CI/CD |
 | [10 — Codex CLI Support](docs/guide/10-codex-support.md) | Codex integration, tool mapping, skill discovery |
+| [11 — Documentation Architecture](docs/guide/11-documentation-architecture.md) | Doc templates, tree generation, enforcement |
 
 ### Examples
 
@@ -110,10 +111,10 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
-| Agents (as skills) | 22 | 22 |
-| Commands / Orchestrators | 8 (slash commands) | 8 (user-invocable skills) |
+| Agents (as skills) | 23 | 23 |
+| Commands / Orchestrators | 9 (slash commands) | 9 (user-invocable skills) |
 | Hooks (auto-format, auto-lint) | 12 | — |
-| Rules | 3 (separate files) | Inline in AGENTS.md |
+| Rules | 4 (separate files) | Inline in AGENTS.md |
 | Skills | 3 | 3 |
 | Session continuity | Yes | — |
 | Subagent dispatch | Agent tool | spawn_agent |

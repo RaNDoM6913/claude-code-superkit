@@ -45,11 +45,17 @@ TODO: dev server commands
 
 ## Architecture Reference
 
-> Before changing any component, read the corresponding architecture doc.
+> Fill in after running `/docs-init`. Update when code changes affect architecture.
 
-| File | Description |
-|------|-------------|
-| `docs/architecture/TODO.md` | TODO: list architecture docs |
+| Doc | Description |
+|-----|-------------|
+| `docs/architecture/backend-layers.md` | TODO: Layers, DI, error handling |
+| `docs/architecture/api-reference.md` | TODO: All API endpoints |
+| `docs/architecture/database-schema.md` | TODO: Tables, migrations, indexes |
+| `docs/architecture/auth-and-sessions.md` | TODO: Auth flow, sessions |
+| `docs/architecture/frontend-state.md` | TODO: State, routing, data fetching |
+| `docs/architecture/deployment.md` | TODO: Deploy process, environments |
+| `docs/trees/tree-monorepo.md` | TODO: Project directory structure |
 
 ## Migrations
 
@@ -58,15 +64,15 @@ Current: `TODO: 000001..000NNN`
 
 ## Mandatory Documentation Updates
 
-After ANY changes to logic, API, or architecture, update all related docs in the same response as the code change. Do not wait for a separate request.
+**Rule:** Code changes affecting logic/API/architecture MUST include doc updates in the same response.
 
-### Checklist:
-
-1. **Architecture docs** (`docs/architecture/`) — update affected files
-2. **CLAUDE.md** — update Active Plans, Project Structure, Known Constraints
-3. **README files** — update all affected READMEs
-4. **Project trees** (`docs/trees/`) — update on ANY file structure changes
-5. **OpenAPI spec** — update on API endpoint changes
+### Checklist (after any code change)
+1. Did I change an API endpoint? → update `docs/architecture/api-reference.md`
+2. Did I add/change a DB table/column? → update `docs/architecture/database-schema.md`
+3. Did I change auth/session logic? → update `docs/architecture/auth-and-sessions.md`
+4. Did I change backend layers? → update `docs/architecture/backend-layers.md`
+5. Did I change frontend state/routing? → update `docs/architecture/frontend-state.md`
+6. Did I add/remove files or directories? → regenerate `docs/trees/`
 
 ### Rule: code without updated docs = incomplete task. Do it in the SAME response as the code.
 

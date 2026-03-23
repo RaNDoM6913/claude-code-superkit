@@ -209,6 +209,26 @@ else
   warn "CLAUDE.md already exists — skipped (merge mode)"
 fi
 
+# ── Documentation scaffolding (optional) ─────────────────
+echo ""
+read -rp "Initialize documentation structure? [y/N] " docs_yn
+if [[ "$docs_yn" =~ ^[Yy] ]]; then
+  mkdir -p "$PROJECT_DIR/docs/architecture" "$PROJECT_DIR/docs/trees"
+  TMPL_DIR="$PACKAGES/core/docs-templates/architecture"
+  if [ -d "$TMPL_DIR" ]; then
+    TMPL_COUNT=0
+    for tmpl in "$TMPL_DIR/"*.md; do
+      [ -f "$tmpl" ] || continue
+      copy_file "$tmpl" "$PROJECT_DIR/docs/architecture/$(basename "$tmpl")"
+      ((TMPL_COUNT++))
+    done
+    info "Copied $TMPL_COUNT architecture doc templates → docs/architecture/"
+    info "Run /docs-init in Claude Code to auto-detect relevant templates"
+  else
+    info "Created docs/architecture/ and docs/trees/ directories"
+  fi
+fi
+
 # ── Codex CLI Support (optional) ──────────────────────────
 echo ""
 read -rp "Also install for Codex CLI? [y/N] " codex_yn
@@ -249,7 +269,7 @@ echo "  Claude Code:"
 echo "    Agents:   $TOTAL_AGENTS ($AGENT_COUNT core + $STACK_AGENT_COUNT stack + $EXTRA_COUNT extras)"
 echo "    Commands: $CMD_COUNT"
 echo "    Hooks:    $TOTAL_HOOKS + Stop prompt"
-echo "    Rules:    3"
+echo "    Rules:    4"
 echo "    Skills:   3"
 echo "    Profile:  $PROFILE"
 if [ "$CODEX_INSTALLED" = true ]; then
