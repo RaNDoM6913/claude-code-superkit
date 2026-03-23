@@ -161,6 +161,54 @@ find . -name "requirements.txt" -execdir sh -c 'command -v pip-audit >/dev/null 
 - Constant-time comparison for sensitive values
 - Grep: `user not found|email not registered|account does not exist` in error messages
 
+## Claude Code Configuration Security
+
+Checks specific to .claude/ configuration files (inspired by AgentShield):
+
+### Config-19. Secrets in Settings (Critical)
+Grep `.claude/settings.json` and `settings.local.json` for:
+- API key patterns: `[A-Za-z0-9_-]{32,}` in string values
+- Token patterns: `sk-`, `ghp_`, `gho_`, `Bearer `
+- Password assignments: `"password"`, `"secret"`, `"token"` keys with literal values
+
+### Config-20. Wildcard Permissions (High)
+Check `settings.json` permissions.allow for:
+- `Bash(*)` or just `Bash` without deny patterns
+- `Write(*)` without path restrictions
+- Missing deny list for destructive commands
+
+### Config-21. Hook Injection (Critical)
+Check hook scripts for:
+- Unquoted variable expansion: `$INPUT` without quotes (should be `"$INPUT"`)
+- Command substitution with user input: `$(echo $VARIABLE)`
+- `eval` usage with any external input
+- Reverse shell patterns: `bash -i`, `/dev/tcp`, `nc -e`
+
+### Config-22. Silent Error Suppression (Medium)
+Check hooks for:
+- `2>/dev/null` hiding real errors (acceptable for optional checks only)
+- `|| true` masking failures
+- `set +e` disabling error checking
+
+### Config-23. MCP Supply Chain (High)
+Check settings.json mcpServers for:
+- `npx -y` auto-installing unvetted packages
+- Packages without version pinning (`@latest` vs specific version)
+- Shell metacharacters in args arrays
+
+### Config-24. Agent Prompt Injection (Critical)
+Check agent .md files for:
+- Zero-width Unicode characters (U+200B, U+FEFF, U+200C, U+200D)
+- Base64-encoded instructions
+- Hidden text in HTML comments that override behavior
+- `ignore previous instructions` patterns
+
+### Config-25. Permission Escalation (Critical)
+Grep all scripts for:
+- `--dangerously-skip-permissions`
+- `--no-verify` (should be caught by hooks, but verify)
+- `chmod 777` or `chmod a+rwx`
+
 ## App-Specific Checks
 
 <!-- Add domain-specific security checks here. Examples: -->

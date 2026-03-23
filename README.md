@@ -8,8 +8,8 @@ Production-tested agents, commands, hooks & skills for [Claude Code](https://cla
 |-----------|-------|-------------|
 | **Core Agents** | 17 | Code review, security scan, testing, audit, debugging, health checks, tree generation |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specific reviewers |
-| **Extra Agents** | 2 | Bot reviewer (Telegram/Discord/Slack), design system reviewer |
-| **Commands** | 9 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init` |
+| **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
+| **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
 | **Hooks** | 7 + Stop | Git safety, format-on-edit, typecheck, context injection, session continuity |
 | **Rules** | 4 | Coding style, security, git workflow, documentation |
 | **Skills** | 3 | Project architecture template, writing-agents guide, writing-commands guide |
@@ -77,7 +77,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 
 ## Documentation
 
-### Guide (11 chapters)
+### Guide (12 chapters)
 
 | Chapter | Topic |
 |---------|-------|
@@ -92,6 +92,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | [09 — Advanced Patterns](docs/guide/09-advanced-patterns.md) | Profiles, session continuity, CI/CD |
 | [10 — Codex CLI Support](docs/guide/10-codex-support.md) | Codex integration, tool mapping, skill discovery |
 | [11 — Documentation Architecture](docs/guide/11-documentation-architecture.md) | Doc templates, tree generation, enforcement |
+| [12 — Security Scanning](docs/guide/12-security-scanning.md) | AgentShield, CI, Red Team/Blue Team |
 
 ### Examples
 
@@ -100,6 +101,19 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | [Agent from Scratch](docs/examples/agent-from-scratch.md) | Dockerfile reviewer agent (10 checks) |
 | [Command Orchestrator](docs/examples/command-orchestrator.md) | /deploy command with 4 phases |
 | [Hook Pipeline](docs/examples/hook-pipeline.md) | Format + lint on every edit |
+
+## Security Scanning
+
+Scan your `.claude/` configurations for vulnerabilities with [AgentShield](https://github.com/affaan-m/agentshield):
+
+```bash
+npx ecc-agentshield scan          # Quick scan (102 rules)
+npx ecc-agentshield scan --fix    # Auto-fix safe issues
+```
+
+Or use the built-in command: `/security-scan`
+
+CI integration included — see `.github/workflows/security.yml`.
 
 ## Showcase
 

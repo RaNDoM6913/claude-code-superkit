@@ -1,0 +1,36 @@
+name: AgentShield Security Scan
+
+on:
+  push:
+    paths:
+      - 'packages/core/**'
+      - 'packages/codex/**'
+      - 'packages/extras/**'
+      - 'packages/stack-agents/**'
+      - 'packages/stack-hooks/**'
+      - 'packages/showcase/**'
+      - 'setup.sh'
+  pull_request:
+    paths:
+      - 'packages/**'
+      - 'setup.sh'
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan core package
+        uses: affaan-m/agentshield@v1
+        with:
+          path: "packages/core"
+          min-severity: "medium"
+          fail-on-findings: "true"
+
+      - name: Scan showcase
+        uses: affaan-m/agentshield@v1
+        with:
+          path: "packages/showcase/.claude"
+          min-severity: "high"
+          fail-on-findings: "false"
