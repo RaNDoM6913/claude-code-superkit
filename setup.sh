@@ -209,23 +209,62 @@ else
   warn "CLAUDE.md already exists — skipped (merge mode)"
 fi
 
+# ── Codex CLI Support (optional) ──────────────────────────
+echo ""
+read -rp "Also install for Codex CLI? [y/N] " codex_yn
+if [[ "$codex_yn" =~ ^[Yy] ]]; then
+  CODEX_SKILLS="$HOME/.agents/skills/superkit"
+  if [ -L "$CODEX_SKILLS" ] || [ -d "$CODEX_SKILLS" ]; then
+    warn "Codex skills already installed at $CODEX_SKILLS"
+  else
+    mkdir -p "$HOME/.agents/skills"
+    ln -s "$PACKAGES/codex/skills" "$CODEX_SKILLS"
+    info "Symlinked Codex skills → ~/.agents/skills/superkit"
+  fi
+
+  if [ ! -f "$PROJECT_DIR/AGENTS.md" ]; then
+    cp "$PACKAGES/codex/AGENTS.md" "$PROJECT_DIR/AGENTS.md"
+    info "Created AGENTS.md template"
+  else
+    warn "AGENTS.md already exists — skipped"
+  fi
+
+  mkdir -p "$PROJECT_DIR/.codex"
+  if [ ! -f "$PROJECT_DIR/.codex/config.toml" ]; then
+    cp "$PACKAGES/codex/config.toml" "$PROJECT_DIR/.codex/config.toml"
+    info "Created .codex/config.toml"
+  fi
+  CODEX_INSTALLED=true
+else
+  CODEX_INSTALLED=false
+fi
+
 # ── Summary ──────────────────────────────────────────────
 TOTAL_AGENTS=$((AGENT_COUNT + STACK_AGENT_COUNT + EXTRA_COUNT))
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 info "Installation complete!"
 echo ""
-echo "  Agents:   $TOTAL_AGENTS ($AGENT_COUNT core + $STACK_AGENT_COUNT stack + $EXTRA_COUNT extras)"
-echo "  Commands: $CMD_COUNT"
-echo "  Hooks:    $TOTAL_HOOKS + Stop prompt"
-echo "  Rules:    3"
-echo "  Skills:   3"
-echo "  Profile:  $PROFILE"
+echo "  Claude Code:"
+echo "    Agents:   $TOTAL_AGENTS ($AGENT_COUNT core + $STACK_AGENT_COUNT stack + $EXTRA_COUNT extras)"
+echo "    Commands: $CMD_COUNT"
+echo "    Hooks:    $TOTAL_HOOKS + Stop prompt"
+echo "    Rules:    3"
+echo "    Skills:   3"
+echo "    Profile:  $PROFILE"
+if [ "$CODEX_INSTALLED" = true ]; then
+  CODEX_SKILL_COUNT=$(find "$PACKAGES/codex/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+  echo ""
+  echo "  Codex CLI:"
+  echo "    Skills:   $CODEX_SKILL_COUNT (symlinked to ~/.agents/skills/superkit)"
+  echo "    Config:   .codex/config.toml"
+  echo "    Docs:     AGENTS.md"
+fi
 echo ""
 echo "  Next steps:"
 echo "    1. Edit CLAUDE.md — fill in your project details"
 echo "    2. Edit .claude/skills/project-architecture/SKILL.md"
 echo "    3. Set profile: export CLAUDE_HOOK_PROFILE=$PROFILE"
-echo "    4. Run: claude"
+echo "    4. Run: claude (or codex)"
 echo "    5. Try: /review or /audit"
 echo ""

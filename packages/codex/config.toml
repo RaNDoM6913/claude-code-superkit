@@ -1,0 +1,18 @@
+# claude-code-superkit — Codex CLI configuration
+# Place in .codex/config.toml (project) or ~/.codex/config.toml (global)
+
+model = "o3"
+model_reasoning_effort = "high"
+
+[features]
+multi_agent = true
+web_search = true
+
+# MCP servers (uncomment as needed)
+# [mcp_servers.playwright]
+# command = "npx"
+# args = ["@playwright/mcp@latest"]
+
+# [mcp_servers.context7]
+# command = "npx"
+# args = ["-y", "@context7/mcp@latest"]

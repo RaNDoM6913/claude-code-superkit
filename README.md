@@ -90,6 +90,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | [07 — Writing Rules](docs/guide/07-writing-rules.md) | Always-in-context enforcement |
 | [08 — Orchestration](docs/guide/08-orchestration.md) | Full pipeline: /dev → agents → report |
 | [09 — Advanced Patterns](docs/guide/09-advanced-patterns.md) | Profiles, session continuity, CI/CD |
+| [10 — Codex CLI Support](docs/guide/10-codex-support.md) | Codex integration, tool mapping, skill discovery |
 
 ### Examples
 
@@ -102,6 +103,24 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 ## Showcase
 
 See [`packages/showcase/`](packages/showcase/) for a real production example — a Telegram dating app with 21 agents, 14 commands, 11 hooks, 11 skills, and 3 rules.
+
+## Codex CLI Support
+
+superkit works with both **Claude Code** and **OpenAI Codex CLI**:
+
+| Feature | Claude Code | Codex CLI |
+|---------|:-:|:-:|
+| Agents (as skills) | 22 | 22 |
+| Commands / Orchestrators | 8 (slash commands) | 8 (user-invocable skills) |
+| Hooks (auto-format, auto-lint) | 12 | — |
+| Rules | 3 (separate files) | Inline in AGENTS.md |
+| Skills | 3 | 3 |
+| Session continuity | Yes | — |
+| Subagent dispatch | Agent tool | spawn_agent |
+
+`setup.sh` will ask: "Also install for Codex CLI?" — symlinks skills and creates AGENTS.md + config.toml.
+
+See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
 ## Using with Superpowers Plugin
 
