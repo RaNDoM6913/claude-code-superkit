@@ -209,9 +209,14 @@ else
   warn "CLAUDE.md already exists — skipped (merge mode)"
 fi
 
-# ── Documentation scaffolding (optional) ─────────────────
+# ── Documentation scaffolding (recommended) ──────────────
 echo ""
-read -rp "Initialize documentation structure? [y/N] " docs_yn
+echo "  All agents use Phase 0 — they read docs/architecture/ before reviewing."
+echo "  Without these docs, agents work blind and produce less accurate reviews."
+echo "  This step creates architecture templates (fill TODOs later) and a project tree."
+echo ""
+read -rp "Initialize documentation structure? (recommended) [Y/n] " docs_yn
+docs_yn="${docs_yn:-y}"  # default to yes
 if [[ "$docs_yn" =~ ^[Yy] ]]; then
   mkdir -p "$PROJECT_DIR/docs/architecture" "$PROJECT_DIR/docs/trees"
   TMPL_DIR="$PACKAGES/core/docs-templates/architecture"
