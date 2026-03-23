@@ -1,6 +1,17 @@
 {
   "permissions": {
-    "allow": ["Bash", "Read", "Edit", "Write", "Glob", "Grep"]
+    "allow": ["Bash", "Read", "Edit", "Write", "Glob", "Grep"],
+    "deny": [
+      "Bash(curl * | bash)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | bash)",
+      "Bash(wget * | sh)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(mkfs *)",
+      "Bash(dd if=*)",
+      "Bash(:(){ :|:& };:)"
+    ]
   },
   "hooks": {
     "PreToolUse": [
