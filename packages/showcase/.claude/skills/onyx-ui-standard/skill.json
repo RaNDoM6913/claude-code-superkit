@@ -1,0 +1,6 @@
+{
+  "name": "onyx-ui-standard",
+  "description": "ONYX UI Standard — базовая палитра, layout-стандарт экранов без хедера, swipe-навигация. Активируй когда создаёшь или редактируешь экраны user frontend.",
+  "user_invocable": false,
+  "instructions_file": "SKILL.md"
+}

@@ -75,9 +75,33 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | `standard` (default) | All core hooks + stack formatters |
 | `strict` | Everything + go vet on every edit + stop verification |
 
+## Documentation
+
+### Guide (9 chapters)
+
+| Chapter | Topic |
+|---------|-------|
+| [01 — Getting Started](docs/guide/01-getting-started.md) | Install in 5 minutes, first commands |
+| [02 — Architecture](docs/guide/02-architecture.md) | How agents, commands, hooks, rules, skills work together |
+| [03 — Writing Agents](docs/guide/03-writing-agents.md) | Agent format, 2-phase review, severity/confidence |
+| [04 — Writing Commands](docs/guide/04-writing-commands.md) | Orchestrator pattern, agent dispatch |
+| [05 — Writing Hooks](docs/guide/05-writing-hooks.md) | Hook types, JSON protocol, profiles |
+| [06 — Writing Skills](docs/guide/06-writing-skills.md) | Knowledge skills, dynamic content |
+| [07 — Writing Rules](docs/guide/07-writing-rules.md) | Always-in-context enforcement |
+| [08 — Orchestration](docs/guide/08-orchestration.md) | Full pipeline: /dev → agents → report |
+| [09 — Advanced Patterns](docs/guide/09-advanced-patterns.md) | Profiles, session continuity, CI/CD |
+
+### Examples
+
+| Example | What you build |
+|---------|---------------|
+| [Agent from Scratch](docs/examples/agent-from-scratch.md) | Dockerfile reviewer agent (10 checks) |
+| [Command Orchestrator](docs/examples/command-orchestrator.md) | /deploy command with 4 phases |
+| [Hook Pipeline](docs/examples/hook-pipeline.md) | Format + lint on every edit |
+
 ## Showcase
 
-See `packages/showcase/` for a real production example — a Telegram dating app with 21 agents, 14 commands, 11 hooks, 11 skills, and 3 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a Telegram dating app with 21 agents, 14 commands, 11 hooks, 11 skills, and 3 rules.
 
 ## Using with Superpowers Plugin
 
