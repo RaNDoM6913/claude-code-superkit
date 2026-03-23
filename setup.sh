@@ -148,7 +148,7 @@ done
 
 # Stack agents
 STACK_AGENT_COUNT=0
-for stack in "${STACKS[@]}"; do
+for stack in "${STACKS[@]+"${STACKS[@]}"}"; do
   if [ -d "$PACKAGES/stack-agents/$stack" ]; then
     for f in "$PACKAGES/stack-agents/$stack/"*.md; do
       [ -f "$f" ] && copy_file "$f" "$CLAUDE_DIR/agents/$(basename "$f")" && ((STACK_AGENT_COUNT++))
@@ -158,7 +158,7 @@ done
 
 # Stack hooks
 STACK_HOOK_COUNT=0
-for stack in "${STACKS[@]}"; do
+for stack in "${STACKS[@]+"${STACKS[@]}"}"; do
   if [ -d "$PACKAGES/stack-hooks/$stack" ]; then
     for f in "$PACKAGES/stack-hooks/$stack/"*.sh; do
       [ -f "$f" ] && copy_file "$f" "$CLAUDE_DIR/scripts/hooks/$(basename "$f")" && ((STACK_HOOK_COUNT++))
@@ -171,7 +171,7 @@ info "Copied $TOTAL_HOOKS hooks → .claude/scripts/hooks/ ($HOOK_COUNT core + $
 
 # Extras
 EXTRA_COUNT=0
-for extra in "${EXTRAS[@]}"; do
+for extra in "${EXTRAS[@]+"${EXTRAS[@]}"}"; do
   if [ -f "$PACKAGES/extras/$extra.md" ]; then
     copy_file "$PACKAGES/extras/$extra.md" "$CLAUDE_DIR/agents/$extra.md"
     ((EXTRA_COUNT++))
@@ -189,7 +189,7 @@ copy_file "$PACKAGES/core/settings.json" "$CLAUDE_DIR/settings.json"
 
 # Add stack hooks to PostToolUse
 SETTINGS="$CLAUDE_DIR/settings.json"
-for stack in "${STACKS[@]}"; do
+for stack in "${STACKS[@]+"${STACKS[@]}"}"; do
   for hook_file in "$PACKAGES/stack-hooks/$stack/"*.sh; do
     [ -f "$hook_file" ] || continue
     hook_name=$(basename "$hook_file")
