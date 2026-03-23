@@ -121,7 +121,7 @@ Execute the plan in dependency order. For each step, read the reference pattern 
    - Add to `frontend/src/types/domain.ts` or create new type file
 
 9. **Frontend UI** (if needed):
-   - Read existing screens for ONYX Liquid Glass patterns
+   - Read existing screens for glass design system patterns
    - Use `m.div` (motion/react v12), never `motion.div`
    - Tailwind for styling, Lucide for icons
    - TanStack Query for server state, Zustand for client state
@@ -159,7 +159,7 @@ Dispatch the **test-generator** agent for new backend code:
 Generate table-driven Go tests for the following new/changed files:
 - [list handler, service, repo files created/modified]
 
-Follow TGApp test patterns:
+Follow SocialApp test patterns:
 - "should [behavior] when [condition]" naming
 - httptest for handlers
 - Mock interfaces for services

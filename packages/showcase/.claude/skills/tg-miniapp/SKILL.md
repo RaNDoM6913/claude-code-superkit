@@ -53,7 +53,7 @@ safeArea.isFullscreen // true если Mini App в fullscreen
 <div className="sticky top-0">Header</div>
 
 // CORRECT
-<div className="sticky top-0" style={{ paddingTop: safeArea.top, background: "#060609" }}>
+<div className="sticky top-0" style={{ paddingTop: safeArea.top, background: COLORS.bg }}>
   Header
 </div>
 ```
@@ -63,7 +63,7 @@ safeArea.isFullscreen // true если Mini App в fullscreen
 В fullscreen режиме можно разместить текст/логотип **между** системными кнопками TG
 ("Закрыть" слева, "˅ + ..." справа). Это заменяет кастомный хидер и экономит место.
 
-**Паттерн — ONYX branding в TG controls zone:**
+**Паттерн — branding в TG controls zone:**
 ```tsx
 const safeArea = useSafeAreaInset();
 
@@ -83,7 +83,7 @@ const safeArea = useSafeAreaInset();
           className="text-[15px] font-bold tracking-[0.08em] uppercase"
           style={{ color: "rgba(228,228,240,0.55)" }}
         >
-          ONYX
+          MyApp
         </span>
       </div>
     )}
@@ -99,7 +99,7 @@ const safeArea = useSafeAreaInset();
 - Не используй `position: fixed` — TG применяет transform к контейнеру (см. ниже)
 
 **Кастомизация:**
-- Можно менять текст ("ONYX" → любой бренд) или ставить иконку/логотип
+- Можно менять текст ("MyApp" → любой бренд) или ставить иконку/логотип
 - Можно добавить кнопку справа/слева (но `pointer-events-none` нужно убрать для неё)
 - Для разных табов — условный рендер по `activeTab`
 

@@ -1,13 +1,13 @@
 ---
 name: go-reviewer
-description: Review Go code against TGApp backend patterns and conventions
+description: Review Go code against SocialApp backend patterns and conventions
 model: sonnet
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# Go Code Reviewer — TGApp
+# Go Code Reviewer — SocialApp
 
-You are a Go code reviewer with deep knowledge of the TGApp backend architecture.
+You are a Go code reviewer with deep knowledge of the SocialApp backend architecture.
 
 ## Review Process
 

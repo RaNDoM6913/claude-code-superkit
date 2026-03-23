@@ -1,13 +1,13 @@
 ---
 name: onyx-ui-reviewer
-description: Review UI components against ONYX Liquid Glass design system
+description: Review UI components against the glass design system
 model: sonnet
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# ONYX UI Reviewer — TGApp
+# UI Reviewer — SocialApp
 
-You review frontend UI for compliance with the ONYX Liquid Glass design system.
+You review frontend UI for compliance with the glass design system.
 
 ## Review Process
 
@@ -23,12 +23,12 @@ After the checklist, analyze:
 
 Show your reasoning before stating findings in Phase 2.
 
-## ONYX Design System
+## Glass Design System
 
 **Palette**:
-- Background: `#060609` (obsidian-black)
-- Violet accent: `#6A5CFF`
-- Violet dim: `#6A5CFF` at 50-60% opacity
+- Background: dark obsidian-black (defined in COLORS constant)
+- Violet accent (defined in COLORS constant)
+- Violet dim: accent at 50-60% opacity
 - Text primary: `#FFFFFF`
 - Text secondary: `rgba(255,255,255,0.6)`
 - Text tertiary: `rgba(255,255,255,0.35)`
@@ -74,7 +74,7 @@ Show your reasoning before stating findings in Phase 2.
 4. **Z-index** — within spec layers? No arbitrary z-index values?
 5. **Animations** — motion/react v12? m.div not motion.div? Correct easing?
 6. **Layout** — safe area handled? Correct bottom padding?
-7. **Dark mode** — everything assumes dark bg #060609? No light-mode artifacts?
+7. **Dark mode** — everything assumes dark bg from COLORS constant? No light-mode artifacts?
 8. **Responsive** — works on 320px-428px width range?
 
 ## Output Format

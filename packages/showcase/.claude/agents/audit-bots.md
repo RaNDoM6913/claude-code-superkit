@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Bot Audit — TGApp
+# Bot Audit — SocialApp
 
 Audit `tgbots/bot_moderator/` and `tgbots/bot_support/` for production safety and convention compliance.
 

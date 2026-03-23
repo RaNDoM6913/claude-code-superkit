@@ -1,13 +1,13 @@
 ---
 name: security-scanner
-description: Scan codebase for security vulnerabilities (OWASP top-10 + dating-app specific)
+description: Scan codebase for security vulnerabilities (OWASP top-10 + social-app specific)
 model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Security Scanner — TGApp
+# Security Scanner — SocialApp
 
-Scan the TGApp codebase for common security vulnerabilities, including dating-app-specific privacy and Telegram platform checks.
+Scan the SocialApp codebase for common security vulnerabilities, including social-app-specific privacy and Telegram platform checks.
 
 ## Review Process
 
@@ -79,7 +79,7 @@ cd adminpanel/frontend && npm audit --production 2>/dev/null | tail -5
 
 ---
 
-## Dating App — Privacy & PII Checks
+## Social App — Privacy & PII Checks
 
 ### 10. Photo URL Security (Critical)
 - Verify user photos are served via **presigned S3 URLs**, not direct object keys.
@@ -136,7 +136,7 @@ cd adminpanel/frontend && npm audit --production 2>/dev/null | tail -5
 
 ---
 
-## Dating App — Anti-Abuse Checks
+## Social App — Anti-Abuse Checks
 
 ### 18. Block System Enforcement (High)
 - Verify blocked users are excluded from feed queries — read feed SQL for block-list filter.

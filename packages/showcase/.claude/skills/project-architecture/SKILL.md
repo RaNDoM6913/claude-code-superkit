@@ -1,10 +1,10 @@
 ---
 name: project-architecture
-description: TGApp project architecture reference — modules, layers, data flow, and key files
+description: SocialApp project architecture reference — modules, layers, data flow, and key files
 user-invocable: false
 ---
 
-# TGApp Architecture Reference
+# SocialApp Architecture Reference
 
 ## Current Scale
 - Backend services: !`ls -d backend/internal/services/*/ 2>/dev/null | wc -l | tr -d ' '`

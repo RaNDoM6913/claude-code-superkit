@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Backend Audit — TGApp
+# Backend Audit — SocialApp
 
 Audit `backend/internal/` for code quality, SQL safety, API contract integrity, and convention violations.
 

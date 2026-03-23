@@ -5,9 +5,9 @@ model: opus
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ---
 
-# Playwright Test Generator — TGApp Admin Panel
+# Playwright Test Generator — SocialApp Admin Panel
 
-Generate Playwright e2e tests for the admin frontend panel following TGApp conventions and Playwright best practices.
+Generate Playwright e2e tests for the admin frontend panel following SocialApp conventions and Playwright best practices.
 
 ## Project Context
 

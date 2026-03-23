@@ -1,6 +1,6 @@
-# TGApp -- Production Showcase
+# SocialApp -- Production Showcase
 
-This is a sanitized copy of a real production Claude Code setup from a Telegram dating mini app.
+This is a sanitized copy of a real production Claude Code setup from a social discovery platform.
 
 ## Stats
 - **21 agents** (quality reviewers, audit agents, productivity generators, DevOps validators, discovery)
@@ -10,10 +10,10 @@ This is a sanitized copy of a real production Claude Code setup from a Telegram 
 - **3 rules** (coding-style, security, git-workflow)
 
 ## What makes this interesting
-- 47-check security scanner with dating-app + Telegram-specific checks
+- 47-check security scanner with social-app + Telegram-specific checks
 - Moderation pipeline agents (snapshot-based content moderation)
 - Bot reviewer with 22 Telegram-specific checks (callback data, state machines, rate limits)
-- ONYX design system reviewer (custom glassmorphism UI)
+- Custom design system reviewer (glassmorphism UI)
 - 8-phase `/dev` orchestrator dispatching 5+ agents per feature
 - `/review` orchestrator that auto-detects changed files and dispatches the right reviewers in parallel
 - `/audit` orchestrator running 4 specialized audit agents simultaneously
@@ -28,11 +28,11 @@ This is a sanitized copy of a real production Claude Code setup from a Telegram 
 .claude/
   agents/                  # 21 agents
     go-reviewer.md         # Go code review (layers, DI, error handling, SQL safety)
-    ts-reviewer.md         # TypeScript/React review (TanStack Query, Zustand, ONYX design)
+    ts-reviewer.md         # TypeScript/React review (TanStack Query, Zustand, design system)
     migration-reviewer.md  # SQL migration review (naming, rollback, constraints)
     onyx-ui-reviewer.md    # UI review (glassmorphism design system, z-index layers)
     bot-reviewer.md        # Telegram bot review (22 checks: callbacks, state machines, rate limits)
-    security-scanner.md    # 47-check security scanner (OWASP + dating-app + Telegram + photo)
+    security-scanner.md    # 47-check security scanner (OWASP + social-app + Telegram + photo)
     test-generator.md      # Go table-driven test generator with edge case heuristics
     playwright-test-gen.md # Playwright e2e test generator for admin panel
     pre-deploy-validator.md # 9-point pre-deploy checklist

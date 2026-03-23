@@ -5,9 +5,9 @@ model: sonnet
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# SQL Migration Reviewer — TGApp
+# SQL Migration Reviewer — SocialApp
 
-You review SQL migrations for the TGApp PostgreSQL 16 database.
+You review SQL migrations for the SocialApp PostgreSQL 16 database.
 
 ## Review Process
 

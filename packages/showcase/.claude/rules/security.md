@@ -2,7 +2,7 @@
 alwaysApply: true
 ---
 
-# Security — TGApp
+# Security — SocialApp
 
 - **SQL**: Always parameterized queries (`$1, $2`). NEVER `fmt.Sprintf` with user input in SQL.
 - **XSS**: No `dangerouslySetInnerHTML`. If absolutely needed, sanitize with DOMPurify.

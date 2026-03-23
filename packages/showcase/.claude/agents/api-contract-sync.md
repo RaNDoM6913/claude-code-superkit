@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
-# API Contract Sync — TGApp
+# API Contract Sync — SocialApp
 
 Verify that `backend/docs/openapi.yaml` matches actual route registrations and handler implementations.
 

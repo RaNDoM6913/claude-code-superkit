@@ -4,7 +4,7 @@ argument-hint: "[frontend|admin|backend|bots|security|all]"
 allowed-tools: Bash, Read, Grep, Glob, Agent
 ---
 
-# TGApp Audit Orchestrator
+# SocialApp Audit Orchestrator
 
 Run a structured audit by dispatching specialized audit agents in parallel.
 
@@ -39,7 +39,7 @@ Based on scope, launch the appropriate audit agents **in parallel** (single mess
 
 For each agent, send this prompt:
 ```
-Run ALL checks from your checklist against the TGApp codebase.
+Run ALL checks from your checklist against the SocialApp codebase.
 Scope: {scope}
 Report every check as PASS/WARN/FAIL with evidence.
 End with summary counts and action items for FAILs.
@@ -50,7 +50,7 @@ End with summary counts and action items for FAILs.
 After collecting all agent results, produce a unified report:
 
 ```
-## TGApp Audit Report
+## SocialApp Audit Report
 Scope: {scope}
 Date: {date}
 Agents: {list of dispatched agents}

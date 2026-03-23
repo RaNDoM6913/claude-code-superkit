@@ -1,6 +1,6 @@
 ---
 name: db-patterns
-description: TGApp database patterns — pgx usage, migrations, repository layer, transactions, common queries
+description: SocialApp database patterns — pgx usage, migrations, repository layer, transactions, common queries
 user-invocable: false
 ---
 

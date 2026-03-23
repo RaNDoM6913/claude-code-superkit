@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Dependency Checker — TGApp
+# Dependency Checker — SocialApp
 
 Audit all project dependencies (npm + Go modules) for outdated packages, security vulnerabilities, and breaking changes. Produce a prioritized update plan.
 
@@ -81,7 +81,7 @@ Assign each update a risk level:
 For HIGH-risk updates, read changelogs:
 - Read `CHANGELOG.md` or `MIGRATION.md` if available in `node_modules/<package>/`
 - Check the package's GitHub releases for migration guides
-- Note specific breaking changes that affect TGApp code
+- Note specific breaking changes that affect SocialApp code
 
 ### Phase 6: Build Update Plan
 

@@ -91,7 +91,7 @@ Groups 1 and 2 have no dependencies — dispatch ALL triggered agents simultaneo
 For each agent, inject the `REVIEW_CONTEXT` block into the prompt:
 
 ```
-You are reviewing code changes for the TGApp project.
+You are reviewing code changes for the SocialApp project.
 
 {REVIEW_CONTEXT — filtered to files relevant to this agent}
 

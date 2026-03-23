@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Security Audit — TGApp
+# Security Audit — SocialApp
 
 Cross-cutting security audit across all components: backend, frontends, bots, config.
 

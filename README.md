@@ -1,6 +1,6 @@
 # claude-code-superkit
 
-Production-tested agents, commands, hooks & skills for [Claude Code](https://claude.ai/claude-code). Extracted and generalized from a real Telegram Mini App with 60+ endpoints, 21 agents, and 48 database migrations.
+Production-tested agents, commands, hooks & skills for [Claude Code](https://claude.ai/claude-code). Battle-tested in production apps with 60+ endpoints, 21 agents, and 48 database migrations.
 
 ## What's Inside
 
@@ -102,7 +102,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 
 ## Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a Telegram dating app with 21 agents, 14 commands, 11 hooks, 11 skills, and 3 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 21 agents, 14 commands, 11 hooks, 11 skills, and 3 rules.
 
 ## Codex CLI Support
 

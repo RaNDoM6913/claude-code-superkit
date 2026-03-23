@@ -6,7 +6,7 @@ allowed-tools: Bash
 
 # Run Admin Panel
 
-Start the TGApp admin panel in one of three modes.
+Start the SocialApp admin panel in one of three modes.
 
 ## Mode Selection
 

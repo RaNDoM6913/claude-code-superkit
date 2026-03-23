@@ -7,7 +7,7 @@ allowed-tools: Bash, Glob, Grep, Read, Agent
 
 # Project Health Check
 
-Run a comprehensive health check on the TGApp project. Report results as a dashboard.
+Run a comprehensive health check on the SocialApp project. Report results as a dashboard.
 
 ## Checks to run (all in parallel where possible)
 
@@ -72,7 +72,7 @@ cd frontend && npm run build 2>&1 | grep -E 'dist/|gzip|chunk' | head -10
 ## Output Format
 
 ```
-TGApp Health Dashboard
+SocialApp Health Dashboard
 
 Compilation:  Go clean, TypeScript clean
 Tests:        42 pass, 0 fail

@@ -2,7 +2,7 @@
 alwaysApply: true
 ---
 
-# Git Workflow — TGApp
+# Git Workflow — SocialApp
 
 - **Commits**: conventional format `type(scope): description`
   - Types: feat, fix, docs, refactor, chore, test, perf

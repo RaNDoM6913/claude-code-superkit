@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Frontend Audit — TGApp
+# Frontend Audit — SocialApp
 
 Audit `frontend/src/` (user app) and `adminpanel/frontend/src/` (admin panel) for code quality issues.
 

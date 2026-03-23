@@ -1,6 +1,6 @@
 ---
 name: frontend-patterns
-description: TGApp admin frontend patterns — mock/live API layer, page structure, components, types, hooks
+description: SocialApp admin frontend patterns — mock/live API layer, page structure, components, types, hooks
 user-invocable: false
 ---
 

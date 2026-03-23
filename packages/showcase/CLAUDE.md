@@ -1,8 +1,8 @@
-# TGApp — Telegram Dating Mini App
+# SocialApp — Social Discovery Platform
 
 > **HARD RULE — Documentation-on-change**: после ЛЮБОГО изменения кода, затрагивающего логику, поведение, API или архитектуру, Claude ОБЯЗАН обновить все связанные docs (`docs/architecture/`, `CLAUDE.md`, `docs/trees/`, README) **в том же ответе**, что и код. НЕ ждать отдельного запроса. См. полный чеклист в секции [Mandatory Documentation Updates](#mandatory-documentation-updates).
 
-Монорепо: dating-приложение для Telegram с админ-панелью, модерацией и аналитикой.
+Монорепо: social приложение для Telegram с админ-панелью, модерацией и аналитикой.
 
 ## Tech Stack
 
@@ -37,7 +37,7 @@ backend/                    # Go API server (:8080)
 adminpanel/
   frontend/                 # React admin dashboard (:5173)
   backend/login/            # Admin login service (:8082)
-frontend/                   # User-facing «ONYX» mini app
+frontend/                   # User-facing mini app
   src/
     app/App.tsx             # Onboarding shell (~770 LOC), lazy loads MainAppScreen
     app/MainAppScreen.tsx   # Post-onboarding (~2900 LOC, lazy, ~20KB gzip)
@@ -67,9 +67,9 @@ tgbots/
 - **Moderation**: snapshot-backed workflow — draft-first writes (`profile_drafts`, `draft_media`), immutable snapshots (`moderation_snapshots`), states: `PENDING`, `APPROVED`, `REJECTED`, `PENDING_UPDATE`, `REJECTED_UPDATE`. **Field-level moderation** (migration 000048): per-field approve/reject via `field_decisions` JSONB + `changed_fields` TEXT[]
 - **Photo storage**: two-tier — display (processed crop) + original (raw upload); moderation overlay; `cleanupRawOriginalRetention()` auto-cleanup
 
-## User Frontend Architecture («ONYX»)
+## User Frontend Architecture
 
-- **Дизайн**: ONYX Liquid Glass — `#060609` bg, `#6A5CFF` violet accent, iOS 26 glassmorphism
+- **Дизайн**: custom glass design system — dark bg, violet accent, iOS 26 glassmorphism
 - **Навигация**: state-based (`currentScreen`), без React Router. Zustand store + `useOnboardingFlow` hook
 - **Code splitting**: App.tsx (onboarding shell) → lazy `MainAppScreen.tsx` (preloaded at step 5)
 - **Онбординг**: 9 шагов (Start → Privacy → Location → Photos → PersonalData → Questionnaire → Preferences → Verification → ModerationWait → MainApp)
@@ -77,7 +77,7 @@ tgbots/
 - **Data**: TanStack Query + IndexedDB persistence (staleTime=30s, gcTime=24h). Все экраны на live API
 - **UX**: ThumbHash image placeholders, haptic feedback, tab swipe (edge-only on Feed), photo crop modal, dual-file upload, multi-account isolation (`user-guard.ts`), ErrorBoundary
 - **Analytics**: batched event collector (`analytics.ts`) + `useScreenTracking` + web-vitals (LCP/CLS/INP/TTFB)
-- **Telegram SDK**: fullscreen + portrait lock, BackButton, `window.__TGAPP_RUNTIME_CONFIG__`
+- **Telegram SDK**: fullscreen + portrait lock, BackButton, `window.__SOCIALAPP_RUNTIME_CONFIG__`
 - **Dev toggle**: `VITE_DEV_START_SCREEN=main_app` + `npm run dev:main`
 
 ### Ключевые типы (types/domain.ts)
@@ -177,12 +177,12 @@ Profile: `CLAUDE_HOOK_PROFILE=fast|standard|strict` (default: standard)
 | Agent | Category | Model | Status | Описание |
 |-------|----------|-------|--------|----------|
 | go-reviewer | Quality | sonnet | **active** | Go code review: layers, DI, error handling, SQL safety |
-| ts-reviewer | Quality | sonnet | **active** | TypeScript/React review: motion/react, TanStack Query, ONYX |
+| ts-reviewer | Quality | sonnet | **active** | TypeScript/React review: motion/react, TanStack Query, design system |
 | migration-reviewer | Quality | sonnet | **active** | SQL migration review: naming, rollback, constraints |
-| onyx-ui-reviewer | Quality | sonnet | **active** | UI review: ONYX Liquid Glass, glass components, z-index |
+| onyx-ui-reviewer | Quality | sonnet | **active** | UI review: glass design system, glass components, z-index |
 | bot-reviewer | Quality | sonnet | **active** | 22 checks: callbacks, state machines, goroutine safety, rate limits |
 | pre-deploy-validator | DevOps | sonnet | **active** | 9-point pre-deploy checklist + security scan |
-| security-scanner | DevOps | sonnet | **active** | 47 security checks: OWASP + dating-app + Telegram + photo |
+| security-scanner | DevOps | sonnet | **active** | 47 security checks: OWASP + social app + Telegram + photo |
 | test-generator | Productivity | opus | **active** | Go table-driven tests + edge cases |
 | playwright-test-generator | Productivity | opus | **active** | Playwright e2e tests для admin |
 | api-contract-sync | Productivity | sonnet | **active** | OpenAPI spec ↔ routes.go sync |

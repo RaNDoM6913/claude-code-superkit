@@ -1,6 +1,6 @@
 ---
 name: api-conventions
-description: TGApp API design conventions — REST patterns, error format, naming, middleware, request/response contracts
+description: SocialApp API design conventions — REST patterns, error format, naming, middleware, request/response contracts
 user-invocable: false
 ---
 

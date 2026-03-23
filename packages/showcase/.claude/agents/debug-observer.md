@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Debug Observer — TGApp
+# Debug Observer — SocialApp
 
 Debug production issues by gathering context from multiple sources: container logs, PostgreSQL state, Redis sessions/cache, recent git changes, and request execution traces.
 

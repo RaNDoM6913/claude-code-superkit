@@ -6,7 +6,7 @@ allowed-tools: Bash, Read, Grep, Glob
 
 # Conventional Commit Helper
 
-Create a well-formatted commit following TGApp conventions.
+Create a well-formatted commit following SocialApp conventions.
 
 ## Steps
 

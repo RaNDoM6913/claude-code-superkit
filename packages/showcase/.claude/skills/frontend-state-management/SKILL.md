@@ -1,12 +1,12 @@
 ---
 name: frontend-state-management
-description: TGApp user frontend state management — TanStack Query, Zustand, IndexedDB persistence, cache invalidation, multi-account isolation
+description: SocialApp user frontend state management — TanStack Query, Zustand, IndexedDB persistence, cache invalidation, multi-account isolation
 user-invocable: false
 ---
 
 # Frontend State Management
 
-State management in the ONYX user frontend follows a strict split: **server state** lives in TanStack Query, **client-only state** lives in Zustand. Never mix the two.
+State management in the user frontend follows a strict split: **server state** lives in TanStack Query, **client-only state** lives in Zustand. Never mix the two.
 
 ## TanStack Query Patterns
 
@@ -216,7 +216,7 @@ Location: `src/api/query-persister.ts`
 import { get, set, del } from "idb-keyval";
 import type { PersistedClient, Persister } from "@tanstack/react-query-persist-client";
 
-const IDB_KEY = "onyx-query-cache";
+const IDB_KEY = "app-query-cache";
 
 export const idbPersister: Persister = {
   persistClient: async (client) => { await set(IDB_KEY, client); },
@@ -252,14 +252,14 @@ When a different Telegram account logs in on the same device, **all cached data 
 
 ```typescript
 export function guardUserSwitch(userId: number): void {
-  const saved = localStorage.getItem("onyx.last_user_id");
+  const saved = localStorage.getItem("app.last_user_id");
   const savedId = saved ? parseInt(saved, 10) : null;
 
   if (savedId !== null && !isNaN(savedId) && savedId !== userId) {
     purgeAllUserData();
   }
 
-  localStorage.setItem("onyx.last_user_id", String(userId));
+  localStorage.setItem("app.last_user_id", String(userId));
 }
 ```
 

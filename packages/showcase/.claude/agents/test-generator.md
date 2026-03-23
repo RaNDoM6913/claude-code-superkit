@@ -1,13 +1,13 @@
 ---
 name: test-generator
-description: Generate Go table-driven tests following TGApp patterns
+description: Generate Go table-driven tests following SocialApp patterns
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ---
 
-# Test Generator — TGApp
+# Test Generator — SocialApp
 
-Generate Go tests following TGApp conventions and patterns.
+Generate Go tests following SocialApp conventions and patterns.
 
 ## Test Naming Convention
 

@@ -2,7 +2,7 @@
 alwaysApply: true
 ---
 
-# Coding Style — TGApp
+# Coding Style — SocialApp
 
 ## Go
 - Format: `gofmt` (enforced by format-on-edit hook)

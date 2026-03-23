@@ -1,6 +1,6 @@
 ---
 name: pagination-and-filtering
-description: TGApp pagination and filtering patterns — cursor-based SQL pagination, LIMIT+1 hasMore, TanStack infinite queries, admin table pagination, debounced search
+description: SocialApp pagination and filtering patterns — cursor-based SQL pagination, LIMIT+1 hasMore, TanStack infinite queries, admin table pagination, debounced search
 user-invocable: false
 ---
 
@@ -10,7 +10,7 @@ user-invocable: false
 
 ### Cursor-Based Pagination (Feeds & Lists)
 
-TGApp uses **cursor-based** pagination for all user-facing lists (feed, likes, notifications, matches). Never use OFFSET-based pagination for these — it's slow on large tables and produces inconsistent results when rows are inserted/deleted between pages.
+SocialApp uses **cursor-based** pagination for all user-facing lists (feed, likes, notifications, matches). Never use OFFSET-based pagination for these — it's slow on large tables and produces inconsistent results when rows are inserted/deleted between pages.
 
 **Composite cursor pattern** — use `(created_at, id)` tuple for stable ordering:
 
@@ -271,7 +271,7 @@ function UsersPage({ accessToken }: Props) {
 | **localStorage** | Admin filters that should persist across page switches |
 | **URL params** | Admin pages where users share links (future consideration) |
 
-Current TGApp pattern — admin filters persist in localStorage:
+Current SocialApp pattern — admin filters persist in localStorage:
 
 ```typescript
 const [filters, setFilters] = useState(() => {

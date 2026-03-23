@@ -145,7 +145,7 @@ find . -name "requirements.txt" -execdir sh -c 'command -v pip-audit >/dev/null 
 ## App-Specific Checks
 
 <!-- Add domain-specific security checks here. Examples: -->
-<!-- Dating apps: photo privacy, location privacy, block system, age verification -->
+<!-- Social apps: photo privacy, location privacy, block system, age verification -->
 <!-- E-commerce: payment security, inventory race conditions, coupon abuse -->
 <!-- Healthcare: PHI/HIPAA compliance, audit logging, data encryption at rest -->
 <!-- SaaS: tenant isolation, API key rotation, webhook security -->

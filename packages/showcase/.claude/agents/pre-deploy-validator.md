@@ -5,7 +5,7 @@ model: sonnet
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
-# Pre-Deploy Validator — TGApp
+# Pre-Deploy Validator — SocialApp
 
 Run comprehensive checks before deploying to production.
 
