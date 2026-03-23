@@ -9,6 +9,22 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Check whether documentation is up to date with recent code changes by mapping changed code files to docs that reference them.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack, list of docs that SHOULD exist
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know the complete list of documentation files the project maintains (architecture docs, READMEs, API specs)
+- Understand which code changes trigger mandatory doc updates (per project rules)
+- Map code directories to their corresponding documentation files accurately
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Step 1 — Get Changed Files
 
 Default: last 5 commits. Override via prompt context (e.g., "check last 20 commits" or "check branch diff").

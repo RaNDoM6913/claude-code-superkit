@@ -11,6 +11,18 @@ You review frontend UI components for compliance with the project's design syste
 
 ## Review Process
 
+### Phase 0: Load Project Context
+
+Read if exists:
+1. `CLAUDE.md` or `AGENTS.md` — design system name and principles
+2. `docs/architecture/frontend-state.md` — component patterns
+3. Design tokens file (CSS variables, Tailwind config, tokens.json)
+
+**Use this context to:**
+- Know the exact color palette, spacing scale, typography
+- Understand z-index layer conventions
+- Know which animation library is used
+
 ### Phase 1: Discover Design System
 Read the project's design tokens and configuration before checking any components.
 

@@ -9,6 +9,24 @@ allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 
 Create a new API endpoint by learning from the project's existing patterns. This agent does NOT assume any specific framework — it discovers the architecture from the codebase.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/backend-layers.md` — layer separation, DI patterns, error handling, adding endpoints
+3. `docs/architecture/api-reference.md` — existing endpoints, naming conventions, auth requirements
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Follow the documented pattern for adding new endpoints (handler, service, repo, route registration)
+- Use the correct error types and HTTP status code mappings
+- Apply the right auth middleware and route grouping conventions
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Phase 1 — Discover Project Patterns
 
 ### Step 1: Identify the Stack

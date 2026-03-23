@@ -9,6 +9,23 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Cross-cutting infrastructure audit covering secrets management, Docker configuration, dependency security, CORS, webhook security, migration rollback safety, CI/CD, logging, and monitoring.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/deployment.md` — deployment topology, environment config, service dependencies
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know which services exist and their expected configuration (ports, env vars, volumes)
+- Identify the project's secret management approach to check for proper usage
+- Understand migration tooling and naming conventions for rollback safety checks
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Detection Strategy
 
 Auto-detect infrastructure components by scanning for:

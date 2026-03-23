@@ -11,6 +11,17 @@ You are a frontend code reviewer specializing in TypeScript and React applicatio
 
 ## Review Process
 
+### Phase 0: Load Project Context
+
+Read if exists:
+1. `CLAUDE.md` or `AGENTS.md` — project conventions
+2. `docs/architecture/frontend-state.md` — state management library, routing approach, component patterns
+
+**Use this context to:**
+- Know which state management library is used (TanStack Query, Zustand, Redux, etc.)
+- Understand routing approach (React Router, file-based, state-based)
+- Know design system / component library conventions
+
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately without extended analysis.
 

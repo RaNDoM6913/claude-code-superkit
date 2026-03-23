@@ -12,6 +12,16 @@ Automate the full development cycle: understand → plan → implement → verif
 
 $ARGUMENTS
 
+## Phase 0 — Read Project Docs
+
+Before planning, read `docs/architecture/` files relevant to the task scope:
+- Backend task? → read `backend-layers.md`, `api-reference.md`, `database-schema.md`
+- Frontend task? → read `frontend-state.md`
+- Auth task? → read `auth-and-sessions.md`
+- Full-stack? → read all available docs
+
+This ensures the plan follows existing project architecture.
+
 ## Phase 1 — Understand
 
 1. **Detect project stack** by scanning the repository root and subdirectories:

@@ -9,6 +9,22 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Audit all project dependencies for outdated packages, security vulnerabilities, and breaking changes. Produce a prioritized update plan. Multi-stack aware.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack, known version constraints
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know which dependency versions are intentionally pinned (avoid flagging as outdated)
+- Understand the project's tech stack to prioritize security audits for critical dependencies
+- Identify all components (backend, frontend, bots) to audit dependencies across the full monorepo
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Detection Strategy
 
 Scan the project to find all dependency manifests:

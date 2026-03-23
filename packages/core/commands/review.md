@@ -72,6 +72,9 @@ Rules:
 
 All reviewer agents are independent — dispatch ALL triggered agents simultaneously using parallel Agent calls.
 
+**Context injection:** When dispatching agents, include in each prompt:
+"Start with Phase 0 — read project docs (CLAUDE.md/AGENTS.md + relevant docs/architecture/ files) before starting your review."
+
 **Parallel Group 1 (code quality)**:
 - go-reviewer (if triggered)
 - ts-reviewer (if triggered)

@@ -1,6 +1,6 @@
 ---
 name: writing-agents
-description: How to write Claude Code agents — standard format, 2-phase review, severity/confidence, dispatch patterns
+description: How to write Claude Code agents — standard format, 3-phase review, severity/confidence, dispatch patterns
 user-invocable: false
 ---
 
@@ -22,21 +22,18 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 - **model**: `sonnet` for review/audit (fast, cheap), `opus` for code generation (high quality)
 - **allowed-tools**: minimal set needed. Review agents: `Read, Grep, Glob, Bash`. Generator agents add `Edit, Write`.
 
-## Standard 2-Phase Review Process
+## Standard 3-Phase Review Process
 
-All review agents follow this pattern:
+### Phase 0: Load Project Context (required for all agents)
+Read `CLAUDE.md`/`AGENTS.md` + relevant `docs/architecture/` files before starting.
+This makes the agent context-aware for the specific project.
+Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
 
 ### Phase 1: Checklist (quick scan)
-Run through numbered items. Report violations immediately without extended analysis. Each item has a grep pattern or file to check.
+Now informed by project docs — flag violations of documented conventions as higher confidence.
 
 ### Phase 2: Deep Analysis (think step by step)
-After the checklist:
-1. What is the intent of this change?
-2. What are the possible failure modes?
-3. Are there edge cases the checklist didn't cover?
-4. Does this change affect other components?
-
-Show reasoning before stating findings.
+Use project context to assess cross-component impact.
 
 ## Severity / Confidence System
 

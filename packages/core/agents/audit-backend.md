@@ -9,6 +9,24 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Audit backend source code for SQL safety, error handling, API contract integrity, and convention violations.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/backend-layers.md` — layer separation, DI patterns, error handling conventions
+3. `docs/architecture/database-schema.md` — tables, constraints, indexes
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know the project's error wrapping convention to accurately flag missing context
+- Identify which endpoints require auth and which are intentionally public
+- Understand the SQL patterns used (parameterized queries, pgx vs ORM) to reduce false positives
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Detection Strategy
 
 Auto-detect the backend stack by scanning for:

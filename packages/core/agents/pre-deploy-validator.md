@@ -9,6 +9,22 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Run comprehensive checks before deploying to production. Auto-detects the tech stack and runs all applicable validations.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack, build/test/lint commands, migration format
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Use the project's documented build, test, and lint commands for each component
+- Know the migration naming convention and directory for consistency checks
+- Identify all deployable components to validate each one before deploy
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Detection Strategy
 
 Scan the project root to identify components and their verification commands:

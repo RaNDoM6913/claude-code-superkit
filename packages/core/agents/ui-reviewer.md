@@ -9,6 +9,23 @@ allowed-tools: Read, Grep, Glob, Bash
 
 You review frontend UI components for accessibility, semantic correctness, animation performance, responsive design, and design token compliance.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/frontend-state.md` — screen tree, navigation, state management, z-index layers
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Verify z-index values match the project's documented z-index scale
+- Identify the correct animation library and patterns (e.g., motion/react vs framer-motion)
+- Check design token usage against the project's documented color/spacing system
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)

@@ -11,6 +11,17 @@ You are a Python code reviewer. Review code against idiomatic Python patterns an
 
 ## Review Process
 
+### Phase 0: Load Project Context
+
+Read if exists:
+1. `CLAUDE.md` or `AGENTS.md` — project conventions
+2. `docs/architecture/backend-layers.md` — Python-specific patterns (FastAPI, Django, Flask)
+
+**Use this context to:**
+- Know the web framework in use and its conventions
+- Understand async patterns (if applicable)
+- Know testing conventions (pytest fixtures, factory patterns)
+
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately without extended analysis.
 

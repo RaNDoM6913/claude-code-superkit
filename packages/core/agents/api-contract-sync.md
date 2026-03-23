@@ -9,6 +9,24 @@ allowed-tools: Read, Grep, Glob, Bash
 
 Verify that the API specification (OpenAPI/Swagger) matches actual route registrations and handler implementations.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/api-reference.md` — documented endpoints, request/response contracts
+3. OpenAPI/Swagger spec file (e.g., `backend/docs/openapi.yaml`, `**/openapi.json`, `**/swagger.yaml`)
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know the complete list of expected endpoints before scanning route registrations
+- Identify which endpoints are intentionally undocumented (internal/admin routes)
+- Verify DTO field names and types match the documented API contract
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## When to Trigger
 
 This agent should be invoked after changes to:

@@ -9,6 +9,24 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Debug issues by gathering context from multiple sources: container logs, database state, cache state, recent git changes, and request execution traces. Auto-detects the infrastructure from the project.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/backend-layers.md` — layer separation, request flow, middleware chain
+3. `docs/architecture/database-schema.md` — tables, relationships, key columns for diagnostic queries
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Trace request flow through the correct layers (middleware -> handler -> service -> repo)
+- Write accurate diagnostic SQL queries using the documented table schema
+- Identify the correct service names and container names for log inspection
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Input
 
 Provide one or more of:

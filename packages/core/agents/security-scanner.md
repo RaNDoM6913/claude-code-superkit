@@ -9,6 +9,24 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Scan the codebase for common security vulnerabilities based on OWASP guidelines and general best practices.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/auth-and-sessions.md` — auth flow, session management, token lifecycle
+3. `docs/architecture/api-reference.md` — all endpoints, which are public vs protected
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know which endpoints are intentionally public (skip false positives on auth coverage)
+- Understand the auth token lifecycle to check for proper expiry/refresh handling
+- Identify project-specific security patterns (e.g., single-device enforcement, TOTP)
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)

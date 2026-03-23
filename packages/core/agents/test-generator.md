@@ -9,6 +9,23 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 
 Generate tests following the project's existing test patterns and conventions. Multi-stack aware — adapts to Go, TypeScript, Python, Rust, or any language found in the project.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. Existing test files in the same package/directory as the target file — to match style exactly
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Match the project's exact test naming convention (table-driven, describe/it, pytest parametrize)
+- Use the same mocking approach as existing tests (interface mocks, function-field mocks, testify)
+- Follow the project's assertion style and test file organization
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Detection Strategy
 
 Before generating tests:

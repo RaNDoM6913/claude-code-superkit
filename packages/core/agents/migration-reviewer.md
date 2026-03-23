@@ -9,6 +9,24 @@ allowed-tools: Read, Grep, Glob, Bash
 
 You review SQL migrations for safety, naming conventions, rollback correctness, and production readiness.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/database-schema.md` — existing tables, constraints, indexes, column conventions
+3. Latest 3 migration files in the migrations directory — to learn naming and style conventions
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Verify new migrations follow the project's exact naming convention and numbering sequence
+- Check that new columns/tables align with existing schema patterns (timestamp types, ID types, JSONB conventions)
+- Identify potential conflicts with existing indexes or constraints
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)

@@ -9,6 +9,23 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Audit frontend source code for code quality issues, hardcoded values, dead code, and pattern violations.
 
+## Phase 0: Load Project Context
+
+Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
+2. `docs/architecture/frontend-state.md` — screen tree, state management, data fetching patterns
+
+**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+
+**Use this context to:**
+- Know which design tokens and color constants are defined (avoid false positives on hardcoded values)
+- Identify the project's state management approach (Context, Zustand, Redux) to check for correct usage
+- Understand which query key patterns are expected (centralized vs inline)
+
+**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+
 ## Detection Strategy
 
 Auto-detect frontend projects by scanning for:

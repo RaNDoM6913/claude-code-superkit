@@ -11,6 +11,17 @@ You are a code reviewer specializing in chat bot code. You review bots for Teleg
 
 ## Review Process
 
+### Phase 0: Load Project Context
+
+Read if exists:
+1. `CLAUDE.md` or `AGENTS.md` — bot architecture, callback format
+2. Any bot-specific architecture docs
+
+**Use this context to:**
+- Know callback data format conventions
+- Understand state machine patterns used
+- Know rate limiting requirements
+
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below (22 checks). Report violations immediately without extended analysis.
 
