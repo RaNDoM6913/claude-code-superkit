@@ -78,9 +78,11 @@ This skill extends the project's "search-first" coding rule:
 
 ## Rate Limits
 
-- 500 requests/day per API key
-- Resets at midnight UTC
+- **30 requests/minute** per API key
+- **500 requests/day** per API key (resets at midnight UTC)
 - No wildcard searches
+- Check headers: `x-ratelimit-daily-remaining`, `x-ratelimit-minute-remaining`
+- **Rule**: do NOT loop searches — one keyword + one AI search per topic is enough
 
 ## Installation
 
