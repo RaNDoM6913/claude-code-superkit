@@ -9,6 +9,7 @@ Production-tested agents, commands, hooks & skills for [Claude Code](https://cla
 | **Core Agents** | 17 | Code review, security scan, testing, audit, debugging, health checks, tree generation |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specific reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
+| **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace (requires API key) |
 | **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
 | **Hooks** | 7 + Stop | Git safety, format-on-edit, typecheck, context injection, session continuity |
 | **Rules** | 5 | Coding style, security, git workflow, documentation, auto dev workflow |
