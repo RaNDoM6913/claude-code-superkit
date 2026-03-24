@@ -61,9 +61,9 @@ Both rules and hooks influence behavior, but they work differently:
 
 Use **rules** for guidelines Claude should follow. Use **hooks** for constraints that must be enforced mechanically. Often you want both: a rule saying "never force push" and a hook that blocks `git push --force`.
 
-## The Three Default Rules
+## The Five Default Rules
 
-The superkit ships with three rules:
+The superkit ships with five rules:
 
 ### coding-style.md (22 lines)
 ```markdown
@@ -95,6 +95,12 @@ Covers SQL injection, XSS, secrets, auth, input validation, file uploads, CORS.
 
 ### git-workflow.md (9 lines)
 Covers conventional commits, no --no-verify, no force push, branch naming.
+
+### documentation.md (17 lines)
+Enforces documentation updates in the same response as code changes. Maps change types to specific doc files.
+
+### dev-workflow.md (30 lines)
+Auto-triggers the full `/dev` orchestration (8 phases) for substantial tasks — new features, multi-file bug fixes, full-stack work. Skips orchestration for simple edits, docs-only, config changes, or questions. Claude follows the workflow naturally without the user calling `/dev` explicitly.
 
 ## Full Example: "no-orm" Rule
 

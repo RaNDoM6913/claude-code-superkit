@@ -11,7 +11,7 @@ Production-tested agents, commands, hooks & skills for [Claude Code](https://cla
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
 | **Hooks** | 7 + Stop | Git safety, format-on-edit, typecheck, context injection, session continuity |
-| **Rules** | 4 | Coding style, security, git workflow, documentation |
+| **Rules** | 5 | Coding style, security, git workflow, documentation, auto dev workflow |
 | **Skills** | 3 | Project architecture template, writing-agents guide, writing-commands guide |
 
 ## Quick Start
@@ -117,7 +117,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 21 agents, 14 commands, 11 hooks, 11 skills, and 3 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 21 agents, 14 commands, 11 hooks, 11 skills, and 4 rules.
 
 ## Codex CLI Support
 
