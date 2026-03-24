@@ -1,7 +1,7 @@
 ---
 name: bot-reviewer
 description: Review Telegram bot code against SocialApp bot patterns and conventions
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

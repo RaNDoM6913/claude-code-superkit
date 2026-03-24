@@ -1,7 +1,7 @@
 ---
 name: api-contract-sync
 description: Verify OpenAPI spec matches actual handler implementations
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

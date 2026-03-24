@@ -1,7 +1,7 @@
 ---
 name: scaffold-endpoint
 description: Scaffold a new API endpoint by reading existing project patterns — no hardcoded architecture
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---
 

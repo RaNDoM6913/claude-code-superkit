@@ -1,7 +1,7 @@
 ---
 name: docs-checker
 description: Compare git diff vs documentation — flag stale docs that reference changed code
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

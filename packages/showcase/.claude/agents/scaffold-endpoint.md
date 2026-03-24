@@ -1,7 +1,7 @@
 ---
 name: scaffold-endpoint
 description: Scaffold a new admin API endpoint following project patterns (handler + service + repo)
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---
 

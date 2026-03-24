@@ -1,7 +1,7 @@
 ---
 name: docs-checker
 description: Check if architecture docs are up to date with recent code changes
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

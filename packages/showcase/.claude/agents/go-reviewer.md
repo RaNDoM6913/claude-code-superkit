@@ -1,7 +1,7 @@
 ---
 name: go-reviewer
 description: Review Go code against SocialApp backend patterns and conventions
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

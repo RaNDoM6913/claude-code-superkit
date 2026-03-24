@@ -1,7 +1,7 @@
 ---
 name: ts-reviewer
 description: Review TypeScript/React code for type safety, hooks correctness, state management, and conventions
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

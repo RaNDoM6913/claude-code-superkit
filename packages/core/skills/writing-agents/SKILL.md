@@ -73,7 +73,7 @@ If a **stack-specific reviewer** exists (e.g., `go-reviewer` for `*.go`), it is 
 ---
 name: dockerfile-reviewer
 description: Review Dockerfiles for security and best practices
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: dependency-checker
 description: Audit npm and Go dependencies for outdated packages, security vulnerabilities, and suggest update plan
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

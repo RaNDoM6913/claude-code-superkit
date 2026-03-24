@@ -1,7 +1,7 @@
 ---
 name: audit-bots
 description: Audit Telegram bot code for goroutine safety, rate limits, callback integrity, and production readiness
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

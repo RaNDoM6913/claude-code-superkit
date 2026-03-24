@@ -1,7 +1,7 @@
 ---
 name: onyx-ui-reviewer
 description: Review UI components against the glass design system
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

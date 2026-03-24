@@ -1,7 +1,7 @@
 ---
 name: events-discovery
 description: Find events, venues, and social spots using Yandex Places MCP and web search
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, mcp__*
 ---
 

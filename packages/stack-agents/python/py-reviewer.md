@@ -1,7 +1,7 @@
 ---
 name: py-reviewer
 description: Review Python code for type hints, async patterns, exception handling, and conventions
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

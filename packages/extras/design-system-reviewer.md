@@ -1,7 +1,7 @@
 ---
 name: design-system-reviewer
 description: Review UI components against the project's design system tokens — colors, spacing, typography, z-index, animations
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

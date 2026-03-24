@@ -1,7 +1,7 @@
 ---
 name: dependency-checker
 description: Audit dependencies — npm audit, govulncheck, pip-audit, cargo-audit, outdated packages, update plan
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: ts-reviewer
 description: Review TypeScript/React code against SocialApp frontend patterns
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: debug-observer
 description: Debug production issues by gathering logs, DB state, Redis state, and building execution traces
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: bot-reviewer
 description: Review chat bot code (Telegram, Discord, Slack) for callback safety, state machines, rate limits, and production readiness
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

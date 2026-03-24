@@ -1,7 +1,7 @@
 ---
 name: health-checker
 description: Project health dashboard — compilation, tests, TODOs, API spec drift, migration pairs, deps, security, docs, bundle
-model: sonnet
+model: opus
 allowed-tools: Bash, Glob, Grep, Read
 ---
 

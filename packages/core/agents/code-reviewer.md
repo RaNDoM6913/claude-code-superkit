@@ -1,7 +1,7 @@
 ---
 name: code-reviewer
 description: Generic code review — layers, error handling, naming, DI, SQL safety, auth, tests
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

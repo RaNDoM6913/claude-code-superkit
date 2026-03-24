@@ -1,7 +1,7 @@
 ---
 name: pre-deploy-validator
 description: Run full pre-deployment validation checklist
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: migration-reviewer
 description: Review SQL migrations for safety, naming, and rollback
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

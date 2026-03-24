@@ -1,7 +1,7 @@
 ---
 name: audit-frontend
 description: Audit user and admin frontends for hardcoded values, mock data, code quality, and pattern violations
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

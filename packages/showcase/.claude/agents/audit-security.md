@@ -1,7 +1,7 @@
 ---
 name: audit-security
 description: Cross-cutting security audit — secrets, CORS, auth, photo URLs, env config, dependencies
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

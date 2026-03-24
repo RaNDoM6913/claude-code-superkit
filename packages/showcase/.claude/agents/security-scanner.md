@@ -1,7 +1,7 @@
 ---
 name: security-scanner
 description: Scan codebase for security vulnerabilities (OWASP top-10 + social-app specific)
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

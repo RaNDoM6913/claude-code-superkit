@@ -1,7 +1,7 @@
 ---
 name: debug-observer
 description: Multi-source debug — Docker logs, Redis inspection, SQL diagnostics, git blame, execution traces
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

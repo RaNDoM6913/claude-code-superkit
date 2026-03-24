@@ -1,7 +1,7 @@
 ---
 name: content-curator
 description: Curate promotional content, seasonal events, and social recommendations
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, WebSearch, WebFetch
 ---
 

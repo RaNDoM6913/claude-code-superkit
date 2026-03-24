@@ -1,7 +1,7 @@
 ---
 name: audit-backend
 description: Audit Go backend for SQL safety, error handling, API contracts, PII leaks, and convention violations
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

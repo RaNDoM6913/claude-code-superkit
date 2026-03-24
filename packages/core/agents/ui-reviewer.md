@@ -1,7 +1,7 @@
 ---
 name: ui-reviewer
 description: UI/UX review — accessibility, semantic HTML, z-index, animations, responsive, design tokens
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

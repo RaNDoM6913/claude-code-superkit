@@ -1,7 +1,7 @@
 ---
 name: audit-infra
 description: Audit infrastructure — secrets, Docker, deps, CORS, webhooks, migrations, CI/CD, monitoring
-model: sonnet
+model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 

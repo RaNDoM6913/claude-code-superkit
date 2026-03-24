@@ -1,7 +1,7 @@
 ---
 name: rs-reviewer
 description: Review Rust code for ownership, error handling, unsafe usage, and idiomatic patterns
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
