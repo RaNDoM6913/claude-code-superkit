@@ -22,6 +22,10 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/block-dangerous-git.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/doc-check-on-commit.sh"
           }
         ]
       }
@@ -96,8 +100,8 @@
           {
             "type": "prompt",
             "prompt": "Before finishing, verify: (1) All changed .go files pass 'go vet'. (2) All changed .ts/.tsx files pass 'tsc --noEmit'. (3) If any logic, API, or architecture was changed — check that relevant docs in docs/architecture/ were updated. List any docs that SHOULD be updated but weren't. Respond with {\"decision\": \"allow\"} if everything is clean, or {\"decision\": \"block\", \"reason\": \"...\"} if there are issues.",
-            "model": "haiku",
-            "timeout": 30,
+            "model": "opus",
+            "timeout": 60,
             "statusMessage": "Verifying session changes..."
           }
         ]
