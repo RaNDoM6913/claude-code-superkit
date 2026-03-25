@@ -30,20 +30,23 @@ The installer will ask you to select your stack (Go, TypeScript, Python, Rust) a
 ### Option 2: Manual Copy
 
 ```bash
-# Copy core files
-cp -r /path/to/claude-code-superkit/packages/core/agents/ .claude/agents/
-cp -r /path/to/claude-code-superkit/packages/core/commands/ .claude/commands/
-cp -r /path/to/claude-code-superkit/packages/core/hooks/ .claude/scripts/hooks/
-cp -r /path/to/claude-code-superkit/packages/core/rules/ .claude/rules/
-cp -r /path/to/claude-code-superkit/packages/core/skills/ .claude/skills/
-cp /path/to/claude-code-superkit/packages/core/settings.json .claude/settings.json
-cp /path/to/claude-code-superkit/packages/core/CLAUDE.md ./CLAUDE.md
+# Set the path to your cloned superkit
+SUPERKIT="/path/to/claude-code-superkit"
 
-# Add stack-specific files (example: Go + TypeScript)
-cp packages/stack-agents/go/go-reviewer.md .claude/agents/
-cp packages/stack-agents/typescript/ts-reviewer.md .claude/agents/
-cp packages/stack-hooks/go/*.sh .claude/scripts/hooks/
-cp packages/stack-hooks/typescript/*.sh .claude/scripts/hooks/
+# Copy core files
+cp -r $SUPERKIT/packages/core/agents/ .claude/agents/
+cp -r $SUPERKIT/packages/core/commands/ .claude/commands/
+cp -r $SUPERKIT/packages/core/hooks/ .claude/scripts/hooks/
+cp -r $SUPERKIT/packages/core/rules/ .claude/rules/
+cp -r $SUPERKIT/packages/core/skills/ .claude/skills/
+cp $SUPERKIT/packages/core/settings.json .claude/settings.json
+cp $SUPERKIT/packages/core/CLAUDE.md ./CLAUDE.md
+
+# Add stack-specific agents (example: Go + TypeScript)
+cp $SUPERKIT/packages/stack-agents/go/go-reviewer.md .claude/agents/
+cp $SUPERKIT/packages/stack-agents/typescript/ts-reviewer.md .claude/agents/
+cp $SUPERKIT/packages/stack-hooks/go/*.sh .claude/scripts/hooks/
+cp $SUPERKIT/packages/stack-hooks/typescript/*.sh .claude/scripts/hooks/
 
 # Make hooks executable
 chmod +x .claude/scripts/hooks/*.sh
@@ -65,6 +68,10 @@ chmod +x .claude/scripts/hooks/*.sh
 | `/test` | Auto-detect stack and run tests |
 | `/lint` | Auto-detect stack and run linters |
 | `/commit` | Conventional commit with secret scanning |
+| `/new-migration` | Create migration file pair (up + down) |
+| `/migrate` | Apply or rollback database migrations |
+| `/docs-init` | Scaffold architecture documentation |
+| `/security-scan` | Run security scan on .claude/ configs |
 
 ## Hook Profiles
 
@@ -75,6 +82,10 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | `fast` | Only git safety + console.log warning |
 | `standard` (default) | All core hooks + stack formatters |
 | `strict` | Everything + go vet on every edit + stop verification |
+
+## Troubleshooting
+
+See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues, platform-specific guidance, and FAQ.
 
 ## Documentation
 
