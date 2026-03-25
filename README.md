@@ -88,18 +88,23 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 history.
 
 ```mermaid
 graph LR
-    A["👤 You"] -->|"/dev task"| B["🎯 Dev Orchestrator"]
-    B --> C["📋 Plan"]
-    C --> D["⚡ Implement"]
-    D --> E["✅ Verify"]
+    A["👤 You"] -->|"/dev task"| B["🎯 Understand"]
+    B -->|"complex?"| B1["🏗️ Architect"]
+    B1 --> C["📋 Plan"]
+    B -->|"standard"| C
+    C --> C1["✅ Plan Checker"]
+    C1 --> D["⚡ Implement"]
+    D --> E["🔧 Verify"]
     E --> F["🧪 Test"]
-    F --> G["🔍 Review"]
+    F --> F1["🔬 Goal Verifier"]
+    F1 --> G["🔍 Review"]
     G --> H["go-reviewer"]
     G --> I["ts-reviewer"]
     G --> J["security-scanner"]
     G --> K["database-reviewer"]
     H & I & J & K --> L["🔄 Validate Findings"]
-    L --> M["📊 Report"]
+    L --> M["📄 Document"]
+    M --> N["📊 Report"]
 ```
 
 ## 🚀 Installation
