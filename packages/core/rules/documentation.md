@@ -41,5 +41,17 @@ If ANY answer is YES → update docs BEFORE committing.
 - Typo fixes
 - Dependency updates (unless API changes)
 
-## Enforcement
-Update docs proactively with every code change. Do NOT rely on session-end hooks — they are a safety net, not the primary mechanism.
+## Enforcement (3 layers)
+
+1. **Rule (this file)** — Claude reads this on every session. Primary mechanism.
+2. **PreToolUse hook (`doc-check-on-commit.sh`)** — warns before every `git commit` if code changed but no docs updated.
+3. **Stop hook** — opus-level verification at session end. Safety net.
+
+Do NOT rely on hooks alone — update docs proactively with every code change.
+
+## Plan completion gate
+
+When finishing an implementation plan (superpowers writing-plans / executing-plans):
+- **BEFORE marking the plan as complete**, run the pre-commit checklist above
+- If any docs are stale — update them as the FINAL task
+- A plan is NOT complete until docs are updated
