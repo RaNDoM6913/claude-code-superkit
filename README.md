@@ -88,8 +88,9 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 h
 ## 🔄 How it Works
 
 ```mermaid
-graph TD
-    subgraph planning ["📐 Planning"]
+graph LR
+    subgraph planning [" Planning "]
+        direction TB
         A["👤 You"] -->|"/dev task"| B["🎯 Understand"]
         B -->|"complex?"| B1["🏗️ Architect"]
         B1 --> C["📋 Plan"]
@@ -97,24 +98,27 @@ graph TD
         C --> C1["✅ Plan Checker"]
     end
 
-    subgraph execution ["⚡ Execution"]
+    subgraph execution [" Execution "]
+        direction TB
         D["⚡ Implement"] --> E["🔧 Verify"]
         E --> F["🧪 Test"]
         F --> F1["🔬 Goal Verifier"]
     end
 
-    subgraph quality ["🔍 Quality"]
-        G["🔍 Review"] --> H["go-reviewer"]
-        G --> I["ts-reviewer"]
-        G --> J["security-scanner"]
-        G --> K["database-reviewer"]
-        H & I & J & K --> L["🔄 Validate"]
+    subgraph quality [" Quality "]
+        direction TB
+        G["🔍 Review"] --> R["go / ts / security / db"]
+        R --> L["🔄 Validate"]
         L --> M["📄 Document"]
         M --> N["📊 Report"]
     end
 
     C1 --> D
     F1 --> G
+
+    style planning fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
+    style execution fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
+    style quality fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
 ```
 
 ## 🚀 Installation
