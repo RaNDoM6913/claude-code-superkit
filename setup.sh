@@ -4,6 +4,27 @@
 
 set -euo pipefail
 
+VERSION="1.1.0"
+
+if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+  echo "claude-code-superkit v$VERSION — interactive installer"
+  echo ""
+  echo "Usage: bash setup.sh [options]"
+  echo ""
+  echo "Options:"
+  echo "  --help, -h     Show this help"
+  echo "  --version, -v  Show version"
+  echo ""
+  echo "Run from your project root (must be a git repository)."
+  echo "Requires: git, jq. Recommended: claude CLI, tree."
+  exit 0
+fi
+
+if [ "${1:-}" = "--version" ] || [ "${1:-}" = "-v" ]; then
+  echo "claude-code-superkit v$VERSION"
+  exit 0
+fi
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PACKAGES="$SCRIPT_DIR/packages"
 
@@ -37,9 +58,15 @@ if ! command -v jq &>/dev/null; then
   fail "jq is required for settings.json assembly. Install: brew install jq (macOS) or apt install jq (Linux)"
 fi
 
+# Check claude CLI (recommended)
+if ! command -v claude &>/dev/null; then
+  warn "Claude Code CLI not found. Install: npm install -g @anthropic-ai/claude-code"
+  warn "Superkit requires Claude Code to function. Continuing setup anyway..."
+fi
+
 # Check we're in a git repo
 if ! git rev-parse --is-inside-work-tree &>/dev/null; then
-  fail "Not inside a git repository. Run this from your project root."
+  fail "Not inside a git repository. Run from your project root: cd /path/to/your-project && git init"
 fi
 
 PROJECT_DIR="$(git rev-parse --show-toplevel)"
@@ -177,8 +204,8 @@ copy_file() {
   if [ "$MODE" = "merge" ] && [ -f "$dst" ]; then
     return 0  # skip existing
   fi
-  mkdir -p "$(dirname "$dst")"
-  cp "$src" "$dst"
+  mkdir -p "$(dirname "$dst")" || { warn "Cannot create directory for $dst"; return 1; }
+  cp "$src" "$dst" || { warn "Failed to copy $src → $dst"; return 1; }
 }
 
 copy_dir() {
