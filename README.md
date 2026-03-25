@@ -89,13 +89,12 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 h
 
 ```mermaid
 graph LR
-    U(["👤 /dev task"]) --> P --> E --> Q
+    P -->|" "| E -->|" "| Q
 
-    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate Plan"]
-    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Verify<br/>7 · Test<br/>8 · Check Goals"]
-    Q["🔍 <b>Quality</b><br/><br/>9 · Review × 4<br/>10 · Validate<br/>11 · Docs<br/>12 · Report"]
+    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
+    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Verify<br/>7 · Test<br/>8 · Goals"]
+    Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Validate<br/>11 · Docs<br/>12 · Report"]
 
-    style U fill:#f5f5f5,stroke:#9E9E9E,stroke-width:2px,color:#333
     style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
     style E fill:#fff3e0,stroke:#F57C00,stroke-width:2px,color:#333
     style Q fill:#e8f5e9,stroke:#388E3C,stroke-width:2px,color:#333
