@@ -85,7 +85,7 @@ Don't reinvent — discover and adapt.
 
 See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 history.
 
-## 🔄 How it Works
+## 🔄 How `/dev` Works
 
 ```mermaid
 graph LR
