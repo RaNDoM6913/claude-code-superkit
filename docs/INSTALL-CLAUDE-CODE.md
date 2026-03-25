@@ -7,7 +7,7 @@
 | git | Yes | System package manager |
 | jq | Yes | `brew install jq` (macOS) / `sudo apt install jq` (Linux) |
 | Claude Code CLI | Yes | `npm install -g @anthropic-ai/claude-code` |
-| Superpowers plugin | Recommended | Auto-installed by setup.sh, or: Claude Code → `/plugins` → "superpowers" |
+| Plugins | Recommended | Auto-enabled by setup.sh: superpowers, github, context7, code-review. Install via Claude Code → `/plugins` |
 | tree | Optional | `brew install tree` — nicer project tree generation |
 
 ## Option 1: Interactive Setup (recommended)
@@ -28,21 +28,22 @@ bash /path/to/claude-code-superkit/setup.sh
 1. **Checks prerequisites** — git, jq, Claude CLI
 2. **Installs superpowers plugin** — auto-clones from GitHub if missing
 3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup + replace), or abort
-4. **Asks your stack** — Go, TypeScript, Python, Rust (multi-select)
-5. **Asks extras** — bot-reviewer, design-system-reviewer
-6. **Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
-7. **Copies files**:
-   - 20 core agents → `.claude/agents/`
+4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust (multi-select)
+5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer
+6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
+7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
+8. **Copies files**:
+   - 21 core agents → `.claude/agents/`
    - Up to 4 stack agents → `.claude/agents/`
-   - 10 commands → `.claude/commands/`
-   - 8+ hooks → `.claude/scripts/hooks/`
-   - 5 rules → `.claude/rules/`
+   - 11 commands → `.claude/commands/`
+   - 11+ hooks → `.claude/scripts/hooks/`
+   - 6 rules → `.claude/rules/`
    - 3 skills → `.claude/skills/`
-   - `settings.json` with hook wiring
+   - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template
-8. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
-9. **Validates** — checks JSON, hook permissions, file presence
-10. **Optionally installs for Codex CLI** — copies 36 skills to `.codex/skills/`
+9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
+10. **Validates** — checks JSON, hook permissions, file presence
+11. **Optionally installs for Codex CLI** — copies 37 skills to `.codex/skills/`
 
 ### Hook Profiles
 
@@ -111,9 +112,14 @@ Add to `~/.zshrc` or `~/.bashrc`:
 export CLAUDE_HOOK_PROFILE=standard
 ```
 
-### 4. Install superpowers plugin (if not auto-installed)
+### 4. Install plugins
 
-Open Claude Code → type `/plugins` → search "superpowers" → install
+Open Claude Code → type `/plugins` → install each enabled plugin:
+- **superpowers** — TDD, brainstorming, debugging, verification
+- **github** — PR comments, issue tracking
+- **context7** — library documentation lookup
+- **code-review** — enhanced code review workflows
+- Plus any optional plugins you selected during setup
 
 ### 5. Verify
 
