@@ -16,6 +16,7 @@ All notable changes to claude-code-superkit are documented here.
 - **Mitigation roadmap** in security-scanner — Phase 3: prioritized fix plan (immediate/short/medium/long-term)
 - **Auto-fix recommendations** in health-checker — check 10: concrete fix suggestions for each unhealthy check
 - **Enhanced config-protection** — .env file warnings + DECISIONS.md append-only enforcement
+- **`auto-commands.md` rule** — auto-triggers for /review, /test, /lint, /audit --health, /security-scan based on file count, change type, and sensitivity
 - **Plugin auto-configuration** — setup.sh enables 4 base plugins (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 - **`enabledPlugins`** in core settings.json — base plugins enabled out of the box
 

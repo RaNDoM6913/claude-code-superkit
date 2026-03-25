@@ -10,7 +10,7 @@ packages/
     agents/                 # 21 agents (all opus)
     commands/               # 11 commands
     hooks/                  # 11 hooks
-    rules/                  # 5 rules
+    rules/                  # 6 rules
     skills/                 # 3 skills
     settings.json           # Hook wiring
     CLAUDE.md               # Template for users
@@ -57,7 +57,7 @@ VERSION                     # 1.2.0
 | Skills | 3 | — | 1 | 11 | 37 |
 | Commands | 11 | — | — | 16 | 8 |
 | Hooks | 11 | 5 | — | 13 | — |
-| Rules | 5 | — | — | 5 | — |
+| Rules | 6 | — | — | 5 | — |
 
 ## Conventions
 
