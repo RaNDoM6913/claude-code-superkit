@@ -182,10 +182,12 @@ Install both for the complete experience.
 | playwright | Browser automation/screenshots | Plugin (built-in) |
 | context7 | Library docs lookup | Plugin (built-in) |
 
-### Platforms
+### Repos & Platforms
 
-| Platform | What | Link |
+| Resource | What | Link |
 |----------|------|------|
+| Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
+| SkillsMP | 500K+ agent skills marketplace with search API | [skillsmp.com](https://skillsmp.com) |
 | 21st.dev | AI agent deployment + community UI components | [21st.dev](https://21st.dev) |
 
 ## Contributing
