@@ -46,7 +46,7 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.1.0
+VERSION                     # 1.2.0
 ```
 
 ## Current Counts
@@ -54,9 +54,9 @@ VERSION                     # 1.1.0
 | Component | Core | Stack | Extras | Showcase | Codex |
 |-----------|------|-------|--------|----------|-------|
 | Agents | 21 | 4 | 3 | 28 | — |
-| Skills | 3 | — | 1 | 12 | 37 |
+| Skills | 3 | — | 1 | 11 | 37 |
 | Commands | 10 | — | — | 16 | 8 |
-| Hooks | 10 | 5 | — | 15 | — |
+| Hooks | 10 | 5 | — | 13 | — |
 | Rules | 5 | — | — | 5 | — |
 
 ## Conventions
@@ -106,5 +106,5 @@ After ANY change to agents, commands, hooks, rules, skills, or setup.sh:
 | `setup.sh` | Interactive installer — stack selection, superpowers auto-install, validation |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) |
 | `packages/core/rules/documentation.md` | 3-layer doc enforcement rule |
-| `packages/core/commands/dev.md` | 8-phase dev orchestrator with plan-checker + goal-verifier gates |
+| `packages/core/commands/dev.md` | 10-phase dev orchestrator with plan-checker + goal-verifier gates |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |

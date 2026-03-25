@@ -142,7 +142,7 @@ Start a new Claude Code session and run `/review --full`. You should see agents 
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 8-phase orchestrator: understand → plan → implement → verify → test → review → document → report |
+| `/dev <task>` | 10-phase orchestrator: understand → plan → validate → implement → verify → test → verify goals → review → document → report |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
 | `/test` | Auto-detect stack and run tests |
@@ -182,7 +182,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## 🏗️ Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 16 commands, 13 hooks, 11 skills, and 5 rules.
 
 <details>
 <summary>📖 Documentation (12 chapters + 3 examples)</summary>
