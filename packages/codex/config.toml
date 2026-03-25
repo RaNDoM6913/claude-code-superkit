@@ -1,8 +1,7 @@
 # claude-code-superkit — Codex CLI configuration
 # Place in .codex/config.toml (project) or ~/.codex/config.toml (global)
 
-model = "o3"
-model_reasoning_effort = "high"
+model = "gpt-5.4"
 
 [features]
 multi_agent = true

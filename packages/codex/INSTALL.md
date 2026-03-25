@@ -5,7 +5,7 @@
 ### Step 1: Clone the superkit
 
 ```bash
-git clone https://github.com/YOUR_ORG/claude-code-superkit.git
+git clone https://github.com/RaNDoM6913/claude-code-superkit.git
 cd claude-code-superkit
 ```
 
@@ -32,6 +32,8 @@ cp claude-code-superkit/packages/codex/config.toml .codex/config.toml
 cp claude-code-superkit/packages/codex/config.toml ~/.codex/config.toml
 ```
 
+The default model is **gpt-5.4** (most capable). Edit `config.toml` to change.
+
 ### Step 4: Set up AGENTS.md
 
 ```bash
@@ -54,7 +56,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 | Skill | Description |
 |-------|-------------|
 | `dev-orchestrator` | Full development cycle: understand, plan, implement, verify, test, review, document |
-| `review-orchestrator` | Detect changes, dispatch reviewers in parallel, collect findings |
+| `review-orchestrator` | Detect changes, dispatch reviewers, **double-verify** findings, collect report |
 | `audit-orchestrator` | Parallel audit across frontend, backend, infra, security |
 | `test-runner` | Auto-detect project test runner and execute tests |
 | `lint-runner` | Auto-detect linters, run with optional --fix mode |
@@ -62,30 +64,35 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 | `new-migration` | Scaffold migration file pair with auto-numbering |
 | `migrate` | Apply or rollback database migrations |
 
-### 16 Agent Skills (auto-dispatched by orchestrators)
+### 21 Agent Skills (auto-dispatched by orchestrators)
 
-These are converted from core agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack:
+These are converted from core + extras agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack:
 
 | Skill | Category |
 |-------|----------|
 | `code-reviewer` | Quality — generic code review |
-| `security-scanner` | Security — OWASP + 18 checks |
-| `audit-frontend` | Audit — frontend code quality |
-| `audit-backend` | Audit — backend code quality |
-| `audit-infra` | Audit — infrastructure security |
+| `security-scanner` | Security — OWASP + 47 checks |
+| `audit-frontend` | Audit — frontend code quality (15 checks) |
+| `audit-backend` | Audit — backend code quality (15 checks) |
+| `audit-infra` | Audit — infrastructure security (12 checks) |
 | `migration-reviewer` | Quality — SQL migration review |
 | `test-generator` | Productivity — generate tests |
 | `e2e-test-generator` | Productivity — Playwright/Cypress tests |
 | `health-checker` | DevOps — compilation checks |
-| `pre-deploy-validator` | DevOps — pre-deploy checklist |
+| `pre-deploy-validator` | DevOps — pre-deploy checklist (9 points) |
 | `dependency-checker` | DevOps — dependency audit |
 | `debug-observer` | Observability — debug analysis |
 | `docs-checker` | Quality — documentation completeness |
-| `api-contract-sync` | Quality — API spec sync |
+| `api-contract-sync` | Quality — API spec ↔ routes sync |
 | `scaffold-endpoint` | Productivity — new endpoint scaffolding |
-| `ui-reviewer` | Quality — UI/UX review |
+| `ui-reviewer` | Quality — UI/UX design system review |
+| `bot-reviewer` | Quality — bot code review (Telegram/Discord/Slack) |
+| `design-system-reviewer` | Quality — design system compliance |
+| `project-architecture` | Knowledge — project architecture reference |
+| `writing-agents` | Knowledge — how to write agents |
+| `writing-commands` | Knowledge — how to write command orchestrators |
 
-### Stack-Specific Agents (add from stack-agents/)
+### Stack-Specific Reviewers (add per language)
 
 Copy only the ones matching your stack:
 
@@ -103,11 +110,21 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: up to 28 skills
+### Total: up to 33 skills
 
 - 8 command skills (user-invocable)
-- 16 core agent skills (auto-dispatched)
-- 4 stack-specific agent skills (optional, per language)
+- 21 agent + knowledge skills (auto-dispatched)
+- 4 stack-specific reviewer skills (optional, per language)
+
+## Model Configuration
+
+The default `config.toml` uses **gpt-5.4** — the most capable model available:
+
+```toml
+model = "gpt-5.4"
+```
+
+All skills inherit this model. Unlike Claude Code (where each agent has its own `model:` field), Codex uses a single global model from config.toml.
 
 ## What's NOT Available in Codex
 
@@ -119,6 +136,7 @@ Codex CLI does not support these Claude Code features:
 | **Session continuity** | SessionStart hook restores context | Not supported | Rely on AGENTS.md for context |
 | **Stop verification** | Auto-verifies compile + docs before end | Not supported | Manually run lint/test skills |
 | **Format-on-edit** | Auto-formats after file edits | Not supported | Run lint-runner with --fix |
+| **Doc-check-on-commit** | Warns when committing without docs | Not supported | Documentation rule in AGENTS.md |
 | **Migration safety hook** | Auto-validates migration naming | Not supported | migration-reviewer skill checks post-hoc |
 | **Bundle import check** | Warns on missing package.json deps | Not supported | dependency-checker skill |
 | **Hook profiles** | fast/standard/strict profiles | Not supported | Single configuration via AGENTS.md |
@@ -134,7 +152,7 @@ ls -la AGENTS.md
 # Check skills are installed
 ls .codex/skills/
 
-# Check config
+# Check config (should show gpt-5.4)
 cat .codex/config.toml
 
 # Run Codex to test
@@ -155,12 +173,3 @@ git pull
 # Re-copy skills
 cp -r packages/codex/skills/* /path/to/your-project/.codex/skills/
 ```
-
-### Re-generate agent skills from latest core agents
-
-```bash
-# Run the conversion script to regenerate all agent skills
-bash /path/to/claude-code-superkit/tools/convert-agents-to-codex-skills.sh
-```
-
-This reads `packages/core/agents/*.md` and regenerates `packages/codex/skills/*/SKILL.md` with Codex-compatible frontmatter.
