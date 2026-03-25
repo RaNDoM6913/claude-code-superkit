@@ -88,24 +88,33 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 h
 ## 🔄 How it Works
 
 ```mermaid
-graph LR
-    A["👤 You"] -->|"/dev task"| B["🎯 Understand"]
-    B -->|"complex?"| B1["🏗️ Architect"]
-    B1 --> C["📋 Plan"]
-    B -->|"standard"| C
-    C --> C1["✅ Plan Checker"]
-    C1 --> D["⚡ Implement"]
-    D --> E["🔧 Verify"]
-    E --> F["🧪 Test"]
-    F --> F1["🔬 Goal Verifier"]
-    F1 --> G["🔍 Review"]
-    G --> H["go-reviewer"]
-    G --> I["ts-reviewer"]
-    G --> J["security-scanner"]
-    G --> K["database-reviewer"]
-    H & I & J & K --> L["🔄 Validate Findings"]
-    L --> M["📄 Document"]
-    M --> N["📊 Report"]
+graph TD
+    subgraph planning ["📐 Planning"]
+        A["👤 You"] -->|"/dev task"| B["🎯 Understand"]
+        B -->|"complex?"| B1["🏗️ Architect"]
+        B1 --> C["📋 Plan"]
+        B -->|"standard"| C
+        C --> C1["✅ Plan Checker"]
+    end
+
+    subgraph execution ["⚡ Execution"]
+        D["⚡ Implement"] --> E["🔧 Verify"]
+        E --> F["🧪 Test"]
+        F --> F1["🔬 Goal Verifier"]
+    end
+
+    subgraph quality ["🔍 Quality"]
+        G["🔍 Review"] --> H["go-reviewer"]
+        G --> I["ts-reviewer"]
+        G --> J["security-scanner"]
+        G --> K["database-reviewer"]
+        H & I & J & K --> L["🔄 Validate"]
+        L --> M["📄 Document"]
+        M --> N["📊 Report"]
+    end
+
+    C1 --> D
+    F1 --> G
 ```
 
 ## 🚀 Installation
