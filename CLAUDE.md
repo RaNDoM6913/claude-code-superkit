@@ -84,12 +84,13 @@ After ANY change to agents, commands, hooks, rules, skills, or setup.sh:
 
 ### Release Rules (MANDATORY)
 
-- **Every VERSION bump MUST have a GitHub release** — `gh release create vX.Y.Z`
+- **Releases are NOT per-commit** — accumulate changes, release when user says "выпусти релиз"
+- **Claude may suggest a release** — if enough changes accumulated (3+ agents, major command rewrite, etc.), ask: "Накопилось N изменений, выпустить релиз?"
 - **Releases are sequential** — never skip versions (1.0→1.1→1.2, not 1.0→1.2)
-- **README "What's New" section** — always shows LATEST version, not stale
-- **CHANGELOG.md** — must have entry for EVERY version before release is created
-- **Release notes** — copy from CHANGELOG, add emoji headers for readability
-- **Order**: bump VERSION → update CHANGELOG → update README What's New → commit → push → `gh release create`
+- **CHANGELOG.md** — update continuously as changes are made (under `## [Unreleased]` section)
+- **On release**: move `[Unreleased]` → `[X.Y.Z] — date`, bump VERSION, update README What's New, commit, push, `gh release create`
+- **Release notes** — comprehensive summary of ALL changes since last release, with emoji headers
+- **Order**: CHANGELOG [Unreleased] → rename to version → bump VERSION → update README What's New → commit → push → `gh release create`
 
 ### Checklist before commit:
 - [ ] Agent count in README badge matches `ls packages/core/agents/*.md | wc -l` + stack + extras
