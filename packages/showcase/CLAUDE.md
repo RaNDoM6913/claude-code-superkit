@@ -176,27 +176,27 @@ Profile: `CLAUDE_HOOK_PROFILE=fast|standard|strict` (default: standard)
 
 | Agent | Category | Model | Status | Описание |
 |-------|----------|-------|--------|----------|
-| go-reviewer | Quality | sonnet | **active** | Go code review: layers, DI, error handling, SQL safety |
-| ts-reviewer | Quality | sonnet | **active** | TypeScript/React review: motion/react, TanStack Query, design system |
-| migration-reviewer | Quality | sonnet | **active** | SQL migration review: naming, rollback, constraints |
-| onyx-ui-reviewer | Quality | sonnet | **active** | UI review: glass design system, glass components, z-index |
-| bot-reviewer | Quality | sonnet | **active** | 22 checks: callbacks, state machines, goroutine safety, rate limits |
-| pre-deploy-validator | DevOps | sonnet | **active** | 9-point pre-deploy checklist + security scan |
-| security-scanner | DevOps | sonnet | **active** | 47 security checks: OWASP + social app + Telegram + photo |
+| go-reviewer | Quality | opus | **active** | Go code review: layers, DI, error handling, SQL safety |
+| ts-reviewer | Quality | opus | **active** | TypeScript/React review: motion/react, TanStack Query, design system |
+| migration-reviewer | Quality | opus | **active** | SQL migration review: naming, rollback, constraints |
+| onyx-ui-reviewer | Quality | opus | **active** | UI review: glass design system, glass components, z-index |
+| bot-reviewer | Quality | opus | **active** | 22 checks: callbacks, state machines, goroutine safety, rate limits |
+| pre-deploy-validator | DevOps | opus | **active** | 9-point pre-deploy checklist + security scan |
+| security-scanner | DevOps | opus | **active** | 47 security checks: OWASP + social app + Telegram + photo |
 | test-generator | Productivity | opus | **active** | Go table-driven tests + edge cases |
 | playwright-test-generator | Productivity | opus | **active** | Playwright e2e tests для admin |
-| api-contract-sync | Productivity | sonnet | **active** | OpenAPI spec ↔ routes.go sync |
-| health-checker | Productivity | sonnet | **active** | 9-point project health dashboard (ex-/health command) |
-| docs-checker | Productivity | sonnet | **active** | Docs freshness check vs recent code changes (ex-/docs-check command) |
-| scaffold-endpoint | Productivity | sonnet | **active** | Scaffold admin endpoint by project patterns (ex-/new-endpoint command) |
-| debug-observer | Observability | sonnet | **active** | Debug: logs + DB + Redis + traces |
-| dependency-checker | DevOps | sonnet | **active** | npm/Go dependency audit |
-| audit-frontend | Audit | sonnet | **active** | 15 checks: hardcoded values, mock data, query keys, TypeScript |
-| audit-backend | Audit | sonnet | **active** | 15 checks: SQL safety, error handling, PII leaks, auth gaps |
-| audit-bots | Audit | sonnet | **active** | 12 checks: goroutine safety, rate limits, callback data |
-| audit-security | Audit | sonnet | **active** | 12 checks: secrets, CORS, photo URLs, phone isolation |
-| events-discovery | Discovery | sonnet | **experimental** | Yandex Places MCP |
-| content-curator | Discovery | sonnet | **experimental** | Promo content, seasonal events |
+| api-contract-sync | Productivity | opus | **active** | OpenAPI spec ↔ routes.go sync |
+| health-checker | Productivity | opus | **active** | 9-point project health dashboard (ex-/health command) |
+| docs-checker | Productivity | opus | **active** | Docs freshness check vs recent code changes (ex-/docs-check command) |
+| scaffold-endpoint | Productivity | opus | **active** | Scaffold admin endpoint by project patterns (ex-/new-endpoint command) |
+| debug-observer | Observability | opus | **active** | Debug: logs + DB + Redis + traces |
+| dependency-checker | DevOps | opus | **active** | npm/Go dependency audit |
+| audit-frontend | Audit | opus | **active** | 15 checks: hardcoded values, mock data, query keys, TypeScript |
+| audit-backend | Audit | opus | **active** | 15 checks: SQL safety, error handling, PII leaks, auth gaps |
+| audit-bots | Audit | opus | **active** | 12 checks: goroutine safety, rate limits, callback data |
+| audit-security | Audit | opus | **active** | 12 checks: secrets, CORS, photo URLs, phone isolation |
+| events-discovery | Discovery | opus | **experimental** | Yandex Places MCP |
+| content-curator | Discovery | opus | **experimental** | Promo content, seasonal events |
 
 ### Rules (3)
 `.claude/rules/`: coding-style (incl. testing + search-first), security, git-workflow

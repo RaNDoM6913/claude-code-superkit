@@ -19,7 +19,7 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ---
 ```
 
-- **model**: `sonnet` for review/audit (fast, cheap), `opus` for code generation (high quality)
+- **model**: `opus` for all agents -- maximum reasoning depth and accuracy. Sonnet/haiku available but not recommended.
 - **allowed-tools**: minimal set needed. Review agents: `Read, Grep, Glob, Bash`. Generator agents add `Edit, Write`.
 
 ## Standard 2-Phase Review Process

@@ -10,7 +10,7 @@ Agent files are Markdown with YAML frontmatter. Place them in `.claude/agents/`.
 ---
 name: agent-name
 description: One-line description (used for dispatch matching)
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 ```
@@ -21,7 +21,7 @@ allowed-tools: Read, Grep, Glob, Bash
 |-------|--------|----------|
 | `name` | kebab-case identifier | Matches the filename without `.md` |
 | `description` | One line | Commands use this to decide which agent to dispatch |
-| `model` | `sonnet`, `opus`, `haiku` | `sonnet` for review/audit (fast, cheap). `opus` for code generation (high quality). `haiku` for lightweight checks. |
+| `model` | `opus` | Use `opus` for all agents -- maximum reasoning depth and accuracy. |
 | `allowed-tools` | Comma-separated | Review agents: `Read, Grep, Glob, Bash`. Generator agents add: `Edit, Write`. |
 
 ## 2-Phase Review Process
@@ -114,7 +114,7 @@ Create `.claude/agents/dockerfile-reviewer.md`:
 ---
 name: dockerfile-reviewer
 description: Review Dockerfiles for security, image size, and best practices
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob
 ---
 

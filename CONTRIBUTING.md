@@ -26,7 +26,7 @@
 ---
 name: agent-name
 description: One-line description
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

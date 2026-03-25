@@ -20,7 +20,7 @@ Create `.claude/agents/dockerfile-reviewer.md`:
 ---
 name: dockerfile-reviewer
 description: Review Dockerfiles for security, performance, and best practices
-model: sonnet
+model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
 ```
@@ -31,7 +31,7 @@ allowed-tools: Read, Grep, Glob, Bash
 |-------|-------|-----|
 | `name` | `dockerfile-reviewer` | Used for dispatch matching when calling the agent |
 | `description` | One-line summary | Shown in agent listings, used by orchestrators to decide when to dispatch |
-| `model` | `sonnet` | Fast and cheap -- perfect for review/audit tasks. Use `opus` for code generation |
+| `model` | `opus` | Maximum reasoning depth for all tasks |
 | `allowed-tools` | `Read, Grep, Glob, Bash` | Minimal toolset. Review agents don't need `Edit` or `Write` |
 
 ## Step 2: Write the Checklist
