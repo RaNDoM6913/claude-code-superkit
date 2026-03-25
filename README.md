@@ -88,36 +88,8 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 h
 ## 🔄 How it Works
 
 ```mermaid
-graph TD
-    subgraph p ["  Planning  "]
-        direction LR
-        A["👤 You"] -->|"/dev"| B["🎯 Understand"]
-        B --> B1["🏗️ Architect?"]
-        B1 --> C["📋 Plan"]
-        C --> C1["✅ Plan Checker"]
-    end
-
-    subgraph e ["  Execution  "]
-        direction LR
-        D["⚡ Implement"] --> E["🔧 Verify"]
-        E --> F["🧪 Test"]
-        F --> F1["🔬 Goal Verifier"]
-    end
-
-    subgraph q ["  Quality  "]
-        direction LR
-        G["🔍 Review"] --> R["go / ts / security / db"]
-        R --> L["🔄 Validate"]
-        L --> M["📄 Document"]
-        M --> N["📊 Report"]
-    end
-
-    C1 --> D
-    F1 --> G
-
-    style p fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
-    style e fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
-    style q fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
+graph LR
+    P["📐 <b>Planning</b><br/><br/>You → Understand<br/>Architect · Plan<br/>Plan Checker"] --> E["⚡ <b>Execution</b><br/><br/>Implement → Verify<br/>Test<br/>Goal Verifier"] --> Q["🔍 <b>Quality</b><br/><br/>Review × 4 agents<br/>Validate Findings<br/>Document → Report"]
 ```
 
 ## 🚀 Installation
