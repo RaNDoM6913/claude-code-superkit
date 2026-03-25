@@ -2,7 +2,7 @@
 
 All notable changes to claude-code-superkit are documented here.
 
-## [Unreleased]
+## [1.3.0] — 2026-03-25
 
 ### Added
 - **`/workflow` command** — predefined workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit

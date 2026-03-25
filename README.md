@@ -72,17 +72,18 @@ Don't reinvent — discover and adapt.
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
-## 🆕 What's New (v1.2.0)
+## 🆕 What's New (v1.3.0)
 
-- 🎯 **`/dev` v2 — 10-phase orchestrator** with architect, plan-checker, goal-verifier
-- 🏗️ **Phase 1.5: Architect** — dispatched for complex tasks (5+ files) to propose architecture
-- ✅ **Phase 2.5: Plan Validation** — 8-dimension check before execution starts
-- 🔬 **Phase 5.5: Goal Verification** — 4-level substantiation (exists → substantive → wired → data-flow)
-- 🧠 **Complexity routing** — simple tasks skip validation, complex get full pipeline
-- 🗄️ **database-reviewer** — PostgreSQL specialist in review phase
-- 📄 **docs-reviewer** — merged docs-checker + doc-updater into one agent
+- 🔄 **`/workflow` command** — predefined templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit
+- ⚡ **`/dev --quick` mode** — lightweight cycle skipping architect, plan validation, goal verification, docs
+- 🏥 **`/audit --health` mode** — quick health dashboard (~30s vs ~5min)
+- 🔁 **`loop-guard.sh` hook** — detects repeated identical tool calls and A→B→A→B loops
+- 🔬 **Anti-anchoring scan** in code-reviewer — grep anti-patterns before reading code
+- 🕵️ **Forensics phase** in debug-observer — scientific method with READ-ONLY investigation
+- 🛡️ **Mitigation roadmap** in security-scanner — prioritized fix plan (immediate/short/medium/long-term)
+- 📦 **Safe upgrade strategy** in dependency-checker — rollback planning, blast radius estimation
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 history.
 
 ## 🔄 How it Works
 
@@ -226,8 +227,8 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
 | Agents / Skills | 28 agents | 37 skills (8 commands + 25 agents + 4 stack) |
-| Commands | 10 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 15 + Stop | — (inline rules in AGENTS.md) |
+| Commands | 11 (slash commands) | 8 (user-invocable skills) |
+| Hooks | 16 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 5 (separate files) | Inline in AGENTS.md |
 | Knowledge Skills | 3 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
