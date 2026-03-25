@@ -407,15 +407,27 @@ fi
 echo ""
 read -rp "Also install for Codex CLI? [y/N] " codex_yn
 if [[ "$codex_yn" =~ ^[Yy] ]]; then
-  CODEX_SKILLS="$HOME/.agents/skills/superkit"
-  if [ -L "$CODEX_SKILLS" ] || [ -d "$CODEX_SKILLS" ]; then
-    warn "Codex skills already installed at $CODEX_SKILLS"
-  else
-    mkdir -p "$HOME/.agents/skills"
-    ln -s "$PACKAGES/codex/skills" "$CODEX_SKILLS"
-    info "Symlinked Codex skills → ~/.agents/skills/superkit"
+  # Check if codex CLI is available
+  if ! command -v codex &>/dev/null; then
+    warn "Codex CLI not found. Install: npm install -g @openai/codex"
+    warn "Continuing with file setup anyway..."
   fi
 
+  # Copy skills into project (not symlink — survives superkit removal)
+  CODEX_SKILLS_DIR="$PROJECT_DIR/.codex/skills"
+  mkdir -p "$CODEX_SKILLS_DIR"
+  CODEX_SKILL_COUNT=0
+  for skill_dir in "$PACKAGES/codex/skills/"*/; do
+    skill_name=$(basename "$skill_dir")
+    if [ "$MODE" = "merge" ] && [ -d "$CODEX_SKILLS_DIR/$skill_name" ]; then
+      continue  # skip existing in merge mode
+    fi
+    mkdir -p "$CODEX_SKILLS_DIR/$skill_name"
+    cp "$skill_dir/SKILL.md" "$CODEX_SKILLS_DIR/$skill_name/SKILL.md" 2>/dev/null && ((CODEX_SKILL_COUNT++))
+  done
+  info "Copied $CODEX_SKILL_COUNT Codex skills → .codex/skills/"
+
+  # AGENTS.md template
   if [ ! -f "$PROJECT_DIR/AGENTS.md" ]; then
     cp "$PACKAGES/codex/AGENTS.md" "$PROJECT_DIR/AGENTS.md"
     info "Created AGENTS.md template"
@@ -423,11 +435,11 @@ if [[ "$codex_yn" =~ ^[Yy] ]]; then
     warn "AGENTS.md already exists — skipped"
   fi
 
+  # config.toml (always overwrite to ensure latest model)
   mkdir -p "$PROJECT_DIR/.codex"
-  if [ ! -f "$PROJECT_DIR/.codex/config.toml" ]; then
-    cp "$PACKAGES/codex/config.toml" "$PROJECT_DIR/.codex/config.toml"
-    info "Created .codex/config.toml"
-  fi
+  cp "$PACKAGES/codex/config.toml" "$PROJECT_DIR/.codex/config.toml"
+  info "Created .codex/config.toml (gpt-5.4, extra_high reasoning)"
+
   CODEX_INSTALLED=true
 else
   CODEX_INSTALLED=false
@@ -492,14 +504,15 @@ echo "  Claude Code:"
 echo "    Agents:   $TOTAL_AGENTS ($AGENT_COUNT core + $STACK_AGENT_COUNT stack + $EXTRA_COUNT extras)"
 echo "    Commands: $CMD_COUNT"
 echo "    Hooks:    $TOTAL_HOOKS + Stop prompt"
-echo "    Rules:    4"
+echo "    Rules:    5"
 echo "    Skills:   3"
 echo "    Profile:  $PROFILE"
 if [ "$CODEX_INSTALLED" = true ]; then
-  CODEX_SKILL_COUNT=$(find "$PACKAGES/codex/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
+  INSTALLED_CODEX_SKILLS=$(find "$PROJECT_DIR/.codex/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
   echo ""
   echo "  Codex CLI:"
-  echo "    Skills:   $CODEX_SKILL_COUNT (symlinked to ~/.agents/skills/superkit)"
+  echo "    Skills:   $INSTALLED_CODEX_SKILLS (copied to .codex/skills/)"
+  echo "    Model:    gpt-5.4 (extra_high reasoning)"
   echo "    Config:   .codex/config.toml"
   echo "    Docs:     AGENTS.md"
 fi
