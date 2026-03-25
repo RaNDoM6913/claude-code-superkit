@@ -8,8 +8,6 @@ allowed-tools: Bash, Read, Grep, Glob, Agent
 
 Detect changed files, enrich with git context, dispatch specialized reviewer agents in parallel, validate findings with independent verification agents, collect and deduplicate results. Optionally post inline comments on GitHub PRs.
 
-Absorbs former `/review-pr` and `/review-with-context` commands.
-
 ## Target
 
 $ARGUMENTS
@@ -23,7 +21,7 @@ $ARGUMENTS
 **Determine diff base:**
 - If target matches `PR#NNN` or is a number: `gh pr diff $TARGET --name-only`
 - If target is a branch name: `git diff --name-only $TARGET...HEAD`
-- If target is `--full`: review all tracked files (no diff filter)
+- If target is `--full`: review all tracked files (`git ls-files`)
 - If empty: `git diff --name-only HEAD~1`
 
 **Gather structured context:**
@@ -62,21 +60,23 @@ Description: <PR body, first 500 chars>
 
 ## Step 2 — Map Files to Agents
 
-Based on file path patterns, build a dispatch plan:
+Based on file extension and path patterns, build a dispatch plan. Each pattern maps to one or more agents:
 
 | File Pattern | Agents |
 |---|---|
-| `backend/**/*.go` (excluding migrations, tests) | **go-reviewer**, **security-scanner** |
-| `backend/migrations/*.sql` | **migration-reviewer** |
-| `frontend/src/**/*.tsx` | **ts-reviewer**, **onyx-ui-reviewer** |
-| `frontend/src/**/*.ts` | **ts-reviewer** |
-| `frontend/src/api/**` | **api-contract-sync** |
-| `tgbots/**/*.go` | **bot-reviewer**, **go-reviewer** |
-| `adminpanel/**/*.tsx` | **ts-reviewer** |
-| `adminpanel/**/*.ts` | **ts-reviewer** |
+| `*.go` (excluding `*_test.go`, `migrations/`) | **go-reviewer**, **security-scanner** |
+| `migrations/*.sql` or `db/migrate/*.sql` | **migration-reviewer** |
+| `*.tsx` | **ts-reviewer**, **design-system-reviewer** |
+| `*.ts` | **ts-reviewer** |
+| `*.py` | **py-reviewer**, **security-scanner** |
+| `*.rs` | **rs-reviewer** |
+| `**/bot*/**/*.go` or `**/bot*/**/*.py` | **bot-reviewer** |
+| `*.yaml` / `*.yml` (OpenAPI/config) | **api-contract-sync** (if available) |
+| Any changed code files | **goal-verifier** (optional — if implementation plan exists in docs/superpowers/plans/) |
 
 Rules:
 - A single agent is dispatched **at most once** even if multiple files match
+- Only dispatch agents that are actually available in the project's `.claude/agents/` directory
 - If no files match any pattern, report "No reviewable changes detected" and stop
 - List the dispatch plan before executing (agent name + matched file count)
 
@@ -84,8 +84,11 @@ Rules:
 
 All reviewer agents are independent — dispatch ALL triggered agents simultaneously.
 
+**Context injection:** When dispatching agents, include in each prompt:
+"Start with Phase 0 — read project docs (CLAUDE.md/AGENTS.md + relevant docs/architecture/ files) before starting your review."
+
 **Parallel Group 1 (code quality)**:
-- go-reviewer, ts-reviewer, onyx-ui-reviewer, bot-reviewer, migration-reviewer
+- go-reviewer, ts-reviewer, py-reviewer, rs-reviewer, bot-reviewer, migration-reviewer, design-system-reviewer
 
 **Parallel Group 2 (cross-cutting)**:
 - security-scanner, api-contract-sync
@@ -95,7 +98,7 @@ Groups 1 and 2 have no dependencies — dispatch ALL simultaneously.
 For each agent, inject the `REVIEW_CONTEXT` block:
 
 ```
-You are reviewing code changes for the TGApp project.
+You are reviewing code changes.
 
 {REVIEW_CONTEXT — filtered to files relevant to this agent}
 
@@ -112,14 +115,15 @@ Report findings in your standard output format.
 Each finding MUST include: file path, line number(s), severity, confidence, description, evidence, suggested fix.
 ```
 
-**Per-agent diff filtering**:
-- **go-reviewer**: only `*.go` hunks (excluding `*_test.go`, migrations)
-- **ts-reviewer**: only `*.ts` and `*.tsx` hunks
-- **onyx-ui-reviewer**: only `frontend/src/**/*.tsx` hunks
-- **migration-reviewer**: only `backend/migrations/*.sql` hunks
+**Per-agent diff filtering** — only include relevant file hunks:
+- **go-reviewer**: `*.go` hunks (excluding `*_test.go`, migrations)
+- **ts-reviewer**: `*.ts` and `*.tsx` hunks
+- **py-reviewer**: `*.py` hunks
+- **rs-reviewer**: `*.rs` hunks
+- **migration-reviewer**: `*.sql` migration hunks only
 - **security-scanner**: all hunks (cross-cutting concern)
-- **api-contract-sync**: `routes.go` + `handlers/*.go` + `frontend/src/api/*.ts` + `openapi.yaml` hunks
-- **bot-reviewer**: only `tgbots/**/*.go` hunks
+- **bot-reviewer**: bot-related file hunks only
+- **design-system-reviewer**: `*.tsx` / `*.vue` / `*.svelte` UI component hunks
 
 ## Step 4 — Collect Raw Findings
 
@@ -227,12 +231,12 @@ No issues found. Checked for bugs, security, and convention compliance.
 
 **If `--comment` was provided and confirmed issues exist**:
 
-For each confirmed finding, post an inline comment on the PR:
+Post a summary comment on the PR with all confirmed findings:
 ```bash
 # Get the full SHA for link formatting
 FULL_SHA=$(git rev-parse HEAD)
 
-# Post a summary comment first
+# Post summary comment
 gh pr comment $PR_NUMBER --body "## Code Review
 
 Found **N confirmed issues** (X raw findings → N after double verification).

@@ -72,6 +72,7 @@ Based on file extension and path patterns, build a dispatch plan. Each pattern m
 | `*.rs` | **rs-reviewer** |
 | `**/bot*/**/*.go` or `**/bot*/**/*.py` | **bot-reviewer** |
 | `*.yaml` / `*.yml` (OpenAPI/config) | **api-contract-sync** (if available) |
+| Any changed code files | **goal-verifier** (optional — if implementation plan exists in docs/superpowers/plans/) |
 
 Rules:
 - A single agent is dispatched **at most once** even if multiple files match

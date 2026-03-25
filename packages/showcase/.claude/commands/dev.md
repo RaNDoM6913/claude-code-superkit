@@ -1,75 +1,103 @@
 ---
-description: Full-stack development orchestrator — plan, implement, test, review, and document a feature or fix
+description: Full-stack development orchestrator — understand, plan, implement, verify, test, review, document, and report
 argument-hint: <task-description>
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---
 
 # Development Orchestrator
 
-Automate the full development cycle: understand → plan → implement → test → review → document.
+Automate the full development cycle: understand → plan → implement → verify → test → review → document → report.
 
 ## Task
 
 $ARGUMENTS
 
+## Phase 0 — Read Project Docs
+
+Before planning, read `docs/architecture/` files relevant to the task scope:
+- Backend task? → read `backend-layers.md`, `api-reference.md`, `database-schema.md`
+- Frontend task? → read `frontend-state.md`
+- Auth task? → read `auth-and-sessions.md`
+- Full-stack? → read all available docs
+
+This ensures the plan follows existing project architecture.
+
 ## Phase 1 — Understand
 
-1. Parse the task description to determine scope:
-   - **Backend**: new/changed endpoint, service logic, repo, migration
-   - **Frontend (user)**: API client, types, UI component, hook
-   - **Frontend (admin)**: admin page, API client, types
-   - **Bot**: moderator or support bot changes
-   - **Docs**: architecture docs, OpenAPI, CLAUDE.md, trees
+1. **Detect project stack** by scanning the repository root and subdirectories:
 
-2. Search the codebase for existing patterns related to the task:
-   - Grep for relevant domain terms, endpoint paths, service names
+   | Marker File | Stack |
+   |---|---|
+   | `go.mod` | Go backend |
+   | `package.json` + `tsconfig.json` | TypeScript (check for React, Vue, Svelte, etc.) |
+   | `pyproject.toml` / `setup.py` / `requirements.txt` | Python |
+   | `Cargo.toml` | Rust |
+   | `pom.xml` / `build.gradle` | Java/Kotlin |
+   | `docker-compose.yml` | Docker infrastructure |
+   | `migrations/` or `db/migrate/` | Database migrations |
+
+   Record the detected stacks — they determine which tools, agents, and conventions apply.
+
+2. **Parse the task description** to determine scope:
+   - Which components are affected (backend, frontend, infra, bots, docs)?
+   - Is this a new feature, enhancement, bug fix, or refactoring?
+   - What are the inputs and expected outputs?
+
+3. **Search the codebase** for existing patterns related to the task:
+   - Grep for relevant domain terms, endpoint paths, function names
    - Read existing files that will be modified or serve as templates
-   - Check `backend/internal/app/apiapp/routes.go` for existing route patterns
-   - Check `docs/architecture/backend-api-reference.md` for API contracts
+   - Check routing files for existing route patterns
+   - Check API specs (OpenAPI, GraphQL schema) for contracts
 
-3. Identify the **closest existing implementation** to use as a reference pattern. Always read it before writing new code.
+4. **Identify the closest existing implementation** to use as a reference pattern. Always read it before writing new code.
 
 ## Phase 2 — Plan
 
-Produce a structured plan before writing any code. Output the plan as a checklist:
+Produce a structured plan before writing any code. Output as a checklist, organized by component. Include only the relevant sections:
 
 ```
 ## Implementation Plan
 
+### Database
+- [ ] Migration: NNNN_description (if new table/column needed)
+
 ### Backend
-- [ ] Migration: 000NNN_description (if new table/column needed)
-- [ ] Repo: backend/internal/repo/postgres/xxx_repo.go (new methods or file)
-- [ ] Service: backend/internal/services/xxx/service.go (business logic)
-- [ ] DTO: backend/internal/transport/http/dto/ (if new request/response shapes)
-- [ ] Handler: backend/internal/transport/http/handlers/xxx_handler.go
-- [ ] Routes: backend/internal/app/apiapp/routes.go (register new routes)
-- [ ] Tests: handler_test.go, service_test.go
+- [ ] Repository/data layer: path/to/repo (new methods or file)
+- [ ] Service/business logic: path/to/service
+- [ ] DTOs/schemas: path/to/dto (if new request/response shapes)
+- [ ] Handler/controller: path/to/handler
+- [ ] Routes: path/to/routes (register new endpoints)
+- [ ] Tests: path/to/tests
 
-### Frontend (user)
-- [ ] Types: frontend/src/types/domain.ts (if new types)
-- [ ] API client: frontend/src/api/xxx.ts (new API functions)
-- [ ] Query keys: frontend/src/api/query-keys.ts (if using TanStack Query)
-- [ ] Hook: frontend/src/hooks/useXxx.ts (if new hook needed)
-- [ ] Screen/Component: frontend/src/pages/main/xxx.tsx or frontend/src/app/components/xxx.tsx
-- [ ] Navigation: frontend/src/app/MainAppScreen.tsx or App.tsx (if new screen)
+### Frontend
+- [ ] Types: path/to/types (if new types)
+- [ ] API client: path/to/api (new API functions)
+- [ ] State management: path/to/store (if new state needed)
+- [ ] Component/page: path/to/component
 
-### Frontend (admin)
-- [ ] Types: adminpanel/frontend/src/types/xxx.ts
-- [ ] API client: adminpanel/frontend/src/lib/xxxApiLive.ts + xxxApiClient.ts
-- [ ] Page: adminpanel/frontend/src/pages/xxx.tsx
+### Infrastructure
+- [ ] Docker/config changes
 
-### Bot
-- [ ] Handler changes in tgbots/bot_moderator/ or tgbots/bot_support/
-
-### Docs (mandatory if logic changed)
-- [ ] docs/architecture/backend-api-reference.md (new/changed endpoints)
-- [ ] docs/architecture/database-schema.md (new tables/columns)
-- [ ] docs/architecture/xxx.md (relevant architecture doc)
-- [ ] backend/docs/openapi.yaml (API spec)
-- [ ] CLAUDE.md (Active Plans, API tables, Known Constraints)
+### Documentation
+- [ ] API spec (OpenAPI, GraphQL schema)
+- [ ] Architecture docs
+- [ ] README updates
 ```
 
-Omit sections that are not relevant to the task. Wait for implicit confirmation (proceed immediately unless the plan is clearly wrong).
+Omit sections not relevant to the task. Proceed to implementation unless the plan is clearly wrong.
+
+## Phase 2.5 — Validate Plan
+
+Dispatch **plan-checker** agent with the plan produced in Phase 2:
+
+```
+Validate this implementation plan before execution.
+Plan: {full plan text from Phase 2}
+```
+
+- **PASS** → proceed to Phase 3
+- **REVISE** → fix blocking issues, re-run plan-checker (max 2 iterations)
+- **BLOCK** → stop, present issues to user
 
 ## Phase 3 — Implement
 
@@ -78,142 +106,109 @@ Execute the plan in dependency order. For each step, read the reference pattern 
 ### Execution Order
 
 1. **Migration** (if needed):
-   - Find next migration number: `ls backend/migrations/ | sort | tail -2`
-   - Create `000NNN_description.up.sql` and `000NNN_description.down.sql`
-   - Follow conventions: `IF NOT EXISTS`, `TIMESTAMPTZ`, `BIGSERIAL`/`UUID`, `ON DELETE` clause, indexes
+   - Find the next migration number in the project's migration directory
+   - Create up + down migration files following project conventions
+   - Use parameterized queries, `IF NOT EXISTS`, appropriate types
 
-2. **Repository** (if needed):
-   - Read the closest existing repo file for pattern
-   - Constructor: `NewXxxRepo(pool *pgxpool.Pool) *XxxRepo`
-   - `Ready() bool` method
-   - Error wrapping: `fmt.Errorf("XxxRepo.Method: %w", err)`
-   - Parameterized queries only (`$1, $2`)
+2. **Data layer** (repository/model):
+   - Follow the project's existing patterns for data access
+   - Go: pgx/sqlx/gorm patterns, `Ready()` nil-safety, `fmt.Errorf("Context.Method: %w", err)`
+   - Python: SQLAlchemy/Django ORM/raw patterns
+   - TypeScript: Prisma/TypeORM/Drizzle patterns
 
-3. **Service** (if needed):
-   - Read the closest existing service for pattern
-   - Constructor DI: `NewService(repo RepoInterface, ...) *Service`
-   - `context.Context` as first param
-   - Domain errors: `ErrNotFound`, `ErrValidation`, `ErrConflict`
-   - Optional deps via `Attach*()` methods
+3. **Business logic** (service layer):
+   - Constructor dependency injection via interfaces
+   - Go: `context.Context` as first param, domain errors
+   - Python: type hints, async where applicable
+   - TypeScript: strict types, proper error handling
 
-4. **DTO** (if new request/response shapes):
-   - JSON tags matching API contract
-   - Validation in handler, not DTO
+4. **Transport layer** (handlers/controllers):
+   - Follow existing handler patterns for the framework (chi, gin, echo, express, FastAPI, etc.)
+   - Input validation at the boundary
+   - Proper error mapping to HTTP status codes
 
-5. **Handler** (if needed):
-   - Read the closest existing handler for pattern
-   - Constructor-injected services
-   - `(w http.ResponseWriter, r *http.Request)` signature
-   - `httperrors.Write()` for responses
-   - `errors.Is()` for error mapping to HTTP status
+5. **Routes** (if needed):
+   - Register new endpoints in the router file
+   - Apply appropriate auth/middleware
 
-6. **Routes** (if needed):
-   - Register in `backend/internal/app/apiapp/routes.go`
-   - Apply auth middleware for `/v1/` routes
-   - Apply admin auth for `/admin/` routes
-
-7. **Frontend API client** (if needed):
-   - Read existing `frontend/src/api/` files for pattern
-   - Use `requestJSON<T>()` via `http.ts`
-   - Add query keys to `query-keys.ts` if using TanStack Query
-
-8. **Frontend types** (if needed):
-   - Add to `frontend/src/types/domain.ts` or create new type file
-
-9. **Frontend UI** (if needed):
-   - Read existing screens for glass design system patterns
-   - Use `m.div` (motion/react v12), never `motion.div`
-   - Tailwind for styling, Lucide for icons
-   - TanStack Query for server state, Zustand for client state
-
-10. **Admin frontend** (if needed):
-    - Live-only pattern: `xxxApiLive.ts` + `xxxApiClient.ts`
-    - Types in `adminpanel/frontend/src/types/`
-
-11. **Bot changes** (if needed):
-    - Read existing bot handlers for pattern
-    - Russian UI text, all buttons in Russian
+6. **Frontend** (if needed):
+   - Read existing components for patterns (animation library, styling approach, state management)
+   - API client using project conventions
+   - Types matching the backend contract
 
 ## Phase 4 — Verify
 
-Run compilation checks to catch errors early:
+Dispatch the **health-checker** agent (if available) or run compilation checks directly:
 
-```bash
-# Backend (if Go files changed)
-cd /path/to/your-project/backend && go vet ./...
+```
+Based on detected stack, run:
 
-# Frontend (if TS/TSX files changed)
-cd /path/to/your-project/frontend && npx tsc --noEmit
-
-# Admin frontend (if admin TS/TSX files changed)
-cd /path/to/your-project/adminpanel/frontend && npx tsc --noEmit
+Go:        go vet ./...
+TypeScript: npx tsc --noEmit
+Python:     python -m py_compile / mypy / pyright
+Rust:       cargo check
 ```
 
 Fix any errors before proceeding.
 
 ## Phase 5 — Test
 
-Dispatch the **test-generator** agent for new backend code:
+Dispatch the **test-generator** agent (if available) for new backend code:
 
 ```
-Generate table-driven Go tests for the following new/changed files:
-- [list handler, service, repo files created/modified]
+Generate tests for the following new/changed files:
+- [list files created/modified]
 
-Follow SocialApp test patterns:
-- "should [behavior] when [condition]" naming
-- httptest for handlers
-- Mock interfaces for services
-- Cover: happy path, validation errors, not found, conflict, boundary values
+Follow project test patterns. Cover:
+- Happy path
+- Validation errors
+- Not found / conflict
+- Boundary values
+- Edge cases
 ```
 
-After tests are generated, run them:
-```bash
-cd /path/to/your-project/backend && go test ./... -count=1 -short
+After tests are generated, run them using the project's test command. Fix any failures.
+
+## Phase 5.5 — Verify Goals
+
+Dispatch **goal-verifier** agent:
+
+```
+Verify implementation results match the original goals from the plan.
+Goals: {from Phase 2 plan}
+Changed files: {list from Phase 3}
 ```
 
-Fix any test failures.
+- **VERIFIED** → proceed to Phase 6
+- **PARTIAL** → fix data-flow issues, re-verify
+- **FAILED** → return to Phase 3 — critical artifacts missing
 
 ## Phase 6 — Review
 
-Dispatch relevant reviewer agents **in parallel** based on what changed:
+Dispatch reviewer agents **in parallel** based on what changed and what's available:
 
 | Changed Files | Agent |
 |---|---|
-| `backend/**/*.go` (not migrations, not tests) | **go-reviewer** |
-| `backend/migrations/*.sql` | **migration-reviewer** |
-| `frontend/src/**/*.tsx` | **ts-reviewer**, **onyx-ui-reviewer** |
-| `frontend/src/**/*.ts` | **ts-reviewer** |
-| `frontend/src/api/**` | **api-contract-sync** |
-| `backend/**/*.go` + any handler | **security-scanner** |
-| `tgbots/**/*.go` | **go-reviewer** |
+| `*.go` (not migrations, not tests) | **go-reviewer** |
+| `*.sql` migrations | **migration-reviewer** (if available) |
+| `*.tsx`, `*.ts` | **ts-reviewer** |
+| `*.py` | **py-reviewer** (if available) |
+| `*.rs` | **rs-reviewer** (if available) |
+| Any handler/controller code | **security-scanner** (if available) |
+| Bot code | **bot-reviewer** (if available) |
+| UI components | **design-system-reviewer** (if available) |
 
-For each triggered agent, pass:
-```
-Review the following new/changed files: [list files]
-These implement: [task description]
-```
-
+For each triggered agent, pass the list of changed files and the task description.
 Collect findings. Fix any CRITICAL or WARNING issues before proceeding.
 
 ## Phase 7 — Document
 
-Update all relevant documentation (mandatory per CLAUDE.md rules):
+Dispatch the **docs-checker** agent (if available) or manually update documentation:
 
-1. **Architecture docs** (`docs/architecture/`):
-   - `backend-api-reference.md` — if new/changed endpoints
-   - `database-schema.md` — if new tables/columns/migrations
-   - Other relevant docs based on what changed
-
-2. **OpenAPI spec** (`backend/docs/openapi.yaml`) — if API endpoints changed
-
-3. **CLAUDE.md** — update:
-   - Active Plans section (add new or update existing)
-   - API tables (if new endpoints)
-   - Project Structure (if new files/dirs)
-   - Migrations list (if new migration)
-   - Known Constraints (if applicable)
-
-4. **Project trees** (`docs/trees/`) — if file structure changed
+1. **API spec** — if endpoints changed (OpenAPI, GraphQL schema, etc.)
+2. **Architecture docs** — if system behavior changed
+3. **README** — if setup steps, commands, or project structure changed
+4. **Code comments** — for non-obvious logic
 
 ## Phase 8 — Report
 
@@ -228,16 +223,14 @@ Output a summary:
 ### Changes Made
 | File | Action | Description |
 |------|--------|-------------|
-| backend/migrations/000NNN_xxx.up.sql | Created | [description] |
-| backend/internal/services/xxx/service.go | Modified | [description] |
+| path/to/file | Created/Modified | [description] |
 | ... | ... | ... |
 
 ### Tests
 - X tests generated, Y passing
 
 ### Review Findings
-- go-reviewer: [PASS/WARN/FAIL]
-- migration-reviewer: [PASS/WARN/FAIL]
+- [agent]: [PASS/WARN/FAIL]
 - ...
 
 ### Documentation Updated
@@ -247,15 +240,14 @@ Output a summary:
 ```
 type(scope): description
 
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 ```
 
 ## Notes
 
-- Always read existing patterns before generating new code — search-first rule
-- Never skip tests for new endpoints
-- Never skip documentation updates if logic changed
-- Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`
+- Always read existing patterns before generating new code — search first
+- Never skip tests for new endpoints or business logic
 - If the task is ambiguous, ask for clarification before Phase 3
 - If a phase produces errors, fix them before proceeding to the next phase
+- Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`

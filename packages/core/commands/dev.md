@@ -86,6 +86,19 @@ Produce a structured plan before writing any code. Output as a checklist, organi
 
 Omit sections not relevant to the task. Proceed to implementation unless the plan is clearly wrong.
 
+## Phase 2.5 — Validate Plan
+
+Dispatch **plan-checker** agent with the plan produced in Phase 2:
+
+```
+Validate this implementation plan before execution.
+Plan: {full plan text from Phase 2}
+```
+
+- **PASS** → proceed to Phase 3
+- **REVISE** → fix blocking issues, re-run plan-checker (max 2 iterations)
+- **BLOCK** → stop, present issues to user
+
 ## Phase 3 — Implement
 
 Execute the plan in dependency order. For each step, read the reference pattern first, then implement.
@@ -155,6 +168,20 @@ Follow project test patterns. Cover:
 ```
 
 After tests are generated, run them using the project's test command. Fix any failures.
+
+## Phase 5.5 — Verify Goals
+
+Dispatch **goal-verifier** agent:
+
+```
+Verify implementation results match the original goals from the plan.
+Goals: {from Phase 2 plan}
+Changed files: {list from Phase 3}
+```
+
+- **VERIFIED** → proceed to Phase 6
+- **PARTIAL** → fix data-flow issues, re-verify
+- **FAILED** → return to Phase 3 — critical artifacts missing
 
 ## Phase 6 — Review
 
