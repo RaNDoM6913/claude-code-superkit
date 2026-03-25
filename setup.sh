@@ -53,15 +53,28 @@ if [ -d "$SUPERPOWERS_DIR" ]; then
 else
   echo ""
   warn "Superpowers plugin is NOT installed."
-  echo "  Superkit uses superpowers skills (brainstorming, TDD, debugging, plans,"
-  echo "  verification, code review workflows). Without it, these won't work."
   echo ""
-  echo "  To install: open Claude Code → type /plugins → search 'superpowers' → install"
+  echo "  Superkit depends on superpowers for: brainstorming, TDD, debugging,"
+  echo "  writing plans, verification, code review workflows."
+  echo "  Without it, these features will silently fail."
   echo ""
-  read -rp "Continue without superpowers? [y/N] " sp_yn
+  echo "  ┌─────────────────────────────────────────────────┐"
+  echo "  │  HOW TO INSTALL (takes 10 seconds):             │"
+  echo "  │                                                 │"
+  echo "  │  1. Open terminal and run: claude               │"
+  echo "  │  2. Type: /plugins                              │"
+  echo "  │  3. Search: superpowers                         │"
+  echo "  │  4. Select it and confirm install               │"
+  echo "  │  5. Done! Re-run this setup.sh                  │"
+  echo "  └─────────────────────────────────────────────────┘"
+  echo ""
+  echo "  Note: plugins require manual install via Claude Code UI."
+  echo "  There is no CLI command to auto-install them."
+  echo ""
+  read -rp "Continue without superpowers? (not recommended) [y/N] " sp_yn
   case "$sp_yn" in
-    y|Y) warn "Continuing without superpowers. Install it later for full functionality." ;;
-    *) echo "Install superpowers first, then re-run setup.sh"; exit 0 ;;
+    y|Y) warn "Continuing without superpowers. Some features will not work." ;;
+    *) echo ""; info "Install superpowers first, then re-run setup.sh. See instructions above."; exit 0 ;;
   esac
   echo ""
 fi
