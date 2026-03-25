@@ -71,16 +71,33 @@ VERSION                     # 1.2.0
 
 ## Mandatory Documentation Updates
 
-After ANY change to agents, commands, hooks, rules, skills, or setup.sh:
+After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh:
 
-1. **README.md** — update counts in "What's Inside" table, badges, Codex comparison table, showcase description
-2. **CHANGELOG.md** — add entry under current version
-3. **CLAUDE.md** (this file) — update counts table and structure if files added/removed
-4. **packages/codex/INSTALL.md** — update skill counts if codex skills changed
-5. **VERSION** — bump if significant change (new agents, commands, hooks)
-6. **GitHub About** — `gh repo edit` if description numbers changed
-7. **README "What's New"** — update version number and bullet points when VERSION bumps
-8. **GitHub Release** — create via `gh release create vX.Y.Z` when VERSION bumps
+### Tier 1 — ALWAYS update (every change):
+1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
+2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
+3. **CLAUDE.md** (this file) — counts table, structure section
+4. **GitHub About** — `gh repo edit --description` if ANY count changed
+5. **GitHub Release** — `gh release edit` if release already exists for this version
+
+### Tier 2 — Update when relevant:
+6. **packages/codex/INSTALL.md** — skill counts, feature comparison table
+7. **packages/codex/AGENTS.md** — Available Skills lists, Auto-Activation Rules
+8. **docs/INSTALL-CLAUDE-CODE.md** — step counts, file counts, plugin list
+9. **docs/guide/*.md** — any chapter referencing changed counts
+10. **setup.sh** — summary output counts, step numbering, VERSION variable
+
+### Tier 3 — On release:
+11. **VERSION** — bump version number
+12. **README "What's New"** — update version and bullet points
+13. **CHANGELOG.md** — move `[Unreleased]` → `[X.Y.Z] — date`
+14. **GitHub Release** — `gh release create vX.Y.Z`
+
+### CRITICAL: Never forget Codex!
+- Codex AGENTS.md and INSTALL.md MUST stay in sync with core changes
+- New rules → add equivalent section to AGENTS.md (Codex has no rules files)
+- New commands → check if Codex skill exists, update INSTALL.md counts
+- GitHub description (`gh repo edit`) → update on EVERY count change
 
 ### Release Rules (MANDATORY)
 
@@ -97,14 +114,19 @@ After ANY change to agents, commands, hooks, rules, skills, or setup.sh:
 - [ ] Showcase count matches `ls packages/showcase/.claude/agents/*.md | wc -l`
 - [ ] Codex skill count matches `find packages/codex/skills -name "SKILL.md" | wc -l`
 - [ ] Hook count matches `ls packages/core/hooks/*.sh | wc -l` + stack hooks
+- [ ] Rule count matches `ls packages/core/rules/*.md | wc -l`
+- [ ] GitHub description counts match actual (`gh repo view --json description`)
+- [ ] Codex AGENTS.md Available Skills lists are current
+- [ ] Codex INSTALL.md counts match actual
+- [ ] docs/INSTALL-CLAUDE-CODE.md counts match actual
 - [ ] CHANGELOG has entry for the change
 
 ## Key Files
 
 | File | What |
 |------|------|
-| `setup.sh` | Interactive installer — stack selection, superpowers auto-install, validation |
-| `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) |
+| `setup.sh` | Interactive installer — stack, extras, profile, plugins, validation |
+| `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 3-layer doc enforcement rule |
 | `packages/core/commands/dev.md` | 10-phase dev orchestrator with plan-checker + goal-verifier gates |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |

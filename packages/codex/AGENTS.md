@@ -132,6 +132,8 @@ This project uses **gpt-5.4** with **extra_high** reasoning effort (maximum accu
 
 Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` with its description and instructions.
 
+**Command skills (user-invocable):**
+
 | Skill | Description |
 |-------|-------------|
 | `dev-orchestrator` | Full-stack development cycle: understand, plan, implement, verify, test, review, document |
@@ -142,6 +144,30 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `commit-helper` | Conventional commit: analyze changes, detect secrets, create commit |
 | `new-migration` | Scaffold migration file pair (up + down) with auto-numbering |
 | `migrate` | Apply or rollback database migrations |
+
+**Agent skills (auto-dispatched by orchestrators):**
+code-reviewer, security-scanner, test-generator, e2e-test-generator, health-checker, pre-deploy-validator, dependency-checker, debug-observer, docs-reviewer, api-contract-sync, scaffold-endpoint, tree-generator, database-reviewer, architect, plan-checker, goal-verifier, audit-frontend, audit-backend, audit-bots, audit-infra, audit-security, project-architecture, writing-agents, writing-commands, red-blue-auditor
+
+**Stack-specific reviewers (optional):**
+go-reviewer, ts-reviewer, py-reviewer, rs-reviewer
+
+### Auto-Activation Rules
+
+Codex MUST auto-invoke skills when these conditions are met (without the user explicitly asking):
+
+| Skill | Auto-trigger when |
+|-------|-------------------|
+| `dev-orchestrator` | New feature, bug fix touching 2+ files, 100+ lines in one file, migration + service |
+| `review-orchestrator` | After completing work on 3+ files, before commit with 5+ files changed |
+| `test-runner` | After feature implementation, bug fix, refactor, or test file edits |
+| `lint-runner` | Before any commit with code changes (not docs-only) |
+| `audit-orchestrator` | When touching infrastructure, CI/CD, or security-sensitive code (use health-only mode for quick check) |
+
+**Skip auto-activation when:**
+- Already inside `dev-orchestrator` (it includes review + test)
+- User explicitly says "just do X" / "quick fix"
+- Docs-only or config-only changes
+- Single file with < 50 lines changed
 
 ## Active Plans
 
