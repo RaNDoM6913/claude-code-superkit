@@ -172,7 +172,7 @@ Current: `000001..000048` (key: 000025_user_settings, 000026_entitlements, 00002
 
 Profile: `CLAUDE_HOOK_PROFILE=fast|standard|strict` (default: standard)
 
-### Agents (21)
+### Agents (28)
 
 | Agent | Category | Model | Status | Описание |
 |-------|----------|-------|--------|----------|
@@ -180,22 +180,29 @@ Profile: `CLAUDE_HOOK_PROFILE=fast|standard|strict` (default: standard)
 | ts-reviewer | Quality | opus | **active** | TypeScript/React review: motion/react, TanStack Query, design system |
 | migration-reviewer | Quality | opus | **active** | SQL migration review: naming, rollback, constraints |
 | onyx-ui-reviewer | Quality | opus | **active** | UI review: glass design system, glass components, z-index |
-| bot-reviewer | Quality | opus | **active** | 22 checks: callbacks, state machines, goroutine safety, rate limits |
+| bot-reviewer | Quality | opus | **active** | Telegram bot review: callbacks, state machines, rate limits |
+| database-reviewer | Quality | opus | **active** | PostgreSQL specialist: query optimization, schema design, index strategy |
+| architect | Quality | opus | **active** | System design advisor: trade-offs, scalability, patterns |
+| docs-reviewer | Productivity | opus | **active** | Documentation review: freshness, accuracy, coverage audit |
+| plan-checker | Productivity | opus | **active** | 8-dimension plan validation before execution |
+| goal-verifier | Productivity | opus | **active** | 4-level goal substantiation: exists, substantive, wired, data-flow |
 | pre-deploy-validator | DevOps | opus | **active** | 9-point pre-deploy checklist + security scan |
 | security-scanner | DevOps | opus | **active** | 47 security checks: OWASP + social app + Telegram + photo |
 | test-generator | Productivity | opus | **active** | Go table-driven tests + edge cases |
 | playwright-test-generator | Productivity | opus | **active** | Playwright e2e tests для admin |
 | api-contract-sync | Productivity | opus | **active** | OpenAPI spec ↔ routes.go sync |
-| health-checker | Productivity | opus | **active** | 9-point project health dashboard (ex-/health command) |
-| docs-checker | Productivity | opus | **active** | Docs freshness check vs recent code changes (ex-/docs-check command) |
-| scaffold-endpoint | Productivity | opus | **active** | Scaffold admin endpoint by project patterns (ex-/new-endpoint command) |
+| health-checker | Productivity | opus | **active** | 9-point project health dashboard |
+| scaffold-endpoint | Productivity | opus | **active** | Scaffold admin endpoint by project patterns |
+| tree-generator | Productivity | opus | **active** | Generate project directory tree documentation |
+| red-blue-auditor | Security | opus | **active** | Adversarial security audit: Red Team + Blue Team + risk synthesis |
 | debug-observer | Observability | opus | **active** | Debug: logs + DB + Redis + traces |
 | dependency-checker | DevOps | opus | **active** | npm/Go dependency audit |
 | audit-frontend | Audit | opus | **active** | 15 checks: hardcoded values, mock data, query keys, TypeScript |
 | audit-backend | Audit | opus | **active** | 15 checks: SQL safety, error handling, PII leaks, auth gaps |
 | audit-bots | Audit | opus | **active** | 12 checks: goroutine safety, rate limits, callback data |
+| audit-infra | Audit | opus | **active** | Infrastructure audit: secrets, Docker, deps, CORS, CI/CD |
 | audit-security | Audit | opus | **active** | 12 checks: secrets, CORS, photo URLs, phone isolation |
-| events-discovery | Discovery | opus | **experimental** | Yandex Places MCP |
+| events-discovery | Discovery | opus | **experimental** | Venue/event discovery via web search |
 | content-curator | Discovery | opus | **experimental** | Promo content, seasonal events |
 
 ### Rules (3)

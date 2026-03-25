@@ -3,8 +3,8 @@
 This is a sanitized copy of a real production Claude Code setup from a social discovery platform.
 
 ## Stats
-- **21 agents** (quality reviewers, audit agents, productivity generators, DevOps validators, discovery)
-- **14 commands** (orchestrators, service management, development workflow)
+- **28 agents** (quality reviewers, audit agents, productivity generators, DevOps validators, discovery)
+- **16 commands** (orchestrators, service management, development workflow)
 - **11 hooks** (7 PostToolUse + PreToolUse + UserPromptSubmit + PreCompact + SessionStart + Stop)
 - **11 skills** (architecture, patterns, conventions, UI standards, state management)
 - **3 rules** (coding-style, security, git-workflow)
@@ -26,7 +26,7 @@ This is a sanitized copy of a real production Claude Code setup from a social di
 
 ```
 .claude/
-  agents/                  # 21 agents
+  agents/                  # 28 agents
     go-reviewer.md         # Go code review (layers, DI, error handling, SQL safety)
     ts-reviewer.md         # TypeScript/React review (TanStack Query, Zustand, design system)
     migration-reviewer.md  # SQL migration review (naming, rollback, constraints)
@@ -34,26 +34,34 @@ This is a sanitized copy of a real production Claude Code setup from a social di
     bot-reviewer.md        # Telegram bot review (22 checks: callbacks, state machines, rate limits)
     security-scanner.md    # 47-check security scanner (OWASP + social-app + Telegram + photo)
     test-generator.md      # Go table-driven test generator with edge case heuristics
-    playwright-test-gen.md # Playwright e2e test generator for admin panel
+    playwright-test-generator.md # Playwright e2e test generator for admin panel
     pre-deploy-validator.md # 9-point pre-deploy checklist
     api-contract-sync.md   # OpenAPI spec <-> routes.go sync checker
     debug-observer.md      # Production debugger (logs + DB + Redis + code trace)
     dependency-checker.md  # npm/Go dependency audit with prioritized update plan
     health-checker.md      # Project health dashboard (9 checks)
-    docs-checker.md        # Documentation freshness checker
+    docs-reviewer.md       # Documentation review (freshness, accuracy, coverage)
     scaffold-endpoint.md   # New endpoint scaffolding (handler + service + repo)
+    database-reviewer.md   # PostgreSQL specialist (queries, schema, indexes)
+    architect.md           # System design advisor (trade-offs, scalability, patterns)
+    plan-checker.md        # 8-dimension plan validation before execution
+    goal-verifier.md       # 4-level goal substantiation (exists/substantive/wired/data-flow)
+    tree-generator.md      # Project directory tree documentation generator
+    red-blue-auditor.md    # Adversarial security audit (Red Team + Blue Team)
     audit-frontend.md      # 15 frontend checks (hardcoded values, mock data, TypeScript)
     audit-backend.md       # 15 backend checks (SQL safety, error handling, PII leaks)
     audit-bots.md          # 12 bot checks (goroutine safety, rate limits, callbacks)
+    audit-infra.md         # Infrastructure audit (secrets, Docker, deps, CORS, CI/CD)
     audit-security.md      # 12 security checks (secrets, CORS, photo URLs, phone isolation)
     content-curator.md     # Promotional content and seasonal events
     events-discovery.md    # Venue/event discovery via web search
 
-  commands/                # 14 commands
+  commands/                # 16 commands
     dev.md                 # 8-phase development orchestrator (understand -> document)
     review.md              # Unified code review orchestrator (parallel agent dispatch)
     audit.md               # 4-agent parallel audit orchestrator
     commit.md              # Conventional commit helper with secret scanning
+    docs-init.md           # Initialize documentation structure
     start.md               # Start full local stack
     stop.md                # Stop services (keep Docker)
     stop-docker.md         # Stop everything including Docker
@@ -64,6 +72,7 @@ This is a sanitized copy of a real production Claude Code setup from a social di
     migrate.md             # Database migration runner
     new-migration.md       # Migration file generator
     seed-reset.md          # Demo data seeder
+    security-scan.md       # Security scanning
 
   rules/                   # 3 rules (always-active context)
     coding-style.md        # Go + TypeScript conventions

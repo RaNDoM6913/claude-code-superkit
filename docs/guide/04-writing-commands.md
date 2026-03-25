@@ -161,7 +161,7 @@ If any CRITICAL finding exists, STOP and report. Do not proceed.
 
 ## Phase 4: Documentation Check
 
-Dispatch the **docs-checker** agent (if available):
+Dispatch the **docs-reviewer** agent (if available):
 
 > Verify API specs match routes, READMEs are current, architecture docs
 > reflect the actual code.

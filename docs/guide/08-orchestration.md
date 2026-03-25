@@ -19,7 +19,7 @@ Phase 5: Test           Dispatch test-generator agent, run generated tests
                         |
 Phase 6: Review         Dispatch reviewer agents in parallel based on changed file types
                         |
-Phase 7: Document       Dispatch docs-checker or update docs manually
+Phase 7: Document       Dispatch docs-reviewer or update docs manually
                         |
 Phase 8: Report         Summary table: files changed, tests, review findings, commit message
 ```
@@ -27,7 +27,7 @@ Phase 8: Report         Summary table: files changed, tests, review findings, co
 Key design decisions:
 
 - **Dependency order in Phase 3**: migrations before repos, repos before services, services before handlers. This prevents compile errors mid-implementation.
-- **Agents in Phases 5-7 run independently**: test-generator, reviewer agents, and docs-checker have no dependencies on each other and can be dispatched in parallel.
+- **Agents in Phases 5-7 run independently**: test-generator, reviewer agents, and docs-reviewer have no dependencies on each other and can be dispatched in parallel.
 - **Gate between phases**: if Phase 4 (verify) fails, Claude fixes errors before proceeding to Phase 5 (test).
 
 ## How /review Works

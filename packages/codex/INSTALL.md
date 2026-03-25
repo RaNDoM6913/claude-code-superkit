@@ -82,7 +82,7 @@ These are converted from core + extras agents. They are dispatched automatically
 | `pre-deploy-validator` | DevOps — pre-deploy checklist (9 points) |
 | `dependency-checker` | DevOps — dependency audit |
 | `debug-observer` | Observability — debug analysis |
-| `docs-checker` | Quality — documentation completeness |
+| `docs-reviewer` | Quality — documentation freshness, accuracy, coverage |
 | `api-contract-sync` | Quality — API spec ↔ routes sync |
 | `scaffold-endpoint` | Productivity — new endpoint scaffolding |
 | `ui-reviewer` | Quality — UI/UX design system review |
@@ -90,7 +90,8 @@ These are converted from core + extras agents. They are dispatched automatically
 | `design-system-reviewer` | Quality — design system compliance |
 | `database-reviewer` | Quality — PostgreSQL specialist |
 | `architect` | Quality — system design advisor |
-| `doc-updater` | Quality — documentation validation |
+| `plan-checker` | Quality — 8-dimension plan validation |
+| `goal-verifier` | Quality — 4-level goal substantiation |
 | `project-architecture` | Knowledge — project architecture reference |
 | `writing-agents` | Knowledge — how to write agents |
 | `writing-commands` | Knowledge — how to write command orchestrators |

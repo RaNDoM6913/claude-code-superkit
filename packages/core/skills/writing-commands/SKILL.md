@@ -32,7 +32,7 @@ Phase 3: Execute     → create/modify files
 Phase 4: Verify      → dispatch health-checker agent
 Phase 5: Test        → dispatch test-generator agent
 Phase 6: Review      → dispatch reviewer agents (parallel)
-Phase 7: Document    → dispatch docs-checker agent
+Phase 7: Document    → dispatch docs-reviewer agent
 Phase 8: Report      → summary table
 ```
 

@@ -23,7 +23,7 @@ Each template includes section headers, placeholder text, and comments explainin
 
 The `tree-generator` agent auto-generates directory trees for your project and writes them to `docs/trees/`. This keeps a human-readable snapshot of your file structure that Claude can reference without running `find` or `ls` across your entire repo.
 
-Trees are checked for staleness by the `docs-checker` agent — if your file structure changed but the trees did not, you will get a warning.
+Trees are checked for staleness by the `docs-reviewer` agent — if your file structure changed but the trees did not, you will get a warning.
 
 ## The /docs-init Command
 
@@ -49,9 +49,9 @@ The `documentation` rule (`.claude/rules/documentation.md`) enforces a simple pr
 
 When this rule is active, Claude will update all related architecture docs, project trees, and CLAUDE.md in the same response as any code change that affects logic, API, or architecture. No separate "update docs" step needed.
 
-## The docs-checker Agent
+## The docs-reviewer Agent
 
-The `docs-checker` agent finds stale documentation by comparing `git diff` against `docs/`:
+The `docs-reviewer` agent finds stale documentation by comparing `git diff` against `docs/`:
 
 - **Stale content** — code changed but the corresponding doc was not updated
 - **Tree staleness** — files added or removed but `docs/trees/` not regenerated
@@ -60,7 +60,7 @@ The `docs-checker` agent finds stale documentation by comparing `git diff` again
 Run it manually via `/review` (it is part of the review pipeline) or invoke it directly:
 
 ```
-Use the docs-checker agent to verify documentation is up to date
+Use the docs-reviewer agent to verify documentation is up to date
 ```
 
 ## Stop Hook Verification
@@ -72,7 +72,7 @@ The Stop hook (active in `standard` and `strict` profiles) runs before Claude en
 Every code change follows this cycle:
 
 ```
-code change → doc update (same response) → docs-checker (review) → Stop verification
+code change → doc update (same response) → docs-reviewer (review) → Stop verification
 ```
 
 This means documentation never drifts. The rule ensures Claude updates docs proactively, the agent catches anything missed, and the Stop hook provides a final safety net.
@@ -83,4 +83,4 @@ This means documentation never drifts. The rule ensures Claude updates docs proa
 - **Fill only what you know.** Leave template sections empty rather than writing speculative docs. Claude will fill them as features land.
 - **Add detail as the project grows.** A 10-line architecture doc is better than no architecture doc. It gives Claude enough context to ask the right questions.
 - **Let trees auto-generate.** Do not manually maintain `docs/trees/` — that is what the tree-generator agent is for.
-- **Review docs in PRs.** If a PR changes behavior but not docs, the docs-checker agent will flag it during `/review`.
+- **Review docs in PRs.** If a PR changes behavior but not docs, the docs-reviewer agent will flag it during `/review`.

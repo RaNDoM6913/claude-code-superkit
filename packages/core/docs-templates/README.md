@@ -27,4 +27,4 @@ Copy relevant templates to your project's `docs/architecture/` directory and fil
 
 - Start minimal — fill only what you know now, expand later
 - These docs are read by AI agents (Phase 0) — accurate docs = better reviews
-- The `docs-checker` agent will flag stale docs after code changes
+- The `docs-reviewer` agent will flag stale docs after code changes

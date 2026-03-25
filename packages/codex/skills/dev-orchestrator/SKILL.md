@@ -166,7 +166,7 @@ Collect findings. Fix any CRITICAL or WARNING issues before proceeding.
 
 ## Phase 7 — Document
 
-Use `spawn_agent` to dispatch the **docs-checker** agent (if available) or manually update documentation:
+Use `spawn_agent` to dispatch the **docs-reviewer** agent (if available) or manually update documentation:
 
 1. **API spec** — if endpoints changed (OpenAPI, GraphQL schema, etc.)
 2. **Architecture docs** — if system behavior changed
