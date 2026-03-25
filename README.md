@@ -72,15 +72,17 @@ Don't reinvent — discover and adapt.
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
-## 🆕 What's New (v1.1.0)
+## 🆕 What's New (v1.2.0)
 
-- 🔍 **Double-verification `/review`** — findings validated by independent agents, `--comment` posts to GitHub PRs
-- 📄 **3-layer documentation enforcement** — rule + doc-check-on-commit hook + opus Stop hook
-- 🔎 **SkillsMP integration** — search 500K+ community skills before building new ones
-- 🧠 **All agents on Opus** — maximum reasoning depth for every task
-- 🤖 **Codex: gpt-5.4 + extra_high** — maximum model and reasoning for Codex CLI
-- 🆕 **New agents** — database-reviewer, architect, doc-updater (from ECC v1.9 research)
-- 🔒 **Config protection hook** — warns when modifying linter/formatter configs
+- 🎯 **`/dev` v2 — 10-phase orchestrator** with architect, plan-checker, goal-verifier
+- 🏗️ **Phase 1.5: Architect** — dispatched for complex tasks (5+ files) to propose architecture
+- ✅ **Phase 2.5: Plan Validation** — 8-dimension check before execution starts
+- 🔬 **Phase 5.5: Goal Verification** — 4-level substantiation (exists → substantive → wired → data-flow)
+- 🧠 **Complexity routing** — simple tasks skip validation, complex get full pipeline
+- 🗄️ **database-reviewer** — PostgreSQL specialist in review phase
+- 📄 **docs-reviewer** — merged docs-checker + doc-updater into one agent
+
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 history.
 
 ## 🔄 How it Works
 

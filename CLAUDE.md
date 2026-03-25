@@ -79,6 +79,17 @@ After ANY change to agents, commands, hooks, rules, skills, or setup.sh:
 4. **packages/codex/INSTALL.md** — update skill counts if codex skills changed
 5. **VERSION** — bump if significant change (new agents, commands, hooks)
 6. **GitHub About** — `gh repo edit` if description numbers changed
+7. **README "What's New"** — update version number and bullet points when VERSION bumps
+8. **GitHub Release** — create via `gh release create vX.Y.Z` when VERSION bumps
+
+### Release Rules (MANDATORY)
+
+- **Every VERSION bump MUST have a GitHub release** — `gh release create vX.Y.Z`
+- **Releases are sequential** — never skip versions (1.0→1.1→1.2, not 1.0→1.2)
+- **README "What's New" section** — always shows LATEST version, not stale
+- **CHANGELOG.md** — must have entry for EVERY version before release is created
+- **Release notes** — copy from CHANGELOG, add emoji headers for readability
+- **Order**: bump VERSION → update CHANGELOG → update README What's New → commit → push → `gh release create`
 
 ### Checklist before commit:
 - [ ] Agent count in README badge matches `ls packages/core/agents/*.md | wc -l` + stack + extras
