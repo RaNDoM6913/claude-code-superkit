@@ -88,25 +88,24 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 h
 ## 🔄 How it Works
 
 ```mermaid
-graph LR
-    subgraph planning [" Planning "]
-        direction TB
-        A["👤 You"] -->|"/dev task"| B["🎯 Understand"]
-        B -->|"complex?"| B1["🏗️ Architect"]
+graph TD
+    subgraph p ["  Planning  "]
+        direction LR
+        A["👤 You"] -->|"/dev"| B["🎯 Understand"]
+        B --> B1["🏗️ Architect?"]
         B1 --> C["📋 Plan"]
-        B -->|"standard"| C
         C --> C1["✅ Plan Checker"]
     end
 
-    subgraph execution [" Execution "]
-        direction TB
+    subgraph e ["  Execution  "]
+        direction LR
         D["⚡ Implement"] --> E["🔧 Verify"]
         E --> F["🧪 Test"]
         F --> F1["🔬 Goal Verifier"]
     end
 
-    subgraph quality [" Quality "]
-        direction TB
+    subgraph q ["  Quality  "]
+        direction LR
         G["🔍 Review"] --> R["go / ts / security / db"]
         R --> L["🔄 Validate"]
         L --> M["📄 Document"]
@@ -116,9 +115,9 @@ graph LR
     C1 --> D
     F1 --> G
 
-    style planning fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
-    style execution fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
-    style quality fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
+    style p fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
+    style e fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
+    style q fill:none,stroke:#8A2BE2,stroke-width:2px,color:#8A2BE2
 ```
 
 ## 🚀 Installation
