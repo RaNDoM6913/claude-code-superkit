@@ -152,6 +152,31 @@ Before proposing fixes, apply the scientific method to validate your diagnosis:
 > IMPORTANT: This phase is READ-ONLY. Do NOT modify production code during investigation.
 > Treat your own assumptions with extra skepticism — verify before concluding.
 
+## Circuit Breaker
+
+If debugging loops without progress:
+
+**Counter:** Track failed fix attempts. Increment when:
+- A proposed fix doesn't resolve the original error
+- A fix introduces a new error
+- The same hypothesis is tested twice
+
+**Thresholds:**
+- **1-2 failures** — continue with different hypothesis. Document what didn't work and why.
+- **3 failures** — STOP debugging. Escalate to architect agent:
+  ```
+  Dispatch architect with:
+  "Debug investigation stalled after 3 failed attempts.
+  Symptom: [original issue]
+  Attempted fixes: [list of 3 attempts and why each failed]
+  Evidence collected: [summary of Phases 1-7]
+
+  Possible architectural root cause — please advise on structural approach."
+  ```
+- **After architect response** — try architect's recommended approach (1 more attempt). If it also fails → report to user with full evidence trail.
+
+**NEVER:** Loop more than 4 total fix attempts. The circuit breaker exists to prevent infinite debugging cycles.
+
 ## Output Format
 
 ### Summary
