@@ -109,6 +109,10 @@ After ANY changes to logic, API, or architecture, update all related docs in the
 
 ### Rule: code without updated docs = incomplete task. Do it in the SAME response as the code.
 
+## Model Configuration
+
+This project uses **gpt-5.4** with **extra_high** reasoning effort (maximum accuracy). All skills inherit this from `.codex/config.toml`. Do NOT downgrade the model or reasoning level — maximum performance is required for code review, security scanning, and test generation.
+
 ## Codex-Specific Notes
 
 ### Agent Dispatch
