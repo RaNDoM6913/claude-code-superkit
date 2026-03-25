@@ -1,38 +1,106 @@
-# claude-code-superkit
+# ⚡ claude-code-superkit
 
-[![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=flat)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Agents](https://img.shields.io/badge/agents-27_Opus-8A2BE2)
-![Codex](https://img.shields.io/badge/Codex-gpt--5.4_extra__high-00A67E)
+<div align="center">
 
-Production-tested infrastructure for [Claude Code](https://claude.ai/claude-code): 27 agents, 10 commands, 14 hooks, 5 rules, and an interactive installer. All agents run on **Opus** for maximum accuracy. Battle-tested in a production app with 68+ endpoints and 48 database migrations.
+[![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
+![Agents](https://img.shields.io/badge/27_agents-Opus-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
-Features double-verification code review, 3-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration. Works with Codex CLI too.
+**Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
+**All agents on Opus. Maximum accuracy. Zero compromises.**
 
-## What's Inside
+[🚀 Quick Start](#-installation) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
+
+</div>
+
+---
+
+Battle-tested in a production app with 68+ endpoints and 48 database migrations. Features double-verification code review, 3-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration.
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔍 Double-Verification Review
+Every finding validated by an independent agent.
+False positives eliminated before you see them.
+Post inline comments on GitHub PRs with `--comment`.
+
+</td>
+<td width="50%">
+
+### 📄 3-Layer Doc Enforcement
+Rule + PreToolUse hook + Opus Stop hook.
+Documentation never falls behind code.
+Plan completion gate — docs before "done".
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🛡️ Security Scanning
+AgentShield (102 rules) + Red/Blue adversarial audit.
+Config protection hook guards your standards.
+CI integration included.
+
+</td>
+<td width="50%">
+
+### 🔎 SkillsMP Integration
+Search 500K+ community skills before building.
+Keyword + AI semantic search via API.
+Don't reinvent — discover and adapt.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📦 What's Inside
 
 | Component | Count | Description |
 |-----------|-------|-------------|
 | **Core Agents** | 20 | Code review, security scan, testing, audit, debugging, health checks, tree generation, DB review, architecture, doc validation — all on **Opus** |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
-| **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace (requires API key) |
+| **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 9 + 5 stack + Stop | Git safety, doc-check-on-commit, format-on-edit, typecheck, context inject, session continuity |
+| **Hooks** | 9 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
-## What's New (v1.1.0)
+## 🆕 What's New (v1.1.0)
 
-- **Double-verification `/review`** — findings validated by independent agents, `--comment` posts to GitHub PRs
-- **3-layer documentation enforcement** — rule + doc-check-on-commit hook + opus Stop hook
-- **SkillsMP integration** — search 500K+ community skills before building new ones
-- **All agents on Opus** — maximum reasoning depth for every task
-- **Codex: gpt-5.4 + extra_high** — maximum model and reasoning for Codex CLI
-- **New agents** — database-reviewer, architect, doc-updater (from ECC v1.9 research)
-- **Config protection hook** — warns when modifying linter/formatter configs
+- 🔍 **Double-verification `/review`** — findings validated by independent agents, `--comment` posts to GitHub PRs
+- 📄 **3-layer documentation enforcement** — rule + doc-check-on-commit hook + opus Stop hook
+- 🔎 **SkillsMP integration** — search 500K+ community skills before building new ones
+- 🧠 **All agents on Opus** — maximum reasoning depth for every task
+- 🤖 **Codex: gpt-5.4 + extra_high** — maximum model and reasoning for Codex CLI
+- 🆕 **New agents** — database-reviewer, architect, doc-updater (from ECC v1.9 research)
+- 🔒 **Config protection hook** — warns when modifying linter/formatter configs
 
-## Installation
+## 🔄 How it Works
+
+```mermaid
+graph LR
+    A["👤 You"] -->|"/dev task"| B["🎯 Dev Orchestrator"]
+    B --> C["📋 Plan"]
+    C --> D["⚡ Implement"]
+    D --> E["✅ Verify"]
+    E --> F["🧪 Test"]
+    F --> G["🔍 Review"]
+    G --> H["go-reviewer"]
+    G --> I["ts-reviewer"]
+    G --> J["security-scanner"]
+    G --> K["database-reviewer"]
+    H & I & J & K --> L["🔄 Validate Findings"]
+    L --> M["📊 Report"]
+```
+
+## 🚀 Installation
 
 ### Claude Code (recommended)
 
@@ -59,11 +127,11 @@ Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** 
 2. Edit `.claude/skills/project-architecture/SKILL.md` — describe your architecture
 3. Run `claude` and try: `/review --full` or `/audit`
 
-### Verify
+### ✅ Verify
 
 Start a new Claude Code session and run `/review --full`. You should see agents dispatched and a findings report.
 
-## Key Commands
+## ⌨️ Key Commands
 
 | Command | What it does |
 |---------|-------------|
@@ -78,7 +146,7 @@ Start a new Claude Code session and run `/review --full`. You should see agents 
 | `/docs-init` | Scaffold architecture documentation |
 | `/security-scan` | Run security scan on .claude/ configs |
 
-## Hook Profiles
+## 🔧 Hook Profiles
 
 Set `CLAUDE_HOOK_PROFILE` environment variable:
 
@@ -88,13 +156,31 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | `standard` (default) | All core hooks + stack formatters |
 | `strict` | Everything + go vet on every edit + stop verification |
 
-## Troubleshooting
+## ❓ Troubleshooting
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues, platform-specific guidance, and FAQ.
 
-## Documentation
+## 🛡️ Security Scanning
 
-### Guide (12 chapters)
+Scan your `.claude/` configurations for vulnerabilities with [AgentShield](https://github.com/affaan-m/agentshield):
+
+```bash
+npx ecc-agentshield scan          # Quick scan (102 rules)
+npx ecc-agentshield scan --fix    # Auto-fix safe issues
+```
+
+Or use the built-in command: `/security-scan`
+
+CI integration included — see `.github/workflows/security.yml`.
+
+## 🏗️ Showcase
+
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 27 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
+
+<details>
+<summary>📖 Documentation (12 chapters + 3 examples)</summary>
+
+### Guide
 
 | Chapter | Topic |
 |---------|-------|
@@ -119,24 +205,10 @@ See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues, platform-specifi
 | [Command Orchestrator](docs/examples/command-orchestrator.md) | /deploy command with 4 phases |
 | [Hook Pipeline](docs/examples/hook-pipeline.md) | Format + lint on every edit |
 
-## Security Scanning
+</details>
 
-Scan your `.claude/` configurations for vulnerabilities with [AgentShield](https://github.com/affaan-m/agentshield):
-
-```bash
-npx ecc-agentshield scan          # Quick scan (102 rules)
-npx ecc-agentshield scan --fix    # Auto-fix safe issues
-```
-
-Or use the built-in command: `/security-scan`
-
-CI integration included — see `.github/workflows/security.yml`.
-
-## Showcase
-
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 27 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
-
-## Codex CLI Support
+<details>
+<summary>🤝 Codex CLI Support</summary>
 
 superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
@@ -151,11 +223,13 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`setup.sh` will ask: "Also install for Codex CLI?" — symlinks 36 skills and creates AGENTS.md + config.toml (`gpt-5.4`).
+`setup.sh` will ask: "Also install for Codex CLI?" — copies 36 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
-## Using with Superpowers Plugin
+</details>
+
+## ⚡ Using with Superpowers Plugin
 
 This toolkit is **complementary** to the [Superpowers plugin](https://github.com/obra/superpowers):
 
@@ -164,7 +238,8 @@ This toolkit is **complementary** to the [Superpowers plugin](https://github.com
 
 Install both for the complete experience.
 
-## Recommended Companion Tools
+<details>
+<summary>🧩 Recommended Companion Tools</summary>
 
 ### Skills (install separately)
 
@@ -191,10 +266,20 @@ Install both for the complete experience.
 | SkillsMP | 500K+ agent skills marketplace with search API | [skillsmp.com](https://skillsmp.com) |
 | 21st.dev | AI agent deployment + community UI components | [21st.dev](https://21st.dev) |
 
-## Contributing
+</details>
+
+## 👥 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and hooks.
 
-## License
+## 📄 License
 
 MIT
+
+---
+
+<div align="center">
+
+Made with ❤️ for the Claude Code community
+
+</div>
