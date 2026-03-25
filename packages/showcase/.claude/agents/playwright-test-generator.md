@@ -9,6 +9,17 @@ allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 
 Generate Playwright e2e tests for the admin frontend panel following SocialApp conventions and Playwright best practices.
 
+## Phase 0: Load Project Context
+
+Read if exists:
+1. `CLAUDE.md` or `AGENTS.md` — project conventions
+2. `docs/architecture/` — relevant architecture docs for the task at hand
+
+**Use this context to:**
+- Know project-specific conventions and patterns
+- Identify documented rules to check with HIGH confidence
+- Understand the tech stack and framework in use
+
 ## Project Context
 
 - **Stack**: React 19 + TypeScript 5.9 + Vite 7 + Tailwind CSS 3.4 + Radix UI

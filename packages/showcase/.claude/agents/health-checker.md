@@ -9,6 +9,17 @@ allowed-tools: Bash, Glob, Grep, Read, Agent
 
 Run a comprehensive health check on the SocialApp project. Report results as a dashboard.
 
+## Phase 0: Load Project Context
+
+Read if exists:
+1. `CLAUDE.md` or `AGENTS.md` — project conventions
+2. `docs/architecture/` — relevant architecture docs for the task at hand
+
+**Use this context to:**
+- Know project-specific conventions and patterns
+- Identify documented rules to check with HIGH confidence
+- Understand the tech stack and framework in use
+
 ## Checks to run (all in parallel where possible)
 
 ### 1. Compilation Status
