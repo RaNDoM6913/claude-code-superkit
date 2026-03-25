@@ -263,6 +263,8 @@ Install both for the complete experience.
 | Resource | What | Link |
 |----------|------|------|
 | Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
+| Get Shit Done (GSD) | 41K stars — meta-prompting framework with plan validation, goal-backward verification | [GitHub](https://github.com/gsd-build/get-shit-done) |
+| Awesome MCP Servers | Curated list of MCP servers — 300+ servers across all categories | [GitHub](https://github.com/punkpeye/awesome-mcp-servers) |
 | SkillsMP | 500K+ agent skills marketplace with search API | [skillsmp.com](https://skillsmp.com) |
 | 21st.dev | AI agent deployment + community UI components | [21st.dev](https://21st.dev) |
 
