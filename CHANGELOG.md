@@ -2,6 +2,24 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.2.0] — 2026-03-25
+
+### Added
+- **Phase 1.5 (Architect)** in `/dev` — dispatches architect agent for complex tasks (5+ files)
+- **Phase 2.5 (Validate Plan)** in `/dev` — plan-checker validates before execution
+- **Phase 5.5 (Verify Goals)** in `/dev` — goal-verifier checks 4-level substantiation
+- **database-reviewer** in `/dev` Phase 6 — dispatched for migrations + repo files
+- **docs-reviewer** in `/dev` Phase 7 — verifies documentation completeness
+- **Complexity routing** — simple tasks skip validation phases, complex tasks get architect
+
+### Changed
+- `/dev` now has 10 phases (was 8): +Phase 1.5 Architect, +Phase 2.5 Validate, +Phase 5.5 Goals
+- Phase 8 Report now shows all phases with status table
+- Phase 6 Review dispatch table: added database-reviewer for SQL + repo files
+- Superkit CLAUDE.md added with project structure, counts, conventions
+
+---
+
 ## [1.1.0] — 2026-03-25
 
 ### Added
