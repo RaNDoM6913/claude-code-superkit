@@ -1,5 +1,10 @@
 # claude-code-superkit
 
+[![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=flat)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+![Agents](https://img.shields.io/badge/agents-24_Opus-8A2BE2)
+![Codex](https://img.shields.io/badge/Codex-gpt--5.4_extra__high-00A67E)
+
 Production-tested infrastructure for [Claude Code](https://claude.ai/claude-code): 24 agents, 10 commands, 13 hooks, 5 rules, and an interactive installer. All agents run on **Opus** for maximum accuracy. Battle-tested in a production app with 68+ endpoints and 48 database migrations.
 
 Features double-verification code review, 3-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration. Works with Codex CLI too.
@@ -17,9 +22,19 @@ Features double-verification code review, 3-layer documentation enforcement, Age
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
-## Quick Start
+## What's New (v1.1.0)
 
-### Option 1: Interactive Setup
+- **Double-verification `/review`** — findings validated by independent agents, `--comment` posts to GitHub PRs
+- **3-layer documentation enforcement** — rule + doc-check-on-commit hook + opus Stop hook
+- **SkillsMP integration** — search 500K+ community skills before building new ones
+- **All agents on Opus** — maximum reasoning depth for every task
+- **Codex: gpt-5.4 + extra_high** — maximum model and reasoning for Codex CLI
+- **New agents** — database-reviewer, architect, doc-updater (from ECC v1.9 research)
+- **Config protection hook** — warns when modifying linter/formatter configs
+
+## Installation
+
+### Claude Code (recommended)
 
 ```bash
 git clone https://github.com/RaNDoM6913/claude-code-superkit.git
@@ -27,38 +42,26 @@ cd your-project/
 bash /path/to/claude-code-superkit/setup.sh
 ```
 
-The installer will ask you to select your stack (Go, TypeScript, Python, Rust) and hook profile (fast/standard/strict).
+Interactive installer: selects your stack (Go/TS/Python/Rust), hook profile (fast/standard/strict), auto-installs superpowers plugin. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
 
-### Option 2: Manual Copy
+### Codex CLI
 
-```bash
-# Set the path to your cloned superkit
-SUPERKIT="/path/to/claude-code-superkit"
-
-# Copy core files
-cp -r $SUPERKIT/packages/core/agents/ .claude/agents/
-cp -r $SUPERKIT/packages/core/commands/ .claude/commands/
-cp -r $SUPERKIT/packages/core/hooks/ .claude/scripts/hooks/
-cp -r $SUPERKIT/packages/core/rules/ .claude/rules/
-cp -r $SUPERKIT/packages/core/skills/ .claude/skills/
-cp $SUPERKIT/packages/core/settings.json .claude/settings.json
-cp $SUPERKIT/packages/core/CLAUDE.md ./CLAUDE.md
-
-# Add stack-specific agents (example: Go + TypeScript)
-cp $SUPERKIT/packages/stack-agents/go/go-reviewer.md .claude/agents/
-cp $SUPERKIT/packages/stack-agents/typescript/ts-reviewer.md .claude/agents/
-cp $SUPERKIT/packages/stack-hooks/go/*.sh .claude/scripts/hooks/
-cp $SUPERKIT/packages/stack-hooks/typescript/*.sh .claude/scripts/hooks/
-
-# Make hooks executable
-chmod +x .claude/scripts/hooks/*.sh
+Tell Codex:
 ```
+Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
+```
+
+Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** reasoning.
 
 ### After Installation
 
 1. Edit `CLAUDE.md` — fill in your project details (replace TODO placeholders)
 2. Edit `.claude/skills/project-architecture/SKILL.md` — describe your architecture
-3. Run `claude` and try: `/review`, `/audit`, `/test`
+3. Run `claude` and try: `/review --full` or `/audit`
+
+### Verify
+
+Start a new Claude Code session and run `/review --full`. You should see agents dispatched and a findings report.
 
 ## Key Commands
 
