@@ -64,7 +64,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 | `new-migration` | Scaffold migration file pair with auto-numbering |
 | `migrate` | Apply or rollback database migrations |
 
-### 21 Agent Skills (auto-dispatched by orchestrators)
+### 24 Agent Skills (auto-dispatched by orchestrators)
 
 These are converted from core + extras agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack:
 
@@ -88,6 +88,9 @@ These are converted from core + extras agents. They are dispatched automatically
 | `ui-reviewer` | Quality — UI/UX design system review |
 | `bot-reviewer` | Quality — bot code review (Telegram/Discord/Slack) |
 | `design-system-reviewer` | Quality — design system compliance |
+| `database-reviewer` | Quality — PostgreSQL specialist |
+| `architect` | Quality — system design advisor |
+| `doc-updater` | Quality — documentation validation |
 | `project-architecture` | Knowledge — project architecture reference |
 | `writing-agents` | Knowledge — how to write agents |
 | `writing-commands` | Knowledge — how to write command orchestrators |
@@ -110,10 +113,10 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: up to 33 skills
+### Total: up to 36 skills
 
 - 8 command skills (user-invocable)
-- 21 agent + knowledge skills (auto-dispatched)
+- 24 agent + knowledge skills (auto-dispatched)
 - 4 stack-specific reviewer skills (optional, per language)
 
 ## Model Configuration

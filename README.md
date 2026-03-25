@@ -2,10 +2,10 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=flat)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Agents](https://img.shields.io/badge/agents-24_Opus-8A2BE2)
+![Agents](https://img.shields.io/badge/agents-27_Opus-8A2BE2)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.4_extra__high-00A67E)
 
-Production-tested infrastructure for [Claude Code](https://claude.ai/claude-code): 24 agents, 10 commands, 13 hooks, 5 rules, and an interactive installer. All agents run on **Opus** for maximum accuracy. Battle-tested in a production app with 68+ endpoints and 48 database migrations.
+Production-tested infrastructure for [Claude Code](https://claude.ai/claude-code): 27 agents, 10 commands, 14 hooks, 5 rules, and an interactive installer. All agents run on **Opus** for maximum accuracy. Battle-tested in a production app with 68+ endpoints and 48 database migrations.
 
 Features double-verification code review, 3-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration. Works with Codex CLI too.
 
@@ -13,12 +13,12 @@ Features double-verification code review, 3-layer documentation enforcement, Age
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 17 | Code review, security scan, testing, audit, debugging, health checks, tree generation — all on **Opus** |
+| **Core Agents** | 20 | Code review, security scan, testing, audit, debugging, health checks, tree generation, DB review, architecture, doc validation — all on **Opus** |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace (requires API key) |
 | **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 8 + 5 stack + Stop | Git safety, doc-check-on-commit, format-on-edit, typecheck, context inject, session continuity |
+| **Hooks** | 9 + 5 stack + Stop | Git safety, doc-check-on-commit, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
@@ -134,7 +134,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 24 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 27 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
 
 ## Codex CLI Support
 
@@ -143,15 +143,15 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 24 agents | 33 skills (8 commands + 21 agents + 4 stack) |
+| Agents / Skills | 27 agents | 36 skills (8 commands + 24 agents + 4 stack) |
 | Commands | 10 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 13 + Stop | — (inline rules in AGENTS.md) |
+| Hooks | 14 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 5 (separate files) | Inline in AGENTS.md |
 | Knowledge Skills | 3 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`setup.sh` will ask: "Also install for Codex CLI?" — symlinks 33 skills and creates AGENTS.md + config.toml (`gpt-5.4`).
+`setup.sh` will ask: "Also install for Codex CLI?" — symlinks 36 skills and creates AGENTS.md + config.toml (`gpt-5.4`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
