@@ -14,7 +14,9 @@ If the task description starts with `--quick` or the task is trivially simple (s
 
 - **Skip** Phase 1.5 (Architect)
 - **Skip** Phase 2.5 (Validate Plan)
+- **Skip** Phase 3.5 (AI Slop Cleanup)
 - **Skip** Phase 5.5 (Verify Goals)
+- **Skip** Phase 6.5 (Critic)
 - **Skip** Phase 7 (Document)
 - Go directly: understand → plan → implement → verify → test → review → report
 
@@ -67,6 +69,19 @@ This ensures the plan follows existing project architecture.
    - Check API specs (OpenAPI, GraphQL schema) for contracts
 
 5. **Identify the closest existing implementation** to use as a reference pattern. Always read it before writing new code.
+
+6. **Ambiguity check** — before proceeding to planning, verify clarity:
+
+   | Dimension | Clear? | Question if unclear |
+   |-----------|:---:|---------------------|
+   | Scope | ✅/❌ | Which components are in/out of scope? |
+   | Acceptance criteria | ✅/❌ | How will we know this is done correctly? |
+   | Edge cases | ✅/❌ | What happens with empty input? Concurrent access? Failure? |
+   | Dependencies | ✅/❌ | Does this depend on other work being done first? |
+   | Backwards compatibility | ✅/❌ | Can existing behavior change, or must it be preserved? |
+
+   **If 2+ dimensions are unclear** → ask the user for clarification BEFORE proceeding to Phase 2. Do NOT guess — misunderstood requirements waste more time than a clarifying question.
+   **If 0-1 unclear** → proceed, noting assumptions explicitly in the plan.
 
 ## Phase 1.5 — Architect (complex tasks only)
 
@@ -171,6 +186,22 @@ Execute the plan in dependency order. For each step, read the reference pattern 
    - API client using project conventions
    - Types matching the backend contract
 
+## Phase 3.5 — AI Slop Cleanup
+
+After implementation, do a quick cleanup pass on all created/modified files:
+
+1. Remove comments that restate what the code does (keep comments that explain WHY)
+2. Inline one-use helper functions that add no clarity
+3. Simplify boolean expressions (`x ? true : false` → `x`)
+4. Remove unused imports, variables, parameters
+5. Replace over-verbose variable names with idiomatic ones
+
+Dispatch **ai-slop-cleaner** agent if available, otherwise do a manual pass.
+
+> This phase is FAST (< 2 min). It prevents slop from reaching review and wasting reviewer time.
+
+**Skip for --quick mode.**
+
 ## Phase 4 — Verify
 
 Dispatch the **health-checker** agent (if available) or run compilation checks directly:
@@ -240,6 +271,27 @@ Dispatch reviewer agents **in parallel** based on what changed and what's availa
 For each triggered agent, pass the list of changed files and the task description.
 Collect findings. Fix any CRITICAL or WARNING issues before proceeding.
 
+## Phase 6.5 — Critic (complex tasks only)
+
+**Only for complex tasks (5+ files, new subsystems, security-sensitive changes).**
+
+Dispatch **critic** agent with all changed files and the original task:
+
+```
+Final quality gate for this implementation:
+Task: [original description]
+Changed files: [list]
+Review findings: [summary from Phase 6]
+
+Evaluate from security, new-hire, and ops perspectives.
+```
+
+**APPROVE** → proceed to Phase 7.
+**CONCERN** → address concerns, proceed if non-blocking.
+**BLOCK** → fix blocking issues, re-run critic.
+
+**Skip for simple/standard tasks and --quick mode.**
+
 ## Phase 7 — Document
 
 Dispatch the **docs-reviewer** agent to verify documentation completeness:
@@ -271,10 +323,12 @@ Output a summary:
 | 2. Plan | ✅ | N tasks planned |
 | 2.5 Validate | ✅ PASS | 0 blocking |
 | 3. Implement | ✅ | N files created, M modified |
+| 3.5 Slop Cleanup | ✅ | N patterns cleaned |
 | 4. Verify | ✅ | Compilation clean |
 | 5. Test | ✅ | X tests, all passing |
 | 5.5 Goals | ✅ VERIFIED | All 4 levels pass |
 | 6. Review | ✅ | [agents]: PASS |
+| 6.5 Critic | ⏭ skipped | Standard complexity |
 | 7. Document | ✅ | Updated [doc files] |
 
 ### Changes Made
