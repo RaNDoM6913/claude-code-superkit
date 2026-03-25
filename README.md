@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/27_agents-Opus-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Agents](https://img.shields.io/badge/28_agents-Opus-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -63,12 +63,12 @@ Don't reinvent — discover and adapt.
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 20 | Code review, security scan, testing, audit, debugging, health checks, tree generation, DB review, architecture, doc validation — all on **Opus** |
+| **Core Agents** | 21 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification — all on **Opus** |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 9 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, format-on-edit, typecheck, context inject, session continuity |
+| **Hooks** | 10 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, context-monitor, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
@@ -175,7 +175,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## 🏗️ Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 27 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
 
 <details>
 <summary>📖 Documentation (12 chapters + 3 examples)</summary>
@@ -215,15 +215,15 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 27 agents | 36 skills (8 commands + 24 agents + 4 stack) |
+| Agents / Skills | 28 agents | 37 skills (8 commands + 25 agents + 4 stack) |
 | Commands | 10 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 14 + Stop | — (inline rules in AGENTS.md) |
+| Hooks | 15 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 5 (separate files) | Inline in AGENTS.md |
 | Knowledge Skills | 3 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`setup.sh` will ask: "Also install for Codex CLI?" — copies 36 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`setup.sh` will ask: "Also install for Codex CLI?" — copies 37 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

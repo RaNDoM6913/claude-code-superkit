@@ -7,7 +7,10 @@ All notable changes to claude-code-superkit are documented here.
 ### Added
 - **database-reviewer** agent — PostgreSQL specialist (EXPLAIN ANALYZE, indexes, anti-patterns, schema design)
 - **architect** agent — System design advisor (trade-offs, scalability, patterns)
-- **doc-updater** agent — Validates docs match current code state
+- **docs-reviewer** agent — Merged docs-checker + doc-updater: freshness, accuracy, coverage in one agent
+- **plan-checker** agent — 8-dimension plan validation before execution (from GSD research)
+- **goal-verifier** agent — 4-level goal substantiation: exists → substantive → wired → data-flow
+- **context-monitor** hook — Warns at 75% and 90% context window usage
 - **config-protection** hook — Warns when modifying linter/formatter configs
 - **doc-check-on-commit** hook — PreToolUse warning before git commit without doc updates
 - **SkillsMP search** skill — Search 500K+ community skills (requires API key)
@@ -31,8 +34,9 @@ All notable changes to claude-code-superkit are documented here.
 - Codex install: symlink → copy (survives superkit removal)
 - /dev workflow threshold: 3+ files → **2+ files or 100+ lines**
 - Stop hook: haiku → **opus** (60s timeout)
-- Core hooks: 7 → **9** (+doc-check-on-commit, +config-protection)
-- Core agents: 17 → **20** (+database-reviewer, +architect, +doc-updater)
+- Core hooks: 7 → **10** (+doc-check-on-commit, +config-protection, +context-monitor)
+- Core agents: 17 → **21** (+database-reviewer, +architect, +docs-reviewer, +plan-checker, +goal-verifier, merged docs-checker+doc-updater)
+- Codex skills: 33 → **37**
 - Rules count display: 4 → **5**
 - README: platform-specific install sections, What's New, badges
 - Codex INSTALL.md: 16 agent skills → 21 (total 33 → 36)
