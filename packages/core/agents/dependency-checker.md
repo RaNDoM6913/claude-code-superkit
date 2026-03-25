@@ -129,6 +129,18 @@ For each update group, note:
 - Which files need changes (manifest, lock file, source code)
 - Post-update verification commands
 
+### Safe Upgrade Strategy
+
+For each package in the update plan:
+
+1. **Upgrade order** — dependencies before dependents (leaf packages first)
+2. **Batch by risk** — group LOW-risk updates together, handle HIGH-risk one-by-one
+3. **Rollback strategy** — for each HIGH-risk update, document:
+   - What to revert (exact package versions)
+   - How to verify rollback (which tests to run)
+   - Estimated blast radius (what breaks if update fails)
+4. **Migration notes** — for BREAKING changes, list required code modifications with file paths
+
 ## Output Format
 
 ### Security Findings

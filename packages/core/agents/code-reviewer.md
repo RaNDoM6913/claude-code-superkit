@@ -34,6 +34,16 @@ Before starting, read available project documentation to understand architecture
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately without extended analysis.
 
+### Phase 1.5: Anti-Anchoring Scan
+
+Before reading the changed code in detail, search for anti-patterns via grep/glob:
+
+1. **Search first, read second** — use Grep/Glob to find known anti-patterns (hardcoded secrets, TODO/FIXME/HACK, empty catch blocks, magic numbers, console.log/print left in code)
+2. **Record findings independently** — document what you found BEFORE reading the full diff
+3. **Challenge assumptions** — explicitly ask: "What assumptions am I making about this code? What would a hostile reviewer say?"
+
+> This prevents anchoring bias where reading code first makes you accept existing patterns as "reasonable."
+
 ### Phase 2: Deep Analysis (think step by step)
 After the checklist, analyze:
 1. What is the intent of this change?

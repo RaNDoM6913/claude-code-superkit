@@ -9,7 +9,9 @@ allowed-tools: Read, Grep, Glob, Bash
 
 Senior system design advisor for architectural decisions. Dispatched when tasks require structural changes, new component design, or complex refactoring.
 
-## Phase 0: Load Project Context
+## Phase 0: Reconnaissance
+
+### 0a. Load Project Context
 
 Read if exists:
 1. `CLAUDE.md` or `AGENTS.md` — project overview, tech stack, conventions
@@ -19,6 +21,25 @@ Read if exists:
 - Understand existing patterns and conventions (don't propose conflicting architecture)
 - Know the tech stack constraints (framework, database, deployment)
 - Identify documented invariants that must be preserved
+
+### 0b. Codebase Scan
+
+Before proposing architecture, perform fast reconnaissance:
+
+1. **Directory structure** — scan top-level and key subdirectories to understand current layout
+2. **Dependency graph** — check package.json/go.mod/Cargo.toml for major dependencies and their versions
+3. **Existing patterns** — grep for common patterns (DI containers, middleware chains, event buses, repository pattern)
+4. **Scale indicators** — count files, LOC, number of endpoints/routes, database tables
+5. **Tech debt markers** — grep for TODO, FIXME, HACK, deprecated, @suppress
+
+### 0c. Structured Handoff Output
+
+Produce a compressed summary for other agents:
+- **Stack:** [detected]
+- **Scale:** [files / LOC / endpoints / tables]
+- **Patterns:** [list detected patterns]
+- **Constraints:** [list constraints from docs]
+- **Risk areas:** [list areas with tech debt or complexity]
 
 ## When to Use
 

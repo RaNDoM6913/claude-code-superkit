@@ -8,6 +8,18 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 
 Automate the full development cycle: understand → plan → validate → implement → verify → test → verify goals → review → document → report.
 
+## Quick Mode
+
+If the task description starts with `--quick` or the task is trivially simple (single file, < 50 lines change):
+
+- **Skip** Phase 1.5 (Architect)
+- **Skip** Phase 2.5 (Validate Plan)
+- **Skip** Phase 5.5 (Verify Goals)
+- **Skip** Phase 7 (Document)
+- Go directly: understand → plan → implement → verify → test → review → report
+
+> Quick mode is for small fixes, typos, config changes. For anything touching multiple files or core logic, use full mode.
+
 ## Task
 
 $ARGUMENTS

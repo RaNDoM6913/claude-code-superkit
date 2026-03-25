@@ -2,6 +2,26 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [Unreleased]
+
+### Added
+- **`/workflow` command** — predefined workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit
+- **`/dev --quick` mode** — lightweight dev cycle skipping architect, plan validation, goal verification, docs phases
+- **`/audit --health` mode** — quick health dashboard dispatching only health-checker (~30s vs ~5min)
+- **`loop-guard.sh` hook** — PreToolUse detection of repeated identical tool calls and A→B→A→B alternating loops
+- **Anti-anchoring scan** in code-reviewer — Phase 1.5: grep anti-patterns before reading code to prevent anchoring bias
+- **Forensics phase** in debug-observer — Phase 7: scientific method (hypothesis → experiment → verify) with READ-ONLY investigation
+- **Reconnaissance phase** in architect — Phase 0 expanded: codebase scan + structured handoff output for other agents
+- **Safe upgrade strategy** in dependency-checker — rollback planning, upgrade ordering, blast radius estimation
+- **Mitigation roadmap** in security-scanner — Phase 3: prioritized fix plan (immediate/short/medium/long-term)
+- **Auto-fix recommendations** in health-checker — check 10: concrete fix suggestions for each unhealthy check
+- **Enhanced config-protection** — .env file warnings + DECISIONS.md append-only enforcement
+
+### Changed
+- `settings.json` — added loop-guard.sh to PreToolUse hooks
+
+---
+
 ## [1.2.0] — 2026-03-25
 
 ### Added

@@ -67,8 +67,8 @@ Don't reinvent — discover and adapt.
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
-| **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 10 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, context-monitor, format-on-edit, typecheck, context inject, session continuity |
+| **Commands** | 11 | `/dev`, `/review`, `/audit`, `/workflow`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
+| **Hooks** | 11 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
@@ -143,8 +143,11 @@ Start a new Claude Code session and run `/review --full`. You should see agents 
 | Command | What it does |
 |---------|-------------|
 | `/dev <task>` | 10-phase orchestrator: understand → plan → validate → implement → verify → test → verify goals → review → document → report |
+| `/dev --quick <task>` | Lightweight mode: skips architect, plan validation, goal verification, docs — for small fixes |
+| `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
+| `/audit --health` | Quick health dashboard — dispatches only health-checker (~30s vs ~5min) |
 | `/test` | Auto-detect stack and run tests |
 | `/lint` | Auto-detect stack and run linters |
 | `/commit` | Conventional commit with secret scanning |

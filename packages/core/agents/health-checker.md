@@ -111,6 +111,18 @@ npm run build 2>&1 | grep -iE "dist/|gzip|chunk|size" | head -10
 ```
 Report: main bundle size
 
+### 10. Auto-Fix Recommendations
+
+For each NEEDS ATTENTION or UNHEALTHY check, suggest a concrete fix:
+
+- Compilation fails → show the error and suggest fix
+- Tests fail → identify failing test and likely cause
+- Stale TODOs → list with age and suggest triage
+- Outdated deps → suggest `npm update` / `go get -u` / equivalent
+- Security issues → reference security-scanner for deep analysis
+
+> Format: `[CHECK_NAME] [STATUS] — [one-line fix suggestion]`
+
 ## Output Format
 
 ```

@@ -139,6 +139,19 @@ After gathering all evidence, build an execution trace:
 3. **State mismatch**: compare expected state vs actual state at each layer
 4. **Root cause**: identify where the flow breaks
 
+## Phase 7 — Forensics (Scientific Method)
+
+Before proposing fixes, apply the scientific method to validate your diagnosis:
+
+1. **Formulate hypothesis** — based on evidence from Phases 1-6, state the most likely root cause
+2. **Design experiment** — identify the minimal test that would confirm or refute the hypothesis
+3. **Execute experiment** — run the test (add temporary logging, reproduce in isolation, check edge case)
+4. **Analyze results** — does evidence support the hypothesis?
+5. **Iterate or conclude** — if refuted, form new hypothesis and repeat (max 3 iterations)
+
+> IMPORTANT: This phase is READ-ONLY. Do NOT modify production code during investigation.
+> Treat your own assumptions with extra skepticism — verify before concluding.
+
 ## Output Format
 
 ### Summary

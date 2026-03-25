@@ -217,6 +217,20 @@ Grep all scripts for:
 <!-- Healthcare: PHI/HIPAA compliance, audit logging, data encryption at rest -->
 <!-- SaaS: tenant isolation, API key rotation, webhook security -->
 
+## Phase 3: Mitigation Roadmap
+
+After identifying all findings, produce a prioritized fix plan:
+
+1. **Immediate (24h)** — CRITICAL findings with HIGH confidence (active vulnerabilities, exposed secrets)
+2. **Short-term (1 week)** — CRITICAL/MEDIUM + WARNING/HIGH (exploitable with effort)
+3. **Medium-term (1 month)** — WARNING findings, hardening measures
+4. **Long-term** — SUGGESTION items, defense-in-depth improvements
+
+For each item include:
+- **Fix approach** — specific code change or configuration needed
+- **Verification** — how to confirm the fix works (test, scan, manual check)
+- **Regression risk** — what else might break when applying the fix
+
 ## Output Format
 
 For each finding, rate:

@@ -8,8 +8,8 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 packages/
   core/                     # Generic components (any project)
     agents/                 # 21 agents (all opus)
-    commands/               # 10 commands
-    hooks/                  # 10 hooks
+    commands/               # 11 commands
+    hooks/                  # 11 hooks
     rules/                  # 5 rules
     skills/                 # 3 skills
     settings.json           # Hook wiring
@@ -55,8 +55,8 @@ VERSION                     # 1.2.0
 |-----------|------|-------|--------|----------|-------|
 | Agents | 21 | 4 | 3 | 28 | — |
 | Skills | 3 | — | 1 | 11 | 37 |
-| Commands | 10 | — | — | 16 | 8 |
-| Hooks | 10 | 5 | — | 13 | — |
+| Commands | 11 | — | — | 16 | 8 |
+| Hooks | 11 | 5 | — | 13 | — |
 | Rules | 5 | — | — | 5 | — |
 
 ## Conventions
@@ -107,4 +107,5 @@ After ANY change to agents, commands, hooks, rules, skills, or setup.sh:
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) |
 | `packages/core/rules/documentation.md` | 3-layer doc enforcement rule |
 | `packages/core/commands/dev.md` | 10-phase dev orchestrator with plan-checker + goal-verifier gates |
+| `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |

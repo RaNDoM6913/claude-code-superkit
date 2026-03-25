@@ -10,6 +10,15 @@ Run a structured audit by dispatching specialized audit agents in parallel.
 
 **Scope**: `$ARGUMENTS` (default: `all`)
 
+## Health Mode
+
+If arguments contain `--health`:
+- Dispatch ONLY **health-checker** agent (skip frontend/backend/infra/security audits)
+- Produce a quick project health dashboard
+- Use this for fast daily check-ups instead of full audit
+
+> `/audit --health` takes ~30 seconds vs ~5 minutes for full audit.
+
 ## Dispatch Rules
 
 Based on scope, launch the appropriate audit agents **in parallel** (single message, multiple Agent tool calls):
