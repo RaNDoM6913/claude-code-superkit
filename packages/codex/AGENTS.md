@@ -146,7 +146,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `migrate` | Apply or rollback database migrations |
 
 **Agent skills (auto-dispatched by orchestrators):**
-code-reviewer, security-scanner, test-generator, e2e-test-generator, health-checker, pre-deploy-validator, dependency-checker, debug-observer, docs-reviewer, api-contract-sync, scaffold-endpoint, tree-generator, database-reviewer, architect, plan-checker, goal-verifier, audit-frontend, audit-backend, audit-bots, audit-infra, audit-security, project-architecture, writing-agents, writing-commands, red-blue-auditor
+code-reviewer, security-scanner, test-generator, e2e-test-generator, health-checker, pre-deploy-validator, dependency-checker, debug-observer, docs-reviewer, api-contract-sync, scaffold-endpoint, tree-generator, database-reviewer, architect, plan-checker, goal-verifier, audit-frontend, audit-backend, audit-bots, audit-infra, audit-security, project-architecture, writing-agents, writing-commands, red-blue-auditor, ai-slop-cleaner, critic, visual-reviewer
 
 **Stack-specific reviewers (optional):**
 go-reviewer, ts-reviewer, py-reviewer, rs-reviewer

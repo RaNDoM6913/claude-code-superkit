@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/28_agents-Opus_4.6-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Agents](https://img.shields.io/badge/31_agents-Opus_4.6-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -63,7 +63,7 @@ Don't reinvent — discover and adapt.
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 21 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification — all on **Opus** |
+| **Core Agents** | 24 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, AI slop cleanup, critic, visual review — all on **Opus** |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
@@ -92,9 +92,9 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 h
 graph LR
     P -->|" "| E -->|" "| Q
 
-    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
-    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Verify<br/>7 · Test<br/>8 · Goals"]
-    Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Validate<br/>11 · Docs<br/>12 · Report"]
+    P["📐 <b>Planning</b><br/><br/>1 · Understand + Clarity Gate<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
+    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Slop Cleanup<br/>7 · Verify<br/>8 · Test + Goals"]
+    Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Critic<br/>11 · Validate<br/>12 · Docs · Report"]
 
     style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
     style E fill:#fff3e0,stroke:#F57C00,stroke-width:2px,color:#333
@@ -220,7 +220,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 28 agents | 37 skills (8 commands + 25 agents + 4 stack) |
+| Agents / Skills | 31 agents | 37 skills (8 commands + 25 agents + 4 stack) |
 | Commands | 11 (slash commands) | 8 (user-invocable skills) |
 | Hooks | 16 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 6 (separate files) | Inline in AGENTS.md |

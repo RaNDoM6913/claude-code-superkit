@@ -2,6 +2,26 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.3.1] — 2026-03-26
+
+### Added
+- **ai-slop-cleaner** agent — detect and fix AI-generated code patterns (redundant comments, unnecessary abstractions, over-engineering, template slop)
+- **critic** agent — multi-perspective final quality gate (security, new-hire, ops) with gap analysis and predictions
+- **visual-reviewer** agent — UI consistency scoring, design system compliance check (score 0-100)
+- **Ambiguity Gate** in /dev Phase 1 — 5-dimension clarity check before planning, asks user if 2+ dimensions unclear
+- **Phase 3.5 AI Slop Cleanup** in /dev — automatic cleanup pass after implementation
+- **Phase 6.5 Critic** in /dev — final quality gate for complex tasks (5+ files)
+- **Git trailers** in /commit — Confidence, Scope-risk, Not-tested metadata for non-trivial commits
+- **Phase 0.5 Spec Compliance** in code-reviewer — verify implementation matches requirements before quality review
+
+### Changed
+- **debug-observer** — added circuit breaker: 3 failed fixes → escalate to architect
+- **code-reviewer** — added Phase 0.5 spec compliance check before code quality review
+- **/dev** — now 12 phases (was 10): +Phase 3.5 Slop Cleanup, +Phase 6.5 Critic, +Ambiguity Gate in Phase 1
+- Core agents: 21 → **24** (+ai-slop-cleaner, +critic, +visual-reviewer)
+
+---
+
 ## [1.3.0] — 2026-03-25
 
 ### Added

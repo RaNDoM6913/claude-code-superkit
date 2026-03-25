@@ -33,7 +33,7 @@ bash /path/to/claude-code-superkit/setup.sh
 6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
-   - 21 core agents → `.claude/agents/`
+   - 24 core agents → `.claude/agents/`
    - Up to 4 stack agents → `.claude/agents/`
    - 11 commands → `.claude/commands/`
    - 11+ hooks → `.claude/scripts/hooks/`
