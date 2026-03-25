@@ -47,6 +47,7 @@ CLAUDE_DIR="$PROJECT_DIR/.claude"
 
 # Check superpowers plugin (recommended dependency)
 SUPERPOWERS_DIR="$HOME/.claude/plugins/cache/claude-plugins-official/superpowers"
+INSTALLED_PLUGINS="$HOME/.claude/plugins/installed_plugins.json"
 if [ -d "$SUPERPOWERS_DIR" ]; then
   SP_VERSION=$(ls "$SUPERPOWERS_DIR" 2>/dev/null | sort -V | tail -1)
   info "Superpowers plugin found (v${SP_VERSION})"
@@ -58,23 +59,58 @@ else
   echo "  writing plans, verification, code review workflows."
   echo "  Without it, these features will silently fail."
   echo ""
-  echo "  ┌─────────────────────────────────────────────────┐"
-  echo "  │  HOW TO INSTALL (takes 10 seconds):             │"
-  echo "  │                                                 │"
-  echo "  │  1. Open terminal and run: claude               │"
-  echo "  │  2. Type: /plugins                              │"
-  echo "  │  3. Search: superpowers                         │"
-  echo "  │  4. Select it and confirm install               │"
-  echo "  │  5. Done! Re-run this setup.sh                  │"
-  echo "  └─────────────────────────────────────────────────┘"
-  echo ""
-  echo "  Note: plugins require manual install via Claude Code UI."
-  echo "  There is no CLI command to auto-install them."
-  echo ""
-  read -rp "Continue without superpowers? (not recommended) [y/N] " sp_yn
-  case "$sp_yn" in
-    y|Y) warn "Continuing without superpowers. Some features will not work." ;;
-    *) echo ""; info "Install superpowers first, then re-run setup.sh. See instructions above."; exit 0 ;;
+  read -rp "Install superpowers automatically? [Y/n] " sp_install
+  case "$sp_install" in
+    n|N)
+      warn "Skipping superpowers. Some features will not work."
+      warn "To install later: open Claude Code → /plugins → search 'superpowers'"
+      ;;
+    *)
+      echo "  Cloning superpowers from GitHub..."
+      SP_TMP=$(mktemp -d)
+      if git clone --depth 1 https://github.com/obra/superpowers.git "$SP_TMP/superpowers" 2>/dev/null; then
+        # Read version from plugin manifest
+        SP_VERSION=$(jq -r '.version' "$SP_TMP/superpowers/.claude-plugin/plugin.json" 2>/dev/null || echo "latest")
+        SP_SHA=$(cd "$SP_TMP/superpowers" && git rev-parse HEAD)
+
+        # Copy to cache
+        mkdir -p "$SUPERPOWERS_DIR/$SP_VERSION"
+        cp -r "$SP_TMP/superpowers/"* "$SUPERPOWERS_DIR/$SP_VERSION/"
+        cp -r "$SP_TMP/superpowers/".* "$SUPERPOWERS_DIR/$SP_VERSION/" 2>/dev/null || true
+
+        # Register in installed_plugins.json
+        mkdir -p "$(dirname "$INSTALLED_PLUGINS")"
+        if [ ! -f "$INSTALLED_PLUGINS" ]; then
+          echo '{"version":2,"plugins":{}}' > "$INSTALLED_PLUGINS"
+        fi
+
+        SP_NOW=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+        SP_ENTRY=$(cat <<SPEOF
+{
+  "scope": "user",
+  "projectPath": "",
+  "installPath": "$SUPERPOWERS_DIR/$SP_VERSION",
+  "version": "$SP_VERSION",
+  "installedAt": "$SP_NOW",
+  "lastUpdated": "$SP_NOW",
+  "gitCommitSha": "$SP_SHA"
+}
+SPEOF
+)
+        # Add to registry (merge with existing)
+        jq --argjson entry "[$SP_ENTRY]" \
+          '.plugins["superpowers@claude-plugins-official"] = $entry' \
+          "$INSTALLED_PLUGINS" > "$INSTALLED_PLUGINS.tmp" \
+          && mv "$INSTALLED_PLUGINS.tmp" "$INSTALLED_PLUGINS"
+
+        rm -rf "$SP_TMP"
+        info "Superpowers plugin installed (v${SP_VERSION})"
+      else
+        rm -rf "$SP_TMP"
+        warn "Failed to clone superpowers. Install manually:"
+        echo "  Open Claude Code → /plugins → search 'superpowers'"
+      fi
+      ;;
   esac
   echo ""
 fi
