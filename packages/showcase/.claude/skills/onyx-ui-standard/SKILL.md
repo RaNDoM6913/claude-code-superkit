@@ -1,3 +1,8 @@
+---
+name: onyx-ui-standard
+description: ONYX Liquid Glass design system — colors, glassmorphism, z-index layers, layout standards
+---
+
 # ONYX UI Standard — Базовая палитра и layout-стандарт
 
 ## Палитра ONYX (obsidian-black + violet accent)
