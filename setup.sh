@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-VERSION="1.2.0"
+VERSION="1.3.0"
 
 if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
   echo "claude-code-superkit v$VERSION — interactive installer"
@@ -177,7 +177,7 @@ fi
 
 # ── Stack Selection ────────────────────────────────────────
 echo ""
-echo "[1/3] Select your stacks:"
+echo "[1/4] Select your stacks:"
 STACKS=()
 
 read -rp "  Go?         [y/N] " yn; [[ "$yn" =~ ^[Yy] ]] && STACKS+=(go)
@@ -187,7 +187,7 @@ read -rp "  Rust?        [y/N] " yn; [[ "$yn" =~ ^[Yy] ]] && STACKS+=(rust)
 
 # ── Extras Selection ───────────────────────────────────────
 echo ""
-echo "[2/3] Select extras:"
+echo "[2/4] Select extras:"
 EXTRAS=()
 
 read -rp "  Bot reviewer (Telegram/Discord/Slack)?  [y/N] " yn; [[ "$yn" =~ ^[Yy] ]] && EXTRAS+=(bot-reviewer)
@@ -195,7 +195,7 @@ read -rp "  Design system reviewer?                  [y/N] " yn; [[ "$yn" =~ ^[Y
 
 # ── Profile Selection ──────────────────────────────────────
 echo ""
-echo "[3/3] Select hook profile:"
+echo "[3/4] Select hook profile:"
 echo "  [f] fast     — minimal checks, maximum speed"
 echo "  [s] standard — balanced (default)"
 echo "  [x] strict   — everything including vet/check on each edit"
@@ -205,6 +205,35 @@ case "$profile_choice" in
   x|X) PROFILE="strict" ;;
   *)   PROFILE="standard" ;;
 esac
+
+# ── Plugin Selection ───────────────────────────────────────
+echo ""
+echo "[4/4] Claude Code plugins:"
+echo ""
+echo "  Base plugins (always enabled):"
+echo "    ✓ superpowers  — TDD, brainstorming, debugging, verification"
+echo "    ✓ github       — PR comments, issue tracking (/review --comment)"
+echo "    ✓ context7     — library documentation lookup"
+echo "    ✓ code-review  — enhanced code review workflows"
+echo ""
+echo "  Optional plugins:"
+OPTIONAL_PLUGINS=()
+
+read -rp "  code-simplifier (code cleanup/refactoring)?    [y/N] " yn
+[[ "$yn" =~ ^[Yy] ]] && OPTIONAL_PLUGINS+=(code-simplifier)
+
+read -rp "  playwright (browser automation, e2e tests)?    [y/N] " yn
+[[ "$yn" =~ ^[Yy] ]] && OPTIONAL_PLUGINS+=(playwright)
+
+# Auto-suggest frontend-design if TypeScript selected
+if [[ " ${STACKS[*]+"${STACKS[*]}"} " =~ " typescript " ]]; then
+  read -rp "  frontend-design (UI/design assistance)?       [Y/n] " yn
+  yn="${yn:-y}"
+  [[ "$yn" =~ ^[Yy] ]] && OPTIONAL_PLUGINS+=(frontend-design)
+else
+  read -rp "  frontend-design (UI/design assistance)?       [y/N] " yn
+  [[ "$yn" =~ ^[Yy] ]] && OPTIONAL_PLUGINS+=(frontend-design)
+fi
 
 # ── Install ────────────────────────────────────────────────
 echo ""
@@ -316,7 +345,22 @@ for stack in "${STACKS[@]+"${STACKS[@]}"}"; do
   done
 done
 rm -f "$SETTINGS.bak"
-info "Built settings.json with $PROFILE profile hooks"
+
+# Add optional plugins to enabledPlugins
+for plugin in "${OPTIONAL_PLUGINS[@]+"${OPTIONAL_PLUGINS[@]}"}"; do
+  cp "$SETTINGS" "$SETTINGS.bak" 2>/dev/null || true
+  jq --arg p "${plugin}@claude-plugins-official" \
+    '.enabledPlugins[$p] = true' \
+    "$SETTINGS" > "$SETTINGS.tmp" && mv "$SETTINGS.tmp" "$SETTINGS"
+  if ! jq empty "$SETTINGS" 2>/dev/null; then
+    warn "settings.json corrupted by plugin injection — restoring backup"
+    cp "$SETTINGS.bak" "$SETTINGS"
+  fi
+done
+rm -f "$SETTINGS.bak"
+
+PLUGIN_COUNT=$(jq '.enabledPlugins | length' "$SETTINGS" 2>/dev/null || echo "4")
+info "Built settings.json with $PROFILE profile hooks + $PLUGIN_COUNT plugins"
 
 # ── Copy CLAUDE.md template ──────────────────────────────
 if [ ! -f "$PROJECT_DIR/CLAUDE.md" ] || [ "$MODE" != "merge" ]; then
@@ -506,6 +550,7 @@ echo "    Commands: $CMD_COUNT"
 echo "    Hooks:    $TOTAL_HOOKS + Stop prompt"
 echo "    Rules:    5"
 echo "    Skills:   3"
+echo "    Plugins:  $PLUGIN_COUNT"
 echo "    Profile:  $PROFILE"
 if [ "$CODEX_INSTALLED" = true ]; then
   INSTALLED_CODEX_SKILLS=$(find "$PROJECT_DIR/.codex/skills" -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
@@ -521,11 +566,14 @@ echo "  Next steps:"
 echo "    1. Edit CLAUDE.md — fill in your project details"
 echo "    2. Edit .claude/skills/project-architecture/SKILL.md"
 echo "    3. Set profile: export CLAUDE_HOOK_PROFILE=$PROFILE"
-echo "    4. Run: claude (or codex)"
+echo "    4. Run: claude → /plugins → install missing plugins"
 echo "    5. Try: /review or /audit"
-if [ ! -d "$SUPERPOWERS_DIR" ]; then
-  echo ""
-  warn "Don't forget to install superpowers plugin!"
-  echo "    → Open Claude Code → /plugins → search 'superpowers' → install"
-fi
+echo ""
+echo "  ⚠ Plugins are ENABLED in settings.json but may need to be"
+echo "    installed first. Open Claude Code → /plugins → install:"
+PLUGIN_LIST="superpowers, github, context7, code-review"
+for p in "${OPTIONAL_PLUGINS[@]+"${OPTIONAL_PLUGINS[@]}"}"; do
+  PLUGIN_LIST="$PLUGIN_LIST, $p"
+done
+echo "    $PLUGIN_LIST"
 echo ""

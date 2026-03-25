@@ -71,6 +71,7 @@ Don't reinvent — discover and adapt.
 | **Hooks** | 11 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
+| **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
 ## 🆕 What's New (v1.3.0)
 
@@ -110,7 +111,7 @@ cd your-project/
 bash /path/to/claude-code-superkit/setup.sh
 ```
 
-Interactive installer: selects your stack (Go/TS/Python/Rust), hook profile (fast/standard/strict), auto-installs superpowers plugin. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
+Interactive installer: selects your stack, hook profile, plugins (github, context7, code-review + optional), auto-installs superpowers. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
 
 ### Codex CLI
 
@@ -125,7 +126,8 @@ Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** 
 
 1. Edit `CLAUDE.md` — fill in your project details (replace TODO placeholders)
 2. Edit `.claude/skills/project-architecture/SKILL.md` — describe your architecture
-3. Run `claude` and try: `/review --full` or `/audit`
+3. Run `claude` → `/plugins` → install enabled plugins (superpowers, github, context7, code-review)
+4. Try: `/review --full` or `/audit`
 
 ### ✅ Verify
 

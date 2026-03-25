@@ -16,9 +16,13 @@ All notable changes to claude-code-superkit are documented here.
 - **Mitigation roadmap** in security-scanner — Phase 3: prioritized fix plan (immediate/short/medium/long-term)
 - **Auto-fix recommendations** in health-checker — check 10: concrete fix suggestions for each unhealthy check
 - **Enhanced config-protection** — .env file warnings + DECISIONS.md append-only enforcement
+- **Plugin auto-configuration** — setup.sh enables 4 base plugins (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
+- **`enabledPlugins`** in core settings.json — base plugins enabled out of the box
 
 ### Changed
-- `settings.json` — added loop-guard.sh to PreToolUse hooks
+- `settings.json` — added loop-guard.sh to PreToolUse hooks + enabledPlugins section
+- `setup.sh` — 4-step installer (was 3): +Plugin Selection with base/optional split
+- `setup.sh` — improved post-install instructions with plugin install reminder
 
 ---
 
