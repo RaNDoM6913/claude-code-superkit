@@ -36,7 +36,7 @@ bash /path/to/claude-code-superkit/setup.sh
    - 21 core agents → `.claude/agents/`
    - Up to 4 stack agents → `.claude/agents/`
    - 11 commands → `.claude/commands/`
-   - 12+ hooks → `.claude/scripts/hooks/`
+   - 11+ hooks → `.claude/scripts/hooks/`
    - 6 rules → `.claude/rules/`
    - 3 skills → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins

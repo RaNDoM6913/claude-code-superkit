@@ -28,10 +28,6 @@
           },
           {
             "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/superkit-meta-check.sh"
-          },
-          {
-            "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/loop-guard.sh"
           }
         ]
