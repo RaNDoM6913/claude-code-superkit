@@ -31,6 +31,24 @@ Before starting, read available project documentation to understand architecture
 
 ## Review Process
 
+### Phase 0.5: Spec Compliance Check
+
+Before reviewing code quality, verify the implementation matches the task specification:
+
+1. **Read the task/ticket/PR description** — what was requested?
+2. **Map requirements to implementation** — for each requirement, find the code that fulfills it
+3. **Check for missing requirements** — any requirement NOT addressed in the code?
+4. **Check for scope creep** — any code that goes BEYOND what was requested?
+
+| Requirement | Implemented? | File:Line | Notes |
+|-------------|:---:|-----------|-------|
+| [from spec] | ✅/❌ | path:line | [gap or scope creep] |
+
+**If spec compliance < 100%:** flag missing requirements as WARNING before proceeding to code quality.
+**If scope creep detected:** flag as SUGGESTION — extra code may introduce bugs without solving the stated problem.
+
+> This phase runs BEFORE code quality review. A perfectly written implementation of the WRONG thing is still wrong.
+
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately without extended analysis.
 
