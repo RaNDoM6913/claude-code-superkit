@@ -1,19 +1,21 @@
 # claude-code-superkit
 
-Production-tested agents, commands, hooks & skills for [Claude Code](https://claude.ai/claude-code). Battle-tested in production apps with 60+ endpoints, 21 agents, and 48 database migrations.
+Production-tested infrastructure for [Claude Code](https://claude.ai/claude-code): 24 agents, 10 commands, 13 hooks, 5 rules, and an interactive installer. All agents run on **Opus** for maximum accuracy. Battle-tested in a production app with 68+ endpoints and 48 database migrations.
+
+Features double-verification code review, 3-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration. Works with Codex CLI too.
 
 ## What's Inside
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 17 | Code review, security scan, testing, audit, debugging, health checks, tree generation |
-| **Stack Agents** | 4 | Go, TypeScript, Python, Rust specific reviewers |
+| **Core Agents** | 17 | Code review, security scan, testing, audit, debugging, health checks, tree generation — all on **Opus** |
+| **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace (requires API key) |
 | **Commands** | 10 | `/dev`, `/review`, `/audit`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 7 + Stop | Git safety, format-on-edit, typecheck, context injection, session continuity |
-| **Rules** | 5 | Coding style, security, git workflow, documentation, auto dev workflow |
-| **Skills** | 3 | Project architecture template, writing-agents guide, writing-commands guide |
+| **Hooks** | 8 + 5 stack + Stop | Git safety, doc-check-on-commit, format-on-edit, typecheck, context inject, session continuity |
+| **Rules** | 5 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow |
+| **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 
 ## Quick Start
 
@@ -63,7 +65,7 @@ chmod +x .claude/scripts/hooks/*.sh
 | Command | What it does |
 |---------|-------------|
 | `/dev <task>` | 8-phase orchestrator: understand → plan → implement → verify → test → review → document → report |
-| `/review` | Detect changed files → dispatch reviewer agents → unified report |
+| `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
 | `/test` | Auto-detect stack and run tests |
 | `/lint` | Auto-detect stack and run linters |
@@ -129,7 +131,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 21 agents, 14 commands, 11 hooks, 11 skills, and 4 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 24 agents, 16 commands, 10 hooks, 12 skills, and 5 rules.
 
 ## Codex CLI Support
 
@@ -137,10 +139,10 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
-| Agents (as skills) | 23 | 23 |
-| Commands / Orchestrators | 9 (slash commands) | 9 (user-invocable skills) |
-| Hooks (auto-format, auto-lint) | 12 | — |
-| Rules | 4 (separate files) | Inline in AGENTS.md |
+| Agents (as skills) | 24 | 24 |
+| Commands / Orchestrators | 10 (slash commands) | 10 (user-invocable skills) |
+| Hooks (auto-format, lint, doc-check) | 13 + Stop | — |
+| Rules | 5 (separate files) | Inline in AGENTS.md |
 | Skills | 3 | 3 |
 | Session continuity | Yes | — |
 | Subagent dispatch | Agent tool | spawn_agent |
