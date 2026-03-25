@@ -45,6 +45,27 @@ fi
 PROJECT_DIR="$(git rev-parse --show-toplevel)"
 CLAUDE_DIR="$PROJECT_DIR/.claude"
 
+# Check superpowers plugin (recommended dependency)
+SUPERPOWERS_DIR="$HOME/.claude/plugins/cache/claude-plugins-official/superpowers"
+if [ -d "$SUPERPOWERS_DIR" ]; then
+  SP_VERSION=$(ls "$SUPERPOWERS_DIR" 2>/dev/null | sort -V | tail -1)
+  info "Superpowers plugin found (v${SP_VERSION})"
+else
+  echo ""
+  warn "Superpowers plugin is NOT installed."
+  echo "  Superkit uses superpowers skills (brainstorming, TDD, debugging, plans,"
+  echo "  verification, code review workflows). Without it, these won't work."
+  echo ""
+  echo "  To install: open Claude Code → type /plugins → search 'superpowers' → install"
+  echo ""
+  read -rp "Continue without superpowers? [y/N] " sp_yn
+  case "$sp_yn" in
+    y|Y) warn "Continuing without superpowers. Install it later for full functionality." ;;
+    *) echo "Install superpowers first, then re-run setup.sh"; exit 0 ;;
+  esac
+  echo ""
+fi
+
 # ── Handle existing .claude/ ───────────────────────────────
 if [ -d "$CLAUDE_DIR" ]; then
   echo ""
@@ -344,4 +365,9 @@ echo "    2. Edit .claude/skills/project-architecture/SKILL.md"
 echo "    3. Set profile: export CLAUDE_HOOK_PROFILE=$PROFILE"
 echo "    4. Run: claude (or codex)"
 echo "    5. Try: /review or /audit"
+if [ ! -d "$SUPERPOWERS_DIR" ]; then
+  echo ""
+  warn "Don't forget to install superpowers plugin!"
+  echo "    → Open Claude Code → /plugins → search 'superpowers' → install"
+fi
 echo ""
