@@ -124,11 +124,22 @@ else
 }
 SPEOF
 )
+        # Backup before mutation
+        cp "$INSTALLED_PLUGINS" "$INSTALLED_PLUGINS.bak" 2>/dev/null || true
+
         # Add to registry (merge with existing)
         jq --argjson entry "[$SP_ENTRY]" \
           '.plugins["superpowers@claude-plugins-official"] = $entry' \
           "$INSTALLED_PLUGINS" > "$INSTALLED_PLUGINS.tmp" \
           && mv "$INSTALLED_PLUGINS.tmp" "$INSTALLED_PLUGINS"
+
+        # Validate JSON integrity
+        if ! jq empty "$INSTALLED_PLUGINS" 2>/dev/null; then
+          warn "Plugin registry corrupted — restoring backup"
+          cp "$INSTALLED_PLUGINS.bak" "$INSTALLED_PLUGINS" 2>/dev/null || true
+        else
+          rm -f "$INSTALLED_PLUGINS.bak"
+        fi
 
         rm -rf "$SP_TMP"
         info "Superpowers plugin installed (v${SP_VERSION})"
@@ -280,6 +291,9 @@ done
 # Make hooks executable
 chmod +x "$CLAUDE_DIR/scripts/hooks/"*.sh 2>/dev/null
 
+# Ensure ALL hooks are executable (covers merge mode + edge cases)
+find "$CLAUDE_DIR/scripts/hooks" -name "*.sh" -exec chmod +x {} \; 2>/dev/null || true
+
 # ── Build settings.json ──────────────────────────────────
 # Start with base settings
 copy_file "$PACKAGES/core/settings.json" "$CLAUDE_DIR/settings.json"
@@ -291,11 +305,17 @@ for stack in "${STACKS[@]+"${STACKS[@]}"}"; do
     [ -f "$hook_file" ] || continue
     hook_name=$(basename "$hook_file")
     # Add to PostToolUse hooks array
-    jq --arg cmd "\"$""CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/$hook_name" \
+    cp "$SETTINGS" "$SETTINGS.bak" 2>/dev/null || true
+    jq --arg cmd "\"\$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/$hook_name" \
       '.hooks.PostToolUse[0].hooks += [{"type": "command", "command": $cmd}]' \
       "$SETTINGS" > "$SETTINGS.tmp" && mv "$SETTINGS.tmp" "$SETTINGS"
+    if ! jq empty "$SETTINGS" 2>/dev/null; then
+      warn "settings.json corrupted by hook injection — restoring backup"
+      cp "$SETTINGS.bak" "$SETTINGS"
+    fi
   done
 done
+rm -f "$SETTINGS.bak"
 info "Built settings.json with $PROFILE profile hooks"
 
 # ── Copy CLAUDE.md template ──────────────────────────────
@@ -411,6 +431,55 @@ if [[ "$codex_yn" =~ ^[Yy] ]]; then
   CODEX_INSTALLED=true
 else
   CODEX_INSTALLED=false
+fi
+
+# ── Post-Install Validation ──────────────────────────────
+echo ""
+VALIDATION_OK=true
+
+# Check settings.json is valid
+SETTINGS="$CLAUDE_DIR/settings.json"
+if [ -f "$SETTINGS" ]; then
+  if jq empty "$SETTINGS" 2>/dev/null; then
+    info "Validation: settings.json is valid JSON"
+  else
+    warn "Validation: settings.json is INVALID — hooks will not work!"
+    VALIDATION_OK=false
+  fi
+fi
+
+# Check hooks are executable
+NON_EXEC=$(find "$CLAUDE_DIR/scripts/hooks" -name "*.sh" ! -perm -111 2>/dev/null | wc -l | tr -d ' ')
+if [ "$NON_EXEC" -gt 0 ]; then
+  warn "Validation: $NON_EXEC hooks are not executable — fixing..."
+  find "$CLAUDE_DIR/scripts/hooks" -name "*.sh" -exec chmod +x {} \; 2>/dev/null
+else
+  info "Validation: all hooks are executable"
+fi
+
+# Check CLAUDE.md exists
+if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
+  info "Validation: CLAUDE.md is present"
+else
+  warn "Validation: CLAUDE.md is missing"
+  VALIDATION_OK=false
+fi
+
+# Check agents installed
+INSTALLED_AGENTS=$(find "$CLAUDE_DIR/agents" -name "*.md" 2>/dev/null | wc -l | tr -d ' ')
+if [ "$INSTALLED_AGENTS" -gt 0 ]; then
+  info "Validation: $INSTALLED_AGENTS agents installed"
+else
+  warn "Validation: no agents found — installation may have failed"
+  VALIDATION_OK=false
+fi
+
+if [ "$VALIDATION_OK" = true ]; then
+  echo ""
+  info "All validation checks passed"
+else
+  echo ""
+  warn "Some validation checks failed — review warnings above"
 fi
 
 # ── Summary ──────────────────────────────────────────────
