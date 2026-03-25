@@ -73,18 +73,19 @@ Don't reinvent — discover and adapt.
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.0)
+## 🆕 What's New (v1.3.1)
 
-- 🔄 **`/workflow` command** — predefined templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit
-- ⚡ **`/dev --quick` mode** — lightweight cycle skipping architect, plan validation, goal verification, docs
-- 🏥 **`/audit --health` mode** — quick health dashboard (~30s vs ~5min)
-- 🔁 **`loop-guard.sh` hook** — detects repeated identical tool calls and A→B→A→B loops
-- 🔬 **Anti-anchoring scan** in code-reviewer — grep anti-patterns before reading code
-- 🕵️ **Forensics phase** in debug-observer — scientific method with READ-ONLY investigation
-- 🛡️ **Mitigation roadmap** in security-scanner — prioritized fix plan (immediate/short/medium/long-term)
-- 📦 **Safe upgrade strategy** in dependency-checker — rollback planning, blast radius estimation
+- 🧹 **AI Slop Cleaner** agent — detect and fix AI-generated code patterns (redundant comments, unnecessary abstractions, template slop)
+- 🎯 **Critic** agent — multi-perspective final quality gate (security, new-hire, ops) with gap analysis and predictions
+- 🎨 **Visual Reviewer** agent — UI consistency scoring, design system compliance (0-100)
+- 🔍 **Ambiguity Gate** in /dev Phase 1 — 5-dimension clarity check before planning
+- 🧹 **Phase 3.5 Slop Cleanup** in /dev — automatic AI code cleanup after implementation
+- 🎯 **Phase 6.5 Critic** in /dev — final quality gate for complex tasks
+- 📋 **Spec Compliance** in code-reviewer — verify implementation matches requirements before quality review
+- 🔄 **Circuit Breaker** in debug-observer — 3 failures → escalate to architect
+- 🏷️ **Git Trailers** in /commit — Confidence, Scope-risk, Not-tested metadata
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.1.0 → v1.2.0 → v1.3.0 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.1 history.
 
 ## 🔄 How `/dev` Works
 
