@@ -46,7 +46,7 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.2.0
+VERSION                     # 1.3.3
 ```
 
 ## Current Counts
@@ -128,6 +128,8 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 | `setup.sh` | Interactive installer — stack, extras, profile, plugins, validation |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
-| `packages/core/commands/dev.md` | 10-phase dev orchestrator with plan-checker + goal-verifier gates |
+| `packages/core/commands/dev.md` | 12-phase dev orchestrator with plan-checker + goal-verifier + slop-cleanup + critic gates |
+| `packages/core/commands/superkit-init.md` | Intelligent project setup — scan, generate docs, configure rules |
+| `packages/core/commands/superkit-evolve.md` | Incremental documentation drift detection and fix |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |
