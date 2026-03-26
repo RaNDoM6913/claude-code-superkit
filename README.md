@@ -67,19 +67,21 @@ Don't reinvent — discover and adapt.
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
-| **Commands** | 11 | `/dev`, `/review`, `/audit`, `/workflow`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 11 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, format-on-edit, typecheck, context inject, session continuity |
+| **Commands** | 13 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
+| **Hooks** | 12 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, evolve-check, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 6 | Coding style, security, git workflow, documentation (4-layer enforcement with BLOCKING hook), auto dev workflow, auto command triggers |
-| **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
+| **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.2)
+## 🆕 What's New (v1.4.0)
 
-- 📄 **Smart doc-check hook** — maps specific file types to required docs (migrations → schema, handlers → API ref, frontend → arch docs), not just "any .md"
-- 📋 **15-point documentation rule** — explicit trigger-to-doc mapping table, subagent delegation instructions, dual-repo sync advisory
-- 🔧 **Generalized core hook** — project-agnostic patterns (no app-specific paths), with full TGApp version in showcase
+- 🚀 **`/superkit-init`** — intelligent project setup: scan codebase → generate **filled** docs (not TODOs) → configure rules with real paths
+- 🔄 **`/superkit-evolve`** — incremental drift detection: migration counter, missing docs, stale trees → auto-fix
+- 🔍 **`project-scanner` skill** — codebase introspection: languages, frameworks, DB, structure, scale
+- ⏰ **`evolve-check` hook** — SessionStart advisory: checks drift every 24h, suggests `/superkit-evolve`
+- 🏗️ **Scaffold Mode** — `/superkit-init` on empty projects creates minimal structure with stack selection
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.2 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.4.0 history.
 
 ## 🔄 How `/dev` Works
 
@@ -143,7 +145,9 @@ Start a new Claude Code session and run `/review --full`. You should see agents 
 | `/commit` | Conventional commit with secret scanning |
 | `/new-migration` | Create migration file pair (up + down) |
 | `/migrate` | Apply or rollback database migrations |
-| `/docs-init` | Scaffold architecture documentation |
+| `/superkit-init` | Intelligent project setup: scan codebase → generate filled docs → configure rules with real paths |
+| `/superkit-evolve` | Incremental doc update: detect drift (migrations, trees, missing docs) → fix |
+| `/docs-init` | Scaffold architecture documentation (redirects to `/superkit-init`) |
 | `/security-scan` | Run security scan on .claude/ configs |
 
 ## 🔧 Hook Profiles
@@ -216,10 +220,10 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
 | Agents / Skills | 31 agents | 41 skills (8 commands + 29 agents + 4 stack) |
-| Commands | 11 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 16 + Stop | — (inline rules in AGENTS.md) |
+| Commands | 13 (slash commands) | 8 (user-invocable skills) |
+| Hooks | 17 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 6 (separate files) | Inline in AGENTS.md |
-| Knowledge Skills | 3 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
+| Knowledge Skills | 4 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 

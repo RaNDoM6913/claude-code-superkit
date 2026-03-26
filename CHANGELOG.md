@@ -2,6 +2,24 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.4.0] — 2026-03-26
+
+### Added
+- **`/superkit-init` command** — 5-phase intelligent project setup: scan codebase → generate filled architecture docs → configure rules with real paths → validate → commit. Supports `--non-interactive` flag and scaffold mode for empty projects
+- **`/superkit-evolve` command** — incremental drift detection: migration counter, missing docs, stale trees, broken rule paths. Supports `--fix-all` flag
+- **`project-scanner` skill** — codebase introspection patterns for language/framework/database/structure/component detection
+- **`evolve-check.sh` hook** — SessionStart advisory: checks documentation drift every 24h, suggests `/superkit-evolve` if issues found
+- **Scaffold Mode** — `/superkit-init` on empty projects asks for stack, creates minimal CLAUDE.md with smart hints
+
+### Changed
+- **`/docs-init`** — now redirects to `/superkit-init` (fallback kept for older versions)
+- `setup.sh` — suggests `/superkit-init` after file installation
+- Commands: 11 → **13** (+superkit-init, +superkit-evolve)
+- Hooks: 11 → **12** (+evolve-check)
+- Skills: 3 → **4** (+project-scanner)
+
+---
+
 ## [1.3.2] — 2026-03-26
 
 ### Breaking Changes

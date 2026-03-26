@@ -8,10 +8,10 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 packages/
   core/                     # Generic components (any project)
     agents/                 # 24 agents (all opus)
-    commands/               # 11 commands
-    hooks/                  # 11 hooks
+    commands/               # 13 commands
+    hooks/                  # 12 hooks
     rules/                  # 6 rules
-    skills/                 # 3 skills
+    skills/                 # 4 skills
     settings.json           # Hook wiring
     CLAUDE.md               # Template for users
     docs-templates/         # Architecture doc templates
@@ -54,9 +54,9 @@ VERSION                     # 1.2.0
 | Component | Core | Stack | Extras | Showcase | Codex |
 |-----------|------|-------|--------|----------|-------|
 | Agents | 24 | 4 | 3 | 28 | — |
-| Skills | 3 | — | 1 | 11 | 37 |
-| Commands | 11 | — | — | 16 | 8 |
-| Hooks | 11 | 5 | — | 13 | — |
+| Skills | 4 | — | 1 | 11 | 37 |
+| Commands | 13 | — | — | 16 | 8 |
+| Hooks | 12 | 5 | — | 13 | — |
 | Rules | 6 | — | — | 5 | — |
 
 ## Conventions

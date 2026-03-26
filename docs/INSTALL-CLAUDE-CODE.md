@@ -35,10 +35,10 @@ bash /path/to/claude-code-superkit/setup.sh
 8. **Copies files**:
    - 24 core agents → `.claude/agents/`
    - Up to 4 stack agents → `.claude/agents/`
-   - 11 commands → `.claude/commands/`
-   - 11+ hooks → `.claude/scripts/hooks/`
+   - 13 commands → `.claude/commands/`
+   - 12+ hooks → `.claude/scripts/hooks/`
    - 6 rules → `.claude/rules/`
-   - 3 skills → `.claude/skills/`
+   - 4 skills → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree

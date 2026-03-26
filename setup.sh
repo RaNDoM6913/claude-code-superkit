@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-VERSION="1.3.1"
+VERSION="1.4.0"
 
 if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
   echo "claude-code-superkit v$VERSION — interactive installer"
@@ -563,11 +563,13 @@ if [ "$CODEX_INSTALLED" = true ]; then
 fi
 echo ""
 echo "  Next steps:"
-echo "    1. Edit CLAUDE.md — fill in your project details"
-echo "    2. Edit .claude/skills/project-architecture/SKILL.md"
-echo "    3. Set profile: export CLAUDE_HOOK_PROFILE=$PROFILE"
-echo "    4. Run: claude → /plugins → install missing plugins"
-echo "    5. Try: /review or /audit"
+echo "    1. Run: claude"
+echo "    2. Run: /superkit-init  ← intelligent project setup (auto-fills docs!)"
+echo "    3. Install plugins: /plugins → install missing"
+echo "    4. Try: /review or /audit"
+echo ""
+echo "  💡 /superkit-init scans your code and generates FILLED docs —"
+echo "     no more manual TODO filling! Use --non-interactive for quick setup."
 echo ""
 echo "  ⚠ Plugins are ENABLED in settings.json but may need to be"
 echo "    installed first. Open Claude Code → /plugins → install:"
