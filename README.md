@@ -87,9 +87,9 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.2 history.
 graph LR
     P -->|" "| E -->|" "| Q
 
-    P["📐 <b>Planning</b><br/><br/>1 · Understand + Clarity Gate<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
-    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Slop Cleanup<br/>7 · Verify<br/>8 · Test + Goals"]
-    Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Critic<br/>11 · Validate<br/>12 · Docs · Report"]
+    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
+    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Cleanup<br/>7 · Verify<br/>8 · Test"]
+    Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Critic<br/>11 · Docs<br/>12 · Report"]
 
     style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
     style E fill:#fff3e0,stroke:#F57C00,stroke-width:2px,color:#333
