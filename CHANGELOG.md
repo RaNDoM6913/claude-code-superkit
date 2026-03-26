@@ -2,16 +2,6 @@
 
 All notable changes to claude-code-superkit are documented here.
 
-## [1.3.2] — 2026-03-26
-
-### Changed
-- **`doc-check-on-commit.sh`** — now **BLOCKS** commits (exit 2) instead of warning (exit 0) when code changes lack documentation updates. Migration-specific check: blocks if `.sql` migration staged without database schema docs.
-- **`documentation.md` rule** — enforcement upgraded from 3 layers to **4 layers** (+auto-commands.md as highest-priority trigger)
-- **`auto-commands.md` rule** — added "Documentation — Auto Verify Before Commit" as **highest priority** auto-trigger (never skip)
-- **`docs/guide/07-writing-rules.md`** — updated from "Five Default Rules" to **Six** (+auto-commands.md description)
-
----
-
 ## [1.3.1] — 2026-03-26
 
 ### Added
@@ -29,6 +19,10 @@ All notable changes to claude-code-superkit are documented here.
 - **code-reviewer** — added Phase 0.5 spec compliance check before code quality review
 - **/dev** — now 12 phases (was 10): +Phase 3.5 Slop Cleanup, +Phase 6.5 Critic, +Ambiguity Gate in Phase 1
 - Core agents: 21 → **24** (+ai-slop-cleaner, +critic, +visual-reviewer)
+- **`doc-check-on-commit.sh`** — now **BLOCKS** commits (exit 2) instead of warning (exit 0) when code changes lack documentation updates
+- **`documentation.md` rule** — enforcement upgraded from 3 layers to **4 layers** (+auto-commands.md as highest-priority trigger)
+- **`auto-commands.md` rule** — added "Documentation — Auto Verify Before Commit" as highest priority auto-trigger
+- **`docs/guide/07-writing-rules.md`** — updated from "Five Default Rules" to **Six** (+auto-commands.md)
 
 ---
 
