@@ -16,7 +16,7 @@
 
 ---
 
-Battle-tested in a production app with 68+ endpoints and 48 database migrations. Features double-verification code review, 3-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration.
+Battle-tested in a production app with 68+ endpoints and 50 database migrations. Features double-verification code review, 4-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration.
 
 <table>
 <tr>
@@ -30,10 +30,10 @@ Post inline comments on GitHub PRs with `--comment`.
 </td>
 <td width="50%">
 
-### 📄 3-Layer Doc Enforcement
-Rule + PreToolUse hook + Opus Stop hook.
-Documentation never falls behind code.
-Plan completion gate — docs before "done".
+### 📄 4-Layer Doc Enforcement
+Rule + BLOCKING hook + auto-commands + Stop hook.
+Smart file-to-doc mapping — blocks commits.
+15-point checklist — docs before "done".
 
 </td>
 </tr>
@@ -132,8 +132,8 @@ Start a new Claude Code session and run `/review --full`. You should see agents 
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 10-phase orchestrator: understand → plan → validate → implement → verify → test → verify goals → review → document → report |
-| `/dev --quick <task>` | Lightweight mode: skips architect, plan validation, goal verification, docs — for small fixes |
+| `/dev <task>` | 12-phase orchestrator: understand → architect → plan → validate → implement → cleanup → verify → test → review ×4 → critic → docs → report |
+| `/dev --quick <task>` | Lightweight mode: skips architect, plan validation, slop cleanup, critic, docs — for small fixes |
 | `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
