@@ -103,38 +103,28 @@ graph LR
 ### Claude Code (recommended)
 
 ```bash
+# 1. Clone superkit
 git clone https://github.com/RaNDoM6913/claude-code-superkit.git
+
+# 2. Run installer in your project
 cd your-project/
 bash /path/to/claude-code-superkit/setup.sh
-```
 
-Interactive installer: selects your stack, hook profile, plugins (github, context7, code-review + optional), auto-installs superpowers. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
-
-### Codex CLI
-
-Tell Codex:
-```
-Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
-```
-
-Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** reasoning.
-
-### After Installation
-
-```bash
-# 1. Open Claude Code
+# 3. Open Claude Code
 claude
 
-# 2. Install plugins
+# 4. Install plugins
 /plugins
 # → install: superpowers, github, context7, code-review
 
-# 3. Run intelligent setup (auto-fills docs from your code!)
+# 5. Run intelligent setup (auto-fills docs from your code!)
 /superkit-init
 
-# 4. Verify everything works
+# 6. Verify
 /review --full
 ```
+
+`setup.sh` — interactive installer: selects your stack, hook profile, plugins. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
 
 **`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
 - `CLAUDE.md` — populated with your tech stack, commands, conventions
@@ -145,6 +135,15 @@ claude
 Use `--non-interactive` for quick setup without checkpoints.
 
 > **Already set up?** Run `/superkit-evolve` anytime to detect and fix documentation drift (stale migration counters, missing docs for new components, outdated trees).
+
+### Codex CLI
+
+Tell Codex:
+```
+Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
+```
+
+Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** reasoning.
 
 ## ⌨️ Key Commands
 
