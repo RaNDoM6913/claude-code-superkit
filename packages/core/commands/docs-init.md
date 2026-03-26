@@ -1,65 +1,22 @@
 ---
-description: Initialize project documentation — scaffold architecture docs, generate trees, set up doc-update rules
-argument-hint: "[minimal|standard|full]"
-allowed-tools: Bash, Read, Write, Glob, Agent
+description: "Initialize project documentation — redirects to /superkit-init for intelligent setup"
+argument-hint: "[--non-interactive]"
+allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---
 
 # Initialize Project Documentation
 
-Scaffold documentation structure for the project.
+> **This command now redirects to `/superkit-init`** which provides intelligent project scanning and auto-populated documentation instead of empty TODO templates.
 
-## Modes
+Run `/superkit-init` for the full experience, or `/superkit-init --non-interactive` for quick setup.
 
-Parse $ARGUMENTS:
-- **minimal** — just `docs/architecture/` dir + copy relevant templates
-- **standard** (default) — architecture templates + generate trees
-- **full** — architecture + trees + OpenAPI stub + changelog template
+## Fallback (if /superkit-init is not available)
 
-## Steps
+If running an older version of superkit without `/superkit-init`:
 
-### 1. Create directories
-
-```bash
-mkdir -p docs/architecture docs/trees
-```
-
-### 2. Auto-detect and copy relevant templates
-
-Based on project files:
-
-| Detected | Templates to copy |
-|----------|-------------------|
-| `go.mod` | backend-layers, api-reference, database-schema |
-| `package.json` + `src/` or `app/` | frontend-state |
-| `migrations/` or `prisma/` | database-schema |
-| `Dockerfile` or `docker-compose.yml` | deployment |
-| Auth-related files (jwt, auth, session) | auth-and-sessions |
-| Always | data-flow |
-
-Copy from superkit templates directory. If superkit not found locally, create minimal stubs.
-
-### 3. Generate project trees (standard and full modes)
-
-Dispatch `tree-generator` agent:
-```
-Generate project trees for this codebase. Write to docs/trees/.
-```
-
-### 4. Update CLAUDE.md / AGENTS.md
-
-Append "Architecture Reference" section if not present:
-```markdown
-## Architecture Reference
-
-| Doc | Description |
-|-----|-------------|
-```
-Populate table with created doc files.
-
-Append "Mandatory Documentation Updates" checklist if not present.
-
-### 5. Report
-
-List created files and next steps (fill in TODOs).
+1. Create directories: `mkdir -p docs/architecture docs/trees`
+2. Dispatch `tree-generator` agent to generate project trees
+3. Create CLAUDE.md from the template in `packages/core/CLAUDE.md`
+4. Fill in TODO sections manually
 
 $ARGUMENTS
