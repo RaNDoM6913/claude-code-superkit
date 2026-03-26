@@ -72,6 +72,22 @@ Commands that Claude MUST invoke automatically when conditions are met — witho
 - Report CRITICAL and HIGH severity only for auto-triggered scans
 - Do NOT auto-fix security issues — always report to user first
 
+## Documentation — Auto Verify Before Commit
+
+**THIS IS THE HIGHEST PRIORITY AUTO-TRIGGER. NEVER SKIP.**
+
+| Trigger | Condition |
+|---------|-----------|
+| Pre-commit | Before EVERY `git commit` that includes code changes (.go, .ts, .tsx, .sql, .py, .rs) |
+
+**Behavior:**
+- Before committing, verify that corresponding docs are staged alongside code
+- **Migration staged** → database schema docs MUST be updated
+- **Handler/endpoint changed** → API reference docs MUST be updated
+- **Frontend behavior changed** → frontend state/architecture docs MUST be updated
+- If docs are missing → update them BEFORE committing, not after
+- The `doc-check-on-commit` hook will BLOCK the commit if docs are missing — fix the docs, don't bypass the hook
+
 ## When NOT to auto-trigger
 
 | Situation | Why skip |
