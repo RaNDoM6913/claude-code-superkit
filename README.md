@@ -73,7 +73,7 @@ Don't reinvent — discover and adapt.
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.4.0)
+## 🆕 What's New (v1.3.3)
 
 - 🚀 **`/superkit-init`** — intelligent project setup: scan codebase → generate **filled** docs (not TODOs) → configure rules with real paths
 - 🔄 **`/superkit-evolve`** — incremental drift detection: migration counter, missing docs, stale trees → auto-fix
@@ -81,7 +81,7 @@ Don't reinvent — discover and adapt.
 - ⏰ **`evolve-check` hook** — SessionStart advisory: checks drift every 24h, suggests `/superkit-evolve`
 - 🏗️ **Scaffold Mode** — `/superkit-init` on empty projects creates minimal structure with stack selection
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.4.0 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.3 history.
 
 ## 🔄 How `/dev` Works
 

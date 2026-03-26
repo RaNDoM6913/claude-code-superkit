@@ -2,7 +2,7 @@
 
 All notable changes to claude-code-superkit are documented here.
 
-## [1.4.0] — 2026-03-26
+## [1.3.3] — 2026-03-26
 
 ### Added
 - **`/superkit-init` command** — 5-phase intelligent project setup: scan codebase → generate filled architecture docs → configure rules with real paths → validate → commit. Supports `--non-interactive` flag and scaffold mode for empty projects
