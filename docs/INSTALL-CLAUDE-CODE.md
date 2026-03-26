@@ -5,27 +5,32 @@
 | Tool | Required | Install |
 |------|----------|---------|
 | git | Yes | System package manager |
-| jq | Yes | `brew install jq` (macOS) / `sudo apt install jq` (Linux) |
+| Node.js 18+ | Yes | [nodejs.org](https://nodejs.org) or `brew install node` |
 | Claude Code CLI | Yes | `npm install -g @anthropic-ai/claude-code` |
 | Plugins | Recommended | Auto-enabled by setup.sh: superpowers, github, context7, code-review. Install via Claude Code → `/plugins` |
 | tree | Optional | `brew install tree` — nicer project tree generation |
 
-## Option 1: Interactive Setup (recommended)
+## Option 1: npx (recommended)
 
 ```bash
-# Clone the superkit
-git clone https://github.com/RaNDoM6913/claude-code-superkit.git
-
-# Navigate to YOUR project (not the superkit!)
-cd /path/to/your-project
-
-# Run the installer
-bash /path/to/claude-code-superkit/setup.sh
+npx claude-code-superkit
 ```
 
-### What setup.sh does
+### CLI Options
 
-1. **Checks prerequisites** — git, jq, Claude CLI
+| Flag | Description |
+|------|-------------|
+| `--stacks=go,typescript` | Pre-select language stacks |
+| `--profile=strict` | Set hook profile (fast/standard/strict) |
+| `--extras=bot-reviewer` | Include extra agents |
+| `--codex` | Also install Codex CLI support |
+| `--no-docs` | Skip doc scaffolding |
+| `--no-superpowers` | Skip superpowers plugin |
+| `--defaults` | Non-interactive mode for CI/CD |
+
+### What the installer does
+
+1. **Checks prerequisites** — Node.js 18+, git, Claude CLI
 2. **Installs superpowers plugin** — auto-clones from GitHub if missing
 3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup + replace), or abort
 4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust (multi-select)
@@ -153,12 +158,8 @@ The `evolve-check` hook also runs at session start (every 24h) and suggests `/su
 ## Updating
 
 ```bash
-cd /path/to/claude-code-superkit
-git pull
-
-# Re-run setup.sh with merge mode
-cd /path/to/your-project
-bash /path/to/claude-code-superkit/setup.sh
+# Just re-run:
+npx claude-code-superkit@latest
 # Choose [m] merge — adds new files, keeps your existing customizations
 ```
 
