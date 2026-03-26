@@ -121,14 +121,30 @@ Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** 
 
 ### After Installation
 
-1. Edit `CLAUDE.md` — fill in your project details (replace TODO placeholders)
-2. Edit `.claude/skills/project-architecture/SKILL.md` — describe your architecture
-3. Run `claude` → `/plugins` → install enabled plugins (superpowers, github, context7, code-review)
-4. Try: `/review --full` or `/audit`
+```bash
+# 1. Open Claude Code
+claude
 
-### ✅ Verify
+# 2. Install plugins
+/plugins
+# → install: superpowers, github, context7, code-review
 
-Start a new Claude Code session and run `/review --full`. You should see agents dispatched and a findings report.
+# 3. Run intelligent setup (auto-fills docs from your code!)
+/superkit-init
+
+# 4. Verify everything works
+/review --full
+```
+
+**`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
+- `CLAUDE.md` — populated with your tech stack, commands, conventions
+- `docs/architecture/*.md` — generated from actual code analysis
+- `docs/trees/*.md` — project structure trees
+- `.claude/rules/` — configured with your real file paths
+
+Use `--non-interactive` for quick setup without checkpoints.
+
+> **Already set up?** Run `/superkit-evolve` anytime to detect and fix documentation drift (stale migration counters, missing docs for new components, outdated trees).
 
 ## ⌨️ Key Commands
 

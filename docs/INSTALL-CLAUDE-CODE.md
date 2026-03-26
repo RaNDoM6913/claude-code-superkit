@@ -92,27 +92,14 @@ chmod +x .claude/scripts/hooks/*.sh
 
 ## Post-Installation
 
-### 1. Fill in CLAUDE.md
-
-Open `CLAUDE.md` and replace all `TODO:` placeholders with your project info:
-- Tech stack table
-- Project structure
-- Key commands
-- Conventions
-- Architecture references
-
-### 2. Fill in project-architecture skill
-
-Edit `.claude/skills/project-architecture/SKILL.md` — describe your modules, layers, and data flow.
-
-### 3. Set hook profile
+### 1. Set hook profile
 
 Add to `~/.zshrc` or `~/.bashrc`:
 ```bash
 export CLAUDE_HOOK_PROFILE=standard
 ```
 
-### 4. Install plugins
+### 2. Install plugins
 
 Open Claude Code → type `/plugins` → install each enabled plugin:
 - **superpowers** — TDD, brainstorming, debugging, verification
@@ -121,13 +108,47 @@ Open Claude Code → type `/plugins` → install each enabled plugin:
 - **code-review** — enhanced code review workflows
 - Plus any optional plugins you selected during setup
 
-### 5. Verify
+### 3. Run `/superkit-init` (recommended)
 
 ```bash
 claude
-# Then type: /review --full
+# Then type:
+/superkit-init
+```
+
+This scans your codebase and **auto-generates filled documentation**:
+
+| What it generates | From what |
+|-------------------|-----------|
+| `CLAUDE.md` (populated) | README, go.mod/package.json, Makefile |
+| `docs/architecture/*.md` (filled) | Actual source code analysis |
+| `docs/trees/*.md` | `tree` command on your project |
+| `.claude/rules/` (configured) | Real project file paths |
+
+**No more manual TODO filling.** The command reads your code and writes docs for you.
+
+Options:
+- `--non-interactive` — skip all checkpoints, generate everything automatically
+- Scaffold Mode — for empty projects, asks your stack and creates minimal structure
+
+### 4. Verify
+
+```bash
+# In Claude Code:
+/review --full
 # Expected: agents dispatched, findings report shown
 ```
+
+### 5. Keep docs fresh with `/superkit-evolve`
+
+Run anytime to detect and fix documentation drift:
+```bash
+/superkit-evolve
+```
+
+Detects: migration counter drift, missing docs for new components, stale trees, broken rule paths. Use `--fix-all` for automatic fixing.
+
+The `evolve-check` hook also runs at session start (every 24h) and suggests `/superkit-evolve` if drift is detected.
 
 ## Updating
 

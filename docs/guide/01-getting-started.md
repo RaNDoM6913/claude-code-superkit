@@ -2,7 +2,7 @@
 
 ## What is claude-code-superkit?
 
-claude-code-superkit is a collection of production-tested agents, commands, hooks, rules, and skills for Claude Code. It gives Claude structured review processes, automated safety checks, and orchestrated development workflows out of the box. Extracted from a real monorepo with 60+ endpoints and 48 database migrations, every component has been battle-tested against real code.
+claude-code-superkit is a collection of production-tested agents, commands, hooks, rules, and skills for Claude Code. It gives Claude structured review processes, automated safety checks, and orchestrated development workflows out of the box. Extracted from a real monorepo with 68+ endpoints and 50 database migrations, every component has been battle-tested against real code.
 
 ## Prerequisites
 
@@ -27,13 +27,16 @@ cd /path/to/your-project
 bash ~/claude-code-superkit/setup.sh
 ```
 
-The installer walks you through three choices:
+The installer walks you through four steps:
 
-1. **Stack selection** -- Go, TypeScript, Python, Rust (pick any combination)
-2. **Extras** -- bot reviewer, design system reviewer
-3. **Hook profile** -- fast, standard, or strict
+1. **[1/4] Stack selection** — Go, TypeScript, Python, Rust (pick any combination)
+2. **[2/4] Extras** — bot reviewer, design system reviewer
+3. **[3/4] Hook profile** — fast, standard, or strict
+4. **[4/4] Plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional
 
-It copies the right files into `.claude/`, builds `settings.json`, and creates a starter `CLAUDE.md`.
+It copies the right files into `.claude/`, builds `settings.json` with plugins, and creates a starter `CLAUDE.md`.
+
+**After setup.sh finishes, run `/superkit-init` in Claude Code** — it scans your codebase and auto-fills CLAUDE.md, architecture docs, and rules with your real project paths. No more manual TODO filling.
 
 ## Manual Installation
 
@@ -76,7 +79,8 @@ Launch Claude Code in your project and try these:
 | `/review` | Detects changed files, dispatches matching reviewer agents, produces a unified report |
 | `/audit` | Runs up to 4 audit agents in parallel (frontend, backend, infra, security) |
 | `/test` | Auto-detects your test runner and executes tests |
-| `/dev <task>` | Full 8-phase orchestrator: understand, plan, implement, verify, test, review, document, report |
+| `/superkit-init` | Scan codebase → generate filled docs → configure rules with real paths |
+| `/dev <task>` | Full 12-phase orchestrator: understand, plan, implement, cleanup, verify, test, review, critic, document, report |
 | `/commit` | Analyzes changes, scans for secrets, creates a conventional commit |
 
 ## Verify Installation
@@ -84,28 +88,30 @@ Launch Claude Code in your project and try these:
 After setup, confirm everything landed correctly:
 
 ```bash
-# Expected: 16 core + stack agents
+# Expected: 24+ core + stack agents
 ls .claude/agents/*.md | wc -l
 
-# Expected: 8 commands
+# Expected: 13 commands
 ls .claude/commands/*.md | wc -l
 
-# Expected: 7 core + stack hooks
+# Expected: 12+ core + stack hooks
 ls .claude/scripts/hooks/*.sh | wc -l
 
-# Expected: 3 rules
+# Expected: 6 rules
 ls .claude/rules/*.md | wc -l
 
-# Expected: 3 skill directories
+# Expected: 4 skill directories
 ls .claude/skills/*/SKILL.md | wc -l
 
-# settings.json exists with hook wiring
+# settings.json exists with hook wiring + plugins
 cat .claude/settings.json | jq '.hooks | keys'
+cat .claude/settings.json | jq '.enabledPlugins | keys'
 ```
 
 ## Next Steps
 
-1. Edit `CLAUDE.md` -- replace the TODO placeholders with your project's stack, structure, and conventions
-2. Edit `.claude/skills/project-architecture/SKILL.md` -- describe your architecture so agents have context
+1. Run `/superkit-init` in Claude Code — auto-generates filled CLAUDE.md and architecture docs from your code
+2. Install plugins: `/plugins` → install superpowers, github, context7, code-review
 3. Set your hook profile: `export CLAUDE_HOOK_PROFILE=standard`
-4. Read Chapter 2 to understand how the five component types work together
+4. Try `/review --full` or `/dev <task>`
+5. Read Chapter 2 to understand how the component types work together
