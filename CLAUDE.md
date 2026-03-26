@@ -9,7 +9,7 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 24 agents (all opus)
     commands/               # 13 commands
-    hooks/                  # 12 hooks
+    hooks/                  # 13 hooks
     rules/                  # 6 rules
     skills/                 # 4 skills
     settings.json           # Hook wiring
@@ -56,7 +56,7 @@ VERSION                     # 1.3.3
 | Agents | 24 | 4 | 3 | 28 | — |
 | Skills | 4 | — | 1 | 11 | 37 |
 | Commands | 13 | — | — | 16 | 8 |
-| Hooks | 12 | 5 | — | 13 | — |
+| Hooks | 13 | 5 | — | 13 | — |
 | Rules | 6 | — | — | 5 | — |
 
 ## Conventions

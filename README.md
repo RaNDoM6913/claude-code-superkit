@@ -68,7 +68,7 @@ Don't reinvent — discover and adapt.
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 13 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 12 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, evolve-check, format-on-edit, typecheck, context inject, session continuity |
+| **Hooks** | 13 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, evolve-check, format-on-edit, typecheck, context inject, session continuity |
 | **Rules** | 6 | Coding style, security, git workflow, documentation (4-layer enforcement with BLOCKING hook), auto dev workflow, auto command triggers |
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
@@ -236,7 +236,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
 | Agents / Skills | 31 agents | 41 skills (8 commands + 29 agents + 4 stack) |
 | Commands | 13 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 17 + Stop | — (inline rules in AGENTS.md) |
+| Hooks | 18 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 6 (separate files) | Inline in AGENTS.md |
 | Knowledge Skills | 4 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |

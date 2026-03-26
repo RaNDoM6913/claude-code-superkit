@@ -9,13 +9,15 @@ All notable changes to claude-code-superkit are documented here.
 - **`/superkit-evolve` command** — incremental drift detection: migration counter, missing docs, stale trees, broken rule paths. Supports `--fix-all` flag
 - **`project-scanner` skill** — codebase introspection patterns for language/framework/database/structure/component detection
 - **`evolve-check.sh` hook** — SessionStart advisory: checks documentation drift every 24h, suggests `/superkit-evolve` if issues found
+- **`superkit-update.sh` hook** — SessionStart auto-update: pulls latest superkit, re-copies agents/commands/hooks/rules/skills every 6h
+- **`.superkit-meta`** — setup.sh saves source path + stacks + profile for auto-updates
 - **Scaffold Mode** — `/superkit-init` on empty projects asks for stack, creates minimal CLAUDE.md with smart hints
 
 ### Changed
 - **`/docs-init`** — now redirects to `/superkit-init` (fallback kept for older versions)
-- `setup.sh` — suggests `/superkit-init` after file installation
+- `setup.sh` — suggests `/superkit-init` after file installation, saves `.superkit-meta` for auto-updates
 - Commands: 11 → **13** (+superkit-init, +superkit-evolve)
-- Hooks: 11 → **12** (+evolve-check)
+- Hooks: 11 → **13** (+evolve-check, +superkit-update)
 - Skills: 3 → **4** (+project-scanner)
 
 ---

@@ -538,6 +538,18 @@ else
   warn "Some validation checks failed — review warnings above"
 fi
 
+# ── Save superkit source for auto-updates ─────────────────
+SUPERKIT_META="$CLAUDE_DIR/.superkit-meta"
+cat > "$SUPERKIT_META" <<METAEOF
+SUPERKIT_SOURCE="$SCRIPT_DIR"
+SUPERKIT_VERSION="$VERSION"
+SUPERKIT_STACKS="${STACKS[*]+"${STACKS[*]}"}"
+SUPERKIT_EXTRAS="${EXTRAS[*]+"${EXTRAS[*]}"}"
+SUPERKIT_PROFILE="$PROFILE"
+SUPERKIT_INSTALLED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+METAEOF
+info "Saved superkit source path for auto-updates → .claude/.superkit-meta"
+
 # ── Summary ──────────────────────────────────────────────
 TOTAL_AGENTS=$((AGENT_COUNT + STACK_AGENT_COUNT + EXTRA_COUNT))
 echo ""
