@@ -71,9 +71,9 @@ Claude continues or finishes
     security-scanner.md       # Cross-cutting security audit
     migration-reviewer.md     # SQL migration checks
     test-generator.md         # Generates tests for new code
-    ...                       # 16 core + stack agents total
+    ...                       # 24 core + 4 stack agents
   commands/
-    dev.md                    # 8-phase development orchestrator
+    dev.md                    # 12-phase development orchestrator
     review.md                 # Unified review: detect -> dispatch -> report
     audit.md                  # Parallel audit: up to 4 agents
     test.md                   # Auto-detect and run tests

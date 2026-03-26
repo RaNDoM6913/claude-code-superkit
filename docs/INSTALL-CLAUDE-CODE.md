@@ -43,7 +43,7 @@ bash /path/to/claude-code-superkit/setup.sh
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
 10. **Validates** — checks JSON, hook permissions, file presence
-11. **Optionally installs for Codex CLI** — copies 37 skills to `.codex/skills/`
+11. **Optionally installs for Codex CLI** — copies 41 skills to `.codex/skills/`
 
 ### Hook Profiles
 

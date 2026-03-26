@@ -35,7 +35,7 @@ packages/
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
-  showcase/                 # Production example (28 agents, 16 commands)
+  showcase/                 # Production example (28 agents, 16 commands, 13 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
 setup.sh                    # Interactive installer
