@@ -69,7 +69,7 @@ Don't reinvent — discover and adapt.
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 11 | `/dev`, `/review`, `/audit`, `/workflow`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
 | **Hooks** | 11 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, format-on-edit, typecheck, context inject, session continuity |
-| **Rules** | 6 | Coding style, security, git workflow, documentation (3-layer enforcement), auto dev workflow, auto command triggers |
+| **Rules** | 6 | Coding style, security, git workflow, documentation (4-layer enforcement with BLOCKING hook), auto dev workflow, auto command triggers |
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 

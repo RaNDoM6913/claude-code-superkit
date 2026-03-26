@@ -41,11 +41,12 @@ If ANY answer is YES → update docs BEFORE committing.
 - Typo fixes
 - Dependency updates (unless API changes)
 
-## Enforcement (3 layers)
+## Enforcement (4 layers)
 
 1. **Rule (this file)** — Claude reads this on every session. Primary mechanism.
-2. **PreToolUse hook (`doc-check-on-commit.sh`)** — warns before every `git commit` if code changed but no docs updated.
-3. **Stop hook** — opus-level verification at session end. Safety net.
+2. **Rule (`auto-commands.md`)** — HIGHEST PRIORITY auto-trigger: docs checklist before every commit.
+3. **PreToolUse hook (`doc-check-on-commit.sh`)** — **BLOCKS** `git commit` (exit 2) if code changed but no docs staged. Not a warning — a hard block.
+4. **Stop hook** — opus-level verification at session end. Safety net.
 
 Do NOT rely on hooks alone — update docs proactively with every code change.
 

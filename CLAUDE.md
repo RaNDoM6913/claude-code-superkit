@@ -127,7 +127,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 |------|------|
 | `setup.sh` | Interactive installer — stack, extras, profile, plugins, validation |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
-| `packages/core/rules/documentation.md` | 3-layer doc enforcement rule |
+| `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
 | `packages/core/commands/dev.md` | 10-phase dev orchestrator with plan-checker + goal-verifier gates |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |
