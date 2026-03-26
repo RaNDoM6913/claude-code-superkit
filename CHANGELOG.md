@@ -4,11 +4,20 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [1.3.2] — 2026-03-26
 
+### Breaking Changes
+- **`doc-check-on-commit.sh`** — now **BLOCKS** commits (exit 2) when code changes lack documentation updates. Previously advisory-only (exit 0). Commits with code changes now REQUIRE corresponding docs staged alongside
+
+### Added
+- **`auto-commands.md` rule** — "Documentation — Auto Verify Before Commit" as highest priority auto-trigger. Runs 15-point checklist before every git commit
+- **Smart file-to-doc mapping** in doc-check hook — analyzes staged files and determines exactly which documentation files must be staged (migrations → database-schema, handlers → API reference, frontend src → frontend docs, new files → tree docs)
+- **Subagent delegation template** in documentation rule — explicit instructions for dispatching subagents with complete doc file lists
+- **Dual-repo sync advisory** — hook warns when `.claude/` infrastructure changes, reminding to sync upstream
+
 ### Changed
-- **`doc-check-on-commit.sh`** — smart file-to-doc mapping: analyzes staged files and determines exactly which documentation files must also be staged (migrations → database-schema, handlers → API reference, frontend src → frontend docs, new files → tree docs). Generalized for any project (no app-specific paths in core; full TGApp version in showcase)
-- **`documentation.md` rule** — upgraded from 8-point checklist to **15-point** trigger-to-doc mapping table with explicit file paths. Added subagent delegation template, dual-repo sync advisory, and 4-layer enforcement table
-- **`docs/guide/05-writing-hooks.md`** — updated doc-check description to reflect smart mapping behavior
-- **`docs/guide/07-writing-rules.md`** — updated documentation rule description to mention 15-point checklist
+- **`doc-check-on-commit.sh`** — rewritten with smart mapping. Generalized for any project (no app-specific paths in core; full TGApp version in showcase)
+- **`documentation.md` rule** — upgraded from 8-point checklist to **15-point** trigger-to-doc mapping table with explicit file paths. 3-layer → 4-layer enforcement (+ auto-commands rule)
+- **`docs/guide/05-writing-hooks.md`** — updated doc-check description to reflect smart mapping and blocking behavior
+- **`docs/guide/07-writing-rules.md`** — "Five Default Rules" → "Six" (+ auto-commands), updated documentation rule to mention 15-point checklist
 
 ---
 
