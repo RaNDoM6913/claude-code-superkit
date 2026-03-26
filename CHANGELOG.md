@@ -2,6 +2,16 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.3.2] — 2026-03-26
+
+### Changed
+- **`doc-check-on-commit.sh`** — smart file-to-doc mapping: analyzes staged files and determines exactly which documentation files must also be staged (migrations → database-schema, handlers → API reference, frontend src → frontend docs, new files → tree docs). Generalized for any project (no app-specific paths in core; full TGApp version in showcase)
+- **`documentation.md` rule** — upgraded from 8-point checklist to **15-point** trigger-to-doc mapping table with explicit file paths. Added subagent delegation template, dual-repo sync advisory, and 4-layer enforcement table
+- **`docs/guide/05-writing-hooks.md`** — updated doc-check description to reflect smart mapping behavior
+- **`docs/guide/07-writing-rules.md`** — updated documentation rule description to mention 15-point checklist
+
+---
+
 ## [1.3.1] — 2026-03-26
 
 ### Added

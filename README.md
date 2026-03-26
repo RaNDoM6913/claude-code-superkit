@@ -73,19 +73,13 @@ Don't reinvent — discover and adapt.
 | **Skills** | 3 + 1 extra | Project architecture, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.1)
+## 🆕 What's New (v1.3.2)
 
-- 🧹 **AI Slop Cleaner** agent — detect and fix AI-generated code patterns (redundant comments, unnecessary abstractions, template slop)
-- 🎯 **Critic** agent — multi-perspective final quality gate (security, new-hire, ops) with gap analysis and predictions
-- 🎨 **Visual Reviewer** agent — UI consistency scoring, design system compliance (0-100)
-- 🔍 **Ambiguity Gate** in /dev Phase 1 — 5-dimension clarity check before planning
-- 🧹 **Phase 3.5 Slop Cleanup** in /dev — automatic AI code cleanup after implementation
-- 🎯 **Phase 6.5 Critic** in /dev — final quality gate for complex tasks
-- 📋 **Spec Compliance** in code-reviewer — verify implementation matches requirements before quality review
-- 🔄 **Circuit Breaker** in debug-observer — 3 failures → escalate to architect
-- 🏷️ **Git Trailers** in /commit — Confidence, Scope-risk, Not-tested metadata
+- 📄 **Smart doc-check hook** — maps specific file types to required docs (migrations → schema, handlers → API ref, frontend → arch docs), not just "any .md"
+- 📋 **15-point documentation rule** — explicit trigger-to-doc mapping table, subagent delegation instructions, dual-repo sync advisory
+- 🔧 **Generalized core hook** — project-agnostic patterns (no app-specific paths), with full TGApp version in showcase
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.1 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.2 history.
 
 ## 🔄 How `/dev` Works
 

@@ -96,8 +96,8 @@ Covers SQL injection, XSS, secrets, auth, input validation, file uploads, CORS.
 ### git-workflow.md (9 lines)
 Covers conventional commits, no --no-verify, no force push, branch naming.
 
-### documentation.md (17 lines)
-Enforces documentation updates in the same response as code changes. Maps change types to specific doc files.
+### documentation.md (70 lines)
+Enforces documentation updates in the same response as code changes. Features a 15-point trigger-to-doc mapping table (e.g., "migrations staged? update database-schema.md"), subagent delegation template for explicit doc instructions, and a 4-layer enforcement stack (rule + blocking hook + dev-workflow gate + Stop hook).
 
 ### dev-workflow.md (30 lines)
 Auto-triggers the full `/dev` orchestration (8 phases) for substantial tasks — new features, multi-file bug fixes, full-stack work. Skips orchestration for simple edits, docs-only, config changes, or questions. Claude follows the workflow naturally without the user calling `/dev` explicitly.

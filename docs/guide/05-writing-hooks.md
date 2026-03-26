@@ -58,6 +58,18 @@ fi
 
 Claude sees the block message and must find an alternative approach.
 
+### Smart file-to-doc mapping (doc-check-on-commit)
+
+The `doc-check-on-commit.sh` hook demonstrates an advanced PreToolUse pattern: it intercepts `git commit` commands, analyzes all staged files, and maps each code file to its required documentation. For example:
+
+- `*/migrations/*.sql` → requires database schema docs
+- `*/handlers/*.go` or `*/routes*.go` → requires API reference or OpenAPI spec
+- `*/src/**/*.ts(x)` → requires frontend architecture docs
+- New files (diff filter A) → requires project tree docs
+- `.claude/` changes → prints a non-blocking sync advisory
+
+If any required doc is missing from the staged files, the hook exits with code 2 (BLOCK). This is more precise than a simple "any code needs any doc" check -- it tells Claude exactly which documentation files are missing.
+
 ## Prompt-Based Hooks (Stop Event)
 
 The Stop event uses a different mechanism -- it sends a prompt to a lightweight model (haiku) that returns a JSON decision:
