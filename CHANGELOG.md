@@ -19,6 +19,14 @@ All notable changes to claude-code-superkit are documented here.
 - **`docs/guide/05-writing-hooks.md`** — updated doc-check description to reflect smart mapping and blocking behavior
 - **`docs/guide/07-writing-rules.md`** — "Five Default Rules" → "Six" (+ auto-commands), updated documentation rule to mention 15-point checklist
 
+### Codex CLI Sync
+- **4 new skills**: ai-slop-cleaner, critic, visual-reviewer, tree-generator (37 → 41 total)
+- **dev-orchestrator**: 8 → 12 phases (+Architect, +Validate, +Slop Cleanup, +Goals, +Critic)
+- **commit-helper**: git trailers (Confidence, Scope-risk, Not-tested)
+- **AGENTS.md**: 15-point doc checklist + 4-layer enforcement rules
+- Codex skills: 37 → **41**
+- Dev phases: 8 → **12** (aligned with Claude Code /dev)
+
 ---
 
 ## [1.3.1] — 2026-03-26

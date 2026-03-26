@@ -110,4 +110,4 @@ Codex scans `~/.agents/skills/` at startup. After installation, verify:
 codex --ask-for-approval never "List all superkit skills you can see"
 ```
 
-You should see 37 skills: 25 agent skills + 8 command skills + 4 stack skills.
+You should see 41 skills: 29 agent skills + 8 command skills + 4 stack skills.
