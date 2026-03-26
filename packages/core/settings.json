@@ -89,6 +89,10 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/session-context-restore.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/evolve-check.sh"
           }
         ]
       }
