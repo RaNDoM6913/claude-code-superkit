@@ -1,0 +1,40 @@
+{
+  "name": "claude-code-superkit",
+  "version": "1.3.3",
+  "description": "Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI. All agents on Opus.",
+  "type": "module",
+  "bin": {
+    "claude-code-superkit": "./bin/cli.js",
+    "superkit": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "packages/core/",
+    "packages/stack-agents/",
+    "packages/stack-hooks/",
+    "packages/extras/",
+    "packages/codex/"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:smoke": "node test/smoke.test.js"
+  },
+  "keywords": [
+    "claude-code", "codex", "ai-agents", "cli", "scaffolding",
+    "code-review", "hooks", "skills", "opus"
+  ],
+  "author": "RaNDoM6913",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaNDoM6913/claude-code-superkit.git"
+  },
+  "homepage": "https://github.com/RaNDoM6913/claude-code-superkit#readme",
+  "bugs": {
+    "url": "https://github.com/RaNDoM6913/claude-code-superkit/issues"
+  }
+}

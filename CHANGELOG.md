@@ -2,6 +2,32 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [Unreleased]
+
+### Changed
+- **setup.sh → npx** — installer rewritten from 593-line bash to Node.js CLI. Install via `npx claude-code-superkit`. Zero external dependencies (no jq required). Works on macOS (any bash/zsh), Linux, and Windows
+- **setup.sh** — now a 5-line POSIX sh wrapper that delegates to Node.js
+- **`--defaults` flag** — non-interactive mode for CI/CD (`npx claude-code-superkit --defaults`)
+- **CLI flags** — `--stacks=`, `--profile=`, `--extras=`, `--codex`, `--no-docs`, `--no-superpowers`
+- **Graceful pipe handling** — if stdin closes during interactive mode, auto-falls back to `--defaults`
+
+### Fixed
+- **Silent failures on macOS** — Bash 3.2 + `set -euo pipefail` caused script to exit without error message
+- **Bash 3.2 incompatibility** — empty arrays + `set -u` triggered unbound variable errors
+- **`pipefail` + `ls | wc -l`** — false errors when counting files
+- **`cd` in tree fallback** — changed working directory unexpectedly
+- **zsh users** — running `zsh setup.sh` crashed on `BASH_VERSINFO`
+- **jq dependency removed** — JSON assembly now native in Node.js
+
+### Added
+- `package.json` — npm package for `npx claude-code-superkit`
+- `bin/cli.js` — CLI entry point with argument parsing
+- `lib/` — modular Node.js installer (installer, prompts, settings-builder, superpowers, docs-scaffold, codex, validator, utils)
+- `test/` — unit tests (utils, settings-builder) + smoke test (full --defaults flow)
+- Windows support (via Node.js)
+
+---
+
 ## [1.3.3] — 2026-03-26
 
 ### Added

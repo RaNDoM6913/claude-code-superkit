@@ -38,7 +38,23 @@ packages/
   showcase/                 # Production example (28 agents, 16 commands, 13 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
-setup.sh                    # Interactive installer
+setup.sh                    # POSIX wrapper → `node bin/cli.js`
+bin/
+  cli.js                    # CLI entry point (#!/usr/bin/env node)
+lib/
+  installer.js              # Main orchestrator
+  prompts.js                # Interactive prompts (readline)
+  settings-builder.js       # JSON assembly (replaces jq)
+  superpowers.js            # Plugin installation
+  docs-scaffold.js          # Doc templates + tree
+  codex.js                  # Codex CLI support
+  validator.js              # Post-install validation
+  utils.js                  # Colors, file helpers, git
+test/
+  utils.test.js             # Unit tests
+  settings-builder.test.js  # Unit tests
+  smoke.test.js             # Full install smoke test
+package.json                # npm package config
 docs/
   guide/                    # 12 chapters
   examples/                 # 3 examples
@@ -125,7 +141,11 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 
 | File | What |
 |------|------|
-| `setup.sh` | Interactive installer — stack, extras, profile, plugins, validation |
+| `setup.sh` | POSIX wrapper → `node bin/cli.js` |
+| `package.json` | npm package config for `npx claude-code-superkit` |
+| `bin/cli.js` | CLI entry point — arg parsing, error handling |
+| `lib/installer.js` | Main install orchestrator — ports all setup.sh logic |
+| `lib/settings-builder.js` | JSON assembly — replaces jq dependency |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
 | `packages/core/commands/dev.md` | 12-phase dev orchestrator with plan-checker + goal-verifier + slop-cleanup + critic gates |

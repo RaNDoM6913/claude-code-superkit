@@ -2,6 +2,16 @@
 
 ## Quick Install
 
+### Option A: Via superkit installer (recommended)
+
+```bash
+npx claude-code-superkit --codex
+```
+
+This installs both Claude Code and Codex CLI support in one command.
+
+### Option B: Manual setup
+
 ### Step 1: Clone the superkit
 
 ```bash

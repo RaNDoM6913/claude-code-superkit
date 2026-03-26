@@ -103,13 +103,19 @@ graph LR
 ### Claude Code (recommended)
 
 ```bash
-# 1. Clone superkit
-git clone https://github.com/RaNDoM6913/claude-code-superkit.git
+# One command — works on macOS, Linux, Windows:
+npx claude-code-superkit
 
-# 2. Run installer in your project
-cd your-project/
-bash /path/to/claude-code-superkit/setup.sh
+# With explicit options:
+npx claude-code-superkit --stacks=go,typescript --profile=strict --codex
 
+# Non-interactive (CI/CD):
+npx claude-code-superkit --defaults
+```
+
+`npx claude-code-superkit` — interactive installer: selects your stack, hook profile, plugins. Zero dependencies beyond Node.js. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
+
+```bash
 # 3. Open Claude Code
 claude
 
@@ -123,8 +129,6 @@ claude
 # 6. Verify
 /review --full
 ```
-
-`setup.sh` — interactive installer: selects your stack, hook profile, plugins. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
 
 **`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
 - `CLAUDE.md` — populated with your tech stack, commands, conventions
@@ -143,7 +147,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-Or run `setup.sh` and select "Y" for Codex. Model: **gpt-5.4** + **extra_high** reasoning.
+Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex CLI support in one command. Model: **gpt-5.4** + **extra_high** reasoning.
 
 ## ⌨️ Key Commands
 
@@ -242,7 +246,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`setup.sh` will ask: "Also install for Codex CLI?" — copies 41 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`npx claude-code-superkit --codex` will install for Codex CLI — copies 41 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
