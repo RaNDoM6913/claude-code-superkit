@@ -97,17 +97,44 @@ Current: `TODO: 000001..000NNN`
 
 ## Mandatory Documentation Updates
 
-After ANY changes to logic, API, or architecture, update all related docs in the same response as the code change. Do not wait for a separate request.
+**HARD RULE**: Code changes affecting logic, API, architecture, or behavior MUST include documentation updates **IN THE SAME RESPONSE** as the code. Code without updated docs = **INCOMPLETE TASK**. NEVER defer docs to "later" or "next commit".
 
-### Checklist:
+### Pre-Commit Checklist (15 points):
 
-1. **Architecture docs** (`docs/architecture/`) — update affected files
-2. **AGENTS.md** — update Active Plans, Project Structure, Known Constraints
-3. **README files** — update all affected READMEs
-4. **Project trees** (`docs/trees/`) — update on ANY file structure changes
-5. **OpenAPI spec** — update on API endpoint changes
+Before EVERY commit, check if any apply:
 
-### Rule: code without updated docs = incomplete task. Do it in the SAME response as the code.
+1. **API changed?** -> update `docs/architecture/backend-api-reference.md` + OpenAPI spec
+2. **Frontend behavior changed?** -> update `docs/architecture/frontend-state-contracts.md`
+3. **Onboarding changed?** -> update `docs/architecture/frontend-onboarding-flow.md`
+4. **DB schema changed?** -> update `docs/architecture/database-schema.md`
+5. **Files created/deleted/moved?** -> update `docs/trees/` (relevant tree file)
+6. **Backend layers/DI changed?** -> update `docs/architecture/backend-layers.md`
+7. **Auth/sessions changed?** -> update `docs/architecture/auth-and-sessions.md`
+8. **Feed algorithm changed?** -> update `docs/architecture/feed-and-antiabuse.md`
+9. **Moderation flow changed?** -> update `docs/architecture/moderation-pipeline.md`
+10. **Bot behavior changed?** -> update `docs/architecture/bot-moderator.md` or `bot-support.md`
+11. **Architecture docs** (`docs/architecture/`) — update affected files
+12. **AGENTS.md** — update Active Plans, Project Structure, Known Constraints
+13. **README files** — update all affected READMEs
+14. **Project trees** (`docs/trees/`) — update on ANY file structure changes
+15. **OpenAPI spec** — update on API endpoint changes
+
+If ANY answer is YES -> update docs BEFORE committing.
+
+### When NOT needed
+- Pure refactors (no behavior change)
+- Test-only changes
+- Config/env changes
+- Typo fixes
+
+### 4-Layer Enforcement
+
+1. **AGENTS.md (this file)** — Codex reads this on every session. Primary mechanism.
+2. **Pre-commit checklist (above)** — 15-point check before every commit.
+3. **docs-reviewer skill** — dispatched by dev-orchestrator in Phase 7 to verify completeness.
+4. **Plan completion gate** — plans are NOT complete until docs are updated.
+
+Do NOT rely on a single layer — update docs proactively with every code change.
 
 ## Model Configuration
 
@@ -136,7 +163,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | Full-stack development cycle: understand, plan, implement, verify, test, review, document |
+| `dev-orchestrator` | 12-phase development cycle: understand, architect, plan, validate, implement, slop-cleanup, verify, test, verify-goals, review, critic, document |
 | `review-orchestrator` | Detect changes, dispatch reviewer agents, collect and deduplicate findings |
 | `audit-orchestrator` | Parallel audit: frontend, backend, infra, security |
 | `test-runner` | Auto-detect and run project tests (Go, TS, Python, Rust) |

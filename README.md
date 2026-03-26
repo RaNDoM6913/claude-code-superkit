@@ -215,7 +215,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 31 agents | 37 skills (8 commands + 25 agents + 4 stack) |
+| Agents / Skills | 31 agents | 41 skills (8 commands + 29 agents + 4 stack) |
 | Commands | 11 (slash commands) | 8 (user-invocable skills) |
 | Hooks | 16 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 6 (separate files) | Inline in AGENTS.md |
@@ -223,7 +223,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`setup.sh` will ask: "Also install for Codex CLI?" — copies 37 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`setup.sh` will ask: "Also install for Codex CLI?" — copies 41 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

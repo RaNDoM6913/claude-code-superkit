@@ -1,16 +1,40 @@
 ---
 name: dev-orchestrator
-description: Full-stack development orchestrator — understand, plan, implement, verify, test, review, document, and report
+description: Full-stack development orchestrator — understand, plan, validate, implement, verify, test, verify goals, review, document, and report
 user-invocable: true
 ---
 
 # Development Orchestrator
 
-Automate the full development cycle: understand, plan, implement, verify, test, review, document, report.
+Automate the full development cycle: understand -> plan -> validate -> implement -> verify -> test -> verify goals -> review -> document -> report.
+
+## Quick Mode
+
+If the task description starts with `--quick` or the task is trivially simple (single file, < 50 lines change):
+
+- **Skip** Phase 1.5 (Architect)
+- **Skip** Phase 2.5 (Validate Plan)
+- **Skip** Phase 3.5 (AI Slop Cleanup)
+- **Skip** Phase 5.5 (Verify Goals)
+- **Skip** Phase 6.5 (Critic)
+- **Skip** Phase 7 (Document)
+- Go directly: understand -> plan -> implement -> verify -> test -> review -> report
+
+> Quick mode is for small fixes, typos, config changes. For anything touching multiple files or core logic, use full mode.
 
 ## Task
 
 Parse the user's request to determine scope and parameters.
+
+## Phase 0 — Read Project Docs
+
+Before planning, read `docs/architecture/` files relevant to the task scope:
+- Backend task? -> read `backend-layers.md`, `api-reference.md`, `database-schema.md`
+- Frontend task? -> read `frontend-state.md`
+- Auth task? -> read `auth-and-sessions.md`
+- Full-stack? -> read all available docs
+
+This ensures the plan follows existing project architecture.
 
 ## Phase 1 — Understand
 
@@ -33,13 +57,47 @@ Parse the user's request to determine scope and parameters.
    - Is this a new feature, enhancement, bug fix, or refactoring?
    - What are the inputs and expected outputs?
 
-3. **Search the codebase** for existing patterns related to the task:
+3. **Assess complexity** — this determines the workflow:
+   - **Simple** (1 file, < 100 lines) -> skip to Phase 3, no plan needed
+   - **Standard** (2-5 files) -> full workflow with plan
+   - **Complex** (5+ files, cross-cutting, architectural decisions) -> dispatch **architect** agent first
+
+4. **Search the codebase** for existing patterns related to the task:
    - Grep for relevant domain terms, endpoint paths, function names
    - Read existing files that will be modified or serve as templates
    - Check routing files for existing route patterns
    - Check API specs (OpenAPI, GraphQL schema) for contracts
 
-4. **Identify the closest existing implementation** to use as a reference pattern. Always read it before writing new code.
+5. **Identify the closest existing implementation** to use as a reference pattern. Always read it before writing new code.
+
+6. **Ambiguity check** — before proceeding to planning, verify clarity:
+
+   | Dimension | Clear? | Question if unclear |
+   |-----------|:---:|---------------------|
+   | Scope | Y/N | Which components are in/out of scope? |
+   | Acceptance criteria | Y/N | How will we know this is done correctly? |
+   | Edge cases | Y/N | What happens with empty input? Concurrent access? Failure? |
+   | Dependencies | Y/N | Does this depend on other work being done first? |
+   | Backwards compatibility | Y/N | Can existing behavior change, or must it be preserved? |
+
+   **If 2+ dimensions are unclear** -> ask the user for clarification BEFORE proceeding to Phase 2. Do NOT guess — misunderstood requirements waste more time than a clarifying question.
+   **If 0-1 unclear** -> proceed, noting assumptions explicitly in the plan.
+
+## Phase 1.5 — Architect (complex tasks only)
+
+**Only for complex tasks (5+ files, new subsystems, architectural decisions).**
+
+Dispatch **architect** skill via `spawn_agent`:
+```
+Design the architecture for this task:
+Task: [description]
+Current architecture: [from Phase 0 docs]
+Affected components: [from Phase 1 analysis]
+
+Propose 2-3 approaches with trade-offs.
+```
+
+Use the architect's recommendation to inform Phase 2 plan.
 
 ## Phase 2 — Plan
 
@@ -74,7 +132,22 @@ Produce a structured plan before writing any code. Output as a checklist, organi
 - [ ] README updates
 ```
 
-Omit sections not relevant to the task. Proceed to implementation unless the plan is clearly wrong.
+Omit sections not relevant to the task.
+
+## Phase 2.5 — Validate Plan
+
+Dispatch **plan-checker** skill via `spawn_agent` with the plan from Phase 2:
+
+```
+Validate this implementation plan before execution.
+Plan: {full plan text}
+```
+
+**PASS** -> proceed to Phase 3.
+**REVISE** -> fix blocking issues, re-run plan-checker (max 2 iterations).
+**BLOCK** -> stop, present issues to user.
+
+**Skip for simple tasks** (1 file, < 100 lines).
 
 ## Phase 3 — Implement
 
@@ -113,9 +186,25 @@ Execute the plan in dependency order. For each step, read the reference pattern 
    - API client using project conventions
    - Types matching the backend contract
 
+## Phase 3.5 — AI Slop Cleanup
+
+After implementation, do a quick cleanup pass on all created/modified files:
+
+1. Remove comments that restate what the code does (keep comments that explain WHY)
+2. Inline one-use helper functions that add no clarity
+3. Simplify boolean expressions (`x ? true : false` -> `x`)
+4. Remove unused imports, variables, parameters
+5. Replace over-verbose variable names with idiomatic ones
+
+Dispatch **ai-slop-cleaner** skill if available, otherwise do a manual pass.
+
+> This phase is FAST (< 2 min). It prevents slop from reaching review and wasting reviewer time.
+
+**Skip for --quick mode.**
+
 ## Phase 4 — Verify
 
-Use `spawn_agent` to dispatch the **health-checker** agent (if available) or run compilation checks directly:
+Dispatch the **health-checker** skill (if available) or run compilation checks directly:
 
 ```
 Based on detected stack, run:
@@ -130,7 +219,7 @@ Fix any errors before proceeding.
 
 ## Phase 5 — Test
 
-Use `spawn_agent` to dispatch the **test-generator** agent (if available) for new backend code:
+Dispatch the **test-generator** skill (if available) for new backend code:
 
 ```
 Generate tests for the following new/changed files:
@@ -146,32 +235,74 @@ Follow project test patterns. Cover:
 
 After tests are generated, run them using the project's test command. Fix any failures.
 
+## Phase 5.5 — Verify Goals
+
+Dispatch **goal-verifier** skill via `spawn_agent`:
+
+```
+Verify implementation results match the original goals.
+Goals: {from Phase 2 plan}
+Changed files: {list from Phase 3}
+```
+
+4-level check: EXISTS -> SUBSTANTIVE -> WIRED -> DATA-FLOW.
+
+**VERIFIED** -> proceed to Phase 6.
+**PARTIAL** -> fix data-flow issues, re-verify.
+**FAILED** -> return to Phase 3 — critical artifacts missing.
+
+**Skip for simple tasks** (1 file, < 100 lines).
+
 ## Phase 6 — Review
 
-Use `spawn_agent` to dispatch reviewer agents **in parallel** based on what changed and what's available. Use `wait_agent` / `wait` to collect results:
+Dispatch reviewer skills **in parallel** via `spawn_agent` based on what changed and what's available. Use `wait_agent` / `wait` to collect results:
 
-| Changed Files | Agent |
+| Changed Files | Skill |
 |---|---|
-| `*.go` (not migrations, not tests) | **go-reviewer** |
-| `*.sql` migrations | **migration-reviewer** (if available) |
+| `*.go` (not migrations, not tests) | **go-reviewer**, **security-scanner** |
+| `*.sql` migrations | **migration-reviewer**, **database-reviewer** |
+| `*_repo.go` or data access files | **database-reviewer** |
 | `*.tsx`, `*.ts` | **ts-reviewer** |
 | `*.py` | **py-reviewer** (if available) |
 | `*.rs` | **rs-reviewer** (if available) |
-| Any handler/controller code | **security-scanner** (if available) |
 | Bot code | **bot-reviewer** (if available) |
 | UI components | **design-system-reviewer** (if available) |
 
-For each triggered agent, pass the list of changed files and the task description.
+For each triggered skill, pass the list of changed files and the task description.
 Collect findings. Fix any CRITICAL or WARNING issues before proceeding.
+
+## Phase 6.5 — Critic (complex tasks only)
+
+**Only for complex tasks (5+ files, new subsystems, security-sensitive changes).**
+
+Dispatch **critic** skill via `spawn_agent` with all changed files and the original task:
+
+```
+Final quality gate for this implementation:
+Task: [original description]
+Changed files: [list]
+Review findings: [summary from Phase 6]
+
+Evaluate from security, new-hire, and ops perspectives.
+```
+
+**APPROVE** -> proceed to Phase 7.
+**CONCERN** -> address concerns, proceed if non-blocking.
+**BLOCK** -> fix blocking issues, re-run critic.
+
+**Skip for simple/standard tasks and --quick mode.**
 
 ## Phase 7 — Document
 
-Use `spawn_agent` to dispatch the **docs-reviewer** agent (if available) or manually update documentation:
+Dispatch the **docs-reviewer** skill to verify documentation completeness:
+```
+Verify documentation was updated for these changes: [list changed files]
+```
 
+Also manually update:
 1. **API spec** — if endpoints changed (OpenAPI, GraphQL schema, etc.)
 2. **Architecture docs** — if system behavior changed
 3. **README** — if setup steps, commands, or project structure changed
-4. **Code comments** — for non-obvious logic
 
 ## Phase 8 — Report
 
@@ -183,21 +314,28 @@ Output a summary:
 ### Task
 [Original task description]
 
+### Phases Executed
+| Phase | Status | Notes |
+|-------|--------|-------|
+| 0. Read Docs | done | Read N architecture docs |
+| 1. Understand | done | Scope: [components], [complexity] |
+| 1.5 Architect | skipped | Standard complexity |
+| 2. Plan | done | N tasks planned |
+| 2.5 Validate | done PASS | 0 blocking |
+| 3. Implement | done | N files created, M modified |
+| 3.5 Slop Cleanup | done | N patterns cleaned |
+| 4. Verify | done | Compilation clean |
+| 5. Test | done | X tests, all passing |
+| 5.5 Goals | done VERIFIED | All 4 levels pass |
+| 6. Review | done | [agents]: PASS |
+| 6.5 Critic | skipped | Standard complexity |
+| 7. Document | done | Updated [doc files] |
+
 ### Changes Made
 | File | Action | Description |
 |------|--------|-------------|
 | path/to/file | Created/Modified | [description] |
 | ... | ... | ... |
-
-### Tests
-- X tests generated, Y passing
-
-### Review Findings
-- [agent]: [PASS/WARN/FAIL]
-- ...
-
-### Documentation Updated
-- [list of updated doc files]
 
 ### Suggested Commit Message
 ```
@@ -214,3 +352,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - If the task is ambiguous, ask for clarification before Phase 3
 - If a phase produces errors, fix them before proceeding to the next phase
 - Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`
+- Simple tasks (1 file, < 100 lines) skip Phases 1.5, 2.5, 3.5, 5.5, 6.5

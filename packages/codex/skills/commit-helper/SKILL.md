@@ -46,6 +46,32 @@ Examples:
 
 If the user provides a specific commit message, use it instead of auto-generating.
 
+### 3.5 Add Git Trailers (for non-trivial changes)
+
+For changes touching 3+ files or core logic, append structured trailers to the commit message. These provide traceability metadata.
+
+| Trailer | Values | When to use |
+|---------|--------|-------------|
+| `Confidence` | `HIGH` / `MEDIUM` / `LOW` | Always. How confident are you this change is correct? |
+| `Scope-risk` | `LOW` / `MEDIUM` / `HIGH` | When touching shared code. How likely to affect other components? |
+| `Not-tested` | free text | When something is NOT covered by tests. List what's untested. |
+
+Example commit with trailers:
+```
+feat(auth): add JWT refresh token rotation
+
+Implement automatic token refresh when access token expires.
+Refresh tokens are single-use with 7-day TTL.
+
+Confidence: HIGH
+Scope-risk: MEDIUM — touches auth middleware used by all endpoints
+Not-tested: concurrent refresh requests from multiple devices
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+```
+
+**Skip trailers for:** typo fixes, docs-only changes, config changes, single-file edits < 20 lines.
+
 ### 4. Check for Secrets
 
 Scan staged files for potential secrets:
