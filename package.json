@@ -10,7 +10,11 @@
   "files": [
     "bin/",
     "lib/",
-    "packages/"
+    "packages/core/",
+    "packages/stack-agents/",
+    "packages/stack-hooks/",
+    "packages/extras/",
+    "packages/codex/"
   ],
   "engines": {
     "node": ">=18.0.0"
