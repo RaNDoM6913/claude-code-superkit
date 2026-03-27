@@ -171,6 +171,8 @@ Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex 
 
 ## 🔧 Hook Profiles
 
+> ⚠️ **Critical:** Hook scripts MUST be tracked in git. If your `.gitignore` contains `.claude/scripts/`, remove that line immediately. Without tracked hooks, other developers get zero enforcement. Run `bash .claude/scripts/hooks/verify-hooks.sh` to check.
+
 Set `CLAUDE_HOOK_PROFILE` environment variable:
 
 | Profile | Behavior |

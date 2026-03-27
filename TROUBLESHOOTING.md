@@ -49,6 +49,19 @@ If auto-install in setup.sh failed (network error, etc.):
 
 ## After Installation
 
+### ❌ Hooks are git-ignored (CRITICAL — most common cause)
+
+**Symptoms:** Hooks work on your machine but not for teammates. No doc enforcement, no git safety blocks.
+
+**Cause:** `.gitignore` contains `.claude/scripts/` — hook scripts are invisible to git.
+
+**Fix:**
+1. Remove `.claude/scripts/` from `.gitignore`
+2. Commit all hooks: `git add .claude/scripts/hooks/ && git commit -m "fix: track hook scripts in git"`
+3. Verify: `bash .claude/scripts/hooks/verify-hooks.sh`
+
+**Why this matters:** Hooks enforce documentation updates, block dangerous git commands, validate migrations, and check TypeScript types. If they're not in git, anyone who clones the repo gets zero enforcement.
+
 ### Hooks not firing
 1. Check settings.json is valid JSON:
    ```bash

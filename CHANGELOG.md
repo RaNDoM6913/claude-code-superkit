@@ -12,6 +12,7 @@ All notable changes to claude-code-superkit are documented here.
 - **Graceful pipe handling** — if stdin closes during interactive mode, auto-falls back to `--defaults`
 
 ### Fixed
+- **Hook git-ignore protection** — Added `verify-hooks.sh` script, installer validation, and TROUBLESHOOTING guidance for the critical bug where `.gitignore` blocking `.claude/scripts/` silently disables all enforcement for cloned repos
 - **Silent failures on macOS** — Bash 3.2 + `set -euo pipefail` caused script to exit without error message
 - **Bash 3.2 incompatibility** — empty arrays + `set -u` triggered unbound variable errors
 - **`pipefail` + `ls | wc -l`** — false errors when counting files
