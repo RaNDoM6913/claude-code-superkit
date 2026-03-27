@@ -12,6 +12,16 @@
       "NotebookEdit",
       "Task",
       "TodoWrite"
+    ],
+    "deny": [
+      "Bash(curl * | bash)",
+      "Bash(curl * | sh)",
+      "Bash(wget * | bash)",
+      "Bash(wget * | sh)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(mkfs *)",
+      "Bash(dd if=*)"
     ]
   },
   "hooks": {
@@ -26,6 +36,10 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/doc-check-on-commit.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/loop-guard.sh"
           }
         ]
       }

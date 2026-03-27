@@ -37,6 +37,17 @@ case "$BASENAME" in
       WARN=true
     fi
     ;;
+  .env|.env.*|.env.local|.env.production|.env.staging)
+    WARN=true
+    ;;
+  DECISIONS.md)
+    echo ""
+    echo "WARNING: DECISIONS.md is append-only"
+    echo "  Do NOT delete or modify existing entries — only add new ones."
+    echo "  To reverse a decision, add a new entry that supersedes the old one."
+    echo ""
+    exit 0
+    ;;
 esac
 
 if [ "$WARN" = true ]; then

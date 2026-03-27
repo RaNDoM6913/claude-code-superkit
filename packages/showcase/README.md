@@ -4,8 +4,8 @@ This is a sanitized copy of a real production Claude Code setup from a social di
 
 ## Stats
 - **28 agents** (quality reviewers, audit agents, productivity generators, DevOps validators, discovery)
-- **16 commands** (orchestrators, service management, development workflow)
-- **11 hooks** (7 PostToolUse + PreToolUse + UserPromptSubmit + PreCompact + SessionStart + Stop)
+- **17 commands** (orchestrators, service management, development workflow, workflow templates)
+- **14 hooks** (8 PostToolUse + 3 PreToolUse + UserPromptSubmit + PreCompact + SessionStart + Stop)
 - **11 skills** (architecture, patterns, conventions, UI standards, state management)
 - **3 rules** (coding-style, security, git-workflow)
 
@@ -17,6 +17,7 @@ This is a sanitized copy of a real production Claude Code setup from a social di
 - 8-phase `/dev` orchestrator dispatching 5+ agents per feature
 - `/review` orchestrator that auto-detects changed files and dispatches the right reviewers in parallel
 - `/audit` orchestrator running 4 specialized audit agents simultaneously
+- Anti-loop protection hook (detects repeated identical calls and A-B-A-B patterns)
 - Hook profiles (`fast`/`standard`/`strict`) for different workflow speeds
 - SHA256 hash cache in typecheck hook (skips re-check if file unchanged)
 - UserPromptSubmit hook that injects git context and suggests relevant agents
@@ -56,7 +57,7 @@ This is a sanitized copy of a real production Claude Code setup from a social di
     content-curator.md     # Promotional content and seasonal events
     events-discovery.md    # Venue/event discovery via web search
 
-  commands/                # 16 commands
+  commands/                # 17 commands
     dev.md                 # 8-phase development orchestrator (understand -> document)
     review.md              # Unified code review orchestrator (parallel agent dispatch)
     audit.md               # 4-agent parallel audit orchestrator
@@ -73,13 +74,14 @@ This is a sanitized copy of a real production Claude Code setup from a social di
     new-migration.md       # Migration file generator
     seed-reset.md          # Demo data seeder
     security-scan.md       # Security scanning
+    workflow.md            # Workflow templates (bugfix, hotfix, spike, refactor, dep-upgrade, security-audit)
 
   rules/                   # 3 rules (always-active context)
     coding-style.md        # Go + TypeScript conventions
     security.md            # SQL injection, XSS, secrets, auth, CORS
     git-workflow.md        # Conventional commits, branch naming, no force push
 
-  scripts/hooks/           # 10 hook scripts
+  scripts/hooks/           # 14 hook scripts
     block-dangerous-git.sh # PreToolUse: blocks --no-verify, --force, reset --hard
     typecheck-on-edit.sh   # PostToolUse: tsc --noEmit with SHA256 hash cache
     format-on-edit.sh      # PostToolUse: gofmt -w on .go files
@@ -87,6 +89,10 @@ This is a sanitized copy of a real production Claude Code setup from a social di
     console-log-warning.sh # PostToolUse: warns on console.log in .ts/.tsx
     migration-safety.sh    # PostToolUse: validates migration naming + down.sql exists
     bundle-import-check.sh # PostToolUse: warns on new imports not in package.json
+    config-protection.sh   # PostToolUse: warns on linter/formatter/env config changes
+    context-monitor.sh     # PostToolUse: warns at 75% and 90% context window usage
+    doc-check-on-commit.sh # PreToolUse: blocks commits without required doc updates
+    loop-guard.sh          # PreToolUse: detects and blocks repeated identical tool calls
     user-prompt-context.sh # UserPromptSubmit: injects git context + agent suggestions
     pre-compact-save.sh    # PreCompact: saves context before compaction
     session-context-restore.sh # SessionStart: restores context on new session
