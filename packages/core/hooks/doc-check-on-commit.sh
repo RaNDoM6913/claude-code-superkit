@@ -45,16 +45,33 @@ ONLY_EXEMPT=true  # tests, configs, .claude/ files, docs
 NEED_DB_SCHEMA=false
 NEED_API_REF=false
 NEED_FRONTEND_DOCS=false
+NEED_BOT_DOCS=false
+NEED_MODERATION_DOCS=false
+NEED_AUTH_DOCS=false
 NEED_TREE_DOCS=false
+NEED_CLAUDE_MD=false
+NEED_PHOTO_DOCS=false
+NEED_FEED_DOCS=false
+NEED_ENTITLEMENTS_DOCS=false
+NEED_NOTIFICATION_DOCS=false
 NEED_BACKEND_LAYERS=false
 
 # Track which docs ARE staged
 HAS_DB_SCHEMA=false
 HAS_API_REF=false
 HAS_OPENAPI=false
-HAS_FRONTEND_DOCS=false
+HAS_FRONTEND_STATE=false
+HAS_FRONTEND_ONBOARDING=false
+HAS_BOT_MOD=false
+HAS_BOT_SUPPORT=false
+HAS_MODERATION=false
+HAS_AUTH=false
 HAS_TREE_DOCS=false
 HAS_CLAUDE_MD=false
+HAS_PHOTO_DOCS=false
+HAS_FEED_DOCS=false
+HAS_ENTITLEMENTS_DOCS=false
+HAS_NOTIFICATION_DOCS=false
 HAS_BACKEND_LAYERS=false
 
 # Advisory warnings (non-blocking)
@@ -84,10 +101,20 @@ while IFS= read -r file; do
     .claude/agents/*|.claude/rules/*|.claude/commands/*|.claude/hooks/*|.claude/skills/*|.claude/scripts/*)
       ADVISORIES="${ADVISORIES}\n  [advisory] .claude/ config changed — consider syncing across repos if applicable"
       continue ;;
+    # Detect staged doc files (generic glob patterns)
     *database-schema*|*database_schema*) HAS_DB_SCHEMA=true; continue ;;
     *api-reference*|*api_reference*|*backend-api*) HAS_API_REF=true; continue ;;
-    *frontend-state*|*frontend-onboarding*|*frontend-arch*) HAS_FRONTEND_DOCS=true; continue ;;
-    *backend-layers*|*backend-arch*) HAS_BACKEND_LAYERS=true; continue ;;
+    *frontend-state*|*frontend_state*) HAS_FRONTEND_STATE=true; continue ;;
+    *frontend-onboarding*|*frontend_onboarding*) HAS_FRONTEND_ONBOARDING=true; continue ;;
+    *bot-moderator*|*bot_moderator*) HAS_BOT_MOD=true; continue ;;
+    *bot-support*|*bot_support*) HAS_BOT_SUPPORT=true; continue ;;
+    *moderation-pipeline*|*moderation_pipeline*) HAS_MODERATION=true; continue ;;
+    *auth-and-sessions*|*auth_and_sessions*|*auth-sessions*) HAS_AUTH=true; continue ;;
+    *photo-pipeline*|*photo_pipeline*) HAS_PHOTO_DOCS=true; continue ;;
+    *feed-and-antiabuse*|*feed_antiabuse*|*feed-antiabuse*) HAS_FEED_DOCS=true; continue ;;
+    *entitlements-and-store*|*entitlements_store*|*entitlements-store*) HAS_ENTITLEMENTS_DOCS=true; continue ;;
+    *notification-system*|*notification_system*) HAS_NOTIFICATION_DOCS=true; continue ;;
+    *backend-layers*|*backend_layers*|*backend-arch*) HAS_BACKEND_LAYERS=true; continue ;;
     docs/trees/*) HAS_TREE_DOCS=true; continue ;;
     CLAUDE.md) HAS_CLAUDE_MD=true; continue ;;
     docs/*|*.md|*openapi*|*swagger*) continue ;;
@@ -99,28 +126,85 @@ while IFS= read -r file; do
     */migrations/*.sql|*/migrate/*.sql|*/db/migrate/*)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_DB_SCHEMA=true
+      NEED_CLAUDE_MD=true
       ;;
 
-    # HTTP handlers / routes → API reference or OpenAPI
+    # HTTP handlers → API reference or OpenAPI
     */handlers/*.go|*/routes*.go|*/router*.go)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_API_REF=true
       ;;
 
+    # Services with specific doc mappings (generic path patterns)
+    */services/moderation/*.go|*/service/moderation/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_MODERATION_DOCS=true
+      ;;
+    */services/auth/*.go|*/service/auth/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_AUTH_DOCS=true
+      ;;
+    */services/media/*.go|*/service/media/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_PHOTO_DOCS=true
+      ;;
+    */services/feed/*.go|*/services/antiabuse/*.go|*/service/feed/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_FEED_DOCS=true
+      ;;
+    */services/entitlements/*.go|*/services/store/*.go|*/services/payments/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_ENTITLEMENTS_DOCS=true
+      ;;
+    */services/notifications/*.go|*/services/notification/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_NOTIFICATION_DOCS=true
+      ;;
+
     # App wiring / middleware → backend-layers docs
-    */app/*.go|*/middleware*.go)
+    */app/*.go|*/middleware*.go|*/app/**/*.go)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_BACKEND_LAYERS=true
       ;;
 
-    # Frontend source files
-    */src/*.ts|*/src/*.tsx|*/src/**/*.ts|*/src/**/*.tsx)
+    # Telegram bots (moderator)
+    */bot_moderator/*.go|*/bot_moderator/**/*.go|*/bots/moderator/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_BOT_DOCS=true
+      ;;
+    # Telegram bots (support)
+    */bot_support/*.go|*/bot_support/**/*.go|*/bots/support/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_BOT_DOCS=true
+      ;;
+    # Other bots
+    */tgbots/*.go|*/tgbots/**/*.go|*/bots/*.go|*/bots/**/*.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_BOT_DOCS=true
+      ;;
+
+    # Frontend: onboarding screens
+    */pages/onboarding/*.ts|*/pages/onboarding/*.tsx|\
+    */app/flow/*.ts|*/app/flow/*.tsx|\
+    */app/App.tsx)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_FRONTEND_DOCS=true
       ;;
 
+    # Frontend: main app screens and components
+    */src/*.ts|*/src/*.tsx|\
+    */src/**/*.ts|*/src/**/*.tsx)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      NEED_FRONTEND_DOCS=true
+      ;;
+
+    # Other backend Go files
+    *.go)
+      HAS_CODE=true; ONLY_EXEMPT=false
+      ;;
+
     # Any other code file
-    *.go|*.ts|*.tsx|*.js|*.jsx|*.py|*.rs)
+    *.ts|*.tsx|*.js|*.jsx|*.py|*.rs)
       HAS_CODE=true; ONLY_EXEMPT=false
       ;;
 
@@ -148,16 +232,48 @@ if [ "$NEED_DB_SCHEMA" = true ] && [ "$HAS_DB_SCHEMA" = false ]; then
   MISSING="${MISSING}\n  - Migration staged but database schema docs NOT updated"
 fi
 
+if [ "$NEED_CLAUDE_MD" = true ] && [ "$HAS_CLAUDE_MD" = false ]; then
+  MISSING="${MISSING}\n  - Migration staged but CLAUDE.md NOT updated (migration counter)"
+fi
+
 if [ "$NEED_API_REF" = true ] && [ "$HAS_API_REF" = false ] && [ "$HAS_OPENAPI" = false ]; then
   MISSING="${MISSING}\n  - Handler/route changed but neither API reference docs NOR OpenAPI spec updated"
 fi
 
-if [ "$NEED_FRONTEND_DOCS" = true ] && [ "$HAS_FRONTEND_DOCS" = false ] && [ "$HAS_CLAUDE_MD" = false ]; then
-  MISSING="${MISSING}\n  - Frontend code changed but no frontend architecture docs updated"
+if [ "$NEED_FRONTEND_DOCS" = true ] && [ "$HAS_FRONTEND_STATE" = false ] && [ "$HAS_FRONTEND_ONBOARDING" = false ] && [ "$HAS_CLAUDE_MD" = false ]; then
+  MISSING="${MISSING}\n  - Frontend code changed but none of: frontend-state docs, frontend-onboarding docs, CLAUDE.md updated"
 fi
 
-if [ "$NEED_BACKEND_LAYERS" = true ] && [ "$HAS_BACKEND_LAYERS" = false ] && [ "$HAS_CLAUDE_MD" = false ]; then
-  MISSING="${MISSING}\n  - App wiring/routes/middleware changed but backend architecture docs NOT updated"
+if [ "$NEED_BOT_DOCS" = true ] && [ "$HAS_BOT_MOD" = false ] && [ "$HAS_BOT_SUPPORT" = false ] && [ "$HAS_CLAUDE_MD" = false ]; then
+  MISSING="${MISSING}\n  - Bot code changed but none of: bot-moderator docs, bot-support docs, CLAUDE.md updated"
+fi
+
+if [ "$NEED_MODERATION_DOCS" = true ] && [ "$HAS_MODERATION" = false ]; then
+  MISSING="${MISSING}\n  - Moderation service changed but moderation-pipeline docs NOT updated"
+fi
+
+if [ "$NEED_AUTH_DOCS" = true ] && [ "$HAS_AUTH" = false ]; then
+  MISSING="${MISSING}\n  - Auth service changed but auth-and-sessions docs NOT updated"
+fi
+
+if [ "$NEED_PHOTO_DOCS" = true ] && [ "$HAS_PHOTO_DOCS" = false ]; then
+  MISSING="${MISSING}\n  - Media service changed but photo-pipeline docs NOT updated"
+fi
+
+if [ "$NEED_FEED_DOCS" = true ] && [ "$HAS_FEED_DOCS" = false ]; then
+  MISSING="${MISSING}\n  - Feed/antiabuse service changed but feed-and-antiabuse docs NOT updated"
+fi
+
+if [ "$NEED_ENTITLEMENTS_DOCS" = true ] && [ "$HAS_ENTITLEMENTS_DOCS" = false ]; then
+  MISSING="${MISSING}\n  - Entitlements/store/payments service changed but entitlements-and-store docs NOT updated"
+fi
+
+if [ "$NEED_NOTIFICATION_DOCS" = true ] && [ "$HAS_NOTIFICATION_DOCS" = false ]; then
+  MISSING="${MISSING}\n  - Notifications service changed but notification-system docs NOT updated"
+fi
+
+if [ "$NEED_BACKEND_LAYERS" = true ] && [ "$HAS_BACKEND_LAYERS" = false ]; then
+  MISSING="${MISSING}\n  - App wiring/routes/middleware changed but backend-layers docs NOT updated"
 fi
 
 if [ "$NEED_TREE_DOCS" = true ] && [ "$HAS_TREE_DOCS" = false ]; then

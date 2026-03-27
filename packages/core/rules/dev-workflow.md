@@ -12,7 +12,7 @@ Claude MUST follow the full /dev orchestration (8 phases: understand → plan �
 |-----------|-----------|--------|
 | New feature / endpoint / screen | YES | Multi-file, needs plan + tests + review + docs |
 | Bug fix touching 2+ files | YES | Cross-cutting, needs verification |
-| Single file with 100+ changed lines | YES | Large change needs plan + review even in one file |
+| Single file with 50+ changed lines | YES | Medium+ change needs plan + review even in one file |
 | New migration + repo + service | YES | Full-stack, dependency order matters |
 | Refactoring 5+ files | YES | Needs review to catch regressions |
 | Bot behavior change | YES | Needs review + doc update |
@@ -37,5 +37,5 @@ Ask yourself: "Does this task need a plan, tests, or review?" If yes to any — 
 
 - Do NOT announce "I'm using /dev workflow" — just follow the phases naturally
 - Skip phases that don't apply (e.g., no Phase 5 if no testable logic)
-- Always include Phase 6 (review) for changes touching 2+ files or 100+ lines in a single file
+- Always include Phase 6 (review) for changes touching 2+ files or 50+ lines in a single file
 - Always include Phase 7 (document) if logic/API/architecture changed
