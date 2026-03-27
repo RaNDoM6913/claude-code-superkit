@@ -59,6 +59,8 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 # - Architecture references
 ```
 
+> ⚠️ **Critical:** `AGENTS.md` and `.codex/config.toml` MUST be tracked in git. These files are Codex's enforcement mechanism (documentation rules, coding standards, architecture references). If they're not committed, anyone who clones the repo gets zero enforcement. Unlike Claude Code which uses hook scripts, Codex relies entirely on these files for project context.
+
 ## What Gets Installed
 
 ### 8 Command Skills (user-invocable)
