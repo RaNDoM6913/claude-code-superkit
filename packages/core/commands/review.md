@@ -73,6 +73,8 @@ Based on file extension and path patterns, build a dispatch plan. Each pattern m
 | `**/bot*/**/*.go` or `**/bot*/**/*.py` | **bot-reviewer** |
 | `*.yaml` / `*.yml` (OpenAPI/config) | **api-contract-sync** (if available) |
 | Any changed code files | **goal-verifier** (optional — if implementation plan exists in docs/superpowers/plans/) |
+| Any changed code files | **comment-rot-analyzer** |
+| Any changed code files | **silent-failure-hunter** |
 
 Rules:
 - A single agent is dispatched **at most once** even if multiple files match
@@ -201,15 +203,22 @@ After validation:
 
 5. **Summary table**:
 
-| Agent | Blocking | Important | Nit | Raw | Confirmed | Status |
-|-------|----------|-----------|-----|-----|-----------|--------|
-| go-reviewer | 0 | 2 | 1 | 5 | 3 | PASS |
-| ts-reviewer | 1 | 0 | 0 | 4 | 1 | FAIL |
-| ... | | | | | | |
+| Agent | Blocking | Important | Nit | Raw | Confirmed | Avg Confidence | Status |
+|-------|----------|-----------|-----|-----|-----------|----------------|--------|
+| go-reviewer | 0 | 2 | 1 | 5 | 3 | 85% | PASS |
+| ts-reviewer | 1 | 0 | 0 | 4 | 1 | 92% | FAIL |
+| ... | | | | | | | |
 
 Status: **FAIL** if any blocking, **WARN** if important-only, **PASS** if nits-only or clean.
 
 6. **Validation stats**: "X findings reported → Y confirmed (Z% hit rate)"
+
+### Confidence Distribution
+| Range | Count | Action |
+|-------|-------|--------|
+| 80-100 (HIGH) | N | Reported as findings |
+| 60-79 (MEDIUM) | N | Reported, marked "needs verification" |
+| <60 (LOW) | N | Pre-filtered, not shown |
 
 ### Overall Verdict
 
