@@ -67,7 +67,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | Full development cycle: understand, plan, implement, verify, test, review, document |
+| `dev-orchestrator` | 14-phase development cycle: understand, plan, contract, implement, evaluate, verify, test, review, document |
 | `review-orchestrator` | Detect changes, dispatch reviewers, **double-verify** findings, collect report |
 | `audit-orchestrator` | Parallel audit across frontend, backend, infra, security |
 | `test-runner` | Auto-detect project test runner and execute tests |
@@ -76,7 +76,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 | `new-migration` | Scaffold migration file pair with auto-numbering |
 | `migrate` | Apply or rollback database migrations |
 
-### 29 Agent Skills (auto-dispatched by orchestrators)
+### 30 Agent Skills (auto-dispatched by orchestrators)
 
 These are converted from core + extras agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack:
 
@@ -104,6 +104,7 @@ These are converted from core + extras agents. They are dispatched automatically
 | `architect` | Quality — system design advisor |
 | `plan-checker` | Quality — 8-dimension plan validation |
 | `goal-verifier` | Quality — 4-level goal substantiation |
+| `evaluator` | Quality — calibrated QA scoring against Sprint Contract |
 | `project-architecture` | Knowledge — project architecture reference |
 | `ai-slop-cleaner` | Quality — detect and fix AI-generated code patterns |
 | `critic` | Quality — multi-perspective final quality gate |
@@ -130,10 +131,10 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: up to 41 skills
+### Total: up to 42 skills
 
 - 8 command skills (user-invocable)
-- 29 agent + knowledge skills (auto-dispatched)
+- 30 agent + knowledge skills (auto-dispatched)
 - 4 stack-specific reviewer skills (optional, per language)
 
 ## Model Configuration

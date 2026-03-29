@@ -163,7 +163,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | 12-phase development cycle: understand, architect, plan, validate, implement, verify, test, verify-goals, review, critic, document, report |
+| `dev-orchestrator` | 14-phase development cycle: understand, architect, plan, contract, validate, implement, evaluate, verify, test, verify-goals, review, critic, document, report |
 | `review-orchestrator` | Detect changes, dispatch reviewer agents, collect and deduplicate findings |
 | `audit-orchestrator` | Parallel audit: frontend, backend, infra, security |
 | `test-runner` | Auto-detect and run project tests (Go, TS, Python, Rust) |
@@ -173,7 +173,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `migrate` | Apply or rollback database migrations |
 
 **Agent skills (auto-dispatched by orchestrators):**
-code-reviewer, security-scanner, test-generator, e2e-test-generator, health-checker, pre-deploy-validator, dependency-checker, debug-observer, docs-reviewer, api-contract-sync, scaffold-endpoint, tree-generator, database-reviewer, architect, plan-checker, goal-verifier, audit-frontend, audit-backend, audit-bots, audit-infra, audit-security, project-architecture, writing-agents, writing-commands, red-blue-auditor, ai-slop-cleaner, critic, visual-reviewer
+code-reviewer, security-scanner, test-generator, e2e-test-generator, health-checker, pre-deploy-validator, dependency-checker, debug-observer, docs-reviewer, api-contract-sync, scaffold-endpoint, tree-generator, database-reviewer, architect, plan-checker, goal-verifier, evaluator, audit-frontend, audit-backend, audit-bots, audit-infra, audit-security, project-architecture, writing-agents, writing-commands, red-blue-auditor, ai-slop-cleaner, critic, visual-reviewer
 
 **Stack-specific reviewers (optional):**
 go-reviewer, ts-reviewer, py-reviewer, rs-reviewer
