@@ -1,26 +1,12 @@
 ---
 name: dev-orchestrator
-description: Full-stack development orchestrator — understand, plan, validate, implement, verify, test, verify goals, review, document, and report
+description: Full-stack development orchestrator — always-on, 12 phases: understand → plan → implement → verify → test → goals → review → critic → document → report
 user-invocable: true
 ---
 
 # Development Orchestrator
 
 Automate the full development cycle: understand -> plan -> validate -> implement -> verify -> test -> verify goals -> review -> document -> report.
-
-## Quick Mode
-
-If the task description starts with `--quick` or the task is trivially simple (single file, < 50 lines change):
-
-- **Skip** Phase 1.5 (Architect)
-- **Skip** Phase 2.5 (Validate Plan)
-- **Skip** Phase 3.5 (AI Slop Cleanup)
-- **Skip** Phase 5.5 (Verify Goals)
-- **Skip** Phase 6.5 (Critic)
-- **Skip** Phase 7 (Document)
-- Go directly: understand -> plan -> implement -> verify -> test -> review -> report
-
-> Quick mode is for small fixes, typos, config changes. For anything touching multiple files or core logic, use full mode.
 
 ## Task
 
@@ -69,19 +55,6 @@ This ensures the plan follows existing project architecture.
    - Check API specs (OpenAPI, GraphQL schema) for contracts
 
 5. **Identify the closest existing implementation** to use as a reference pattern. Always read it before writing new code.
-
-6. **Ambiguity check** — before proceeding to planning, verify clarity:
-
-   | Dimension | Clear? | Question if unclear |
-   |-----------|:---:|---------------------|
-   | Scope | Y/N | Which components are in/out of scope? |
-   | Acceptance criteria | Y/N | How will we know this is done correctly? |
-   | Edge cases | Y/N | What happens with empty input? Concurrent access? Failure? |
-   | Dependencies | Y/N | Does this depend on other work being done first? |
-   | Backwards compatibility | Y/N | Can existing behavior change, or must it be preserved? |
-
-   **If 2+ dimensions are unclear** -> ask the user for clarification BEFORE proceeding to Phase 2. Do NOT guess — misunderstood requirements waste more time than a clarifying question.
-   **If 0-1 unclear** -> proceed, noting assumptions explicitly in the plan.
 
 ## Phase 1.5 — Architect (complex tasks only)
 
@@ -186,22 +159,6 @@ Execute the plan in dependency order. For each step, read the reference pattern 
    - API client using project conventions
    - Types matching the backend contract
 
-## Phase 3.5 — AI Slop Cleanup
-
-After implementation, do a quick cleanup pass on all created/modified files:
-
-1. Remove comments that restate what the code does (keep comments that explain WHY)
-2. Inline one-use helper functions that add no clarity
-3. Simplify boolean expressions (`x ? true : false` -> `x`)
-4. Remove unused imports, variables, parameters
-5. Replace over-verbose variable names with idiomatic ones
-
-Dispatch **ai-slop-cleaner** skill if available, otherwise do a manual pass.
-
-> This phase is FAST (< 2 min). It prevents slop from reaching review and wasting reviewer time.
-
-**Skip for --quick mode.**
-
 ## Phase 4 — Verify
 
 Dispatch the **health-checker** skill (if available) or run compilation checks directly:
@@ -290,7 +247,7 @@ Evaluate from security, new-hire, and ops perspectives.
 **CONCERN** -> address concerns, proceed if non-blocking.
 **BLOCK** -> fix blocking issues, re-run critic.
 
-**Skip for simple/standard tasks and --quick mode.**
+**Skip for simple/standard tasks.**
 
 ## Phase 7 — Document
 
@@ -323,7 +280,6 @@ Output a summary:
 | 2. Plan | done | N tasks planned |
 | 2.5 Validate | done PASS | 0 blocking |
 | 3. Implement | done | N files created, M modified |
-| 3.5 Slop Cleanup | done | N patterns cleaned |
 | 4. Verify | done | Compilation clean |
 | 5. Test | done | X tests, all passing |
 | 5.5 Goals | done VERIFIED | All 4 levels pass |
@@ -352,4 +308,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - If the task is ambiguous, ask for clarification before Phase 3
 - If a phase produces errors, fix them before proceeding to the next phase
 - Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`
-- Simple tasks (1 file, < 100 lines) skip Phases 1.5, 2.5, 3.5, 5.5, 6.5
+- Simple tasks (1 file, < 100 lines) skip Phases 1.5, 2.5, 5.5, 6.5

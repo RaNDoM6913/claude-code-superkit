@@ -2,9 +2,14 @@
 
 All notable changes to claude-code-superkit are documented here.
 
-## [Unreleased]
+## [1.3.4] — 2026-03-29
 
 ### Changed
+- **`/dev` command** — always-on: triggers automatically for all code tasks. Removed Quick Mode (`--quick`), removed Phase 3.5 (AI Slop Cleanup), removed Ambiguity Gate from Phase 1. Phase 6.5 (Critic) retained as independent evaluator
+- **`dev-workflow.md` rule** — simplified to always-on: all code tasks trigger `/dev`, Phase 1 complexity assessment handles depth
+- **`/dev` phases**: composition changed — removed Slop Cleanup, surfaced Goals in summary (still 12 phases)
+- **Showcase `dev.md`** — synced with core: added Phase 6.5 (Critic)
+- **Showcase `dev-workflow.md`** — synced with core: always-on
 - **setup.sh → npx** — installer rewritten from 593-line bash to Node.js CLI. Install via `npx claude-code-superkit`. Zero external dependencies (no jq required). Works on macOS (any bash/zsh), Linux, and Windows
 - **setup.sh** — now a 5-line POSIX sh wrapper that delegates to Node.js
 - **`--defaults` flag** — non-interactive mode for CI/CD (`npx claude-code-superkit --defaults`)
@@ -12,6 +17,9 @@ All notable changes to claude-code-superkit are documented here.
 - **Graceful pipe handling** — if stdin closes during interactive mode, auto-falls back to `--defaults`
 
 ### Fixed
+- **`user-prompt-context.sh`** — POSIX sh compatible, safe JSON via `node JSON.stringify()`, multiline git output flattened
+- **`doc-check-on-commit.sh`** — expanded to 15+ doc category mappings (191→299 lines)
+- **`/dev` threshold** — lowered from 100 to 50 changed lines for auto-trigger
 - **Hook git-ignore protection** — Added `verify-hooks.sh` script, installer validation, and TROUBLESHOOTING guidance for the critical bug where `.gitignore` blocking `.claude/scripts/` silently disables all enforcement for cloned repos
 - **Silent failures on macOS** — Bash 3.2 + `set -euo pipefail` caused script to exit without error message
 - **Bash 3.2 incompatibility** — empty arrays + `set -u` triggered unbound variable errors
@@ -21,6 +29,10 @@ All notable changes to claude-code-superkit are documented here.
 - **jq dependency removed** — JSON assembly now native in Node.js
 
 ### Added
+- **`loop-guard.sh` hook** — PreToolUse: detects 3x repeated identical tool calls and A→B→A→B alternating patterns
+- **`/workflow` command** — 6 predefined templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit
+- **`verify-hooks.sh`** — validates hooks are tracked in git, executable, not blocked by .gitignore
+- **Codex INSTALL.md** — git-tracking warning for AGENTS.md and config.toml
 - `package.json` — npm package for `npx claude-code-superkit`
 - `bin/cli.js` — CLI entry point with argument parsing
 - `lib/` — modular Node.js installer (installer, prompts, settings-builder, superpowers, docs-scaffold, codex, validator, utils)

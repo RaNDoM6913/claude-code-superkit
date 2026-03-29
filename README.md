@@ -73,15 +73,15 @@ Don't reinvent — discover and adapt.
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.3)
+## 🆕 What's New (v1.3.4)
 
-- 🚀 **`/superkit-init`** — intelligent project setup: scan codebase → generate **filled** docs (not TODOs) → configure rules with real paths
-- 🔄 **`/superkit-evolve`** — incremental drift detection: migration counter, missing docs, stale trees → auto-fix
-- 🔍 **`project-scanner` skill** — codebase introspection: languages, frameworks, DB, structure, scale
-- ⏰ **`evolve-check` hook** — SessionStart advisory: checks drift every 24h, suggests `/superkit-evolve`
-- 🏗️ **Scaffold Mode** — `/superkit-init` on empty projects creates minimal structure with stack selection
+- ⚡ **Always-on `/dev`** — dev workflow triggers automatically for ALL code tasks, no conditional logic
+- 🚫 Removed `/dev --quick` — complexity-based phase skipping handles this automatically
+- 🧹 Removed Phase 3.5 (AI Slop Cleanup) — Opus 4.6 generates clean code, reviewer catches edge cases
+- 🛡️ **Phase 6.5 (Critic) kept** — independent evaluator: security + new-hire + ops perspectives
+- 🐛 5 bugfixes: POSIX-safe hooks, loop-guard, doc-check 15+ categories, verify-hooks.sh, Codex git-tracking
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.3 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.4 history.
 
 ## 🔄 How `/dev` Works
 
@@ -90,7 +90,7 @@ graph LR
     P -->|" "| E -->|" "| Q
 
     P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
-    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Cleanup<br/>7 · Verify<br/>8 · Test"]
+    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Verify<br/>7 · Test<br/>8 · Goals"]
     Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Critic<br/>11 · Docs<br/>12 · Report"]
 
     style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
@@ -153,8 +153,7 @@ Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex 
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 12-phase orchestrator: understand → architect → plan → validate → implement → cleanup → verify → test → review ×4 → critic → docs → report |
-| `/dev --quick <task>` | Lightweight mode: skips architect, plan validation, slop cleanup, critic, docs — for small fixes |
+| `/dev <task>` | 12-phase orchestrator: understand → architect → plan → validate → implement → verify → test → goals → review → critic → docs → report |
 | `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |

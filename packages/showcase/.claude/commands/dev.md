@@ -228,6 +228,27 @@ Dispatch reviewer agents **in parallel** based on what changed and what's availa
 For each triggered agent, pass the list of changed files and the task description.
 Collect findings. Fix any CRITICAL or WARNING issues before proceeding.
 
+## Phase 6.5 — Critic (complex tasks only)
+
+**Only for complex tasks (5+ files, new subsystems, security-sensitive changes).**
+
+Dispatch **critic** agent with all changed files and the original task:
+
+```
+Final quality gate for this implementation:
+Task: [original description]
+Changed files: [list]
+Review findings: [summary from Phase 6]
+
+Evaluate from security, new-hire, and ops perspectives.
+```
+
+**APPROVE** → proceed to Phase 7.
+**CONCERN** → address concerns, proceed if non-blocking.
+**BLOCK** → fix blocking issues, re-run critic.
+
+**Skip for simple/standard tasks.**
+
 ## Phase 7 — Document
 
 Dispatch the **docs-reviewer** agent to verify documentation completeness:
@@ -263,6 +284,7 @@ Output a summary:
 | 5. Test | ✅ | X tests, all passing |
 | 5.5 Goals | ✅ VERIFIED | All 4 levels pass |
 | 6. Review | ✅ | [agents]: PASS |
+| 6.5 Critic | ⏭ skipped | Standard complexity |
 | 7. Document | ✅ | Updated [doc files] |
 
 ### Changes Made
@@ -286,4 +308,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - If the task is ambiguous, ask for clarification before Phase 3
 - If a phase produces errors, fix them before proceeding to the next phase
 - Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`
-- Simple tasks (1 file, < 100 lines) skip Phases 1.5, 2.5, 5.5
+- Simple tasks (1 file, < 100 lines) skip Phases 1.5, 2.5, 5.5, 6.5

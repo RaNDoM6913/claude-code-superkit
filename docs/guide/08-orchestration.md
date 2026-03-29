@@ -2,22 +2,32 @@
 
 Orchestration is where the superkit's components work together. Commands dispatch agents in parallel, collect results, and produce unified reports. This chapter explains how the three main orchestrators -- `/dev`, `/review`, and `/audit` -- work internally.
 
-## The /dev Pipeline: 8 Phases
+## The /dev Pipeline: 12 Phases
 
-`/dev <task>` is the full development orchestrator. It takes a task description and drives the entire cycle:
+`/dev <task>` is the full development orchestrator. It triggers **automatically** for all code-changing tasks (always-on via `dev-workflow.md` rule). Phase 1 complexity assessment determines which phases to skip.
 
 ```
-Phase 1: Understand     Detect stack, parse task, search codebase for patterns
+Phase 0: Read Docs      Read architecture docs relevant to task scope
+                        |
+Phase 1: Understand     Detect stack, parse task, assess complexity, search patterns
+                        |
+Phase 1.5: Architect    [Complex only] Dispatch architect for 2-3 approaches
                         |
 Phase 2: Plan           Output structured checklist (DB, backend, frontend, docs)
                         |
-Phase 3: Implement      Execute plan in dependency order (migration -> repo -> service -> handler -> routes -> UI)
+Phase 2.5: Validate     Dispatch plan-checker — PASS/REVISE/BLOCK
+                        |
+Phase 3: Implement      Execute plan in dependency order (migration → repo → service → handler → routes → UI)
                         |
 Phase 4: Verify         Dispatch health-checker or run compiler directly
                         |
 Phase 5: Test           Dispatch test-generator agent, run generated tests
                         |
+Phase 5.5: Goals        Dispatch goal-verifier — EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW
+                        |
 Phase 6: Review         Dispatch reviewer agents in parallel based on changed file types
+                        |
+Phase 6.5: Critic       [Complex only] Final quality gate: security, new-hire, ops perspectives
                         |
 Phase 7: Document       Dispatch docs-reviewer or update docs manually
                         |
@@ -26,9 +36,11 @@ Phase 8: Report         Summary table: files changed, tests, review findings, co
 
 Key design decisions:
 
+- **Always-on**: `/dev` triggers automatically for all code-changing tasks. Phase 1 complexity assessment determines which phases to skip (simple tasks skip 1.5, 2.5, 5.5, 6.5).
 - **Dependency order in Phase 3**: migrations before repos, repos before services, services before handlers. This prevents compile errors mid-implementation.
 - **Agents in Phases 5-7 run independently**: test-generator, reviewer agents, and docs-reviewer have no dependencies on each other and can be dispatched in parallel.
 - **Gate between phases**: if Phase 4 (verify) fails, Claude fixes errors before proceeding to Phase 5 (test).
+- **Critic as independent evaluator**: Phase 6.5 evaluates from security, new-hire, and ops perspectives — different from domain-specific reviewers in Phase 6.
 
 ## How /review Works
 

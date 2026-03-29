@@ -148,7 +148,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 | `lib/settings-builder.js` | JSON assembly — replaces jq dependency |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
-| `packages/core/commands/dev.md` | 12-phase dev orchestrator with plan-checker + goal-verifier + slop-cleanup + critic gates |
+| `packages/core/commands/dev.md` | 12-phase always-on dev orchestrator with plan-checker + goal-verifier + critic gates |
 | `packages/core/commands/superkit-init.md` | Intelligent project setup — scan, generate docs, configure rules |
 | `packages/core/commands/superkit-evolve.md` | Incremental documentation drift detection and fix |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |

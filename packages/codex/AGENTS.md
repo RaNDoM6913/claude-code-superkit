@@ -163,7 +163,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | 12-phase development cycle: understand, architect, plan, validate, implement, slop-cleanup, verify, test, verify-goals, review, critic, document |
+| `dev-orchestrator` | 12-phase development cycle: understand, architect, plan, validate, implement, verify, test, verify-goals, review, critic, document, report |
 | `review-orchestrator` | Detect changes, dispatch reviewer agents, collect and deduplicate findings |
 | `audit-orchestrator` | Parallel audit: frontend, backend, infra, security |
 | `test-runner` | Auto-detect and run project tests (Go, TS, Python, Rust) |
