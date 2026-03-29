@@ -74,6 +74,21 @@ func getUserByID(db *sql.DB, id string) (*User, error) {
 
 **Action:** Simplify to idiomatic style for the language.
 
+### Category 6: AI-Generated UI Patterns
+Scan frontend files (`.tsx`, `.jsx`, `.vue`, `.svelte`, `.css`, `.scss`) for telltale AI interface patterns:
+
+```
+Default gradient accent     ← linear-gradient with purple/blue as primary action color
+Uniform card grid           ← All cards same size, spacing, radius, no hierarchy
+No visual hierarchy         ← All text same weight/size, no emphasis
+Stock hero layout           ← Full-width image + centered text + single CTA
+Shadow-everything           ← box-shadow on every interactive element
+Identical border-radius     ← Same border-radius value across all components
+Generic spacing             ← Identical gaps everywhere, no rhythm
+```
+
+**Action:** Flag for design review. Suggest using the project's design system tokens. If no design system exists, flag as BORDERLINE with note "consider establishing a design system."
+
 ## Process
 
 1. **Scan** — Grep for patterns from each category across changed files
@@ -114,6 +129,7 @@ Categories:
 - Over-engineering: N simplified
 - Template slop: N cleaned
 - AI writing style: N fixed
+- AI UI patterns: N flagged
 ```
 
 IMPORTANT: This agent ONLY cleans. It does NOT refactor logic, add features, or change behavior. Every fix must be provably behavior-preserving.
