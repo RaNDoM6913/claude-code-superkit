@@ -13,16 +13,31 @@ if [ -f "$CONTEXT_FILE" ]; then
   fi
 
   if [ "$FILE_AGE" -lt 86400 ]; then
-    echo "<previous-session-context>"
-    cat "$CONTEXT_FILE"
-    echo "</previous-session-context>"
+    # Validate context file is readable
+    if [ ! -s "$CONTEXT_FILE" ]; then
+      echo "<previous-session-context>"
+      echo "WARNING: Previous context file is empty or corrupted. Starting fresh."
+      echo "</previous-session-context>"
+    else
+      echo "<previous-session-context>"
+      cat "$CONTEXT_FILE"
+      echo "</previous-session-context>"
+    fi
 
     # Inject task state if present in project
     if [ -f ".claude/.task-state.json" ]; then
-      echo ""
-      echo "<task-state>"
-      cat .claude/.task-state.json
-      echo "</task-state>"
+      # Validate JSON
+      if node -e "JSON.parse(require('fs').readFileSync('.claude/.task-state.json','utf8'))" 2>/dev/null; then
+        echo ""
+        echo "<task-state>"
+        cat .claude/.task-state.json
+        echo "</task-state>"
+      else
+        echo ""
+        echo "<task-state>"
+        echo "WARNING: .task-state.json is invalid JSON. Ignoring."
+        echo "</task-state>"
+      fi
     fi
   fi
 fi

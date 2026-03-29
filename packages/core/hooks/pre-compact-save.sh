@@ -27,5 +27,10 @@ $(git diff --cached --name-only 2>/dev/null || echo "none")
 $(if [ -f ".claude/.task-state.json" ]; then cat .claude/.task-state.json; else echo "no active task"; fi)
 CTXEOF
 
+# Validate saved context is not empty
+if [ ! -s "$CONTEXT_FILE" ]; then
+  echo "WARNING: Context file is empty after save" >&2
+fi
+
 echo "Context saved to $CONTEXT_FILE" >&2
 exit 0
