@@ -23,7 +23,7 @@ This includes: new features, bug fixes (any size), refactors, migrations, bot ch
 
 - Do NOT announce "I'm using /dev workflow" — just follow the phases naturally
 - Phase 1 complexity assessment determines which phases to skip:
-  - **Simple** (1 file, < 100 lines) → skip 1.5, 2.5, 5.5, 6.5
+  - **Simple** (1 file, < 100 lines) → skip 1.5, 2.1, 2.5, 3.5, 5.5, 6.5
   - **Standard** (2-5 files) → full workflow
   - **Complex** (5+ files) → full workflow + architect + critic
 - Always include Phase 6 (review) for changes touching 2+ files
