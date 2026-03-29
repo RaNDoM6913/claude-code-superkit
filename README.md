@@ -200,7 +200,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## 🏗️ Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 16 commands, 13 hooks, 11 skills, and 6 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 14 hooks, 11 skills, and 6 rules.
 
 <details>
 <summary>📖 Documentation (12 chapters + 3 examples)</summary>

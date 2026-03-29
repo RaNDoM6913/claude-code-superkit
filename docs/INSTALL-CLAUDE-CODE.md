@@ -38,11 +38,11 @@ npx claude-code-superkit
 6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
-   - 24 core agents → `.claude/agents/`
+   - 25 core agents → `.claude/agents/`
    - Up to 4 stack agents → `.claude/agents/`
    - 13 commands → `.claude/commands/`
-   - 13+ hooks → `.claude/scripts/hooks/`
-   - 6 rules → `.claude/rules/`
+   - 15+ hooks → `.claude/scripts/hooks/`
+   - 7 rules → `.claude/rules/`
    - 4 skills → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template

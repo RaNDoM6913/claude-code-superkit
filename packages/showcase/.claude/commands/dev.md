@@ -1,5 +1,5 @@
 ---
-description: Full-stack development orchestrator — understand, plan, validate, implement, verify, test, verify goals, review, document, report
+description: Full-stack development orchestrator — always-on, 14 phases: understand → plan → contract → implement → evaluate → verify → test → goals → review → critic → document → report
 argument-hint: <task-description>
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---

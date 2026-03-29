@@ -9,8 +9,8 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 25 agents (all opus)
     commands/               # 13 commands
-    hooks/                  # 13 hooks
-    rules/                  # 6 rules
+    hooks/                  # 15 hooks
+    rules/                  # 7 rules
     skills/                 # 4 skills
     settings.json           # Hook wiring
     CLAUDE.md               # Template for users
@@ -31,11 +31,11 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 37 skills (converted from agents + commands)
+    skills/                 # 42 skills (converted from agents + commands)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
-  showcase/                 # Production example (28 agents, 16 commands, 13 hooks, 11 skills, 6 rules)
+  showcase/                 # Production example (28 agents, 17 commands, 14 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
 setup.sh                    # POSIX wrapper → `node bin/cli.js`
