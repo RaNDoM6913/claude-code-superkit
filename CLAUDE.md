@@ -62,15 +62,15 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.3.3
+VERSION                     # 1.3.5
 ```
 
 ## Current Counts
 
 | Component | Core | Stack | Extras | Showcase | Codex |
 |-----------|------|-------|--------|----------|-------|
-| Agents | 24 | 4 | 3 | 28 | — |
-| Skills | 4 | — | 1 | 11 | 37 |
+| Agents | 25 | 4 | 3 | 28 | — |
+| Skills | 4 | — | 1 | 11 | 42 |
 | Commands | 13 | — | — | 16 | 8 |
 | Hooks | 13 | 5 | — | 13 | — |
 | Rules | 6 | — | — | 5 | — |
@@ -148,7 +148,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 | `lib/settings-builder.js` | JSON assembly — replaces jq dependency |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
-| `packages/core/commands/dev.md` | 12-phase always-on dev orchestrator with plan-checker + goal-verifier + critic gates |
+| `packages/core/commands/dev.md` | 14-phase always-on dev orchestrator with sprint contract + evaluator + plan-checker + goal-verifier + critic gates |
 | `packages/core/commands/superkit-init.md` | Intelligent project setup — scan, generate docs, configure rules |
 | `packages/core/commands/superkit-evolve.md` | Incremental documentation drift detection and fix |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |

@@ -80,7 +80,7 @@ Launch Claude Code in your project and try these:
 | `/audit` | Runs up to 4 audit agents in parallel (frontend, backend, infra, security) |
 | `/test` | Auto-detects your test runner and executes tests |
 | `/superkit-init` | Scan codebase → generate filled docs → configure rules with real paths |
-| `/dev <task>` | Full 12-phase orchestrator: understand, plan, implement, verify, test, goals, review, critic, document, report |
+| `/dev <task>` | Full 14-phase orchestrator: understand, plan, contract, implement, evaluate, verify, test, goals, review, critic, document, report |
 | `/commit` | Analyzes changes, scans for secrets, creates a conventional commit |
 
 ## Verify Installation

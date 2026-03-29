@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/31_agents-Opus_4.6-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Agents](https://img.shields.io/badge/32_agents-Opus_4.6-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -63,7 +63,7 @@ Don't reinvent — discover and adapt.
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 24 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, AI slop cleanup, critic, visual review — all on **Opus** |
+| **Core Agents** | 25 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, **evaluation**, AI slop cleanup, critic, visual review — all on **Opus** |
 | **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
@@ -73,15 +73,16 @@ Don't reinvent — discover and adapt.
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.4)
+## 🆕 What's New (v1.3.5)
 
-- ⚡ **Always-on `/dev`** — dev workflow triggers automatically for ALL code tasks, no conditional logic
-- 🚫 Removed `/dev --quick` — complexity-based phase skipping handles this automatically
-- 🧹 Removed Phase 3.5 (AI Slop Cleanup) — Opus 4.6 generates clean code, reviewer catches edge cases
-- 🛡️ **Phase 6.5 (Critic) kept** — independent evaluator: security + new-hire + ops perspectives
-- 🐛 5 bugfixes: POSIX-safe hooks, loop-guard, doc-check 15+ categories, verify-hooks.sh, Codex git-tracking
+- 📋 **Sprint Contract** (Phase 2.1) — testable acceptance criteria BEFORE coding begins
+- 🔄 **Evaluate + Iterate** (Phase 3.5) — conditional GAN loop: evaluator checks contract, iterates on FAIL
+- 🔍 **`evaluator` agent** — calibrated QA skeptic with few-shot scoring (0-10), MUST/SHOULD priorities
+- 🎨 **Design Quality + Originality** in visual-reviewer — catches AI template patterns
+- 💾 **Task state persistence** — resume /dev from exact phase across sessions
+- 📊 14-phase `/dev` pipeline (was 12) with cost metrics
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.4 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.5 history.
 
 ## 🔄 How `/dev` Works
 
@@ -89,9 +90,9 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.4 history.
 graph LR
     P -->|" "| E -->|" "| Q
 
-    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Validate"]
-    E["⚡ <b>Execution</b><br/><br/>5 · Implement<br/>6 · Verify<br/>7 · Test<br/>8 · Goals"]
-    Q["🔍 <b>Quality</b><br/><br/>9 · Review ×4<br/>10 · Critic<br/>11 · Docs<br/>12 · Report"]
+    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Contract<br/>5 · Validate"]
+    E["⚡ <b>Execution</b><br/><br/>6 · Implement<br/>7 · Evaluate<br/>8 · Verify<br/>9 · Test<br/>10 · Goals"]
+    Q["🔍 <b>Quality</b><br/><br/>11 · Review ×4<br/>12 · Critic<br/>13 · Docs<br/>14 · Report"]
 
     style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
     style E fill:#fff3e0,stroke:#F57C00,stroke-width:2px,color:#333
@@ -153,7 +154,7 @@ Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex 
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 12-phase orchestrator: understand → architect → plan → validate → implement → verify → test → goals → review → critic → docs → report |
+| `/dev <task>` | 14-phase orchestrator: understand → architect → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
 | `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
@@ -239,7 +240,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 31 agents | 41 skills (8 commands + 29 agents + 4 stack) |
+| Agents / Skills | 32 agents | 42 skills (8 commands + 30 agents + 4 stack) |
 | Commands | 13 (slash commands) | 8 (user-invocable skills) |
 | Hooks | 18 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 6 (separate files) | Inline in AGENTS.md |
@@ -247,7 +248,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`npx claude-code-superkit --codex` will install for Codex CLI — copies 41 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`npx claude-code-superkit --codex` will install for Codex CLI — copies 42 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

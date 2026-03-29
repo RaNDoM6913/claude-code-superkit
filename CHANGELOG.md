@@ -2,6 +2,28 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.3.5] — 2026-03-29
+
+### Added
+- **`evaluator` agent** — calibrated QA evaluator: scores implementation against Sprint Contract criteria (0-10 with few-shot anchors), MUST/SHOULD priorities, structured critique with trend tracking across passes
+- **Phase 2.1 (Sprint Contract)** in `/dev` — testable acceptance criteria generated BEFORE coding. 5-10 criteria for standard tasks, 10-20 for complex
+- **Phase 3.5 (Evaluate + Iterate)** in `/dev` — conditional GAN loop: evaluator checks contract, iterates on FAIL (max 2 passes standard, 3 complex), escalates to architect if scores plateau
+- **Design Quality dimension** in visual-reviewer — coherent whole vs assembled parts, calibrated 1-10 with score anchors
+- **Originality dimension** in visual-reviewer — custom decisions vs AI template defaults, red flag detection (purple gradients, uniform cards, shadow-everything)
+- **AI UI pattern detection** in ai-slop-cleaner — Category 6: detects AI-generated interface patterns in frontend code
+- **Task state persistence** — pre-compact-save includes `.claude/.task-state.json`, session-context-restore injects it for multi-session /dev continuity
+- **Cost metrics** in Phase 8 Report — agent dispatch count, evaluation passes, sprint contract score
+- **Codex evaluator skill** — Codex equivalent of evaluator agent
+
+### Changed
+- **`/dev` phases**: 12 → **14** (+Sprint Contract, +Evaluate+Iterate)
+- **Phase 1 complexity assessment** — enhanced with novelty, risk, and ambiguity factors (not just file/line count)
+- **visual-reviewer** scoring — 8 → **10** dimensions (total stays 100pts, weights redistributed)
+- Core agents: 24 → **25** (+evaluator)
+- Codex skills: 41 → **42** (+evaluator)
+
+---
+
 ## [1.3.4] — 2026-03-29
 
 ### Changed
