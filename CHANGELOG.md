@@ -21,6 +21,21 @@ All notable changes to claude-code-superkit are documented here.
 - **visual-reviewer** scoring — 8 → **10** dimensions (total stays 100pts, weights redistributed)
 - Core agents: 24 → **25** (+evaluator)
 - Codex skills: 41 → **42** (+evaluator)
+- Core hooks: 13 → **15** (+superkit-counts-verify, verify-hooks already existed)
+- Core rules: 6 → **7** (+superkit-integrity)
+
+### Added (post-audit)
+- **`superkit-integrity.md` rule** — alwaysApply: forces 4-step verification (counts, version sync, phase consistency, stale refs) before every commit. Pre-release audit checklist for `gh release create`
+- **`superkit-counts-verify.sh` hook** — PreToolUse: blocks git commit/push when VERSION != package.json or README counts != actual file counts. Runs only inside the superkit repo
+
+### Fixed (post-audit)
+- **package.json** version 1.3.3 → 1.3.5 (was out of sync with VERSION)
+- **CLAUDE.md** structure comment: 24 → 25 agents
+- **docs/guide/02-architecture.md**: 12-phase → 14-phase
+- **docs/guide/01-getting-started.md**: jq → Node.js dependency, `bash setup.sh` → `npx`
+- **docs/INSTALL-CLAUDE-CODE.md**: 41 → 42 Codex skills
+- **docs/guide/10-codex-support.md**: 29 → 30 agent skills
+- **packages/codex/INSTALL.md**: dev-orchestrator full 14-phase list
 
 ---
 

@@ -72,8 +72,8 @@ VERSION                     # 1.3.5
 | Agents | 25 | 4 | 3 | 28 | — |
 | Skills | 4 | — | 1 | 11 | 42 |
 | Commands | 13 | — | — | 16 | 8 |
-| Hooks | 13 | 5 | — | 13 | — |
-| Rules | 6 | — | — | 5 | — |
+| Hooks | 15 | 5 | — | 13 | — |
+| Rules | 7 | — | — | 5 | — |
 
 ## Conventions
 
@@ -131,11 +131,17 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 - [ ] Codex skill count matches `find packages/codex/skills -name "SKILL.md" | wc -l`
 - [ ] Hook count matches `ls packages/core/hooks/*.sh | wc -l` + stack hooks
 - [ ] Rule count matches `ls packages/core/rules/*.md | wc -l`
+- [ ] **VERSION matches package.json version** (critical — npm uses package.json)
+- [ ] **Phase count consistent** across dev.md, README, CLAUDE.md, guides, Codex
 - [ ] GitHub description counts match actual (`gh repo view --json description`)
 - [ ] Codex AGENTS.md Available Skills lists are current
 - [ ] Codex INSTALL.md counts match actual
 - [ ] docs/INSTALL-CLAUDE-CODE.md counts match actual
 - [ ] CHANGELOG has entry for the change
+- [ ] `grep -rn "OLD_PHASE_COUNT-phase" docs/ README.md CLAUDE.md packages/codex/` returns 0 results (excluding plans/ and CHANGELOG)
+
+### Self-Audit Rule (MANDATORY)
+The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` hook enforce automated verification. The rule defines 4 verification steps that Claude MUST run before every commit. The hook blocks commits/pushes when VERSION != package.json or README counts != actual file counts. See `packages/core/rules/superkit-integrity.md` for full details.
 
 ## Key Files
 
