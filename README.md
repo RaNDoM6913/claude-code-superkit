@@ -243,8 +243,8 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
 | Agents / Skills | 34 agents | 44 skills (8 commands + 32 agents + 4 stack) |
 | Commands | 13 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 18 + Stop | — (inline rules in AGENTS.md) |
-| Rules | 6 (separate files) | Inline in AGENTS.md |
+| Hooks | 19 + Stop | — (inline rules in AGENTS.md) |
+| Rules | 7 (separate files) | Inline in AGENTS.md |
 | Knowledge Skills | 4 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
