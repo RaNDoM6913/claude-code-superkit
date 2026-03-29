@@ -1,5 +1,20 @@
 ---
-alwaysApply: true
+alwaysApply: false
+paths:
+  - "**/*.go"
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+  - "**/*.rs"
+  - "**/*.java"
+  - "**/*.kt"
+  - "**/*.rb"
+  - "**/*.sql"
+  - ".github/workflows/**"
+  - "Dockerfile*"
+  - "docker-compose*"
 ---
 
 # Security
