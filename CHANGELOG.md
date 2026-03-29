@@ -2,6 +2,34 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.3.6] — 2026-03-30
+
+### Added
+- **`frontend-aesthetics.md` rule** — path-scoped proactive anti-slop for frontend: typography, color, motion, AI pattern red flags. Activates only for .tsx/.jsx/.vue/.svelte/.css/.scss
+- **`security-patterns.sh` hook** — PostToolUse real-time detection of eval(), innerHTML, pickle, os.system, fmt.Sprintf in SQL, GitHub Actions injection. Based on Anthropic official security-guidance plugin
+- **`comment-rot-analyzer` agent** — detect stale TODOs (>6mo), lying comments, dead references, outdated API docs
+- **`silent-failure-hunter` agent** — find swallowed errors: empty catches, `_ = err`, `2>/dev/null`, `|| true`, bare `except:`, linter suppressions across Go/JS/TS/Python/Bash
+- **Confidence scoring formula** in code-reviewer — numerical 0-100 scale (start at 50, adjust per factor), threshold >=80 for high-confidence findings
+- **Confidence distribution** in /review report — breakdown by HIGH (80-100) / MEDIUM (60-79) / LOW (<60, filtered)
+- **Anti-hallucination rule** in coding-style — investigate before answering, verify packages exist, don't invent APIs
+- **Surgical Changes principle** in coding-style — change only what was requested, no drive-by refactoring
+- **Parallel Execution guidance** in coding-style — batch independent tool calls
+- **Context awareness** in CLAUDE.md template — don't stop early, save progress before compaction
+- **Subagent control** in CLAUDE.md template — when to use subagents vs direct work
+- **Compaction recovery validation** — pre-compact validates save, session-restore validates JSON
+- **Codex skills** — comment-rot-analyzer + silent-failure-hunter (Codex equivalents)
+
+### Changed
+- **`security.md` rule** — path-scoped: activates only for code/infra files, not docs
+- **`/review` command** — dispatches comment-rot-analyzer + silent-failure-hunter, confidence breakdown in report
+- **`code-reviewer` agent** — numerical 0-100 confidence with calculation formula
+- Core agents: 25 → **27** (+comment-rot-analyzer, +silent-failure-hunter)
+- Core hooks: 13 (+2 internal) → **14** (+security-patterns) (+2 internal)
+- Core rules: 6 (+1 internal) → **7** (+frontend-aesthetics) (+1 internal)
+- Codex skills: 42 → **44** (+comment-rot-analyzer, +silent-failure-hunter)
+
+---
+
 ## [1.3.5] — 2026-03-29
 
 ### Added

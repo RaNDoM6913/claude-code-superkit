@@ -7,10 +7,10 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 ```
 packages/
   core/                     # Generic components (any project)
-    agents/                 # 25 agents (all opus)
+    agents/                 # 27 agents (all opus)
     commands/               # 13 commands
-    hooks/                  # 13 hooks (+2 superkit-internal)
-    rules/                  # 6 rules (+1 superkit-internal)
+    hooks/                  # 14 hooks (+2 superkit-internal)
+    rules/                  # 7 rules (+1 superkit-internal)
     skills/                 # 4 skills
     settings.json           # Hook wiring
     CLAUDE.md               # Template for users
@@ -31,7 +31,7 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 42 skills (converted from agents + commands)
+    skills/                 # 44 skills (converted from agents + commands)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
@@ -62,18 +62,18 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.3.5
+VERSION                     # 1.3.6
 ```
 
 ## Current Counts
 
 | Component | Core | Stack | Extras | Showcase | Codex |
 |-----------|------|-------|--------|----------|-------|
-| Agents | 25 | 4 | 3 | 28 | — |
-| Skills | 4 | — | 1 | 11 | 42 |
+| Agents | 27 | 4 | 3 | 28 | — |
+| Skills | 4 | — | 1 | 11 | 44 |
 | Commands | 13 | — | — | 16 | 8 |
-| Hooks | 13 (+2 internal) | 5 | — | 14 | — |
-| Rules | 6 (+1 internal) | — | — | 6 | — |
+| Hooks | 14 (+2 internal) | 5 | — | 14 | — |
+| Rules | 7 (+1 internal) | — | — | 6 | — |
 
 ## Conventions
 

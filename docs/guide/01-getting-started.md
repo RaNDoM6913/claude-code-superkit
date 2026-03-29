@@ -88,16 +88,16 @@ Launch Claude Code in your project and try these:
 After setup, confirm everything landed correctly:
 
 ```bash
-# Expected: 25+ core + stack agents
+# Expected: 27+ core + stack agents
 ls .claude/agents/*.md | wc -l
 
 # Expected: 13 commands
 ls .claude/commands/*.md | wc -l
 
-# Expected: 13+ core + stack hooks
+# Expected: 14+ core + stack hooks
 ls .claude/scripts/hooks/*.sh | wc -l
 
-# Expected: 6 rules
+# Expected: 7 rules
 ls .claude/rules/*.md | wc -l
 
 # Expected: 4 skill directories
