@@ -76,6 +76,26 @@ Current: `TODO: 000001..000NNN`
 
 ### Rule: code without updated docs = incomplete task. Do it in the SAME response as the code.
 
+## Context Management
+
+Your context window will be automatically compacted as it approaches its limit, allowing you to continue working indefinitely. Do not stop tasks early due to context concerns. As you approach the limit, save progress to `.claude/.task-state.json` before the context refreshes. Be persistent and autonomous — complete tasks fully.
+
+When compacting, always preserve: modified file list, current task description, test commands, and any active plan progress.
+
+## Parallel Execution
+
+When multiple independent operations are needed, batch them in a single message:
+- Reading 3+ files → multiple Read calls in parallel
+- Searching for patterns → multiple Grep calls in parallel
+- Dispatching independent agents → all Agent calls in one message
+- Only sequence calls when results of one inform the next
+
+## Agent Usage
+
+Use subagents when: parallel independent tasks, isolated context needed, 3+ files to analyze.
+Work directly when: 1-2 files, sequential edits, maintaining context across steps, simple grep/read.
+Do NOT spawn a subagent to read one file or run one grep — work directly.
+
 ## Active Plans
 
 None yet.
