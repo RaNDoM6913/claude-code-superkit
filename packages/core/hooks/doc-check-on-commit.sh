@@ -1,5 +1,6 @@
 #!/bin/bash
 # doc-check-on-commit.sh — BLOCK commits when code changes lack doc updates
+# NOTE: bash case doesn't support ** globs — expand to N levels explicitly
 # Triggers on: PreToolUse(Bash) when command contains "git commit"
 # Profile: standard, strict
 #
@@ -162,23 +163,23 @@ while IFS= read -r file; do
       ;;
 
     # App wiring / middleware → backend-layers docs
-    */app/*.go|*/middleware*.go|*/app/**/*.go)
+    */app/*.go|*/middleware*.go|*/app/*/*.go|*/app/*/*/*.go|*/app/*/*/*/*.go|*/app/*/*/*/*/*.go)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_BACKEND_LAYERS=true
       ;;
 
     # Telegram bots (moderator)
-    */bot_moderator/*.go|*/bot_moderator/**/*.go|*/bots/moderator/*.go)
+    */bot_moderator/*.go|*/bot_moderator/*/*.go|*/bot_moderator/*/*/*.go|*/bot_moderator/*/*/*/*.go|*/bots/moderator/*.go)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_BOT_DOCS=true
       ;;
     # Telegram bots (support)
-    */bot_support/*.go|*/bot_support/**/*.go|*/bots/support/*.go)
+    */bot_support/*.go|*/bot_support/*/*.go|*/bot_support/*/*/*.go|*/bot_support/*/*/*/*.go|*/bots/support/*.go)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_BOT_DOCS=true
       ;;
     # Other bots
-    */tgbots/*.go|*/tgbots/**/*.go|*/bots/*.go|*/bots/**/*.go)
+    */tgbots/*.go|*/tgbots/*/*.go|*/tgbots/*/*/*.go|*/tgbots/*/*/*/*.go|*/bots/*.go|*/bots/*/*.go|*/bots/*/*/*.go|*/bots/*/*/*/*.go)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_BOT_DOCS=true
       ;;
@@ -193,7 +194,11 @@ while IFS= read -r file; do
 
     # Frontend: main app screens and components
     */src/*.ts|*/src/*.tsx|\
-    */src/**/*.ts|*/src/**/*.tsx)
+    */src/*/*.ts|*/src/*/*.tsx|\
+    */src/*/*/*.ts|*/src/*/*/*.tsx|\
+    */src/*/*/*/*.ts|*/src/*/*/*/*.tsx|\
+    */src/*/*/*/*/*.ts|*/src/*/*/*/*/*.tsx|\
+    */src/*/*/*/*/*/*.ts|*/src/*/*/*/*/*/*.tsx)
       HAS_CODE=true; ONLY_EXEMPT=false
       NEED_FRONTEND_DOCS=true
       ;;
