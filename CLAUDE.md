@@ -7,7 +7,7 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 ```
 packages/
   core/                     # Generic components (any project)
-    agents/                 # 24 agents (all opus)
+    agents/                 # 25 agents (all opus)
     commands/               # 13 commands
     hooks/                  # 13 hooks
     rules/                  # 6 rules

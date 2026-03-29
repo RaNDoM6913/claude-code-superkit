@@ -73,7 +73,7 @@ Claude continues or finishes
     test-generator.md         # Generates tests for new code
     ...                       # 24 core + 4 stack agents
   commands/
-    dev.md                    # 12-phase development orchestrator
+    dev.md                    # 14-phase development orchestrator
     review.md                 # Unified review: detect -> dispatch -> report
     audit.md                  # Parallel audit: up to 4 agents
     test.md                   # Auto-detect and run tests

@@ -12,19 +12,19 @@ Before installing, make sure you have:
 |------|-----|---------|
 | **Claude Code CLI** | The runtime that loads `.claude/` configuration | `npm install -g @anthropic-ai/claude-code` |
 | **git** | Hooks and commands rely on git state | Comes with Xcode CLI tools / your OS |
-| **jq** | Hooks parse JSON on stdin; setup.sh assembles settings.json | `brew install jq` (macOS) or `apt install jq` (Linux) |
+| **Node.js 18+** | Installer and hooks use Node.js for JSON processing | `brew install node` (macOS) or [nodejs.org](https://nodejs.org) |
 
 ## 5-Minute Quickstart
 
 ```bash
-# 1. Clone the superkit somewhere on your machine
-git clone https://github.com/RaNDoM6913/claude-code-superkit.git ~/claude-code-superkit
-
-# 2. Navigate to your project
+# 1. Navigate to your project
 cd /path/to/your-project
 
-# 3. Run the interactive installer
-bash ~/claude-code-superkit/setup.sh
+# 2. Run the interactive installer (no cloning needed)
+npx claude-code-superkit
+
+# Or with explicit options:
+npx claude-code-superkit --stacks=go,typescript --profile=strict --codex
 ```
 
 The installer walks you through four steps:
