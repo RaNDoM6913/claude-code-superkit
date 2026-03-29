@@ -126,14 +126,29 @@ For each finding, rate:
 - **WARNING** — Incorrect behavior under specific conditions, performance degradation. Example: missing error wrap, N+1 query.
 - **SUGGESTION** — Style, readability. Won't break if ignored. Example: variable naming, comment clarity.
 
-### Confidence
-- **HIGH (90%+)** — I can see the concrete bug in the code. I would bet money on this.
-- **MEDIUM (60-90%)** — Looks wrong based on patterns, but I might be missing context.
-- **LOW (<60%)** — A hunch. Flagging for human review.
+### Confidence (0-100 score)
+
+Calculate confidence by starting at 50 and adjusting:
+
+| Factor | Adjustment |
+|--------|-----------|
+| I can see the exact bug in the code | +30 |
+| Pattern violates DOCUMENTED project convention | +20 |
+| I read the full function/file context | +10 |
+| Similar pattern exists elsewhere and works | -20 |
+| I'm inferring intent without reading all callers | -15 |
+| The pattern is common in the project codebase | -10 |
+
+**Thresholds:**
+- **≥80** → HIGH — report as finding
+- **60-79** → MEDIUM — report but mark as "needs verification"
+- **<60** → LOW — drop from report (pre-filtered in /review Step 4)
+
+Include the confidence score in every finding: `[CRITICAL/85] file:line — description`
 
 ### Format:
 ```
-[SEVERITY/CONFIDENCE] file:line — description
+[SEVERITY/SCORE] file:line — description (e.g., [WARNING/72] src/handler.go:45)
   Evidence: <what I see>
   Fix: <suggested change>
 ```
