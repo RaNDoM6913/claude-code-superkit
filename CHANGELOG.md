@@ -17,7 +17,7 @@ All notable changes to claude-code-superkit are documented here.
 - **Graceful pipe handling** — if stdin closes during interactive mode, auto-falls back to `--defaults`
 
 ### Fixed
-- **CRITICAL: `doc-check-on-commit.sh`** — bash `case` doesn't support `**` globs. Patterns like `*/src/**/*.tsx` only matched ONE level, silently skipping deeply nested files. All `**` replaced with explicit depth levels (5-6 levels). Hook was effectively broken for most project files
+- **CRITICAL: `doc-check-on-commit.sh`** — bash `case` doesn't support `**` globs. Patterns like `*/src/**/*.tsx` only matched ONE level, silently skipping deeply nested files. Refactored to `in_dir()` helper using grep — works at ANY nesting depth with no hardcoded level limit. Hook was effectively broken for most project files
 - **`user-prompt-context.sh`** — POSIX sh compatible, safe JSON via `node JSON.stringify()`, multiline git output flattened
 - **`doc-check-on-commit.sh`** — expanded to 15+ doc category mappings (191→299 lines)
 - **`/dev` threshold** — lowered from 100 to 50 changed lines for auto-trigger

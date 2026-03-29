@@ -1,6 +1,10 @@
 #!/bin/bash
 # doc-check-on-commit.sh — BLOCK commits when code changes lack doc updates
-# NOTE: bash case doesn't support ** globs — expand to N levels explicitly
+# NOTE: bash case doesn't support ** globs — use in_dir() helper for any-depth matching
+
+# Helper: check if file is under a directory at ANY depth (no level limit)
+# Usage: in_dir "$file" "dirname"
+in_dir() { echo "$1" | grep -q "/$2/"; }
 # Triggers on: PreToolUse(Bash) when command contains "git commit"
 # Profile: standard, strict
 #
@@ -122,101 +126,72 @@ while IFS= read -r file; do
   esac
 
   # ── Code files — determine which docs are required ──
+  # Step 1: classify by extension (is it code at all?)
+  IS_CODE=false
+  case "$file" in
+    *.go|*.ts|*.tsx|*.js|*.jsx|*.py|*.rs|*.sql) IS_CODE=true ;;
+  esac
+
+  if [ "$IS_CODE" = false ]; then
+    continue
+  fi
+
+  HAS_CODE=true
+  ONLY_EXEMPT=false
+
+  # Step 2: determine doc requirements using grep-based in_dir() for any-depth matching
   case "$file" in
     # Migrations → database-schema docs + CLAUDE.md
     */migrations/*.sql|*/migrate/*.sql|*/db/migrate/*)
-      HAS_CODE=true; ONLY_EXEMPT=false
       NEED_DB_SCHEMA=true
       NEED_CLAUDE_MD=true
       ;;
+    *.sql) ;; # other SQL — no specific doc requirement
+  esac
 
-    # HTTP handlers → API reference or OpenAPI
+  case "$file" in
+    # HTTP handlers → API reference
     */handlers/*.go|*/routes*.go|*/router*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
       NEED_API_REF=true
       ;;
+  esac
 
-    # Services with specific doc mappings (generic path patterns)
-    */services/moderation/*.go|*/service/moderation/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+  # Service-to-doc mappings (grep handles any nesting depth)
+  case "$file" in *.go)
+    if in_dir "$file" "services/moderation" || in_dir "$file" "service/moderation"; then
       NEED_MODERATION_DOCS=true
-      ;;
-    */services/auth/*.go|*/service/auth/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    elif in_dir "$file" "services/auth" || in_dir "$file" "service/auth"; then
       NEED_AUTH_DOCS=true
-      ;;
-    */services/media/*.go|*/service/media/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    elif in_dir "$file" "services/media" || in_dir "$file" "service/media"; then
       NEED_PHOTO_DOCS=true
-      ;;
-    */services/feed/*.go|*/services/antiabuse/*.go|*/service/feed/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    elif in_dir "$file" "services/feed" || in_dir "$file" "services/antiabuse" || in_dir "$file" "service/feed"; then
       NEED_FEED_DOCS=true
-      ;;
-    */services/entitlements/*.go|*/services/store/*.go|*/services/payments/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    elif in_dir "$file" "services/entitlements" || in_dir "$file" "services/store" || in_dir "$file" "services/payments"; then
       NEED_ENTITLEMENTS_DOCS=true
-      ;;
-    */services/notifications/*.go|*/services/notification/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    elif in_dir "$file" "services/notifications" || in_dir "$file" "services/notification"; then
       NEED_NOTIFICATION_DOCS=true
-      ;;
+    fi
 
     # App wiring / middleware → backend-layers docs
-    */app/*.go|*/middleware*.go|*/app/*/*.go|*/app/*/*/*.go|*/app/*/*/*/*.go|*/app/*/*/*/*/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    if in_dir "$file" "app" || echo "$file" | grep -q '/middleware'; then
       NEED_BACKEND_LAYERS=true
-      ;;
+    fi
 
-    # Telegram bots (moderator)
-    */bot_moderator/*.go|*/bot_moderator/*/*.go|*/bot_moderator/*/*/*.go|*/bot_moderator/*/*/*/*.go|*/bots/moderator/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
+    # Telegram bots → bot docs
+    if in_dir "$file" "bot_moderator" || in_dir "$file" "bot_support" || \
+       in_dir "$file" "tgbots" || in_dir "$file" "bots"; then
       NEED_BOT_DOCS=true
-      ;;
-    # Telegram bots (support)
-    */bot_support/*.go|*/bot_support/*/*.go|*/bot_support/*/*/*.go|*/bot_support/*/*/*/*.go|*/bots/support/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
-      NEED_BOT_DOCS=true
-      ;;
-    # Other bots
-    */tgbots/*.go|*/tgbots/*/*.go|*/tgbots/*/*/*.go|*/tgbots/*/*/*/*.go|*/bots/*.go|*/bots/*/*.go|*/bots/*/*/*.go|*/bots/*/*/*/*.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
-      NEED_BOT_DOCS=true
-      ;;
+    fi
+    ;;
+  esac
 
-    # Frontend: onboarding screens
-    */pages/onboarding/*.ts|*/pages/onboarding/*.tsx|\
-    */app/flow/*.ts|*/app/flow/*.tsx|\
-    */app/App.tsx)
-      HAS_CODE=true; ONLY_EXEMPT=false
+  # Frontend → frontend docs (any .ts/.tsx under src/ or onboarding paths)
+  case "$file" in *.ts|*.tsx)
+    if in_dir "$file" "src" || in_dir "$file" "pages/onboarding" || \
+       in_dir "$file" "app/flow" || echo "$file" | grep -q '/app/App\.tsx$'; then
       NEED_FRONTEND_DOCS=true
-      ;;
-
-    # Frontend: main app screens and components
-    */src/*.ts|*/src/*.tsx|\
-    */src/*/*.ts|*/src/*/*.tsx|\
-    */src/*/*/*.ts|*/src/*/*/*.tsx|\
-    */src/*/*/*/*.ts|*/src/*/*/*/*.tsx|\
-    */src/*/*/*/*/*.ts|*/src/*/*/*/*/*.tsx|\
-    */src/*/*/*/*/*/*.ts|*/src/*/*/*/*/*/*.tsx)
-      HAS_CODE=true; ONLY_EXEMPT=false
-      NEED_FRONTEND_DOCS=true
-      ;;
-
-    # Other backend Go files
-    *.go)
-      HAS_CODE=true; ONLY_EXEMPT=false
-      ;;
-
-    # Any other code file
-    *.ts|*.tsx|*.js|*.jsx|*.py|*.rs)
-      HAS_CODE=true; ONLY_EXEMPT=false
-      ;;
-
-    # SQL files outside migrations
-    *.sql)
-      HAS_CODE=true; ONLY_EXEMPT=false
-      ;;
+    fi
+    ;;
   esac
 done <<< "$STAGED"
 
