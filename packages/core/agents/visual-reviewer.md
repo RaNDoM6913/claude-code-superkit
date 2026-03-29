@@ -54,19 +54,45 @@ When screenshots are unavailable, review code for visual consistency:
 6. **Animation** — are transitions using the project's animation library/conventions?
 7. **Accessibility** — are interactive elements focusable? Alt text on images? Aria labels?
 8. **Dark mode** — if the project supports it, are new elements themed correctly?
+9. **Design quality** — does the design feel like a coherent whole? Distinct mood, identity, intentional choices vs assembled parts
+10. **Originality** — evidence of custom decisions vs template defaults and AI-generated patterns (purple gradients, white cards on gray, identical spacing everywhere, shadow-everything)
 
 ### Step 4: Score
 
 | Check | Weight | Pass Criteria |
 |-------|--------|---------------|
-| Color system compliance | 15 | All colors from theme/design tokens |
-| Spacing scale compliance | 15 | All spacing from defined scale |
-| Typography compliance | 10 | Font sizes/weights from type scale |
-| Z-index discipline | 10 | Values from defined scale |
-| Responsive correctness | 15 | All breakpoints covered |
-| Animation consistency | 10 | Uses project animation library |
-| Accessibility | 15 | Focusable, labeled, contrast OK |
-| Dark mode (if applicable) | 10 | Themed correctly |
+| Color system compliance | 12 | All colors from theme/design tokens |
+| Spacing scale compliance | 12 | All spacing from defined scale |
+| Typography compliance | 8 | Font sizes/weights from type scale |
+| Z-index discipline | 8 | Values from defined scale |
+| Responsive correctness | 12 | All breakpoints covered |
+| Animation consistency | 8 | Uses project animation library |
+| Accessibility | 12 | Focusable, labeled, contrast OK |
+| Dark mode (if applicable) | 8 | Themed correctly |
+| Design quality | 10 | Coherent whole, distinct identity (see anchors below) |
+| Originality | 10 | Custom decisions, not AI template defaults (see anchors below) |
+
+### Design Quality Score Anchors
+- **9-10**: Distinct visual identity. Colors, typography, layout create a cohesive mood. A designer would recognize deliberate choices.
+- **7-8**: Professional, cohesive. Wouldn't stand out but feels intentional.
+- **5-6**: Assembled. Parts work individually but don't form a unified whole.
+- **3-4**: Conflicting signals. Mixed visual languages, unclear identity.
+- **1-2**: No visual logic. Random elements with no relationship.
+
+### Originality Score Anchors
+- **9-10**: Deliberate creative choices. A designer would recognize intent.
+- **7-8**: Some custom elements over a standard base.
+- **5-6**: Standard framework defaults with color/font customization.
+- **3-4**: Unmodified component library. Purple-blue gradients on white cards.
+- **1-2**: Default template with no customization.
+
+**AI pattern red flags** (penalize if found):
+- Purple/blue gradient as default accent
+- White cards on gray background with identical spacing
+- Generic hero section with stock imagery
+- Rounded corners on everything with no hierarchy
+- Shadow-everything approach
+- "Clean and modern" that means "bland and default"
 
 Score = weighted sum. **PASS >= 90, WARN 70-89, FAIL < 70.**
 
