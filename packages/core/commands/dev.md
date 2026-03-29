@@ -1,12 +1,12 @@
 ---
-description: Full-stack development orchestrator — always-on, 12 phases: understand → plan → implement → verify → test → goals → review → critic → document → report
+description: Full-stack development orchestrator — always-on, 14 phases: understand → plan → contract → implement → evaluate → verify → test → goals → review → critic → document → report
 argument-hint: <task-description>
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---
 
 # Development Orchestrator
 
-Automate the full development cycle: understand → plan → validate → implement → verify → test → verify goals → review → document → report.
+Automate the full development cycle: understand → plan → contract → validate → implement → evaluate → verify → test → verify goals → review → document → report.
 
 ## Task
 
@@ -43,10 +43,20 @@ This ensures the plan follows existing project architecture.
    - Is this a new feature, enhancement, bug fix, or refactoring?
    - What are the inputs and expected outputs?
 
-3. **Assess complexity** — this determines the workflow:
-   - **Simple** (1 file, < 100 lines) → skip to Phase 3, no plan needed
-   - **Standard** (2-5 files) → full workflow with plan
-   - **Complex** (5+ files, cross-cutting, architectural decisions) → dispatch **architect** agent first
+3. **Assess complexity** using 5 factors — this determines the workflow:
+
+   | Factor | Simple | Standard | Complex |
+   |--------|--------|----------|---------|
+   | File count | 1 | 2-5 | 6+ |
+   | Line changes | < 100 | 100-500 | 500+ |
+   | Novelty | Existing pattern | New pattern in existing area | New subsystem |
+   | Risk | Internal, no data changes | API change, DB migration | Auth, payments, security |
+   | Ambiguity | Clear spec | Some unknowns | Exploratory/open-ended |
+
+   Count how many factors fall in each column. Majority wins:
+   - **Simple** (3+ factors in Simple) → skip Phases 1.5, 2.1, 2.5, 3.5, 5.5, 6.5
+   - **Standard** (default) → full workflow, max 2 evaluator passes
+   - **Complex** (3+ factors in Complex) → full workflow + architect + critic, max 3 evaluator passes
 
 4. **Search the codebase** for existing patterns related to the task:
    - Grep for relevant domain terms, endpoint paths, function names
@@ -107,6 +117,42 @@ Produce a structured plan before writing any code. Output as a checklist, organi
 
 Omit sections not relevant to the task.
 
+## Phase 2.1 — Sprint Contract (standard and complex tasks)
+
+Generate testable acceptance criteria for the implementation plan. These criteria are what the **evaluator** agent will check in Phase 3.5.
+
+### Contract Size
+- **Simple:** skip (no contract needed)
+- **Standard:** 5-10 criteria
+- **Complex:** 10-20 criteria
+
+### Contract Format
+
+```
+## Sprint Contract
+
+### Acceptance Criteria
+| # | Criterion | Test Method | Threshold | Priority |
+|---|-----------|------------|-----------|----------|
+| 1 | [specific, testable outcome] | [how to verify: grep, curl, test, read] | Score >= 7 | MUST |
+| 2 | ... | ... | ... | MUST/SHOULD |
+```
+
+### Good Criteria
+- **Testable** — verifiable by reading code or running a command
+- **Specific** — "returns 200 with JSON containing user.id" not "endpoint works"
+- **Independent** — each criterion tests one thing
+- **Measurable** — clear pass/fail, not subjective
+
+### Bad Criteria (do NOT include)
+- "Code is clean" — subjective, reviewer's job
+- "Performance is good" — unmeasurable without benchmark
+- "Everything works" — too vague
+
+Pass the Sprint Contract to the **plan-checker** in Phase 2.5 for validation alongside the plan.
+
+**Skip for simple tasks.**
+
 ## Phase 2.5 — Validate Plan
 
 Dispatch **plan-checker** agent with the plan from Phase 2:
@@ -158,6 +204,34 @@ Execute the plan in dependency order. For each step, read the reference pattern 
    - Read existing components for patterns (animation library, styling approach, state management)
    - API client using project conventions
    - Types matching the backend contract
+
+## Phase 3.5 — Evaluate + Iterate (standard and complex tasks)
+
+Dispatch the **evaluator** agent with the Sprint Contract and changed files:
+
+```
+Evaluate this implementation against the Sprint Contract.
+Sprint Contract: {contract from Phase 2.1}
+Changed Files: {list from Phase 3}
+Pass Number: 1
+```
+
+**Conditional iteration (GAN loop):**
+
+1. If evaluator verdict = **PROCEED** → all criteria PASS → proceed to Phase 4
+2. If evaluator verdict = **ITERATE**:
+   - Fix issues identified in the critique
+   - Re-dispatch evaluator (pass N+1)
+   - If pass count > MAX_PASSES → proceed to Phase 4 with warning:
+     "Evaluation budget exhausted after N passes. Remaining issues: [list]"
+   - If scores not improving (pass N score <= pass N-1) → proceed with escalation note
+3. If evaluator verdict = **ESCALATE**:
+   - Dispatch **architect** agent for design review
+   - Apply recommendation, restart from Phase 3
+
+**MAX_PASSES:** Simple: 0 (skip), Standard: 2, Complex: 3
+
+**Skip for simple tasks.**
 
 ## Phase 4 — Verify
 
@@ -278,8 +352,10 @@ Output a summary:
 | 1. Understand | ✅ | Scope: [components], [complexity] |
 | 1.5 Architect | ⏭ skipped | Standard complexity |
 | 2. Plan | ✅ | N tasks planned |
+| 2.1 Contract | ✅ | N acceptance criteria |
 | 2.5 Validate | ✅ PASS | 0 blocking |
 | 3. Implement | ✅ | N files created, M modified |
+| 3.5 Evaluate | ✅ PASS | Pass 1: X/Y criteria met |
 | 4. Verify | ✅ | Compilation clean |
 | 5. Test | ✅ | X tests, all passing |
 | 5.5 Goals | ✅ VERIFIED | All 4 levels pass |
@@ -292,6 +368,14 @@ Output a summary:
 |------|--------|-------------|
 | path/to/file | Created/Modified | [description] |
 | ... | ... | ... |
+
+### Metrics
+| Metric | Value |
+|--------|-------|
+| Complexity | Simple / Standard / Complex |
+| Agent dispatches | N (list agents) |
+| Evaluation passes | N (FAIL → ... → PASS) |
+| Sprint contract | X/Y criteria PASS |
 
 ### Suggested Commit Message
 ```
@@ -308,4 +392,4 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - If the task is ambiguous, ask for clarification before Phase 3
 - If a phase produces errors, fix them before proceeding to the next phase
 - Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`
-- Simple tasks (1 file, < 100 lines) skip Phases 1.5, 2.5, 5.5, 6.5
+- Simple tasks skip Phases 1.5, 2.1, 2.5, 3.5, 5.5, 6.5
