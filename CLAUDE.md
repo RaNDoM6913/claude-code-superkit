@@ -9,8 +9,8 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 25 agents (all opus)
     commands/               # 13 commands
-    hooks/                  # 15 hooks
-    rules/                  # 7 rules
+    hooks/                  # 13 hooks (+2 superkit-internal)
+    rules/                  # 6 rules (+1 superkit-internal)
     skills/                 # 4 skills
     settings.json           # Hook wiring
     CLAUDE.md               # Template for users
@@ -72,8 +72,8 @@ VERSION                     # 1.3.5
 | Agents | 25 | 4 | 3 | 28 | — |
 | Skills | 4 | — | 1 | 11 | 42 |
 | Commands | 13 | — | — | 16 | 8 |
-| Hooks | 15 | 5 | — | 13 | — |
-| Rules | 7 | — | — | 5 | — |
+| Hooks | 13 (+2 internal) | 5 | — | 14 | — |
+| Rules | 6 (+1 internal) | — | — | 6 | — |
 
 ## Conventions
 

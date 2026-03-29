@@ -94,10 +94,10 @@ ls .claude/agents/*.md | wc -l
 # Expected: 13 commands
 ls .claude/commands/*.md | wc -l
 
-# Expected: 15+ core + stack hooks
+# Expected: 13+ core + stack hooks
 ls .claude/scripts/hooks/*.sh | wc -l
 
-# Expected: 7 rules
+# Expected: 6 rules
 ls .claude/rules/*.md | wc -l
 
 # Expected: 4 skill directories

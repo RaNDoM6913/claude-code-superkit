@@ -41,8 +41,8 @@ npx claude-code-superkit
    - 25 core agents → `.claude/agents/`
    - Up to 4 stack agents → `.claude/agents/`
    - 13 commands → `.claude/commands/`
-   - 15+ hooks → `.claude/scripts/hooks/`
-   - 7 rules → `.claude/rules/`
+   - 13+ hooks → `.claude/scripts/hooks/`
+   - 6 rules → `.claude/rules/`
    - 4 skills → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template

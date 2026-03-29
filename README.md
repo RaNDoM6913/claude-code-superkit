@@ -68,8 +68,8 @@ Don't reinvent — discover and adapt.
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 13 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 15 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, evolve-check, **counts-verify**, format-on-edit, typecheck, context inject, session continuity |
-| **Rules** | 7 | Coding style, security, git workflow, documentation (4-layer enforcement with BLOCKING hook), auto dev workflow, auto command triggers, **superkit-integrity** |
+| **Hooks** | 13 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, evolve-check, format-on-edit, typecheck, context inject, session continuity |
+| **Rules** | 6 | Coding style, security, git workflow, documentation (4-layer enforcement with BLOCKING hook), auto dev workflow, auto command triggers |
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 

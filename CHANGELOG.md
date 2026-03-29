@@ -21,12 +21,11 @@ All notable changes to claude-code-superkit are documented here.
 - **visual-reviewer** scoring — 8 → **10** dimensions (total stays 100pts, weights redistributed)
 - Core agents: 24 → **25** (+evaluator)
 - Codex skills: 41 → **42** (+evaluator)
-- Core hooks: 13 → **15** (+superkit-counts-verify, verify-hooks already existed)
-- Core rules: 6 → **7** (+superkit-integrity)
-
 ### Added (post-audit)
-- **`superkit-integrity.md` rule** — alwaysApply: forces 4-step verification (counts, version sync, phase consistency, stale refs) before every commit. Pre-release audit checklist for `gh release create`
-- **`superkit-counts-verify.sh` hook** — PreToolUse: blocks git commit/push when VERSION != package.json or README counts != actual file counts. Runs only inside the superkit repo
+- **`superkit-integrity.md` rule** — superkit-internal (not installed to user projects): 4-step verification before every commit
+- **`superkit-counts-verify.sh` hook** — superkit-internal: blocks commit/push when VERSION != package.json or counts mismatch
+- **Installer exclude lists** — superkit-internal rules and hooks are excluded from user installations (`copyDir` exclude parameter)
+- **`.claude/settings.json`** for superkit repo — registers superkit-counts-verify.sh locally
 
 ### Fixed (post-audit)
 - **package.json** version 1.3.3 → 1.3.5 (was out of sync with VERSION)

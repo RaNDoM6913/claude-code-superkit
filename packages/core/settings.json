@@ -29,10 +29,6 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/loop-guard.sh"
-          },
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/superkit-counts-verify.sh"
           }
         ]
       }
