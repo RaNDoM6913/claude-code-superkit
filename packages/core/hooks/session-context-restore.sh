@@ -16,6 +16,14 @@ if [ -f "$CONTEXT_FILE" ]; then
     echo "<previous-session-context>"
     cat "$CONTEXT_FILE"
     echo "</previous-session-context>"
+
+    # Inject task state if present in project
+    if [ -f ".claude/.task-state.json" ]; then
+      echo ""
+      echo "<task-state>"
+      cat .claude/.task-state.json
+      echo "</task-state>"
+    fi
   fi
 fi
 

@@ -22,6 +22,9 @@ $(git diff --name-only 2>/dev/null || echo "none")
 
 ## Staged Files
 $(git diff --cached --name-only 2>/dev/null || echo "none")
+
+## Task State
+$(if [ -f ".claude/.task-state.json" ]; then cat .claude/.task-state.json; else echo "no active task"; fi)
 CTXEOF
 
 echo "Context saved to $CONTEXT_FILE" >&2
