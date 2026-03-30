@@ -28,8 +28,14 @@ Before EVERY `git commit`, walk through this table. If the "Trigger" column matc
 | 13 | Bot source files (`*bot*/*.go`) | Bot docs | `docs/architecture/bot-*.md` |
 | 14 | Config files affecting behavior | Deployment docs | `docs/deployment.md` |
 | 15 | Any new file (`git diff --diff-filter=A`) | Project trees | `docs/trees/` (relevant tree file) |
+| 16 | `go.mod` or `package.json` (new dependency added) | README — update Tech Stack section | `README.md`, `README_FULL.md`, `backend/README.md` |
+| 17 | New `internal/` package created | README — update Project Structure | `README.md`, `CLAUDE.md` |
+| 18 | `config.example.yaml` or `.env.example` changed | README — update Configuration section | `README.md`, `backend/README.md` |
+| 19 | New service directory in `services/` | README — update Architecture section | `README.md`, `CLAUDE.md` |
 
 **If ANY row matches, update the Required Doc BEFORE committing.** Multiple rows can match simultaneously. Adapt file paths to your project structure.
+
+**README Rule:** When dependencies, packages, or config shape change — the project README files MUST reflect this. A project where `go.mod` lists samber/oops but README says "errors via fmt.Errorf" is lying to every new developer who reads it.
 
 ## Subagent Instructions
 
@@ -52,7 +58,7 @@ Subagents MUST NOT commit without documentation updates. If a subagent cannot de
 - Test-only changes (`*_test.go`, `*.test.ts`, `*.spec.ts`)
 - Config/env changes (`.env`, `*.yaml`, `*.json` unless it is `openapi.yaml`)
 - Typo fixes in non-doc files
-- Dependency updates (unless they change public API)
+- Dependency patch/minor updates (but NEW dependencies or major upgrades that change tech stack → update README)
 
 ## Enforcement (4 layers)
 

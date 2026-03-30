@@ -60,6 +60,7 @@ NEED_FEED_DOCS=false
 NEED_ENTITLEMENTS_DOCS=false
 NEED_NOTIFICATION_DOCS=false
 NEED_BACKEND_LAYERS=false
+NEED_README=false
 
 # Track which docs ARE staged
 HAS_DB_SCHEMA=false
@@ -78,6 +79,7 @@ HAS_FEED_DOCS=false
 HAS_ENTITLEMENTS_DOCS=false
 HAS_NOTIFICATION_DOCS=false
 HAS_BACKEND_LAYERS=false
+HAS_README=false
 
 # Advisory warnings (non-blocking)
 ADVISORIES=""
@@ -96,6 +98,23 @@ while IFS= read -r file; do
   # ── Exempt file types (don't require docs) ──
   case "$file" in
     *_test.go|*test_*|*.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx)
+      continue ;;
+    # Dependency files — check if NEW deps were added (not just version bumps)
+    go.mod|*/go.mod)
+      if git diff --cached -- "$file" 2>/dev/null | grep -qE '^\+\t[a-z].*v[0-9]' ; then
+        NEED_README=true
+        NEED_CLAUDE_MD=true
+      fi
+      continue ;;
+    package.json|*/package.json)
+      if git diff --cached -- "$file" 2>/dev/null | grep -qE '^\+.*"(dependencies|devDependencies)"' || \
+         git diff --cached -- "$file" 2>/dev/null | grep -qE '^\+\s+"[a-z@].*":' ; then
+        NEED_README=true
+      fi
+      continue ;;
+    # Config examples — README should document config changes
+    *config.example*|*config.sample*|*.env.example)
+      NEED_README=true
       continue ;;
     *.env*|*.json|*.yaml|*.yml|*.toml|*.cfg|*.ini)
       # Exception: openapi.yaml counts as a doc
@@ -122,6 +141,7 @@ while IFS= read -r file; do
     *backend-layers*|*backend_layers*|*backend-arch*) HAS_BACKEND_LAYERS=true; continue ;;
     docs/trees/*) HAS_TREE_DOCS=true; continue ;;
     CLAUDE.md) HAS_CLAUDE_MD=true; continue ;;
+    README*|*/README*) HAS_README=true; continue ;;
     docs/*|*.md|*openapi*|*swagger*) continue ;;
   esac
 
@@ -258,6 +278,10 @@ fi
 
 if [ "$NEED_TREE_DOCS" = true ] && [ "$HAS_TREE_DOCS" = false ]; then
   MISSING="${MISSING}\n  - New files added but docs/trees/ NOT updated"
+fi
+
+if [ "$NEED_README" = true ] && [ "$HAS_README" = false ] && [ "$HAS_CLAUDE_MD" = false ]; then
+  MISSING="${MISSING}\n  - Dependencies or config changed but no README or CLAUDE.md updated (tech stack / project structure)"
 fi
 
 # ── Output result ─────────────────────────────────────────────────────
