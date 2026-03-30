@@ -301,6 +301,16 @@ Install both for the complete experience.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and hooks.
 
+## Ecosystem & Companions
+
+For deep language-specific skills that complement Superkit's orchestration:
+
+| Plugin | Focus | Skills | Install |
+|--------|-------|--------|---------|
+| [cc-skills-golang](https://github.com/samber/cc-skills-golang) | Production-grade Go patterns | 40 skills | `npx skills add https://github.com/samber/cc-skills-golang --skill '*'` |
+
+Superkit provides **workflow orchestration** (hooks, commands, /dev pipeline). Companion plugins provide **deep domain knowledge**. They work together — Superkit dispatches agents that leverage companion skills for language-specific guidance.
+
 ## 📄 License
 
 MIT
