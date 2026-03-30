@@ -9,8 +9,7 @@
       "Bash(rm -rf /)",
       "Bash(rm -rf /*)",
       "Bash(mkfs *)",
-      "Bash(dd if=*)",
-      "Bash(:(){ :|:& };:)"
+      "Bash(dd if=*)"
     ]
   },
   "hooks": {
