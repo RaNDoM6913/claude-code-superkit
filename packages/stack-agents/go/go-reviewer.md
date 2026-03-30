@@ -89,6 +89,14 @@ For each file in the diff:
 10. **Goroutine safety** — shared state protected by mutex? Context-aware goroutines with cancellation?
 11. **Interface design** — interfaces declared at the consumer side? Small interfaces (1-3 methods)?
 12. **Package structure** — no circular imports? Reasonable package boundaries?
+13. **Zero-value safety** — structs usable without explicit init? Exported types have sensible zero values?
+14. **Append aliasing** — `append()` return value always assigned back? No reuse of backing array across goroutines?
+15. **Defer in loops** — no `defer` inside `for` blocks? (accumulates until function exit — wrap in closure or extract)
+16. **Float comparison** — no `==` on floats? Using epsilon-based comparison or `math.Big`?
+17. **Typed nil interface trap** — no returning typed nil pointer as interface? (typed nil in interface ≠ nil)
+18. **MixedCaps naming** — Go names use MixedCaps (not snake_case, not SCREAMING_CASE)? Acronyms capitalized (ID, URL, HTTP)?
+19. **Interface size** — interfaces have ≤ 3 methods? Declared at consumer side, not provider?
+20. **Functional options** — constructors with >3 optional params use functional options pattern? Not config structs with 15 fields?
 
 ## Output Format
 
@@ -110,6 +118,27 @@ For each finding, rate:
   Evidence: <what I see>
   Fix: <suggested change>
 ```
+
+## Audit Mode — Parallel Sub-Agents
+
+When dispatched in **audit mode** for full codebase scan, use up to 5 parallel sub-agents (via the Agent tool):
+
+1. **Layer violations + DI** — scan all handler/service/repo imports for layer breaches
+2. **Error handling + wrapping** — find swallowed errors, missing wrapping, log-and-return (-> See go-error-reviewer for deep audit)
+3. **Naming + code style** — MixedCaps violations, stuttering, package naming
+4. **Safety traps** — nil maps, append aliasing, defer in loops, float comparison, typed nil interface
+5. **Interface design + struct patterns** — oversized interfaces, missing zero-value safety, functional options opportunities
+
+## Cross-References
+
+For deeper analysis in specific areas, dispatch specialized agents:
+- -> See go-error-reviewer for exhaustive error handling audit (15-point checklist)
+- -> See go-concurrency-reviewer for goroutine/channel/mutex/context audit
+- -> See go-performance-reviewer for measurement-first performance review
+- -> See go-modernizer for outdated pattern detection (Go 1.21-1.24+)
+- -> See go-observability-reviewer for logging/metrics/tracing audit
+- -> See security-scanner for Go security checks (injection, crypto, XSS)
+- -> See database-reviewer for Go/pgx database patterns
 
 IMPORTANT: Do NOT inflate severity to seem thorough. A review with 0 CRITICAL
 findings and 2 SUGGESTIONS is perfectly valid. If the code is clean, say so.
