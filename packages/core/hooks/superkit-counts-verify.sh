@@ -40,19 +40,19 @@ if [ "$VERSION_FILE" != "$PKG_VERSION" ]; then
 fi
 
 # ── Check README agent count ────────────────────────────────────────
-README_AGENTS=$(grep -oP 'Core Agents.*?\|\s*\K\d+' README.md 2>/dev/null | head -1)
+README_AGENTS=$(grep 'Core Agents' README.md 2>/dev/null | grep -oE '[0-9]+' | head -1)
 if [ -n "$README_AGENTS" ] && [ "$README_AGENTS" != "$ACTUAL_AGENTS" ]; then
   ERRORS="${ERRORS}\n  - README Core Agents ($README_AGENTS) != actual ($ACTUAL_AGENTS)"
 fi
 
 # ── Check CLAUDE.md agent count ─────────────────────────────────────
-CLAUDE_AGENTS=$(grep -P '^\| Agents \|' CLAUDE.md 2>/dev/null | grep -oP '\|\s*\K\d+' | head -1)
+CLAUDE_AGENTS=$(grep '| Agents |' CLAUDE.md 2>/dev/null | grep -oE '[0-9]+' | head -1)
 if [ -n "$CLAUDE_AGENTS" ] && [ "$CLAUDE_AGENTS" != "$ACTUAL_AGENTS" ]; then
   ERRORS="${ERRORS}\n  - CLAUDE.md Agents ($CLAUDE_AGENTS) != actual ($ACTUAL_AGENTS)"
 fi
 
 # ── Check Codex skill count in README ───────────────────────────────
-README_CODEX=$(grep -oP '\d+ skills \(' README.md 2>/dev/null | grep -oP '^\d+' | head -1)
+README_CODEX=$(grep -oE '[0-9]+ skills \(' README.md 2>/dev/null | grep -oE '^[0-9]+' | head -1)
 if [ -n "$README_CODEX" ] && [ "$README_CODEX" != "$ACTUAL_CODEX" ]; then
   ERRORS="${ERRORS}\n  - README Codex skills ($README_CODEX) != actual ($ACTUAL_CODEX)"
 fi

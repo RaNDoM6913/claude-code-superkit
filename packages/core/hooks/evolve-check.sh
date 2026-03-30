@@ -31,7 +31,7 @@ ISSUES=()
 if [ -f "CLAUDE.md" ]; then
   ACTUAL_MIGRATIONS=$(find . -path "*/migrations/*.up.sql" 2>/dev/null | wc -l | tr -d ' ')
   if [ "$ACTUAL_MIGRATIONS" -gt 0 ]; then
-    CLAIMED=$(grep -oP '000001\.\.\K[0-9]+' CLAUDE.md 2>/dev/null | tr -d '0' | head -1)
+    CLAIMED=$(grep -oE '000001\.\.[0-9]+' CLAUDE.md 2>/dev/null | grep -oE '[0-9]+$' | tr -d '0' | head -1)
     if [ -n "$CLAIMED" ] && [ "$ACTUAL_MIGRATIONS" != "$CLAIMED" ]; then
       ISSUES+=("Migration counter drift (CLAUDE.md: $CLAIMED, actual: $ACTUAL_MIGRATIONS)")
     fi

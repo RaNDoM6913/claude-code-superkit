@@ -38,7 +38,7 @@ packages/
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
-  showcase/                 # Production example (28 agents, 16 commands, 14 hooks, 11 skills, 6 rules)
+  showcase/                 # Production example (28 agents, 17 commands, 14 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
 setup.sh                    # POSIX wrapper → `node bin/cli.js`
@@ -74,7 +74,7 @@ VERSION                     # 1.3.7
 |-----------|------|-------|--------|----------|-------|
 | Agents | 27 | 9 | 3 | 28 | — |
 | Skills | 4 | — | 1 | 11 | 50 |
-| Commands | 14 | — | — | 16 | 9 |
+| Commands | 14 | — | — | 17 | 9 |
 | Hooks | 14 (+2 internal) | 9 | — | 14 | — |
 | Rules | 7 (+1 internal) | 2 | — | 6 | — |
 
