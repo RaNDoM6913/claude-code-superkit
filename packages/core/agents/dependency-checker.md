@@ -88,6 +88,14 @@ pip-audit 2>/dev/null || echo "pip-audit not installed — install with: pip ins
 cargo audit 2>/dev/null || echo "cargo-audit not installed — install with: cargo install cargo-audit"
 ```
 
+### Go Dependency Patterns (expanded)
+
+- **govulncheck** (preferred over `go mod audit`): `govulncheck ./...` — checks actual call graph, not just module list
+- **tools.go pattern:** Dev dependencies in `//go:build tools` file: `import (_ "github.com/golangci/golangci-lint/cmd/golangci-lint")`
+- **go.sum commitment:** Verify `go.sum` is committed — blocks supply chain substitution
+- **Semantic import versioning:** v2+ modules must use `/v2` in import path — flag if `go.mod` has `module path/v2` but imports don't match
+- **Dependabot/Renovate:** Check `.github/dependabot.yml` or `renovate.json` exists with `gomod` ecosystem configured
+
 ### Phase 3: Categorize by Risk
 
 #### CRITICAL — Security vulnerabilities with known exploits

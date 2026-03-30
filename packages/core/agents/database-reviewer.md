@@ -106,6 +106,18 @@ SELECT relname, seq_scan, seq_tup_read, idx_scan FROM pg_stat_user_tables WHERE 
 - Queries without LIMIT on potentially large result sets
 - `ALTER TABLE` without considering table lock implications
 
+## Go/pgx Database Patterns
+
+When reviewing Go database code (pgx, database/sql):
+
+- Use `*Context` methods always: `QueryContext`, `ExecContext`, `QueryRowContext` — never `Query`, `Exec`, `QueryRow`
+- `defer rows.Close()` immediately after `QueryContext` — before any error check on rows
+- `sql.ErrNoRows` / `pgx.ErrNoRows` via `errors.Is(err, sql.ErrNoRows)` — never direct `==`
+- Connection pool tuning: `SetMaxOpenConns()`, `SetMaxIdleConns()`, `SetConnMaxLifetime()` must be configured
+- Transaction isolation: use `sql.TxOptions{Isolation: sql.LevelSerializable}` for critical sections
+- No `SELECT *` — always explicit column list (schema changes break `SELECT *` silently)
+- Batch operations: use `pgx.Batch` or `COPY` for bulk inserts, not loop of single inserts
+
 ## Output Format
 
 For each finding, rate:

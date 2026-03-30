@@ -152,6 +152,17 @@ Before proposing fixes, apply the scientific method to validate your diagnosis:
 > IMPORTANT: This phase is READ-ONLY. Do NOT modify production code during investigation.
 > Treat your own assumptions with extra skepticism — verify before concluding.
 
+## Go-Specific Debugging
+
+When debugging Go services:
+
+- **pprof:** Check if `/debug/pprof/` is exposed. Collect: `go tool pprof http://localhost:6060/debug/pprof/goroutine`
+- **Delve:** Attach to running process: `dlv attach <pid>` or `dlv debug ./cmd/server`
+- **GODEBUG:** Set `GODEBUG=gctrace=1` for GC diagnostics, `GODEBUG=schedtrace=1000` for scheduler
+- **Goroutine dump:** Send `SIGQUIT` to Go process for full goroutine stack dump: `kill -QUIT <pid>`
+- **Race detector:** Reproduce with `go test -race ./...` — detects data races at runtime
+- **Flaky tests:** Run with `-count=100` to reproduce: `go test -count=100 -run TestFlaky ./pkg/...`
+
 ## Circuit Breaker
 
 If debugging loops without progress:

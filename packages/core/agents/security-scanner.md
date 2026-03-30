@@ -209,6 +209,19 @@ Grep all scripts for:
 - `--no-verify` (should be caught by hooks, but verify)
 - `chmod 777` or `chmod a+rwx`
 
+## Go-Specific Security Checks
+
+When reviewing Go code, additionally check:
+
+- **CHECK-GO-1:** `fmt.Sprintf` in SQL — use parameterized queries (`$1`, `?`)
+- **CHECK-GO-2:** `crypto/md5` or `crypto/sha1` for password hashing — use `bcrypt` or `argon2`
+- **CHECK-GO-3:** `exec.Command` / `os.Exec` with user-controlled input — command injection risk
+- **CHECK-GO-4:** `text/template` with user input — use `html/template` for web output (XSS)
+- **CHECK-GO-5:** `net/http` server without `ReadTimeout`/`WriteTimeout` — slowloris vulnerability
+- **CHECK-GO-6:** `http.ListenAndServe` without TLS in production — use `ListenAndServeTLS`
+
+Severity scoring: use DREAD model (Damage, Reproducibility, Exploitability, Affected users, Discoverability) for Go-specific findings.
+
 ## App-Specific Checks
 
 <!-- Add domain-specific security checks here. Examples: -->

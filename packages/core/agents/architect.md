@@ -140,3 +140,16 @@ Apply these when evaluating designs:
 - [Testing strategy]
 - [Documentation updates needed]
 ```
+
+## Go Project Layout
+
+When designing Go project structure:
+
+- **cmd/** — Entry points. One `main.go` per binary: `cmd/server/main.go`, `cmd/worker/main.go`
+- **internal/** — Private packages. Cannot be imported by other modules. Use for business logic
+- **pkg/** — Public packages (optional). Only if genuinely reusable outside this project
+- **Service layout:** `cmd/` -> `internal/app/` (wire) -> `internal/service/` -> `internal/repository/`
+- **Library layout:** Root package is the API. `internal/` for implementation details
+- **CLI layout:** `cmd/mytool/main.go` -> `internal/cli/` (Cobra commands) -> `internal/` (business logic)
+- **Module path:** Match GitHub path: `module github.com/org/repo`
+- **Makefile essentials:** `build`, `test`, `lint`, `run`, `migrate-up`, `migrate-down` targets

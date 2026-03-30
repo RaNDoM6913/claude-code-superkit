@@ -56,6 +56,16 @@ Use **"should [expected behavior] when [condition]"** format:
 - `t.Fatalf` for setup failures, `t.Errorf` for assertion failures
 - Integration tests: `testing.Short()` skip or env var guard
 
+### Go Testing Patterns (expanded)
+
+- **Table-driven tests:** Every test function uses `tests := []struct{ name string; ... }` + `for _, tt := range tests { t.Run(tt.name, func(t *testing.T) { ... }) }`
+- **t.Parallel():** Add to independent subtests for faster execution
+- **Fuzzing:** For parsing/validation functions, add `func FuzzX(f *testing.F) { f.Add(seed); f.Fuzz(func(t *testing.T, input []byte) { ... }) }`
+- **goleak:** Add `func TestMain(m *testing.M) { goleak.VerifyTestMain(m) }` to detect goroutine leaks
+- **Build tags:** Separate integration tests with `//go:build integration` — run with `go test -tags=integration`
+- **synctest (Go 1.24+):** Use `testing/synctest` for deterministic concurrent test execution
+- **httptest:** Use `httptest.NewServer` for handler tests, `httptest.NewRecorder` for unit tests
+
 ### TypeScript/JavaScript
 - Test runner: detect from `package.json` (vitest, jest, mocha)
 - `describe`/`it` blocks with clear descriptions
