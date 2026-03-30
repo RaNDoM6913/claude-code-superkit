@@ -96,7 +96,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
 2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
 3. **CLAUDE.md** (this file) — counts table, structure section
-4. **GitHub About** — `gh repo edit --description` if ANY count changed
+4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (N), commands (N), hooks (N), skills (N), and rules (N) for Claude Code and Codex CLI. All agents on Opus." — THIS IS MANDATORY AND MUST NOT BE SKIPPED
 5. **GitHub Release** — `gh release edit` if release already exists for this version
 
 ### Tier 2 — Update when relevant:
@@ -136,7 +136,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 - [ ] Rule count matches `ls packages/core/rules/*.md | wc -l`
 - [ ] **VERSION matches package.json version** (critical — npm uses package.json)
 - [ ] **Phase count consistent** across dev.md, README, CLAUDE.md, guides, Codex
-- [ ] GitHub description counts match actual (`gh repo view --json description`)
+- [ ] **GitHub About/description** counts match actual — run `gh repo view --json description` and verify ALL numbers. NEVER skip this step
 - [ ] Codex AGENTS.md Available Skills lists are current
 - [ ] Codex INSTALL.md counts match actual
 - [ ] docs/INSTALL-CLAUDE-CODE.md counts match actual
