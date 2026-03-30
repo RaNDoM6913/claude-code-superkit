@@ -39,8 +39,8 @@ npx claude-code-superkit
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
    - 27 core agents → `.claude/agents/`
-   - Up to 4 stack agents → `.claude/agents/`
-   - 13 commands → `.claude/commands/`
+   - Up to 9 stack agents → `.claude/agents/`
+   - 14 commands → `.claude/commands/`
    - 14+ hooks → `.claude/scripts/hooks/`
    - 7 rules → `.claude/rules/`
    - 4 skills → `.claude/skills/`
@@ -48,7 +48,7 @@ npx claude-code-superkit
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
 10. **Validates** — checks JSON, hook permissions, file presence
-11. **Optionally installs for Codex CLI** — copies 44 skills to `.codex/skills/`
+11. **Optionally installs for Codex CLI** — copies 50 skills to `.codex/skills/`
 
 ### Hook Profiles
 

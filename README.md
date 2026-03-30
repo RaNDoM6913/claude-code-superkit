@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/34_agents-Opus_4.6-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Agents](https://img.shields.io/badge/39_agents-Opus_4.6-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -64,26 +64,28 @@ Don't reinvent — discover and adapt.
 | Component | Count | Description |
 |-----------|-------|-------------|
 | **Core Agents** | 27 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, evaluation, AI slop cleanup, critic, visual review, **comment-rot analyzer**, **silent-failure hunter** — all on **Opus** |
-| **Stack Agents** | 4 | Go, TypeScript, Python, Rust specialized reviewers |
+| **Stack Agents** | 9 | Go (6: reviewer, error, concurrency, performance, modernizer, observability), TypeScript, Python, Rust |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
-| **Commands** | 13 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan` |
-| **Hooks** | 14 + 5 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, **security-patterns**, evolve-check, format-on-edit, typecheck, context inject, session continuity |
-| **Rules** | 7 | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, **frontend-aesthetics** (path-scoped) |
+| **Commands** | 14 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark` |
+| **Hooks** | 14 + 9 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, **security-patterns**, evolve-check, format-on-edit, typecheck, context inject, session continuity, **Go error/context/safety/golangci-lint** |
+| **Rules** | 7 + 2 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, **frontend-aesthetics** (path-scoped), **go-conventions**, **go-safety** |
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.6)
+## 🆕 What's New (v1.3.7)
 
-- 🎨 **Frontend Aesthetics rule** — proactive anti-AI-slop (path-scoped for frontend files only)
-- 🛡️ **Security Patterns hook** — real-time detection of eval(), innerHTML, pickle, os.system during editing
-- 🔢 **Confidence Scoring** — code-reviewer calculates 0-100 confidence per finding, threshold >=80
-- 🔍 **Comment Rot Analyzer** — detects stale TODOs, lying comments, dead references
-- 🐛 **Silent Failure Hunter** — finds swallowed errors, empty catches, `_ = err`, `2>/dev/null`
-- 🧠 **Anti-hallucination + Surgical Changes** in coding-style rule
-- 📐 **Path-scoped rules** — security rule loads only for code files
+- 🐹 **5 new Go agents** — go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer
+- 🪝 **4 new Go hooks** — go-error-check-on-edit, go-context-check-on-edit, go-safety-check-on-edit, golangci-lint-on-edit
+- 📏 **2 Go rules** — go-conventions, go-safety (new `packages/stack-rules/` directory)
+- ⚡ **`/benchmark` command** — Go benchmarks with benchstat comparison
+- 📚 **19 reference docs** — Go knowledge documents in `packages/stack-agents/go/references/`
+- 📊 **EVALUATIONS.md** — framework for measuring agent effectiveness
+- 🔧 **Enhanced go-reviewer** — checklist expanded from 12 to 20 points, audit mode, cross-references
+- 🎭 **Operating modes** — all stack reviewers now support Coding/Review/Audit modes with persona framing
+- 🛡️ **Go-aware core agents** — security-scanner, database-reviewer, test-generator, dependency-checker, debug-observer all enhanced with Go patterns
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.6 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.7 history.
 
 ## 🔄 How `/dev` Works
 
@@ -169,6 +171,7 @@ Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex 
 | `/superkit-evolve` | Incremental doc update: detect drift (migrations, trees, missing docs) → fix |
 | `/docs-init` | Scaffold architecture documentation (redirects to `/superkit-init`) |
 | `/security-scan` | Run security scan on .claude/ configs |
+| `/benchmark` | Run Go benchmarks with benchstat comparison |
 
 ## 🔧 Hook Profiles
 
@@ -201,7 +204,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## 🏗️ Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 14 hooks, 11 skills, and 6 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 16 commands, 14 hooks, 11 skills, and 6 rules.
 
 <details>
 <summary>📖 Documentation (12 chapters + 3 examples)</summary>
@@ -241,15 +244,15 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 34 agents | 44 skills (8 commands + 32 agents + 4 stack) |
-| Commands | 13 (slash commands) | 8 (user-invocable skills) |
-| Hooks | 19 + Stop | — (inline rules in AGENTS.md) |
-| Rules | 7 (separate files) | Inline in AGENTS.md |
+| Agents / Skills | 39 agents | 50 skills (8 commands + 32 agents + 10 stack) |
+| Commands | 14 (slash commands) | 8 (user-invocable skills) |
+| Hooks | 23 + Stop | — (inline rules in AGENTS.md) |
+| Rules | 9 (7 core + 2 stack) | Inline in AGENTS.md |
 | Knowledge Skills | 4 + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`npx claude-code-superkit --codex` will install for Codex CLI — copies 44 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`npx claude-code-superkit --codex` will install for Codex CLI — copies 50 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

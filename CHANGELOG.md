@@ -2,6 +2,35 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [1.3.7] — 2026-03-30
+
+### Added
+- **Go Agents:** go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer
+- **Go Hooks:** go-error-check-on-edit, go-context-check-on-edit, go-safety-check-on-edit, golangci-lint-on-edit
+- **Go Rules:** go-conventions, go-safety (new `packages/stack-rules/go/` directory)
+- **Commands:** /benchmark for Go benchmarks with benchstat comparison
+- **Reference Docs:** 19 Go knowledge documents in `packages/stack-agents/go/references/`
+- **EVALUATIONS.md:** Framework for measuring agent effectiveness
+- **Ecosystem:** Recommended cc-skills-golang as companion plugin
+
+### Changed
+- **go-reviewer:** Expanded checklist from 12 to 20 points, added audit mode and cross-references
+- **All stack reviewers:** Added persona framing and operating modes (Coding/Review/Audit)
+- **security-scanner:** Added 6 Go-specific security checks (weak hash, command injection, XSS, timeouts)
+- **security-patterns.sh:** Expanded Go detection (crypto/md5, exec.Command, text/template, http.ListenAndServe)
+- **database-reviewer:** Added Go/pgx patterns (Context methods, pool tuning, ErrNoRows)
+- **test-generator:** Added Go testing patterns (table-driven, fuzzing, goleak, synctest)
+- **dependency-checker:** Added Go patterns (govulncheck, tools.go, semantic versioning)
+- **debug-observer:** Added Go debugging (pprof, Delve, GODEBUG, race detector)
+- **architect:** Added Go project layout (cmd/internal/pkg)
+- Stack agents: 4 → **9** (+5 Go specialists)
+- Stack hooks: 5 → **9** (+4 Go hooks)
+- Stack rules: 0 → **2** (+go-conventions, +go-safety)
+- Core commands: 13 → **14** (+benchmark)
+- Codex skills: 44 → **50** (+6 new Go + benchmark skills)
+
+---
+
 ## [1.3.6] — 2026-03-30
 
 ### Added

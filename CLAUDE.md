@@ -8,7 +8,7 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
-    commands/               # 13 commands
+    commands/               # 14 commands
     hooks/                  # 14 hooks (+2 superkit-internal)
     rules/                  # 7 rules (+1 superkit-internal)
     skills/                 # 4 skills
@@ -16,26 +16,29 @@ packages/
     CLAUDE.md               # Template for users
     docs-templates/         # Architecture doc templates
   stack-agents/             # Language-specific reviewers
-    go/                     # go-reviewer
+    go/                     # go-reviewer + 5 specialized (error, concurrency, performance, modernizer, observability)
+      references/           # 19 Go knowledge documents
     typescript/             # ts-reviewer
     python/                 # py-reviewer
     rust/                   # rs-reviewer
   stack-hooks/              # Language-specific hooks
-    go/                     # format-on-edit, go-vet-on-edit
+    go/                     # format-on-edit, go-vet-on-edit + 4 new (error-check, context-check, safety-check, golangci-lint)
     typescript/             # typecheck-on-edit
     python/                 # ruff-on-edit
     rust/                   # cargo-check-on-edit
+  stack-rules/              # Language-specific rules
+    go/                     # go-conventions, go-safety
   extras/                   # Optional components (require specific setup)
     bot-reviewer.md         # Telegram/Discord/Slack bot review
     design-system-reviewer.md
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 44 skills (converted from agents + commands)
+    skills/                 # 50 skills (converted from agents + commands)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
-  showcase/                 # Production example (28 agents, 17 commands, 14 hooks, 11 skills, 6 rules)
+  showcase/                 # Production example (28 agents, 16 commands, 14 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
 setup.sh                    # POSIX wrapper → `node bin/cli.js`
@@ -62,18 +65,18 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.3.6
+VERSION                     # 1.3.7
 ```
 
 ## Current Counts
 
 | Component | Core | Stack | Extras | Showcase | Codex |
 |-----------|------|-------|--------|----------|-------|
-| Agents | 27 | 4 | 3 | 28 | — |
-| Skills | 4 | — | 1 | 11 | 44 |
-| Commands | 13 | — | — | 16 | 8 |
-| Hooks | 14 (+2 internal) | 5 | — | 14 | — |
-| Rules | 7 (+1 internal) | — | — | 6 | — |
+| Agents | 27 | 9 | 3 | 28 | — |
+| Skills | 4 | — | 1 | 11 | 50 |
+| Commands | 14 | — | — | 16 | 8 |
+| Hooks | 14 (+2 internal) | 9 | — | 14 | — |
+| Rules | 7 (+1 internal) | 2 | — | 6 | — |
 
 ## Conventions
 

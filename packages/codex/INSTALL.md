@@ -120,8 +120,13 @@ These are converted from core + extras agents. They are dispatched automatically
 Copy only the ones matching your stack:
 
 ```bash
-# Go projects
+# Go projects (6 reviewers: general + error, concurrency, performance, modernizer, observability)
 cp -r claude-code-superkit/packages/codex/skills/go-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-error-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-concurrency-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-performance-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-modernizer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-observability-reviewer .codex/skills/
 
 # TypeScript projects
 cp -r claude-code-superkit/packages/codex/skills/ts-reviewer .codex/skills/
@@ -133,11 +138,11 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: up to 44 skills
+### Total: up to 50 skills
 
 - 8 command skills (user-invocable)
 - 32 agent + knowledge skills (auto-dispatched)
-- 4 stack-specific reviewer skills (optional, per language)
+- 10 stack-specific reviewer skills (optional, per language)
 
 ## Model Configuration
 
