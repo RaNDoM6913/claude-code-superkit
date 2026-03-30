@@ -91,13 +91,13 @@ After setup, confirm everything landed correctly:
 # Expected: 27+ core + stack agents
 ls .claude/agents/*.md | wc -l
 
-# Expected: 13 commands
+# Expected: 14 commands
 ls .claude/commands/*.md | wc -l
 
 # Expected: 14+ core + stack hooks
 ls .claude/scripts/hooks/*.sh | wc -l
 
-# Expected: 7 rules
+# Expected: 7+ rules (7 core + stack rules)
 ls .claude/rules/*.md | wc -l
 
 # Expected: 4 skill directories

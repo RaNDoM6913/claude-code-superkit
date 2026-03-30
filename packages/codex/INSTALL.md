@@ -63,7 +63,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 
 ## What Gets Installed
 
-### 8 Command Skills (user-invocable)
+### 9 Command Skills (user-invocable)
 
 | Skill | Description |
 |-------|-------------|
@@ -75,6 +75,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 | `commit-helper` | Conventional commit with secret detection |
 | `new-migration` | Scaffold migration file pair with auto-numbering |
 | `migrate` | Apply or rollback database migrations |
+| `benchmark` | Run Go benchmarks with benchstat comparison |
 
 ### 32 Agent Skills (auto-dispatched by orchestrators)
 
@@ -138,11 +139,11 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: up to 50 skills
+### Total: 50 skills
 
-- 8 command skills (user-invocable)
+- 9 command skills (user-invocable, including benchmark)
 - 32 agent + knowledge skills (auto-dispatched)
-- 10 stack-specific reviewer skills (optional, per language)
+- 9 stack-specific reviewer skills (optional, per language)
 
 ## Model Configuration
 

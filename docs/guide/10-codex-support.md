@@ -64,8 +64,8 @@ cp /path/to/claude-code-superkit/packages/codex/config.toml .codex/config.toml
 Codex uses TOML instead of JSON for configuration:
 
 ```toml
-model = "o3"
-model_reasoning_effort = "high"
+model = "gpt-5.4"
+model_reasoning_effort = "extra_high"
 
 [features]
 multi_agent = true    # Required for orchestrator skills
@@ -110,4 +110,4 @@ Codex scans `~/.agents/skills/` at startup. After installation, verify:
 codex --ask-for-approval never "List all superkit skills you can see"
 ```
 
-You should see 44 skills: 32 agent skills + 8 command skills + 4 stack skills.
+You should see 50 skills: 32 agent skills + 9 command skills + 9 stack skills.

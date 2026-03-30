@@ -9,7 +9,7 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
     commands/               # 14 commands
-    hooks/                  # 14 hooks (+2 superkit-internal)
+    hooks/                  # 14 hooks (+2 superkit-internal) = 16 total
     rules/                  # 7 rules (+1 superkit-internal)
     skills/                 # 4 skills
     settings.json           # Hook wiring
@@ -34,7 +34,7 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 50 skills (converted from agents + commands)
+    skills/                 # 50 skills (9 commands + 32 agents + 9 stack)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
@@ -74,7 +74,7 @@ VERSION                     # 1.3.7
 |-----------|------|-------|--------|----------|-------|
 | Agents | 27 | 9 | 3 | 28 | — |
 | Skills | 4 | — | 1 | 11 | 50 |
-| Commands | 14 | — | — | 16 | 8 |
+| Commands | 14 | — | — | 16 | 9 |
 | Hooks | 14 (+2 internal) | 9 | — | 14 | — |
 | Rules | 7 (+1 internal) | 2 | — | 6 | — |
 
