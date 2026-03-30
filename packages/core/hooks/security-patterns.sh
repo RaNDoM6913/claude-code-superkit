@@ -73,6 +73,24 @@ case "$FILE_PATH" in *.go)
   if grep -qn 'fmt\.Sprintf.*SELECT\|fmt\.Sprintf.*INSERT\|fmt\.Sprintf.*UPDATE\|fmt\.Sprintf.*DELETE' "$FILE_PATH" 2>/dev/null; then
     WARNINGS="${WARNINGS}\n  [SECURITY] $FILE_PATH: fmt.Sprintf in SQL — use parameterized queries"
   fi
+  # Weak hash for passwords
+  if grep -qn 'crypto/md5\|crypto/sha1' "$FILE_PATH" 2>/dev/null; then
+    WARNINGS="${WARNINGS}\n  [SECURITY] $FILE_PATH: weak hash (md5/sha1) — use bcrypt or argon2 for passwords"
+  fi
+  # Command injection
+  if grep -qn 'exec\.Command.*+\|exec\.CommandContext.*+' "$FILE_PATH" 2>/dev/null; then
+    WARNINGS="${WARNINGS}\n  [SECURITY] $FILE_PATH: exec.Command with concatenation — potential command injection"
+  fi
+  # text/template in HTTP context (XSS)
+  if grep -qn '"text/template"' "$FILE_PATH" 2>/dev/null; then
+    if grep -q 'http\.\|Handler\|handler\|router\|chi\.\|gin\.\|echo\.' "$FILE_PATH" 2>/dev/null; then
+      WARNINGS="${WARNINGS}\n  [SECURITY] $FILE_PATH: text/template in HTTP context — use html/template for XSS safety"
+    fi
+  fi
+  # HTTP server without timeouts
+  if grep -qn 'http\.ListenAndServe\b' "$FILE_PATH" 2>/dev/null; then
+    WARNINGS="${WARNINGS}\n  [SECURITY] $FILE_PATH: http.ListenAndServe without explicit timeouts — slowloris risk. Use http.Server{ReadTimeout, WriteTimeout}"
+  fi
   ;;
 esac
 
