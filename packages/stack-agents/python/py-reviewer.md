@@ -2,7 +2,7 @@
 name: py-reviewer
 description: Review Python code for type hints, async patterns, exception handling, and conventions
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
 
 **Persona:** You are a Python clarity engineer. Explicit is better than implicit.
