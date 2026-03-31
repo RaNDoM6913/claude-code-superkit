@@ -56,4 +56,10 @@ fi
 CTX="${CTX}\n</git_context>"
 
 # Output as additionalContext via JSON
-printf '{"hookSpecificOutput":{"additionalContext":"%s"}}' "$(echo -e "$CTX" | sed 's/"/\\"/g' | tr '\n' ' ')"
+RENDERED=$(echo -e "$CTX" | tr '\n' ' ')
+if command -v python3 >/dev/null 2>&1; then
+  python3 -c "import json,sys; print(json.dumps({'hookSpecificOutput':{'additionalContext':sys.argv[1]}}))" "$RENDERED"
+else
+  ESCAPED=$(echo "$RENDERED" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
+  printf '{"hookSpecificOutput":{"additionalContext":"%s"}}' "$ESCAPED"
+fi
