@@ -21,9 +21,6 @@ User prompt
 [SessionStart hooks] -----> session-context-restore.sh (load prior state)
     |
     v
-[UserPromptSubmit hooks] -> user-prompt-context.sh (inject git context)
-    |
-    v
 Claude reads prompt + rules + CLAUDE.md
     |
     v
@@ -87,7 +84,6 @@ Claude continues or finishes
     typecheck-on-edit.sh      # PostToolUse: tsc --noEmit after TS edits
     format-on-edit.sh         # PostToolUse: gofmt after Go edits
     migration-safety.sh       # PostToolUse: validates migration naming
-    user-prompt-context.sh    # UserPromptSubmit: injects git state
     pre-compact-save.sh       # PreCompact: saves context before compaction
     session-context-restore.sh # SessionStart: restores saved context
     bundle-import-check.sh    # PostToolUse: warns on missing deps
@@ -149,7 +145,6 @@ Need to enforce something automatically?
   |
   |-- Yes, block dangerous actions ---------> Hook (PreToolUse, exit 2)
   |-- Yes, warn on bad patterns ------------> Hook (PostToolUse, stderr)
-  |-- Yes, inject context every time -------> Hook (UserPromptSubmit)
   |
   `-- No, it's advisory?
         |

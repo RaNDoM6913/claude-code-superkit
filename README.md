@@ -68,7 +68,7 @@ Don't reinvent — discover and adapt.
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 14 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark` |
-| **Hooks** | 14 + 9 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, **security-patterns**, evolve-check, format-on-edit, typecheck, context inject, session continuity, **Go error/context/safety/golangci-lint** |
+| **Hooks** | 13 + 9 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, **security-patterns**, evolve-check, format-on-edit, typecheck, session continuity, **Go error/context/safety/golangci-lint** |
 | **Rules** | 7 + 2 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, **frontend-aesthetics** (path-scoped), **go-conventions**, **go-safety** |
 | **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
@@ -204,7 +204,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## 🏗️ Showcase
 
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 14 hooks, 11 skills, and 6 rules.
+See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 13 hooks, 11 skills, and 6 rules.
 
 <details>
 <summary>📖 Documentation (12 chapters + 3 examples)</summary>

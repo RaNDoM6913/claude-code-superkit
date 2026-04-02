@@ -155,7 +155,7 @@ Current: `000001..000048` (key: 000025_user_settings, 000026_entitlements, 00002
 
 ## Claude Code Hooks & Agents
 
-### Hooks (11)
+### Hooks (10)
 | Hook | Event | Profile | Description |
 |------|-------|---------|-------------|
 | block-dangerous-git | PreToolUse(Bash) | fast,standard,strict | Blocks --no-verify, --force, reset --hard, branch -D |
@@ -165,7 +165,6 @@ Current: `000001..000048` (key: 000025_user_settings, 000026_entitlements, 00002
 | format-on-edit | PostToolUse(Edit/Write) | standard,strict | gofmt -w after .go edits |
 | migration-safety | PostToolUse(Edit/Write) | standard,strict | Validates SQL migration naming, matching down.sql, non-empty content |
 | bundle-import-check | PostToolUse(Edit/Write) | standard,strict | Warns when new imports reference packages not in package.json |
-| user-prompt-context | UserPromptSubmit | standard,strict | Auto-injects git context into every prompt |
 | stop-verification | Stop | standard,strict | Auto-verifies compile + docs before session end |
 | pre-compact-save | PreCompact | fast,standard,strict | Saves context before compaction |
 | session-context-restore | SessionStart | fast,standard,strict | Restores context on new session |

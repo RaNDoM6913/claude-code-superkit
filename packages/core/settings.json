@@ -63,17 +63,6 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/user-prompt-context.sh"
-          }
-        ]
-      }
-    ],
     "PreCompact": [
       {
         "matcher": "",

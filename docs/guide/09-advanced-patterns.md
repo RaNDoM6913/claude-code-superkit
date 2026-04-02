@@ -17,7 +17,6 @@ fi
 |------|------|----------|--------|
 | block-dangerous-git (PreToolUse) | yes | yes | yes |
 | console-log-warning (PostToolUse) | yes | yes | yes |
-| user-prompt-context (UserPromptSubmit) | -- | yes | yes |
 | migration-safety (PostToolUse) | -- | yes | yes |
 | bundle-import-check (PostToolUse) | -- | yes | yes |
 | format-on-edit / gofmt (PostToolUse) | -- | yes | yes |

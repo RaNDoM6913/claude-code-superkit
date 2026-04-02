@@ -2,6 +2,11 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [Unreleased]
+
+### Removed
+- **`user-prompt-context.sh`** — removed UserPromptSubmit hook that duplicated built-in git status, caused timeout errors on every prompt, and whose agent hints are already covered by rules (auto-commands.md, dev-workflow.md)
+
 ## [1.3.7] — 2026-03-30
 
 ### Added

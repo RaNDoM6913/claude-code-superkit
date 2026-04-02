@@ -9,7 +9,7 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
     commands/               # 14 commands
-    hooks/                  # 14 hooks (+2 superkit-internal) = 16 total
+    hooks/                  # 13 hooks (+2 superkit-internal) = 15 total
     rules/                  # 7 rules (+1 superkit-internal)
     skills/                 # 4 skills
     settings.json           # Hook wiring
@@ -75,7 +75,7 @@ VERSION                     # 1.3.7
 | Agents | 27 | 9 | 3 | 28 | — |
 | Skills | 4 | — | 1 | 11 | 50 |
 | Commands | 14 | — | — | 17 | 9 |
-| Hooks | 14 (+2 internal) | 9 | — | 14 | — |
+| Hooks | 13 (+2 internal) | 9 | — | 13 | — |
 | Rules | 7 (+1 internal) | 2 | — | 6 | — |
 
 ## Conventions
