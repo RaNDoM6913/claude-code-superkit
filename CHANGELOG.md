@@ -4,27 +4,17 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-### Added
-- **`/pair` command** — AI pair programming with 5 modes: Driver (Claude codes, user steers), Navigator (user codes, Claude reviews), TDD Ping-Pong (alternating test/impl), Review (interactive dialogue review), Debug (collaborative tracing). Session management with switch/pause/resume
-- **`statusline.cjs` helper** — Claude Code status bar showing hook profile, detected stacks, git branch/status, migration count, agent/hook counts, superkit version, active task. Pure Node.js, no deps, 2s timeout
-- **`writing-hooks` skill** — comprehensive guide for writing Claude Code hooks: lifecycle events (PreToolUse, PostToolUse, PreCompact, SessionStart, Stop), exit codes, profile system, input parsing patterns, best practices, naming conventions, testing methods
-- **Pseudocode phase (Phase 1.7)** in `/dev` — for complex tasks, draft language-agnostic pseudocode before the full plan to validate core algorithm/logic. Bridges Architect and Plan phases
-- **Enhanced context persistence** — pre-compact-save now captures architectural decisions, active plans, review findings, discovered issues (not just git state). session-context-restore now injects active plans, discovered issues, and last review findings
-- **`packages/core/helpers/`** — new directory for runtime helper scripts (statusline, future helpers)
+_No unreleased changes._
 
-### Changed
-- Core commands: 14 → **15** (+pair)
-- Core skills: 4 → **5** (+writing-hooks)
-- `/dev` orchestrator: 14 phases → **15 phases** (+pseudocode for complex tasks)
-- `settings.json`: added `statusLine` configuration
-- `installer.js`: copies statusline helper, updated skill count display
-
-### Removed
-- **`user-prompt-context.sh`** — removed UserPromptSubmit hook that duplicated built-in git status, caused timeout errors on every prompt, and whose agent hints are already covered by rules (auto-commands.md, dev-workflow.md)
-
-## [1.3.7] — 2026-03-30
+## [1.3.7] — 2026-04-07
 
 ### Added
+- **`/pair` command** — AI pair programming with 5 modes: Driver, Navigator, TDD Ping-Pong, Review, Debug. Session management with switch/pause/resume
+- **`statusline.cjs` helper** — Claude Code status bar showing hook profile, stacks, git, migrations, counts. Pure Node.js, no deps
+- **`writing-hooks` skill** — comprehensive hook authoring guide: lifecycle events, exit codes, profiles, best practices
+- **Pseudocode phase (Phase 1.7)** in `/dev` — validate core algorithm before plan (complex tasks only)
+- **Enhanced context persistence** — pre-compact-save captures arch decisions, plans, review findings, issues. session-context-restore injects them
+- **`packages/core/helpers/`** — new directory for runtime helper scripts
 - **Go Agents:** go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer
 - **Go Hooks:** go-error-check-on-edit, go-context-check-on-edit, go-safety-check-on-edit, golangci-lint-on-edit
 - **Go Rules:** go-conventions, go-safety (new `packages/stack-rules/go/` directory)
@@ -32,22 +22,35 @@ All notable changes to claude-code-superkit are documented here.
 - **Reference Docs:** 19 Go knowledge documents in `packages/stack-agents/go/references/`
 - **EVALUATIONS.md:** Framework for measuring agent effectiveness
 - **Ecosystem:** Recommended cc-skills-golang as companion plugin
+- **All stack reviewers:** Added `AskUserQuestion` to allowed-tools
+- **`superkit-counts-verify.sh`** — rewritten with 15+ comprehensive checks
+- **`doc-check-on-commit.sh`** — detects new dependencies, blocks commit without README/CLAUDE.md
 
 ### Changed
-- **go-reviewer:** Expanded checklist from 12 to 20 points, added audit mode and cross-references
-- **All stack reviewers:** Added persona framing and operating modes (Coding/Review/Audit)
-- **security-scanner:** Added 6 Go-specific security checks (weak hash, command injection, XSS, timeouts)
-- **security-patterns.sh:** Expanded Go detection (crypto/md5, exec.Command, text/template, http.ListenAndServe)
-- **database-reviewer:** Added Go/pgx patterns (Context methods, pool tuning, ErrNoRows)
-- **test-generator:** Added Go testing patterns (table-driven, fuzzing, goleak, synctest)
-- **dependency-checker:** Added Go patterns (govulncheck, tools.go, semantic versioning)
-- **debug-observer:** Added Go debugging (pprof, Delve, GODEBUG, race detector)
-- **architect:** Added Go project layout (cmd/internal/pkg)
+- **go-reviewer:** Expanded checklist from 12 to 20 points, audit mode, cross-references
+- **All stack reviewers:** Persona framing and operating modes (Coding/Review/Audit)
+- **security-scanner:** 6 Go-specific security checks
+- **security-patterns.sh:** Expanded Go detection
+- **database-reviewer, test-generator, dependency-checker, debug-observer, architect:** Go patterns
+- `/dev` orchestrator: 14 → **15 phases** (+pseudocode)
+- Core commands: 13 → **15** (+benchmark, +pair)
+- Core skills: 4 → **5** (+writing-hooks)
 - Stack agents: 4 → **9** (+5 Go specialists)
 - Stack hooks: 5 → **9** (+4 Go hooks)
 - Stack rules: 0 → **2** (+go-conventions, +go-safety)
-- Core commands: 13 → **14** (+benchmark)
 - Codex skills: 44 → **50** (+6 new Go + benchmark skills)
+- `settings.json`: added `statusLine` configuration
+- `installer.js`: copies statusline helper, updated skill count display
+
+### Fixed
+- **`bin/cli.js`** — version was hardcoded as '1.3.3', now reads from package.json dynamically
+- **`settings.json`** — removed fork bomb deny rule that broke JSON parsing
+- **`superkit-counts-verify.sh`, `evolve-check.sh`** — replaced `grep -P` (macOS incompatible) with POSIX `grep -oE`
+- **`format-on-edit.sh`** — renamed to `go-format-on-edit.sh` to prevent overwriting core hook
+- **Showcase counts** — fixed various stale count references
+
+### Removed
+- **`user-prompt-context.sh`** — removed UserPromptSubmit hook that duplicated built-in git status, caused timeout errors
 
 ---
 

@@ -100,7 +100,7 @@ ls .claude/scripts/hooks/*.sh | wc -l
 # Expected: 7+ rules (7 core + stack rules)
 ls .claude/rules/*.md | wc -l
 
-# Expected: 4 skill directories
+# Expected: 5 skill directories
 ls .claude/skills/*/SKILL.md | wc -l
 
 # settings.json exists with hook wiring + plugins

@@ -174,7 +174,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `benchmark` | Run Go benchmarks with benchstat comparison |
 
 **Agent skills (auto-dispatched by orchestrators):**
-ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-bots, audit-frontend, audit-infra, audit-security, code-reviewer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, docs-reviewer, e2e-test-generator, evaluator, go-concurrency-reviewer, go-error-reviewer, go-modernizer, go-observability-reviewer, go-performance-reviewer, goal-verifier, health-checker, plan-checker, pre-deploy-validator, project-architecture, red-blue-auditor, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, visual-reviewer, writing-agents, writing-commands, writing-hooks
+ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-bots, audit-frontend, audit-infra, audit-security, code-reviewer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, docs-reviewer, e2e-test-generator, evaluator, go-concurrency-reviewer, go-error-reviewer, go-modernizer, go-observability-reviewer, go-performance-reviewer, goal-verifier, health-checker, plan-checker, pre-deploy-validator, project-architecture, red-blue-auditor, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, visual-reviewer, writing-agents, writing-commands
 
 **Stack-specific reviewers (optional):**
 go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer
