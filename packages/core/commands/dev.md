@@ -82,6 +82,49 @@ Propose 2-3 approaches with trade-offs.
 
 Use the architect's recommendation to inform Phase 2 plan.
 
+## Phase 1.7 — Pseudocode (complex tasks only)
+
+**Only for complex tasks (5+ files, new subsystems, non-trivial algorithms).**
+
+Before writing the full plan, draft pseudocode for the core algorithm or data flow. This validates the logical approach before committing to file paths and implementation details.
+
+### Process
+
+1. Identify the **core logic** that makes this task complex (e.g., the algorithm, state machine, data pipeline, coordination logic)
+2. Write pseudocode that covers:
+   - Input/output contract
+   - Main control flow (loops, conditions, branching)
+   - Error paths and edge cases
+   - Data transformations
+3. Present to user: "Here's the pseudocode for [core logic]. Does this match your expectations?"
+
+### Format
+
+```
+FUNCTION processTask(input):
+  VALIDATE input is not empty
+  
+  FOR EACH item IN input:
+    result = transform(item)
+    IF result.error:
+      COLLECT error, CONTINUE
+    STORE result
+  
+  IF errors > threshold:
+    ROLLBACK all stored results
+    RETURN failure(errors)
+  
+  RETURN success(results)
+```
+
+### Rules
+- Keep pseudocode **language-agnostic** — no framework-specific syntax
+- Focus on **logic**, not implementation details (no file paths, no imports)
+- Maximum 30-50 lines — if longer, the task may need decomposition
+- After user approval, use this pseudocode as the skeleton for Phase 2 plan
+
+**Skip for simple/standard tasks.**
+
 ## Phase 2 — Plan
 
 Produce a structured plan before writing any code. Output as a checklist, organized by component. Include only the relevant sections:

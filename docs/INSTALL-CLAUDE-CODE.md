@@ -39,10 +39,10 @@ npx claude-code-superkit
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
    - 27 core agents + up to 9 stack agents → `.claude/agents/`
-   - 14 commands → `.claude/commands/`
+   - 15 commands → `.claude/commands/`
    - 14+ hooks + up to 9 stack hooks → `.claude/scripts/hooks/`
    - 7 rules + up to 2 stack rules → `.claude/rules/`
-   - 4 skills → `.claude/skills/`
+   - 5 skills → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree

@@ -4,6 +4,21 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+### Added
+- **`/pair` command** — AI pair programming with 5 modes: Driver (Claude codes, user steers), Navigator (user codes, Claude reviews), TDD Ping-Pong (alternating test/impl), Review (interactive dialogue review), Debug (collaborative tracing). Session management with switch/pause/resume
+- **`statusline.cjs` helper** — Claude Code status bar showing hook profile, detected stacks, git branch/status, migration count, agent/hook counts, superkit version, active task. Pure Node.js, no deps, 2s timeout
+- **`writing-hooks` skill** — comprehensive guide for writing Claude Code hooks: lifecycle events (PreToolUse, PostToolUse, PreCompact, SessionStart, Stop), exit codes, profile system, input parsing patterns, best practices, naming conventions, testing methods
+- **Pseudocode phase (Phase 1.7)** in `/dev` — for complex tasks, draft language-agnostic pseudocode before the full plan to validate core algorithm/logic. Bridges Architect and Plan phases
+- **Enhanced context persistence** — pre-compact-save now captures architectural decisions, active plans, review findings, discovered issues (not just git state). session-context-restore now injects active plans, discovered issues, and last review findings
+- **`packages/core/helpers/`** — new directory for runtime helper scripts (statusline, future helpers)
+
+### Changed
+- Core commands: 14 → **15** (+pair)
+- Core skills: 4 → **5** (+writing-hooks)
+- `/dev` orchestrator: 14 phases → **15 phases** (+pseudocode for complex tasks)
+- `settings.json`: added `statusLine` configuration
+- `installer.js`: copies statusline helper, updated skill count display
+
 ### Removed
 - **`user-prompt-context.sh`** — removed UserPromptSubmit hook that duplicated built-in git status, caused timeout errors on every prompt, and whose agent hints are already covered by rules (auto-commands.md, dev-workflow.md)
 

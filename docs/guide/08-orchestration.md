@@ -2,7 +2,7 @@
 
 Orchestration is where the superkit's components work together. Commands dispatch agents in parallel, collect results, and produce unified reports. This chapter explains how the three main orchestrators -- `/dev`, `/review`, and `/audit` -- work internally.
 
-## The /dev Pipeline: 14 Phases
+## The /dev Pipeline: 15 Phases
 
 `/dev <task>` is the full development orchestrator. It triggers **automatically** for all code-changing tasks (always-on via `dev-workflow.md` rule). Phase 1 complexity assessment (5 factors: file count, line changes, novelty, risk, ambiguity) determines which phases to skip.
 
@@ -12,6 +12,8 @@ Phase 0: Read Docs      Read architecture docs relevant to task scope
 Phase 1: Understand     Detect stack, parse task, assess complexity (5 factors), search patterns
                         |
 Phase 1.5: Architect    [Complex only] Dispatch architect for 2-3 approaches
+                        |
+Phase 1.7: Pseudocode   [Complex only] Draft pseudocode for core algorithm before full plan
                         |
 Phase 2: Plan           Output structured checklist (DB, backend, frontend, docs)
                         |

@@ -163,7 +163,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | 14-phase development cycle: understand, architect, plan, contract, validate, implement, evaluate, verify, test, verify-goals, review, critic, document, report |
+| `dev-orchestrator` | 15-phase development cycle: understand, architect, pseudocode, plan, contract, validate, implement, evaluate, verify, test, verify-goals, review, critic, document, report |
 | `review-orchestrator` | Detect changes, dispatch reviewer agents, collect and deduplicate findings |
 | `audit-orchestrator` | Parallel audit: frontend, backend, infra, security |
 | `test-runner` | Auto-detect and run project tests (Go, TS, Python, Rust) |
@@ -174,7 +174,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `benchmark` | Run Go benchmarks with benchstat comparison |
 
 **Agent skills (auto-dispatched by orchestrators):**
-ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-bots, audit-frontend, audit-infra, audit-security, code-reviewer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, docs-reviewer, e2e-test-generator, evaluator, go-concurrency-reviewer, go-error-reviewer, go-modernizer, go-observability-reviewer, go-performance-reviewer, goal-verifier, health-checker, plan-checker, pre-deploy-validator, project-architecture, red-blue-auditor, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, visual-reviewer, writing-agents, writing-commands
+ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-bots, audit-frontend, audit-infra, audit-security, code-reviewer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, docs-reviewer, e2e-test-generator, evaluator, go-concurrency-reviewer, go-error-reviewer, go-modernizer, go-observability-reviewer, go-performance-reviewer, goal-verifier, health-checker, plan-checker, pre-deploy-validator, project-architecture, red-blue-auditor, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, visual-reviewer, writing-agents, writing-commands, writing-hooks
 
 **Stack-specific reviewers (optional):**
 go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer

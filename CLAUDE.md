@@ -8,11 +8,12 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
-    commands/               # 14 commands
+    commands/               # 15 commands
     hooks/                  # 13 hooks (+2 superkit-internal) = 15 total
+    helpers/                # 1 helper (statusline.cjs)
     rules/                  # 7 rules (+1 superkit-internal)
-    skills/                 # 4 skills
-    settings.json           # Hook wiring
+    skills/                 # 5 skills
+    settings.json           # Hook wiring + statusLine
     CLAUDE.md               # Template for users
     docs-templates/         # Architecture doc templates
   stack-agents/             # Language-specific reviewers
@@ -73,9 +74,10 @@ VERSION                     # 1.3.7
 | Component | Core | Stack | Extras | Showcase | Codex |
 |-----------|------|-------|--------|----------|-------|
 | Agents | 27 | 9 | 3 | 28 | — |
-| Skills | 4 | — | 1 | 11 | 50 |
-| Commands | 14 | — | — | 17 | 9 |
+| Skills | 5 | — | 1 | 11 | 50 |
+| Commands | 15 | — | — | 17 | 9 |
 | Hooks | 13 (+2 internal) | 9 | — | 13 | — |
+| Helpers | 1 | — | — | — | — |
 | Rules | 7 (+1 internal) | 2 | — | 6 | — |
 
 ## Conventions
@@ -157,7 +159,7 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `lib/settings-builder.js` | JSON assembly — replaces jq dependency |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
-| `packages/core/commands/dev.md` | 14-phase always-on dev orchestrator with sprint contract + evaluator + plan-checker + goal-verifier + critic gates |
+| `packages/core/commands/dev.md` | 15-phase always-on dev orchestrator with pseudocode + sprint contract + evaluator + plan-checker + goal-verifier + critic gates |
 | `packages/core/commands/superkit-init.md` | Intelligent project setup — scan, generate docs, configure rules |
 | `packages/core/commands/superkit-evolve.md` | Incremental documentation drift detection and fix |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |

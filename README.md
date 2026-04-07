@@ -67,10 +67,10 @@ Don't reinvent — discover and adapt.
 | **Stack Agents** | 9 | Go (6: reviewer, error, concurrency, performance, modernizer, observability), TypeScript, Python, Rust |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
-| **Commands** | 14 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark` |
+| **Commands** | 15 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, **`/pair`** |
 | **Hooks** | 13 + 9 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, **security-patterns**, evolve-check, format-on-edit, typecheck, session continuity, **Go error/context/safety/golangci-lint** |
 | **Rules** | 7 + 2 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, **frontend-aesthetics** (path-scoped), **go-conventions**, **go-safety** |
-| **Skills** | 4 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide + SkillsMP search |
+| **Skills** | 5 + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, **writing-hooks guide** + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
 ## 🆕 What's New (v1.3.7)
@@ -93,9 +93,9 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.7 history.
 graph LR
     P -->|" "| E -->|" "| Q
 
-    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Plan<br/>4 · Contract<br/>5 · Validate"]
-    E["⚡ <b>Execution</b><br/><br/>6 · Implement<br/>7 · Evaluate<br/>8 · Verify<br/>9 · Test<br/>10 · Goals"]
-    Q["🔍 <b>Quality</b><br/><br/>11 · Review ×4<br/>12 · Critic<br/>13 · Docs<br/>14 · Report"]
+    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Pseudocode<br/>4 · Plan<br/>5 · Contract<br/>6 · Validate"]
+    E["⚡ <b>Execution</b><br/><br/>7 · Implement<br/>8 · Evaluate<br/>9 · Verify<br/>10 · Test<br/>11 · Goals"]
+    Q["🔍 <b>Quality</b><br/><br/>12 · Review ×4<br/>13 · Critic<br/>14 · Docs<br/>15 · Report"]
 
     style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
     style E fill:#fff3e0,stroke:#F57C00,stroke-width:2px,color:#333

@@ -107,6 +107,7 @@
       }
     ]
   },
+  "statusLine": "node \"$CLAUDE_PROJECT_DIR\"/.claude/scripts/statusline.cjs",
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
     "github@claude-plugins-official": true,

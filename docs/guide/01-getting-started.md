@@ -80,7 +80,7 @@ Launch Claude Code in your project and try these:
 | `/audit` | Runs up to 4 audit agents in parallel (frontend, backend, infra, security) |
 | `/test` | Auto-detects your test runner and executes tests |
 | `/superkit-init` | Scan codebase → generate filled docs → configure rules with real paths |
-| `/dev <task>` | Full 14-phase orchestrator: understand, plan, contract, implement, evaluate, verify, test, goals, review, critic, document, report |
+| `/dev <task>` | Full 15-phase orchestrator: understand, architect, pseudocode, plan, contract, validate, implement, evaluate, verify, test, goals, review, critic, document, report |
 | `/commit` | Analyzes changes, scans for secrets, creates a conventional commit |
 
 ## Verify Installation
@@ -91,7 +91,7 @@ After setup, confirm everything landed correctly:
 # Expected: 27+ core + stack agents
 ls .claude/agents/*.md | wc -l
 
-# Expected: 14 commands
+# Expected: 15 commands
 ls .claude/commands/*.md | wc -l
 
 # Expected: 14+ core + stack hooks
