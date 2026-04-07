@@ -155,17 +155,20 @@ Current: `000001..000048` (key: 000025_user_settings, 000026_entitlements, 00002
 
 ## Claude Code Hooks & Agents
 
-### Hooks (10)
+### Hooks (13)
 | Hook | Event | Profile | Description |
 |------|-------|---------|-------------|
 | block-dangerous-git | PreToolUse(Bash) | fast,standard,strict | Blocks --no-verify, --force, reset --hard, branch -D |
+| doc-check-on-commit | PreToolUse(Bash) | standard,strict | Blocks commits when code changes lack required doc updates |
+| loop-guard | PreToolUse(Bash) | standard,strict | Detects and blocks repeated identical tool calls |
 | typecheck-on-edit | PostToolUse(Edit/Write) | standard,strict | tsc --noEmit with SHA256 hash-cache after .ts/.tsx edits |
 | go-vet-on-edit | PostToolUse(Edit/Write) | strict only | go vet after .go edits |
 | console-log-warning | PostToolUse(Edit/Write) | fast,standard,strict | Warns on console.log in .ts/.tsx |
 | format-on-edit | PostToolUse(Edit/Write) | standard,strict | gofmt -w after .go edits |
 | migration-safety | PostToolUse(Edit/Write) | standard,strict | Validates SQL migration naming, matching down.sql, non-empty content |
 | bundle-import-check | PostToolUse(Edit/Write) | standard,strict | Warns when new imports reference packages not in package.json |
-| stop-verification | Stop | standard,strict | Auto-verifies compile + docs before session end |
+| config-protection | PostToolUse(Edit/Write) | standard,strict | Warns on linter/formatter/env config changes |
+| context-monitor | PostToolUse(Edit/Write) | standard,strict | Warns at 75% and 90% context window usage |
 | pre-compact-save | PreCompact | fast,standard,strict | Saves context before compaction |
 | session-context-restore | SessionStart | fast,standard,strict | Restores context on new session |
 
