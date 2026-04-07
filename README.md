@@ -75,17 +75,17 @@ Don't reinvent — discover and adapt.
 
 ## 🆕 What's New (v1.3.7)
 
-- **`/pair` command** — AI pair programming with 5 modes: Driver, Navigator, TDD Ping-Pong, Review, Debug
-- **Statusline** — Claude Code status bar showing profile, stacks, git branch, migrations, counts
-- **`writing-hooks` skill** — comprehensive hook authoring guide: lifecycle events, exit codes, profiles
-- **Pseudocode phase** — Phase 1.7 in `/dev` validates core algorithm before plan (complex tasks only)
-- **Enhanced context persistence** — saves/restores arch decisions, plans, review findings across compactions
-- **5 new Go agents** — go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer
-- **4 new Go hooks** — go-error-check, go-context-check, go-safety-check, golangci-lint-on-edit
-- **2 Go rules** — go-conventions, go-safety (new `packages/stack-rules/` directory)
-- **`/benchmark` command** — Go benchmarks with benchstat comparison
-- **19 reference docs** — Go knowledge documents in `packages/stack-agents/go/references/`
-- **Enhanced go-reviewer** — 20-point checklist, audit mode, Coding/Review/Audit operating modes
+- 🤝 **`/pair` command** — AI pair programming with 5 modes: Driver, Navigator, TDD Ping-Pong, Review, Debug
+- 📊 **Statusline** — Claude Code status bar showing profile, stacks, git branch, migrations, counts
+- 🪝 **`writing-hooks` skill** — comprehensive hook authoring guide: lifecycle events, exit codes, profiles
+- 📝 **Pseudocode phase** — Phase 1.7 in `/dev` validates core algorithm before plan (complex tasks only)
+- 💾 **Enhanced context persistence** — saves/restores arch decisions, plans, review findings across compactions
+- 🐹 **5 new Go agents** — go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer
+- 🪝 **4 new Go hooks** — go-error-check, go-context-check, go-safety-check, golangci-lint-on-edit
+- 📏 **2 Go rules** — go-conventions, go-safety (new `packages/stack-rules/` directory)
+- ⚡ **`/benchmark` command** — Go benchmarks with benchstat comparison
+- 📚 **19 reference docs** — Go knowledge documents in `packages/stack-agents/go/references/`
+- 🔧 **Enhanced go-reviewer** — 20-point checklist, audit mode, Coding/Review/Audit operating modes
 
 See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.7 history.
 
