@@ -94,7 +94,7 @@ ls .claude/agents/*.md | wc -l
 # Expected: 15 commands
 ls .claude/commands/*.md | wc -l
 
-# Expected: 14+ core + stack hooks
+# Expected: 13+ core + stack hooks
 ls .claude/scripts/hooks/*.sh | wc -l
 
 # Expected: 7+ rules (7 core + stack rules)
