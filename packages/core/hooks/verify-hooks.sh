@@ -2,7 +2,7 @@
 # verify-hooks.sh — Check that hook scripts are tracked in git and executable
 # Run: bash .claude/scripts/hooks/verify-hooks.sh
 
-set -euo pipefail
+# Note: no set -e — hooks must fail-open
 
 HOOKS_DIR=".claude/scripts/hooks"
 ISSUES=0
@@ -65,3 +65,5 @@ else
   echo "Found $ISSUES issue(s). Fix them to ensure enforcement works for all team members."
   exit 1
 fi
+
+exit 0
