@@ -6,6 +6,10 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Go Benchmark Runner
 
+## Arguments
+
+$ARGUMENTS
+
 ## Step 1: Detect Project
 
 1. Find `go.mod` — if not found, report "No Go project detected" and stop
