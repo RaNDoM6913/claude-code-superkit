@@ -157,7 +157,7 @@ Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex 
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 14-phase orchestrator: understand → architect → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
+| `/dev <task>` | 15-phase orchestrator: understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
 | `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
