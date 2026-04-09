@@ -206,6 +206,108 @@ Or use the built-in command: `/security-scan`
 
 CI integration included — see `.github/workflows/security.yml`.
 
+## 🎨 Frontend & 3D Development
+
+Self-contained package for quality frontend, 3D, and animation development. Built from 12+ hours of battle-tested experience building scroll-driven 3D product showcases with GSAP ScrollTrigger, React Three Fiber, and Three.js.
+
+```bash
+npx claude-code-superkit
+# Select "Frontend 3D" when prompted for stacks
+```
+
+<table>
+<tr>
+<td width="50%">
+
+### Agents (4)
+
+| Agent | Checks | What it reviews |
+|-------|--------|----------------|
+| **presentation-reviewer** | 16 | GSAP ScrollTrigger, phone frames, combined sections, 3D textures |
+| **r3f-scene-reviewer** | 15 | Color management, performance, GLB handling, R3F patterns |
+| **ui-design-reviewer** | 16 | Typography, color, layout, motion, states, glassmorphism |
+| **frontend-perf-reviewer** | 12 | Bundle size, lazy loading, CSS containment, web vitals |
+
+</td>
+<td width="50%">
+
+### Skills (6)
+
+| Skill | What it teaches |
+|-------|----------------|
+| **threejs-color-management** | sRGB vs Linear, toneMapping, debug checklist |
+| **r3f-scroll-driven-3d** | GSAP → Zustand → R3F bridge pattern |
+| **gltf-debugging** | Runtime GLB inspection, UV debugging |
+| **html-to-3d-texture** | Capture HTML as PNG for 3D models |
+| **product-3d-lighting** | Studio lighting for product showcases |
+| **output-enforcement** | Anti-laziness, complete code generation |
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### Hooks (4)
+
+| Hook | What it catches |
+|------|----------------|
+| **gsap-pattern-check** | `scrub: true`, missing `invalidateOnRefresh`, no `tl.set` extension, no `gsap.context()` |
+| **r3f-color-check** | Deprecated `sRGBEncoding`, missing `colorSpace`, wrong material for screens |
+| **tailwind-version-guard** | v3/v4 syntax mismatches (`@tailwind` vs `@import`, config format) |
+| **bundle-size-warn** | Heavy imports: moment, lodash, THREE namespace, MUI, antd |
+
+</td>
+<td width="50%">
+
+### Rules (3) + Command (1)
+
+| Rule | What it enforces |
+|------|-----------------|
+| **gsap-conventions** | `scrub` as number, `invalidateOnRefresh`, `tl.set({},{},1.0)`, `gsap.context()` cleanup |
+| **threejs-conventions** | `meshBasicMaterial` for screens, UV copy on texture swap, `getState()` in `useFrame` |
+| **frontend-aesthetics-3d** | Anti-center bias, spring physics, staggered reveals, 3D atmosphere |
+
+**`/capture-screen [port]`** — Capture React components as PNG textures for 3D model screens (Playwright + sharp)
+
+</td>
+</tr>
+</table>
+
+### Recommended External Tools
+
+<details>
+<summary>Skills Marketplace + MCP Servers</summary>
+
+Install via `npx skills add`:
+
+| Source | Skills | Count |
+|--------|--------|-------|
+| [greensock/gsap-skills](https://github.com/nicepkg/gsap-skills) | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
+| [freshtechbro/claudedesignskills](https://github.com/nicepkg/claudedesignskills) | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
+| [Leonxlnx/taste-skill](https://github.com/nicepkg/taste-skill) | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
+
+MCP Server:
+
+| Server | Package | Purpose |
+|--------|---------|---------|
+| gsap-master | `bruzethegreat-gsap-master-mcp-server@2.2.0` | Full GSAP API, intent analysis, production patterns |
+
+</details>
+
+### What problems it solves
+
+| Problem | Before | After |
+|---------|--------|-------|
+| 3D texture color distortion (toneMapping, colorSpace) | ~3 hours debugging | < 15 min (skill + hook catch immediately) |
+| GSAP timeline compression (`tl.set` trick) | ~2 hours, 3-5 attempts | 0 (hook warns on save) |
+| UV mapping mismatch on 3D models | ~2 hours | < 30 min (gltf-debugging skill) |
+| Tailwind v3/v4 syntax mix | ~1 hour | 0 (hook detects instantly) |
+| AI-generated generic UI | ongoing | Caught in review (ui-design-reviewer + aesthetics rule) |
+
+Full reference with all checklists: **[docs/FRONTEND-3D.md](docs/FRONTEND-3D.md)** | Guide: **[Chapter 13](docs/guide/13-frontend-3d.md)**
+
+---
+
 ## 🏗️ Showcase
 
 See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 13 hooks, 11 skills, and 6 rules.
