@@ -116,6 +116,24 @@ These are converted from core + extras agents. They are dispatched automatically
 | `writing-agents` | Knowledge — how to write agents |
 | `writing-commands` | Knowledge — how to write command orchestrators |
 
+### Frontend 3D Skills (add for R3F/Three.js/GSAP projects)
+
+```bash
+# 4 reviewer skills (auto-dispatched)
+cp -r claude-code-superkit/packages/codex/skills/presentation-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/r3f-scene-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/ui-design-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/frontend-perf-reviewer .codex/skills/
+
+# 6 knowledge skills (auto-activated by description matching)
+cp -r claude-code-superkit/packages/codex/skills/threejs-color-management .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/r3f-scroll-driven-3d .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/gltf-debugging .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/html-to-3d-texture .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/product-3d-lighting .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/output-enforcement .codex/skills/
+```
+
 ### Stack-Specific Reviewers (add per language)
 
 Copy only the ones matching your stack:
@@ -139,10 +157,11 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: 50 skills
+### Total: 60 skills
 
 - 9 command skills (user-invocable, including benchmark)
 - 32 agent + knowledge skills (auto-dispatched)
+- 10 frontend 3D skills (optional, for R3F/Three.js/GSAP projects)
 - 9 stack-specific reviewer skills (optional, per language)
 
 ## Model Configuration

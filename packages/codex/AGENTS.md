@@ -176,6 +176,21 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 **Agent skills (auto-dispatched by orchestrators):**
 ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, audit-infra, bot-reviewer, code-reviewer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, design-system-reviewer, docs-reviewer, e2e-test-generator, evaluator, goal-verifier, health-checker, migration-reviewer, plan-checker, pre-deploy-validator, project-architecture, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, ui-reviewer, visual-reviewer, writing-agents, writing-commands
 
+**Frontend 3D skills (optional, for R3F/Three.js/GSAP projects):**
+
+| Skill | Category |
+|-------|----------|
+| `presentation-reviewer` | Quality — scroll-driven presentation sections (GSAP ScrollTrigger, phone frames, 3D textures) |
+| `r3f-scene-reviewer` | Quality — React Three Fiber / Three.js code (color management, GLB, useFrame, disposal) |
+| `ui-design-reviewer` | Quality — anti-slop UI review (typography, color, layout, motion, interactive states) |
+| `frontend-perf-reviewer` | Quality — frontend performance (bundle size, lazy loading, CSS containment, web vitals) |
+| `threejs-color-management` | Knowledge — Three.js color pipeline (sRGB vs Linear, toneMapping, texture colorSpace) |
+| `r3f-scroll-driven-3d` | Knowledge — GSAP ScrollTrigger + R3F via Zustand bridge pattern |
+| `gltf-debugging` | Knowledge — runtime GLB/GLTF inspection (UV, materials, texture replacement) |
+| `html-to-3d-texture` | Knowledge — capture HTML/React as PNG textures for 3D models |
+| `product-3d-lighting` | Knowledge — studio lighting setups for 3D product showcases |
+| `output-enforcement` | Knowledge — anti-laziness enforcement, bans placeholder patterns |
+
 **Stack-specific reviewers (optional):**
 go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer
 
