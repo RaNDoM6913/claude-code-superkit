@@ -30,7 +30,7 @@ Read project CLAUDE.md and any GSAP/3D rules for authoritative conventions.
 |---|-------|----------|------------------|
 | 6 | Screen dimensions | CRITICAL | Constants `SCREEN_W = 440`, `SCREEN_H = 956` — never other values |
 | 7 | Content scale | WARNING | `Math.min(screenW / SCREEN_W, screenH / SCREEN_H)` for scaling content inside phone |
-| 8 | Viewport scale | INFO | `useViewportScale()` from `@/hooks/useDeviceScale` for responsive phone sizing |
+| 8 | Viewport scale | INFO | A responsive viewport scale hook (e.g. `useViewportScale()`) for scaling the phone frame to different screen sizes |
 
 ### Combined Section Pattern (3 checks)
 
