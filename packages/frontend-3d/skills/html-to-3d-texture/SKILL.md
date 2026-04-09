@@ -77,6 +77,8 @@ async function captureToTexture(element: HTMLElement): Promise<THREE.CanvasTextu
 
 Best for: real-time UI displayed on 3D surface.
 
+**Performance warning:** html2canvas re-parses the entire DOM subtree on every call. At 10fps this is CPU-intensive. For production, reduce to 1-2fps or use `requestAnimationFrame` with throttling. For simpler cases, consider `@react-three/drei`'s `<Html>` component instead.
+
 ```tsx
 function useHTMLTexture(ref: React.RefObject<HTMLDivElement>) {
   const textureRef = useRef<THREE.CanvasTexture | null>(null);
