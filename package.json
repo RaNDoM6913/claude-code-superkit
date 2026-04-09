@@ -15,6 +15,7 @@
     "packages/stack-hooks/",
     "packages/stack-rules/",
     "packages/extras/",
+    "packages/frontend-3d/",
     "packages/codex/"
   ],
   "engines": {
