@@ -91,7 +91,7 @@ After setup, confirm everything landed correctly:
 # Expected: 27+ core + stack agents
 ls .claude/agents/*.md | wc -l
 
-# Expected: 15 commands
+# Expected: 15+ commands (15 core + frontend-3d/stack commands)
 ls .claude/commands/*.md | wc -l
 
 # Expected: 13+ core + stack hooks
@@ -100,7 +100,7 @@ ls .claude/scripts/hooks/*.sh | wc -l
 # Expected: 7+ rules (7 core + stack rules)
 ls .claude/rules/*.md | wc -l
 
-# Expected: 5 skill directories
+# Expected: 5+ skill directories (5 core + frontend-3d skills)
 ls .claude/skills/*/SKILL.md | wc -l
 
 # settings.json exists with hook wiring + plugins
