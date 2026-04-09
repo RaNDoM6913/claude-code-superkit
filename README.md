@@ -282,9 +282,9 @@ Install via `npx skills add`:
 
 | Source | Skills | Count |
 |--------|--------|-------|
-| [greensock/gsap-skills](https://github.com/nicepkg/gsap-skills) | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
-| [freshtechbro/claudedesignskills](https://github.com/nicepkg/claudedesignskills) | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
-| [Leonxlnx/taste-skill](https://github.com/nicepkg/taste-skill) | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
+| greensock/gsap-skills | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
+| freshtechbro/claudedesignskills | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
+| Leonxlnx/taste-skill | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
 
 MCP Server:
 
