@@ -15,10 +15,10 @@ Mandatory rules for GSAP ScrollTrigger animations. Violations cause visual bugs.
 After EVERY `gsap.timeline()` creation, add:
 
 ```tsx
-tl.set({}, {}, 1.0);
+tl.set({}, {}, 1.0); // no-op keyframe at position 1.0 — forces timeline to span full duration
 ```
 
-**Why:** Without this, animations compress into the first 10% of scroll range. The timeline needs a marker at 1.0 to know its full duration.
+**Why:** Without this, animations compress into the first 10% of scroll range. The empty `set()` creates a no-op keyframe that tells GSAP the timeline extends to position 1.0.
 
 ## Scrub Must Be a Number
 
