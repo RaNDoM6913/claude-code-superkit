@@ -73,7 +73,7 @@ elif [ "$TW_MAJOR" = "3" ]; then
   # Tailwind v3 project — warn on v4 patterns
 
   # @import "tailwindcss" (v4 syntax)
-  if grep -qE '@import\s+["\x27]tailwindcss["\x27]' "$FILE_PATH" 2>/dev/null; then
+  if grep -qE $'@import\\s+["\']tailwindcss["\']' "$FILE_PATH" 2>/dev/null; then
     WARNINGS="${WARNINGS}\n  ⚠ TW v3: @import \"tailwindcss\" is v4 syntax — v3 uses @tailwind base/components/utilities in ${BASENAME}"
   fi
 

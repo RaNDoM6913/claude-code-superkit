@@ -53,7 +53,7 @@ if grep -qiE '(meshStandardMaterial|MeshStandardMaterial)' "$FILE_PATH" 2>/dev/n
 fi
 
 # 4. Material with texture but no toneMapped prop
-if grep -qE '(map\s*=|map:\s)' "$FILE_PATH" 2>/dev/null; then
+if grep -qE '(\bmap\s*=|\bmap:\s)' "$FILE_PATH" 2>/dev/null; then
   if grep -qE '(meshStandardMaterial|meshBasicMaterial|meshPhongMaterial|MeshStandardMaterial|MeshBasicMaterial|MeshPhongMaterial)' "$FILE_PATH" 2>/dev/null; then
     if ! grep -qE 'toneMapped' "$FILE_PATH" 2>/dev/null; then
       WARNINGS="${WARNINGS}\n  ⚠ R3F: material with texture but no toneMapped prop — add toneMapped={false} for UI/screen textures to preserve colors in ${BASENAME}"

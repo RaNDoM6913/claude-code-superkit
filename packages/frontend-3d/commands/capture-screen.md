@@ -26,7 +26,7 @@ Capture a React component as a high-resolution PNG image for use as a texture on
 1. **Check dev server** — verify it's running on the specified port:
 
 ```bash
-curl -s http://localhost:$ARGUMENTS 2>/dev/null || echo "Dev server not running on port $ARGUMENTS"
+curl -s http://localhost:${ARGUMENTS:-3000} 2>/dev/null || echo "Dev server not running on port ${ARGUMENTS:-3000}"
 ```
 
 2. **Find the capture target** — look for elements with `data-screen-id`:

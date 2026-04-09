@@ -17,7 +17,7 @@ if [ -z "$FILE_PATH" ]; then
 fi
 
 # Only process .tsx files
-if [[ ! "$FILE_PATH" =~ \.tsx$ ]]; then
+if [[ ! "$FILE_PATH" =~ \.(tsx|jsx)$ ]]; then
   exit 0
 fi
 
