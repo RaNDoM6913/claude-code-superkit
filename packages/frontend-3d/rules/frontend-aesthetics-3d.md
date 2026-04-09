@@ -13,7 +13,7 @@ Extended aesthetics rules for 3D-enhanced presentation/landing pages. Supplement
 
 ## Anti-Center Bias
 
-Not everything centered. For DESIGN_VARIANCE > 4 elements, use:
+Not everything centered. When a section contains more than 4 visual elements (cards, CTAs, images, 3D objects), use:
 - Split screen: content left, 3D right (or vice versa)
 - Asymmetric layouts with intentional negative space
 - Offset 3D elements from center for visual interest
