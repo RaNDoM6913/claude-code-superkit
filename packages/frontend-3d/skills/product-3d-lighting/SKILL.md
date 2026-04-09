@@ -40,7 +40,7 @@ function ProductScene() {
         intensity={0.5}
       />
 
-      {/* Environment: very low intensity for subtle reflections */}
+      {/* Environment: very low intensity for subtle reflections (drei v9.88+) */}
       <Environment preset="city" environmentIntensity={0.15} />
 
       {/* Grounding shadow */}
