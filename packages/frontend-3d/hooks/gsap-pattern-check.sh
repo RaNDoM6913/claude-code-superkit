@@ -1,6 +1,6 @@
 #!/bin/bash
 # gsap-pattern-check.sh — PostToolUse hook for Edit/Write
-# Checks for common GSAP anti-patterns in .tsx files.
+# Checks for common GSAP anti-patterns in .tsx/.jsx files.
 # Warnings only (exit 0 always) — never blocks.
 # Profile: standard, strict (skip on fast)
 
