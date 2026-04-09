@@ -6,6 +6,42 @@ All notable changes to claude-code-superkit are documented here.
 
 _No unreleased changes._
 
+## [1.3.8] — 2026-04-09
+
+### Added
+- **`packages/frontend-3d/` package** — self-contained frontend/3D/animation development toolkit
+- **`presentation-reviewer` agent** — 16-check review for scroll-driven sections: GSAP ScrollTrigger, phone frame conventions, combined sections, 3D textures
+- **`r3f-scene-reviewer` agent** — 15-check review for R3F/Three.js: color management, performance, GLB handling, R3F patterns
+- **`ui-design-reviewer` agent** — 16-check anti-slop UI review: typography, color calibration, layout diversity, motion quality, interactive states, glassmorphism
+- **`frontend-perf-reviewer` agent** — 12-check performance review: bundle size, lazy loading, CSS containment, web vitals
+- **`gsap-pattern-check.sh` hook** — 5 GSAP anti-pattern checks on .tsx files (scrub type, invalidateOnRefresh, tl.set extension, context, imports)
+- **`r3f-color-check.sh` hook** — 4 Three.js color management checks (deprecated encoding, colorSpace, material type, toneMapped)
+- **`tailwind-version-guard.sh` hook** — Tailwind v3 vs v4 syntax mismatch detection
+- **`bundle-size-warn.sh` hook** — heavy package import detection (moment, lodash, THREE, chart.js, MUI, antd, framer-motion)
+- **`threejs-color-management` skill** — sRGB vs Linear workflow, toneMapping, texture colorSpace, debug checklist
+- **`r3f-scroll-driven-3d` skill** — GSAP ScrollTrigger → Zustand → R3F useFrame bridge pattern
+- **`gltf-debugging` skill** — runtime GLB inspection: traverse, UV, material dump, texture replacement
+- **`html-to-3d-texture` skill** — capture HTML/React as PNG for 3D (Playwright, html2canvas, CanvasTexture)
+- **`product-3d-lighting` skill** — studio lighting setups for dark/light product showcases
+- **`output-enforcement` skill** — anti-laziness: bans // ..., TODO, placeholder patterns
+- **`gsap-conventions` rule** — scrub number, invalidateOnRefresh, tl.set, context cleanup, phase objects
+- **`threejs-conventions` rule** — meshBasicMaterial for screens, UV settings, useFrame performance
+- **`frontend-aesthetics-3d` rule** — anti-center bias, spring physics, 3D atmosphere, scroll-driven 3D
+- **`/capture-screen` command** — capture React components as PNG textures for 3D model screens
+- **`docs/guide/13-frontend-3d.md`** — guide chapter with installation, components, workflows
+- **`docs/FRONTEND-3D.md`** — complete reference catalog with all checklists and troubleshooting
+- **10 Codex skills** — all frontend-3d agents and skills ported to Codex CLI (50 → 60 total)
+
+### Changed
+- **Installer** — "Frontend 3D" added to stack selection, self-contained package support (`packages/{name}/` pattern)
+- **`settings-builder.js`** — `collectStackHooks` supports dual path patterns for self-contained packages
+- Stack agents: 9 → **13** (+4 frontend-3d)
+- Commands: 15 → **16** (+capture-screen)
+- Stack hooks: 9 → **13** (+4 frontend-3d)
+- Stack rules: 2 → **5** (+3 frontend-3d)
+- Skills: 5+1 → **5+6+1** (+6 frontend-3d knowledge skills)
+- Codex skills: 50 → **60** (+10 frontend-3d)
+
 ## [1.3.7] — 2026-04-07
 
 ### Added

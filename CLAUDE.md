@@ -8,7 +8,7 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
-    commands/               # 15 commands
+    commands/               # 15 commands (+ 1 frontend-3d = 16 total)
     hooks/                  # 13 hooks (+2 superkit-internal) = 15 total
     helpers/                # 1 helper (statusline.cjs)
     rules/                  # 7 rules (+1 superkit-internal)
@@ -29,13 +29,20 @@ packages/
     rust/                   # cargo-check-on-edit
   stack-rules/              # Language-specific rules
     go/                     # go-conventions, go-safety
+  frontend-3d/              # Self-contained Frontend/3D/Animation package
+    agents/                 # 4 agents (presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer)
+    hooks/                  # 4 hooks (gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn)
+    skills/                 # 6 skills (threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement)
+    rules/                  # 3 rules (gsap-conventions, threejs-conventions, frontend-aesthetics-3d)
+    commands/               # 1 command (capture-screen)
+    README.md               # Package documentation
   extras/                   # Optional components (require specific setup)
     bot-reviewer.md         # Telegram/Discord/Slack bot review
     design-system-reviewer.md
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 50 skills (9 commands + 32 agents + 9 stack)
+    skills/                 # 60 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
@@ -60,25 +67,25 @@ test/
   smoke.test.js             # Full install smoke test
 package.json                # npm package config
 docs/
-  guide/                    # 12 chapters
+  guide/                    # 13 chapters
   examples/                 # 3 examples
   INSTALL-CLAUDE-CODE.md    # Detailed install guide
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.3.7
+VERSION                     # 1.3.8
 ```
 
 ## Current Counts
 
-| Component | Core | Stack | Extras | Showcase | Codex |
-|-----------|------|-------|--------|----------|-------|
-| Agents | 27 | 9 | 3 | 28 | — |
-| Skills | 5 | — | 1 | 11 | 50 |
-| Commands | 15 | — | — | 17 | 9 |
-| Hooks | 13 (+2 internal) | 9 | — | 13 | — |
-| Helpers | 1 | — | — | — | — |
-| Rules | 7 (+1 internal) | 2 | — | 6 | — |
+| Component | Core | Stack | Frontend-3D | Extras | Showcase | Codex |
+|-----------|------|-------|-------------|--------|----------|-------|
+| Agents | 27 | 9 | 4 | 3 | 28 | — |
+| Skills | 5 | — | 6 | 1 | 11 | 60 |
+| Commands | 15 | — | 1 | — | 17 | 9 |
+| Hooks | 13 (+2 internal) | 9 | 4 | — | 13 | — |
+| Helpers | 1 | — | — | — | — | — |
+| Rules | 7 (+1 internal) | 2 | 3 | — | 6 | — |
 
 ## Conventions
 
@@ -164,3 +171,4 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `packages/core/commands/superkit-evolve.md` | Incremental documentation drift detection and fix |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |
+| `packages/frontend-3d/README.md` | Frontend 3D package — agents, hooks, skills, rules, commands for GSAP/Three.js/R3F |

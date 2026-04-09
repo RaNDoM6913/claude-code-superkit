@@ -33,21 +33,21 @@ npx claude-code-superkit
 1. **Checks prerequisites** — Node.js 18+, git, Claude CLI
 2. **Installs superpowers plugin** — auto-clones from GitHub if missing
 3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup + replace), or abort
-4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust (multi-select)
+4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust, Frontend 3D (multi-select)
 5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer
 6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
-   - 27 core agents + up to 9 stack agents → `.claude/agents/`
-   - 15 commands → `.claude/commands/`
-   - 13+ hooks + up to 9 stack hooks → `.claude/scripts/hooks/`
-   - 7 rules + up to 2 stack rules → `.claude/rules/`
-   - 5 skills → `.claude/skills/`
+   - 27 core agents + up to 13 stack agents → `.claude/agents/`
+   - 16 commands → `.claude/commands/`
+   - 13+ hooks + up to 13 stack hooks → `.claude/scripts/hooks/`
+   - 7 rules + up to 5 stack rules → `.claude/rules/`
+   - 5 core skills + up to 6 frontend-3d skills → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
 10. **Validates** — checks JSON, hook permissions, file presence
-11. **Optionally installs for Codex CLI** — copies 50 skills to `.codex/skills/`
+11. **Optionally installs for Codex CLI** — copies 60 skills to `.codex/skills/`
 
 ### Hook Profiles
 
