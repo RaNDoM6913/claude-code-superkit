@@ -70,10 +70,12 @@ main();
 5. **Verify output:**
 
 ```bash
-# macOS
+# macOS (built-in)
 sips -g pixelWidth -g pixelHeight public/textures/screen-capture.png
-# Linux
+# Linux (requires ImageMagick: apt install imagemagick)
 identify public/textures/screen-capture.png
+# Universal (Node.js)
+node -e "const s=require('sharp');s('public/textures/screen-capture.png').metadata().then(m=>console.log(m.width+'x'+m.height,'alpha:',m.hasAlpha))"
 ```
 
 ## Resolution Guide
