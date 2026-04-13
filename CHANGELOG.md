@@ -13,6 +13,10 @@ All notable changes to claude-code-superkit are documented here.
 - **`lib/installer.js`** — install summary now computes the rules and skills count from the copy results instead of printing the hardcoded `Rules: 7` / `Skills: 5 + packages`, so the line stays accurate when stack rules, frontend-3d rules, or additional core rules ship with the toolkit.
 - **`loop-guard.sh`** (core + showcase copy) — log path now honors `$TMPDIR` and falls back to `/tmp`, so the hook works on environments where `/tmp` isn't writable (sandboxed macOS contexts, Windows via WSL where `TMPDIR` points elsewhere).
 
+### Changed
+- **README — Frontend 3D section** — replaced the two-column 2×2 tables (Agents/Skills and Hooks/Rules) with single-column bullet lists per category. Much easier to scan on mobile and scales past 4 items per group without breaking the grid.
+- **README — External design & asset resources** — new collapsible section (under Frontend 3D) grouping five curated resources: [React Bits](https://reactbits.dev) (open-source React components), [Unicorn.Studio](https://www.unicorn.studio) (no-code WebGL), [Cosmos](https://www.cosmos.so) (visual moodboards), [Free Faces](https://www.freefaces.gallery) (free fonts), and [Pixolite](https://pixolite.ru) (free 3D assets). The existing community skill packs and `gsap-master` MCP server are consolidated into the same block so there's one place to look for frontend resources.
+
 ## [1.3.8] — 2026-04-09
 
 ### Added
