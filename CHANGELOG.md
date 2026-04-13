@@ -7,6 +7,7 @@ All notable changes to claude-code-superkit are documented here.
 ### Fixed
 - **`statusline.cjs`** — stack detector now scans root + 1 level of subdirectories, so monorepos (e.g. `backend/go.mod` + `frontend/package.json+tsconfig.json`) display their actual stacks instead of just the root marker. Service dirs (`node_modules`, `dist`, `build`, `.git`, `.next`, `.turbo`, `vendor`, `target`, `bin`, `__pycache__`, `.venv`, `venv`, `coverage`, `tmp`, `temp`, and any hidden `.*`) are skipped. Duplicates deduped, output sorted alphabetically.
 - **Frontend 3D agents** — replaced ad-hoc `## Before Review` section with the conventional `## Phase 0: Load Project Context` across all four agents (`presentation-reviewer`, `r3f-scene-reviewer`, `ui-design-reviewer`, `frontend-perf-reviewer`). Each agent now explicitly reads `CLAUDE.md`, `docs/architecture/*.md`, and relevant rules before review, matching core-agent conventions.
+- **`lib/codex.js`** — guarded `config.toml` copy against a missing source file and unified the call through the `copyFile` utility, so the installer now respects the chosen mode (merge/overwrite/fresh) and prints a clear warning instead of crashing when the Codex package is incomplete.
 
 ## [1.3.8] — 2026-04-09
 
