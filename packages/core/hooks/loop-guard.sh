@@ -21,7 +21,7 @@ fi
 FINGERPRINT=$(echo "${TOOL_NAME}:${COMMAND}" | shasum -a 256 | cut -d' ' -f1)
 
 # Log file for tracking recent calls (per-session)
-LOG_FILE="/tmp/claude-loop-guard-${PPID}.log"
+LOG_FILE="${TMPDIR:-/tmp}/claude-loop-guard-${PPID}.log"
 
 # Append current fingerprint
 echo "$FINGERPRINT" >> "$LOG_FILE"

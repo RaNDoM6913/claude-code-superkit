@@ -11,6 +11,7 @@ All notable changes to claude-code-superkit are documented here.
 - **`lib/settings-builder.js`** — dedupes stack hook entries before writing `settings.json`, and refuses to re-add a hook that is already wired in the base settings. Prevents duplicate `PostToolUse` invocations if a hook file ever appears in multiple stack packages. Covered by two new unit tests.
 - **`bin/cli.js`** — `main()` invocation now has an explicit `.catch` handler, so any async error bubbling past the inner try/catch prints a clean message (stack in `DEBUG` mode) and exits 1 instead of triggering Node's default `UnhandledPromiseRejection` dump.
 - **`lib/installer.js`** — install summary now computes the rules and skills count from the copy results instead of printing the hardcoded `Rules: 7` / `Skills: 5 + packages`, so the line stays accurate when stack rules, frontend-3d rules, or additional core rules ship with the toolkit.
+- **`loop-guard.sh`** (core + showcase copy) — log path now honors `$TMPDIR` and falls back to `/tmp`, so the hook works on environments where `/tmp` isn't writable (sandboxed macOS contexts, Windows via WSL where `TMPDIR` points elsewhere).
 
 ## [1.3.8] — 2026-04-09
 
