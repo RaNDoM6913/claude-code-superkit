@@ -22,8 +22,14 @@ function getProfile() {
   return process.env.CLAUDE_HOOK_PROFILE || 'standard';
 }
 
-function getStacks() {
-  const stacks = [];
+const STACK_SKIP_DIRS = new Set([
+  'node_modules', 'dist', 'build', '.git', '.next', '.turbo',
+  'vendor', 'target', 'bin', '__pycache__', '.venv', 'venv',
+  'coverage', 'tmp', 'temp',
+]);
+
+function detectStacksIn(dir) {
+  const found = [];
   const markers = {
     'go.mod': 'Go',
     'Cargo.toml': 'Rust',
@@ -31,15 +37,31 @@ function getStacks() {
     'requirements.txt': 'Py',
   };
   for (const [file, label] of Object.entries(markers)) {
-    if (existsSync(join(projectDir, file))) stacks.push(label);
+    if (existsSync(join(dir, file))) found.push(label);
   }
   // TypeScript: need both package.json and tsconfig
-  if (existsSync(join(projectDir, 'package.json')) && existsSync(join(projectDir, 'tsconfig.json'))) {
-    stacks.push('TS');
-  } else if (existsSync(join(projectDir, 'package.json'))) {
-    stacks.push('JS');
+  if (existsSync(join(dir, 'package.json')) && existsSync(join(dir, 'tsconfig.json'))) {
+    found.push('TS');
+  } else if (existsSync(join(dir, 'package.json'))) {
+    found.push('JS');
   }
-  return [...new Set(stacks)];
+  return found;
+}
+
+function getStacks() {
+  const stacks = detectStacksIn(projectDir);
+  // Monorepo fallback: if root didn't yield a clear stack set, scan 1-level subdirs
+  if (stacks.length < 2) {
+    try {
+      for (const entry of readdirSync(projectDir, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        if (entry.name.startsWith('.')) continue;
+        if (STACK_SKIP_DIRS.has(entry.name)) continue;
+        stacks.push(...detectStacksIn(join(projectDir, entry.name)));
+      }
+    } catch { /* skip */ }
+  }
+  return [...new Set(stacks)].sort();
 }
 
 function getGitInfo() {

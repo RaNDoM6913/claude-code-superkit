@@ -4,7 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-_No unreleased changes._
+### Fixed
+- **`statusline.cjs`** — stack detector now scans root + 1 level of subdirectories, so monorepos (e.g. `backend/go.mod` + `frontend/package.json+tsconfig.json`) display their actual stacks instead of just the root marker. Service dirs (`node_modules`, `dist`, `build`, `.git`, `.next`, `.turbo`, `vendor`, `target`, `bin`, `__pycache__`, `.venv`, `venv`, `coverage`, `tmp`, `temp`, and any hidden `.*`) are skipped. Duplicates deduped, output sorted alphabetically.
 
 ## [1.3.8] — 2026-04-09
 
