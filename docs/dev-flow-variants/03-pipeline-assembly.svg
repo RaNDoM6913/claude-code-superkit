@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-label="/dev pipeline — factory assembly line with 15 stations and 4-inspector review tower">
+  <defs>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.1"/>
+    </filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="belt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#64748b"/><stop offset="50%" stop-color="#475569"/><stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e2e8f0" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1400" height="520" rx="20" fill="url(#bg)" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect width="1400" height="520" rx="20" fill="url(#grid)" opacity="0.5"/>
+
+  <!-- Caption -->
+  <text x="700" y="36" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#64748b" letter-spacing="3">/DEV — ASSEMBLY LINE · 15 STATIONS · 4 INSPECTORS</text>
+
+  <!-- Input funnel (TASK) -->
+  <polygon points="30,350 130,330 130,430 30,410" fill="#ffffff" stroke="#475569" stroke-width="2" filter="url(#sh)"/>
+  <text x="80" y="378" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#334155">TASK</text>
+  <text x="80" y="396" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#64748b">input</text>
+
+  <!-- Output funnel (SHIPPED) -->
+  <polygon points="1270,330 1370,350 1370,410 1270,430" fill="#6d28d9" stroke="#4c1d95" stroke-width="2" filter="url(#sh)"/>
+  <text x="1320" y="378" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#ffffff">SHIPPED</text>
+  <text x="1320" y="396" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#ddd6fe">output</text>
+
+  <!-- Conveyor belt -->
+  <rect x="130" y="360" width="1140" height="40" fill="url(#belt)" stroke="#1e293b" stroke-width="1.5" filter="url(#sh)"/>
+  <!-- Belt stripes for motion effect -->
+  <g fill="#94a3b8" opacity="0.5">
+    <rect x="160" y="370" width="16" height="3"/><rect x="200" y="370" width="16" height="3"/>
+    <rect x="240" y="370" width="16" height="3"/><rect x="280" y="370" width="16" height="3"/>
+    <rect x="320" y="370" width="16" height="3"/><rect x="360" y="370" width="16" height="3"/>
+    <rect x="400" y="370" width="16" height="3"/><rect x="440" y="370" width="16" height="3"/>
+    <rect x="480" y="370" width="16" height="3"/><rect x="520" y="370" width="16" height="3"/>
+    <rect x="560" y="370" width="16" height="3"/><rect x="600" y="370" width="16" height="3"/>
+    <rect x="640" y="370" width="16" height="3"/><rect x="680" y="370" width="16" height="3"/>
+    <rect x="720" y="370" width="16" height="3"/><rect x="760" y="370" width="16" height="3"/>
+    <rect x="800" y="370" width="16" height="3"/><rect x="840" y="370" width="16" height="3"/>
+    <rect x="880" y="370" width="16" height="3"/><rect x="920" y="370" width="16" height="3"/>
+    <rect x="1160" y="370" width="16" height="3"/><rect x="1200" y="370" width="16" height="3"/>
+    <rect x="1240" y="370" width="16" height="3"/>
+  </g>
+
+  <!-- Belt legs -->
+  <rect x="140" y="400" width="10" height="30" fill="#334155"/>
+  <rect x="1250" y="400" width="10" height="30" fill="#334155"/>
+
+  <!-- Station x-positions: 150, 223, 296, 369, 442, 515, 588, 661, 734, 807, 880, 953, 1026, 1099, 1172 -->
+  <!-- Stations 1-6 Planning (indigo) -->
+  <g font-family="'SF Mono',monospace" font-size="11" font-weight="700">
+    <rect x="150" y="300" width="60" height="65" rx="4" fill="#eef2ff" stroke="#6366f1" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="180" y="328" text-anchor="middle" fill="#4338ca">01</text>
+    <text x="180" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#4338ca">Under…</text>
+
+    <rect x="223" y="300" width="60" height="65" rx="4" fill="#eef2ff" stroke="#6366f1" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="253" y="328" text-anchor="middle" fill="#4338ca">02</text>
+    <text x="253" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#4338ca">Architect</text>
+
+    <rect x="296" y="300" width="60" height="65" rx="4" fill="#eef2ff" stroke="#6366f1" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="326" y="328" text-anchor="middle" fill="#4338ca">03</text>
+    <text x="326" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#4338ca">Pseudo</text>
+
+    <rect x="369" y="300" width="60" height="65" rx="4" fill="#eef2ff" stroke="#6366f1" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="399" y="328" text-anchor="middle" fill="#4338ca">04</text>
+    <text x="399" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#4338ca">Plan</text>
+
+    <rect x="442" y="300" width="60" height="65" rx="4" fill="#eef2ff" stroke="#6366f1" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="472" y="328" text-anchor="middle" fill="#4338ca">05</text>
+    <text x="472" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#4338ca">Contract</text>
+
+    <rect x="515" y="300" width="60" height="65" rx="4" fill="#eef2ff" stroke="#6366f1" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="545" y="328" text-anchor="middle" fill="#4338ca">06</text>
+    <text x="545" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#4338ca">Validate</text>
+  </g>
+
+  <!-- Stations 7-11 Execution (amber) -->
+  <g font-family="'SF Mono',monospace" font-size="11" font-weight="700">
+    <rect x="588" y="300" width="60" height="65" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="618" y="328" text-anchor="middle" fill="#92400e">07</text>
+    <text x="618" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#92400e">Implement</text>
+
+    <rect x="661" y="300" width="60" height="65" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="691" y="328" text-anchor="middle" fill="#92400e">08</text>
+    <text x="691" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#92400e">Evaluate</text>
+
+    <rect x="734" y="300" width="60" height="65" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="764" y="328" text-anchor="middle" fill="#92400e">09</text>
+    <text x="764" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#92400e">Verify</text>
+
+    <rect x="807" y="300" width="60" height="65" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="837" y="328" text-anchor="middle" fill="#92400e">10</text>
+    <text x="837" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#92400e">Test</text>
+
+    <rect x="880" y="300" width="60" height="65" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="910" y="328" text-anchor="middle" fill="#92400e">11</text>
+    <text x="910" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#92400e">Goals</text>
+  </g>
+
+  <!-- Stations 12-15 Quality (emerald) — Review is the tall one -->
+  <g font-family="'SF Mono',monospace" font-size="11" font-weight="700">
+    <!-- Review — tall and dark green with inspector tower above -->
+    <rect x="953" y="300" width="60" height="65" rx="4" fill="#059669" stroke="#047857" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="983" y="328" text-anchor="middle" fill="#ffffff">12</text>
+    <text x="983" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#ffffff">Review ×4</text>
+
+    <rect x="1026" y="300" width="60" height="65" rx="4" fill="#d1fae5" stroke="#059669" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="1056" y="328" text-anchor="middle" fill="#047857">13</text>
+    <text x="1056" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#047857">Critic</text>
+
+    <rect x="1099" y="300" width="60" height="65" rx="4" fill="#d1fae5" stroke="#059669" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="1129" y="328" text-anchor="middle" fill="#047857">14</text>
+    <text x="1129" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#047857">Docs</text>
+
+    <rect x="1172" y="300" width="60" height="65" rx="4" fill="#d1fae5" stroke="#059669" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="1202" y="328" text-anchor="middle" fill="#047857">15</text>
+    <text x="1202" y="352" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#047857">Report</text>
+  </g>
+
+  <!-- INSPECTOR TOWER above Review station -->
+  <!-- Vertical pipe connecting tower to Review -->
+  <line x1="983" y1="300" x2="983" y2="260" stroke="#475569" stroke-width="3"/>
+  <!-- Horizontal beam -->
+  <rect x="780" y="250" width="410" height="12" rx="2" fill="#475569"/>
+  <!-- 4 inspector pipes hanging down from beam -->
+  <line x1="830" y1="262" x2="830" y2="210" stroke="#475569" stroke-width="2"/>
+  <line x1="930" y1="262" x2="930" y2="210" stroke="#475569" stroke-width="2"/>
+  <line x1="1040" y1="262" x2="1040" y2="210" stroke="#475569" stroke-width="2"/>
+  <line x1="1140" y1="262" x2="1140" y2="210" stroke="#475569" stroke-width="2"/>
+
+  <!-- 4 inspector heads -->
+  <g font-family="-apple-system,sans-serif" font-size="10" font-weight="700">
+    <rect x="790" y="160" width="80" height="50" rx="6" fill="#ffffff" stroke="#059669" stroke-width="2" filter="url(#sh)"/>
+    <text x="830" y="182" text-anchor="middle" fill="#065f46">CODE</text>
+    <text x="830" y="198" text-anchor="middle" font-size="8" fill="#10b981">review</text>
+
+    <rect x="890" y="160" width="80" height="50" rx="6" fill="#ffffff" stroke="#059669" stroke-width="2" filter="url(#sh)"/>
+    <text x="930" y="182" text-anchor="middle" fill="#065f46">SECURITY</text>
+    <text x="930" y="198" text-anchor="middle" font-size="8" fill="#10b981">scan</text>
+
+    <rect x="1000" y="160" width="80" height="50" rx="6" fill="#ffffff" stroke="#059669" stroke-width="2" filter="url(#sh)"/>
+    <text x="1040" y="182" text-anchor="middle" fill="#065f46">TESTS</text>
+    <text x="1040" y="198" text-anchor="middle" font-size="8" fill="#10b981">coverage</text>
+
+    <rect x="1100" y="160" width="80" height="50" rx="6" fill="#ffffff" stroke="#059669" stroke-width="2" filter="url(#sh)"/>
+    <text x="1140" y="182" text-anchor="middle" fill="#065f46">DOCS</text>
+    <text x="1140" y="198" text-anchor="middle" font-size="8" fill="#10b981">audit</text>
+  </g>
+
+  <!-- "4 parallel reviewers" badge -->
+  <rect x="840" y="112" width="280" height="28" rx="14" fill="#059669" filter="url(#sh)"/>
+  <text x="980" y="131" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#ffffff">4 PARALLEL REVIEWERS · double-verified</text>
+
+  <!-- Phase bands below the belt -->
+  <rect x="145" y="445" width="440" height="28" rx="14" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.2"/>
+  <text x="365" y="464" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#4338ca" letter-spacing="1.5">PLANNING · 6 steps</text>
+
+  <rect x="588" y="445" width="352" height="28" rx="14" fill="#fef3c7" stroke="#fcd34d" stroke-width="1.2"/>
+  <text x="764" y="464" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#92400e" letter-spacing="1.5">EXECUTION · 5 steps</text>
+
+  <rect x="948" y="445" width="284" height="28" rx="14" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.2"/>
+  <text x="1090" y="464" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="700" fill="#047857" letter-spacing="1.5">QUALITY · 4 steps</text>
+
+  <!-- Footer -->
+  <text x="700" y="500" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#64748b">complete · tested · documented — zero half-finished work</text>
+</svg>

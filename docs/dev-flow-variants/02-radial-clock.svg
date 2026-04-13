@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="900" viewBox="0 0 900 900" role="img" aria-label="/dev radial clock — 15 phases orbiting the command core">
+  <defs>
+    <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.1"/>
+    </filter>
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="900" rx="20" fill="url(#bg)" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- Caption -->
+  <text x="450" y="44" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#64748b" letter-spacing="3">/DEV — 15 PHASES IN ORBIT</text>
+
+  <!-- Phase arcs (outer guides) -->
+  <path d="M 450 88 A 362 362 0 0 1 763.5 631" fill="none" stroke="#a5b4fc" stroke-width="6" opacity="0.55" stroke-linecap="round"/>
+  <path d="M 562.8 742.8 A 362 362 0 0 1 136.5 631" fill="none" stroke="#fcd34d" stroke-width="6" opacity="0.55" stroke-linecap="round"/>
+  <path d="M 89.9 487.8 A 362 362 0 0 1 303.2 105" fill="none" stroke="#6ee7b7" stroke-width="6" opacity="0.55" stroke-linecap="round"/>
+
+  <!-- Phase labels near arcs -->
+  <text x="720" y="325" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#4338ca" letter-spacing="1.5">PLANNING</text>
+  <text x="415" y="852" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#92400e" letter-spacing="1.5">EXECUTION</text>
+  <text x="90" y="325" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#047857" letter-spacing="1.5">QUALITY</text>
+
+  <!-- /dev core pill -->
+  <rect x="335" y="420" width="230" height="60" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="2" filter="url(#sh)"/>
+  <text x="450" y="445" text-anchor="middle" font-family="'SF Mono',monospace" font-size="18" font-weight="700" fill="#6d28d9">/dev &lt;task&gt;</text>
+  <text x="450" y="465" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#7c3aed">15-phase orchestrator</text>
+
+  <!-- Nodes (15 of them around the clock) -->
+  <!-- Planning: indigo fill/stroke, steps 1-6 -->
+  <g>
+    <circle cx="450" cy="120" r="26" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="450" y="126" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">01</text>
+    <text x="450" y="80" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Understand</text>
+
+    <circle cx="584" cy="148" r="26" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="584" y="154" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">02</text>
+    <text x="636" y="118" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Architect</text>
+
+    <circle cx="695" cy="229" r="26" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="695" y="235" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">03</text>
+    <text x="748" y="205" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Pseudocode</text>
+
+    <circle cx="764" cy="348" r="26" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="764" y="354" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">04</text>
+    <text x="818" y="352" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Plan</text>
+
+    <circle cx="778" cy="485" r="26" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="778" y="491" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">05</text>
+    <text x="832" y="489" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Contract</text>
+
+    <circle cx="736" cy="615" r="26" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="736" y="621" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">06</text>
+    <text x="788" y="625" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Validate</text>
+  </g>
+
+  <!-- Execution: amber, steps 7-11 -->
+  <g>
+    <circle cx="644" cy="717" r="26" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="644" y="723" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">07</text>
+    <text x="684" y="748" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Implement</text>
+
+    <circle cx="519" cy="773" r="26" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="519" y="779" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">08</text>
+    <text x="540" y="820" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Evaluate</text>
+
+    <circle cx="381" cy="773" r="26" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="381" y="779" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">09</text>
+    <text x="320" y="820" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Verify</text>
+
+    <circle cx="256" cy="717" r="26" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="256" y="723" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">10</text>
+    <text x="180" y="748" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Test</text>
+
+    <circle cx="164" cy="615" r="26" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="164" y="621" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">11</text>
+    <text x="100" y="625" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Goals</text>
+  </g>
+
+  <!-- Quality: emerald, steps 12-15 — Review (12) highlighted with satellites -->
+  <g>
+    <!-- Review node — bigger + filled -->
+    <circle cx="122" cy="485" r="32" fill="#059669" stroke="#047857" stroke-width="2.5" filter="url(#sh)"/>
+    <text x="122" y="492" text-anchor="middle" font-family="'SF Mono',monospace" font-size="13" font-weight="700" fill="#ffffff">12</text>
+    <text x="38" y="489" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="700">Review ×4</text>
+
+    <circle cx="136" cy="348" r="26" fill="#d1fae5" stroke="#059669" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="136" y="354" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#047857">13</text>
+    <text x="84" y="352" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="600">Critic</text>
+
+    <circle cx="205" cy="229" r="26" fill="#d1fae5" stroke="#059669" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="205" y="235" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#047857">14</text>
+    <text x="148" y="205" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="600">Docs</text>
+
+    <circle cx="316" cy="148" r="26" fill="#d1fae5" stroke="#059669" stroke-width="2.2" filter="url(#sh)"/>
+    <text x="316" y="154" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#047857">15</text>
+    <text x="265" y="118" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="600">Report</text>
+  </g>
+
+  <!-- Review satellites: 4 small discs orbiting Review node -->
+  <g>
+    <!-- Satellite 1: Code -->
+    <line x1="122" y1="485" x2="50" y2="410" stroke="#10b981" stroke-width="1.2" opacity="0.55" stroke-dasharray="3,2"/>
+    <circle cx="50" cy="410" r="22" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="50" y="414" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#065f46">Code</text>
+
+    <!-- Satellite 2: Security -->
+    <line x1="122" y1="485" x2="28" y2="485" stroke="#10b981" stroke-width="1.2" opacity="0.55" stroke-dasharray="3,2"/>
+    <circle cx="28" cy="485" r="22" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="28" y="481" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#065f46">Secu</text>
+    <text x="28" y="492" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" font-weight="700" fill="#065f46">rity</text>
+
+    <!-- Satellite 3: Tests -->
+    <line x1="122" y1="485" x2="50" y2="560" stroke="#10b981" stroke-width="1.2" opacity="0.55" stroke-dasharray="3,2"/>
+    <circle cx="50" cy="560" r="22" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="50" y="564" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#065f46">Tests</text>
+
+    <!-- Satellite 4: Docs -->
+    <line x1="122" y1="485" x2="122" y2="580" stroke="#10b981" stroke-width="1.2" opacity="0.55" stroke-dasharray="3,2"/>
+    <circle cx="122" cy="600" r="22" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.8" filter="url(#sh)"/>
+    <text x="122" y="604" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#065f46">Docs</text>
+  </g>
+
+  <!-- Footer -->
+  <text x="450" y="872" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#94a3b8">complete · tested · documented — zero half-finished work</text>
+</svg>

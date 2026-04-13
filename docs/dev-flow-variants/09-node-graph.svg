@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="720" viewBox="0 0 1300 720" role="img" aria-label="/dev node graph — dark architect schematic with bezier edges and 4 review fanout">
+  <defs>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#334155" stroke-width="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="1300" height="720" rx="20" fill="url(#bg)"/>
+  <rect width="1300" height="720" rx="20" fill="url(#grid)"/>
+
+  <!-- Caption -->
+  <text x="650" y="38" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#94a3b8" letter-spacing="3">/DEV — SCHEMATIC · 15 NODES · 4 REVIEWER FANOUT</text>
+
+  <!-- Cluster labels top -->
+  <text x="260" y="82" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#a5b4fc" letter-spacing="2">PLANNING · 6</text>
+  <text x="560" y="82" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#fcd34d" letter-spacing="2">EXECUTION · 5</text>
+  <text x="860" y="82" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#6ee7b7" letter-spacing="2">QUALITY · 4</text>
+  <text x="1130" y="82" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#34d399" letter-spacing="2">REVIEW ×4</text>
+
+  <!-- BEZIER EDGES (drawn first so nodes appear on top) -->
+  <g stroke-width="1.6" fill="none" opacity="0.75">
+    <!-- /dev to Planning nodes -->
+    <path d="M 130 360 Q 200 250 200 180" stroke="#818cf8"/>
+    <path d="M 130 360 Q 200 280 280 200" stroke="#818cf8"/>
+    <path d="M 130 360 Q 200 300 340 280" stroke="#818cf8"/>
+    <path d="M 130 360 Q 200 420 340 440" stroke="#818cf8"/>
+    <path d="M 130 360 Q 200 440 280 520" stroke="#818cf8"/>
+    <path d="M 130 360 Q 200 480 200 540" stroke="#818cf8"/>
+
+    <!-- Planning to Execution -->
+    <path d="M 340 280 Q 440 260 520 200" stroke="#a78bfa"/>
+    <path d="M 340 360 Q 440 320 520 280" stroke="#a78bfa"/>
+    <path d="M 340 440 Q 440 400 520 360" stroke="#a78bfa"/>
+    <path d="M 340 440 Q 440 480 600 440" stroke="#a78bfa"/>
+    <path d="M 340 360 Q 440 420 600 520" stroke="#a78bfa"/>
+
+    <!-- Execution to Quality -->
+    <path d="M 620 280 Q 740 260 820 200" stroke="#fbbf24"/>
+    <path d="M 620 360 Q 740 340 820 320" stroke="#fbbf24"/>
+    <path d="M 620 440 Q 740 400 820 400" stroke="#fbbf24"/>
+    <path d="M 620 520 Q 740 500 820 520" stroke="#fbbf24"/>
+
+    <!-- Review to 4 Reviewers (fanout) -->
+    <path d="M 860 360 Q 1000 280 1080 220" stroke="#10b981" stroke-width="2"/>
+    <path d="M 860 360 Q 1000 320 1080 340" stroke="#10b981" stroke-width="2"/>
+    <path d="M 860 360 Q 1000 400 1080 420" stroke="#10b981" stroke-width="2"/>
+    <path d="M 860 360 Q 1000 440 1080 500" stroke="#10b981" stroke-width="2"/>
+  </g>
+
+  <!-- /dev core node (big violet) -->
+  <circle cx="100" cy="360" r="38" fill="#4c1d95" stroke="#c4b5fd" stroke-width="2.5" filter="url(#glow)"/>
+  <text x="100" y="358" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#ddd6fe">/dev</text>
+  <text x="100" y="374" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#a78bfa">&lt;task&gt;</text>
+
+  <!-- PLANNING CLUSTER (indigo) — 6 nodes -->
+  <g font-family="'SF Mono',monospace" font-size="11" font-weight="700">
+    <circle cx="200" cy="180" r="22" fill="#312e81" stroke="#6366f1" stroke-width="2" filter="url(#glow)"/>
+    <text x="200" y="184" text-anchor="middle" fill="#e0e7ff">01</text>
+    <text x="164" y="146" font-family="-apple-system,sans-serif" font-size="10" fill="#a5b4fc" font-weight="600">Understand</text>
+
+    <circle cx="280" cy="200" r="22" fill="#312e81" stroke="#6366f1" stroke-width="2" filter="url(#glow)"/>
+    <text x="280" y="204" text-anchor="middle" fill="#e0e7ff">02</text>
+    <text x="310" y="196" font-family="-apple-system,sans-serif" font-size="10" fill="#a5b4fc" font-weight="600">Architect</text>
+
+    <circle cx="340" cy="280" r="22" fill="#312e81" stroke="#6366f1" stroke-width="2" filter="url(#glow)"/>
+    <text x="340" y="284" text-anchor="middle" fill="#e0e7ff">03</text>
+    <text x="370" y="280" font-family="-apple-system,sans-serif" font-size="10" fill="#a5b4fc" font-weight="600">Pseudocode</text>
+
+    <circle cx="340" cy="440" r="22" fill="#312e81" stroke="#6366f1" stroke-width="2" filter="url(#glow)"/>
+    <text x="340" y="444" text-anchor="middle" fill="#e0e7ff">04</text>
+    <text x="370" y="444" font-family="-apple-system,sans-serif" font-size="10" fill="#a5b4fc" font-weight="600">Plan</text>
+
+    <circle cx="280" cy="520" r="22" fill="#312e81" stroke="#6366f1" stroke-width="2" filter="url(#glow)"/>
+    <text x="280" y="524" text-anchor="middle" fill="#e0e7ff">05</text>
+    <text x="310" y="528" font-family="-apple-system,sans-serif" font-size="10" fill="#a5b4fc" font-weight="600">Contract</text>
+
+    <circle cx="200" cy="540" r="22" fill="#312e81" stroke="#6366f1" stroke-width="2" filter="url(#glow)"/>
+    <text x="200" y="544" text-anchor="middle" fill="#e0e7ff">06</text>
+    <text x="170" y="580" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" fill="#a5b4fc" font-weight="600">Validate</text>
+  </g>
+
+  <!-- EXECUTION CLUSTER (amber) — 5 nodes in pentagon -->
+  <g font-family="'SF Mono',monospace" font-size="11" font-weight="700">
+    <circle cx="520" cy="200" r="22" fill="#78350f" stroke="#d97706" stroke-width="2" filter="url(#glow)"/>
+    <text x="520" y="204" text-anchor="middle" fill="#fde68a">07</text>
+    <text x="490" y="168" font-family="-apple-system,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">Implement</text>
+
+    <circle cx="620" cy="280" r="22" fill="#78350f" stroke="#d97706" stroke-width="2" filter="url(#glow)"/>
+    <text x="620" y="284" text-anchor="middle" fill="#fde68a">08</text>
+    <text x="650" y="276" font-family="-apple-system,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">Evaluate</text>
+
+    <circle cx="620" cy="440" r="22" fill="#78350f" stroke="#d97706" stroke-width="2" filter="url(#glow)"/>
+    <text x="620" y="444" text-anchor="middle" fill="#fde68a">09</text>
+    <text x="650" y="444" font-family="-apple-system,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">Verify</text>
+
+    <circle cx="520" cy="520" r="22" fill="#78350f" stroke="#d97706" stroke-width="2" filter="url(#glow)"/>
+    <text x="520" y="524" text-anchor="middle" fill="#fde68a">10</text>
+    <text x="490" y="560" font-family="-apple-system,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">Test</text>
+
+    <circle cx="460" cy="360" r="22" fill="#78350f" stroke="#d97706" stroke-width="2" filter="url(#glow)"/>
+    <text x="460" y="364" text-anchor="middle" fill="#fde68a">11</text>
+    <text x="420" y="360" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" fill="#fbbf24" font-weight="600">Goals</text>
+  </g>
+
+  <!-- QUALITY CLUSTER (emerald) — 4 nodes, Review highlighted -->
+  <g font-family="'SF Mono',monospace" font-size="11" font-weight="700">
+    <!-- Review node — big, glowing, key dispatcher -->
+    <circle cx="860" cy="360" r="32" fill="#047857" stroke="#6ee7b7" stroke-width="3" filter="url(#glow)"/>
+    <text x="860" y="360" text-anchor="middle" fill="#d1fae5" font-size="13">12</text>
+    <text x="860" y="378" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#ecfdf5" font-weight="700">Review ×4</text>
+
+    <circle cx="820" cy="200" r="22" fill="#064e3b" stroke="#059669" stroke-width="2" filter="url(#glow)"/>
+    <text x="820" y="204" text-anchor="middle" fill="#a7f3d0">13</text>
+    <text x="820" y="168" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#34d399" font-weight="600">Critic</text>
+
+    <circle cx="820" cy="320" r="22" fill="#064e3b" stroke="#059669" stroke-width="2" filter="url(#glow)"/>
+    <text x="820" y="324" text-anchor="middle" fill="#a7f3d0">14</text>
+    <text x="788" y="322" text-anchor="end" font-family="-apple-system,sans-serif" font-size="10" fill="#34d399" font-weight="600">Docs</text>
+
+    <circle cx="820" cy="520" r="22" fill="#064e3b" stroke="#059669" stroke-width="2" filter="url(#glow)"/>
+    <text x="820" y="524" text-anchor="middle" fill="#a7f3d0">15</text>
+    <text x="820" y="560" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#34d399" font-weight="600">Report</text>
+  </g>
+
+  <!-- 4 REVIEWER NODES (east fan from Review) -->
+  <g font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#d1fae5">
+    <circle cx="1100" cy="220" r="26" fill="#065f46" stroke="#10b981" stroke-width="2" filter="url(#glow)"/>
+    <text x="1100" y="218" text-anchor="middle" font-size="10">CODE</text>
+    <text x="1100" y="230" text-anchor="middle" font-size="8" opacity="0.7">review</text>
+
+    <circle cx="1100" cy="340" r="26" fill="#065f46" stroke="#10b981" stroke-width="2" filter="url(#glow)"/>
+    <text x="1100" y="337" text-anchor="middle" font-size="9">SECURITY</text>
+    <text x="1100" y="349" text-anchor="middle" font-size="8" opacity="0.7">scan</text>
+
+    <circle cx="1100" cy="420" r="26" fill="#065f46" stroke="#10b981" stroke-width="2" filter="url(#glow)"/>
+    <text x="1100" y="418" text-anchor="middle" font-size="10">TESTS</text>
+    <text x="1100" y="430" text-anchor="middle" font-size="8" opacity="0.7">coverage</text>
+
+    <circle cx="1100" cy="500" r="26" fill="#065f46" stroke="#10b981" stroke-width="2" filter="url(#glow)"/>
+    <text x="1100" y="498" text-anchor="middle" font-size="10">DOCS</text>
+    <text x="1100" y="510" text-anchor="middle" font-size="8" opacity="0.7">audit</text>
+  </g>
+
+  <!-- OUTPUT terminal node right -->
+  <circle cx="1220" cy="360" r="30" fill="#6d28d9" stroke="#c4b5fd" stroke-width="2.5" filter="url(#glow)"/>
+  <text x="1220" y="358" text-anchor="middle" font-family="'SF Mono',monospace" font-size="10" font-weight="700" fill="#ede9fe">DONE</text>
+  <text x="1220" y="372" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#c4b5fd">shipped</text>
+
+  <!-- Reviewer → Done edges -->
+  <g stroke="#8b5cf6" stroke-width="1.4" fill="none" opacity="0.5" stroke-dasharray="4,3">
+    <path d="M 1126 220 Q 1180 280 1200 350"/>
+    <path d="M 1126 340 L 1190 358"/>
+    <path d="M 1126 420 Q 1180 400 1200 370"/>
+    <path d="M 1126 500 Q 1180 430 1200 370"/>
+  </g>
+
+  <!-- Bottom legend / footer -->
+  <text x="650" y="680" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#64748b">complete · tested · documented — zero half-finished work</text>
+</svg>
