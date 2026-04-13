@@ -45,4 +45,18 @@ describe('buildSettings', () => {
     buildSettings(baseSettings, ['test.sh'], ['playwright']);
     assert.equal(baseSettings.hooks.PostToolUse[0].hooks.length, originalLength);
   });
+
+  it('dedupes hook files that appear multiple times', () => {
+    const result = buildSettings(baseSettings, ['format-on-edit.sh', 'format-on-edit.sh'], []);
+    const formatHooks = result.hooks.PostToolUse[0].hooks
+      .filter(h => h.command.includes('format-on-edit.sh'));
+    assert.equal(formatHooks.length, 1);
+  });
+
+  it('does not re-add a hook already present in the base settings', () => {
+    const result = buildSettings(baseSettings, ['console-log-warning.sh'], []);
+    const warningHooks = result.hooks.PostToolUse[0].hooks
+      .filter(h => h.command.includes('console-log-warning.sh'));
+    assert.equal(warningHooks.length, 1);
+  });
 });
