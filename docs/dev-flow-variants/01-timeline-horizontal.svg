@@ -1,136 +1,142 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="420" viewBox="0 0 1400 420" role="img" aria-label="/dev timeline — 15 phases with 4 parallel reviewers">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="460" viewBox="0 0 1600 460" role="img" aria-label="/dev timeline — 15 phases in a horizontal sequence with 4-reviewer fanout">
   <defs>
     <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.1"/>
     </filter>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#f8fafc"/><stop offset="100%" stop-color="#f1f5f9"/>
     </linearGradient>
+    <linearGradient id="track" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#a5b4fc"/>
+      <stop offset="40%" stop-color="#a5b4fc"/>
+      <stop offset="43%" stop-color="#fcd34d"/>
+      <stop offset="74%" stop-color="#fcd34d"/>
+      <stop offset="77%" stop-color="#6ee7b7"/>
+      <stop offset="100%" stop-color="#6ee7b7"/>
+    </linearGradient>
   </defs>
-  <rect width="1400" height="420" rx="20" fill="url(#bg)" stroke="#e2e8f0" stroke-width="1.5"/>
+  <rect width="1600" height="460" rx="20" fill="url(#bg)" stroke="#e2e8f0" stroke-width="1.5"/>
 
   <!-- Caption -->
-  <text x="700" y="34" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="11" font-weight="600" fill="#64748b" letter-spacing="3">/DEV — 15-PHASE ORCHESTRATOR TIMELINE</text>
+  <text x="800" y="34" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="12" font-weight="600" fill="#64748b" letter-spacing="3">/DEV — 15-PHASE DEVELOPMENT ORCHESTRATOR</text>
 
-  <!-- Phase zones -->
-  <rect x="166" y="102" width="420" height="180" rx="18" fill="#eef2ff" opacity="0.55"/>
-  <rect x="598" y="102" width="350" height="180" rx="18" fill="#fef3c7" opacity="0.55"/>
-  <rect x="960" y="102" width="280" height="180" rx="18" fill="#d1fae5" opacity="0.55"/>
+  <!-- /dev pill at top center -->
+  <rect x="680" y="56" width="240" height="60" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.8" filter="url(#sh)"/>
+  <text x="800" y="82" text-anchor="middle" font-family="'SF Mono','Fira Code',ui-monospace,monospace" font-size="18" font-weight="700" fill="#6d28d9">/dev &lt;task&gt;</text>
+  <text x="800" y="102" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" fill="#7c3aed">auto-complexity · review gates · documentation</text>
 
-  <!-- Phase titles -->
-  <text x="376" y="128" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#4338ca" letter-spacing="1.5">PLANNING · 6</text>
-  <text x="773" y="128" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#92400e" letter-spacing="1.5">EXECUTION · 5</text>
-  <text x="1100" y="128" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#047857" letter-spacing="1.5">QUALITY · 4</text>
+  <!-- Connector from /dev pill to track (subtle) -->
+  <path d="M 800 116 L 800 145" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4,3"/>
 
-  <!-- Track -->
-  <line x1="196" y1="210" x2="1204" y2="210" stroke="#cbd5e1" stroke-width="2.5"/>
+  <!-- Phase zones (soft bands behind track) -->
+  <rect x="90" y="160" width="600" height="170" rx="20" fill="#eef2ff" opacity="0.65"/>
+  <rect x="700" y="160" width="480" height="170" rx="20" fill="#fef3c7" opacity="0.65"/>
+  <rect x="1190" y="160" width="400" height="170" rx="20" fill="#d1fae5" opacity="0.65"/>
 
-  <!-- Task input pill (left) -->
-  <rect x="40" y="190" width="120" height="40" rx="20" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#sh)"/>
-  <text x="100" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="13" font-weight="700" fill="#475569">TASK</text>
+  <!-- Phase titles above zones -->
+  <text x="390" y="186" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#4338ca" letter-spacing="2.5">PLANNING · 6</text>
+  <text x="940" y="186" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#92400e" letter-spacing="2.5">EXECUTION · 5</text>
+  <text x="1390" y="186" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#047857" letter-spacing="2.5">QUALITY · 4</text>
 
-  <!-- Shipped output pill (right) -->
-  <rect x="1240" y="190" width="120" height="40" rx="20" fill="#6d28d9" filter="url(#sh)"/>
-  <text x="1300" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="13" font-weight="700" fill="#ffffff">SHIPPED</text>
+  <!-- Track: thick gradient line with rainbow phase colors -->
+  <rect x="135" y="266" width="1330" height="6" rx="3" fill="url(#track)"/>
 
-  <!-- Connector from Task to first node -->
-  <path d="M 160 210 L 196 210" stroke="#cbd5e1" stroke-width="2"/>
-  <!-- Connector from last node to Shipped -->
-  <path d="M 1204 210 L 1240 210" stroke="#6d28d9" stroke-width="2"/>
-
-  <!-- Nodes: pos 196, 268, 340, 412, 484, 556 | 628, 700, 772, 844, 916 | 988, 1060, 1132, 1204 -->
-  <!-- Planning nodes (indigo) -->
+  <!-- Nodes: 15 evenly spaced at x=135, 230, 325, ..., 1465 (spacing 95) -->
+  <!-- Planning (01-06) — indigo -->
   <g>
-    <circle cx="196" cy="210" r="22" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="196" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#4338ca">01</text>
-    <text x="196" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Understand</text>
+    <circle cx="135" cy="269" r="26" fill="#ffffff" stroke="#6366f1" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="135" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">01</text>
+    <text x="135" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#312e81">Understand</text>
 
-    <circle cx="268" cy="210" r="22" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="268" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#4338ca">02</text>
-    <text x="268" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Architect</text>
+    <circle cx="230" cy="269" r="26" fill="#ffffff" stroke="#6366f1" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="230" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">02</text>
+    <text x="230" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#312e81">Architect</text>
 
-    <circle cx="340" cy="210" r="22" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="340" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#4338ca">03</text>
-    <text x="340" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Pseudocode</text>
+    <circle cx="325" cy="269" r="26" fill="#ffffff" stroke="#6366f1" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="325" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">03</text>
+    <text x="325" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#312e81">Pseudocode</text>
 
-    <circle cx="412" cy="210" r="22" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="412" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#4338ca">04</text>
-    <text x="412" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Plan</text>
+    <circle cx="420" cy="269" r="26" fill="#ffffff" stroke="#6366f1" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="420" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">04</text>
+    <text x="420" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#312e81">Plan</text>
 
-    <circle cx="484" cy="210" r="22" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="484" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#4338ca">05</text>
-    <text x="484" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Contract</text>
+    <circle cx="515" cy="269" r="26" fill="#ffffff" stroke="#6366f1" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="515" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">05</text>
+    <text x="515" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#312e81">Contract</text>
 
-    <circle cx="556" cy="210" r="22" fill="#eef2ff" stroke="#6366f1" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="556" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#4338ca">06</text>
-    <text x="556" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#4338ca" font-weight="600">Validate</text>
+    <circle cx="610" cy="269" r="26" fill="#ffffff" stroke="#6366f1" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="610" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#4338ca">06</text>
+    <text x="610" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#312e81">Validate</text>
   </g>
 
-  <!-- Execution nodes (amber) -->
+  <!-- Execution (07-11) — amber -->
   <g>
-    <circle cx="628" cy="210" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="628" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#92400e">07</text>
-    <text x="628" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Implement</text>
+    <circle cx="705" cy="269" r="26" fill="#ffffff" stroke="#d97706" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="705" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">07</text>
+    <text x="705" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#78350f">Implement</text>
 
-    <circle cx="700" cy="210" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="700" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#92400e">08</text>
-    <text x="700" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Evaluate</text>
+    <circle cx="800" cy="269" r="26" fill="#ffffff" stroke="#d97706" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="800" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">08</text>
+    <text x="800" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#78350f">Evaluate</text>
 
-    <circle cx="772" cy="210" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="772" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#92400e">09</text>
-    <text x="772" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Verify</text>
+    <circle cx="895" cy="269" r="26" fill="#ffffff" stroke="#d97706" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="895" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">09</text>
+    <text x="895" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#78350f">Verify</text>
 
-    <circle cx="844" cy="210" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="844" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#92400e">10</text>
-    <text x="844" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Test</text>
+    <circle cx="990" cy="269" r="26" fill="#ffffff" stroke="#d97706" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="990" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">10</text>
+    <text x="990" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#78350f">Test</text>
 
-    <circle cx="916" cy="210" r="22" fill="#fef3c7" stroke="#d97706" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="916" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#92400e">11</text>
-    <text x="916" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#92400e" font-weight="600">Goals</text>
+    <circle cx="1085" cy="269" r="26" fill="#ffffff" stroke="#d97706" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="1085" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#92400e">11</text>
+    <text x="1085" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#78350f">Goals</text>
   </g>
 
-  <!-- Quality nodes (emerald) -->
+  <!-- Quality (12-15) — emerald, Review highlighted -->
   <g>
-    <!-- Review node — highlighted with ×4 badge -->
-    <circle cx="988" cy="210" r="26" fill="#059669" stroke="#047857" stroke-width="2.5" filter="url(#sh)"/>
-    <text x="988" y="216" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#ffffff">12</text>
-    <text x="988" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="700">Review ×4</text>
+    <!-- Review — bigger, darker, filled -->
+    <circle cx="1180" cy="269" r="32" fill="#059669" stroke="#047857" stroke-width="2.8" filter="url(#sh)"/>
+    <text x="1180" y="275" text-anchor="middle" font-family="'SF Mono',monospace" font-size="13" font-weight="700" fill="#ffffff">12</text>
+    <text x="1180" y="228" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="700" fill="#047857">Review ×4</text>
 
-    <circle cx="1060" cy="210" r="22" fill="#d1fae5" stroke="#059669" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="1060" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#047857">13</text>
-    <text x="1060" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="600">Critic</text>
+    <circle cx="1275" cy="269" r="26" fill="#ffffff" stroke="#059669" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="1275" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#047857">13</text>
+    <text x="1275" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#064e3b">Critic</text>
 
-    <circle cx="1132" cy="210" r="22" fill="#d1fae5" stroke="#059669" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="1132" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#047857">14</text>
-    <text x="1132" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="600">Docs</text>
+    <circle cx="1370" cy="269" r="26" fill="#ffffff" stroke="#059669" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="1370" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#047857">14</text>
+    <text x="1370" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#064e3b">Docs</text>
 
-    <circle cx="1204" cy="210" r="22" fill="#d1fae5" stroke="#059669" stroke-width="2.2" filter="url(#sh)"/>
-    <text x="1204" y="215" text-anchor="middle" font-family="'SF Mono',monospace" font-size="11" font-weight="700" fill="#047857">15</text>
-    <text x="1204" y="172" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#047857" font-weight="600">Report</text>
+    <circle cx="1465" cy="269" r="26" fill="#ffffff" stroke="#059669" stroke-width="2.4" filter="url(#sh)"/>
+    <text x="1465" y="274" text-anchor="middle" font-family="'SF Mono',monospace" font-size="12" font-weight="700" fill="#047857">15</text>
+    <text x="1465" y="232" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600" fill="#064e3b">Report</text>
   </g>
 
-  <!-- Review branch: 4 reviewers fan from Review node (988, 236) down to pills at y=320 -->
-  <path d="M 988 236 Q 988 274 850 320" stroke="#10b981" stroke-width="1.4" fill="none" opacity="0.55" stroke-dasharray="4,3"/>
-  <path d="M 988 236 Q 988 274 942 320" stroke="#10b981" stroke-width="1.4" fill="none" opacity="0.55" stroke-dasharray="4,3"/>
-  <path d="M 988 236 Q 988 274 1034 320" stroke="#10b981" stroke-width="1.4" fill="none" opacity="0.55" stroke-dasharray="4,3"/>
-  <path d="M 988 236 Q 988 274 1126 320" stroke="#10b981" stroke-width="1.4" fill="none" opacity="0.55" stroke-dasharray="4,3"/>
+  <!-- Review branch: fan-out to 4 reviewer pills -->
+  <!-- Pills placed below Review node -->
+  <g stroke="#10b981" stroke-width="1.4" fill="none" opacity="0.6" stroke-dasharray="4,3">
+    <path d="M 1180 301 Q 1180 340 1020 370"/>
+    <path d="M 1180 301 Q 1180 340 1125 370"/>
+    <path d="M 1180 301 Q 1180 340 1235 370"/>
+    <path d="M 1180 301 Q 1180 340 1340 370"/>
+  </g>
 
   <!-- 4 reviewer pills -->
   <g font-family="-apple-system,sans-serif" font-size="11" font-weight="600" fill="#065f46">
-    <rect x="810" y="320" width="80" height="28" rx="14" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
-    <text x="850" y="339" text-anchor="middle">Code</text>
+    <rect x="972" y="370" width="96" height="30" rx="15" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
+    <text x="1020" y="389" text-anchor="middle">Code</text>
 
-    <rect x="902" y="320" width="80" height="28" rx="14" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
-    <text x="942" y="339" text-anchor="middle">Security</text>
+    <rect x="1077" y="370" width="96" height="30" rx="15" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
+    <text x="1125" y="389" text-anchor="middle">Security</text>
 
-    <rect x="994" y="320" width="80" height="28" rx="14" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
-    <text x="1034" y="339" text-anchor="middle">Tests</text>
+    <rect x="1187" y="370" width="96" height="30" rx="15" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
+    <text x="1235" y="389" text-anchor="middle">Tests</text>
 
-    <rect x="1086" y="320" width="80" height="28" rx="14" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
-    <text x="1126" y="339" text-anchor="middle">Docs</text>
+    <rect x="1292" y="370" width="96" height="30" rx="15" fill="#ffffff" stroke="#6ee7b7" stroke-width="1.6" filter="url(#sh)"/>
+    <text x="1340" y="389" text-anchor="middle">Docs</text>
   </g>
-  <text x="988" y="368" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" fill="#065f46" font-style="italic">4 parallel reviewers · double-verified findings</text>
+  <text x="1180" y="418" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" fill="#065f46" font-style="italic">4 parallel reviewers · double-verified findings</text>
 
   <!-- Footer -->
-  <text x="700" y="398" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#94a3b8">complete · tested · documented — zero half-finished work</text>
+  <text x="800" y="442" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#94a3b8">complete · tested · documented — zero half-finished work</text>
 </svg>
