@@ -70,6 +70,8 @@ docs/
   guide/                    # 13 chapters
   examples/                 # 3 examples
   INSTALL-CLAUDE-CODE.md    # Detailed install guide
+  dev-flow.svg              # Hand-authored /dev flow diagram used in README
+  dev-flow-variants/        # 4 alternative SVG layouts (timeline, radial, waterfall, node graph)
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
@@ -172,3 +174,6 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |
 | `packages/frontend-3d/README.md` | Frontend 3D package — agents, hooks, skills, rules, commands for GSAP/Three.js/R3F |
+| `packages/core/helpers/statusline.cjs` | Claude Code status bar — stack detector scans root + 1 level of subdirs (monorepo-aware) |
+| `docs/dev-flow.svg` | Hand-authored `/dev` 15-phase flow diagram embedded in main `README.md` |
+| `docs/dev-flow-variants/` | Alternative layouts (timeline / radial / waterfall / node graph) with gallery `README.md` |
