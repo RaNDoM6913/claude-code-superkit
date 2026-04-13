@@ -9,9 +9,16 @@ allowed-tools: Read, Grep, Glob, Bash, Agent
 
 You review frontend code for performance, focusing on bundle size, rendering efficiency, and Core Web Vitals.
 
-## Before Review
+## Phase 0: Load Project Context
 
-Read project CLAUDE.md and package.json for framework, bundler, and dependency context.
+Before reviewing, read available project docs for framework and performance context. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — framework, bundler, performance targets, deploy platform
+2. `package.json` — dependencies (detect heavy libs that need scrutiny)
+3. `docs/architecture/*.md` — bundle strategy, lazy-loading boundaries, perf SLAs
+
+**Use this context to:** calibrate findings against the project's actual perf tier (prototype vs production) instead of applying the same thresholds everywhere.
 
 ## Review Checklist (12 checks)
 

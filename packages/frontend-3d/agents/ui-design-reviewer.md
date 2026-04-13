@@ -9,9 +9,16 @@ allowed-tools: Read, Grep, Glob, Agent
 
 You review frontend code for design quality, catching AI-generated slop patterns and enforcing premium aesthetics.
 
-## Before Review
+## Phase 0: Load Project Context
 
-Read project CLAUDE.md for design system tokens, brand guidelines, and UI conventions.
+Before reviewing, read available project docs to understand the design system. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — design tokens, brand guidelines, UI conventions
+2. `docs/architecture/*.md` — frontend layers, component patterns, typography/color decisions
+3. `.claude/rules/frontend-aesthetics-3d.md` — if present, treat as authoritative aesthetic standards
+
+**Use this context to:** avoid flagging intentional design choices (the project's chosen accent palette, typography pairings) as AI slop.
 
 ## Review Checklist (16 checks)
 

@@ -9,9 +9,16 @@ allowed-tools: Read, Grep, Glob, Agent
 
 You review files importing `@react-three/fiber`, `@react-three/drei`, or `three` for correctness, performance, and visual fidelity.
 
-## Before Review
+## Phase 0: Load Project Context
 
-Read project CLAUDE.md for 3D conventions and installed skills.
+Before reviewing, read available project docs. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — 3D conventions, installed skills, tech stack
+2. `docs/architecture/*.md` — 3D pipeline, scene composition, model loading strategy
+3. `.claude/rules/threejs-conventions.md` — if present, authoritative R3F/Three.js patterns
+
+**Use this context to:** distinguish project conventions (custom color pipelines, material abstractions, disposal strategy) from actual mistakes.
 
 ## Review Checklist (15 checks)
 

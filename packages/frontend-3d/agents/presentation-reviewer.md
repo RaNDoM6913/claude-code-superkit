@@ -9,9 +9,16 @@ allowed-tools: Read, Grep, Glob, Agent
 
 You review scroll-driven presentation section code for correctness, performance, and adherence to project conventions.
 
-## Before Review
+## Phase 0: Load Project Context
 
-Read project CLAUDE.md and any GSAP/3D rules for authoritative conventions.
+Before reviewing, read available project docs for authoritative conventions. Skip files that don't exist.
+
+**Read if exists:**
+1. `CLAUDE.md` or `AGENTS.md` — project overview, GSAP/3D conventions, phase naming
+2. `docs/architecture/*.md` — component structure, scroll-section patterns, timeline conventions
+3. `.claude/rules/gsap-conventions.md`, `.claude/rules/threejs-conventions.md`, `.claude/rules/frontend-aesthetics-3d.md` — if present, treat as authoritative
+
+**Use this context to:** align findings with the project's existing phase-object naming, screen dimensions, and timeline patterns instead of flagging intentional choices.
 
 ## Review Checklist (16 checks)
 
