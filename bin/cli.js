@@ -132,4 +132,8 @@ async function main() {
   }
 }
 
-main();
+main().catch(err => {
+  console.error(`\n✗ Error: ${err.message}`);
+  if (process.env.DEBUG) console.error(err.stack);
+  process.exit(1);
+});
