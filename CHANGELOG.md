@@ -16,6 +16,7 @@ All notable changes to claude-code-superkit are documented here.
 ### Changed
 - **README — Frontend 3D section** — replaced the two-column 2×2 tables (Agents/Skills and Hooks/Rules) with single-column bullet lists per category. Much easier to scan on mobile and scales past 4 items per group without breaking the grid.
 - **README — External design & asset resources** — new collapsible section (under Frontend 3D) grouping five curated resources: [React Bits](https://reactbits.dev) (open-source React components), [Unicorn.Studio](https://www.unicorn.studio) (no-code WebGL), [Cosmos](https://www.cosmos.so) (visual moodboards), [Free Faces](https://www.freefaces.gallery) (free fonts), and [Pixolite](https://pixolite.ru) (free 3D assets). The existing community skill packs and `gsap-master` MCP server are consolidated into the same block so there's one place to look for frontend resources.
+- **README — `/dev` flow diagram** — replaced the mermaid block (which rendered a flat `P→E→Q` graph with empty-string edge labels) with a hand-authored SVG at `docs/dev-flow.svg`. Three pastel phase cards (Planning / Execution / Quality) list all 15 numbered steps with monospaced numbers for alignment, connected by two minimal arrows between phase headers — no per-step arrows, no redundant dashed lines. Subtle drop-shadow, gradient canvas, aligned typography (SF Mono for commands and numbers, system sans for labels).
 
 ## [1.3.8] — 2026-04-09
 

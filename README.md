@@ -91,18 +91,9 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.8 history.
 
 ## 🔄 How `/dev` Works
 
-```mermaid
-graph LR
-    P -->|" "| E -->|" "| Q
-
-    P["📐 <b>Planning</b><br/><br/>1 · Understand<br/>2 · Architect<br/>3 · Pseudocode<br/>4 · Plan<br/>5 · Contract<br/>6 · Validate"]
-    E["⚡ <b>Execution</b><br/><br/>7 · Implement<br/>8 · Evaluate<br/>9 · Verify<br/>10 · Test<br/>11 · Goals"]
-    Q["🔍 <b>Quality</b><br/><br/>12 · Review ×4<br/>13 · Critic<br/>14 · Docs<br/>15 · Report"]
-
-    style P fill:#e3f2fd,stroke:#1976D2,stroke-width:2px,color:#333
-    style E fill:#fff3e0,stroke:#F57C00,stroke-width:2px,color:#333
-    style Q fill:#e8f5e9,stroke:#388E3C,stroke-width:2px,color:#333
-```
+<p align="center">
+  <img src="docs/dev-flow.svg" alt="/dev — 15-phase development orchestrator: Planning (6 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
+</p>
 
 ## 🚀 Installation
 
