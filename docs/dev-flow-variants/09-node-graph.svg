@@ -14,179 +14,179 @@
   <rect width="1840" height="900" rx="22" fill="url(#bg)"/>
   <rect width="1840" height="900" rx="22" fill="url(#grid)"/>
 
-  <!-- Caption -->
-  <text x="920" y="46" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="600" fill="#94a3b8" letter-spacing="3.5">/DEV — SCHEMATIC · 15 NODES · 4 REVIEWER FANOUT</text>
+  <!-- Caption / title (bigger, like a heading) -->
+  <text x="920" y="58" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="700" fill="#cbd5e1" letter-spacing="4">/DEV · 15 NODES · 4 REVIEWER FANOUT</text>
 
-  <!-- Phase/cluster labels (top row) -->
-  <text x="360" y="106" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#a5b4fc" letter-spacing="3">PLANNING · 6</text>
-  <text x="700" y="106" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#fcd34d" letter-spacing="3">EXECUTION · 5</text>
-  <text x="960" y="106" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#6ee7b7" letter-spacing="3">REVIEW · 12</text>
-  <text x="1140" y="106" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#34d399" letter-spacing="3">×4 PARALLEL</text>
-  <text x="1470" y="106" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#6ee7b7" letter-spacing="3">FINALIZE · 3</text>
+  <!-- Phase/cluster labels (bigger) -->
+  <text x="360" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#a5b4fc" letter-spacing="3.5">PLANNING · 6</text>
+  <text x="700" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#fcd34d" letter-spacing="3.5">EXECUTION · 5</text>
+  <text x="960" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#6ee7b7" letter-spacing="3.5">REVIEW · 12</text>
+  <text x="1140" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#34d399" letter-spacing="3.5">×4 PARALLEL</text>
+  <text x="1470" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#6ee7b7" letter-spacing="3.5">FINALIZE · 3</text>
 
   <!-- ═════════════ EDGES (drawn first, nodes on top) ═════════════ -->
   <g fill="none" opacity="0.8">
-    <!-- /dev → 01 (violet bridge) -->
-    <path d="M 180 460 Q 220 340 260 258" stroke="#a78bfa" stroke-width="2.2"/>
+    <!-- /dev → 01 -->
+    <path d="M 188 460 Q 228 340 262 254" stroke="#a78bfa" stroke-width="2.4"/>
 
-    <!-- Planning internal zigzag: 01→02→03→04→05→06 (indigo) -->
-    <g stroke="#818cf8" stroke-width="2">
-      <path d="M 310 256 Q 370 290 410 312"/>
-      <path d="M 410 348 Q 370 380 310 404"/>
-      <path d="M 310 440 Q 370 472 410 494"/>
-      <path d="M 410 530 Q 370 562 310 586"/>
-      <path d="M 310 622 Q 370 656 410 676"/>
+    <!-- Planning internal zigzag: 01→02→03→04→05→06 -->
+    <g stroke="#818cf8" stroke-width="2.2">
+      <path d="M 312 258 Q 374 286 406 310"/>
+      <path d="M 406 350 Q 374 378 312 404"/>
+      <path d="M 312 442 Q 374 470 406 494"/>
+      <path d="M 406 532 Q 374 560 312 586"/>
+      <path d="M 312 624 Q 374 652 406 676"/>
     </g>
 
     <!-- Planning → Execution bridge (06 → 07) -->
-    <path d="M 474 690 Q 560 540 600 260" stroke="#c4b5fd" stroke-width="2.2" stroke-dasharray="6,4"/>
+    <path d="M 478 692 Q 560 540 602 258" stroke="#c4b5fd" stroke-width="2.4" stroke-dasharray="6,4"/>
 
-    <!-- Execution internal zigzag: 07→08→09→10→11 (amber) -->
-    <g stroke="#fbbf24" stroke-width="2">
-      <path d="M 650 256 Q 710 290 750 312"/>
-      <path d="M 750 348 Q 710 380 650 404"/>
-      <path d="M 650 440 Q 710 472 750 494"/>
-      <path d="M 750 530 Q 710 562 650 586"/>
+    <!-- Execution internal zigzag: 07→08→09→10→11 -->
+    <g stroke="#fbbf24" stroke-width="2.2">
+      <path d="M 652 258 Q 714 286 746 310"/>
+      <path d="M 746 350 Q 714 378 652 404"/>
+      <path d="M 652 442 Q 714 470 746 494"/>
+      <path d="M 746 532 Q 714 560 652 586"/>
     </g>
 
     <!-- Execution → Review bridge (11 → 12) -->
-    <path d="M 650 622 Q 820 610 910 500" stroke="#fde68a" stroke-width="2.2" stroke-dasharray="6,4"/>
+    <path d="M 652 624 Q 826 614 906 504" stroke="#fde68a" stroke-width="2.4" stroke-dasharray="6,4"/>
 
-    <!-- Review → 4 reviewers (bright emerald fanout) -->
-    <g stroke="#34d399" stroke-width="2.4">
-      <path d="M 1020 460 Q 1080 360 1094 310"/>
-      <path d="M 1020 462 Q 1080 430 1094 408"/>
-      <path d="M 1020 470 Q 1080 500 1094 520"/>
-      <path d="M 1020 476 Q 1080 580 1094 620"/>
+    <!-- Review → 4 reviewers (fanout) -->
+    <g stroke="#34d399" stroke-width="2.6">
+      <path d="M 1024 458 Q 1078 358 1092 308"/>
+      <path d="M 1024 462 Q 1078 428 1092 404"/>
+      <path d="M 1024 472 Q 1078 502 1092 524"/>
+      <path d="M 1024 476 Q 1078 582 1092 620"/>
     </g>
 
     <!-- 4 reviewers → 13 Critic (merge back) -->
-    <g stroke="#6ee7b7" stroke-width="2">
-      <path d="M 1186 280 Q 1260 380 1320 448"/>
-      <path d="M 1186 400 Q 1260 420 1320 455"/>
-      <path d="M 1186 520 Q 1260 490 1320 472"/>
-      <path d="M 1186 640 Q 1260 540 1320 478"/>
+    <g stroke="#6ee7b7" stroke-width="2.2">
+      <path d="M 1188 280 Q 1258 378 1316 452"/>
+      <path d="M 1188 400 Q 1258 420 1316 458"/>
+      <path d="M 1188 520 Q 1258 488 1316 472"/>
+      <path d="M 1188 640 Q 1258 540 1316 478"/>
     </g>
 
-    <!-- 13 → 14 → 15 (sequential) -->
-    <g stroke="#6ee7b7" stroke-width="2">
-      <path d="M 1372 465 L 1432 465"/>
+    <!-- 13 → 14 → 15 -->
+    <g stroke="#6ee7b7" stroke-width="2.2">
+      <path d="M 1388 465 L 1432 465"/>
       <path d="M 1504 465 L 1566 465"/>
     </g>
 
     <!-- 15 → DONE -->
-    <path d="M 1638 465 Q 1690 465 1716 465" stroke="#c4b5fd" stroke-width="2.4"/>
+    <path d="M 1638 465 Q 1688 465 1710 465" stroke="#c4b5fd" stroke-width="2.6"/>
   </g>
 
-  <!-- ═════════════ /dev CORE (big) ═════════════ -->
-  <circle cx="120" cy="460" r="60" fill="#4c1d95" stroke="#c4b5fd" stroke-width="3" filter="url(#glow)"/>
-  <text x="120" y="456" text-anchor="middle" font-family="'SF Mono',monospace" font-size="18" font-weight="700" fill="#ddd6fe">/dev</text>
-  <text x="120" y="478" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a78bfa">&lt;task&gt;</text>
+  <!-- ═════════════ /dev CORE (bigger) ═════════════ -->
+  <circle cx="120" cy="460" r="68" fill="#4c1d95" stroke="#c4b5fd" stroke-width="3.2" filter="url(#glow)"/>
+  <text x="120" y="456" text-anchor="middle" font-family="'SF Mono',monospace" font-size="20" font-weight="700" fill="#ddd6fe">/dev</text>
+  <text x="120" y="482" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" fill="#a78bfa">&lt;task&gt;</text>
 
-  <!-- ═════════════ PLANNING CLUSTER (6 nodes, labels ABOVE) ═════════════ -->
-  <g font-family="-apple-system,sans-serif" font-size="14" font-weight="600" fill="#a5b4fc">
-    <text x="280" y="206" text-anchor="middle">Understand</text>
-    <text x="440" y="296" text-anchor="middle">Architect</text>
-    <text x="280" y="386" text-anchor="middle">Pseudocode</text>
-    <text x="440" y="476" text-anchor="middle">Plan</text>
-    <text x="280" y="566" text-anchor="middle">Contract</text>
-    <text x="440" y="656" text-anchor="middle">Validate</text>
+  <!-- ═════════════ PLANNING CLUSTER (6 nodes, labels ABOVE, bigger) ═════════════ -->
+  <g font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#a5b4fc">
+    <text x="280" y="196" text-anchor="middle">Understand</text>
+    <text x="440" y="286" text-anchor="middle">Architect</text>
+    <text x="280" y="376" text-anchor="middle">Pseudocode</text>
+    <text x="440" y="466" text-anchor="middle">Plan</text>
+    <text x="280" y="556" text-anchor="middle">Contract</text>
+    <text x="440" y="646" text-anchor="middle">Validate</text>
   </g>
 
-  <g font-family="'SF Mono',monospace" font-size="14" font-weight="700">
-    <circle cx="280" cy="240" r="30" fill="#312e81" stroke="#6366f1" stroke-width="2.4" filter="url(#glow)"/>
+  <g font-family="'SF Mono',monospace" font-size="16" font-weight="700">
+    <circle cx="280" cy="240" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
     <text x="280" y="246" text-anchor="middle" fill="#e0e7ff">01</text>
 
-    <circle cx="440" cy="330" r="30" fill="#312e81" stroke="#6366f1" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="440" cy="330" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
     <text x="440" y="336" text-anchor="middle" fill="#e0e7ff">02</text>
 
-    <circle cx="280" cy="420" r="30" fill="#312e81" stroke="#6366f1" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="280" cy="420" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
     <text x="280" y="426" text-anchor="middle" fill="#e0e7ff">03</text>
 
-    <circle cx="440" cy="510" r="30" fill="#312e81" stroke="#6366f1" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="440" cy="510" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
     <text x="440" y="516" text-anchor="middle" fill="#e0e7ff">04</text>
 
-    <circle cx="280" cy="600" r="30" fill="#312e81" stroke="#6366f1" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="280" cy="600" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
     <text x="280" y="606" text-anchor="middle" fill="#e0e7ff">05</text>
 
-    <circle cx="440" cy="690" r="30" fill="#312e81" stroke="#6366f1" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="440" cy="690" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
     <text x="440" y="696" text-anchor="middle" fill="#e0e7ff">06</text>
   </g>
 
-  <!-- ═════════════ EXECUTION CLUSTER (5 nodes, labels ABOVE) ═════════════ -->
-  <g font-family="-apple-system,sans-serif" font-size="14" font-weight="600" fill="#fbbf24">
-    <text x="620" y="206" text-anchor="middle">Implement</text>
-    <text x="780" y="296" text-anchor="middle">Evaluate</text>
-    <text x="620" y="386" text-anchor="middle">Verify</text>
-    <text x="780" y="476" text-anchor="middle">Test</text>
-    <text x="620" y="566" text-anchor="middle">Goals</text>
+  <!-- ═════════════ EXECUTION CLUSTER (5 nodes, labels ABOVE, bigger) ═════════════ -->
+  <g font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#fbbf24">
+    <text x="620" y="196" text-anchor="middle">Implement</text>
+    <text x="780" y="286" text-anchor="middle">Evaluate</text>
+    <text x="620" y="376" text-anchor="middle">Verify</text>
+    <text x="780" y="466" text-anchor="middle">Test</text>
+    <text x="620" y="556" text-anchor="middle">Goals</text>
   </g>
 
-  <g font-family="'SF Mono',monospace" font-size="14" font-weight="700">
-    <circle cx="620" cy="240" r="30" fill="#78350f" stroke="#d97706" stroke-width="2.4" filter="url(#glow)"/>
+  <g font-family="'SF Mono',monospace" font-size="16" font-weight="700">
+    <circle cx="620" cy="240" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
     <text x="620" y="246" text-anchor="middle" fill="#fde68a">07</text>
 
-    <circle cx="780" cy="330" r="30" fill="#78350f" stroke="#d97706" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="780" cy="330" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
     <text x="780" y="336" text-anchor="middle" fill="#fde68a">08</text>
 
-    <circle cx="620" cy="420" r="30" fill="#78350f" stroke="#d97706" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="620" cy="420" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
     <text x="620" y="426" text-anchor="middle" fill="#fde68a">09</text>
 
-    <circle cx="780" cy="510" r="30" fill="#78350f" stroke="#d97706" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="780" cy="510" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
     <text x="780" y="516" text-anchor="middle" fill="#fde68a">10</text>
 
-    <circle cx="620" cy="600" r="30" fill="#78350f" stroke="#d97706" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="620" cy="600" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
     <text x="620" y="606" text-anchor="middle" fill="#fde68a">11</text>
   </g>
 
-  <!-- ═════════════ REVIEW HUB (12, biggest) ═════════════ -->
-  <text x="960" y="380" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#6ee7b7">Review ×4</text>
-  <circle cx="960" cy="465" r="58" fill="#047857" stroke="#6ee7b7" stroke-width="3.5" filter="url(#glow)"/>
-  <text x="960" y="464" text-anchor="middle" font-family="'SF Mono',monospace" font-size="20" font-weight="700" fill="#d1fae5">12</text>
-  <text x="960" y="486" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#ecfdf5" font-weight="600">dispatches ×4</text>
+  <!-- ═════════════ REVIEW HUB (12, biggest, bumped) ═════════════ -->
+  <text x="960" y="374" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="17" font-weight="700" fill="#6ee7b7">Review ×4</text>
+  <circle cx="960" cy="465" r="64" fill="#047857" stroke="#6ee7b7" stroke-width="3.6" filter="url(#glow)"/>
+  <text x="960" y="465" text-anchor="middle" font-family="'SF Mono',monospace" font-size="22" font-weight="700" fill="#d1fae5">12</text>
+  <text x="960" y="490" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" fill="#ecfdf5" font-weight="600">dispatches ×4</text>
 
   <!-- ═════════════ 4 REVIEWER NODES (bigger) ═════════════ -->
   <g>
-    <circle cx="1140" cy="280" r="42" fill="#065f46" stroke="#10b981" stroke-width="2.4" filter="url(#glow)"/>
-    <text x="1140" y="278" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#d1fae5">CODE</text>
-    <text x="1140" y="296" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#a7f3d0">review</text>
+    <circle cx="1140" cy="280" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="278" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#d1fae5">CODE</text>
+    <text x="1140" y="298" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">review</text>
 
-    <circle cx="1140" cy="400" r="42" fill="#065f46" stroke="#10b981" stroke-width="2.4" filter="url(#glow)"/>
-    <text x="1140" y="398" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="13" font-weight="700" fill="#d1fae5">SECURITY</text>
-    <text x="1140" y="416" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#a7f3d0">scan</text>
+    <circle cx="1140" cy="400" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="398" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#d1fae5">SECURITY</text>
+    <text x="1140" y="418" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">scan</text>
 
-    <circle cx="1140" cy="520" r="42" fill="#065f46" stroke="#10b981" stroke-width="2.4" filter="url(#glow)"/>
-    <text x="1140" y="518" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#d1fae5">TESTS</text>
-    <text x="1140" y="536" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#a7f3d0">coverage</text>
+    <circle cx="1140" cy="520" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="518" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#d1fae5">TESTS</text>
+    <text x="1140" y="538" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">coverage</text>
 
-    <circle cx="1140" cy="640" r="42" fill="#065f46" stroke="#10b981" stroke-width="2.4" filter="url(#glow)"/>
-    <text x="1140" y="638" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#d1fae5">DOCS</text>
-    <text x="1140" y="656" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10" fill="#a7f3d0">audit</text>
+    <circle cx="1140" cy="640" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="638" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#d1fae5">DOCS</text>
+    <text x="1140" y="658" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">audit</text>
   </g>
 
-  <!-- ═════════════ 13 CRITIC · 14 DOCS · 15 REPORT ═════════════ -->
-  <g font-family="-apple-system,sans-serif" font-size="14" font-weight="600" fill="#34d399">
-    <text x="1352" y="412" text-anchor="middle">Critic</text>
-    <text x="1468" y="412" text-anchor="middle">Docs</text>
-    <text x="1602" y="412" text-anchor="middle">Report</text>
+  <!-- ═════════════ 13 CRITIC · 14 DOCS · 15 REPORT (bigger) ═════════════ -->
+  <g font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#34d399">
+    <text x="1352" y="408" text-anchor="middle">Critic</text>
+    <text x="1468" y="408" text-anchor="middle">Docs</text>
+    <text x="1602" y="408" text-anchor="middle">Report</text>
   </g>
 
-  <g font-family="'SF Mono',monospace" font-size="14" font-weight="700">
-    <circle cx="1352" cy="465" r="32" fill="#064e3b" stroke="#059669" stroke-width="2.4" filter="url(#glow)"/>
+  <g font-family="'SF Mono',monospace" font-size="16" font-weight="700">
+    <circle cx="1352" cy="465" r="36" fill="#064e3b" stroke="#059669" stroke-width="2.6" filter="url(#glow)"/>
     <text x="1352" y="471" text-anchor="middle" fill="#a7f3d0">13</text>
 
-    <circle cx="1468" cy="465" r="32" fill="#064e3b" stroke="#059669" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="1468" cy="465" r="36" fill="#064e3b" stroke="#059669" stroke-width="2.6" filter="url(#glow)"/>
     <text x="1468" y="471" text-anchor="middle" fill="#a7f3d0">14</text>
 
-    <circle cx="1602" cy="465" r="32" fill="#064e3b" stroke="#059669" stroke-width="2.4" filter="url(#glow)"/>
+    <circle cx="1602" cy="465" r="36" fill="#064e3b" stroke="#059669" stroke-width="2.6" filter="url(#glow)"/>
     <text x="1602" y="471" text-anchor="middle" fill="#a7f3d0">15</text>
   </g>
 
-  <!-- ═════════════ DONE TERMINAL ═════════════ -->
-  <text x="1750" y="412" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="600" fill="#c4b5fd">shipped</text>
-  <circle cx="1750" cy="465" r="36" fill="#6d28d9" stroke="#c4b5fd" stroke-width="2.4" filter="url(#glow)"/>
-  <text x="1750" y="472" text-anchor="middle" font-family="'SF Mono',monospace" font-size="13" font-weight="700" fill="#ede9fe">DONE</text>
+  <!-- ═════════════ DONE TERMINAL (bigger) ═════════════ -->
+  <text x="1750" y="408" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#c4b5fd">shipped</text>
+  <circle cx="1750" cy="465" r="40" fill="#6d28d9" stroke="#c4b5fd" stroke-width="2.6" filter="url(#glow)"/>
+  <text x="1750" y="472" text-anchor="middle" font-family="'SF Mono',monospace" font-size="14" font-weight="700" fill="#ede9fe">DONE</text>
 
   <!-- Footer -->
-  <text x="920" y="858" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="13" fill="#64748b">complete · tested · documented — zero half-finished work</text>
+  <text x="920" y="858" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" fill="#64748b">complete · tested · documented — zero half-finished work</text>
 </svg>

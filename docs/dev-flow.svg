@@ -1,84 +1,192 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="480" viewBox="0 0 960 480" role="img" aria-label="/dev — 15-phase development orchestrator. Planning (6 steps) then Execution (5 steps) then Quality (4 steps).">
+<svg xmlns="http://www.w3.org/2000/svg" width="1840" height="900" viewBox="0 0 1840 900" role="img" aria-label="/dev node graph — 15-node dataflow with 4-reviewer fanout, large readable typography">
   <defs>
-    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="130%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.08"/>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
-    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="100%" stop-color="#f1f5f9"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e293b"/>
     </linearGradient>
-    <marker id="arr" viewBox="0 0 10 8" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="userSpaceOnUse">
-      <path d="M 0 0 L 10 4 L 0 8 z" fill="#94a3b8"/>
-    </marker>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#334155" stroke-width="0.4"/>
+    </pattern>
   </defs>
+  <rect width="1840" height="900" rx="22" fill="url(#bg)"/>
+  <rect width="1840" height="900" rx="22" fill="url(#grid)"/>
 
-  <!-- Canvas -->
-  <rect width="960" height="480" rx="20" fill="url(#bgGrad)" stroke="#e2e8f0" stroke-width="1.5"/>
+  <!-- Caption / title (bigger, like a heading) -->
+  <text x="920" y="58" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="700" fill="#cbd5e1" letter-spacing="4">/DEV · 15 NODES · 4 REVIEWER FANOUT</text>
 
-  <!-- Caption -->
-  <text x="480" y="36" text-anchor="middle"
-        font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"
-        font-size="11" font-weight="600" fill="#64748b" letter-spacing="2">15-PHASE DEVELOPMENT ORCHESTRATOR</text>
+  <!-- Phase/cluster labels (bigger) -->
+  <text x="360" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#a5b4fc" letter-spacing="3.5">PLANNING · 6</text>
+  <text x="700" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#fcd34d" letter-spacing="3.5">EXECUTION · 5</text>
+  <text x="960" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#6ee7b7" letter-spacing="3.5">REVIEW · 12</text>
+  <text x="1140" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#34d399" letter-spacing="3.5">×4 PARALLEL</text>
+  <text x="1470" y="118" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="18" font-weight="700" fill="#6ee7b7" letter-spacing="3.5">FINALIZE · 3</text>
 
-  <!-- /dev command pill -->
-  <rect x="340" y="56" width="280" height="60" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1.8" filter="url(#cardShadow)"/>
-  <text x="480" y="80" text-anchor="middle"
-        font-family="'SF Mono','Fira Code',ui-monospace,Menlo,Consolas,monospace"
-        font-size="17" font-weight="700" fill="#6d28d9">/dev &lt;task&gt;</text>
-  <text x="480" y="100" text-anchor="middle"
-        font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"
-        font-size="10.5" fill="#7c3aed">auto-complexity · review gates · documentation</text>
+  <!-- ═════════════ EDGES (drawn first, nodes on top) ═════════════ -->
+  <g fill="none" opacity="0.8">
+    <!-- /dev → 01 -->
+    <path d="M 188 460 Q 228 340 262 254" stroke="#a78bfa" stroke-width="2.4"/>
 
-  <!-- ─────────────── PHASE 1: Planning (indigo) ─────────────── -->
-  <rect x="50" y="144" width="260" height="240" rx="14" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.8" filter="url(#cardShadow)"/>
-  <text x="70" y="178" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="15" font-weight="700" fill="#4338ca">Planning</text>
-  <text x="290" y="178" text-anchor="end" font-family="'SF Mono',ui-monospace,monospace" font-size="10" font-weight="600" fill="#6366f1" opacity="0.85">6 steps</text>
-  <line x1="70" y1="190" x2="290" y2="190" stroke="#c7d2fe" stroke-width="1"/>
+    <!-- Planning internal zigzag: 01→02→03→04→05→06 -->
+    <g stroke="#818cf8" stroke-width="2.2">
+      <path d="M 312 258 Q 374 286 406 310"/>
+      <path d="M 406 350 Q 374 378 312 404"/>
+      <path d="M 312 442 Q 374 470 406 494"/>
+      <path d="M 406 532 Q 374 560 312 586"/>
+      <path d="M 312 624 Q 374 652 406 676"/>
+    </g>
 
-  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="12.5" fill="#312e81">
-    <text y="220"><tspan x="70" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#6366f1">01</tspan><tspan x="100">Understand</tspan></text>
-    <text y="244"><tspan x="70" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#6366f1">02</tspan><tspan x="100">Architect</tspan></text>
-    <text y="268"><tspan x="70" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#6366f1">03</tspan><tspan x="100">Pseudocode</tspan></text>
-    <text y="292"><tspan x="70" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#6366f1">04</tspan><tspan x="100">Plan</tspan></text>
-    <text y="316"><tspan x="70" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#6366f1">05</tspan><tspan x="100">Contract</tspan></text>
-    <text y="340"><tspan x="70" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#6366f1">06</tspan><tspan x="100">Validate</tspan></text>
+    <!-- Planning → Execution bridge (06 → 07) -->
+    <path d="M 478 692 Q 560 540 602 258" stroke="#c4b5fd" stroke-width="2.4" stroke-dasharray="6,4"/>
+
+    <!-- Execution internal zigzag: 07→08→09→10→11 -->
+    <g stroke="#fbbf24" stroke-width="2.2">
+      <path d="M 652 258 Q 714 286 746 310"/>
+      <path d="M 746 350 Q 714 378 652 404"/>
+      <path d="M 652 442 Q 714 470 746 494"/>
+      <path d="M 746 532 Q 714 560 652 586"/>
+    </g>
+
+    <!-- Execution → Review bridge (11 → 12) -->
+    <path d="M 652 624 Q 826 614 906 504" stroke="#fde68a" stroke-width="2.4" stroke-dasharray="6,4"/>
+
+    <!-- Review → 4 reviewers (fanout) -->
+    <g stroke="#34d399" stroke-width="2.6">
+      <path d="M 1024 458 Q 1078 358 1092 308"/>
+      <path d="M 1024 462 Q 1078 428 1092 404"/>
+      <path d="M 1024 472 Q 1078 502 1092 524"/>
+      <path d="M 1024 476 Q 1078 582 1092 620"/>
+    </g>
+
+    <!-- 4 reviewers → 13 Critic (merge back) -->
+    <g stroke="#6ee7b7" stroke-width="2.2">
+      <path d="M 1188 280 Q 1258 378 1316 452"/>
+      <path d="M 1188 400 Q 1258 420 1316 458"/>
+      <path d="M 1188 520 Q 1258 488 1316 472"/>
+      <path d="M 1188 640 Q 1258 540 1316 478"/>
+    </g>
+
+    <!-- 13 → 14 → 15 -->
+    <g stroke="#6ee7b7" stroke-width="2.2">
+      <path d="M 1388 465 L 1432 465"/>
+      <path d="M 1504 465 L 1566 465"/>
+    </g>
+
+    <!-- 15 → DONE -->
+    <path d="M 1638 465 Q 1688 465 1710 465" stroke="#c4b5fd" stroke-width="2.6"/>
   </g>
 
-  <!-- Arrow: Planning → Execution -->
-  <path d="M 316 180 L 344 180" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+  <!-- ═════════════ /dev CORE (bigger) ═════════════ -->
+  <circle cx="120" cy="460" r="68" fill="#4c1d95" stroke="#c4b5fd" stroke-width="3.2" filter="url(#glow)"/>
+  <text x="120" y="456" text-anchor="middle" font-family="'SF Mono',monospace" font-size="20" font-weight="700" fill="#ddd6fe">/dev</text>
+  <text x="120" y="482" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" fill="#a78bfa">&lt;task&gt;</text>
 
-  <!-- ─────────────── PHASE 2: Execution (amber) ─────────────── -->
-  <rect x="350" y="144" width="260" height="240" rx="14" fill="#fef3c7" stroke="#fcd34d" stroke-width="1.8" filter="url(#cardShadow)"/>
-  <text x="370" y="178" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="15" font-weight="700" fill="#92400e">Execution</text>
-  <text x="590" y="178" text-anchor="end" font-family="'SF Mono',ui-monospace,monospace" font-size="10" font-weight="600" fill="#d97706" opacity="0.85">5 steps</text>
-  <line x1="370" y1="190" x2="590" y2="190" stroke="#fde68a" stroke-width="1"/>
-
-  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="12.5" fill="#78350f">
-    <text y="220"><tspan x="370" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#d97706">07</tspan><tspan x="400">Implement</tspan></text>
-    <text y="244"><tspan x="370" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#d97706">08</tspan><tspan x="400">Evaluate</tspan></text>
-    <text y="268"><tspan x="370" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#d97706">09</tspan><tspan x="400">Verify</tspan></text>
-    <text y="292"><tspan x="370" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#d97706">10</tspan><tspan x="400">Test</tspan></text>
-    <text y="316"><tspan x="370" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#d97706">11</tspan><tspan x="400">Goals</tspan></text>
+  <!-- ═════════════ PLANNING CLUSTER (6 nodes, labels ABOVE, bigger) ═════════════ -->
+  <g font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#a5b4fc">
+    <text x="280" y="196" text-anchor="middle">Understand</text>
+    <text x="440" y="286" text-anchor="middle">Architect</text>
+    <text x="280" y="376" text-anchor="middle">Pseudocode</text>
+    <text x="440" y="466" text-anchor="middle">Plan</text>
+    <text x="280" y="556" text-anchor="middle">Contract</text>
+    <text x="440" y="646" text-anchor="middle">Validate</text>
   </g>
 
-  <!-- Arrow: Execution → Quality -->
-  <path d="M 616 180 L 644 180" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arr)"/>
+  <g font-family="'SF Mono',monospace" font-size="16" font-weight="700">
+    <circle cx="280" cy="240" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="280" y="246" text-anchor="middle" fill="#e0e7ff">01</text>
 
-  <!-- ─────────────── PHASE 3: Quality (emerald) ─────────────── -->
-  <rect x="650" y="144" width="260" height="240" rx="14" fill="#d1fae5" stroke="#6ee7b7" stroke-width="1.8" filter="url(#cardShadow)"/>
-  <text x="670" y="178" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="15" font-weight="700" fill="#047857">Quality</text>
-  <text x="890" y="178" text-anchor="end" font-family="'SF Mono',ui-monospace,monospace" font-size="10" font-weight="600" fill="#059669" opacity="0.85">4 steps</text>
-  <line x1="670" y1="190" x2="890" y2="190" stroke="#a7f3d0" stroke-width="1"/>
+    <circle cx="440" cy="330" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="440" y="336" text-anchor="middle" fill="#e0e7ff">02</text>
 
-  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif" font-size="12.5" fill="#064e3b">
-    <text y="220"><tspan x="670" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#059669">12</tspan><tspan x="700">Review ×4</tspan></text>
-    <text y="244"><tspan x="670" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#059669">13</tspan><tspan x="700">Critic</tspan></text>
-    <text y="268"><tspan x="670" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#059669">14</tspan><tspan x="700">Docs</tspan></text>
-    <text y="292"><tspan x="670" font-family="'SF Mono',ui-monospace,monospace" font-size="11" font-weight="700" fill="#059669">15</tspan><tspan x="700">Report</tspan></text>
+    <circle cx="280" cy="420" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="280" y="426" text-anchor="middle" fill="#e0e7ff">03</text>
+
+    <circle cx="440" cy="510" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="440" y="516" text-anchor="middle" fill="#e0e7ff">04</text>
+
+    <circle cx="280" cy="600" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="280" y="606" text-anchor="middle" fill="#e0e7ff">05</text>
+
+    <circle cx="440" cy="690" r="34" fill="#312e81" stroke="#6366f1" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="440" y="696" text-anchor="middle" fill="#e0e7ff">06</text>
   </g>
 
-  <!-- Bottom tagline -->
-  <text x="480" y="438" text-anchor="middle"
-        font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif"
-        font-size="11" fill="#94a3b8">complete · tested · documented — zero half-finished work</text>
+  <!-- ═════════════ EXECUTION CLUSTER (5 nodes, labels ABOVE, bigger) ═════════════ -->
+  <g font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#fbbf24">
+    <text x="620" y="196" text-anchor="middle">Implement</text>
+    <text x="780" y="286" text-anchor="middle">Evaluate</text>
+    <text x="620" y="376" text-anchor="middle">Verify</text>
+    <text x="780" y="466" text-anchor="middle">Test</text>
+    <text x="620" y="556" text-anchor="middle">Goals</text>
+  </g>
+
+  <g font-family="'SF Mono',monospace" font-size="16" font-weight="700">
+    <circle cx="620" cy="240" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="620" y="246" text-anchor="middle" fill="#fde68a">07</text>
+
+    <circle cx="780" cy="330" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="780" y="336" text-anchor="middle" fill="#fde68a">08</text>
+
+    <circle cx="620" cy="420" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="620" y="426" text-anchor="middle" fill="#fde68a">09</text>
+
+    <circle cx="780" cy="510" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="780" y="516" text-anchor="middle" fill="#fde68a">10</text>
+
+    <circle cx="620" cy="600" r="34" fill="#78350f" stroke="#d97706" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="620" y="606" text-anchor="middle" fill="#fde68a">11</text>
+  </g>
+
+  <!-- ═════════════ REVIEW HUB (12, biggest, bumped) ═════════════ -->
+  <text x="960" y="374" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="17" font-weight="700" fill="#6ee7b7">Review ×4</text>
+  <circle cx="960" cy="465" r="64" fill="#047857" stroke="#6ee7b7" stroke-width="3.6" filter="url(#glow)"/>
+  <text x="960" y="465" text-anchor="middle" font-family="'SF Mono',monospace" font-size="22" font-weight="700" fill="#d1fae5">12</text>
+  <text x="960" y="490" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="12" fill="#ecfdf5" font-weight="600">dispatches ×4</text>
+
+  <!-- ═════════════ 4 REVIEWER NODES (bigger) ═════════════ -->
+  <g>
+    <circle cx="1140" cy="280" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="278" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#d1fae5">CODE</text>
+    <text x="1140" y="298" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">review</text>
+
+    <circle cx="1140" cy="400" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="398" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" font-weight="700" fill="#d1fae5">SECURITY</text>
+    <text x="1140" y="418" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">scan</text>
+
+    <circle cx="1140" cy="520" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="518" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#d1fae5">TESTS</text>
+    <text x="1140" y="538" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">coverage</text>
+
+    <circle cx="1140" cy="640" r="46" fill="#065f46" stroke="#10b981" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1140" y="638" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="15" font-weight="700" fill="#d1fae5">DOCS</text>
+    <text x="1140" y="658" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="11" fill="#a7f3d0">audit</text>
+  </g>
+
+  <!-- ═════════════ 13 CRITIC · 14 DOCS · 15 REPORT (bigger) ═════════════ -->
+  <g font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#34d399">
+    <text x="1352" y="408" text-anchor="middle">Critic</text>
+    <text x="1468" y="408" text-anchor="middle">Docs</text>
+    <text x="1602" y="408" text-anchor="middle">Report</text>
+  </g>
+
+  <g font-family="'SF Mono',monospace" font-size="16" font-weight="700">
+    <circle cx="1352" cy="465" r="36" fill="#064e3b" stroke="#059669" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1352" y="471" text-anchor="middle" fill="#a7f3d0">13</text>
+
+    <circle cx="1468" cy="465" r="36" fill="#064e3b" stroke="#059669" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1468" y="471" text-anchor="middle" fill="#a7f3d0">14</text>
+
+    <circle cx="1602" cy="465" r="36" fill="#064e3b" stroke="#059669" stroke-width="2.6" filter="url(#glow)"/>
+    <text x="1602" y="471" text-anchor="middle" fill="#a7f3d0">15</text>
+  </g>
+
+  <!-- ═════════════ DONE TERMINAL (bigger) ═════════════ -->
+  <text x="1750" y="408" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16" font-weight="600" fill="#c4b5fd">shipped</text>
+  <circle cx="1750" cy="465" r="40" fill="#6d28d9" stroke="#c4b5fd" stroke-width="2.6" filter="url(#glow)"/>
+  <text x="1750" y="472" text-anchor="middle" font-family="'SF Mono',monospace" font-size="14" font-weight="700" fill="#ede9fe">DONE</text>
+
+  <!-- Footer -->
+  <text x="920" y="858" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="14" fill="#64748b">complete · tested · documented — zero half-finished work</text>
 </svg>
