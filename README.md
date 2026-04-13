@@ -248,10 +248,12 @@ npx claude-code-superkit
 
 Full reference: **[docs/FRONTEND-3D.md](docs/FRONTEND-3D.md)** · Guide: **[Chapter 13](docs/guide/13-frontend-3d.md)**
 
-<details>
-<summary><b>🎨 External design & asset resources</b> — curated links that pair well with this toolkit</summary>
+### 🎨 External Design & Asset Resources
 
-Personal pick-list of resources worth keeping around when shipping polished frontend work. Grouped by intent, not a grid — scales cleanly as the list grows.
+Personal pick-list of resources worth keeping around when shipping polished frontend work. Grouped by intent so the list scales cleanly as it grows.
+
+<details>
+<summary><b>Expand — components · inspiration · assets · platforms · skills</b></summary>
 
 #### Components & tools
 
@@ -266,6 +268,11 @@ Personal pick-list of resources worth keeping around when shipping polished fron
 
 - **[Free Faces](https://www.freefaces.gallery)** — curated directory of free typefaces (Cursive / Display / Mono / Sans / Serif / Slab) · licenses vary per font, check each
 - **[Pixolite](https://pixolite.ru)** — free 3D icons, letters (EN/RU), backgrounds and textures (RU-language site) · free per-asset, verify terms before commercial use
+
+#### Platforms & skill marketplaces
+
+- **[21st.dev](https://21st.dev)** — AI agent deployment platform + community UI component library
+- **[SkillsMP](https://skillsmp.com)** — 500K+ agent-skill marketplace with keyword + AI semantic search API
 
 #### Community skill packs (install via `npx skills add`)
 
@@ -351,10 +358,14 @@ This toolkit is **complementary** to the [Superpowers plugin](https://github.com
 
 Install both for the complete experience.
 
-<details>
-<summary>🧩 Recommended Companion Tools</summary>
+### 🧩 Recommended Companion Tools
 
-### Skills (install separately)
+Skills, MCP servers, and repos that complement Superkit's orchestration. Superkit provides the pipeline (hooks, commands, `/dev`); these add depth.
+
+<details>
+<summary><b>Expand — skills · MCP servers · repos · language packs</b></summary>
+
+#### Skills (install separately)
 
 | Skill | What | Link |
 |-------|------|------|
@@ -362,7 +373,7 @@ Install both for the complete experience.
 | app-store-preflight | iOS/macOS App Store review validator | [GitHub](https://github.com/truongduy2611/app-store-preflight-skills) |
 | app-store-screenshots | AI-generated App Store screenshots — device frames + marketing copy (3.2K stars) | [GitHub](https://github.com/ParthJadhav/app-store-screenshots) |
 
-### MCP Servers (add to .mcp.json)
+#### MCP servers (add to `.mcp.json`)
 
 | Server | What | Package |
 |--------|------|---------|
@@ -371,7 +382,7 @@ Install both for the complete experience.
 | playwright | Browser automation/screenshots | Plugin (built-in) |
 | context7 | Library docs lookup | Plugin (built-in) |
 
-### Repos & Platforms
+#### Repos & platforms
 
 | Resource | What | Link |
 |----------|------|------|
@@ -379,24 +390,20 @@ Install both for the complete experience.
 | Get Shit Done (GSD-2) | 41K stars — meta-prompting framework with plan validation, goal-backward verification | [GitHub](https://github.com/gsd-build/gsd-2) |
 | Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
 | Awesome MCP Servers | Curated list of MCP servers — 300+ servers across all categories | [GitHub](https://github.com/punkpeye/awesome-mcp-servers) |
-| SkillsMP | 500K+ agent skills marketplace with search API | [skillsmp.com](https://skillsmp.com) |
-| 21st.dev | AI agent deployment + community UI components | [21st.dev](https://21st.dev) |
+
+> Design-focused platforms (21st.dev, SkillsMP) live in **[External Design & Asset Resources](#-external-design--asset-resources)** above.
+
+#### Language-specific skill packs
+
+| Plugin | Focus | Skills | Install |
+|--------|-------|--------|---------|
+| [cc-skills-golang](https://github.com/samber/cc-skills-golang) | Production-grade Go patterns | 40 skills | `npx skills add https://github.com/samber/cc-skills-golang --skill '*'` |
 
 </details>
 
 ## 👥 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and hooks.
-
-## Ecosystem & Companions
-
-For deep language-specific skills that complement Superkit's orchestration:
-
-| Plugin | Focus | Skills | Install |
-|--------|-------|--------|---------|
-| [cc-skills-golang](https://github.com/samber/cc-skills-golang) | Production-grade Go patterns | 40 skills | `npx skills add https://github.com/samber/cc-skills-golang --skill '*'` |
-
-Superkit provides **workflow orchestration** (hooks, commands, /dev pipeline). Companion plugins provide **deep domain knowledge**. They work together — Superkit dispatches agents that leverage companion skills for language-specific guidance.
 
 ## 📄 License
 
