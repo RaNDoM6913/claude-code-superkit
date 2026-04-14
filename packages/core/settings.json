@@ -151,6 +151,17 @@
         ]
       }
     ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/subagent-stop-validate.sh"
+          }
+        ]
+      }
+    ],
     "Stop": [
       {
         "hooks": [
