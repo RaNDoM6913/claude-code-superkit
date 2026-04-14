@@ -281,6 +281,31 @@ fi
 
 MISSING=""
 
+# Task 14: plan completion gate.
+# plan-completion-gate.sh places a marker when a superpowers plan skill
+# finishes. The next commit touching code MUST either stage
+# docs/architecture/* OR carry a [plan-docs-deferred: <id>: <reason>]
+# override. HAS_CODE is already true (we exited on line 272 otherwise).
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+SESSION_KEY="${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}"
+PLAN_MARKER="${TMPDIR:-/tmp}/claude-plan-docs-pending-${SESSION_KEY}"
+if [ -f "$PLAN_MARKER" ]; then
+  HAS_ARCH_DOC=false
+  while IFS= read -r f; do
+    case "$f" in
+      docs/architecture/*|*/docs/architecture/*) HAS_ARCH_DOC=true ;;
+    esac
+  done <<< "$STAGED"
+  HAS_DEFERRAL=$(echo "$COMMAND" | grep -oiE '\[plan-docs-deferred:[^]]{15,}\]' | head -1)
+
+  if [ "$HAS_ARCH_DOC" = false ] && [ -z "$HAS_DEFERRAL" ]; then
+    MISSING="${MISSING}\n  - Plan completion marker set but no docs/architecture/* file staged. Either stage an updated arch doc OR add [plan-docs-deferred: <plan-id>: <reason ≥15 chars>] to the commit message."
+  else
+    # marker satisfied — clear it so subsequent commits don't re-fire
+    rm -f "$PLAN_MARKER"
+  fi
+fi
+
 if [ "$NEED_DB_SCHEMA" = true ] && [ "$HAS_DB_SCHEMA" = false ]; then
   MISSING="${MISSING}\n  - Migration staged but database schema docs NOT updated"
 fi
