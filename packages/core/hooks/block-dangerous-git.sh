@@ -29,4 +29,30 @@ if echo "$COMMAND" | grep -qE 'git\s+branch\s+-D'; then
   exit 2
 fi
 
+# ── Task 18: stash-commit bypass patterns ─────────────────────────────────
+# Real incident from github.com/anthropics/claude-code/issues/40117 — a
+# stash+commit+stash-pop sequence can slip staged changes past hook
+# scrutiny. Also catch -q/--quiet combined with --no-verify and
+# --amend --no-verify which target pre-commit gate bypass.
+
+if echo "$COMMAND" | grep -qE 'git\s+stash.*&&.*git\s+commit.*stash\s+pop'; then
+  echo "BLOCKED: stash → commit → stash pop bypass pattern detected." >&2
+  echo "  This pattern is a known way to slip staged work past commit-gate hooks." >&2
+  echo "  Commit the staged work directly, then stash/pop the remainder." >&2
+  exit 2
+fi
+
+if echo "$COMMAND" | grep -qE 'git\s+commit.*(-q|--quiet).*--no-verify'; then
+  echo "BLOCKED: git commit -q/--quiet combined with --no-verify." >&2
+  echo "  This combination exists solely to silence the hook failure. Fix the" >&2
+  echo "  underlying pre-commit-hook error instead of muting it." >&2
+  exit 2
+fi
+
+if echo "$COMMAND" | grep -qE 'git\s+commit.*--amend.*--no-verify'; then
+  echo "BLOCKED: git commit --amend --no-verify is a pre-commit-hook bypass." >&2
+  echo "  Fix the hook error, stage the fix, then --amend without --no-verify." >&2
+  exit 2
+fi
+
 exit 0
