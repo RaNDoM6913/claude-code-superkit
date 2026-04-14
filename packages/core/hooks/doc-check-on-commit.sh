@@ -29,16 +29,30 @@ fi
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .command // empty' 2>/dev/null)
 
-# Only trigger on git commit commands
-if ! echo "$COMMAND" | grep -qE 'git\s+commit'; then
+# Only trigger on git commit commands.
+# Also match `git -C <path> commit` — without this, the hook would run
+# `git diff --cached` in the wrong directory and see an empty STAGED,
+# silently exiting 0 while the real commit lands elsewhere.
+if ! echo "$COMMAND" | grep -qE 'git(\s+-[cC]\s+\S+)*\s+commit'; then
   exit 0
 fi
 
-# Get staged files
-STAGED=$(git diff --cached --name-only 2>/dev/null)
+# Extract `-C <path>` target if present so we check staged files in the
+# actual target repo, not the shell cwd.
+GIT_TARGET_DIR=$(echo "$COMMAND" | sed -nE 's/.*git[[:space:]]+(-[cC][[:space:]]+([^[:space:]]+)).*/\2/p' | head -n1)
+if [ -n "$GIT_TARGET_DIR" ] && [ -d "$GIT_TARGET_DIR" ]; then
+  GIT_CMD_PREFIX="git -C $GIT_TARGET_DIR"
+else
+  GIT_CMD_PREFIX="git"
+fi
+
+# Get staged files (from the correct repo)
+STAGED=$($GIT_CMD_PREFIX diff --cached --name-only 2>/dev/null)
 if [ -z "$STAGED" ]; then
-  if echo "$COMMAND" | grep -qE '\-a|\-\-all'; then
-    STAGED=$(git diff --name-only 2>/dev/null)
+  # Match `-a` / `--all` only as standalone flags — not as part of longer
+  # option names like `--allow-empty` or `--author`.
+  if echo "$COMMAND" | grep -qE '(^|[[:space:]])(-a|--all)([[:space:]]|$)'; then
+    STAGED=$($GIT_CMD_PREFIX diff --name-only 2>/dev/null)
   fi
 fi
 
@@ -100,6 +114,26 @@ if [ -n "$NEW_FILES" ]; then
 fi
 
 while IFS= read -r file; do
+  # ── Non-architectural markdown — CANNOT satisfy architecture-doc requirements ──
+  # These files are meta-work (plans, memory, changelogs) and must NEVER be
+  # counted as evidence that architecture docs were updated. We continue early
+  # WITHOUT setting any HAS_* flag. Must be checked BEFORE the generic
+  # `docs/*|*.md` fallthrough below or the HAS_* pattern-name matches.
+  case "$file" in
+    docs/superpowers/plans/*|*/docs/superpowers/plans/*)
+      continue ;;
+    docs/superpowers/specs/*|*/docs/superpowers/specs/*)
+      continue ;;
+    docs/superpowers/research/*|*/docs/superpowers/research/*)
+      continue ;;
+    memory/*|*/memory/*)
+      continue ;;
+    CHANGELOG*|*/CHANGELOG*|*/HISTORY.md|HISTORY.md)
+      continue ;;
+    docs/active-plans-archive.md|*/docs/active-plans-archive.md)
+      continue ;;
+  esac
+
   # ── Exempt file types (don't require docs) ──
   case "$file" in
     *_test.go|*test_*|*.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx)
@@ -197,9 +231,23 @@ while IFS= read -r file; do
       NEED_NOTIFICATION_DOCS=true
     fi
 
-    # App wiring / middleware → backend-layers docs
-    if in_dir "$file" "app" || echo "$file" | grep -q '/middleware'; then
+    # App wiring / middleware / background jobs / entry points → backend-layers docs.
+    # Tree docs only required if the file is NEW (added) — modifying existing
+    # middleware.go does not change the tree, so don't demand a tree update.
+    if in_dir "$file" "app" || echo "$file" | grep -q '/middleware' || \
+       in_dir "$file" "jobs" || in_dir "$file" "workers" || \
+       in_dir "$file" "cmd"; then
       NEED_BACKEND_LAYERS=true
+      if echo "$NEW_FILES" | grep -qxF "$file"; then
+        NEED_TREE_DOCS=true
+      fi
+    fi
+
+    # New storage backend under */repo/** → tree docs (only for NEW files)
+    if in_dir "$file" "repo"; then
+      if echo "$NEW_FILES" | grep -qxF "$file"; then
+        NEED_TREE_DOCS=true
+      fi
     fi
 
     # Telegram bots → bot docs
