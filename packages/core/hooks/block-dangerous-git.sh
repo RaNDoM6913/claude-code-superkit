@@ -10,22 +10,50 @@ if [ -z "$COMMAND" ]; then
 fi
 
 if echo "$COMMAND" | grep -qE '\-\-no-verify'; then
-  echo "BLOCKED: --no-verify is not allowed. Fix the underlying issue instead." >&2
+  cat >&2 <<'EOF'
+BLOCKED: --no-verify is not allowed.
+  Why: pre-commit hooks exist to catch regressions before they land.
+  Suggested alternative:
+    1) Run the failing hook manually, read its output, fix the issue.
+    2) If the hook itself is wrong, amend the hook config with a
+       documented reason rather than silencing it at every commit.
+EOF
   exit 2
 fi
 
 if echo "$COMMAND" | grep -qE 'git\s+push\s+.*\-\-force|git\s+push\s+.*\-f\b'; then
-  echo "BLOCKED: Force push is not allowed. Use --force-with-lease if absolutely necessary." >&2
+  cat >&2 <<'EOF'
+BLOCKED: Force push is not allowed.
+  Why: overwrites remote history; collaborators' clones break silently.
+  Suggested alternative:
+    git push --force-with-lease          # safe — refuses if remote moved
+    git push --force-with-lease=<branch>  # even safer — scopes to your ref
+EOF
   exit 2
 fi
 
 if echo "$COMMAND" | grep -qE 'git\s+reset\s+--hard'; then
-  echo "BLOCKED: git reset --hard can destroy work. Use git stash or git reset --soft instead." >&2
+  cat >&2 <<'EOF'
+BLOCKED: git reset --hard can destroy work.
+  Why: drops uncommitted changes AND moves HEAD — double hit.
+  Suggested alternative:
+    git stash push -u -m 'before-reset'   # preserve WIP first
+    git reset --soft <ref>                # keep staged + WC
+    git reset --mixed <ref>               # keep WC only
+    git restore --source=<ref> <path>     # narrow, per-file restore
+EOF
   exit 2
 fi
 
 if echo "$COMMAND" | grep -qE 'git\s+branch\s+-D'; then
-  echo "BLOCKED: git branch -D force-deletes. Use -d for safe delete." >&2
+  cat >&2 <<'EOF'
+BLOCKED: git branch -D force-deletes.
+  Why: drops a branch even if its commits are unmerged / unpushed.
+  Suggested alternative:
+    git branch -d <name>                  # safe — refuses if unmerged
+    git push origin --delete <name>       # delete remote counterpart
+    git reflog show <name>                # recover if you just -D'd one
+EOF
   exit 2
 fi
 
