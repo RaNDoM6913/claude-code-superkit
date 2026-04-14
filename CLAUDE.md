@@ -9,7 +9,7 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
     commands/               # 15 commands (+ 1 frontend-3d = 16 total)
-    hooks/                  # 21 hooks (+2 superkit-internal) = 23 total · incl. /dev trio, audit-settings-source, audit-trail, plan-completion-gate, user-intent-detect, subagent-stop-validate
+    hooks/                  # 22 hooks (+2 superkit-internal) = 24 total · incl. /dev trio, audit-settings-source, audit-trail, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject
     helpers/                # 1 helper (statusline.cjs)
     rules/                  # 7 rules (+1 superkit-internal)
     skills/                 # 5 skills
@@ -85,7 +85,7 @@ VERSION                     # 1.3.8
 | Agents | 27 | 9 | 4 | 3 | 28 | — |
 | Skills | 5 | — | 6 | 1 | 11 | 60 |
 | Commands | 15 | — | 1 | — | 17 | 9 |
-| Hooks | 21 (+2 internal) | 9 | 4 | — | 13 | — |
+| Hooks | 22 (+2 internal) | 9 | 4 | — | 13 | — |
 | Helpers | 1 | — | — | — | — | — |
 | Rules | 7 (+1 internal) | 2 | 3 | — | 6 | — |
 

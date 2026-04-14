@@ -149,6 +149,15 @@
             "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/superkit-update.sh"
           }
         ]
+      },
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/compact-state-inject.sh"
+          }
+        ]
       }
     ],
     "SubagentStop": [
