@@ -174,10 +174,21 @@ EOF
   TAG_REASON=$(printf '%s' "$MATCHED_TAG" | sed -nE 's/^\[[a-z-]+:[[:space:]]*([^]]*)\]$/\1/ip')
 
   # Rule 1: quick / trivial / no-dev require a rationale of ≥15 chars
+  # Exception (Task 15): if the user explicitly asked for a "quick fix" /
+  # "small tweak" / etc. in this session, user-intent-detect.sh leaves a
+  # marker. Bare [quick] is then allowed (the user took responsibility).
+  # The marker is consumed so subsequent commits still need rationale.
+  USER_INTENT_MARKER="${TMPDIR:-/tmp}/claude-user-said-quick-${SESSION_KEY}"
+  USER_SAID_QUICK=false
+  [ -f "$USER_INTENT_MARKER" ] && USER_SAID_QUICK=true
   case "$TAG_NAME" in
     quick|trivial|no-dev)
       if [ -z "$TAG_REASON" ] || [ "${#TAG_REASON}" -lt 15 ]; then
-        cat >&2 <<EOF
+        if [ "$USER_SAID_QUICK" = true ] && [ "$TAG_NAME" = "quick" ]; then
+          # User explicitly authorised a quick fix — consume the marker
+          rm -f "$USER_INTENT_MARKER"
+        else
+          cat >&2 <<EOF
 
 BLOCKED: [${TAG_NAME}] override requires a rationale of at least 15 characters.
 
@@ -187,9 +198,12 @@ BLOCKED: [${TAG_NAME}] override requires a rationale of at least 15 characters.
     [${TAG_NAME}: config-only tweak, no logic change, follow-up in plan #42]
 
   Current tag: ${MATCHED_TAG}
+  (If the user explicitly asked for a "quick fix" in chat, the bare
+  [quick] tag is allowed once per such request.)
 
 EOF
-        exit 2
+          exit 2
+        fi
       fi
       ;;
   esac
