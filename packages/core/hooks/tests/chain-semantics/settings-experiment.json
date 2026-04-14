@@ -1,0 +1,15 @@
+{
+  "_comment": "Temporary Claude Code settings for the hook-chain-semantics experiment. Place the file at .claude/settings.json inside a throwaway project directory, then open it with Claude Code and run a single `ls` command. The three hooks h1/h2/h3 will fire simultaneously. Observe /tmp/claude-chain-test.log for interleaving and /tmp/claude-chain-test-h3-ran for h3's marker. Restore your real settings.json afterwards.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/packages/core/hooks/tests/chain-semantics/h1.sh" },
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/packages/core/hooks/tests/chain-semantics/h2.sh" },
+          { "type": "command", "command": "${CLAUDE_PROJECT_DIR}/packages/core/hooks/tests/chain-semantics/h3.sh" }
+        ]
+      }
+    ]
+  }
+}
