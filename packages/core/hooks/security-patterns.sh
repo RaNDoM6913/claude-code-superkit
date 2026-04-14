@@ -14,9 +14,10 @@ if [ "$PROFILE" = "fast" ]; then
   exit 0
 fi
 
-# Read tool input
+# Read tool input — PostToolUse payload: .tool_input.file_path.
+# See doc-check-on-commit.sh for the historical-bug context — same JSON shape.
 INPUT=$(cat)
-FILE_PATH=$(echo "$INPUT" | jq -r '.file_path // .filePath // empty' 2>/dev/null)
+FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // .tool_input.filePath // .file_path // .filePath // empty' 2>/dev/null)
 
 # Only check code files
 case "$FILE_PATH" in

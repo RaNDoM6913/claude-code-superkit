@@ -20,9 +20,14 @@ if [ "$PROFILE" = "fast" ]; then
   exit 0
 fi
 
-# Read the tool input (JSON with command field)
+# Read the tool input — Claude Code PreToolUse payload is:
+#   { "hook_event_name": "PreToolUse", "tool_name": "Bash",
+#     "tool_input": { "command": "…", "description": "…" } }
+# Historical bug: older versions read `.command` which is always null on
+# Bash PreToolUse, so the hook silently exited 0 and NEVER blocked any
+# commit. Accept both shapes for defence-in-depth.
 INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.command // empty' 2>/dev/null)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .command // empty' 2>/dev/null)
 
 # Only trigger on git commit commands
 if ! echo "$COMMAND" | grep -qE 'git\s+commit'; then

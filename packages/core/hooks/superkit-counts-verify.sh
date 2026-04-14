@@ -13,9 +13,10 @@ if [ ! -f "packages/core/settings.json" ] || [ ! -d "packages/core/agents" ]; th
   exit 0
 fi
 
-# Read the tool input
+# Read the tool input (PreToolUse payload: .tool_input.command).
+# See doc-check-on-commit.sh for the historical-bug context — same JSON shape.
 INPUT=$(cat)
-COMMAND=$(echo "$INPUT" | jq -r '.command // empty' 2>/dev/null)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .command // empty' 2>/dev/null)
 
 # Only trigger on git commit or git push
 if ! echo "$COMMAND" | grep -qE 'git\s+(commit|push)'; then
@@ -32,7 +33,7 @@ CORE_COMMANDS=$(ls packages/core/commands/*.md 2>/dev/null | wc -l | tr -d ' ')
 CORE_HOOKS=$(ls packages/core/hooks/*.sh 2>/dev/null | wc -l | tr -d ' ')
 CORE_RULES=$(ls packages/core/rules/*.md 2>/dev/null | wc -l | tr -d ' ')
 
-# Stack
+# Stack (per-language packages under packages/stack-*/)
 STACK_AGENTS=0
 STACK_HOOKS=0
 STACK_RULES=0
@@ -51,6 +52,30 @@ for lang in go typescript python rust; do
   fi
 done
 
+# Self-contained packages (agents/hooks/rules/commands colocated in packages/<pkg>/)
+PKG_AGENTS=0
+PKG_HOOKS=0
+PKG_RULES=0
+PKG_COMMANDS=0
+for pkg in frontend-3d; do
+  if [ -d "packages/$pkg/agents" ]; then
+    COUNT=$(ls packages/$pkg/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
+    PKG_AGENTS=$((PKG_AGENTS + COUNT))
+  fi
+  if [ -d "packages/$pkg/hooks" ]; then
+    COUNT=$(ls packages/$pkg/hooks/*.sh 2>/dev/null | wc -l | tr -d ' ')
+    PKG_HOOKS=$((PKG_HOOKS + COUNT))
+  fi
+  if [ -d "packages/$pkg/rules" ]; then
+    COUNT=$(ls packages/$pkg/rules/*.md 2>/dev/null | wc -l | tr -d ' ')
+    PKG_RULES=$((PKG_RULES + COUNT))
+  fi
+  if [ -d "packages/$pkg/commands" ]; then
+    COUNT=$(ls packages/$pkg/commands/*.md 2>/dev/null | wc -l | tr -d ' ')
+    PKG_COMMANDS=$((PKG_COMMANDS + COUNT))
+  fi
+done
+
 # Extras
 EXTRAS_AGENTS=$(ls packages/extras/*.md 2>/dev/null | wc -l | tr -d ' ')
 
@@ -64,10 +89,18 @@ SHOWCASE_COMMANDS=$(ls packages/showcase/.claude/commands/*.md 2>/dev/null | wc 
 # References
 REFERENCE_DOCS=$(ls packages/stack-agents/go/references/*.md 2>/dev/null | wc -l | tr -d ' ')
 
-# Totals
-TOTAL_AGENTS=$((CORE_AGENTS + STACK_AGENTS + EXTRAS_AGENTS))
-TOTAL_HOOKS=$((CORE_HOOKS + STACK_HOOKS))
-TOTAL_RULES=$((CORE_RULES + STACK_RULES))
+# Totals — include frontend-3d (and any future self-contained pkg) in stack sums
+TOTAL_AGENTS=$((CORE_AGENTS + STACK_AGENTS + PKG_AGENTS + EXTRAS_AGENTS))
+# Internal-only core hooks aren't shipped to users — subtract them so TOTAL_HOOKS
+# matches the number published in README/GitHub About / CLAUDE.md public counts.
+# Ship-list: exclude superkit-counts-verify.sh + verify-hooks.sh (both are
+# superkit-repo-internal per installer.js SUPERKIT_INTERNAL_HOOKS).
+SHIPPED_CORE_HOOKS=$((CORE_HOOKS - 2))
+TOTAL_HOOKS=$((SHIPPED_CORE_HOOKS + STACK_HOOKS + PKG_HOOKS))
+# Rules: exclude superkit-integrity.md (internal, see installer.js SUPERKIT_INTERNAL_RULES)
+SHIPPED_CORE_RULES=$((CORE_RULES - 1))
+TOTAL_RULES=$((SHIPPED_CORE_RULES + STACK_RULES + PKG_RULES))
+TOTAL_COMMANDS=$((CORE_COMMANDS + PKG_COMMANDS))
 
 # ── Check VERSION vs package.json ───────────────────────────────────
 VERSION_FILE=$(cat VERSION 2>/dev/null | tr -d '[:space:]')
@@ -103,8 +136,10 @@ if [ -n "$CLAUDE_CODEX" ] && [ "$CLAUDE_CODEX" != "$CODEX_SKILLS" ]; then
   ERRORS="${ERRORS}\n  - CLAUDE.md Codex Skills ($CLAUDE_CODEX) != actual ($CODEX_SKILLS)"
 fi
 
-# Showcase commands
-CLAUDE_SHOWCASE_CMD=$(grep '| Commands |' CLAUDE.md 2>/dev/null | grep -oE '[0-9]+' | sed -n '4p')
+# Showcase commands — Commands row `| Commands | 15 | — | 1 | — | 17 | 9 |`
+# grep -oE '[0-9]+' extracts non-dash columns in order: Core, Frontend, Showcase, Codex.
+# Position 3 = Showcase when all 4 numeric columns exist.
+CLAUDE_SHOWCASE_CMD=$(grep '| Commands |' CLAUDE.md 2>/dev/null | grep -oE '[0-9]+' | sed -n '3p')
 if [ -n "$CLAUDE_SHOWCASE_CMD" ] && [ "$CLAUDE_SHOWCASE_CMD" != "$SHOWCASE_COMMANDS" ]; then
   ERRORS="${ERRORS}\n  - CLAUDE.md Showcase Commands ($CLAUDE_SHOWCASE_CMD) != actual ($SHOWCASE_COMMANDS)"
 fi
@@ -134,8 +169,8 @@ if command -v gh &>/dev/null; then
     if [ -n "$GH_AGENTS" ] && [ "$GH_AGENTS" != "$TOTAL_AGENTS" ]; then
       ERRORS="${ERRORS}\n  - GitHub About agents ($GH_AGENTS) != actual ($TOTAL_AGENTS)"
     fi
-    if [ -n "$GH_COMMANDS" ] && [ "$GH_COMMANDS" != "$CORE_COMMANDS" ]; then
-      ERRORS="${ERRORS}\n  - GitHub About commands ($GH_COMMANDS) != actual ($CORE_COMMANDS)"
+    if [ -n "$GH_COMMANDS" ] && [ "$GH_COMMANDS" != "$TOTAL_COMMANDS" ]; then
+      ERRORS="${ERRORS}\n  - GitHub About commands ($GH_COMMANDS) != actual ($TOTAL_COMMANDS)"
     fi
     if [ -n "$GH_HOOKS" ] && [ "$GH_HOOKS" != "$TOTAL_HOOKS" ]; then
       ERRORS="${ERRORS}\n  - GitHub About hooks ($GH_HOOKS) != actual ($TOTAL_HOOKS)"
@@ -177,10 +212,11 @@ if [ -n "$ERRORS" ]; then
   echo -e "  Mismatches:${ERRORS}"
   echo ""
   echo "  Actual counts:"
-  echo "    Core:  agents=$CORE_AGENTS commands=$CORE_COMMANDS hooks=$CORE_HOOKS rules=$CORE_RULES"
-  echo "    Stack: agents=$STACK_AGENTS hooks=$STACK_HOOKS rules=$STACK_RULES"
-  echo "    Total: agents=$TOTAL_AGENTS hooks=$TOTAL_HOOKS rules=$TOTAL_RULES"
-  echo "    Codex: skills=$CODEX_SKILLS"
+  echo "    Core:     agents=$CORE_AGENTS commands=$CORE_COMMANDS hooks=$CORE_HOOKS rules=$CORE_RULES"
+  echo "    Stack:    agents=$STACK_AGENTS hooks=$STACK_HOOKS rules=$STACK_RULES"
+  echo "    Packages: agents=$PKG_AGENTS hooks=$PKG_HOOKS rules=$PKG_RULES commands=$PKG_COMMANDS"
+  echo "    Total:    agents=$TOTAL_AGENTS commands=$TOTAL_COMMANDS hooks=$TOTAL_HOOKS rules=$TOTAL_RULES"
+  echo "    Codex:    skills=$CODEX_SKILLS"
   echo "    Showcase: agents=$SHOWCASE_AGENTS commands=$SHOWCASE_COMMANDS"
   echo "    References: $REFERENCE_DOCS"
   echo "    VERSION=$VERSION_FILE package.json=$PKG_VERSION"

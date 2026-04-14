@@ -8,10 +8,12 @@ if [ "$PROFILE" = "fast" ]; then
   exit 0
 fi
 
-# Read tool input and create a fingerprint
+# Read tool input and create a fingerprint.
+# Payload shape: .tool_input.{command,file_path}. See doc-check-on-commit.sh
+# for the historical-bug context — same JSON schema change applied here.
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
-COMMAND=$(echo "$INPUT" | jq -r '.command // .input.command // empty' 2>/dev/null)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // .tool_input.file_path // .command // .input.command // empty' 2>/dev/null)
 
 if [ -z "$TOOL_NAME" ] || [ -z "$COMMAND" ]; then
   exit 0
