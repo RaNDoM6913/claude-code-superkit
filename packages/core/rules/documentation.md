@@ -71,6 +71,42 @@ Subagents MUST NOT commit without documentation updates. If a subagent cannot de
 
 The hook (layer 2) performs smart analysis: it maps each staged code file to its required documentation file and **blocks the commit** if any required doc is missing. Do NOT rely on the hook alone — update docs proactively with every code change.
 
+### What CANNOT satisfy the doc requirement
+
+The hook explicitly **excludes** these paths from counting as "docs updated":
+
+- `docs/superpowers/plans/**` — planning and intent files
+- `docs/superpowers/specs/**` — design specs
+- `docs/superpowers/research/**` — research notes
+- `memory/**` — memory vault (auto-generated or behavioural notes)
+- `CHANGELOG.md`, `HISTORY.md` — release history
+- `docs/active-plans-archive.md` — historical archive of finished plans
+
+**Why:** these are meta-work, not architecture docs. A contract change in `handlers/auth_handler.go` must be reflected in `docs/architecture/auth-and-sessions.md` — not "described in the plan file". The plan describes intent; the architecture doc describes the current behaviour of the system.
+
+### Historical bug (fixed 2026-04-14)
+
+Before this date, `doc-check-on-commit.sh` read the tool command from `.command` in the PreToolUse JSON payload. Claude Code actually sends the command at `.tool_input.command` — so `.command` was always `null`, the hook saw an empty `COMMAND`, and silently exited 0 on every commit. **The hook never blocked a single commit during that period.** The same bug affected `superkit-counts-verify.sh`, `config-protection.sh`, `security-patterns.sh`, and `loop-guard.sh` — all now read `.tool_input.*` first with the legacy `.command` / `.file_path` path as a fallback for defence-in-depth.
+
+### Coverage of the path-to-doc map
+
+| Source path (any depth) | Required doc(s) |
+|-------------------------|-----------------|
+| `*/migrations/*.sql` | `database-schema.md` + `CLAUDE.md` migration counter |
+| `*/handlers/*.go`, `*/routes*.go` | `api-reference.md` OR `openapi.yaml` |
+| `*/services/auth/**` | `auth-and-sessions.md` |
+| `*/services/media/**` | `photo-pipeline.md` |
+| `*/services/moderation/**` | `moderation-pipeline.md` |
+| `*/services/feed/**`, `*/services/antiabuse/**` | `feed-and-antiabuse.md` |
+| `*/services/{entitlements,store,payments}/**` | `entitlements-and-store.md` |
+| `*/services/notifications/**` | `notification-system.md` |
+| `*/app/**`, `*/middleware/**`, `*/jobs/**`, `*/workers/**`, `*/cmd/**` | `backend-layers.md` (+ `docs/trees/tree-*.md` if the file is NEW) |
+| `*/repo/**` (NEW file only) | `docs/trees/tree-*.md` |
+| `*/bot_{moderator,support}/**`, `*/tgbots/**`, `*/bots/**` | `bot-*.md` |
+| `*/src/**/*.{ts,tsx}` (except `presentation/`) | `frontend-*.md` |
+
+New paths must be added to this table AND to the `case` statements in `doc-check-on-commit.sh` simultaneously.
+
 ## Plan Completion Gate
 
 When finishing an implementation plan (superpowers writing-plans / executing-plans):

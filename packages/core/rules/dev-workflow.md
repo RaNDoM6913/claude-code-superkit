@@ -28,3 +28,42 @@ This includes: new features, bug fixes (any size), refactors, migrations, bot ch
   - **Complex** (5+ files) → full workflow + architect + critic
 - Always include Phase 6 (review) for changes touching 2+ files
 - Always include Phase 7 (document) if logic/API/architecture changed
+
+## Enforcement (hard-block)
+
+Since 2026-04-14 this rule is technically enforced by three cooperating hooks:
+
+| Hook | Event | Purpose |
+|------|-------|---------|
+| `dev-edit-counter.sh` | `PostToolUse(Edit\|Write\|MultiEdit)` | Increments the per-session counter on each code-file edit. Tests, docs, memory, `.claude/`, and config files are ignored. |
+| `dev-marker-set.sh` | `UserPromptSubmit` + `PreToolUse(Skill)` | Sets a marker when `/dev` is invoked — either as a user prompt (`/dev …` with word boundary, so `/develop`, `/device`, `/devops` do NOT trigger) or as a Skill tool call (`skill == "dev"` or any `:dev$` variant). |
+| `dev-required-on-commit.sh` | `PreToolUse(Bash)` | Blocks `git commit` (incl. `git -C <path> commit`) with `exit 2` when the counter is ≥ threshold AND no `/dev` marker is set AND no override tag is present. |
+
+**Threshold:** 3 code-file edits. Below that, the commit is allowed without `/dev`.
+
+**State files** (keyed by Claude Code `session_id`, falls back to `$PPID` for older runtimes):
+- `${TMPDIR:-/tmp}/claude-edit-count-<session_id>` — counter
+- `${TMPDIR:-/tmp}/claude-dev-marker-<session_id>` — marker
+
+Both are reset on any successful commit so the next work-cycle starts fresh.
+
+**Override tags** (added to the commit message, any one of):
+
+| Tag | When to use |
+|-----|-------------|
+| `[quick]` | Small fix, intentional skip |
+| `[no-dev]` | `/dev` not applicable (pure infra / docs) — explain why |
+| `[trivial]` | Cosmetic change (naming, formatting) |
+| `[hotfix]` | Emergency fix |
+| `[wip]` | Work-in-progress checkpoint |
+
+**Exempt commits** (no `/dev` required even at counter ≥ 3):
+
+- Docs-only commits (no `.go` / `.ts` / `.tsx` / etc. files staged)
+- Test-only commits (`*_test.go`, `*.test.ts`, `*.spec.*`)
+- `presentation/` changes (see the frontend-3d documentation)
+- `.claude/` and `memory/` changes
+
+This closes the historical gap where `/dev` was advisory-only (only Claude's discipline enforced it). Skipping `/dev` on 3+ code edits now fails at commit time instead of being noticed only in review.
+
+Reference implementation proven in production: https://github.com/RaNDoM6913/tgapp/commit/41cc6832
