@@ -68,7 +68,7 @@ Don't reinvent — discover and adapt.
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, **`/capture-screen`** |
-| **Hooks** | 16 + 13 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, **gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn**, **`/dev` hard-enforce (edit-counter + marker-set + required-on-commit)** |
+| **Hooks** | 17 + 13 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, **gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn**, **`/dev` hard-enforce (edit-counter + marker-set + required-on-commit)**, **audit-settings-source (CVE-2025-59536)** |
 | **Rules** | 7 + 5 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics (path-scoped), go-conventions, go-safety, **gsap-conventions**, **threejs-conventions**, **frontend-aesthetics-3d** |
 | **Skills** | 5 + 6 frontend-3d + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, writing-hooks guide + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
@@ -184,7 +184,22 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues, platform-specific guidance, and FAQ.
 
-## 🛡️ Security Scanning
+## 🛡️ Security
+
+### Untrusted `.claude/settings.json` (CVE-2025-59536)
+
+`.claude/settings.json` tells Claude Code which hooks to run on every tool call. A malicious `settings.json` committed to an untrusted repo can register a PreToolUse hook that executes arbitrary code the moment you open the project — this is a real **RCE + API token exfiltration** vector, documented by [Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/).
+
+Superkit mitigates this with the `audit-settings-source.sh` hook wired to `SessionStart`. On every session it inspects `.claude/settings.json`'s git history:
+
+- If the file was modified in the last 7 days by an author whose email doesn't match your `git config user.email` → the hook prints a loud warning with the offending commit hashes and authors, and drops a marker `${TMPDIR:-/tmp}/claude-untrusted-settings-<session>` so downstream hooks can downgrade decisions.
+- Fails open (`exit 0`) everywhere — this is an alert, not a block.
+
+**Opt-out for known-good repos:** `export CLAUDE_DISABLE_SETTINGS_AUDIT=1`.
+
+**Before opening any untrusted project:** read the diff first (`git log -p .claude/settings.json`), or start Claude Code with `--no-hooks` until you've vetted the file.
+
+### Scanning `.claude/` for misconfigurations
 
 Scan your `.claude/` configurations for vulnerabilities with [AgentShield](https://github.com/affaan-m/agentshield):
 
@@ -193,7 +208,7 @@ npx ecc-agentshield scan          # Quick scan (102 rules)
 npx ecc-agentshield scan --fix    # Auto-fix safe issues
 ```
 
-Or use the built-in command: `/security-scan`
+Or use the built-in command: `/security-scan`.
 
 CI integration included — see `.github/workflows/security.yml`.
 
@@ -337,7 +352,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
 | Agents / Skills | 43 agents | 60 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
-| Hooks | 29 + Stop | — (inline rules in AGENTS.md) |
+| Hooks | 30 + Stop | — (inline rules in AGENTS.md) |
 | Rules | 12 (7 core + 5 stack) | Inline in AGENTS.md |
 | Knowledge Skills | 5 + 6 frontend-3d + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
