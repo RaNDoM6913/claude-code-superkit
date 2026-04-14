@@ -9,7 +9,7 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 27 agents (all opus)
     commands/               # 15 commands (+ 1 frontend-3d = 16 total)
-    hooks/                  # 13 hooks (+2 superkit-internal) = 15 total
+    hooks/                  # 16 hooks (+2 superkit-internal) = 18 total · incl. /dev enforcement trio
     helpers/                # 1 helper (statusline.cjs)
     rules/                  # 7 rules (+1 superkit-internal)
     skills/                 # 5 skills
@@ -85,7 +85,7 @@ VERSION                     # 1.3.8
 | Agents | 27 | 9 | 4 | 3 | 28 | — |
 | Skills | 5 | — | 6 | 1 | 11 | 60 |
 | Commands | 15 | — | 1 | — | 17 | 9 |
-| Hooks | 13 (+2 internal) | 9 | 4 | — | 13 | — |
+| Hooks | 16 (+2 internal) | 9 | 4 | — | 13 | — |
 | Helpers | 1 | — | — | — | — | — |
 | Rules | 7 (+1 internal) | 2 | 3 | — | 6 | — |
 
