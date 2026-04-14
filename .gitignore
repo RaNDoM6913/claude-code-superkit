@@ -16,3 +16,8 @@ npm-debug.log*
 # OS
 Thumbs.db
 Desktop.ini
+
+# Working plans stay local — policy 2026-04-14
+# (existing tracked plans remain tracked; new ones are not staged)
+docs/superpowers/plans/
+docs/superpowers/prompts/
