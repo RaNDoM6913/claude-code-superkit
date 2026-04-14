@@ -119,7 +119,30 @@ if [ "$OVERRIDE_CYCLES_RECENT" -ge 2 ]; then
   THRESHOLD=2
 fi
 
-# ── Override: explicit bypass tag in commit message ──
+# ── Rolling-budget query (Task 12): count overrides in audit log ──
+budget_last_30min() {
+  # Count override-tagged entries in ~/.claude/audit/*.jsonl within 30 min.
+  # Audit log lives under $HOME/.claude/audit/YYYY-MM-DD.jsonl.
+  local cutoff
+  cutoff=$(date -u -v-30M +%s 2>/dev/null || date -u -d '30 minutes ago' +%s 2>/dev/null || echo 0)
+  local cnt=0
+  for f in "$HOME/.claude/audit/"*.jsonl; do
+    [ -f "$f" ] || continue
+    while IFS= read -r line; do
+      local tag ts_iso ts_epoch
+      tag=$(printf '%s' "$line" | jq -r '.tag // empty' 2>/dev/null)
+      [ -z "$tag" ] && continue
+      ts_iso=$(printf '%s' "$line" | jq -r '.ts // empty' 2>/dev/null)
+      [ -z "$ts_iso" ] && continue
+      ts_epoch=$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$ts_iso" +%s 2>/dev/null || \
+                 date -u -d "$ts_iso" +%s 2>/dev/null || echo 0)
+      [ "$ts_epoch" -ge "$cutoff" ] && cnt=$((cnt + 1))
+    done < "$f"
+  done
+  echo "$cnt"
+}
+
+# ── Override: explicit bypass tag in commit message (Task 12 validation) ──
 # Recognised tags: [quick] [no-dev] [trivial] [hotfix] [wip]
 MATCHED_TAG=$(echo "$COMMAND" | grep -oiE '\[(quick|no-dev|trivial|hotfix|wip)(:[^]]*)?\]' | head -1)
 if [ -n "$MATCHED_TAG" ]; then
@@ -145,6 +168,109 @@ BLOCKED: Override path disabled (anti-reset penalty)
 EOF
     exit 2
   fi
+
+  # Extract tag name + optional `: <reason>`
+  TAG_NAME=$(printf '%s' "$MATCHED_TAG" | tr '[:upper:]' '[:lower:]' | sed -E 's/^\[([a-z-]+).*/\1/')
+  TAG_REASON=$(printf '%s' "$MATCHED_TAG" | sed -nE 's/^\[[a-z-]+:[[:space:]]*([^]]*)\]$/\1/ip')
+
+  # Rule 1: quick / trivial / no-dev require a rationale of ≥15 chars
+  case "$TAG_NAME" in
+    quick|trivial|no-dev)
+      if [ -z "$TAG_REASON" ] || [ "${#TAG_REASON}" -lt 15 ]; then
+        cat >&2 <<EOF
+
+BLOCKED: [${TAG_NAME}] override requires a rationale of at least 15 characters.
+
+  Format: [${TAG_NAME}: <explain why /dev is not needed here>]
+
+  Example:
+    [${TAG_NAME}: config-only tweak, no logic change, follow-up in plan #42]
+
+  Current tag: ${MATCHED_TAG}
+
+EOF
+        exit 2
+      fi
+      ;;
+  esac
+
+  # Rule 2: [hotfix] requires a ticket ID OR `no-ticket: <reason>`
+  if [ "$TAG_NAME" = "hotfix" ]; then
+    if [ -z "$TAG_REASON" ]; then
+      cat >&2 <<EOF
+
+BLOCKED: [hotfix] requires a ticket reference OR an explicit no-ticket justification.
+
+  Formats accepted:
+    [hotfix: #1234 …]             — GitHub/Linear-style numeric ticket
+    [hotfix: ABC-123 …]           — Jira-style key-number ticket
+    [hotfix: no-ticket: <reason>] — explain why there is no ticket (≥15 chars)
+
+  Current tag: ${MATCHED_TAG}
+
+EOF
+      exit 2
+    fi
+    # Accept if reason contains ticket-id OR starts with `no-ticket:<reason ≥15 chars>`
+    if ! printf '%s' "$TAG_REASON" | grep -qE '(#[0-9]+|[A-Z]+-[0-9]+)'; then
+      if ! printf '%s' "$TAG_REASON" | grep -qiE '^no-ticket:[[:space:]]*.{15,}$'; then
+        cat >&2 <<EOF
+
+BLOCKED: [hotfix] rationale must contain a ticket ID (#123 or ABC-123) or
+  start with "no-ticket: <reason of at least 15 chars>".
+
+  Current reason: "${TAG_REASON}"
+
+EOF
+        exit 2
+      fi
+    fi
+  fi
+
+  # Rule 3: [wip] is forbidden on main / prod branches
+  if [ "$TAG_NAME" = "wip" ]; then
+    CURRENT_BRANCH=$($GIT_CMD_PREFIX rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+    case "$CURRENT_BRANCH" in
+      main|master|prod|prod/*|production|production/*)
+        cat >&2 <<EOF
+
+BLOCKED: [wip] is not allowed on ${CURRENT_BRANCH}.
+
+  WIP commits belong on feature branches, not the mainline. Options:
+    1) Checkout a feature branch and try again.
+    2) Finish the work and drop the [wip] tag.
+    3) Use [quick: <reason>] if this is genuinely a small standalone fix.
+
+EOF
+        exit 2
+        ;;
+    esac
+  fi
+
+  # Rule 4: rolling budget — max 2 overrides per 30 min across audit log
+  RECENT_OVERRIDES_30M=$(budget_last_30min 2>/dev/null || echo 0)
+  if [ "$RECENT_OVERRIDES_30M" -ge 2 ]; then
+    cat >&2 <<EOF
+
+BLOCKED: Override budget exhausted (${RECENT_OVERRIDES_30M} in the last 30 min, cap = 2).
+
+  You've used 2+ override tags in the last 30 minutes. The next commit
+  must go through /dev instead of adding another [quick] / [no-dev] /
+  [trivial] / [hotfix] / [wip] tag.
+
+  Options:
+    1) Run /dev  — orchestrate through the phased workflow (recommended).
+    2) Wait until the oldest override drops out of the 30-min window,
+       then retry.
+    3) Split the staged files — commit docs/config first (those don't
+       count against the budget), then handle code via /dev.
+
+  Audit log: ~/.claude/audit/$(date -u +%Y-%m-%d).jsonl
+
+EOF
+    exit 2
+  fi
+
   log_cycle "allow-override" "$MATCHED_TAG" "$(cat "$COUNTER" 2>/dev/null || echo 0)"
   if [ "$OVERRIDE_CYCLES_RECENT" -ge 1 ]; then
     cat >&2 <<EOF

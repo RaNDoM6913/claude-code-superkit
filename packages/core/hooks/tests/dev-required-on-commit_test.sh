@@ -77,10 +77,10 @@ run_case "A: 0 edits + code staged → ALLOW" 0 stage_code
 reset_state; set_counter 3
 run_case "B: 3 edits + code + no /dev → BLOCK" 2 stage_code
 
-# Case C: 3 edits + [quick] override → ALLOW (state reset)
+# Case C: 3 edits + [quick: <rationale≥15 chars>] → ALLOW (Task 12)
 reset_state; set_counter 3
-COMMIT_MSG="'[quick] fix typo'"
-run_case "C: 3 edits + [quick] override → ALLOW" 0 stage_code
+COMMIT_MSG="'[quick: minor config path adjustment, no logic change]'"
+run_case "C: 3 edits + [quick: …] rationale → ALLOW" 0 stage_code
 [ ! -f "$COUNTER" ] && [ ! -f "$MARKER" ] && echo "    (state reset verified)" || echo "    WARN: state not reset after C"
 
 # Case D: 3 edits + marker present → ALLOW
@@ -91,10 +91,37 @@ run_case "D: 3 edits + /dev marker → ALLOW" 0 stage_code
 reset_state; set_counter 5
 run_case "E: 5 edits + docs-only → ALLOW (exempt)" 0 stage_docs_only
 
-# Case F: [no-dev] override on any count → ALLOW
+# Case F: [no-dev: <rationale>] override on any count → ALLOW
 reset_state; set_counter 10
-COMMIT_MSG="'[no-dev] infra change'"
-run_case "F: [no-dev] override → ALLOW" 0 stage_code
+COMMIT_MSG="'[no-dev: infra-only change, .claude settings]'"
+run_case "F: [no-dev: …] rationale → ALLOW" 0 stage_code
+
+# ── Task 12 cases ─────────────────────────────────────────────────────────
+
+# Case G: bare [quick] without rationale → BLOCK (Task 12)
+reset_state; set_counter 3
+COMMIT_MSG="'[quick] typo'"
+run_case "G: bare [quick] (no rationale) → BLOCK" 2 stage_code
+
+# Case H: [quick: short] rationale <15 chars → BLOCK
+reset_state; set_counter 3
+COMMIT_MSG="'[quick: tiny]'"
+run_case "H: [quick: tiny] under 15 chars → BLOCK" 2 stage_code
+
+# Case I: [hotfix] without ticket → BLOCK
+reset_state; set_counter 3
+COMMIT_MSG="'[hotfix] emergency'"
+run_case "I: bare [hotfix] (no ticket) → BLOCK" 2 stage_code
+
+# Case J: [hotfix: #42 fix] → ALLOW (ticket present)
+reset_state; set_counter 3
+COMMIT_MSG="'[hotfix: #42 urgent auth regression]'"
+run_case "J: [hotfix: #42 …] ticket → ALLOW" 0 stage_code
+
+# Case K: [hotfix: no-ticket: <reason ≥15>] → ALLOW
+reset_state; set_counter 3
+COMMIT_MSG="'[hotfix: no-ticket: customer-reported 500 on payment flow]'"
+run_case "K: [hotfix: no-ticket: …] explicit justification → ALLOW" 0 stage_code
 
 echo ""
 echo "Results: $PASS passed, $FAIL failed"

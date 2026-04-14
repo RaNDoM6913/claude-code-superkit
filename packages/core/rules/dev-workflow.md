@@ -47,15 +47,20 @@ Since 2026-04-14 this rule is technically enforced by three cooperating hooks:
 
 Both are reset on any successful commit so the next work-cycle starts fresh.
 
-**Override tags** (added to the commit message, any one of):
+**Override tags** (added to the commit message):
 
-| Tag | When to use |
-|-----|-------------|
-| `[quick]` | Small fix, intentional skip |
-| `[no-dev]` | `/dev` not applicable (pure infra / docs) — explain why |
-| `[trivial]` | Cosmetic change (naming, formatting) |
-| `[hotfix]` | Emergency fix |
-| `[wip]` | Work-in-progress checkpoint |
+| Tag | When to use | Rationale requirements |
+|-----|-------------|------------------------|
+| `[quick: <reason ≥15 chars>]` | Small fix, intentional skip | Reason required |
+| `[no-dev: <reason ≥15 chars>]` | `/dev` not applicable (pure infra / docs) | Reason required |
+| `[trivial: <reason ≥15 chars>]` | Cosmetic change (naming, formatting) | Reason required |
+| `[hotfix: #123 …]` or `[hotfix: ABC-123 …]` | Emergency fix tied to a ticket | Ticket ID mandatory |
+| `[hotfix: no-ticket: <reason ≥15 chars>]` | Emergency fix without a ticket | Explicit justification |
+| `[wip]` | Work-in-progress checkpoint | **Forbidden on `main` / `master` / `prod*` branches** |
+
+**Rolling budget** — at most **2 override tags per 30 min** across the whole project (read from `~/.claude/audit/*.jsonl`). The third override in that window is blocked; use `/dev` instead or wait for the oldest override to drop out of the window.
+
+**Anti-reset penalty** — `~/.claude/state/dev-cycles-<session>.jsonl` logs one entry per allow path. `≥ 2` override cycles in the last 60 min lower the threshold from 3 to 2. `≥ 3` consecutive override cycles disable the override path entirely for the rest of the session (forced recovery).
 
 **Exempt commits** (no `/dev` required even at counter ≥ 3):
 
