@@ -78,17 +78,21 @@ Current: `TODO: 000001..000NNN`
 
 ## Context Management
 
-Your context window will be automatically compacted as it approaches its limit, allowing you to continue working indefinitely. Do not stop tasks early due to context concerns. As you approach the limit, save progress to `.claude/.task-state.json` before the context refreshes. Be persistent and autonomous — complete tasks fully.
+Opus 4.7 provides a 1M-token context window, so compaction is rare — do not stop tasks early or abbreviate work due to context concerns. Be persistent and autonomous: complete tasks fully.
 
-When compacting, always preserve: modified file list, current task description, test commands, and any active plan progress.
+For unusually long sessions that do approach the limit, save progress to `.claude/.task-state.json` before the context refreshes. When compaction happens, always preserve: modified file list, current task description, test commands, and any active plan progress. For normal work, this is not needed.
 
 ## Parallel Execution
 
-When multiple independent operations are needed, batch them in a single message:
-- Reading 3+ files → multiple Read calls in parallel
-- Searching for patterns → multiple Grep calls in parallel
-- Dispatching independent agents → all Agent calls in one message
-- Only sequence calls when results of one inform the next
+Opus 4.7 handles parallel tool calls well — use them aggressively whenever operations are independent. Batch into a single message:
+
+- Reading 3+ files → multiple `Read` calls in parallel
+- Searching for different patterns → multiple `Grep` calls in parallel
+- Independent shell commands (e.g. `git status` + `git diff` + `git log`) → parallel `Bash` calls
+- Dispatching independent subagents → all `Agent` calls in one message
+- Reading a file + grepping for related symbols → parallel
+
+Only sequence calls when the result of one informs the inputs of the next (e.g. grep first, then read the hit). Do NOT serialize out of caution — parallelism is cheaper and faster, and the model is capable of reasoning over many results at once.
 
 ## Agent Usage
 
