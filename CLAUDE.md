@@ -91,7 +91,7 @@ VERSION                     # 1.3.8
 
 ## Conventions
 
-- **Model**: ALL agents use `model: opus`. No sonnet. No haiku.
+- **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.7, 1M context**) — kit automatically picks up new Opus versions without code changes.
 - **Codex model**: `gpt-5.4` with `model_reasoning_effort = "extra_high"`
 - **Agent format**: YAML frontmatter (name, description, model, allowed-tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)
