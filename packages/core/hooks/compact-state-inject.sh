@@ -34,9 +34,11 @@ SESSION_KEY="${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}"
 AUDIT_DIR="$HOME/.claude/audit"
 [ -d "$AUDIT_DIR" ] || exit 0
 
-# Count tagged overrides + /dev invocations in the last 30 minutes
+# Count tagged overrides + /dev invocations in the last 60 minutes
 # (across all audit files — today + maybe yesterday at a day boundary).
-cutoff=$(date -u -v-30M +%s 2>/dev/null || date -u -d '30 minutes ago' +%s 2>/dev/null || echo 0)
+# Window widened for Opus 4.7 1M context: sessions last longer, so 60 min
+# keeps the post-compaction summary representative of the active stretch.
+cutoff=$(date -u -v-60M +%s 2>/dev/null || date -u -d '60 minutes ago' +%s 2>/dev/null || echo 0)
 
 overrides=0
 dev_invocations=0
@@ -64,11 +66,11 @@ fi
 
 # Build the summary. Keep under ~200 chars so it doesn't eat budget.
 if [ "$overrides" -ge 2 ]; then
-  msg="Disciplinary state after compaction: ${overrides} override tag(s) used in the last 30 min. The next override is rejected by the rolling-budget gate — please use /dev for the next code-changing commit."
+  msg="Disciplinary state after compaction: ${overrides} override tag(s) used in the last 60 min. The next override is rejected by the rolling-budget gate — please use /dev for the next code-changing commit."
 elif [ "$overrides" -eq 1 ]; then
-  msg="Disciplinary state after compaction: 1 override tag used in the last 30 min. One more within 30 min will raise strictness (threshold 3 → 2) and the one after that is blocked."
+  msg="Disciplinary state after compaction: 1 override tag used in the last 60 min. One more within 60 min will raise strictness (threshold 3 → 2) and the one after that is blocked."
 else
-  msg="Disciplinary state after compaction: no overrides in the last 30 min, ${dev_invocations} /dev invocation(s) recorded."
+  msg="Disciplinary state after compaction: no overrides in the last 60 min, ${dev_invocations} /dev invocation(s) recorded."
 fi
 
 # Emit the SessionStart additionalContext JSON
