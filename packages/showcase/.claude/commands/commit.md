@@ -52,7 +52,7 @@ If found, WARN and ask for confirmation before committing.
 git commit -m "$(cat <<'EOF'
 type(scope): description
 
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
 EOF
 )"
 ```
