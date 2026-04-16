@@ -1,0 +1,24 @@
+{
+  "_comment": "frontend-ui package hooks. Merged into root .claude/settings.json at install time by lib/settings-builder.js.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/ui-banned-fonts-check.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/ui-color-check.sh"
+          },
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/scripts/hooks/ui-animation-easing-check.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
