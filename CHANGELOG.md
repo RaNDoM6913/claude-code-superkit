@@ -4,6 +4,14 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+### Changed (Opus 4.7 readiness)
+- **README badge** — `Opus_4.6` → `Opus_4.7 (1M)`. The kit targets Anthropic's latest frontier model (Opus 4.7) with its 1M-token context window.
+- **`packages/showcase/.claude/commands/commit.md`** — `Co-Authored-By` template bumped `Opus 4.6` → `Opus 4.7 (1M context)` so showcase commits reflect the current model.
+- **`packages/core/hooks/compact-state-inject.sh`** — rolling window for post-compaction disciplinary summary widened `30 min` → `60 min`. With 1M context sessions run longer between compactions, so a 30-min slice was no longer representative of the active stretch. Message text + cutoff both updated.
+- **`packages/core/CLAUDE.md` (user template) — Context Management** — softened: explicitly states Opus 4.7's 1M window makes compaction rare, so `.claude/.task-state.json` save-on-progress is only needed for unusually long sessions, not normal work.
+- **`packages/core/CLAUDE.md` (user template) — Parallel Execution** — strengthened with Opus 4.7-specific guidance: aggressive parallelism recommended, added examples (parallel `Bash` for git status/diff/log, file-read + symbol-grep in parallel), explicit callout not to serialize out of caution.
+- **`CLAUDE.md` (repo instructions)** — documented that `model: opus` is an alias that auto-routes to the latest Opus release (currently Opus 4.7, 1M context), so the kit picks up new Opus versions automatically without config churn.
+
 ### Fixed (critical)
 - **Hooks reading `.command` / `.file_path` at the top level of the tool-input JSON** — Claude Code actually sends those fields under `.tool_input.<field>`, so every one of `doc-check-on-commit.sh`, `superkit-counts-verify.sh`, `config-protection.sh`, `security-patterns.sh`, and `loop-guard.sh` silently exited 0 on every invocation since inception. None of them have ever blocked a real commit or warned on a real edit. Every hook now reads `.tool_input.<field>` first with the legacy path as a fallback for defence-in-depth. Covered by `packages/core/hooks/tests/json-path_test.sh`.
 - **`superkit-counts-verify.sh`** — after the JSON-path fix exposed it, the hook itself undercounted: its per-language loop missed the self-contained `packages/frontend-3d/` package (+4 agents / +4 hooks / +3 rules / +1 command) and its CLAUDE.md "Showcase Commands" parser pointed at the wrong column (Codex instead of Showcase). Counts now include self-contained packages, use `TOTAL_COMMANDS` in the GitHub-About comparison, and read Showcase from `sed -n '3p'`. Excludes internal-only hooks (superkit-counts-verify, verify-hooks) and internal rules (superkit-integrity) from the ship-totals so the numbers match what users actually see.
