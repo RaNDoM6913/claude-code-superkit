@@ -116,6 +116,21 @@ These are converted from core + extras agents. They are dispatched automatically
 | `writing-agents` | Knowledge — how to write agents |
 | `writing-commands` | Knowledge — how to write command orchestrators |
 
+### Frontend UI Skills (add for 2D UI / landing-page / dashboard projects)
+
+```bash
+# Umbrella + 5 specialist reviewers (auto-dispatched)
+cp -r claude-code-superkit/packages/codex/skills/frontend-ui-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/frontend-ui-typography-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/frontend-ui-color-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/frontend-ui-motion-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/frontend-ui-interaction-reviewer .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/frontend-ui-design-critic .codex/skills/
+
+# 1 opt-in craft skill (user-invocable — /impeccable-craft)
+cp -r claude-code-superkit/packages/codex/skills/impeccable-craft .codex/skills/
+```
+
 ### Frontend 3D Skills (add for R3F/Three.js/GSAP projects)
 
 ```bash
@@ -157,11 +172,12 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: 60 skills
+### Total: 67 skills
 
 - 9 command skills (user-invocable, including benchmark)
 - 32 agent + knowledge skills (auto-dispatched)
 - 10 frontend 3D skills (optional, for R3F/Three.js/GSAP projects)
+- 7 frontend UI skills (optional, for 2D UI / landing-page / dashboard projects)
 - 9 stack-specific reviewer skills (optional, per language)
 
 ## Model Configuration

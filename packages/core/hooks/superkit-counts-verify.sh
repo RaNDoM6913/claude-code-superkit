@@ -57,7 +57,7 @@ PKG_AGENTS=0
 PKG_HOOKS=0
 PKG_RULES=0
 PKG_COMMANDS=0
-for pkg in frontend-3d; do
+for pkg in frontend-3d frontend-ui; do
   if [ -d "packages/$pkg/agents" ]; then
     COUNT=$(ls packages/$pkg/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
     PKG_AGENTS=$((PKG_AGENTS + COUNT))

@@ -191,6 +191,18 @@ ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, au
 | `product-3d-lighting` | Knowledge — studio lighting setups for 3D product showcases |
 | `output-enforcement` | Knowledge — anti-laziness enforcement, bans placeholder patterns |
 
+**Frontend UI skills (optional, for 2D UI / landing page / dashboard projects):**
+
+| Skill | Category |
+|-------|----------|
+| `frontend-ui-reviewer` | Quality umbrella — auto-dispatches on audit/review/polish/critique when .tsx/.jsx/.ts/.css/.vue active; runs 11-item reflex audit + delegates to specialists |
+| `frontend-ui-typography-reviewer` | Quality — reflex_fonts_to_reject list, modular scale, line-height/length, font-loading hygiene, OpenType, 4-step font-selection procedure |
+| `frontend-ui-color-reviewer` | Quality — OKLCH over HSL, tinted neutrals, palette cohesion, theme-by-use-context decision table, WCAG/APCA contrast, AI-palette reflexes |
+| `frontend-ui-motion-reviewer` | Quality — Emil's 4-question Animation Decision Framework, easing constants, duration table, spring vs duration, reduced-motion. Outputs Before/After/Why markdown table |
+| `frontend-ui-interaction-reviewer` | Quality — buttons (:active, hit target), modals (transform-origin, scroll-lock, focus trap), forms (validation timing, inline errors), focus-visible, loading patterns, UX writing |
+| `frontend-ui-design-critic` | Quality — holistic gestalt critique ("does it feel designed?"), narrative output, reflex audit scaled across whole diff |
+| `impeccable-craft` | Knowledge (user-invocable) — shape-then-build 4-stage craft flow: Shape → Refine → Implement → Polish |
+
 **Stack-specific reviewers (optional):**
 go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer
 
@@ -205,6 +217,12 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 | `test-runner` | After feature implementation, bug fix, refactor, or test file edits |
 | `lint-runner` | Before any commit with code changes (not docs-only) |
 | `audit-orchestrator` | When touching infrastructure, CI/CD, or security-sensitive code (use health-only mode for quick check) |
+| `frontend-ui-reviewer` | User asks for audit/review/polish/critique AND active edits are in .tsx/.jsx/.ts/.css/.scss/.html/.vue files · 3+ UI file edits in one task · before commit staging ≥2 UI files. Do NOT activate for .go/.py/.rs backend, 3D/WebGL code, tests |
+| `frontend-ui-typography-reviewer` | font-family / weight / scale token changed · Google Fonts import added · user asks about fonts/type/hierarchy while UI files active |
+| `frontend-ui-color-reviewer` | palette / theme / color-token changed · dark/light mode added · oklch/hsl/rgb/hex added · user asks about palette/theme/contrast/dark mode while UI files active |
+| `frontend-ui-motion-reviewer` | transition / @keyframes / animation / useSpring / motion.* added or changed · user asks about motion/animation/easing/duration/spring while UI files active |
+| `frontend-ui-interaction-reviewer` | button / modal / drawer / form / focus / loading / empty / microcopy change · user asks about interactions/polish/accessibility while UI files active |
+| `frontend-ui-design-critic` | user asks for critique / design-review / holistic-review / aesthetic-audit · major new UI surface created · 5+ UI files changed in one task. Do NOT activate for bug fixes or single-component changes |
 
 **Skip auto-activation when:**
 - Already inside `dev-orchestrator` (it includes review + test)

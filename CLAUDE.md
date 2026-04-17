@@ -36,13 +36,20 @@ packages/
     rules/                  # 3 rules (gsap-conventions, threejs-conventions, frontend-aesthetics-3d)
     commands/               # 1 command (capture-screen)
     README.md               # Package documentation
+  frontend-ui/              # Self-contained Frontend 2D UI package (typography, color, motion, interaction)
+    agents/                 # 6 agents (ui-reviewer umbrella + typography / color / motion / interaction / design-critic)
+    hooks/                  # 3 hooks (ui-banned-fonts-check, ui-color-check, ui-animation-easing-check) + tests/
+    skills/                 # 1 skill (impeccable-craft, opt-in shape-then-build flow)
+    rules/                  # 7 rules (frontend-design-aesthetics, typography, color, spatial, motion, interaction, anti-patterns) — all applyWhenPaths-scoped
+    NOTICE.md               # Apache-2.0 attribution for pbakaus/impeccable material
+    README.md               # Package documentation
   extras/                   # Optional components (require specific setup)
     bot-reviewer.md         # Telegram/Discord/Slack bot review
     design-system-reviewer.md
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 60 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d)
+    skills/                 # 67 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
@@ -80,14 +87,14 @@ VERSION                     # 1.3.8
 
 ## Current Counts
 
-| Component | Core | Stack | Frontend-3D | Extras | Showcase | Codex |
-|-----------|------|-------|-------------|--------|----------|-------|
-| Agents | 27 | 9 | 4 | 3 | 28 | — |
-| Skills | 5 | — | 6 | 1 | 11 | 60 |
-| Commands | 15 | — | 1 | — | 17 | 9 |
-| Hooks | 22 (+2 internal) | 9 | 4 | — | 13 | — |
-| Helpers | 1 | — | — | — | — | — |
-| Rules | 7 (+1 internal) | 2 | 3 | — | 6 | — |
+| Component | Core | Stack | Frontend-3D | Frontend-UI | Extras | Showcase | Codex |
+|-----------|------|-------|-------------|-------------|--------|----------|-------|
+| Agents | 27 | 9 | 4 | 6 | 3 | 28 | — |
+| Skills | 5 | — | 6 | 1 | 1 | 11 | 67 |
+| Commands | 15 | — | 1 | — | — | 17 | 9 |
+| Hooks | 22 (+2 internal) | 9 | 4 | 3 | — | 13 | — |
+| Helpers | 1 | — | — | — | — | — | — |
+| Rules | 7 (+1 internal) | 2 | 3 | 7 | — | 6 | — |
 
 ## Conventions
 
@@ -177,3 +184,42 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `packages/core/helpers/statusline.cjs` | Claude Code status bar — stack detector scans root + 1 level of subdirs (monorepo-aware) |
 | `docs/dev-flow.svg` | Hand-authored `/dev` 15-phase flow diagram embedded in main `README.md` |
 | `docs/dev-flow-variants/` | Alternative layouts (timeline / radial / waterfall / node graph) with gallery `README.md` |
+
+<!-- code-review-graph MCP tools -->
+## MCP Tools: code-review-graph
+
+**IMPORTANT: This project has a knowledge graph. ALWAYS use the
+code-review-graph MCP tools BEFORE using Grep/Glob/Read to explore
+the codebase.** The graph is faster, cheaper (fewer tokens), and gives
+you structural context (callers, dependents, test coverage) that file
+scanning cannot.
+
+### When to use graph tools FIRST
+
+- **Exploring code**: `semantic_search_nodes` or `query_graph` instead of Grep
+- **Understanding impact**: `get_impact_radius` instead of manually tracing imports
+- **Code review**: `detect_changes` + `get_review_context` instead of reading entire files
+- **Finding relationships**: `query_graph` with callers_of/callees_of/imports_of/tests_for
+- **Architecture questions**: `get_architecture_overview` + `list_communities`
+
+Fall back to Grep/Glob/Read **only** when the graph doesn't cover what you need.
+
+### Key Tools
+
+| Tool | Use when |
+|------|----------|
+| `detect_changes` | Reviewing code changes — gives risk-scored analysis |
+| `get_review_context` | Need source snippets for review — token-efficient |
+| `get_impact_radius` | Understanding blast radius of a change |
+| `get_affected_flows` | Finding which execution paths are impacted |
+| `query_graph` | Tracing callers, callees, imports, tests, dependencies |
+| `semantic_search_nodes` | Finding functions/classes by name or keyword |
+| `get_architecture_overview` | Understanding high-level codebase structure |
+| `refactor_tool` | Planning renames, finding dead code |
+
+### Workflow
+
+1. The graph auto-updates on file changes (via hooks).
+2. Use `detect_changes` for code review.
+3. Use `get_affected_flows` to understand impact.
+4. Use `query_graph` pattern="tests_for" to check coverage.

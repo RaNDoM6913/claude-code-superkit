@@ -4,6 +4,18 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+### Added (Frontend UI package)
+- **`packages/frontend-ui/`** — new self-contained package for 2D frontend UI design / polish, sibling to `frontend-3d/`. Philosophy: auto-dispatch agents + auto-loaded rules (no slash commands). Opt-in during install. Brand-context inferred from `CLAUDE.md` + `docs/architecture/` + auto-memory; one targeted mid-review question only when genuinely ambiguous; no upfront questionnaires.
+  - **6 agents (all Opus):** `ui-reviewer` umbrella + 5 specialists — `ui-typography-reviewer`, `ui-color-reviewer`, `ui-motion-reviewer`, `ui-interaction-reviewer`, `ui-design-critic` (gestalt narrative critique). Each has explicit dispatch/no-dispatch rules in the `description` field so Claude picks the right specialist and avoids routing UI audits to `go-reviewer`.
+  - **7 rules (path-scoped via `applyWhenPaths`):** `frontend-design-aesthetics`, `typography-guidelines` (4-step font-selection procedure + full `reflex_fonts_to_reject` list), `color-and-contrast` (OKLCH, tinted neutrals, theme-by-use-context decision table), `spatial-and-layout` (4pt scale, rhythm, container queries), `motion-and-animation` (4-question framework, custom cubic-bezier constants, duration table), `interaction-polish` (buttons / modals / drawers / forms / focus / loading / empty / microcopy), `ui-anti-patterns` (banned fonts / colors / layouts / motion / interactions).
+  - **3 hooks (advisory, never blocking):** `ui-banned-fonts-check` (Inter / DM Sans / Fraunces / etc. detection), `ui-color-check` (pure `#000`/`#fff`, purple→blue gradients, gradient text, 3+ hsl without oklch), `ui-animation-easing-check` (`ease-in` on UI, `transition: all`, `scale(0)` entry, layout-property animation). Regression suites 9+12+13 = 34 tests, all passing.
+  - **1 skill (`impeccable-craft`, user-invocable opt-in):** 4-stage shape-then-build flow (Shape → Refine → Implement → Polish) for creating UI from scratch with user check-ins at drift points.
+  - **Codex port:** 7 equivalent skills under `packages/codex/skills/` — `frontend-ui-reviewer` (prefixed to avoid collision with existing `ui-reviewer`) + 5 specialists + `impeccable-craft`. Auto-activation rules updated in `packages/codex/AGENTS.md`.
+  - **Attribution:** `packages/frontend-ui/NOTICE.md` credits [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) for the rule content and [Emil Kowalski's skill](https://github.com/emilkowalski/skill) for idea-level adoption (prose re-expressed because the source has no LICENSE).
+  - **Installer:** `lib/installer.js` adds the `Frontend UI? [y/N]` prompt and the `frontend-ui` entry in `SELF_CONTAINED_PACKAGES`. The existing `collectStackHooks` path handles self-contained hooks automatically; no `lib/settings-builder.js` changes required.
+  - **Documentation:** counts table in root `CLAUDE.md` gains a Frontend-UI column; `README.md` badge updated from 43 → 49 agents; Codex count 60 → 67. `packages/codex/INSTALL.md` and `AGENTS.md` updated.
+- **`packages/core/hooks/superkit-counts-verify.sh`** — internal counts-verify hook extended to recognise `frontend-ui/` in the self-contained-packages loop alongside `frontend-3d/`. TOTAL_AGENTS / TOTAL_HOOKS / TOTAL_RULES now include both.
+
 ### Changed (Opus 4.7 readiness)
 - **README badge** — `Opus_4.6` → `Opus_4.7 (1M)`. The kit targets Anthropic's latest frontier model (Opus 4.7) with its 1M-token context window.
 - **`packages/showcase/.claude/commands/commit.md`** — `Co-Authored-By` template bumped `Opus 4.6` → `Opus 4.7 (1M context)` so showcase commits reflect the current model.

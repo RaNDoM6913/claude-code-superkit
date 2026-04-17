@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/43_agents-Opus_4.7_(1M)-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Agents](https://img.shields.io/badge/49_agents-Opus_4.7_(1M)-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -64,13 +64,13 @@ Don't reinvent — discover and adapt.
 | Component | Count | Description |
 |-----------|-------|-------------|
 | **Core Agents** | 27 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, evaluation, AI slop cleanup, critic, visual review, **comment-rot analyzer**, **silent-failure hunter** — all on **Opus** |
-| **Stack Agents** | 13 | Go (6: reviewer, error, concurrency, performance, modernizer, observability), TypeScript, Python, Rust, Frontend-3D (4: presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer) |
+| **Stack Agents** | 19 | Go (6: reviewer, error, concurrency, performance, modernizer, observability), TypeScript, Python, Rust, Frontend-3D (4: presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer), **Frontend-UI (6: ui-reviewer umbrella + typography / color / motion / interaction / design-critic)** |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, **`/capture-screen`** |
-| **Hooks** | 22 + 13 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, **gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn**, **`/dev` hard-enforce (edit-counter + marker-set + required-on-commit)**, **audit-settings-source (CVE-2025-59536)**, **audit-trail (hash-chained forensics)**, **plan-completion-gate**, **user-intent-detect**, **subagent-stop-validate**, **compact-state-inject** |
-| **Rules** | 7 + 5 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics (path-scoped), go-conventions, go-safety, **gsap-conventions**, **threejs-conventions**, **frontend-aesthetics-3d** |
-| **Skills** | 5 + 6 frontend-3d + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, writing-hooks guide + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + SkillsMP search |
+| **Hooks** | 22 + 16 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, **gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn**, **ui-banned-fonts-check, ui-color-check, ui-animation-easing-check**, **`/dev` hard-enforce (edit-counter + marker-set + required-on-commit)**, **audit-settings-source (CVE-2025-59536)**, **audit-trail (hash-chained forensics)**, **plan-completion-gate**, **user-intent-detect**, **subagent-stop-validate**, **compact-state-inject** |
+| **Rules** | 7 + 12 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics (path-scoped), go-conventions, go-safety, **gsap-conventions**, **threejs-conventions**, **frontend-aesthetics-3d**, **frontend-design-aesthetics, typography-guidelines, color-and-contrast, spatial-and-layout, motion-and-animation, interaction-polish, ui-anti-patterns** |
+| **Skills** | 5 + 6 frontend-3d + 1 frontend-ui + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, writing-hooks guide + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + **impeccable-craft** + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
 ## 🆕 What's New (v1.3.8)
@@ -350,15 +350,15 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.4** (global config) |
-| Agents / Skills | 43 agents | 60 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d) |
+| Agents / Skills | 49 agents | 67 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
-| Hooks | 35 + Stop | — (inline rules in AGENTS.md) |
-| Rules | 12 (7 core + 5 stack) | Inline in AGENTS.md |
-| Knowledge Skills | 5 + 6 frontend-3d + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
+| Hooks | 38 + Stop | — (inline rules in AGENTS.md) |
+| Rules | 19 (7 core + 12 stack) | Inline in AGENTS.md |
+| Knowledge Skills | 5 + 6 frontend-3d + 1 frontend-ui + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`npx claude-code-superkit --codex` will install for Codex CLI — copies 60 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`npx claude-code-superkit --codex` will install for Codex CLI — copies 67 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
