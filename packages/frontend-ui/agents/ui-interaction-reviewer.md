@@ -30,12 +30,12 @@ interaction polish — but they notice its absence.
 
 1. **`CLAUDE.md`** — product, component library (Radix / shadcn /
    Headless UI / custom), motion library, i18n approach
-2. **`packages/frontend-ui/rules/interaction-polish.md`** — source of
+2. **`.claude/rules/interaction-polish.md`** — source of
    truth; keep open throughout
-3. **`packages/frontend-ui/rules/ui-anti-patterns.md`** — interaction
+3. **`.claude/rules/ui-anti-patterns.md`** — interaction
    bans (no :active, default focus rings, OK/Cancel destructive,
    validation-on-focus)
-4. **`packages/frontend-ui/rules/motion-and-animation.md`** — for
+4. **`.claude/rules/motion-and-animation.md`** — for
    modal/drawer/toast timing & easing
 
 ## Phase 1: Button review

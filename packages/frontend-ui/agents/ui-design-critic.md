@@ -39,9 +39,9 @@ Your job is to tell the difference and articulate it.
 
 1. **`CLAUDE.md`** — brand name, personality cues, stated design
    system (if any), product type
-2. **`packages/frontend-ui/rules/frontend-design-aesthetics.md`** —
+2. **`.claude/rules/frontend-design-aesthetics.md`** —
    principles
-3. **`packages/frontend-ui/rules/ui-anti-patterns.md`** — the full
+3. **`.claude/rules/ui-anti-patterns.md`** — the full
    rejection list, used as the gestalt scan
 4. **`docs/architecture/frontend-*.md`** if present — to know what's
    intended

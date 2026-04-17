@@ -28,9 +28,9 @@ failures, (4) theme choice that contradicts use context.
 
 1. **`CLAUDE.md`** — product, audience, **physical use context** (when,
    where, by whom is this consumed?)
-2. **`packages/frontend-ui/rules/color-and-contrast.md`** — source of
+2. **`.claude/rules/color-and-contrast.md`** — source of
    truth; keep open throughout
-3. **`packages/frontend-ui/rules/ui-anti-patterns.md`** — banned color
+3. **`.claude/rules/ui-anti-patterns.md`** — banned color
    patterns
 4. **Design tokens / theme files** — understand the existing palette
    before commenting on new additions

@@ -5,7 +5,7 @@
 # Opt-out: CLAUDE_DISABLE_UI_FONT_CHECK=1
 #
 # Scans the incoming diff for fonts in the reflex_fonts_to_reject list
-# from packages/frontend-ui/rules/ui-anti-patterns.md. Writes a stderr
+# from .claude/rules/ui-anti-patterns.md. Writes a stderr
 # warning pointing at the rule so Claude can correct course BEFORE the
 # edit settles into the design system. Never blocks — exit 0 always.
 
@@ -76,7 +76,7 @@ if [ -n "$HITS" ]; then
   printf "%b" "$HITS" >&2
   echo "  These fonts are the LLM's training-data defaults and create visual" >&2
   echo "  monoculture. Consider running the font-selection procedure in" >&2
-  echo "  packages/frontend-ui/rules/typography-guidelines.md (Step 1-4)." >&2
+  echo "  .claude/rules/typography-guidelines.md (Step 1-4)." >&2
   echo "  Opt out: export CLAUDE_DISABLE_UI_FONT_CHECK=1" >&2
   echo "" >&2
 fi

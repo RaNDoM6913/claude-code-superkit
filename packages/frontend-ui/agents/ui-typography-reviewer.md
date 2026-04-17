@@ -28,9 +28,9 @@ misconfigured line-height, wrong font-display, etc.).
 ## Phase 0: Load Project Context
 
 1. **`CLAUDE.md`** — product, brand name, brand personality cues
-2. **`packages/frontend-ui/rules/typography-guidelines.md`** — keep
+2. **`.claude/rules/typography-guidelines.md`** — keep
    open throughout; this is your source of truth
-3. **`packages/frontend-ui/rules/ui-anti-patterns.md`** — reflex-font
+3. **`.claude/rules/ui-anti-patterns.md`** — reflex-font
    list and the typographic bans
 4. **Design tokens** — `tailwind.config.*`, `tokens.*`, theme files —
    to understand the existing scale before reviewing new additions

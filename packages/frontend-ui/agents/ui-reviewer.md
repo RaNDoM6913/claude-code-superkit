@@ -14,7 +14,7 @@ description: |
   - Test files (`*.test.*`, `*.spec.*`)
   - Non-token config files (`.json`, `.yaml`, `.toml`) unless they are design-token configs (`tailwind.config.*`, `tokens.*`, `theme.*`)
 
-  Reads `packages/frontend-ui/rules/` in Phase 0 and applies them during review. Outputs findings with Severity (CRITICAL / WARNING / SUGGESTION) + Confidence (HIGH / MEDIUM / LOW).
+  Reads `.claude/rules/` in Phase 0 and applies them during review. Outputs findings with Severity (CRITICAL / WARNING / SUGGESTION) + Confidence (HIGH / MEDIUM / LOW).
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -35,9 +35,9 @@ Read in order (skip silently if missing):
    CSS-in-JS; motion library), any stated design system name.
 2. **`docs/architecture/frontend-*.md`** — screen structure,
    navigation model, design tokens, existing components.
-3. **`packages/frontend-ui/rules/frontend-design-aesthetics.md`** — the
+3. **`.claude/rules/frontend-design-aesthetics.md`** — the
    principles umbrella. Keep open throughout the review.
-4. **`packages/frontend-ui/rules/ui-anti-patterns.md`** — the rejection
+4. **`.claude/rules/ui-anti-patterns.md`** — the rejection
    list, used for the reflex audit at Phase 2.
 5. **Auto-memory** — check for `project_brand_context.md` or
    `project_design_tone.md` entries if your environment exposes them.
@@ -150,7 +150,7 @@ file path.
 [CRITICAL · HIGH] Using Inter — reflex-list font
 src/components/Hero.tsx:12
 
-`font-family: Inter` is in packages/frontend-ui/rules/ui-anti-patterns.md
+`font-family: Inter` is in .claude/rules/ui-anti-patterns.md
 reflex_fonts_to_reject list.
 
 This is a training-data default; every AI-generated UI reaches for it.

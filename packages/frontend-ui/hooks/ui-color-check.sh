@@ -88,7 +88,7 @@ if [ -n "$WARNINGS" ]; then
   echo "" >&2
   echo "⚠ UI: color anti-patterns in ${FILE_PATH}" >&2
   printf "%b" "$WARNINGS" >&2
-  echo "  See packages/frontend-ui/rules/color-and-contrast.md and ui-anti-patterns.md" >&2
+  echo "  See .claude/rules/color-and-contrast.md and ui-anti-patterns.md" >&2
   echo "  Opt out: export CLAUDE_DISABLE_UI_COLOR_CHECK=1" >&2
   echo "" >&2
 fi

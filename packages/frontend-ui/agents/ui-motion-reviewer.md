@@ -28,9 +28,9 @@ table format.
 
 1. **`CLAUDE.md`** — product, use frequency, motion library in use
    (motion/react / Framer Motion / GSAP / vanilla CSS)
-2. **`packages/frontend-ui/rules/motion-and-animation.md`** — the
+2. **`.claude/rules/motion-and-animation.md`** — the
    4-question framework, easing constants, duration table
-3. **`packages/frontend-ui/rules/ui-anti-patterns.md`** — motion bans
+3. **`.claude/rules/ui-anti-patterns.md`** — motion bans
 
 ### Establish exposure frequency
 
