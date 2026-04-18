@@ -175,14 +175,14 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `lib/settings-builder.js` | JSON assembly — replaces jq dependency |
 | `packages/core/settings.json` | Hook wiring (PreToolUse, PostToolUse, Stop) + enabledPlugins |
 | `packages/core/rules/documentation.md` | 4-layer doc enforcement rule (rule + auto-commands + BLOCKING hook + Stop) |
-| `packages/core/commands/dev.md` | 15-phase always-on dev orchestrator with pseudocode + sprint contract + evaluator + plan-checker + goal-verifier + critic gates |
+| `packages/core/commands/dev.md` | 16-phase always-on dev orchestrator with pseudocode + sprint contract + evaluator + plan-checker + goal-verifier + critic gates |
 | `packages/core/commands/superkit-init.md` | Intelligent project setup — scan, generate docs, configure rules |
 | `packages/core/commands/superkit-evolve.md` | Incremental documentation drift detection and fix |
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |
 | `packages/frontend-3d/README.md` | Frontend 3D package — agents, hooks, skills, rules, commands for GSAP/Three.js/R3F |
 | `packages/core/helpers/statusline.cjs` | Claude Code status bar — stack detector scans root + 1 level of subdirs (monorepo-aware) |
-| `docs/dev-flow.svg` | Hand-authored `/dev` 15-phase flow diagram embedded in main `README.md` |
+| `docs/dev-flow.svg` | Hand-authored `/dev` 16-phase flow diagram embedded in main `README.md` |
 | `docs/dev-flow-variants/` | Alternative layouts (timeline / radial / waterfall / node graph) with gallery `README.md` |
 
 <!-- code-review-graph MCP tools -->

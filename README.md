@@ -90,7 +90,7 @@ See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.9 history.
 ## 🔄 How `/dev` Works
 
 <p align="center">
-  <img src="docs/dev-flow.svg" alt="/dev — 15-phase development orchestrator: Planning (6 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
+  <img src="docs/dev-flow.svg" alt="/dev — 16-phase development orchestrator: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
 </p>
 
 ## 🚀 Installation
@@ -148,7 +148,7 @@ Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex 
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 15-phase orchestrator: understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
+| `/dev <task>` | 16-phase orchestrator: read-docs → understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
 | `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
 | `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |

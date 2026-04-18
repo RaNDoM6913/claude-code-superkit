@@ -67,7 +67,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | 15-phase development cycle: understand, architect, pseudocode, plan, contract, validate, implement, evaluate, verify, test, goals, review, critic, document, report |
+| `dev-orchestrator` | 16-phase development cycle: read-docs, understand, architect, pseudocode, plan, contract, validate, implement, evaluate, verify, test, goals, review, critic, document, report |
 | `review-orchestrator` | Detect changes, dispatch reviewers, **double-verify** findings, collect report |
 | `audit-orchestrator` | Parallel audit across frontend, backend, infra, security |
 | `test-runner` | Auto-detect project test runner and execute tests |
