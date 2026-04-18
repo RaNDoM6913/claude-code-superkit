@@ -1,6 +1,7 @@
 ---
 name: tree-generator
 description: Generate project directory tree documentation — auto-detect structure, filter noise, output clean markdown trees
+tokens: 400
 model: opus
 allowed-tools: Bash, Read, Glob, Write
 ---

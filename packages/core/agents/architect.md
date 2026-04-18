@@ -1,6 +1,7 @@
 ---
 name: architect
 description: System design advisor — evaluates trade-offs, proposes architecture for new features, reviews refactoring plans
+tokens: 1315
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

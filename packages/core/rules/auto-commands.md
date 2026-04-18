@@ -1,5 +1,6 @@
 ---
 alwaysApply: true
+tokens: 1231
 ---
 
 # Auto Command Triggers

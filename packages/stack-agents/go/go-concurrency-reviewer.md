@@ -1,6 +1,7 @@
 ---
 name: go-concurrency-reviewer
 description: Audit Go concurrency — goroutines, channels, mutexes, context propagation, race conditions
+tokens: 1602
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Agent, AskUserQuestion
 ---

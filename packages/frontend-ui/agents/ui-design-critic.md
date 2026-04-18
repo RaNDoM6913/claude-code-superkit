@@ -2,6 +2,7 @@
 name: ui-design-critic
 description: |
   Holistic design critique — NOT a code reviewer. Evaluates whether a UI FEELS designed or feels like AI template output. Covers layout rhythm, visual weight, hierarchy, composition, intentionality, and the aggregate of anti-patterns. Complements the technical specialists (typography / color / motion / interaction) by judging overall aesthetic coherence.
+tokens: 1523
 
   **Dispatch when:**
   - User asks for "critique", "design review", "holistic review",

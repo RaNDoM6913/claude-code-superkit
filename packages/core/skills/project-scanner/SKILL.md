@@ -1,6 +1,7 @@
 ---
 name: project-scanner
 description: Project introspection — detect languages, frameworks, database, structure, scale, auth, CI/CD
+tokens: 766
 user-invocable: false
 ---
 

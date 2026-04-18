@@ -1,6 +1,7 @@
 ---
 name: writing-agents
 description: How to write Claude Code agents — standard format, 3-phase review, severity/confidence, dispatch patterns
+tokens: 760
 user-invocable: false
 ---
 

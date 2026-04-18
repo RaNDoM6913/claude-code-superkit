@@ -1,6 +1,7 @@
 ---
 name: interaction-polish
 description: "Interactive element polish — buttons, modals, drawers, forms, focus states, loading, UX writing. The invisible details that compound into 'feels right'. Auto-loaded when editing UI files."
+tokens: 2928
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"

@@ -1,6 +1,7 @@
 ---
 name: gltf-debugging
 description: Runtime GLB/GLTF inspection — traverse nodes, identify screen meshes, inspect UV coordinates, material property dumping, fixing exported materials at runtime. Use when textures don't map correctly to 3D models.
+tokens: 917
 ---
 
 # GLTF/GLB Debugging

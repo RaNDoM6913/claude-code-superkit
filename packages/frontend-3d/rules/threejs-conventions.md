@@ -5,6 +5,7 @@ applyWhenPaths:
   - "**/three/**"
   - "**/scene/**"
   - "**/r3f/**"
+tokens: 544
 ---
 
 # Three.js / R3F Conventions

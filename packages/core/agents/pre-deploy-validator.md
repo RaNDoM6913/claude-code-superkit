@@ -1,6 +1,7 @@
 ---
 name: pre-deploy-validator
 description: 9-point pre-deploy gate — compilation, linting, tests, migrations, API spec, debug artifacts, env config, bundle size, secrets
+tokens: 1357
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---

@@ -1,6 +1,7 @@
 ---
 name: ui-anti-patterns
 description: "Explicit rejection list — banned fonts, banned color patterns, banned layout templates, banned motion patterns. The 'what not to do' companion to the positive design rules. Auto-loaded when editing UI files."
+tokens: 2344
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"

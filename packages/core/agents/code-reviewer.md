@@ -1,6 +1,7 @@
 ---
 name: code-reviewer
 description: Generic code review — layers, error handling, naming, DI, SQL safety, auth, tests
+tokens: 1848
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

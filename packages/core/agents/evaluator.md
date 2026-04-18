@@ -1,6 +1,7 @@
 ---
 name: evaluator
 description: Calibrated QA evaluator — scores implementation against Sprint Contract criteria, provides structured critique for conditional iteration loop
+tokens: 1063
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

@@ -1,6 +1,7 @@
 ---
 name: critic
 description: Final quality gate — multi-perspective review (security, new-hire, ops) with gap analysis and pre-commitment predictions
+tokens: 929
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

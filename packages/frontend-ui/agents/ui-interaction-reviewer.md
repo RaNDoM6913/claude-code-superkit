@@ -2,6 +2,7 @@
 name: ui-interaction-reviewer
 description: |
   Interactive-component review — buttons, modals, drawers, forms, focus states, loading patterns, UX writing, empty states. Checks for the invisible details that compound into "feels right" — :active states, spatial-consistency entry/exit, modal vs popover transform-origin, inline form errors, focus-visible, optimistic UI, prescriptive empty states, verb-not-noun button labels.
+tokens: 1515
 
   **Dispatch when:**
   - A button / modal / drawer / dialog / sheet / popover / dropdown /

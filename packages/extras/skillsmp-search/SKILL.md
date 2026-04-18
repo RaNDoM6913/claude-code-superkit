@@ -1,6 +1,7 @@
 ---
 name: skillsmp-search
 description: Search 500K+ agent skills on SkillsMP marketplace before writing new agents, commands, or skills. Use when creating new .claude/ components or looking for community solutions.
+tokens: 695
 user-invocable: false
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: comment-rot-analyzer
 description: Detect stale comments, outdated TODOs, doc rot — comments that lie about the code
+tokens: 539
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

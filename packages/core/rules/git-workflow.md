@@ -1,5 +1,6 @@
 ---
 alwaysApply: true
+tokens: 105
 ---
 
 # Git Workflow

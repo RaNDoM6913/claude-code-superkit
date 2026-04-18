@@ -1,6 +1,7 @@
 ---
 name: audit-frontend
 description: Audit frontend code for hardcoded values, console.log, TypeScript strict, dead imports, design tokens, accessibility
+tokens: 1070
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---

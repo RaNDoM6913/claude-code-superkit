@@ -2,6 +2,7 @@
 name: ui-reviewer
 description: |
   Frontend UI code review umbrella — typography, color, spacing, motion, interaction, overall aesthetic. Covers 2D DOM UI built with React/Vue/Svelte + Tailwind / CSS / CSS-in-JS. Runs a quick umbrella scan and dispatches specialist sub-reviewers (ui-typography-reviewer, ui-color-reviewer, ui-motion-reviewer, ui-interaction-reviewer, ui-design-critic) when a specific domain needs deep attention.
+tokens: 1807
 
   **Dispatch automatically when:**
   - User asks for "audit", "review", "polish", "critique" AND active edits are in `.tsx/.jsx/.ts/.css/.scss/.html/.vue` files

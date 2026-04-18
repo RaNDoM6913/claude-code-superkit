@@ -1,5 +1,6 @@
 ---
 alwaysApply: true
+tokens: 403
 ---
 
 # Coding Style

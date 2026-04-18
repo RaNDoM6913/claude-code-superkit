@@ -1,6 +1,7 @@
 ---
 name: scaffold-endpoint
 description: Scaffold a new API endpoint by reading existing project patterns — no hardcoded architecture
+tokens: 1043
 model: opus
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---

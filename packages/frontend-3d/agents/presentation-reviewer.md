@@ -1,6 +1,7 @@
 ---
 name: presentation-reviewer
 description: Review scroll-driven presentation sections using GSAP ScrollTrigger, phone frame components, and 3D textures — phase objects, dual ScrollTrigger entrance pattern, performance. Activate when editing scroll-driven presentation sections.
+tokens: 975
 model: opus
 allowed-tools: Read, Grep, Glob, Agent
 ---

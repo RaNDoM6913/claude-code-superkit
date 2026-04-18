@@ -1,6 +1,7 @@
 ---
 name: silent-failure-hunter
 description: Find swallowed errors, empty catches, silent fallbacks — code that hides failures instead of handling them
+tokens: 809
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

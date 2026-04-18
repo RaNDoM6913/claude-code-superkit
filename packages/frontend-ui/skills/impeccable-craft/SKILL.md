@@ -2,6 +2,7 @@
 name: impeccable-craft
 description: |
   Opt-in shape-then-build flow for creating a UI from scratch with maximum intentionality. Gathers brand context, commits to an aesthetic direction, and iterates through a 4-stage craft cycle (sketch → refine → implement → polish). Use this skill when explicitly asked for "craft a UI from scratch" or "use the impeccable approach" — otherwise the auto-dispatched agents (ui-reviewer + specialists) are the primary workflow.
+tokens: 1340
 user-invocable: true
 license: Apache-2.0 (based on portions of pbakaus/impeccable — see https://github.com/RaNDoM6913/claude-code-superkit/blob/main/packages/frontend-ui/NOTICE.md)
 ---

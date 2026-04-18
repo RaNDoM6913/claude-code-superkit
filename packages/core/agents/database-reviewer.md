@@ -1,6 +1,7 @@
 ---
 name: database-reviewer
 description: PostgreSQL database specialist — query optimization, schema design, index strategy, migration safety, anti-patterns
+tokens: 1502
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

@@ -2,6 +2,7 @@
 name: ui-motion-reviewer
 description: |
   Motion-specific review — runs the Animation Decision Framework (should it animate? purpose? easing? duration?), catches ease-in on UI, transition:all, scale(0) entry, bounce/elastic defaults, unmetered keyboard animations, prefers-reduced-motion gaps, and poorly-chosen spring vs duration tradeoffs. Outputs the Before/After/Why markdown table format.
+tokens: 1476
 
   **Dispatch when:**
   - A `transition`, `@keyframes`, `animation`, `useSpring`,

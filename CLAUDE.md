@@ -105,6 +105,7 @@ VERSION                     # 1.3.9
 - **Output format**: Severity (CRITICAL/WARNING/SUGGESTION) + Confidence (HIGH/MEDIUM/LOW)
 - **Generic**: Core agents must NOT reference specific projects. Use auto-detection patterns.
 - **Showcase**: May reference TGApp/SocialApp patterns (it's a real production example)
+- **Token metadata**: All agents, skills, and rules declare `tokens: N` in YAML frontmatter as a transparency signal (approximate body size, ~4 chars/token). This is NOT a budget — specialist agents may run 2500+ tokens because depth is the point. Authors should update `tokens:` when editing a file so users see the real cost. Regenerate via `node bin/inject-tokens.js`.
 
 ## Mandatory Documentation Updates
 

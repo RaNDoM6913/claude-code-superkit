@@ -2,6 +2,7 @@
 alwaysApply: false
 applyWhenPaths:
   - "**/*.go"
+tokens: 409
 ---
 
 # Go Conventions

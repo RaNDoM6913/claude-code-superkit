@@ -1,6 +1,7 @@
 ---
 name: writing-hooks
 description: How to write Claude Code hooks — lifecycle events, exit codes, profile system, shell patterns, best practices
+tokens: 1844
 user-invocable: false
 ---
 

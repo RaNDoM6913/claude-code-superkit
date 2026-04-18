@@ -1,6 +1,7 @@
 ---
 name: api-contract-sync
 description: Verify OpenAPI/Swagger spec matches actual route registrations and handler implementations
+tokens: 901
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

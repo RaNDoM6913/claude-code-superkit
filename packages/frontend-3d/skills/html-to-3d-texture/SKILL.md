@@ -1,6 +1,7 @@
 ---
 name: html-to-3d-texture
 description: Capture HTML/React components as PNG textures for 3D models — html2canvas, CanvasTexture, capture pipeline, resolution settings. Use when you need to display web UI on a 3D surface.
+tokens: 1013
 ---
 
 # HTML to 3D Texture Pipeline

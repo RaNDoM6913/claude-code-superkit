@@ -1,6 +1,7 @@
 ---
 name: goal-verifier
 description: Goal-backward verification — validates implementation results match stated goals using 4-level substantiation (exists/substantive/wired/data-flow)
+tokens: 495
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

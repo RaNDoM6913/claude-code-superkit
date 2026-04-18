@@ -1,6 +1,7 @@
 ---
 name: go-observability-reviewer
 description: Audit Go observability — structured logging, Prometheus metrics, OpenTelemetry traces, pprof, health checks
+tokens: 1183
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Agent, AskUserQuestion
 ---

@@ -1,6 +1,7 @@
 ---
 name: docs-reviewer
 description: Documentation review — freshness check (git diff vs docs) + accuracy validation (claims vs code) + coverage audit
+tokens: 1412
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---

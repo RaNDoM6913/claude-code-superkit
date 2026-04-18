@@ -1,6 +1,7 @@
 ---
 name: dependency-checker
 description: Audit dependencies — npm audit, govulncheck, pip-audit, cargo-audit, outdated packages, update plan
+tokens: 1476
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---

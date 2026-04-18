@@ -7,6 +7,7 @@ applyWhenPaths:
   - "**/*.svelte"
   - "**/*.css"
   - "**/*.scss"
+tokens: 425
 ---
 
 # Frontend Aesthetics

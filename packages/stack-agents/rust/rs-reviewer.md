@@ -1,6 +1,7 @@
 ---
 name: rs-reviewer
 description: Review Rust code for ownership, error handling, unsafe usage, and idiomatic patterns
+tokens: 1522
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---

@@ -1,6 +1,7 @@
 ---
 name: project-architecture
 description: Project architecture reference — modules, layers, data flow
+tokens: 72
 user-invocable: false
 ---
 

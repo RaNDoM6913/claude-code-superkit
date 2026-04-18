@@ -1,6 +1,7 @@
 ---
 name: ai-slop-cleaner
 description: Clean AI-generated code patterns — redundant comments, unnecessary abstractions, over-engineering, template code
+tokens: 1176
 model: opus
 allowed-tools: Read, Grep, Glob, Edit
 ---

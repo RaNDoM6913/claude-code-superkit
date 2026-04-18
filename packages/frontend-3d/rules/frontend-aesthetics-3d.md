@@ -5,6 +5,7 @@ applyWhenPaths:
   - "**/presentation/**/*.jsx"
   - "**/landing/**/*.tsx"
   - "**/landing/**/*.jsx"
+tokens: 477
 ---
 
 # Frontend Aesthetics — 3D & Presentation

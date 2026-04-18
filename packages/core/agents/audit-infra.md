@@ -1,6 +1,7 @@
 ---
 name: audit-infra
 description: Audit infrastructure — secrets, Docker, deps, CORS, webhooks, migrations, CI/CD, monitoring
+tokens: 1588
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---

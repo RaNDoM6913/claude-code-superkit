@@ -1,6 +1,7 @@
 ---
 name: audit-backend
 description: Audit backend code for SQL safety, error handling, auth coverage, PII exposure, dead code, TODO density
+tokens: 1106
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---

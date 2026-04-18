@@ -1,6 +1,7 @@
 ---
 name: product-3d-lighting
 description: Studio lighting setups for 3D product showcases — HDRI, directional/spot/point lights, Environment from drei, shadow config, dark background optimization. Use when setting up lighting for product 3D scenes.
+tokens: 859
 ---
 
 # Product 3D Lighting

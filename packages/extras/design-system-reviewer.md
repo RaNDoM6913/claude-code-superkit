@@ -1,6 +1,7 @@
 ---
 name: design-system-reviewer
 description: Review UI components against the project's design system tokens — colors, spacing, typography, z-index, animations
+tokens: 1710
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

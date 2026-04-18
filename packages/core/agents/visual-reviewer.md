@@ -1,6 +1,7 @@
 ---
 name: visual-reviewer
 description: Visual QA — screenshot comparison before/after, UI consistency check, design system compliance scoring
+tokens: 1117
 model: opus
 allowed-tools: Read, Bash, Glob, Grep
 ---

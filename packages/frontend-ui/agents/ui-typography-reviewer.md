@@ -2,6 +2,7 @@
 name: ui-typography-reviewer
 description: |
   Typography-specific review — font selection, modular scale, line-height, line-length, pairing, tracking, OpenType, web-font loading. Called by ui-reviewer when typography needs a deep dive, or directly when the user asks specifically about fonts / type / hierarchy.
+tokens: 1319
 
   **Dispatch when:**
   - A `font-family`, `font-weight`, or type-scale token changed

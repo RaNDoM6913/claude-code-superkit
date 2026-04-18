@@ -1,6 +1,7 @@
 ---
 name: test-generator
 description: Generate tests following project patterns — table-driven, edge cases, multi-stack aware
+tokens: 1488
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ---

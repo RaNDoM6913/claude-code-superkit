@@ -1,6 +1,7 @@
 ---
 name: health-checker
 description: Project health dashboard — compilation, tests, TODOs, API spec drift, migration pairs, deps, security, docs, bundle
+tokens: 1267
 model: opus
 allowed-tools: Bash, Glob, Grep, Read
 ---

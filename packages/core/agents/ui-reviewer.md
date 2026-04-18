@@ -1,6 +1,7 @@
 ---
 name: ui-reviewer
 description: UI/UX review — accessibility, semantic HTML, z-index, animations, responsive, design tokens
+tokens: 1391
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

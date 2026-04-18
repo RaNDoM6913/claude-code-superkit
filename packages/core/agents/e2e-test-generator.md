@@ -1,6 +1,7 @@
 ---
 name: e2e-test-generator
 description: Generate Playwright e2e tests — Page Object Model, data-testid selectors, network mocking, viewport testing
+tokens: 1544
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Edit, Write
 ---

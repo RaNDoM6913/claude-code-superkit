@@ -1,5 +1,6 @@
 ---
 alwaysApply: true
+tokens: 1888
 ---
 
 # Documentation Updates — MANDATORY

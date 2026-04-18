@@ -15,6 +15,7 @@ applyWhenPaths:
   - ".github/workflows/**"
   - "Dockerfile*"
   - "docker-compose*"
+tokens: 99
 ---
 
 # Security

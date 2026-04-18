@@ -2,6 +2,7 @@
 name: ui-color-reviewer
 description: |
   Color-system review — OKLCH usage, tinted neutrals, contrast, palette construction, theme selection (dark/light), status colors, accessibility. Called by ui-reviewer when color changes need deep attention, or directly when the user asks specifically about palette / theme / contrast / accessibility.
+tokens: 1347
 
   **Dispatch when:**
   - A palette, theme file, or color token changed

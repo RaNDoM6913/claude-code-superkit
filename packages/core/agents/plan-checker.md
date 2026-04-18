@@ -1,6 +1,7 @@
 ---
 name: plan-checker
 description: Validates implementation plans before execution — checks requirement coverage, file paths, dependencies, scope, factual accuracy
+tokens: 712
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

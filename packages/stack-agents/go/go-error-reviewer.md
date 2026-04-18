@@ -1,6 +1,7 @@
 ---
 name: go-error-reviewer
 description: Deep audit of Go error handling — wrapping, inspection, logging, panic/recover patterns
+tokens: 1855
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Agent, AskUserQuestion
 ---

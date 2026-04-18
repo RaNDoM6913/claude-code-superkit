@@ -1,6 +1,7 @@
 ---
 name: typography-guidelines
 description: "Typography rules — modular scales, fluid sizing, pairing, line-height, tracking, font-selection procedure, and the reflex_fonts_to_reject list. Auto-loaded when editing UI files."
+tokens: 1707
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"

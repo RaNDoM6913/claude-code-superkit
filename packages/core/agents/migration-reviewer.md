@@ -1,6 +1,7 @@
 ---
 name: migration-reviewer
 description: SQL migration safety — naming, rollback, FK constraints, indexes, idempotency, data loss risk
+tokens: 1324
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

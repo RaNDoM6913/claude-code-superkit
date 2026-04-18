@@ -4,6 +4,7 @@ applyWhenPaths:
   - "**/presentation/**"
   - "**/src/**/*.tsx"
   - "**/src/**/*.jsx"
+tokens: 548
 ---
 
 # GSAP ScrollTrigger Conventions

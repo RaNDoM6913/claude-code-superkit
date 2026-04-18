@@ -1,6 +1,7 @@
 ---
 name: go-modernizer
 description: Detect outdated Go patterns and suggest modern idioms — Go 1.21 through 1.24+ features
+tokens: 1138
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---

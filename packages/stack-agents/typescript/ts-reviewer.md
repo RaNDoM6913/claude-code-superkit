@@ -1,6 +1,7 @@
 ---
 name: ts-reviewer
 description: Review TypeScript/React code for type safety, hooks correctness, state management, and conventions
+tokens: 1353
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---

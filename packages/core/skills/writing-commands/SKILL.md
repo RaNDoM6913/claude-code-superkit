@@ -1,6 +1,7 @@
 ---
 name: writing-commands
 description: How to write Claude Code slash commands — orchestrator pattern, agent dispatch, auto-detection
+tokens: 735
 user-invocable: false
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: py-reviewer
 description: Review Python code for type hints, async patterns, exception handling, and conventions
+tokens: 1492
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---

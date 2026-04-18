@@ -1,6 +1,7 @@
 ---
 name: color-and-contrast
 description: "Color system rules — OKLCH over HSL, tinted neutrals, 60-30-10 weight, contrast, dark/light theme selection by use context. Auto-loaded when editing UI files."
+tokens: 2033
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"

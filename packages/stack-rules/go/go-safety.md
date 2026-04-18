@@ -2,6 +2,7 @@
 alwaysApply: false
 applyWhenPaths:
   - "**/*.go"
+tokens: 302
 ---
 
 # Go Safety Guardrails

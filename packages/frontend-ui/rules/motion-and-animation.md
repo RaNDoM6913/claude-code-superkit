@@ -1,6 +1,7 @@
 ---
 name: motion-and-animation
 description: "UI motion rules — the 4-question animation framework, easing curves, duration tables, springs, reduced motion. Auto-loaded when editing UI files."
+tokens: 2417
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"

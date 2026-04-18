@@ -1,6 +1,7 @@
 ---
 name: go-performance-reviewer
 description: Go performance review — profiling, benchmarks, allocation analysis, caching, connection pooling
+tokens: 1164
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, Agent, AskUserQuestion
 ---

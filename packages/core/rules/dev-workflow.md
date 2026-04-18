@@ -1,5 +1,6 @@
 ---
 alwaysApply: true
+tokens: 1025
 ---
 
 # Auto Dev Workflow
