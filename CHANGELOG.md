@@ -4,21 +4,45 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-### Added (Go reference material)
-- **5 new Go reference documents** in `packages/stack-agents/go/references/` (19 → 24 refs total):
-  - `samber-do.md` — DI container: `Provide` / `Invoke` / named / scoped injectors, shutdown ordering, testing overrides, migration from manual wiring, pitfalls.
-  - `samber-oops.md` — structured errors: attributes (`Code`/`In`/`With`/`Public`/`Owner`), stack traces, APM serialization, `errors.Is` / `errors.As` compatibility, stdlib vs `pkg/errors` vs oops comparison.
-  - `samber-lo.md` — generic collection helpers: Map/Filter/FilterMap/Reduce/GroupBy/KeyBy/Must/Try, stdlib `slices`/`maps` overlap table, `parallel.Map` caveats, anti-patterns.
-  - `grpc-patterns.md` — service definition, 4 stream types, interceptors (logging/auth/recovery), `status.Errorf` + `codes.*`, deadline propagation, TLS/mTLS, `bufconn` testing.
-  - `benchmark-methodology.md` — `testing.B` API, sub-benchmarks, `benchstat` workflow, profile capture, dead-code elimination trap, reading output.
-- **`packages/stack-agents/go/go-reviewer.md`** — added "Reference Loading" section listing all 15 refs the agent can pull on demand.
-- **Codex port:** 5 new knowledge skills under `packages/codex/skills/go-samber-do/`, `go-samber-oops/`, `go-samber-lo/`, `go-grpc-patterns/`, `go-benchmark/` — content inlined (Codex skills are self-contained). Total Codex skills: 67 → 72.
-- **`packages/codex/AGENTS.md`** — new "Go knowledge skills" table + auto-activation rules (samber/grpc/benchmark triggers).
-
-### Changed
-- **Counts updated** to 72 Codex skills / 24 Go references across `CLAUDE.md`, `README.md`, `packages/codex/INSTALL.md`, `docs/INSTALL-CLAUDE-CODE.md`, `docs/guide/10-codex-support.md`.
-
 ## [1.3.9] — 2026-04-18
+
+### Amendment (evening 2026-04-18) — correctness, docs parity, features
+
+Seventeen commits amended into v1.3.9 after the initial tag, driven by a 15-agent audit, README quality push, and five competitor-inspired features (samber/cc-skills-golang, everything-claude-code, gsd-2, oh-my-claudecode analysis).
+
+#### Correctness fixes (audit findings)
+- **`/dev` phase count reconciled 15 → 16** — dev.md has 16 phase headers (`0, 1, 1.5, 1.7, 2, 2.1, 2.5, 3, 3.5, 4, 5, 5.5, 6, 6.5, 7, 8`); all docs (dev.md frontmatter, CLAUDE.md, README, Codex AGENTS.md, guide chapters) now match reality. Verbal arrow list prepended with `read-docs →` to match 16-step count.
+- **Rule frontmatter schema normalized** — 7 rules used legacy `paths:` instead of canonical `applyWhenPaths:` and were likely never scoping correctly. Affected: `packages/core/rules/{security,frontend-aesthetics}.md`, `packages/stack-rules/go/{go-conventions,go-safety}.md`, `packages/frontend-3d/rules/{gsap-conventions,threejs-conventions,frontend-aesthetics-3d}.md`. Glob patterns preserved.
+- **Showcase `dev.md:367`** — `Co-Authored-By: Claude <noreply>` bumped to `Claude Opus 4.7 (1M context) <noreply@anthropic.com>` to match sibling `commit.md`.
+
+#### README / docs quality
+- **Frontend section restructured** — single `🎨 Frontend Development` umbrella with two parallel subsections: `🖌️ frontend-ui` (6 agents / 7 rules / 3 hooks / impeccable-craft) and `🎬 frontend-3d` (4 agents / 6 skills / 4 hooks / 3 rules / 1 command). Same structure, same depth. frontend-ui previously lived only in counts table.
+- **Features grid copy tightened** — removed AI-cadence filler ("Every finding validated…", "False positives eliminated before you see them"). Concrete CVE-2025-59536 mitigation replaced vague "Config protection hook guards your standards".
+- **Concrete example added to 4-layer doc enforcement card** — `edit app/api/users.go → commit blocked until docs/architecture/api-reference.md is staged`.
+- **Orphaned docs linked** — `CONTRIBUTING.md`, `EVALUATIONS.md`, `docs/recommendations.md` (162 lines of curated tooling) now appear in a new `📚 More` README section. Previously never referenced from README.
+- **Install guide counts synced** — `docs/INSTALL-CLAUDE-CODE.md` stack list includes Frontend UI, extras list includes red-blue-auditor, hook/skill counts correct (22 core hooks + 19 stack/package; 67 → 72 Codex skills).
+
+#### New user-facing documentation
+- **`docs/FRONTEND-UI.md` (472 lines)** — full reference parallel to `FRONTEND-3D.md`. Agent dispatch matrix for all 6 specialists, per-rule scoping, full `reflex_fonts_to_reject` list, OKLCH + banned-pattern tables, Emil Kowalski's 4-question motion framework + cubic-bezier constants + duration table, hook trigger conditions with opt-out env vars, 4-stage `impeccable-craft` walkthrough, Next.js/Vite/Remix integration notes, 7 common false-positive cases with quiet-down tactics, Apache-2.0 attribution.
+- **`docs/guide/14-frontend-ui.md` (241 lines)** — tutorial chapter parallel to Chapter 13. First UI review walkthrough (PricingCard with Inter + purple→blue gradient), auto-dispatch decision tree, `impeccable-craft` flow, troubleshooting with real opt-out env vars.
+- **`docs/guide/15-env-vars-and-hook-profiles.md` (195 lines)** — single source of truth for every `CLAUDE_*` env var. Was a real discoverability gap: 9 `CLAUDE_DISABLE_*` opt-outs existed only as in-hook comments. Now documented: profile behavior table, per-hook opt-out table, setter recipes (one-shot / zshrc / direnv / GitHub Actions), scenario→flag mapping.
+
+#### New features (competitor-inspired)
+- **`packages/core/hooks/lib/profile.sh` + `CLAUDE_DISABLED_HOOKS`** — shared helper with `should_skip_hook()` function wired into all 37 shipping hooks (3 internal exempted). New env var `CLAUDE_DISABLED_HOOKS=hook1,hook2` disables specific hooks by basename without editing `settings.json`. `CLAUDE_HOOK_PROFILE=fast` now handled consistently (4 critical hooks stay on: `block-dangerous-git`, `security-patterns`, `audit-settings-source`, `doc-check-on-commit`). `lib/installer.js` updated to copy the helper into `.claude/scripts/hooks/lib/` on install. Regression test `profile-helper_test.sh` 5/5 pass. Inspired by affaan-m/everything-claude-code.
+- **`packages/core/hooks/edit-streak-check.sh`** — detects 5+ consecutive Edit/Write without a Bash verification run. Advisory only (stderr warning, exit 0). Resets on any Bash call. Opt-out: `CLAUDE_DISABLE_EDIT_STREAK=1`. Regression test `edit-streak-check_test.sh` 6/6 pass. Inspired by gsd-build/gsd-2.
+- **`tokens:` metadata in YAML frontmatter** — transparency signal (NOT a budget) across 48 agents + 13 skills + 20 rules = 81 files. Approximates body size at ~4 chars/token. Observed range: 72 (`project-architecture` skill) to 2928 (`interaction-polish` rule); agents median 1347. Kit philosophy preserved: specialist agents stay full-size because quality > brevity. New tooling: `bin/measure-tokens.js`, `bin/inject-tokens.js` for regeneration. Inspired by samber/cc-skills-golang.
+- **AgentShield static SAST** — `packages/extras/red-blue-auditor.md` → directory with `agent.md` (prompt-engineered LLM auditor with new Phase 4 that invokes static scan), `scan.sh --exit-on-critical` (Bearer-style grep over 5 pattern files), `README.md` (CI integration examples), and `patterns/`: `secrets.txt` (16 patterns incl. OpenAI / Anthropic / AWS / GitHub / Slack / Telegram / Discord / Stripe / npm / JWT / SSH keys), `hook-injection.txt`, `permission-abuse.txt`, `mcp-risk.txt`, `agent-config.txt`. Exit 2 on CRITICAL for CI gating, 1 on HIGH/MEDIUM, 0 clean. Inspired by affaan-m/everything-claude-code AgentShield.
+- **5 new Go references + Codex port** — `samber-do.md` (201 lines, DI container), `samber-oops.md` (200 lines, structured errors), `samber-lo.md` (260 lines, generic collection helpers), `grpc-patterns.md` (373 lines, service/stream/interceptor/TLS/bufconn), `benchmark-methodology.md` (277 lines, `testing.B` + benchstat + profile capture). Wired into `go-reviewer.md` reference-loading section. Ported as 5 self-contained Codex skills (`go-samber-do/oops/lo`, `go-grpc-patterns`, `go-benchmark`) with auto-activation triggers. Counts updated: 19 → 24 Go refs; 67 → 72 Codex skills. Inspired by samber/cc-skills-golang.
+
+#### Contracts
+
+- `CLAUDE_DISABLED_HOOKS` — comma-separated hook basenames (e.g. `CLAUDE_DISABLED_HOOKS=loop-guard,context-monitor`)
+- `CLAUDE_DISABLE_EDIT_STREAK=1` — silences the edit-streak advisory
+- `tokens: N` — optional YAML frontmatter field on agents/skills/rules; regenerate via `node bin/inject-tokens.js`
+- `bash packages/extras/red-blue-auditor/scan.sh --exit-on-critical` — CI-ready SAST scan
+
+---
+
 
 ### Added (Frontend UI package)
 - **`packages/frontend-ui/`** — new self-contained package for 2D frontend UI design / polish, sibling to `frontend-3d/`. Philosophy: auto-dispatch agents + auto-loaded rules (no slash commands). Opt-in during install. Brand-context inferred from `CLAUDE.md` + `docs/architecture/` + auto-memory; one targeted mid-review question only when genuinely ambiguous; no upfront questionnaires.
