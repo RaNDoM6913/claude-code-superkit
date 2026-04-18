@@ -1,6 +1,6 @@
 ---
 alwaysApply: false
-paths:
+applyWhenPaths:
   - "**/presentation/**/*.tsx"
   - "**/presentation/**/*.jsx"
   - "**/landing/**/*.tsx"
