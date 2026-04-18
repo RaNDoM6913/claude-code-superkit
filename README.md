@@ -23,17 +23,15 @@ Battle-tested in a production app with 68+ endpoints and 50 database migrations.
 <td width="50%">
 
 ### 🔍 Double-Verification Review
-Every finding validated by an independent agent.
-False positives eliminated before you see them.
-Post inline comments on GitHub PRs with `--comment`.
+Independent second agent re-checks every finding before it reaches you.
+`/review --comment` posts inline on GitHub PRs.
 
 </td>
 <td width="50%">
 
 ### 📄 4-Layer Doc Enforcement
-Rule + BLOCKING hook + auto-commands + Stop hook.
-Smart file-to-doc mapping — blocks commits.
-15-point checklist — docs before "done".
+Rule + auto-commands + BLOCKING hook + Stop hook.
+Maps every changed file to its required arch doc — commit blocked if missing.
 
 </td>
 </tr>
@@ -42,16 +40,14 @@ Smart file-to-doc mapping — blocks commits.
 
 ### 🛡️ Security Scanning
 AgentShield (102 rules) + Red/Blue adversarial audit.
-Config protection hook guards your standards.
-CI integration included.
+`.claude/settings.json` guarded against CVE-2025-59536 hijacks. CI-ready via `/security-scan`.
 
 </td>
 <td width="50%">
 
 ### 🔎 SkillsMP Integration
 Search 500K+ community skills before building.
-Keyword + AI semantic search via API.
-Don't reinvent — discover and adapt.
+Keyword or AI semantic search via API.
 
 </td>
 </tr>
