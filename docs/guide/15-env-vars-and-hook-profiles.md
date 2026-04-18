@@ -43,6 +43,20 @@ Every flag below is a hook-level kill switch. Set it to `1` to skip that single 
 
 Convention: **set = `1` disables the hook. Unset or any other value = hook runs normally.**
 
+### Shortcut — `CLAUDE_DISABLED_HOOKS` (multi-hook disable)
+
+Instead of setting individual opt-out flags, you can pass a comma-separated list of hook basenames to disable several at once:
+
+```bash
+export CLAUDE_DISABLED_HOOKS=loop-guard,edit-streak-check,context-monitor
+```
+
+This is handled by the shared helper `packages/core/hooks/lib/profile.sh` that every shipping hook sources on entry. Works for all 37 non-internal hooks. Takes precedence over `CLAUDE_HOOK_PROFILE=fast` (a hook listed here is always skipped regardless of profile). The hook's own `CLAUDE_DISABLE_<NAME>` flag is still honoured when set — `CLAUDE_DISABLED_HOOKS` is just a terser superset syntax.
+
+When to use which:
+- **`CLAUDE_DISABLED_HOOKS=a,b,c`** — CI/CD one-off, testing a single scenario, cross-environment diff
+- **`CLAUDE_DISABLE_<NAME>=1`** — persistent preference in your `~/.zshrc` for a single hook
+
 ### 2.1 Core hooks
 
 | Env var                           | Hook                                  | What the hook does                                                                  | Why you'd turn it off                                         |
@@ -53,6 +67,7 @@ Convention: **set = `1` disables the hook. Unset or any other value = hook runs 
 | `CLAUDE_DISABLE_PLAN_GATE`        | `plan-completion-gate.sh` (Stop)      | Blocks `Stop` if an active plan has unchecked tasks                                  | Doing throw-away work outside the `/dev` flow                 |
 | `CLAUDE_DISABLE_INTENT_DETECT`    | `user-intent-detect.sh` (UserPromptSubmit) | Classifies user prompt (commit, plan, question, etc.) to hint downstream hooks       | Intent classifier misfires on your domain; you want silence    |
 | `CLAUDE_DISABLE_SUBAGENT_VALIDATE`| `subagent-stop-validate.sh` (SubagentStop) | Validates that a dispatched subagent actually produced output matching its contract  | Subagent is exploratory / free-form and the check is noisy    |
+| `CLAUDE_DISABLE_EDIT_STREAK`      | `edit-streak-check.sh` (PostToolUse)  | Warns at 5+ consecutive Edit/Write without a Bash verification run (any Bash call resets the counter) | You know you're editing extensively before testing on purpose |
 
 ### 2.2 Frontend-UI hooks
 
