@@ -18,7 +18,7 @@ packages/
     docs-templates/         # Architecture doc templates
   stack-agents/             # Language-specific reviewers
     go/                     # go-reviewer + 5 specialized (error, concurrency, performance, modernizer, observability)
-      references/           # 19 Go knowledge documents
+      references/           # 24 Go knowledge documents
     typescript/             # ts-reviewer
     python/                 # py-reviewer
     rust/                   # rs-reviewer
@@ -49,7 +49,7 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 67 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui)
+    skills/                 # 72 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge)
     config.toml             # gpt-5.4, extra_high
     AGENTS.md               # Template
     INSTALL.md              # Guide
@@ -90,7 +90,7 @@ VERSION                     # 1.3.9
 | Component | Core | Stack | Frontend-3D | Frontend-UI | Extras | Showcase | Codex |
 |-----------|------|-------|-------------|-------------|--------|----------|-------|
 | Agents | 27 | 9 | 4 | 6 | 3 | 28 | — |
-| Skills | 5 | — | 6 | 1 | 1 | 11 | 67 |
+| Skills | 5 | — | 6 | 1 | 1 | 11 | 72 |
 | Commands | 15 | — | 1 | — | — | 17 | 9 |
 | Hooks | 22 (+2 internal) | 9 | 4 | 3 | — | 13 | — |
 | Helpers | 1 | — | — | — | — | — | — |

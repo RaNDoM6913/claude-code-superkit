@@ -206,6 +206,16 @@ ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, au
 **Stack-specific reviewers (optional):**
 go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer
 
+**Go knowledge skills (optional, auto-activated by description matching):**
+
+| Skill | Category |
+|-------|----------|
+| `go-samber-do` | Knowledge — DI container (Provide/Invoke, named providers, scoped injectors, shutdown order, testing overrides, migration from manual wiring) |
+| `go-samber-oops` | Knowledge — structured errors (Code/In/With/Hint/Owner/Public, stack traces, APM serialization, HTTP boundary safety, errors.Is/As compat) |
+| `go-samber-lo` | Knowledge — generic collection helpers (Map/Filter/Reduce/FilterMap/GroupBy/Must/Try), stdlib slices overlap, parallel.Map, perf caveats |
+| `go-grpc-patterns` | Knowledge — gRPC service/stream types, interceptors, status codes, deadline propagation, TLS/mTLS, bufconn testing |
+| `go-benchmark` | Knowledge — testing.B, benchstat, sub-benchmarks, profile capture, reading output, dead-code elimination trap |
+
 ### Auto-Activation Rules
 
 Codex MUST auto-invoke skills when these conditions are met (without the user explicitly asking):
@@ -223,6 +233,11 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 | `frontend-ui-motion-reviewer` | transition / @keyframes / animation / useSpring / motion.* added or changed · user asks about motion/animation/easing/duration/spring while UI files active |
 | `frontend-ui-interaction-reviewer` | button / modal / drawer / form / focus / loading / empty / microcopy change · user asks about interactions/polish/accessibility while UI files active |
 | `frontend-ui-design-critic` | user asks for critique / design-review / holistic-review / aesthetic-audit · major new UI surface created · 5+ UI files changed in one task. Do NOT activate for bug fixes or single-component changes |
+| `go-samber-do` | Code imports `github.com/samber/do` or `github.com/samber/do/v2` · user asks about Go dependency injection · reviewing service wiring / Provide/Invoke patterns |
+| `go-samber-oops` | Code imports `github.com/samber/oops` · user asks about structured Go errors, error codes, APM context, stack traces in Go |
+| `go-samber-lo` | Code imports `github.com/samber/lo` or `github.com/samber/lo/parallel` · user asks about Go collection utilities, Map/Filter/Reduce helpers |
+| `go-grpc-patterns` | Code imports `google.golang.org/grpc` · `.proto` file in scope · user asks about gRPC services, interceptors, status codes, streaming |
+| `go-benchmark` | File matches `*_test.go` containing `func Benchmark*` · user asks about Go benchmarks, benchstat, performance measurement methodology |
 
 **Skip auto-activation when:**
 - Already inside `dev-orchestrator` (it includes review + test)

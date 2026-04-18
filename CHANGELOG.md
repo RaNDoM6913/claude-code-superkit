@@ -4,6 +4,20 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+### Added (Go reference material)
+- **5 new Go reference documents** in `packages/stack-agents/go/references/` (19 → 24 refs total):
+  - `samber-do.md` — DI container: `Provide` / `Invoke` / named / scoped injectors, shutdown ordering, testing overrides, migration from manual wiring, pitfalls.
+  - `samber-oops.md` — structured errors: attributes (`Code`/`In`/`With`/`Public`/`Owner`), stack traces, APM serialization, `errors.Is` / `errors.As` compatibility, stdlib vs `pkg/errors` vs oops comparison.
+  - `samber-lo.md` — generic collection helpers: Map/Filter/FilterMap/Reduce/GroupBy/KeyBy/Must/Try, stdlib `slices`/`maps` overlap table, `parallel.Map` caveats, anti-patterns.
+  - `grpc-patterns.md` — service definition, 4 stream types, interceptors (logging/auth/recovery), `status.Errorf` + `codes.*`, deadline propagation, TLS/mTLS, `bufconn` testing.
+  - `benchmark-methodology.md` — `testing.B` API, sub-benchmarks, `benchstat` workflow, profile capture, dead-code elimination trap, reading output.
+- **`packages/stack-agents/go/go-reviewer.md`** — added "Reference Loading" section listing all 15 refs the agent can pull on demand.
+- **Codex port:** 5 new knowledge skills under `packages/codex/skills/go-samber-do/`, `go-samber-oops/`, `go-samber-lo/`, `go-grpc-patterns/`, `go-benchmark/` — content inlined (Codex skills are self-contained). Total Codex skills: 67 → 72.
+- **`packages/codex/AGENTS.md`** — new "Go knowledge skills" table + auto-activation rules (samber/grpc/benchmark triggers).
+
+### Changed
+- **Counts updated** to 72 Codex skills / 24 Go references across `CLAUDE.md`, `README.md`, `packages/codex/INSTALL.md`, `docs/INSTALL-CLAUDE-CODE.md`, `docs/guide/10-codex-support.md`.
+
 ## [1.3.9] — 2026-04-18
 
 ### Added (Frontend UI package)

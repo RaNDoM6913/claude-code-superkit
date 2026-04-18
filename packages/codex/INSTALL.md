@@ -162,6 +162,13 @@ cp -r claude-code-superkit/packages/codex/skills/go-performance-reviewer .codex/
 cp -r claude-code-superkit/packages/codex/skills/go-modernizer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/go-observability-reviewer .codex/skills/
 
+# 5 Go knowledge skills (auto-activated by description matching — samber libs, gRPC, benchmarking)
+cp -r claude-code-superkit/packages/codex/skills/go-samber-do .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-samber-oops .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-samber-lo .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-grpc-patterns .codex/skills/
+cp -r claude-code-superkit/packages/codex/skills/go-benchmark .codex/skills/
+
 # TypeScript projects
 cp -r claude-code-superkit/packages/codex/skills/ts-reviewer .codex/skills/
 
@@ -172,13 +179,14 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: 67 skills
+### Total: 72 skills
 
 - 9 command skills (user-invocable, including benchmark)
 - 32 agent + knowledge skills (auto-dispatched)
 - 10 frontend 3D skills (optional, for R3F/Three.js/GSAP projects)
 - 7 frontend UI skills (optional, for 2D UI / landing-page / dashboard projects)
 - 9 stack-specific reviewer skills (optional, per language)
+- 5 Go knowledge skills (optional, samber-do/oops/lo, grpc-patterns, benchmark-methodology)
 
 ## Model Configuration
 

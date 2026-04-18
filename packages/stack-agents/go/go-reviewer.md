@@ -141,5 +141,25 @@ For deeper analysis in specific areas, dispatch specialized agents:
 - -> See security-scanner for Go security checks (injection, crypto, XSS)
 - -> See database-reviewer for Go/pgx database patterns
 
+## Reference Loading
+
+For detailed patterns, load the relevant reference on demand:
+
+- `packages/stack-agents/go/references/benchmark-methodology.md` — `testing.B`, `benchstat`, `-count`/`-benchmem`, dead-code elimination trap
+- `packages/stack-agents/go/references/code-style.md` — gofmt/goimports, line width, comment conventions
+- `packages/stack-agents/go/references/data-structures.md` — slice, map, struct layout, zero values
+- `packages/stack-agents/go/references/database-patterns.md` — pgx/sqlx patterns, connection pooling, migrations
+- `packages/stack-agents/go/references/design-patterns.md` — functional options, builder, table-driven tests
+- `packages/stack-agents/go/references/grpc-patterns.md` — service/stream types, interceptors, status codes, mTLS, bufconn
+- `packages/stack-agents/go/references/modernize-guide.md` — Go 1.21-1.24+ replacements for legacy patterns
+- `packages/stack-agents/go/references/naming-conventions.md` — MixedCaps, acronyms, package naming, stuttering
+- `packages/stack-agents/go/references/samber-do.md` — DI container: Provide/Invoke/Named/Scoped, shutdown order, testing overrides
+- `packages/stack-agents/go/references/samber-libraries.md` — umbrella overview (lo / oops / do / slog-* / hot / mo / ro)
+- `packages/stack-agents/go/references/samber-lo.md` — generic collection helpers (Map/Filter/FilterMap/Reduce/GroupBy/Must), stdlib `slices` overlap
+- `packages/stack-agents/go/references/samber-oops.md` — structured errors with attributes, stack traces, `.Public` vs `.Private`, APM serialization
+- `packages/stack-agents/go/references/security-checklist.md` — injection, crypto, auth, secrets, TLS
+- `packages/stack-agents/go/references/structs-interfaces.md` — interface size, consumer-side declarations, embedding
+- `packages/stack-agents/go/references/testing-patterns.md` — table-driven tests, subtests, testify usage guidelines
+
 IMPORTANT: Do NOT inflate severity to seem thorough. A review with 0 CRITICAL
 findings and 2 SUGGESTIONS is perfectly valid. If the code is clean, say so.
