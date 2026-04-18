@@ -3,6 +3,12 @@
 # Triggers on: PostToolUse (every tool call)
 # Profile: all (context awareness is always useful)
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 TOKENS_USED="${CLAUDE_CONTEXT_TOKENS_USED:-0}"
 TOKENS_MAX="${CLAUDE_CONTEXT_TOKENS_MAX:-1000000}"
 

@@ -3,6 +3,12 @@
 # Warns if console.log is added to .ts/.tsx files
 # Profile: fast, standard, strict (always on)
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 NEW_STRING=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content // empty')

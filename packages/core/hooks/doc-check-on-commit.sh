@@ -4,6 +4,13 @@
 
 # Helper: check if file is under a directory at ANY depth (no level limit)
 # Usage: in_dir "$file" "dirname"
+
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 in_dir() { echo "$1" | grep -q "/$2/"; }
 # Triggers on: PreToolUse(Bash) when command contains "git commit"
 # Profile: standard, strict

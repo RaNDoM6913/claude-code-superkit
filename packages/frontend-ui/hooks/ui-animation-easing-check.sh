@@ -11,6 +11,12 @@
 #   - scale(0) as entry animation (use scale(0.95))
 #   - Animating width/height/top/left/margin (not compositor-accelerated)
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 if [ "${CLAUDE_DISABLE_UI_ANIM_CHECK:-}" = "1" ]; then
   exit 0
 fi

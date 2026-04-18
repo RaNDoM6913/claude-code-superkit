@@ -4,6 +4,12 @@
 # Captures: git state, modified files, task state, architectural decisions, review findings
 # Profile: always on
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 CONTEXT_DIR="$HOME/.config/claude-superkit"
 mkdir -p "$CONTEXT_DIR"
 

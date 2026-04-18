@@ -13,6 +13,12 @@
 # Marker: ${TMPDIR:-/tmp}/claude-plan-docs-pending-<session>
 # Opt-out: CLAUDE_DISABLE_PLAN_GATE=1
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 PROFILE="${CLAUDE_HOOK_PROFILE:-standard}"
 if [ "$PROFILE" = "fast" ] || [ "${CLAUDE_DISABLE_PLAN_GATE:-}" = "1" ]; then
   exit 0

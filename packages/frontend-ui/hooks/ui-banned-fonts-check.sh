@@ -9,6 +9,12 @@
 # warning pointing at the rule so Claude can correct course BEFORE the
 # edit settles into the design system. Never blocks — exit 0 always.
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 if [ "${CLAUDE_DISABLE_UI_FONT_CHECK:-}" = "1" ]; then
   exit 0
 fi

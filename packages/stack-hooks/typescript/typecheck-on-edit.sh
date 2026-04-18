@@ -5,6 +5,12 @@
 # Uses SHA256 hash cache to skip tsc if file unchanged since last successful check.
 # Profile: standard, strict (skip on fast)
 
+# Unified profile + disable check
+SUPERKIT_PROFILE_LIB="$(dirname "$0")/lib/profile.sh"
+[ -f "$SUPERKIT_PROFILE_LIB" ] || SUPERKIT_PROFILE_LIB="$(dirname "$0")/../lib/profile.sh"
+# shellcheck source=/dev/null
+[ -f "$SUPERKIT_PROFILE_LIB" ] && source "$SUPERKIT_PROFILE_LIB" && should_skip_hook "$(basename "$0" .sh)" && exit 0
+
 PROFILE="${CLAUDE_HOOK_PROFILE:-standard}"
 if [ "$PROFILE" = "fast" ]; then
   exit 0
