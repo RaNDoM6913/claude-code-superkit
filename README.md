@@ -210,23 +210,71 @@ Or use the built-in command: `/security-scan`.
 
 CI integration included — see `.github/workflows/security.yml`.
 
-## 🎨 Frontend & 3D Development
+## 🎨 Frontend Development
 
-Self-contained package for quality frontend, 3D, and animation development. Built from 12+ hours of battle-tested experience building scroll-driven 3D product showcases with GSAP ScrollTrigger, React Three Fiber, and Three.js.
+Two sibling self-contained packages covering the full frontend surface — polished product UIs *(frontend-ui)* and scroll-driven 3D experiences *(frontend-3d)*. Install one or both during `npx claude-code-superkit`. Both run entirely on auto-dispatch: Claude routes to the right reviewer based on the files you're editing, no slash commands needed.
+
+---
+
+### 🖌️ `frontend-ui` — 2D UI & Polish
+
+Production-grade reviewers for typography, color, motion, and interaction polish. Rules load only when you edit `.tsx`/`.jsx`/`.css`/`.scss`/`.html`/`.vue` files, so the kit stays weightless on backend work.
+
+```bash
+npx claude-code-superkit
+# Select "Frontend UI" when prompted for stacks
+```
+
+#### 🔍 Agents (6)
+
+- **ui-reviewer** — umbrella dispatcher, 11-item reflex audit, delegates to the 5 specialists below
+- **ui-typography-reviewer** — 4-step font-selection procedure, modular scale, `reflex_fonts_to_reject` list, line-height/length, font-loading hygiene
+- **ui-color-reviewer** — OKLCH over HSL, tinted neutrals, palette cohesion, theme-by-use-context decision table, WCAG/APCA contrast
+- **ui-motion-reviewer** — Emil Kowalski's 4-question animation framework, custom cubic-bezier constants, duration table, spring vs duration, reduced-motion
+- **ui-interaction-reviewer** — buttons (`:active`, hit targets), modals (transform-origin, focus trap), forms (validation timing), focus-visible, loading patterns, microcopy
+- **ui-design-critic** — holistic gestalt critique (*"does it feel designed?"*), narrative output, reflex audit scaled across the whole diff
+
+#### 📏 Rules (7) — path-scoped, zero main-context tax
+
+- **frontend-design-aesthetics** — anti-slop, anti-center, anti-generic UI
+- **typography-guidelines** — font-selection procedure + banned-fonts list (Inter, DM Sans, Fraunces, etc.)
+- **color-and-contrast** — OKLCH, tinted neutrals, theme decision table
+- **spatial-and-layout** — 4pt scale, rhythm, container queries
+- **motion-and-animation** — custom easing constants, duration table, 4-question framework
+- **interaction-polish** — buttons, modals, drawers, forms, focus, loading, empty states, microcopy
+- **ui-anti-patterns** — banned fonts, colors, layouts, motion, interactions
+
+#### 🪝 Hooks (3) — advisory, triggered on save
+
+- **ui-banned-fonts-check** — detects `Inter`, `DM Sans`, `Fraunces`, and other reflex-reject families
+- **ui-color-check** — pure `#000`/`#fff`, purple→blue gradients, gradient text, 3+ `hsl()` without `oklch()`
+- **ui-animation-easing-check** — `ease-in` on UI, `transition: all`, `scale(0)` entry, layout-property animation
+
+#### 🛠️ Skill (opt-in)
+
+- **impeccable-craft** — 4-stage shape-then-build flow: Shape → Refine → Implement → Polish. For building UI from scratch with user check-ins at drift points.
+
+Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill). See [`packages/frontend-ui/README.md`](packages/frontend-ui/README.md) for the full reference.
+
+---
+
+### 🎬 `frontend-3d` — Scroll-driven 3D & Animation
+
+Production-grade reviewers for scroll-driven product showcases with GSAP ScrollTrigger, React Three Fiber, and Three.js. Built from 12+ hours of battle-tested debug experience — texture color distortion, GSAP timeline compression, UV mapping mismatches, Tailwind v3/v4 drift.
 
 ```bash
 npx claude-code-superkit
 # Select "Frontend 3D" when prompted for stacks
 ```
 
-### 🔍 Agents (4)
+#### 🔍 Agents (4)
 
 - **presentation-reviewer** *(16 checks)* — GSAP ScrollTrigger, phone frames, combined sections, 3D textures
 - **r3f-scene-reviewer** *(15 checks)* — color management, performance, GLB handling, R3F patterns
 - **ui-design-reviewer** *(16 checks)* — typography, color, layout, motion, states, glassmorphism
 - **frontend-perf-reviewer** *(12 checks)* — bundle size, lazy loading, CSS containment, web vitals
 
-### 📚 Skills (6)
+#### 📚 Skills (6)
 
 - **threejs-color-management** — sRGB vs Linear, toneMapping, debug checklist
 - **r3f-scroll-driven-3d** — GSAP → Zustand → R3F bridge pattern
@@ -235,14 +283,14 @@ npx claude-code-superkit
 - **product-3d-lighting** — studio lighting for product showcases
 - **output-enforcement** — anti-laziness, complete code generation
 
-### 🪝 Hooks (4)
+#### 🪝 Hooks (4)
 
 - **gsap-pattern-check** — `scrub: true`, missing `invalidateOnRefresh`, no `tl.set` extension, no `gsap.context()`
 - **r3f-color-check** — deprecated `sRGBEncoding`, missing `colorSpace`, wrong material for screens
 - **tailwind-version-guard** — v3/v4 syntax mismatches (`@tailwind` vs `@import`, config format)
 - **bundle-size-warn** — heavy imports: moment, lodash, THREE namespace, MUI, antd, framer-motion
 
-### 📏 Rules (3) & Command (1)
+#### 📏 Rules (3) & Command (1)
 
 - **gsap-conventions** — `scrub` as number, `invalidateOnRefresh`, `tl.set({},{},1.0)`, `gsap.context()` cleanup
 - **threejs-conventions** — `meshBasicMaterial` for screens, UV copy on texture swap, `getState()` in `useFrame`
