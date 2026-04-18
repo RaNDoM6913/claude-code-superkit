@@ -1,5 +1,7 @@
 # Evaluations
 
+> **Status: roadmap item, not yet measured.** The methodology below is documented but actual measurements are deferred to a dedicated compute-budget session. Not linked from README until results exist. Estimated cost: ~360 Opus calls (~$80 API / 4-8 hours Max compute) for the full 12-agent table.
+
 Measuring agent effectiveness with adversarial assertions. Inspired by [cc-skills-golang](https://github.com/samber/cc-skills-golang) evaluation methodology (3,141 assertions, +44pp improvement).
 
 ## Methodology
