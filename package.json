@@ -1,6 +1,6 @@
 {
   "name": "claude-code-superkit",
-  "version": "1.3.9",
+  "version": "1.3.10",
   "description": "Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI. All agents on Opus.",
   "type": "module",
   "bin": {

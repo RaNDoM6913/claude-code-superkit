@@ -4,6 +4,31 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+## [1.3.10] — 2026-04-18
+
+### Fixed (critical — macOS portability + hook output stream)
+
+Two production bugs discovered in a real tgapp Claude Code session on 2026-04-18. Both hit macOS users with stock system `awk` (BWK 20200816, not gawk). One bug was already hot-patched in tgapp (commit `7d146bca`); this release upstreams that fix plus the companion stream-redirect bug.
+
+- **`packages/core/hooks/dev-required-on-commit.sh`** — `cycles_last_hour()` used the gawk-only 3-argument `match($0, /regex/, array)` form. On BWK awk this is a syntax error, which crashes the hook, leaves the variable empty, and falls through to bash `[ "" -ge 2 ]` — evaluating as restrictive and firing a false BLOCK on commits. Replaced with POSIX 2-arg `match()` + `RSTART`/`RLENGTH`/`substr()` extraction. Portable across gawk, BWK (BSD/macOS), and mawk. *Hot-patched in tgapp commit `7d146bca` on 2026-04-18; upstreamed here.*
+
+- **`packages/core/hooks/doc-check-on-commit.sh`** — error-output block wrote `BLOCKED: Required documentation not staged` and the `Missing docs:` list to **stdout**. Claude Code's hook runner only surfaces **stderr** to the user when a hook exits non-zero — stdout is discarded. Result: users saw the opaque `PreToolUse:Bash hook error: No stderr output` message with no actionable info, retried the same commit, got the same opaque error. All 11 `echo` statements in the MISSING branch (and the post-check advisories) now redirect to `>&2`.
+
+- **`packages/core/hooks/loop-guard.sh`** — same stdout-instead-of-stderr antipattern. Both BLOCK branches (3+ identical-call detection, A→B→A→B alternation) had `echo` going to stdout — 14 lines total now redirect to `>&2`.
+
+- **`packages/core/hooks/superkit-counts-verify.sh`** — same antipattern in the count/version mismatch BLOCK path. 15 echoes now redirect to `>&2` (not wired by default but fix applied for consistency when devs wire it manually).
+
+### Tested
+
+- Bug 1: `awk '/"outcome":"allow-override"/ { match($0, /"ts":"[^"]+"/); substr($0, RSTART+6, RLENGTH-7) }'` verified clean on local BWK `awk version 20200816`.
+- Regression suite `packages/core/hooks/tests/dev-required-on-commit_test.sh` — 11/11 pass.
+- `npm test` — 19/19 pass (buildSettings 6 + smoke 7 + countFiles 3 + copyFile 2 + isInsideGitRepo 1).
+- `bash -n` syntax check on all 4 modified hooks — clean.
+
+### Audit results
+
+Grep `match([^)]*,[^)]*,[^)]*)` across all core + stack + frontend-3d + frontend-ui hooks returned zero other hits after this fix — no other hooks suffered from Bug 1. Audit of `exit 2` / `exit 1` branches for `echo`-without-stderr antipattern hit the 4 files listed above; all fixed. `verify-hooks.sh` is a developer CLI (not a Claude Code hook), so its stdout usage is correct and left untouched.
+
 ## [1.3.9] — 2026-04-18
 
 ### Amendment (evening 2026-04-18) — correctness, docs parity, features

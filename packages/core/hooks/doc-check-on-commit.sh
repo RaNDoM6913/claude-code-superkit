@@ -372,25 +372,25 @@ fi
 # ── Output result ─────────────────────────────────────────────────────
 
 if [ -n "$MISSING" ]; then
-  echo ""
-  echo "BLOCKED: Required documentation not staged"
-  echo ""
-  echo -e "  Missing docs:${MISSING}"
-  echo ""
-  echo "  Fix: update the listed doc files and stage them before committing."
-  echo "  If the change is a pure refactor with NO behavior change, stage"
-  echo "  CLAUDE.md or a relevant .md file to acknowledge the check."
-  echo ""
+  echo "" >&2
+  echo "BLOCKED: Required documentation not staged" >&2
+  echo "" >&2
+  echo -e "  Missing docs:${MISSING}" >&2
+  echo "" >&2
+  echo "  Fix: update the listed doc files and stage them before committing." >&2
+  echo "  If the change is a pure refactor with NO behavior change, stage" >&2
+  echo "  CLAUDE.md or a relevant .md file to acknowledge the check." >&2
+  echo "" >&2
   if [ -n "$ADVISORIES" ]; then
-    echo -e "$ADVISORIES"
-    echo ""
+    echo -e "$ADVISORIES" >&2
+    echo "" >&2
   fi
   exit 2
 fi
 
-# Print advisories even on success
+# Print advisories even on success (non-blocking warnings — still route to stderr so Claude Code surfaces them)
 if [ -n "$ADVISORIES" ]; then
-  echo -e "$ADVISORIES"
+  echo -e "$ADVISORIES" >&2
 fi
 
 exit 0

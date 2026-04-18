@@ -206,23 +206,23 @@ fi
 
 # ── Output result ───────────────────────────────────────────────────
 if [ -n "$ERRORS" ]; then
-  echo ""
-  echo "BLOCKED: Superkit count/version mismatch detected"
-  echo ""
-  echo -e "  Mismatches:${ERRORS}"
-  echo ""
-  echo "  Actual counts:"
-  echo "    Core:     agents=$CORE_AGENTS commands=$CORE_COMMANDS hooks=$CORE_HOOKS rules=$CORE_RULES"
-  echo "    Stack:    agents=$STACK_AGENTS hooks=$STACK_HOOKS rules=$STACK_RULES"
-  echo "    Packages: agents=$PKG_AGENTS hooks=$PKG_HOOKS rules=$PKG_RULES commands=$PKG_COMMANDS"
-  echo "    Total:    agents=$TOTAL_AGENTS commands=$TOTAL_COMMANDS hooks=$TOTAL_HOOKS rules=$TOTAL_RULES"
-  echo "    Codex:    skills=$CODEX_SKILLS"
-  echo "    Showcase: agents=$SHOWCASE_AGENTS commands=$SHOWCASE_COMMANDS"
-  echo "    References: $REFERENCE_DOCS"
-  echo "    VERSION=$VERSION_FILE package.json=$PKG_VERSION"
-  echo ""
-  echo "  Fix: update documented counts to match, then run gh repo edit --description if GitHub About is wrong."
-  echo ""
+  echo "" >&2
+  echo "BLOCKED: Superkit count/version mismatch detected" >&2
+  echo "" >&2
+  echo -e "  Mismatches:${ERRORS}" >&2
+  echo "" >&2
+  echo "  Actual counts:" >&2
+  echo "    Core:     agents=$CORE_AGENTS commands=$CORE_COMMANDS hooks=$CORE_HOOKS rules=$CORE_RULES" >&2
+  echo "    Stack:    agents=$STACK_AGENTS hooks=$STACK_HOOKS rules=$STACK_RULES" >&2
+  echo "    Packages: agents=$PKG_AGENTS hooks=$PKG_HOOKS rules=$PKG_RULES commands=$PKG_COMMANDS" >&2
+  echo "    Total:    agents=$TOTAL_AGENTS commands=$TOTAL_COMMANDS hooks=$TOTAL_HOOKS rules=$TOTAL_RULES" >&2
+  echo "    Codex:    skills=$CODEX_SKILLS" >&2
+  echo "    Showcase: agents=$SHOWCASE_AGENTS commands=$SHOWCASE_COMMANDS" >&2
+  echo "    References: $REFERENCE_DOCS" >&2
+  echo "    VERSION=$VERSION_FILE package.json=$PKG_VERSION" >&2
+  echo "" >&2
+  echo "  Fix: update documented counts to match, then run gh repo edit --description if GitHub About is wrong." >&2
+  echo "" >&2
   exit 2
 fi
 

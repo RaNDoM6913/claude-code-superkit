@@ -43,13 +43,13 @@ COUNT=$(echo "$RECENT" | grep -c "^${FINGERPRINT}$" 2>/dev/null)
 
 # Block if 3+ identical consecutive calls
 if [ "$COUNT" -ge 3 ]; then
-  echo ""
-  echo "BLOCKED: Loop detected — same tool call repeated 3+ times"
-  echo "  Tool: $TOOL_NAME"
-  echo "  Command: $(echo "$COMMAND" | head -c 100)"
-  echo ""
-  echo "  Try a different approach or ask the user for guidance."
-  echo ""
+  echo "" >&2
+  echo "BLOCKED: Loop detected — same tool call repeated 3+ times" >&2
+  echo "  Tool: $TOOL_NAME" >&2
+  echo "  Command: $(echo "$COMMAND" | head -c 100)" >&2
+  echo "" >&2
+  echo "  Try a different approach or ask the user for guidance." >&2
+  echo "" >&2
   exit 2
 fi
 
@@ -61,12 +61,12 @@ if [ "$(wc -l < "$LOG_FILE" 2>/dev/null)" -ge 4 ]; then
   LINE4=$(sed -n '4p' "$LOG_FILE")
 
   if [ "$LINE1" = "$LINE3" ] && [ "$LINE2" = "$LINE4" ] && [ "$LINE1" != "$LINE2" ]; then
-    echo ""
-    echo "BLOCKED: Alternating loop detected (A→B→A→B pattern)"
-    echo "  The last 4 tool calls alternate between two operations."
-    echo ""
-    echo "  Try a different approach or ask the user for guidance."
-    echo ""
+    echo "" >&2
+    echo "BLOCKED: Alternating loop detected (A→B→A→B pattern)" >&2
+    echo "  The last 4 tool calls alternate between two operations." >&2
+    echo "" >&2
+    echo "  Try a different approach or ask the user for guidance." >&2
+    echo "" >&2
     exit 2
   fi
 fi

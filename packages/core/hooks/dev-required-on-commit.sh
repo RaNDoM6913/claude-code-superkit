@@ -84,8 +84,10 @@ cycles_last_hour() {
   cutoff=$(date -u -v-60M +%s 2>/dev/null || date -u -d '60 minutes ago' +%s 2>/dev/null || echo 0)
   awk -v cutoff="$cutoff" '
     /"outcome":"allow-override"/ {
-      match($0, /"ts":"([^"]+)"/, a); if (!a[1]) next
-      "date -u -j -f %Y-%m-%dT%H:%M:%SZ " a[1] " +%s 2>/dev/null || date -u -d " a[1] " +%s 2>/dev/null" | getline ts
+      # POSIX 2-arg match (works in both gawk and BWK) — pull substring via RSTART/RLENGTH
+      if (!match($0, /"ts":"[^"]+"/)) next
+      ts_str = substr($0, RSTART+6, RLENGTH-7)
+      "date -u -j -f %Y-%m-%dT%H:%M:%SZ " ts_str " +%s 2>/dev/null || date -u -d " ts_str " +%s 2>/dev/null" | getline ts
       if (ts+0 >= cutoff+0) n++
     }
     END { print n+0 }
