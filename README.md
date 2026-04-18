@@ -175,6 +175,8 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | `standard` (default) | All core hooks + stack formatters |
 | `strict` | Everything + go vet on every edit + stop verification |
 
+Disable specific hooks without editing `settings.json`: `CLAUDE_DISABLED_HOOKS=hook1,hook2`. Full env-var reference: **[Chapter 15](docs/guide/15-env-vars-and-hook-profiles.md)**.
+
 ## ❓ Troubleshooting
 
 See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues, platform-specific guidance, and FAQ.
@@ -251,7 +253,7 @@ npx claude-code-superkit
 
 - **impeccable-craft** — 4-stage shape-then-build flow: Shape → Refine → Implement → Polish. For building UI from scratch with user check-ins at drift points.
 
-Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill). See [`packages/frontend-ui/README.md`](packages/frontend-ui/README.md) for the full reference.
+Full reference: **[docs/FRONTEND-UI.md](docs/FRONTEND-UI.md)** · Guide: **[Chapter 14](docs/guide/14-frontend-ui.md)** · Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill)
 
 ---
 
