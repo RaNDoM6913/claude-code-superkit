@@ -50,6 +50,8 @@ for pfile in "$PATTERNS_DIR"/*.txt; do
                 --include="*.yml" --include="*.yaml" --include="*.go" \
                 --include="*.ts" --include="*.tsx" --include="*.js" \
                 --include="*.py" --include="*.rb" --include="*.rs" \
+                --include="*.env" --include=".env*" --include="*.ini" \
+                --include="*.toml" --include="*.txt" --include="*.conf" \
                 --exclude-dir=.git --exclude-dir=node_modules \
                 --exclude-dir=dist --exclude-dir=build \
                 --exclude-dir=.next --exclude-dir=target \

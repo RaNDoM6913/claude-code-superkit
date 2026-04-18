@@ -1,7 +1,7 @@
 ---
 name: go-reviewer
 description: Review Go code for architecture patterns, error handling, SQL safety, and conventions
-tokens: 1781
+tokens: 2253
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---

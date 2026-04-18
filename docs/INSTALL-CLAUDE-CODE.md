@@ -40,7 +40,7 @@ npx claude-code-superkit
 8. **Copies files**:
    - 27 core agents + up to 22 stack/package agents (9 stack + 4 frontend-3d + 6 frontend-ui + 3 extras) → `.claude/agents/`
    - 16 commands (15 core + 1 frontend-3d) → `.claude/commands/`
-   - 22 core hooks + up to 19 stack/package hooks (9 stack + 4 frontend-3d + 3 frontend-ui + 2 internal) → `.claude/scripts/hooks/`
+   - 23 core hooks + up to 16 stack/package hooks (9 stack + 4 frontend-3d + 3 frontend-ui) → `.claude/scripts/hooks/`
    - 7 rules + up to 12 stack/package rules (2 stack + 3 frontend-3d + 7 frontend-ui) → `.claude/rules/`
    - 5 core skills + up to 7 package skills (6 frontend-3d + 1 frontend-ui) → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
