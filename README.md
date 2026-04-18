@@ -32,6 +32,7 @@ Independent second agent re-checks every finding before it reaches you.
 ### 📄 4-Layer Doc Enforcement
 Rule + auto-commands + BLOCKING hook + Stop hook.
 Maps every changed file to its required arch doc — commit blocked if missing.
+*Example: edit `app/api/users.go` → commit blocked until `docs/architecture/api-reference.md` is staged.*
 
 </td>
 </tr>
