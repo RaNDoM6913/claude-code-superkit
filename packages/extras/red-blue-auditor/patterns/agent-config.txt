@@ -1,0 +1,4 @@
+# Agent configuration anti-patterns
+HIGH|^allowed-tools:\s*\*\s*$|agent allowed-tools wildcard in frontmatter
+MEDIUM|^model:\s*haiku|agent using haiku (kit policy is all-Opus)
+MEDIUM|^model:\s*sonnet|agent using sonnet (kit policy is all-Opus)

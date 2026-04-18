@@ -1,0 +1,5 @@
+# Risky MCP server configurations
+CRITICAL|"command"\s*:\s*"rm\s|MCP command executes rm
+CRITICAL|"command"\s*:\s*"curl\s|MCP command executes curl (supply chain risk)
+HIGH|"url"\s*:\s*"https?://[^"]*\..*"(?!.*allowlist)|remote MCP URL without allowlist context
+MEDIUM|"unsafe"\s*:\s*true|MCP unsafe flag

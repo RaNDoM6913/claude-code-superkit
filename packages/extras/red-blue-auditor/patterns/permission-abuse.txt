@@ -1,0 +1,6 @@
+# Over-permissive .claude/settings.json patterns
+HIGH|"Bash\(\*\)"|Bash wildcard permission
+HIGH|"Write\(\*\)"|Write wildcard permission
+CRITICAL|"dangerouslyAllow[A-Za-z]+"\s*:\s*true|dangerouslyAllow flag set true
+CRITICAL|"dangerouslyDisable[A-Za-z]+"\s*:\s*true|dangerouslyDisable flag set true
+MEDIUM|"allowed-tools"\s*:\s*"\*"|agent allowed-tools wildcard

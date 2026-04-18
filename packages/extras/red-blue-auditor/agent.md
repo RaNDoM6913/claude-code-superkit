@@ -86,3 +86,11 @@ Calculate based on:
 - Existing mitigations (+5 points each)
 
 IMPORTANT: Do NOT inflate risk to seem thorough. If the config is secure, say so clearly.
+
+## Phase 4: Static SAST Scan
+
+Before returning the final synthesis, invoke the static scanner:
+`bash packages/extras/red-blue-auditor/scan.sh --path <scan-root>`
+
+Include static findings alongside LLM findings. If exit code 2 (critical patterns),
+flag the repository as DO NOT MERGE until resolved.
