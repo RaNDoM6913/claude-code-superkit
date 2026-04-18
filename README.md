@@ -457,7 +457,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and ho
 
 ## 📚 More
 
-- **[Evaluations](EVALUATIONS.md)** — benchmark methodology and per-agent accuracy measurements
 - **[Design & tool recommendations](docs/recommendations.md)** — curated list of App Store, 3D, and animation tools
 - **[Troubleshooting](TROUBLESHOOTING.md)** — common issues and FAQ
 - **[Detailed install guide](docs/INSTALL-CLAUDE-CODE.md)** — step-by-step setup with prerequisites
