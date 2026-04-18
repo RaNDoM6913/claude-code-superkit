@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+## [1.3.9] — 2026-04-18
+
 ### Added (Frontend UI package)
 - **`packages/frontend-ui/`** — new self-contained package for 2D frontend UI design / polish, sibling to `frontend-3d/`. Philosophy: auto-dispatch agents + auto-loaded rules (no slash commands). Opt-in during install. Brand-context inferred from `CLAUDE.md` + `docs/architecture/` + auto-memory; one targeted mid-review question only when genuinely ambiguous; no upfront questionnaires.
   - **6 agents (all Opus):** `ui-reviewer` umbrella + 5 specialists — `ui-typography-reviewer`, `ui-color-reviewer`, `ui-motion-reviewer`, `ui-interaction-reviewer`, `ui-design-critic` (gestalt narrative critique). Each has explicit dispatch/no-dispatch rules in the `description` field so Claude picks the right specialist and avoids routing UI audits to `go-reviewer`.

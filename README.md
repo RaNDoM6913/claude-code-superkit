@@ -73,21 +73,19 @@ Don't reinvent — discover and adapt.
 | **Skills** | 5 + 6 frontend-3d + 1 frontend-ui + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, writing-hooks guide + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + **impeccable-craft** + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.8)
+## 🆕 What's New (v1.3.9)
 
-- 🎨 **Frontend 3D package** — 4 agents, 4 hooks, 6 skills, 3 rules, 1 command for GSAP/Three.js/R3F development
-- 📐 **presentation-reviewer** — 16-check review for scroll-driven sections (GSAP, phone frames, 3D textures)
-- 🎬 **r3f-scene-reviewer** — 15-check review for R3F/Three.js (color management, performance, GLB)
-- 🖌️ **ui-design-reviewer** — anti-slop UI review (typography, color, layout, motion, interactive states)
-- ⚡ **frontend-perf-reviewer** — bundle size, lazy loading, CSS containment, web vitals
-- 📚 **6 knowledge skills** — threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement
-- 📸 **/capture-screen command** — capture React components as PNG textures for 3D models
-- 🪝 **4 hooks** — gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn
-- 📏 **3 rules** — gsap-conventions, threejs-conventions, frontend-aesthetics-3d
-- 📖 **Frontend 3D docs** — full guide chapter + complete reference catalog
-- 🤖 **10 Codex skills** — all frontend-3d agents and skills ported to Codex CLI
+- 🎨 **Frontend UI package** — self-contained 2D UI design/polish package alongside Frontend 3D. 6 agents, 7 rules, 3 hooks, 1 skill — auto-dispatch, no slash commands.
+- 🧑‍🎨 **ui-reviewer umbrella + 5 specialists** — typography, color, motion, interaction, design-critic. Each agent has explicit dispatch rules so Claude routes UI audits to the right specialist.
+- 📐 **7 path-scoped rules** — design aesthetics, typography (with full banned-fonts list), color (OKLCH, tinted neutrals), spatial (4pt scale), motion (custom easing), interaction polish, anti-patterns.
+- 🪝 **3 advisory UI hooks** — banned-fonts detection, color checks (pure `#000`/`#fff`, purple→blue gradients), animation-easing (`ease-in` on UI, `transition: all`).
+- 🛠️ **impeccable-craft skill** — opt-in 4-stage shape-then-build flow (Shape → Refine → Implement → Polish) for building UI from scratch.
+- 🧠 **Opus 4.7 + 1M context** — badge, template, and hooks updated. `model: opus` alias auto-routes to the latest Opus release.
+- 🛡️ **Hooks V2-B hardening (11 shipped)** — CVE-2025-59536 mitigation (`audit-settings-source`), hash-chained audit trail, plan-completion gate, user-intent detection, subagent-stop validation, compact-state survival, `/dev` hard-enforcement, override budget + anti-reset-cycle detection, block-dangerous-git bypass patterns.
+- 🐛 **Critical hook-JSON-path fix** — `doc-check-on-commit`, `superkit-counts-verify`, `config-protection`, `security-patterns`, `loop-guard` silently exited 0 since inception because of wrong JSON path. All now read `.tool_input.<field>` first. Covered by regression tests.
+- 🤖 **7 Codex skills** — full frontend-ui port (6 specialists + impeccable-craft).
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.8 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.9 history.
 
 ## 🔄 How `/dev` Works
 
@@ -250,16 +248,6 @@ npx claude-code-superkit
 - **threejs-conventions** — `meshBasicMaterial` for screens, UV copy on texture swap, `getState()` in `useFrame`
 - **frontend-aesthetics-3d** — anti-center bias, spring physics, staggered reveals, 3D atmosphere
 - **`/capture-screen [port]`** — capture React components as PNG textures for 3D model screens (Playwright + sharp)
-
-### What problems it solves
-
-| Problem | Before | After |
-|---------|--------|-------|
-| 3D texture color distortion (toneMapping, colorSpace) | ~3 hours debugging | < 15 min (skill + hook catch immediately) |
-| GSAP timeline compression (`tl.set` trick) | ~2 hours, 3-5 attempts | 0 (hook warns on save) |
-| UV mapping mismatch on 3D models | ~2 hours | < 30 min (gltf-debugging skill) |
-| Tailwind v3/v4 syntax mix | ~1 hour | 0 (hook detects instantly) |
-| AI-generated generic UI | ongoing | caught in review (ui-design-reviewer + aesthetics rule) |
 
 Full reference: **[docs/FRONTEND-3D.md](docs/FRONTEND-3D.md)** · Guide: **[Chapter 13](docs/guide/13-frontend-3d.md)**
 
