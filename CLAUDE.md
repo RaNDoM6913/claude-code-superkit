@@ -50,7 +50,7 @@ packages/
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
     skills/                 # 72 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge)
-    config.toml             # gpt-5.4, extra_high
+    config.toml             # gpt-5.5, xhigh
     AGENTS.md               # Template
     INSTALL.md              # Guide
   showcase/                 # Production example (28 agents, 17 commands, 13 hooks, 11 skills, 6 rules)
@@ -99,7 +99,7 @@ VERSION                     # 1.3.10
 ## Conventions
 
 - **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.7, 1M context**) — kit automatically picks up new Opus versions without code changes.
-- **Codex model**: `gpt-5.4` with `model_reasoning_effort = "extra_high"`
+- **Codex model**: `gpt-5.5` with `model_reasoning_effort = "xhigh"`
 - **Agent format**: YAML frontmatter (name, description, model, allowed-tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)
 - **Output format**: Severity (CRITICAL/WARNING/SUGGESTION) + Confidence (HIGH/MEDIUM/LOW)

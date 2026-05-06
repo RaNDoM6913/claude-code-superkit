@@ -138,22 +138,27 @@ Do NOT rely on a single layer — update docs proactively with every code change
 
 ## Model Configuration
 
-This project uses **gpt-5.4** with **extra_high** reasoning effort (maximum accuracy). All skills inherit this from `.codex/config.toml`. Do NOT downgrade the model or reasoning level — maximum performance is required for code review, security scanning, and test generation.
+This project uses **gpt-5.5** with **xhigh** reasoning effort (maximum accuracy). All skills inherit this from `.codex/config.toml`. Do NOT downgrade the model or reasoning level — maximum performance is required for code review, security scanning, and test generation.
 
 ## Codex-Specific Notes
 
 ### Agent Dispatch
-- Use `spawn_agent` instead of the Agent tool for subagent dispatch
-- Use `wait_agent` / `wait` to collect agent results
-- All reviewer agents are independent — dispatch them in parallel
+- Use `spawn_agent` for explicit subagent dispatch when the user has authorized parallel agent work
+- Use `wait_agent` to collect agent results when the next step depends on them
+- Keep independent reviewer prompts self-contained and dispatch them in parallel only when their file scopes do not overlap
 
 ### Planning
-- Use `update_plan` instead of TodoWrite for tracking progress
+- Use `update_plan` for tracking progress
 
 ### Skills
 - Skills auto-activate based on description matching
 - Invoke skills by describing the task that matches the skill description
 - Multi-agent requires `[features] multi_agent = true` in config.toml
+
+### Local Tool Mapping
+- Search files with `rg` / `rg --files`
+- Run shell checks with `exec_command`
+- Edit files with `apply_patch` unless using a mechanical formatter or bulk rewrite
 
 ### Available Skills
 

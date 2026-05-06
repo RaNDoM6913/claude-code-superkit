@@ -42,7 +42,7 @@ cp claude-code-superkit/packages/codex/config.toml .codex/config.toml
 cp claude-code-superkit/packages/codex/config.toml ~/.codex/config.toml
 ```
 
-The default model is **gpt-5.4** with **extra_high** reasoning effort (maximum). Edit `config.toml` to change.
+The default model is **gpt-5.5** with **xhigh** reasoning effort (maximum). Edit `config.toml` to change.
 
 ### Step 4: Set up AGENTS.md
 
@@ -190,14 +190,14 @@ cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 
 ## Model Configuration
 
-The default `config.toml` uses **gpt-5.4** with **extra_high** reasoning — maximum performance:
+The default `config.toml` uses **gpt-5.5** with **xhigh** reasoning — maximum performance:
 
 ```toml
-model = "gpt-5.4"
-model_reasoning_effort = "extra_high"
+model = "gpt-5.5"
+model_reasoning_effort = "xhigh"
 ```
 
-Available reasoning levels: `low`, `medium`, `high`, `extra_high`. We use `extra_high` for maximum accuracy.
+Available reasoning levels: `low`, `medium`, `high`, `xhigh`. We use `xhigh` for maximum accuracy.
 
 All skills inherit this model. Unlike Claude Code (where each agent has its own `model:` field), Codex uses a single global model from config.toml.
 
@@ -227,7 +227,7 @@ ls -la AGENTS.md
 # Check skills are installed
 ls .codex/skills/
 
-# Check config (should show gpt-5.4)
+# Check config (should show gpt-5.5)
 cat .codex/config.toml
 
 # Run Codex to test
