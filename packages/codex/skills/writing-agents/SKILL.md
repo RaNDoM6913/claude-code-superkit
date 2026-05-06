@@ -1,42 +1,50 @@
 ---
 name: writing-agents
-description: How to write Claude Code agents — standard format, 2-phase review, severity/confidence, dispatch patterns
+description: How to write Codex reviewer skills — SKILL.md format, review process, severity/confidence, spawn_agent dispatch patterns
 user-invocable: false
 ---
 
-# Writing Claude Code Agents
+# Writing Codex Reviewer Skills
 
-## Agent File Format
+## Skill File Format
 
-Agents are `.md` files in `.claude/agents/`. Frontmatter:
+Reviewer skills live in `.codex/skills/<skill-name>/SKILL.md`. Frontmatter:
 
 ```yaml
 ---
-name: agent-name
-description: One-line description (used for dispatch matching)
-model: sonnet|opus|haiku
-allowed-tools: Read, Grep, Glob, Bash, Edit, Write
+name: skill-name
+description: One-line trigger description for Codex skill matching
+user-invocable: false
 ---
 ```
 
-- **model**: `opus` for all agents -- maximum reasoning depth and accuracy. Sonnet/haiku available but not recommended.
-- **allowed-tools**: minimal set needed. Review agents: `Read, Grep, Glob, Bash`. Generator agents add `Edit, Write`.
+- Keep frontmatter minimal: `name`, `description`, and `user-invocable`.
+- Do not include Claude-only fields such as per-agent model routing or allowed tool lists.
+- Codex uses the project-level `.codex/config.toml` model and reasoning effort.
+
+## Codex Tool Mapping
+
+- Search file names with `rg --files`; search contents with `rg`.
+- Run shell checks with `exec_command`.
+- Edit files with `apply_patch` unless a formatter or mechanical bulk rewrite is more appropriate.
+- Track multi-step work with `update_plan`.
+- Dispatch independent reviewer work with `spawn_agent` only when the user has authorized parallel agent work; collect required results with `wait_agent`.
 
 ## Standard 2-Phase Review Process
 
-All review agents follow this pattern:
+All review skills should follow this pattern:
 
-### Phase 1: Checklist (quick scan)
-Run through numbered items. Report violations immediately without extended analysis. Each item has a grep pattern or file to check.
+### Phase 1: Checklist
+Run through numbered checks. Report concrete violations immediately. Each item should point to a file path, `rg` pattern, command, or explicit code invariant.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 After the checklist:
 1. What is the intent of this change?
-2. What are the possible failure modes?
-3. Are there edge cases the checklist didn't cover?
+2. What failure modes are plausible?
+3. Are there edge cases the checklist did not cover?
 4. Does this change affect other components?
 
-Show reasoning before stating findings.
+State evidence before findings. If the code is clean, say so and call out residual test gaps.
 
 ## Severity / Confidence System
 
@@ -48,50 +56,49 @@ Show reasoning before stating findings.
 ### Confidence
 - **HIGH (90%+)** — Concrete bug visible in code.
 - **MEDIUM (60-90%)** — Looks wrong based on patterns, might be missing context.
-- **LOW (<60%)** — A hunch. Flagging for human review.
+- **LOW (<60%)** — A hunch. Flag for human review.
 
 ### Output Format
-```
+```text
 [SEVERITY/CONFIDENCE] file:line — description
   Evidence: <what I see>
   Fix: <suggested change>
 ```
 
-**IMPORTANT: Do NOT inflate severity to seem thorough.** A review with 0 CRITICAL and 2 SUGGESTIONS is valid. If the code is clean, say so.
+Do not inflate severity to seem thorough. A review with no findings is valid.
 
 ## Dispatch Priority
 
-If a **stack-specific reviewer** exists (e.g., `go-reviewer` for `*.go`), it is dispatched **instead of** `code-reviewer` for matching files. `code-reviewer` handles files not covered by any stack reviewer.
+If a stack-specific reviewer exists, use it instead of a generic reviewer for matching files. `code-reviewer` handles files not covered by a stack reviewer.
 
 ## Checklist Design Tips
 
-- Each item should have a **grep pattern** or **file path** to check
-- Order by severity (critical checks first)
-- Include both positive checks (X must be present) and negative (Y must NOT be present)
-- 8-15 items is the sweet spot. More than 20 → split into two agents.
+- Each item should have a concrete `rg` pattern, command, or file path.
+- Order by severity.
+- Include positive checks and negative checks.
+- Keep checklists around 8-15 items. Split larger surfaces into multiple skills.
 
-## Example: Minimal Agent
+## Example: Minimal Codex Reviewer Skill
 
 ```markdown
 ---
 name: dockerfile-reviewer
-description: Review Dockerfiles for security and best practices
-model: opus
-allowed-tools: Read, Grep, Glob
+description: Review Dockerfiles for security and build hygiene
+user-invocable: false
 ---
 
 # Dockerfile Reviewer
 
 ## Phase 1: Checklist
-1. **Root user** — Grep for `USER` directive. Must not run as root.
-2. **Latest tag** — Grep for `:latest`. Use specific version tags.
-3. **Multi-stage** — Check for multi-stage build (reduce image size).
-4. **COPY vs ADD** — Prefer COPY over ADD (no auto-extract).
-5. **Health check** — HEALTHCHECK directive present?
+1. **Root user** — Use `rg '^USER ' Dockerfile*`; images must not run as root.
+2. **Latest tag** — Use `rg ':latest' Dockerfile*`; pin base image versions.
+3. **Multi-stage** — Check for multiple `FROM` lines where build tooling is needed.
+4. **COPY vs ADD** — Prefer `COPY` unless archive extraction or remote URLs are intentional.
+5. **Health check** — Verify `HEALTHCHECK` exists for long-running services.
 
 ## Phase 2: Deep Analysis
-[standard questions]
+Apply the standard deep analysis questions.
 
 ## Output Format
-[standard severity/confidence format]
+Use the standard severity/confidence format.
 ```
