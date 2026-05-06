@@ -4,6 +4,33 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+## [1.3.11] — 2026-05-06
+
+### Changed (Codex layer modernization)
+
+The Codex layer was adapted to the latest GPT release and aligned with Codex-native tooling. Claude Code source-of-truth was untouched.
+
+- **Model bump** — `packages/codex/config.toml` now declares `model = "gpt-5.5"` and `model_reasoning_effort = "xhigh"`. Installer summary (`lib/installer.js`), Codex install info (`lib/codex.js`), `packages/codex/AGENTS.md`, `packages/codex/INSTALL.md`, `README.md` (badge + comparison table + install snippet), and `CLAUDE.md` (conventions) all updated in lockstep.
+- **`writing-agents` and `writing-commands` rewritten** — both Codex skills are now Codex-native: minimal frontmatter (no `model:` / `allowed-tools:`), explicit Codex tool mapping (`rg`, `exec_command`, `apply_patch`, `update_plan`, `spawn_agent`/`wait_agent`), and Codex-shaped examples.
+- **AGENTS.md sharpened** — dispatch guidance reframed around `spawn_agent` only when the user has authorized parallel agent work; new "Local Tool Mapping" section documents `rg`, `exec_command`, `apply_patch`.
+- **All 32 reviewer/workflow skills cleaned** — no leftover `Co-Authored-By: Claude` trailers in commit/dev guides; `docs-reviewer` now scans `.codex/skills/*/SKILL.md` instead of `.claude/agents/`; legacy `/dev workflow`, `/review pipeline`, `/docs-init` wording removed; missing `user-invocable: false` added to 6 frontend-3d knowledge skills (`gltf-debugging`, `html-to-3d-texture`, `output-enforcement`, `product-3d-lighting`, `r3f-scroll-driven-3d`, `threejs-color-management`); references to `CLAUDE.md`-only context replaced with `AGENTS.md or CLAUDE.md`.
+- **`tools/convert-agents-to-codex-skills.sh` learned `normalize_body_for_codex`** — future conversions from `packages/core/agents/` auto-strip `model:` / `allowed-tools:` frontmatter, rewrite `Agent`/`TodoWrite`/`Read`/`Grep`/`Glob`/`Bash`/`Edit`/`Write` to their Codex equivalents (`spawn_agent`, `update_plan`, `rg`, `rg --files`, `exec_command`, `apply_patch`), and remove `Co-Authored-By: Claude` trailers.
+
+### Added
+
+- **`test/codex.test.js`** — 5 regression assertions guarding Codex package integrity:
+  - `config.toml` declares `gpt-5.5` + `xhigh`, no `extra_high` / `gpt-5.4` anywhere.
+  - Active Codex docs (`AGENTS.md`, `INSTALL.md`, `README.md`, `lib/codex.js`, `lib/installer.js`) free of legacy model strings.
+  - Authoring guides (`writing-agents`, `writing-commands`) mention `spawn_agent` and `exec_command`, never `Agent tool` / `allowed-tools:` / `Claude Code Agents`.
+  - Convert script contains `normalize_body_for_codex`, `spawn_agent`, `apply_patch`, `update_plan`.
+  - No skill body ships `allowed-tools:`, `model: opus`, `TodoWrite`, `Agent tool`, or `Co-Authored-By: Claude`.
+
+### Tested
+
+- `node --test test/codex.test.js` — 9/9 pass.
+- `npm test` — 28/28 pass.
+- Manual grep audit across `packages/codex/` finds zero `gpt-5.4` / `extra_high` / `allowed-tools:` / `model: opus` / `TodoWrite` / `.claude/agents` / `.claude/commands`.
+
 ## [1.3.10] — 2026-04-18
 
 ### Fixed (critical — macOS portability + hook output stream)

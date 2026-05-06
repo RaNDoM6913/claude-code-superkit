@@ -5,7 +5,7 @@
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 ![Agents](https://img.shields.io/badge/49_agents-Opus_4.7-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
-![Codex](https://img.shields.io/badge/Codex-gpt--5.4-00A67E?style=for-the-badge&logo=openai&logoColor=white)
+![Codex](https://img.shields.io/badge/Codex-gpt--5.5-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
 **All agents on Opus. Maximum accuracy. Zero compromises.**
@@ -70,19 +70,15 @@ Keyword or AI semantic search via API.
 | **Skills** | 5 + 6 frontend-3d + 1 frontend-ui + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, writing-hooks guide + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + **impeccable-craft** + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.9)
+## 🆕 What's New (v1.3.11)
 
-- 🎨 **Frontend UI package** — self-contained 2D UI design/polish package alongside Frontend 3D. 6 agents, 7 rules, 3 hooks, 1 skill — auto-dispatch, no slash commands.
-- 🧑‍🎨 **ui-reviewer umbrella + 5 specialists** — typography, color, motion, interaction, design-critic. Each agent has explicit dispatch rules so Claude routes UI audits to the right specialist.
-- 📐 **7 path-scoped rules** — design aesthetics, typography (with full banned-fonts list), color (OKLCH, tinted neutrals), spatial (4pt scale), motion (custom easing), interaction polish, anti-patterns.
-- 🪝 **3 advisory UI hooks** — banned-fonts detection, color checks (pure `#000`/`#fff`, purple→blue gradients), animation-easing (`ease-in` on UI, `transition: all`).
-- 🛠️ **impeccable-craft skill** — opt-in 4-stage shape-then-build flow (Shape → Refine → Implement → Polish) for building UI from scratch.
-- 🧠 **Opus 4.7 + 1M context** — badge, template, and hooks updated. `model: opus` alias auto-routes to the latest Opus release.
-- 🛡️ **Hooks V2-B hardening (11 shipped)** — CVE-2025-59536 mitigation (`audit-settings-source`), hash-chained audit trail, plan-completion gate, user-intent detection, subagent-stop validation, compact-state survival, `/dev` hard-enforcement, override budget + anti-reset-cycle detection, block-dangerous-git bypass patterns.
-- 🐛 **Critical hook-JSON-path fix** — `doc-check-on-commit`, `superkit-counts-verify`, `config-protection`, `security-patterns`, `loop-guard` silently exited 0 since inception because of wrong JSON path. All now read `.tool_input.<field>` first. Covered by regression tests.
-- 🤖 **7 Codex skills** — full frontend-ui port (6 specialists + impeccable-craft).
+- 🤖 **Codex on `gpt-5.5` + `xhigh` reasoning** — `config.toml`, installer messages, and all Codex docs updated. Latest reasoning level for maximum review accuracy.
+- ✍️ **Codex-native authoring guides rewritten** — `writing-agents` and `writing-commands` skills no longer reference Claude-only fields (`model:`, `allowed-tools:`, `Agent`, `TodoWrite`); they now describe `spawn_agent` / `wait_agent` / `update_plan` / `apply_patch` / `exec_command` / `rg` properly.
+- 🧹 **All 32 Codex skills purged of Claude-only markers** — no leftover `Co-Authored-By: Claude`, no Claude-tool references in skill bodies, missing `user-invocable: false` added to 6 frontend-3d knowledge skills, `docs-reviewer` now scans `.codex/skills/*/SKILL.md` instead of `.claude/agents`.
+- 🛠️ **`tools/convert-agents-to-codex-skills.sh` got `normalize_body_for_codex`** — future Claude→Codex conversions auto-strip Claude-only frontmatter and rewrite tool names so the Codex layer stays clean by construction.
+- ✅ **New regression suite `test/codex.test.js`** — 5 invariants guard the Codex package (model strings, banned markers, Codex-native tool mentions). `node --test` 9/9 pass, full `npm test` 28/28 pass.
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.9 history.
+See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.11 history.
 
 ## 🔄 How `/dev` Works
 
@@ -139,7 +135,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex CLI support in one command. Model: **gpt-5.4** + **extra_high** reasoning.
+Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex CLI support in one command. Model: **gpt-5.5** + **xhigh** reasoning.
 
 ## ⌨️ Key Commands
 
@@ -384,7 +380,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
-| Model | Opus (per agent) | **gpt-5.4** (global config) |
+| Model | Opus (per agent) | **gpt-5.5** (global config) |
 | Agents / Skills | 49 agents | 72 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
 | Hooks | 38 + Stop | — (inline rules in AGENTS.md) |
@@ -393,7 +389,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`npx claude-code-superkit --codex` will install for Codex CLI — copies 72 skills and creates AGENTS.md + config.toml (`gpt-5.4`, `extra_high`).
+`npx claude-code-superkit --codex` will install for Codex CLI — copies 72 skills and creates AGENTS.md + config.toml (`gpt-5.5`, `xhigh`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
