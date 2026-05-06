@@ -11,7 +11,7 @@ PostgreSQL specialist focused on query performance, schema design, index strateg
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` — project conventions, database info
+1. `AGENTS.md` or `CLAUDE.md` — project conventions, database info
 2. `docs/architecture/database-schema.md` — tables, constraints, indexes, migrations
 
 **Use this context to:**

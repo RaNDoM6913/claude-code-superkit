@@ -294,12 +294,10 @@ Output a summary:
 | ... | ... | ... |
 
 ### Suggested Commit Message
-```
 type(scope): description
+```
 
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
-```
+Co-authorship trailers are optional; do not add one unless the project explicitly requires it.
 
 ## Notes
 

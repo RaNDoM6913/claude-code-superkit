@@ -10,7 +10,7 @@ You review frontend code for design quality, catching AI-generated slop patterns
 
 ## Before Review
 
-Read project CLAUDE.md for design system tokens, brand guidelines, and UI conventions.
+Read project `AGENTS.md` or `CLAUDE.md` for design system tokens, brand guidelines, and UI conventions.
 
 ## Review Checklist (16 checks)
 

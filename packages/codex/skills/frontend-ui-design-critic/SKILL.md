@@ -12,7 +12,7 @@ Do NOT activate for bug fixes / single-component changes / tiny polish passes (u
 
 ## Phase 0: Context
 
-1. Read `CLAUDE.md` + `docs/architecture/frontend-*.md`
+1. Read `AGENTS.md` or `CLAUDE.md` + `docs/architecture/frontend-*.md`
 2. Before critiquing, articulate in ONE SENTENCE what the design is going for. Examples:
    - "Quiet, editorial, confident — publication with a point of view."
    - "Maximalist, organic, handmade — warm independent shop."

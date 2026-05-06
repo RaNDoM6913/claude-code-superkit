@@ -10,7 +10,7 @@ Activates on: palette / theme / color-token changes · dark/light theme added ·
 
 ## Phase 0: Context
 
-1. Read `CLAUDE.md` — product, audience, **physical use context**
+1. Read `AGENTS.md` or `CLAUDE.md` — product, audience, **physical use context**
 2. Determine the theme decision by use context, not default preference
 
 ### Theme Selection by Use Context

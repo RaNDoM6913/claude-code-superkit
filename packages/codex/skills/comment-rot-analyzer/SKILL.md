@@ -11,12 +11,12 @@ Detect comments that no longer match the code they describe. Stale comments are 
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` -- project conventions
+1. `AGENTS.md` or `CLAUDE.md` -- project conventions
 2. Recent git log (`git log --oneline -10`) -- understand recent changes
 
 ## When to Use
 
-- During `/review` pipeline -- dispatched for any changed files
+- During the `review-orchestrator` pipeline -- dispatched for any changed files
 - After major refactors -- comments likely stale
 - Periodic codebase health check
 

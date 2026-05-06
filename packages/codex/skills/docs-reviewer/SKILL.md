@@ -13,7 +13,7 @@ Replaces former `docs-checker` + `doc-updater` agents.
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, list of docs
+1. `AGENTS.md` or `CLAUDE.md` — project overview, conventions, list of docs
 2. `docs/architecture/` — all architecture docs
 3. `git log --oneline -10` — recent changes
 
@@ -24,7 +24,7 @@ Read if exists:
 
 ## When to Use
 
-- As part of `/review` pipeline (cross-cutting check on every review)
+- As part of the `review-orchestrator` pipeline (cross-cutting check on every review)
 - After implementing a feature (verify docs updated)
 - Standalone audit: check all docs for staleness
 - Before releases (comprehensive freshness check)
@@ -81,9 +81,9 @@ Do docs match reality?
 4. **Feature descriptions** — docs describe behavior that code no longer implements
 5. **Configuration** — docs mention env vars/config keys that don't exist in code
 6. **Dependencies** — docs list deps not in go.mod/package.json (or vice versa)
-7. **Active Plans** — CLAUDE.md lists plans as "IN PROGRESS" that are actually done
+7. **Active Plans** — `AGENTS.md` or `CLAUDE.md` lists plans as "IN PROGRESS" that are actually done
 8. **Known Constraints** — listed constraints that have been resolved
-9. **Agent/Command counts** — CLAUDE.md agent table vs actual `.claude/agents/*.md` files
+9. **Codex skill counts** — `AGENTS.md` skill table vs actual `.codex/skills/*/SKILL.md` files
 10. **Tree freshness** — `docs/trees/` files differ significantly from actual structure
 
 ### Part 3: Coverage Audit
@@ -99,7 +99,7 @@ Are all code areas documented?
 | API handlers/controllers | api-reference.md | Grep for handler dirs |
 | Docker/CI files | deployment.md | Check for Dockerfile |
 
-For each missing doc → **WARN** (suggest `/docs-init` or manual creation).
+For each missing doc → **WARN** (suggest running the documentation initializer or creating it manually).
 
 ## Spot-Check: False Positive Prevention
 

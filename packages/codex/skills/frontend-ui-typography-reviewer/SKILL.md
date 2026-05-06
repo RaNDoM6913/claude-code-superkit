@@ -10,7 +10,7 @@ Activates on: font-family / weight / scale token changes · Google Fonts imports
 
 ## Phase 0: Context
 
-1. Read `CLAUDE.md` — product, brand personality
+1. Read `AGENTS.md` or `CLAUDE.md` — product, brand personality
 2. Derive brand voice in 3 concrete words
 
 ## Phase 1: Reflex Font Scan

@@ -15,7 +15,7 @@ Do NOT activate for `.go/.py/.rs/.java` backend, 3D/WebGL/R3F (use frontend-3d s
 
 ## Phase 0: Load Context
 
-1. Read `CLAUDE.md` — product, brand cues, tech stack
+1. Read `AGENTS.md` or `CLAUDE.md` — product, brand cues, tech stack
 2. Read `docs/architecture/frontend-*.md` if present
 3. Derive brand voice in 3 concrete words ("expensive, quiet, precise" / "fast, dense, unimpressed" etc.)
 4. If context unclear, ask ONE targeted question mid-review — never an upfront questionnaire

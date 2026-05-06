@@ -10,7 +10,7 @@ You review frontend code for performance, focusing on bundle size, rendering eff
 
 ## Before Review
 
-Read project CLAUDE.md and package.json for framework, bundler, and dependency context.
+Read project `AGENTS.md` or `CLAUDE.md` and package.json for framework, bundler, and dependency context.
 
 ## Review Checklist (12 checks)
 

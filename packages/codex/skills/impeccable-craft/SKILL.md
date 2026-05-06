@@ -18,7 +18,7 @@ user-invocable: true
 
 ## Stage 1 — Shape (before any code)
 
-1. **Gather brand context**: read `CLAUDE.md`, check auto-memory. If context thin, ask ONE question: "In one sentence, what should this interface feel like?"
+1. **Gather brand context**: read `AGENTS.md` or `CLAUDE.md`, check available project memory. If context thin, ask ONE question: "In one sentence, what should this interface feel like?"
 
 2. **Articulate the aesthetic direction in 3 concrete words.** Not "modern" or "elegant". Concrete: "warm, mechanical, opinionated" / "calm, clinical, careful" / "fast, dense, unimpressed" / "expensive, quiet, precise".
 

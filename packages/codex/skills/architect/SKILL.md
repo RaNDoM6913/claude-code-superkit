@@ -11,7 +11,7 @@ Senior system design advisor for architectural decisions. Dispatched when tasks 
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` — project overview, tech stack, conventions
+1. `AGENTS.md` or `CLAUDE.md` — project overview, tech stack, conventions
 2. All `docs/architecture/*.md` — existing architecture, layers, data flow, constraints
 
 **Use this context to:**

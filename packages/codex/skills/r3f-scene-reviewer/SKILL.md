@@ -10,7 +10,7 @@ You review files importing `@react-three/fiber`, `@react-three/drei`, or `three`
 
 ## Before Review
 
-Read project CLAUDE.md for 3D conventions and installed skills.
+Read project `AGENTS.md` or `CLAUDE.md` for 3D conventions and installed skills.
 
 ## Review Checklist (15 checks)
 

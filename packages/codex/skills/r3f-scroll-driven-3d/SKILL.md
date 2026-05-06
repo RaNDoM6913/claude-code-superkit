@@ -1,6 +1,7 @@
 ---
 name: r3f-scroll-driven-3d
 description: Connect GSAP ScrollTrigger to React Three Fiber — Zustand bridge, useFrame animation, scroll progress to 3D transforms. The pattern for scroll-driven 3D product showcases.
+user-invocable: false
 ---
 
 # Scroll-Driven 3D with GSAP + R3F

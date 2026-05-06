@@ -11,15 +11,15 @@ Validates that implementation RESULTS match stated GOALS. Works backward from go
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` — project conventions
+1. `AGENTS.md` or `CLAUDE.md` — project conventions
 2. The implementation plan/spec that was executed
 3. `git log --oneline -10` — recent commits
 
 ## When to Use
 
-- After Phase 5 (Test) in /dev workflow — before review
+- After Phase 5 (Test) in `dev-orchestrator` — before review
 - After completing an implementation plan
-- As part of /review pipeline for feature branches
+- As part of the `review-orchestrator` pipeline for feature branches
 
 ## 4-Level Substantiation
 

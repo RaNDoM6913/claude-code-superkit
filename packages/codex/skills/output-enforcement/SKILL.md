@@ -1,6 +1,7 @@
 ---
 name: output-enforcement
 description: Anti-laziness enforcement — bans placeholder patterns (// ..., // TODO, // rest of code), enforces complete code generation, handles token-limit splits cleanly. Activate for every code generation task.
+user-invocable: false
 ---
 
 # Full Output Enforcement

@@ -11,12 +11,12 @@ Find code that suppresses errors instead of handling them. Silent failures are t
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` -- error handling conventions
+1. `AGENTS.md` or `CLAUDE.md` -- error handling conventions
 2. `docs/architecture/backend-layers.md` -- expected error patterns
 
 ## When to Use
 
-- During `/review` pipeline -- dispatched for changed code files
+- During the `review-orchestrator` pipeline -- dispatched for changed code files
 - After new endpoint/service creation -- verify error paths
 - Periodic codebase health check
 

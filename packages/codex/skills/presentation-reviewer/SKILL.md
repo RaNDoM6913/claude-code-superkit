@@ -10,7 +10,7 @@ You review scroll-driven presentation section code for correctness, performance,
 
 ## Before Review
 
-Read project CLAUDE.md and any GSAP/3D rules for authoritative conventions.
+Read project `AGENTS.md` or `CLAUDE.md` and any GSAP/3D rules for authoritative conventions.
 
 ## Review Checklist (16 checks)
 

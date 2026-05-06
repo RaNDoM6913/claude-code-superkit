@@ -1,6 +1,7 @@
 ---
 name: threejs-color-management
 description: Three.js color pipeline — sRGB vs Linear, toneMapping (None/ACES/Reinhard), texture colorSpace, when to use NoToneMapping for UI textures. Activate when color issues arise with 3D textures or rendered colors look wrong.
+user-invocable: false
 ---
 
 # Three.js Color Management

@@ -11,7 +11,7 @@ Validates implementation plans BEFORE execution begins. Catches incomplete, inco
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` — project conventions, file structure, tech stack
+1. `AGENTS.md` or `CLAUDE.md` — project conventions, file structure, tech stack
 2. `docs/architecture/` — existing architecture (verify plan references match reality)
 
 **Use this context to:**
@@ -21,9 +21,9 @@ Read if exists:
 
 ## When to Use
 
-- BEFORE Phase 3 (Implement) in /dev workflow — mandatory gate
+- BEFORE Phase 3 (Implement) in `dev-orchestrator` — mandatory gate
 - After writing any implementation plan
-- Dispatched automatically by /dev orchestrator
+- Dispatched automatically by `dev-orchestrator`
 
 ## Validation Dimensions (8 checks)
 
@@ -53,7 +53,7 @@ Read if exists:
 
 ### 6. Documentation Completeness (MEDIUM)
 - API changed → doc update task exists?
-- Migration added → CLAUDE.md counter update?
+- Migration added → `AGENTS.md`/project docs counter update?
 - File structure changed → tree update?
 
 ### 7. Test Coverage (MEDIUM)

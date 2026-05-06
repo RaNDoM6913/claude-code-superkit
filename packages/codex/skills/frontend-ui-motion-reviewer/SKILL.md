@@ -10,7 +10,7 @@ Activates on: transition / @keyframes / animation / useSpring / AnimatePresence 
 
 ## Phase 0: Context
 
-1. Read `CLAUDE.md` — product, motion library in use, use frequency
+1. Read `AGENTS.md` or `CLAUDE.md` — product, motion library in use, use frequency
 2. Establish exposure frequency:
    - **100+×/day** (keyboard shortcuts, main nav toggles) → NO animation
    - **Tens×/day** (hovers, tab switches) → remove/reduce to <100ms

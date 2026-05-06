@@ -11,14 +11,14 @@ Independent QA evaluator -- the "skeptic." Scores implementation results against
 ## Phase 0: Load Project Context
 
 Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` -- project conventions, tech stack
+1. `AGENTS.md` or `CLAUDE.md` -- project conventions, tech stack
 2. `docs/architecture/` -- relevant architecture docs
 3. The Sprint Contract provided in the prompt
 
 ## When to Use
 
-- Phase 3.5 (Evaluate + Iterate) in /dev workflow -- after implementation, before verify
-- Dispatched by /dev orchestrator with Sprint Contract + changed files
+- Phase 3.5 (Evaluate + Iterate) in `dev-orchestrator` -- after implementation, before verify
+- Dispatched by `dev-orchestrator` with Sprint Contract + changed files
 - Can be used standalone for post-implementation validation
 
 ## Input
@@ -109,4 +109,4 @@ For each FAIL:
 
 ## Important
 
-This agent ONLY evaluates. It does NOT fix code, refactor, or implement. It provides a structured critique that the /dev orchestrator uses to guide the next iteration.
+This skill ONLY evaluates. It does NOT fix code, refactor, or implement. It provides a structured critique that `dev-orchestrator` uses to guide the next iteration.

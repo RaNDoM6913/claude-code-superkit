@@ -10,7 +10,7 @@ Activates on: button / modal / drawer / dialog / form / input / tooltip / menu /
 
 ## Phase 0: Context
 
-Read `CLAUDE.md`, component library in use, motion library, i18n approach.
+Read `AGENTS.md` or `CLAUDE.md`, component library in use, motion library, i18n approach.
 
 ## Phase 1: Buttons
 

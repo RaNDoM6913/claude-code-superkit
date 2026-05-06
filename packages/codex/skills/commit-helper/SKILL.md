@@ -66,9 +66,9 @@ Refresh tokens are single-use with 7-day TTL.
 Confidence: HIGH
 Scope-risk: MEDIUM — touches auth middleware used by all endpoints
 Not-tested: concurrent refresh requests from multiple devices
-
-Co-Authored-By: Claude <noreply@anthropic.com>
 ```
+
+Co-authorship trailers are optional; do not add one unless the project explicitly requires it.
 
 **Skip trailers for:** typo fixes, docs-only changes, config changes, single-file edits < 20 lines.
 
@@ -89,8 +89,6 @@ If found, **WARN** and list the suspicious patterns. Ask for confirmation before
 ```bash
 git commit -m "$(cat <<'EOF'
 type(scope): description
-
-Co-Authored-By: Claude <noreply@anthropic.com>
 EOF
 )"
 ```
