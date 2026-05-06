@@ -5,8 +5,8 @@
 # Reads each .md file from packages/core/agents/,
 # extracts the name from frontmatter, creates
 # packages/codex/skills/{name}/SKILL.md with
-# Codex-compatible frontmatter (no model/allowed-tools,
-# adds user-invocable: false).
+# Codex-compatible frontmatter and normalizes common Claude Code
+# tool references into Codex-native guidance.
 #
 # Usage:
 #   bash tools/convert-agents-to-codex-skills.sh
@@ -25,6 +25,34 @@ if [ ! -d "$AGENTS_DIR" ]; then
   echo "ERROR: Agents directory not found: $AGENTS_DIR"
   exit 1
 fi
+
+normalize_body_for_codex() {
+  local body="$1"
+
+  printf '%s' "$body" | sed \
+    -e 's/Claude Code agents/Codex skills/g' \
+    -e 's/Claude Code Agents/Codex Skills/g' \
+    -e 's/Claude Code agent/Codex skill/g' \
+    -e 's/Claude Code Agent/Codex Skill/g' \
+    -e 's/Claude Code slash commands/Codex user-invocable skills/g' \
+    -e 's/Claude Code Commands/Codex User-Invocable Skills/g' \
+    -e 's/\.claude\/agents\//.codex\/skills\/<skill-name>\//g' \
+    -e 's/\.claude\/commands\//.codex\/skills\/<skill-name>\//g' \
+    -e 's/Use the `Agent` tool to dispatch agents./Use `spawn_agent` to dispatch subagents when the user has authorized parallel agent work./g' \
+    -e 's/Agent tool/spawn_agent/g' \
+    -e 's/TodoWrite/update_plan/g' \
+    -e 's/`Read`/`file reads`/g' \
+    -e 's/`Grep`/`rg`/g' \
+    -e 's/`Glob`/`rg --files`/g' \
+    -e 's/`Bash`/`exec_command`/g' \
+    -e 's/`Edit`/`apply_patch`/g' \
+    -e 's/`Write`/`apply_patch`/g' \
+    -e 's/Read, Grep, Glob/file reads, rg, rg --files/g' \
+    -e 's/Bash, Read, Edit, Write, Glob, Grep/exec_command, file reads, apply_patch, apply_patch, rg --files, rg/g' \
+    -e '/^model: /d' \
+    -e '/^allowed-tools: /d' \
+    -e '/Co-Authored-By: Claude <noreply@anthropic\.com>/d'
+}
 
 converted=0
 skipped=0
@@ -80,6 +108,10 @@ for agent_file in "$AGENTS_DIR"/*.md; do
   if [ -z "$description" ]; then
     description="Agent skill converted from $filename"
   fi
+  description="$(printf '%s' "$description" | sed \
+    -e 's/Claude Code/Codex/g' \
+    -e 's/slash commands/user-invocable skills/g')"
+  body="$(normalize_body_for_codex "$body")"
 
   # Create skill directory
   skill_dir="$SKILLS_DIR/$name"
