@@ -88,7 +88,8 @@ function printHelp() {
 claude-code-superkit v${VERSION} — interactive installer
 
 Usage:
-  npx claude-code-superkit [options]
+  bash setup.sh [options]                # from a cloned superkit repo (current)
+  npx claude-code-superkit [options]     # when published to npm (deferred)
 
 Options:
   --defaults              Use default settings, no interactive prompts
@@ -103,9 +104,9 @@ Options:
   --version, -v           Show version
 
 Examples:
-  npx claude-code-superkit                          # Interactive
-  npx claude-code-superkit --defaults               # All defaults
-  npx claude-code-superkit --stacks=go,ts --codex   # Go + TypeScript + Codex
+  bash setup.sh                                # Interactive
+  bash setup.sh --defaults                     # All defaults
+  bash setup.sh --stacks=go,ts --codex         # Go + TypeScript + Codex
 
 Run from your project root (must be a git repository).
 Requires: Node.js 18+, git. Recommended: claude CLI.
