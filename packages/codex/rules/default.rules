@@ -131,6 +131,15 @@ prefix_rule(pattern=["git", "rev-parse"], decision="allow")
 prefix_rule(pattern=["git", "config"], decision="allow")
 prefix_rule(pattern=["git", "remote"], decision="allow")
 
+# NOTE on git push --force coverage:
+# prefix_rule matches as an argv prefix tuple. `git push --force origin main`
+# matches ["git", "push", "--force"], but `git push origin main --force`
+# does NOT — the flag lands on position 4, not 2. Codex CLI's rule engine
+# does not support substring/regex on argv tails. So `git push` is left
+# as decision="prompt" rather than "allow" so the user is asked for every
+# push (one extra confirmation is the price of not getting silently
+# force-pushed by argv-position trickery). Real protection of main branch
+# happens at the host (GitHub branch protection rules), not here.
 prefix_rule(
     pattern = ["git", "push", "--force"],
     decision = "prompt",
@@ -141,14 +150,30 @@ prefix_rule(
     decision = "prompt",
     justification = "Force-push rewrites remote history. Confirm branch and target.",
 )
-prefix_rule(pattern=["git", "push"], decision="allow")
+prefix_rule(
+    pattern = ["git", "push", "--force-with-lease"],
+    decision = "prompt",
+    justification = "Force-push (safer variant) still rewrites remote history.",
+)
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "prompt",
+    justification = "Push touches remote state and may carry a --force flag after the ref. Confirm.",
+)
 
+# Same argv-position caveat for reset --hard. We keep `git reset` at prompt
+# rather than allow so `git reset HEAD --hard` (--hard at position 3) still
+# triggers a confirmation.
 prefix_rule(
     pattern = ["git", "reset", "--hard"],
     decision = "prompt",
     justification = "Hard reset discards uncommitted work. Confirm target ref.",
 )
-prefix_rule(pattern=["git", "reset"], decision="allow")
+prefix_rule(
+    pattern = ["git", "reset"],
+    decision = "prompt",
+    justification = "Reset may include --hard after the ref. Confirm.",
+)
 
 prefix_rule(
     pattern = ["git", "clean", "-fdx"],
@@ -364,20 +389,35 @@ prefix_rule(pattern=["sed"], decision="allow")
 prefix_rule(pattern=["awk"], decision="allow")
 prefix_rule(pattern=["echo"], decision="allow")
 prefix_rule(pattern=["printf"], decision="allow")
-prefix_rule(pattern=["curl"], decision="allow")
-prefix_rule(pattern=["wget"], decision="allow")
 prefix_rule(pattern=["http"], decision="allow")
 
-# Pipe to bash/sh from curl/wget — always forbidden
+# NOTE on curl | bash:
+# Codex CLI passes individual argv arrays to the rule engine; shell pipes
+# are not visible as argv tokens. A `curl URL | bash` is observed as two
+# separate executions: argv=["curl", "URL"] then argv=["bash"]. We cannot
+# match the pipe semantically from this layer.
+# Therefore: curl and wget land at decision="prompt" so the user sees
+# the URL before any fetch. Real defense against curl|bash is at the
+# shell/sandbox layer, not here.
 prefix_rule(
-    pattern = ["curl", "|", "bash"],
-    decision = "forbidden",
-    justification = "Piping remote scripts to a shell is unsafe.",
+    pattern = ["curl"],
+    decision = "prompt",
+    justification = "Curl may be piped into a shell. Confirm URL and target.",
 )
 prefix_rule(
-    pattern = ["wget", "|", "bash"],
-    decision = "forbidden",
-    justification = "Piping remote scripts to a shell is unsafe.",
+    pattern = ["wget"],
+    decision = "prompt",
+    justification = "Wget may be piped into a shell. Confirm URL and target.",
+)
+prefix_rule(
+    pattern = ["bash", "-c"],
+    decision = "prompt",
+    justification = "Arbitrary inline shell. Inspect the command before running.",
+)
+prefix_rule(
+    pattern = ["sh", "-c"],
+    decision = "prompt",
+    justification = "Arbitrary inline shell. Inspect the command before running.",
 )
 
 # =============================================================================
@@ -399,6 +439,31 @@ prefix_rule(
     pattern = ["dropdb"],
     decision = "prompt",
     justification = "dropdb removes a database. Confirm name.",
+)
+prefix_rule(
+    pattern = ["psql", "-c", "DROP"],
+    decision = "prompt",
+    justification = "DROP statement via psql -c removes DB objects. Confirm.",
+)
+prefix_rule(
+    pattern = ["psql", "-c", "TRUNCATE"],
+    decision = "prompt",
+    justification = "TRUNCATE wipes table data. Confirm.",
+)
+prefix_rule(
+    pattern = ["kubectl", "drain"],
+    decision = "prompt",
+    justification = "kubectl drain evicts pods from a node. Confirm.",
+)
+prefix_rule(
+    pattern = ["terraform", "destroy"],
+    decision = "prompt",
+    justification = "terraform destroy tears down infrastructure. Confirm targets.",
+)
+prefix_rule(
+    pattern = ["terraform", "apply"],
+    decision = "prompt",
+    justification = "terraform apply mutates infrastructure. Confirm plan.",
 )
 prefix_rule(
     pattern = ["redis-cli", "FLUSHDB"],
