@@ -4,7 +4,10 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-(Move to a versioned section on next release.)
+### Added — convenience wrapper
+
+- **`bin/superkit-counts-verify.sh`** — thin wrapper around the canonical `packages/core/hooks/superkit-counts-verify.sh` so contributors can run the count/version check manually from the repo root without remembering the full hook path. Synthesises an empty git-commit payload when invoked interactively (no stdin) so the hook actually runs its checks instead of early-exiting. Forwards both stdin payload and exit code transparently when invoked from a pipe.
+- **CLAUDE.md Self-Audit Rule section** updated to list both the canonical hook path and the wrapper, so neither human contributors nor automated reviewers (e.g. Codex CLI) confuse "no `bin/...` path" for "no verification mechanism".
 
 ## [1.4.1] — 2026-05-14
 

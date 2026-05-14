@@ -173,7 +173,11 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 - [ ] `grep -rn "OLD_PHASE_COUNT-phase" docs/ README.md CLAUDE.md packages/codex/` returns 0 results (excluding plans/ and CHANGELOG)
 
 ### Self-Audit Rule (MANDATORY)
-The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` hook enforce automated verification. The rule defines 4 verification steps that Claude MUST run before every commit. The hook blocks commits/pushes when VERSION != package.json or README counts != actual file counts. See `packages/core/rules/superkit-integrity.md` for full details.
+The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` hook enforce automated verification. The rule defines 4 verification steps that Claude MUST run before every commit. The hook blocks commits/pushes when VERSION != package.json or README counts != actual file counts.
+
+- Canonical hook: `packages/core/hooks/superkit-counts-verify.sh` (wired into `.claude/settings.json`)
+- Convenience wrapper: `bash bin/superkit-counts-verify.sh` — same checks, run manually from repo root
+- Full rule details: `packages/core/rules/superkit-integrity.md`
 
 ## Key Files
 
