@@ -88,7 +88,7 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.4.0
+VERSION                     # 1.4.1
 ```
 
 ## Current Counts

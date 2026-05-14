@@ -184,14 +184,17 @@ cp -r claude-code-superkit/packages/codex/skills/py-reviewer .codex/skills/
 cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ```
 
-### Total: 72 skills
+### Total: 82 skills
 
 - 9 command skills (user-invocable, including benchmark)
-- 32 agent + knowledge skills (auto-dispatched)
+- 36 agent + knowledge skills (auto-dispatched) — incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
 - 10 frontend 3D skills (optional, for R3F/Three.js/GSAP projects)
 - 7 frontend UI skills (optional, for 2D UI / landing-page / dashboard projects)
 - 9 stack-specific reviewer skills (optional, per language)
 - 5 Go knowledge skills (optional, samber-do/oops/lo, grpc-patterns, benchmark-methodology)
+- 6 TGApp / production skills (telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns)
+
+Plus 1 Codex approval rules file (`packages/codex/rules/default.rules`) + 3 GAN agents (optional, requires Playwright).
 
 ## Model Configuration
 

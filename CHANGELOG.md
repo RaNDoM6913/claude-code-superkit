@@ -6,6 +6,20 @@ All notable changes to claude-code-superkit are documented here.
 
 (Move to a versioned section on next release.)
 
+## [1.4.1] — 2026-05-14
+
+Documentation hygiene patch on top of v1.4.0. Fixes four mismatches caught by post-release audit before the maintainer's GPT-5.5 review pass.
+
+### Fixed
+
+- **`test/codex.test.js` was red on main** — `packages/codex/skills/silent-failure-hunter/SKILL.md` had a leftover `` `/review` `` slash-command reference banned by the v1.3.11 regression test. Replaced with "the review workflow". `npm test` now passes 28/28 again.
+- **`README.md` Codex comparison table** — counts were stuck at v1.3.11 values (49 agents, 72 skills, 38 hooks, 19 rules, 5 knowledge skills, "copies 72 skills"). Updated to v1.4.0 actuals (56 agents, 82 skills, 28 + 16 stack hooks, 20 rules, 11 knowledge skills, "copies 82 skills + default.rules").
+- **`packages/codex/INSTALL.md` Total summary** — `Total: 72 skills` with `32 agent + knowledge skills` bullet. Updated to **82 skills**, **36 agents**, with the v1.4.0 additions called out (4 new core roles + 6 TGApp skills) plus `default.rules` + 3 GAN agents disclosure.
+
+### Why a patch and not just a follow-up commit
+
+The maintainer's workflow is to run a separate Codex CLI (gpt-5.5) review pass after each release. If Codex CLI itself reads `packages/codex/INSTALL.md` with the wrong count, it will surface a phantom inconsistency between sources. Better to fix it before Codex reads it.
+
 ## [1.4.0] — 2026-05-14
 
 A substantial expansion across both Claude Code and Codex CLI surfaces. Three primary themes: **VKirill/codex-starter-kit adaptations** (3 cross-CLI specialist roles + Codex approval policy DSL + intake classifier), **TGApp / general production skills** (Telegram bots, Next.js + Supabase, Drizzle, Russian typography, PostgreSQL optimization, Redis patterns, behavioral nudge engine), **competitor patterns** (GateGuard hooks from everything-claude-code, expanded silent-failure-hunter), and a brand-new **GAN harness package** for adversarial verification of UI features.

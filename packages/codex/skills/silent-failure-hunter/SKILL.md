@@ -20,7 +20,7 @@ Read if exists:
 
 ## When to Use
 
-- During `/review` pipeline — dispatched for changed code files
+- During the review workflow — dispatched for changed code files
 - After new endpoint / service creation — verify error paths
 - After any new feature implementation that adds error-prone surface (network, file, parse, auth)
 - As part of `/dev` Phase 13 (Critic)
