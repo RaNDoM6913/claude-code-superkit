@@ -4,13 +4,42 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-Documentation hygiene fixes on top of v1.4.0 — these will roll up into the next versioned release (assigned by the maintainer, not auto-bumped).
+Post-v1.4.0 fixes from two review passes (internal audit + Codex CLI gpt-5.5).
+Will roll up into the next versioned release (assigned by the maintainer).
 
-### Fixed (post-release, awaiting GPT-5.5 review pass)
+### Fixed — install / packaging (BLOCKER level for fresh installs)
 
-- **`test/codex.test.js` was red on main** — `packages/codex/skills/silent-failure-hunter/SKILL.md` had a leftover `` `/review` `` slash-command reference banned by the v1.3.11 regression test. Replaced with "the review workflow". `npm test` 28/28 green again.
-- **`README.md` Codex comparison table** — counts were stuck at v1.3.11 values (49 agents, 72 skills, 38 hooks, 19 rules, 5 knowledge skills, "copies 72 skills"). Updated to v1.4.0 actuals (56, 82, 28 + 16 stack, 20, 11, "copies 82 skills + default.rules").
-- **`packages/codex/INSTALL.md` Total summary** — 72 → 82 skills, 32 → 36 agent skills, v1.4.0 additions called out (4 new core roles + 6 TGApp skills), `default.rules` + 3 GAN agents disclosed.
+- **npm pack shipped 0 GAN files** — `package.json` `files[]` array did not include `packages/gan/`. Anyone running `npm publish` would have produced an artifact without the advertised GAN package. Added.
+- **`intake-classifier.py` silently dropped during install** — `lib/installer.js` copied only `.sh` hooks. `settings.json` then referenced a missing file on every `UserPromptSubmit`. Now accepts both `.sh` and `.py`.
+- **`default.rules` never copied for Codex CLI installs** — `lib/codex.js` never read `packages/codex/rules/default.rules`. README promised it, install didn't deliver it. Added copy to `.codex/rules/default.rules`.
+- **`superkit-counts-verify.sh` blocked legitimate commits** — under-counted core hooks (missed `.py`), missed the GAN package, didn't see `extras/*/agent.md` subdirectory layout. Reported `agents=52` vs actual 56, and emitted false BLOCKED on `git commit`. All three counters fixed.
+
+### Fixed — Codex approval rules (MAJOR — safety theater)
+
+- **Force-push bypass via argv position** — `pattern=["git","push","--force"]` only matches when `--force` lands at argv[2]. `git push origin main --force` placed it at argv[4] and went straight through `git push` allow rule. Downgraded `git push` to `prompt`, same for `git reset` (covers `git reset HEAD --hard`). Documented WHY in a comment so a future "more permissive" rewrite won't reintroduce the hole.
+- **`curl | bash` was never matchable** — pipes aren't argv tokens; rule engine sees two separate executions. Dropped misleading "forbidden" rule, moved `curl` / `wget` to `prompt` so the user sees the URL, added `bash -c` / `sh -c` to `prompt`.
+- **Missing destructive ops** — `psql -c DROP`, `psql -c TRUNCATE`, `kubectl drain`, `terraform destroy`, `terraform apply` had no rules. Added to `prompt`.
+
+### Fixed — documentation drift
+
+- **Codex `AGENTS.md` Agent skills list** was frozen at v1.3.11 — missed 4 new core roles and the 6 TGApp / production skills. Refreshed alphabetically + added "Production skills" and "GAN harness skills" subsections.
+- **README hook/rule totals** were stuck at "28 + 16 stack" and "8 + 12 stack" (pre-superkit-counts-verify fix). Now reflect actual `42 shipped + 2 internal` hooks and `19 shipped + 1 internal` rules.
+- **README Codex arithmetic** — `82 (... + 3 GAN)` read as 85. Re-spelled to make clear 82 live in `packages/codex/skills/` and 3 GAN mirrors live in `packages/gan/skills/` (optional install).
+- **`packages/codex/INSTALL.md` Total summary** — 72 → 82 skills, 32 → 36 agent skills, v1.4.0 additions called out, `default.rules` + 3 GAN disclosed.
+- **GitHub About description** updated via `gh repo edit`: hooks 28 → 42, rules 10 → 19 (matches actual after counts-verify fix).
+- **`CLAUDE.md`** Current Counts table split into "Hooks shipped" / "Hooks internal" / "Rules shipped" / "Rules internal" so the public number is unambiguous.
+
+### Fixed — content defects
+
+- **`test/codex.test.js` was red on main** — `packages/codex/skills/silent-failure-hunter/SKILL.md` had a leftover `` `/review` `` slash-command reference banned by the v1.3.11 regression test. Replaced with "the review workflow".
+- **`drizzle-orm-expert` SKILL.md** — relational query example used `const users = await db.query.users.findMany({ where: eq(users.role, 'user') })` which shadows the imported `users` table. Renamed result variable + switched to modern callback RQB form (`where: (user, { eq }) => eq(user.role, 'user')`).
+- **`silent-failure-hunter.md`** — declared `tokens: 1280` but actual body was ≈2218 tokens. Updated for honest transparency.
+
+### Fixed — GateGuard hooks robustness
+
+- **Non-atomic state writes** — `echo > $STATE_FILE` could interleave bytes under concurrent invocation. Now writes to `${STATE_FILE}.$$.$now` then `mv -f` for a single-rename atomic commit.
+- **Clock skew false-OK** — a stored future timestamp pretended facts were fresh forever. Explicit `[ "$last_facts" -gt "$now" ]` resets to defaults.
+- **Strict mode noise on read-only commands** — `sed -n`, `awk`, `nl`, `tree`, `git grep`, `git stash list`, `git reflog`, `git describe`, `git tag --list`, `node --version`, `stat`, `realpath`, `readlink`, `basename`, `dirname`, `cut`, `sort`, `uniq`, `locate`, `more`, `id` are now in the read-only whitelist.
 
 ## [1.4.0] — 2026-05-14
 
