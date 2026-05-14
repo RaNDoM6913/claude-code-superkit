@@ -103,14 +103,26 @@ const recent = await db
 ```
 
 ### Relational
+
+In `db.query.<table>.findMany`, the `where` / `orderBy` clauses can be either a value built from the imported schema's table (`eq(users.role, 'user')`) or, with the latest relational query builder, a callback that receives the table:
+
 ```typescript
-const users = await db.query.users.findMany({
-  where: eq(users.role, 'user'),
-  with: { posts: { where: eq(posts.published, true), limit: 5 } },
-  orderBy: desc(users.createdAt),
+import { users, posts } from './schema';
+
+const activeUsers = await db.query.users.findMany({
+  where: (user, { eq }) => eq(user.role, 'user'),
+  orderBy: (user, { desc }) => desc(user.createdAt),
+  with: {
+    posts: {
+      where: (post, { eq }) => eq(post.published, true),
+      limit: 5,
+    },
+  },
   limit: 20,
 });
 ```
+
+Both forms work. The callback form avoids shadowing the imported `users` table when the local result variable would otherwise collide.
 
 ## Mutations
 
@@ -201,8 +213,8 @@ Never write manual TS interfaces for DB rows — schema is the source of truth.
 import { db } from '@/db';
 
 export default async function Dashboard() {
-  const users = await db.query.users.findMany({ limit: 20 });
-  return <UsersList users={users} />;
+  const allUsers = await db.query.users.findMany({ limit: 20 });
+  return <UsersList users={allUsers} />;
 }
 ```
 
