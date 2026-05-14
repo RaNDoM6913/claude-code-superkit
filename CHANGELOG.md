@@ -4,7 +4,12 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-(Move to a versioned section on next release.)
+### Fixed — superkit-update.sh (sync logic + .py hooks)
+
+- **Install-version drift never detected when source clone matched remote.** The hook compared only `git rev-parse HEAD` vs `@{u}` in the source clone. If a user manually pulled the clone (or another project synced first), `LOCAL == REMOTE` returned true and the hook exited immediately — even when `.superkit-meta`'s `SUPERKIT_VERSION` lagged the source `VERSION` file. Real-world scenario: user upgraded clone to 1.4.1 from CLI, then ran a different project's SessionStart hook expecting auto-sync; install stayed at 1.3.10 silently. Fix: cheap version-string compare (`INSTALL_VERSION` vs `SOURCE_VERSION`) now runs FIRST, independently of the git ref check. Version mismatch alone triggers re-sync. Rate limit bypassed when install lags source (no point delaying a known-stale install).
+- **`.py` hooks were not copied during update.** Only the `*.sh` glob was iterated. v1.4.0 introduced `intake-classifier.py` and v1.4.1's `installer.js` fix accepted both extensions, but the update path stayed `.sh`-only. Now mirrors the installer: copies `.sh` and `.py` from `packages/core/hooks/` (and stack-hooks).
+- **Skill auxiliary files (scripts/, references/) were not copied during update.** Only `SKILL.md` was synced. If a skill ships supporting files in its directory, they would be missing after an update even though present after a fresh install. Now copies the full skill directory contents.
+- **`chmod +x` on `.py` hooks added** (was `.sh` only).
 
 ## [1.4.1] — 2026-05-14
 
