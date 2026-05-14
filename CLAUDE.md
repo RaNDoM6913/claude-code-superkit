@@ -9,7 +9,7 @@ packages/
   core/                     # Generic components (any project)
     agents/                 # 31 agents (all opus) · incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
     commands/               # 15 commands (+ 1 frontend-3d = 16 total)
-    hooks/                  # 28 hooks (+2 superkit-internal) = 30 total · incl. /dev trio, audit-settings-source, audit-trail, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, edit-streak-check, intake-classifier (Python), gateguard-pre-edit, gateguard-record-facts
+    hooks/                  # 26 shipped + 2 superkit-internal = 28 files (27 *.sh + 1 *.py). Shipped incl. /dev trio, audit-settings-source (CVE-2025-59536), audit-trail, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, edit-streak-check, intake-classifier.py, gateguard-pre-edit, gateguard-record-facts
     helpers/                # 1 helper (statusline.cjs)
     rules/                  # 8 rules (+1 superkit-internal)
     skills/                 # 11 skills · incl. v1.4.0: telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns
@@ -98,11 +98,13 @@ VERSION                     # 1.4.0
 | Agents | 31 | 9 | 4 | 6 | 3 | 3 | 28 | — |
 | Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 82 |
 | Commands | 15 | — | 1 | — | — | — | 17 | 9 |
-| Hooks | 28 (+2 internal) | 9 | 4 | 3 | — | — | 13 | — |
+| Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | — |
+| Hooks internal | 2 | — | — | — | — | — | — | — |
 | Helpers | 1 | — | — | — | — | — | — | — |
-| Rules | 8 (+1 internal) | 2 | 3 | 7 | — | — | 6 | 1 file |
+| Rules shipped | 7 | 2 | 3 | 7 | — | — | 6 | 1 file |
+| Rules internal | 1 | — | — | — | — | — | — | — |
 
-**Total agents:** 56 (was 49 in v1.3.11)
+**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself.
 
 ## Conventions
 

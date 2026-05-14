@@ -66,8 +66,8 @@ Keyword or AI semantic search via API.
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
 | **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, `/capture-screen` |
-| **Hooks** | 28 + 16 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, gsap/r3f/tailwind/bundle-size, ui-banned-fonts/color/animation-easing, `/dev` hard-enforce, audit-settings-source (CVE-2025-59536), audit-trail (hash-chained forensics), plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, edit-streak-check, **intake-classifier (Python scoring + LLM fallback)**, **gateguard-pre-edit (require facts before edits)**, **gateguard-record-facts** |
-| **Rules** | 8 + 12 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics (path-scoped), superkit-integrity, go-conventions, go-safety, gsap-conventions, threejs-conventions, frontend-aesthetics-3d, frontend-design-aesthetics, typography-guidelines, color-and-contrast, spatial-and-layout, motion-and-animation, interaction-polish, ui-anti-patterns + **packages/codex/rules/default.rules** (Codex CLI approval DSL) |
+| **Hooks** | 42 shipped + 2 internal + Stop | 28 core (incl. intake-classifier.py, gateguard pair, edit-streak, audit-trail, audit-settings CVE-2025-59536, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, /dev hard-enforce trio) + 9 stack (Go error/context/safety/golangci-lint + format-on-edit per language) + 4 frontend-3d (gsap/r3f/tailwind/bundle-size) + 3 frontend-ui (banned-fonts/color/animation-easing) |
+| **Rules** | 19 shipped + 1 internal | 7 core (coding style, security path-scoped, git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics path-scoped) + superkit-integrity (internal) + 2 stack (go-conventions, go-safety) + 3 frontend-3d (gsap-conventions, threejs-conventions, frontend-aesthetics-3d) + 7 frontend-ui (frontend-design-aesthetics, typography-guidelines, color-and-contrast, spatial-and-layout, motion-and-animation, interaction-polish, ui-anti-patterns) + 1 Codex `default.rules` (approval policy DSL) |
 | **Skills** | 11 core + 6 frontend-3d + 1 frontend-ui + 3 GAN + 1 extra | project-architecture, project-scanner, writing-agents/commands/hooks/skills, **telegram-bot-builder**, **nextjs-supabase-auth**, **drizzle-orm-expert**, **ru-text** (Russian typography), **postgresql-optimization**, **redis-patterns** + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + impeccable-craft + gan-planner/generator/evaluator + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
@@ -386,10 +386,10 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model | Opus (per agent) | **gpt-5.5** (global config) |
-| Agents / Skills | 56 agents | 82 skills (9 commands + 36 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp + 3 GAN) |
+| Agents / Skills | 56 agents | 82 skills in `packages/codex/skills/` (9 commands + 36 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 82) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
-| Hooks | 28 + 16 stack + Stop | — (inline rules in AGENTS.md) |
-| Rules | 20 (8 core + 12 stack) | 1 file (`packages/codex/rules/default.rules` — approval policy DSL) |
+| Hooks | 42 (28 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + Stop | — (inline rules in AGENTS.md) |
+| Rules | 19 (7 core shipped + 2 stack + 3 frontend-3d + 7 frontend-ui) + 1 internal | 1 file (`packages/codex/rules/default.rules` — approval policy DSL) |
 | Knowledge Skills | 11 + 6 frontend-3d + 1 frontend-ui + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
