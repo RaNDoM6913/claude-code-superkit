@@ -4,6 +4,75 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+(Move to a versioned section on next release.)
+
+## [1.4.0] — 2026-05-14
+
+A substantial expansion across both Claude Code and Codex CLI surfaces. Three primary themes: **VKirill/codex-starter-kit adaptations** (3 cross-CLI specialist roles + Codex approval policy DSL + intake classifier), **TGApp / general production skills** (Telegram bots, Next.js + Supabase, Drizzle, Russian typography, PostgreSQL optimization, Redis patterns, behavioral nudge engine), **competitor patterns** (GateGuard hooks from everything-claude-code, expanded silent-failure-hunter), and a brand-new **GAN harness package** for adversarial verification of UI features.
+
+### Added — Agents (Core)
+
+- **`minimal-change-engineer`** — surgical implementation specialist. Value measured in lines NOT written. Refuses scope creep, prefers three similar lines over a premature abstraction. Use after a feature impl or during code review to prune what isn't strictly required.
+- **`reality-checker`** — evidence-based readiness assessor. Defaults to NEEDS WORK, refuses fantasy A+ ratings. Demands screenshots, logs, test outputs before declaring anything production-ready.
+- **`codebase-onboarding-engineer`** — first-pass analyst for unfamiliar codebases. Produces a concise 30-60 min brief covering tech stack, architecture layers, conventions, hot paths, and known constraints.
+- **`behavioral-nudge-engine`** — behavioral psychology for retention. Cadence personalization, cognitive load reduction, momentum building. Fogg Behavior Model + onboarding/re-engagement templates + streak mechanics. Useful for social products.
+
+### Added — GAN package (new, optional)
+
+- **`packages/gan/`** — three-agent adversarial verification loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by GAN pattern from `affaan-m/everything-claude-code` (Anthropic Hackathon Winner, 181k stars).
+- Two rubric files: `rubrics/ui-quality.md` (17 binary criteria) and `rubrics/functionality.md` (15 criteria for non-UI features). Auto-fails on `console.log`, "something went wrong", placeholder text, or no empty state.
+- Codex SKILL.md mirrors. **Optional install** via CLI prompt (Playwright ~150 MB).
+
+### Added — Hooks (Core)
+
+- **`intake-classifier.py`** — UserPromptSubmit hook. Deterministic scorer (0-15) on RU+EN keywords + optional `gpt-5.5-nano` LLM fallback when confidence < 0.78. Emits intent + flags (`should_edit`, `should_plan`, `should_use_task_ledger`, `subagents_authorized`). Fail-open. Opt-out: `CLAUDE_DISABLE_INTAKE_CLASSIFIER=1`.
+- **`gateguard-pre-edit.sh`** + **`gateguard-record-facts.sh`** — pair of hooks. Pre-edit emits a stderr nudge when no `Grep`/`Read` recorded in last 10 min. Read-only Bash exempt. Strict mode (`CLAUDE_GATEGUARD_STRICT=1`) blocks. Forces "establish facts before action."
+
+### Added — Codex Approval Rules (new)
+
+- **`packages/codex/rules/default.rules`** — Starlark-like DSL (~380 lines). Forbids `rm -rf /`, `sudo`, `dd`, `mkfs`, `shutdown`. Allows git/gh/npm/pnpm/yarn/pip/cargo/go/docker/kubectl reads. Prompts on force-push, hard reset, chmod, docker prune, kubectl delete. New "Approval Rules" section in `packages/codex/AGENTS.md`.
+
+### Added — Skills (dual-format, core + codex)
+
+- **`telegram-bot-builder`** — Telegraf, grammY, aiogram patterns. Bot architecture, inline keyboards, monetization (ads/per-use/freemium/subscription), error handling, webhook vs long polling tradeoff.
+- **`nextjs-supabase-auth`** — Next.js 14+ App Router. `@supabase/ssr` browser/server/middleware setup, OAuth callback route, Server Action login, RLS policies, common production issues. Replaces a thin source skill with substantive content.
+- **`drizzle-orm-expert`** — TypeScript-first ORM. SQL-like + relational APIs, schema/migrations/transactions, adapter table for Neon/Turso/PlanetScale, performance patterns.
+- **`ru-text`** — Russian typography. Quotes (« »), em dash (—), en dash (–), NBSP, ellipsis, digit groups, decimal comma, № sign, ₽ symbol. 14 stop-words. UX writing rules for microcopy.
+- **`postgresql-optimization`** — 7-phase workflow (assess → EXPLAIN → index → query → config → maintenance → monitor). EXPLAIN node interpretation, index selection guide, config cheatsheet, anti-patterns.
+- **`redis-patterns`** — Cache-aside, pub/sub, BLPOP wake queue, data structures, distributed locks with Lua, pipeline vs multi/exec, TTL strategy, eviction policies.
+
+### Changed — Agents
+
+- **`silent-failure-hunter`** expanded 109 → 250 lines. 6-category taxonomy (A: empty handlers, B: promise suppression, C: fallback masking, D: log-and-forget, E: generic catch-all, F: linter/type suppression) + per-language BEFORE/AFTER fix examples (TS, Python, Go, JS floating promise, Bash) + acceptable-silence disclosure table + severity rules tied to data/auth/payment paths.
+
+### Added — Go References (5 new files: 24 → 29)
+
+- `di-frameworks.md` — uber-fx, uber-dig, google-wire comparison table + choice matrix
+- `graphql-patterns.md` — gqlgen schema-first workflow, N+1 prevention via DataLoader
+- `module-management.md` — go.mod/go.sum/workspaces/replace, govulncheck, CI checklist
+- `stay-updated.md` — tracking Go releases (1.21/1.22/1.23 highlights), modernize tool
+- `standard-stdlib-now.md` — what stdlib now replaces (slices, maps, errors, log/slog, math/rand/v2, net/http mux)
+
+### Counts after v1.4.0
+
+| Component | Before (1.3.11) | After (1.4.0) | Δ |
+|-----------|------|------|------|
+| Core agents | 27 | 31 | +4 |
+| Core skills | 5 | 11 | +6 |
+| Core hooks | 25 | 28 | +3 |
+| Codex skills | 72 | 82 | +10 |
+| Codex rules | 0 | 1 file | +1 |
+| Go references | 24 | 29 | +5 |
+| Packages | 7 | 8 (+gan) | +1 |
+| Total agents | 49 | 56 | +7 |
+
+### Source attribution
+
+- 3 cross-CLI roles, `default.rules`, `intake-classifier`, TGApp skills, `behavioral-nudge-engine` — adapted from [VKirill/codex-starter-kit](https://github.com/VKirill/codex-starter-kit) (MIT). Compacted from VKirill's 800-1000 line TOMLs to our ~300-500 line markdown standard.
+- GateGuard hooks, GAN harness, silent-failure-hunter expansion — inspired by [affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code) (181k stars).
+- Go references — drawn from [samber/cc-skills-golang](https://github.com/samber/cc-skills-golang) (Apache 2.0).
+- Russian typography — based on Arseniy Kamyshev's ru-text reference (https://ru-text.org).
+
 ## [1.3.11] — 2026-05-06
 
 ### Changed (Codex layer modernization)

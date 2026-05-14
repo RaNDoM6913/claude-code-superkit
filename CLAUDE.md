@@ -7,18 +7,18 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 ```
 packages/
   core/                     # Generic components (any project)
-    agents/                 # 27 agents (all opus)
+    agents/                 # 31 agents (all opus) · incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
     commands/               # 15 commands (+ 1 frontend-3d = 16 total)
-    hooks/                  # 23 hooks (+2 superkit-internal) = 25 total · incl. /dev trio, audit-settings-source, audit-trail, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, edit-streak-check
+    hooks/                  # 28 hooks (+2 superkit-internal) = 30 total · incl. /dev trio, audit-settings-source, audit-trail, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, edit-streak-check, intake-classifier (Python), gateguard-pre-edit, gateguard-record-facts
     helpers/                # 1 helper (statusline.cjs)
-    rules/                  # 7 rules (+1 superkit-internal)
-    skills/                 # 5 skills
+    rules/                  # 8 rules (+1 superkit-internal)
+    skills/                 # 11 skills · incl. v1.4.0: telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns
     settings.json           # Hook wiring + statusLine
     CLAUDE.md               # Template for users
     docs-templates/         # Architecture doc templates
   stack-agents/             # Language-specific reviewers
     go/                     # go-reviewer + 5 specialized (error, concurrency, performance, modernizer, observability)
-      references/           # 24 Go knowledge documents
+      references/           # 29 Go knowledge documents (+5 in v1.4.0: di-frameworks, graphql-patterns, module-management, stay-updated, standard-stdlib-now)
     typescript/             # ts-reviewer
     python/                 # py-reviewer
     rust/                   # rs-reviewer
@@ -43,15 +43,21 @@ packages/
     rules/                  # 7 rules (frontend-design-aesthetics, typography, color, spatial, motion, interaction, anti-patterns) — all applyWhenPaths-scoped
     NOTICE.md               # Apache-2.0 attribution for pbakaus/impeccable material
     README.md               # Package documentation
+  gan/                      # NEW v1.4.0 — adversarial verification harness (optional, Playwright required)
+    agents/                 # 3 agents (gan-planner, gan-generator, gan-evaluator)
+    skills/                 # 3 Codex SKILL.md mirrors
+    rubrics/                # 2 rubric files (ui-quality, functionality)
+    README.md
   extras/                   # Optional components (require specific setup)
     bot-reviewer.md         # Telegram/Discord/Slack bot review
     design-system-reviewer.md
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 72 skills (9 commands + 32 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge)
+    skills/                 # 82 skills (added: 3 cross-CLI roles, 6 TGApp skills, behavioral-nudge, 3 GAN, silent-failure-hunter expansion)
+    rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
     config.toml             # gpt-5.5, xhigh
-    AGENTS.md               # Template
+    AGENTS.md               # Template (incl. new "Approval Rules" section)
     INSTALL.md              # Guide
   showcase/                 # Production example (28 agents, 17 commands, 13 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
@@ -87,14 +93,16 @@ VERSION                     # 1.3.11
 
 ## Current Counts
 
-| Component | Core | Stack | Frontend-3D | Frontend-UI | Extras | Showcase | Codex |
-|-----------|------|-------|-------------|-------------|--------|----------|-------|
-| Agents | 27 | 9 | 4 | 6 | 3 | 28 | — |
-| Skills | 5 | — | 6 | 1 | 1 | 11 | 72 |
-| Commands | 15 | — | 1 | — | — | 17 | 9 |
-| Hooks | 23 (+2 internal) | 9 | 4 | 3 | — | 13 | — |
-| Helpers | 1 | — | — | — | — | — | — |
-| Rules | 7 (+1 internal) | 2 | 3 | 7 | — | 6 | — |
+| Component | Core | Stack | Frontend-3D | Frontend-UI | GAN | Extras | Showcase | Codex |
+|-----------|------|-------|-------------|-------------|-----|--------|----------|-------|
+| Agents | 31 | 9 | 4 | 6 | 3 | 3 | 28 | — |
+| Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 82 |
+| Commands | 15 | — | 1 | — | — | — | 17 | 9 |
+| Hooks | 28 (+2 internal) | 9 | 4 | 3 | — | — | 13 | — |
+| Helpers | 1 | — | — | — | — | — | — | — |
+| Rules | 8 (+1 internal) | 2 | 3 | 7 | — | — | 6 | 1 file |
+
+**Total agents:** 56 (was 49 in v1.3.11)
 
 ## Conventions
 

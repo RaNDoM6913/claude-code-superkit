@@ -77,9 +77,14 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 | `migrate` | Apply or rollback database migrations |
 | `benchmark` | Run Go benchmarks with benchstat comparison |
 
-### 32 Agent Skills (auto-dispatched by orchestrators)
+### 36 Agent Skills (auto-dispatched by orchestrators)
 
-These are converted from core + extras agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack:
+These are converted from core + extras agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack. **v1.4.0 added 4 specialist roles:**
+
+- `minimal-change-engineer` — surgical implementation, refuses scope creep
+- `reality-checker` — defaults to NEEDS WORK, demands evidence
+- `codebase-onboarding-engineer` — 30-60 min onboarding brief
+- `behavioral-nudge-engine` — retention psychology, habit loops
 
 | Skill | Category |
 |-------|----------|

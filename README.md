@@ -4,7 +4,7 @@
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/49_agents-Opus_4.7-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Agents](https://img.shields.io/badge/56_agents-Opus_4.7-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.5-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -60,25 +60,30 @@ Keyword or AI semantic search via API.
 
 | Component | Count | Description |
 |-----------|-------|-------------|
-| **Core Agents** | 27 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, evaluation, AI slop cleanup, critic, visual review, **comment-rot analyzer**, **silent-failure hunter** — all on **Opus** |
+| **Core Agents** | 31 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, evaluation, AI slop cleanup, critic, visual review, comment-rot analyzer, silent-failure-hunter, **minimal-change-engineer**, **reality-checker**, **codebase-onboarding-engineer**, **behavioral-nudge-engine** — all on **Opus** |
 | **Stack Agents** | 19 | Go (6: reviewer, error, concurrency, performance, modernizer, observability), TypeScript, Python, Rust, Frontend-3D (4: presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer), **Frontend-UI (6: ui-reviewer umbrella + typography / color / motion / interaction / design-critic)** |
+| **GAN Agents** | 3 | **gan-planner**, **gan-generator**, **gan-evaluator** — adversarial verification loop (optional package, requires Playwright) |
 | **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
-| **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, **`/capture-screen`** |
-| **Hooks** | 23 + 16 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, **gsap-pattern-check, r3f-color-check, tailwind-version-guard, bundle-size-warn**, **ui-banned-fonts-check, ui-color-check, ui-animation-easing-check**, **`/dev` hard-enforce (edit-counter + marker-set + required-on-commit)**, **audit-settings-source (CVE-2025-59536)**, **audit-trail (hash-chained forensics)**, **plan-completion-gate**, **user-intent-detect**, **subagent-stop-validate**, **compact-state-inject**, **edit-streak-check** |
-| **Rules** | 7 + 12 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics (path-scoped), go-conventions, go-safety, **gsap-conventions**, **threejs-conventions**, **frontend-aesthetics-3d**, **frontend-design-aesthetics, typography-guidelines, color-and-contrast, spatial-and-layout, motion-and-animation, interaction-polish, ui-anti-patterns** |
-| **Skills** | 5 + 6 frontend-3d + 1 frontend-ui + 1 extra | Project architecture, project-scanner, writing-agents guide, writing-commands guide, writing-hooks guide + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + **impeccable-craft** + SkillsMP search |
+| **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, `/capture-screen` |
+| **Hooks** | 28 + 16 stack + Stop | Git safety, doc-check-on-commit, config-protection, loop-guard, context-monitor, security-patterns, evolve-check, format-on-edit, typecheck, session continuity, Go error/context/safety/golangci-lint, gsap/r3f/tailwind/bundle-size, ui-banned-fonts/color/animation-easing, `/dev` hard-enforce, audit-settings-source (CVE-2025-59536), audit-trail (hash-chained forensics), plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, edit-streak-check, **intake-classifier (Python scoring + LLM fallback)**, **gateguard-pre-edit (require facts before edits)**, **gateguard-record-facts** |
+| **Rules** | 8 + 12 stack | Coding style, security (path-scoped), git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics (path-scoped), superkit-integrity, go-conventions, go-safety, gsap-conventions, threejs-conventions, frontend-aesthetics-3d, frontend-design-aesthetics, typography-guidelines, color-and-contrast, spatial-and-layout, motion-and-animation, interaction-polish, ui-anti-patterns + **packages/codex/rules/default.rules** (Codex CLI approval DSL) |
+| **Skills** | 11 core + 6 frontend-3d + 1 frontend-ui + 3 GAN + 1 extra | project-architecture, project-scanner, writing-agents/commands/hooks/skills, **telegram-bot-builder**, **nextjs-supabase-auth**, **drizzle-orm-expert**, **ru-text** (Russian typography), **postgresql-optimization**, **redis-patterns** + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + impeccable-craft + gan-planner/generator/evaluator + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.3.11)
+## 🆕 What's New (v1.4.0)
 
-- 🤖 **Codex on `gpt-5.5` + `xhigh` reasoning** — `config.toml`, installer messages, and all Codex docs updated. Latest reasoning level for maximum review accuracy.
-- ✍️ **Codex-native authoring guides rewritten** — `writing-agents` and `writing-commands` skills no longer reference Claude-only fields (`model:`, `allowed-tools:`, `Agent`, `TodoWrite`); they now describe `spawn_agent` / `wait_agent` / `update_plan` / `apply_patch` / `exec_command` / `rg` properly.
-- 🧹 **All 32 Codex skills purged of Claude-only markers** — no leftover `Co-Authored-By: Claude`, no Claude-tool references in skill bodies, missing `user-invocable: false` added to 6 frontend-3d knowledge skills, `docs-reviewer` now scans `.codex/skills/*/SKILL.md` instead of `.claude/agents`.
-- 🛠️ **`tools/convert-agents-to-codex-skills.sh` got `normalize_body_for_codex`** — future Claude→Codex conversions auto-strip Claude-only frontmatter and rewrite tool names so the Codex layer stays clean by construction.
-- ✅ **New regression suite `test/codex.test.js`** — 5 invariants guard the Codex package (model strings, banned markers, Codex-native tool mentions). `node --test` 9/9 pass, full `npm test` 28/28 pass.
+- 🧠 **3 cross-CLI specialist roles** — `minimal-change-engineer` (lines NOT written), `reality-checker` (defaults to NEEDS WORK, no fantasy A+), `codebase-onboarding-engineer` (30-60 min brief for unfamiliar repos). All on Opus + Codex SKILL.md mirrors.
+- 🎯 **GAN harness package** (`packages/gan/`) — three-agent adversarial loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by `affaan-m/everything-claude-code` (181k stars). Optional install — requires Playwright.
+- 🤖 **Intake classifier hook** (Python) — scoring 0-15 on RU+EN action verbs, optional `gpt-5.5-nano` LLM fallback when confidence < 0.78. Emits intent + flags (should_edit, should_plan, subagents_authorized).
+- 🛡️ **GateGuard hooks** — require `Grep`/`Read` before `Edit`/`Write`/`Bash` (advisory by default, strict mode opt-in). Forces "establish facts before action" discipline.
+- 🔍 **silent-failure-hunter expanded** — 6 categories (empty handlers / promise suppression / fallback mask / log-and-forget / catch-all / linter suppression) + per-language fix examples (TS, Python, Go, Bash).
+- 🎨 **behavioral-nudge-engine agent** — retention psychology, habit loops, notification cadence design. Fogg Behavior Model + onboarding/re-engagement templates. Useful for social apps.
+- 📚 **TGApp / general skills bundle** — `telegram-bot-builder` (Telegraf/grammY/aiogram), `nextjs-supabase-auth` (App Router + RLS), `drizzle-orm-expert`, `ru-text` (Russian typography: «», NBSP, тире, ₽), `postgresql-optimization`, `redis-patterns`.
+- 🔒 **Codex `default.rules` DSL** — Starlark-like approval policy for Codex CLI (forbid `rm -rf /`, `sudo`, `dd`; allow `git`, `npm`, `systemctl restart`, `nginx reload`; prompt on force-push, hard reset). Adapted from VKirill/codex-starter-kit.
+- 🐹 **Go references +5** — `di-frameworks.md` (uber-fx / dig / wire comparison), `graphql-patterns.md` (gqlgen), `module-management.md`, `stay-updated.md` (Go release cadence), `standard-stdlib-now.md` (what stdlib now replaces). 24 → 29 files.
 
-See [full changelog](CHANGELOG.md) for v1.0.0 → v1.3.11 history.
+Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous: [v1.3.11](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.3.11).
 
 ## 🔄 How `/dev` Works
 
