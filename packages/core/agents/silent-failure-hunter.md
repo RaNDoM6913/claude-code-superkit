@@ -1,7 +1,7 @@
 ---
 name: silent-failure-hunter
 description: Detects swallowed errors, empty catch blocks, log-and-forget patterns, and fallback masks that hide failures. Zero tolerance for silent failures. Severity-graded output with concrete fixes per language
-tokens: 1280
+tokens: 2218
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

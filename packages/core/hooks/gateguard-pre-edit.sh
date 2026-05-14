@@ -44,17 +44,25 @@ esac
 if [ "$TOOL_NAME" = "Bash" ]; then
   CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)
   case "$CMD" in
-    "ls "*|"ls"|"pwd"|"cat "*|"head "*|"tail "*|"less "*|"wc "*|"file "*)
+    "ls "*|"ls"|"pwd"|"cat "*|"head "*|"tail "*|"less "*|"more "*|"wc "*|"file "*)
       exit 0 ;;
-    "grep "*|"rg "*|"find "*|"fd "*|"which "*|"type "*|"command "*)
+    "grep "*|"rg "*|"find "*|"fd "*|"which "*|"type "*|"command "*|"locate "*)
       exit 0 ;;
     "git status"*|"git diff"*|"git log"*|"git show"*|"git blame"*|"git branch"*)
       exit 0 ;;
-    "git rev-parse"*|"git config "*|"git remote "*|"git ls-files"*)
+    "git rev-parse"*|"git config "*|"git remote "*|"git ls-files"*|"git grep"*)
       exit 0 ;;
-    "echo "*|"printf "*|"date"*|"whoami"*|"hostname"*|"env"|"uname"*)
+    "git stash list"*|"git reflog"*|"git describe"*|"git tag --list"*|"git tag -l"*)
+      exit 0 ;;
+    "echo "*|"printf "*|"date"*|"whoami"*|"hostname"*|"env"|"uname"*|"id"|"id "*)
       exit 0 ;;
     "ps "*|"top"|"htop"|"df "*|"du "*|"free"*|"jq "*|"yq "*)
+      exit 0 ;;
+    "sed -n "*|"awk "*|"nl "*|"tree "*|"tree"|"cut "*|"sort "*|"uniq "*)
+      exit 0 ;;
+    "stat "*|"realpath "*|"readlink "*|"basename "*|"dirname "*)
+      exit 0 ;;
+    "node --version"*|"python3 --version"*|"npm view"*|"npm list"*|"npm ls"*)
       exit 0 ;;
   esac
 fi
@@ -73,8 +81,17 @@ if [ -f "$STATE_FILE" ]; then
   last_facts=${last_facts:-0}
   counter_since_facts=${counter_since_facts:-999}
 
+  # Defensive — non-numeric values reset to safe defaults.
+  case "$last_facts" in (*[!0-9]*|"") last_facts=0 ;; esac
+  case "$counter_since_facts" in (*[!0-9]*|"") counter_since_facts=999 ;; esac
+
+  # Clock skew / future timestamps — treat as fresh-start, not as "facts
+  # are valid forever".
+  if [ "$last_facts" -gt "$now" ]; then
+    last_facts=0
+    counter_since_facts=999
   # Expire stale state — if last Grep/Read was too long ago, treat as never.
-  if [ "$((now - last_facts))" -gt "$WINDOW_SECONDS" ]; then
+  elif [ "$((now - last_facts))" -gt "$WINDOW_SECONDS" ]; then
     last_facts=0
     counter_since_facts=999
   fi
@@ -83,7 +100,13 @@ fi
 # Increment counter for this attempted action (we're in PreToolUse for
 # Edit/Write/Bash). If a recent Grep/Read exists, we're good.
 counter_since_facts=$((counter_since_facts + 1))
-echo "$last_facts $counter_since_facts" > "$STATE_FILE"
+
+# Atomic write: build temp then mv (single rename = atomic on POSIX).
+# Prevents concurrent hook invocations from interleaving bytes.
+TMP_STATE="${STATE_FILE}.$$.$now"
+echo "$last_facts $counter_since_facts" > "$TMP_STATE" 2>/dev/null && mv -f "$TMP_STATE" "$STATE_FILE" 2>/dev/null
+# If state write failed (full disk, permissions) — proceed anyway.
+# Hook is fail-open by design.
 
 # Threshold: if no Grep/Read recorded at all, or counter is too high,
 # emit a warning.

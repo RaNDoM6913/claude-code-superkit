@@ -30,6 +30,7 @@ esac
 STATE_FILE="${CLAUDE_GATEGUARD_STATE:-${TMPDIR:-/tmp}/superkit-gateguard-state-${PPID}}"
 now=$(date +%s)
 
-# Reset counter on facts-gathering tool use
-echo "$now 0" > "$STATE_FILE"
+# Reset counter on facts-gathering tool use — atomic write via temp + mv.
+TMP_STATE="${STATE_FILE}.$$.$now"
+echo "$now 0" > "$TMP_STATE" 2>/dev/null && mv -f "$TMP_STATE" "$STATE_FILE" 2>/dev/null
 exit 0
