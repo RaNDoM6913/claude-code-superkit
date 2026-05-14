@@ -1,0 +1,436 @@
+# default.rules — Codex CLI approval policy for claude-code-superkit
+#
+# DSL format (adapted from VKirill/codex-starter-kit, MIT):
+#   prefix_rule(pattern=[...], decision="allow|forbidden|prompt", justification="...", match=[...])
+#
+# Decisions:
+#   allow      — Codex executes silently
+#   prompt     — Codex asks user before executing
+#   forbidden  — Codex refuses to execute
+#
+# Pattern matching is a prefix tuple match against the command argv.
+# More-specific patterns take precedence over more-general ones.
+#
+# Philosophy: maximize developer flow for safe commands; require approval
+# for state-changing operations; forbid destructive system calls.
+
+# =============================================================================
+# DESTRUCTIVE — never allowed
+# =============================================================================
+
+prefix_rule(
+    pattern = ["rm", "-rf", "/"],
+    decision = "forbidden",
+    justification = "Recursive deletion of root filesystem is irrecoverable.",
+)
+
+prefix_rule(
+    pattern = ["rm", "-rf", "/*"],
+    decision = "forbidden",
+    justification = "Recursive deletion of root filesystem is irrecoverable.",
+)
+
+prefix_rule(
+    pattern = ["sudo"],
+    decision = "forbidden",
+    justification = "Privilege escalation is blocked. Ask the user for an explicit one-off elevated command if needed.",
+)
+
+prefix_rule(
+    pattern = ["dd", "if="],
+    decision = "forbidden",
+    justification = "Raw disk writes can destroy data. Use a safer file-level tool.",
+    match = ["dd if=/dev/zero of=/dev/sda", "dd if=image.iso of=/dev/disk2"],
+)
+
+prefix_rule(
+    pattern = ["mkfs"],
+    decision = "forbidden",
+    justification = "Formatting filesystems must be performed manually by the user.",
+)
+
+prefix_rule(
+    pattern = ["wipefs"],
+    decision = "forbidden",
+    justification = "Filesystem signature wiping must be performed manually by the user.",
+)
+
+prefix_rule(
+    pattern = ["shutdown"],
+    decision = "forbidden",
+    justification = "System shutdown must be performed manually by the user.",
+)
+
+prefix_rule(
+    pattern = ["reboot"],
+    decision = "forbidden",
+    justification = "System reboot must be performed manually by the user.",
+)
+
+prefix_rule(
+    pattern = ["halt"],
+    decision = "forbidden",
+    justification = "System halt must be performed manually by the user.",
+)
+
+prefix_rule(
+    pattern = ["shred"],
+    decision = "forbidden",
+    justification = "Secure deletion is irreversible. Use trash or ask for explicit approval.",
+)
+
+# =============================================================================
+# PERMISSION / OWNERSHIP — always ask
+# =============================================================================
+
+prefix_rule(
+    pattern = ["chmod"],
+    decision = "prompt",
+    justification = "Permission changes can expose secrets or break apps. Ask for exact target + mode.",
+    match = ["chmod -R 777 .", "chmod 600 .env"],
+)
+
+prefix_rule(
+    pattern = ["chown"],
+    decision = "prompt",
+    justification = "Ownership changes can break workspace permissions.",
+)
+
+# =============================================================================
+# RM — case-by-case (root forbidden above, named paths require prompt)
+# =============================================================================
+
+prefix_rule(
+    pattern = ["rm"],
+    decision = "prompt",
+    justification = "Confirm exact target before deletion. Prefer trash where available.",
+    match = ["rm node_modules", "rm -rf .next/cache"],
+)
+
+# =============================================================================
+# GIT — most allowed; force-push and reset --hard require approval upstream
+# =============================================================================
+
+prefix_rule(pattern=["git", "status"], decision="allow")
+prefix_rule(pattern=["git", "log"], decision="allow")
+prefix_rule(pattern=["git", "diff"], decision="allow")
+prefix_rule(pattern=["git", "show"], decision="allow")
+prefix_rule(pattern=["git", "blame"], decision="allow")
+prefix_rule(pattern=["git", "branch"], decision="allow")
+prefix_rule(pattern=["git", "switch"], decision="allow")
+prefix_rule(pattern=["git", "checkout"], decision="allow")
+prefix_rule(pattern=["git", "add"], decision="allow")
+prefix_rule(pattern=["git", "commit"], decision="allow")
+prefix_rule(pattern=["git", "fetch"], decision="allow")
+prefix_rule(pattern=["git", "pull"], decision="allow")
+prefix_rule(pattern=["git", "merge"], decision="allow")
+prefix_rule(pattern=["git", "rebase"], decision="allow")
+prefix_rule(pattern=["git", "stash"], decision="allow")
+prefix_rule(pattern=["git", "tag"], decision="allow")
+prefix_rule(pattern=["git", "rev-parse"], decision="allow")
+prefix_rule(pattern=["git", "config"], decision="allow")
+prefix_rule(pattern=["git", "remote"], decision="allow")
+
+prefix_rule(
+    pattern = ["git", "push", "--force"],
+    decision = "prompt",
+    justification = "Force-push rewrites remote history. Confirm branch and target.",
+)
+prefix_rule(
+    pattern = ["git", "push", "-f"],
+    decision = "prompt",
+    justification = "Force-push rewrites remote history. Confirm branch and target.",
+)
+prefix_rule(pattern=["git", "push"], decision="allow")
+
+prefix_rule(
+    pattern = ["git", "reset", "--hard"],
+    decision = "prompt",
+    justification = "Hard reset discards uncommitted work. Confirm target ref.",
+)
+prefix_rule(pattern=["git", "reset"], decision="allow")
+
+prefix_rule(
+    pattern = ["git", "clean", "-fdx"],
+    decision = "prompt",
+    justification = "git clean -fdx removes untracked files and ignored dirs (incl. node_modules). Confirm.",
+)
+prefix_rule(
+    pattern = ["git", "clean", "-fd"],
+    decision = "prompt",
+    justification = "git clean -fd removes untracked files. Confirm.",
+)
+
+# =============================================================================
+# GH CLI — most allowed
+# =============================================================================
+
+prefix_rule(pattern=["gh", "pr"], decision="allow")
+prefix_rule(pattern=["gh", "issue"], decision="allow")
+prefix_rule(pattern=["gh", "repo", "view"], decision="allow")
+prefix_rule(pattern=["gh", "repo", "list"], decision="allow")
+prefix_rule(pattern=["gh", "release"], decision="allow")
+prefix_rule(pattern=["gh", "workflow"], decision="allow")
+prefix_rule(pattern=["gh", "run"], decision="allow")
+prefix_rule(pattern=["gh", "api"], decision="allow")
+prefix_rule(pattern=["gh", "auth", "status"], decision="allow")
+
+prefix_rule(
+    pattern = ["gh", "repo", "delete"],
+    decision = "forbidden",
+    justification = "Repository deletion is permanent. Must be done by the user manually.",
+)
+
+# =============================================================================
+# NPM / PNPM / YARN — installs and reads allowed, publish/unpublish prompt
+# =============================================================================
+
+prefix_rule(pattern=["npm", "view"], decision="allow")
+prefix_rule(pattern=["npm", "info"], decision="allow")
+prefix_rule(pattern=["npm", "search"], decision="allow")
+prefix_rule(pattern=["npm", "ping"], decision="allow")
+prefix_rule(pattern=["npm", "config", "get"], decision="allow")
+prefix_rule(pattern=["npm", "list"], decision="allow")
+prefix_rule(pattern=["npm", "ls"], decision="allow")
+prefix_rule(pattern=["npm", "install"], decision="allow")
+prefix_rule(pattern=["npm", "ci"], decision="allow")
+prefix_rule(pattern=["npm", "run"], decision="allow")
+prefix_rule(pattern=["npm", "test"], decision="allow")
+prefix_rule(pattern=["npm", "audit"], decision="allow")
+prefix_rule(pattern=["npm", "outdated"], decision="allow")
+
+prefix_rule(
+    pattern = ["npm", "publish"],
+    decision = "prompt",
+    justification = "Publishing pushes a package to the registry. Confirm version, scope, and tag.",
+)
+prefix_rule(
+    pattern = ["npm", "unpublish"],
+    decision = "prompt",
+    justification = "Unpublishing is mostly irreversible and breaks dependents.",
+)
+
+prefix_rule(pattern=["pnpm"], decision="allow")
+prefix_rule(pattern=["yarn"], decision="allow")
+prefix_rule(pattern=["bun"], decision="allow")
+prefix_rule(pattern=["npx"], decision="allow")
+
+# =============================================================================
+# PYTHON / PIP / UV
+# =============================================================================
+
+prefix_rule(pattern=["python"], decision="allow")
+prefix_rule(pattern=["python3"], decision="allow")
+prefix_rule(pattern=["pip"], decision="allow")
+prefix_rule(pattern=["pip3"], decision="allow")
+prefix_rule(pattern=["uv"], decision="allow")
+prefix_rule(pattern=["poetry"], decision="allow")
+prefix_rule(pattern=["pipx"], decision="allow")
+
+# =============================================================================
+# GO / RUST / OTHER COMPILERS
+# =============================================================================
+
+prefix_rule(pattern=["go"], decision="allow")
+prefix_rule(pattern=["cargo"], decision="allow")
+prefix_rule(pattern=["rustc"], decision="allow")
+prefix_rule(pattern=["javac"], decision="allow")
+prefix_rule(pattern=["mvn"], decision="allow")
+prefix_rule(pattern=["gradle"], decision="allow")
+prefix_rule(pattern=["./gradlew"], decision="allow")
+
+# =============================================================================
+# DOCKER / KUBERNETES — read allowed, destructive prompt
+# =============================================================================
+
+prefix_rule(pattern=["docker", "ps"], decision="allow")
+prefix_rule(pattern=["docker", "logs"], decision="allow")
+prefix_rule(pattern=["docker", "inspect"], decision="allow")
+prefix_rule(pattern=["docker", "images"], decision="allow")
+prefix_rule(pattern=["docker", "build"], decision="allow")
+prefix_rule(pattern=["docker", "run"], decision="allow")
+prefix_rule(pattern=["docker", "compose"], decision="allow")
+prefix_rule(pattern=["docker-compose"], decision="allow")
+
+prefix_rule(
+    pattern = ["docker", "system", "prune"],
+    decision = "prompt",
+    justification = "Prune deletes containers, images, networks, and build cache. Confirm scope.",
+)
+prefix_rule(
+    pattern = ["docker", "volume", "prune"],
+    decision = "prompt",
+    justification = "Volume prune deletes anonymous volumes — possibly with data.",
+)
+
+prefix_rule(pattern=["kubectl", "get"], decision="allow")
+prefix_rule(pattern=["kubectl", "describe"], decision="allow")
+prefix_rule(pattern=["kubectl", "logs"], decision="allow")
+prefix_rule(pattern=["kubectl", "exec"], decision="allow")
+prefix_rule(pattern=["kubectl", "apply"], decision="allow")
+prefix_rule(pattern=["kubectl", "rollout"], decision="allow")
+
+prefix_rule(
+    pattern = ["kubectl", "delete"],
+    decision = "prompt",
+    justification = "kubectl delete removes cluster resources. Confirm namespace + resource.",
+)
+
+# =============================================================================
+# SYSTEMD / SERVICE MANAGERS — restart allowed, enable/disable prompt
+# =============================================================================
+
+prefix_rule(pattern=["systemctl", "status"], decision="allow")
+prefix_rule(pattern=["systemctl", "start"], decision="allow")
+prefix_rule(pattern=["systemctl", "stop"], decision="allow")
+prefix_rule(pattern=["systemctl", "restart"], decision="allow")
+prefix_rule(pattern=["systemctl", "reload"], decision="allow")
+
+prefix_rule(
+    pattern = ["systemctl", "enable"],
+    decision = "prompt",
+    justification = "Changing boot-time service state affects the host.",
+)
+prefix_rule(
+    pattern = ["systemctl", "disable"],
+    decision = "prompt",
+    justification = "Changing boot-time service state affects the host.",
+)
+prefix_rule(
+    pattern = ["systemctl", "mask"],
+    decision = "prompt",
+    justification = "Masking services can break host behavior.",
+)
+
+prefix_rule(pattern=["pm2", "list"], decision="allow")
+prefix_rule(pattern=["pm2", "logs"], decision="allow")
+prefix_rule(pattern=["pm2", "describe"], decision="allow")
+prefix_rule(pattern=["pm2", "start"], decision="allow")
+prefix_rule(pattern=["pm2", "restart"], decision="allow")
+prefix_rule(pattern=["pm2", "reload"], decision="allow")
+prefix_rule(pattern=["pm2", "stop"], decision="allow")
+prefix_rule(
+    pattern = ["pm2", "delete"],
+    decision = "prompt",
+    justification = "pm2 delete removes a process from the manager — confirm name.",
+)
+
+prefix_rule(pattern=["supervisorctl", "status"], decision="allow")
+prefix_rule(pattern=["supervisorctl", "restart"], decision="allow")
+prefix_rule(pattern=["supervisorctl", "start"], decision="allow")
+prefix_rule(pattern=["supervisorctl", "stop"], decision="allow")
+
+# =============================================================================
+# WEB SERVERS — config check + reload allowed; full restart prompt
+# =============================================================================
+
+prefix_rule(pattern=["nginx", "-t"], decision="allow")
+prefix_rule(pattern=["nginx", "-s", "reload"], decision="allow")
+prefix_rule(pattern=["caddy", "validate"], decision="allow")
+prefix_rule(pattern=["caddy", "reload"], decision="allow")
+prefix_rule(pattern=["apachectl", "configtest"], decision="allow")
+prefix_rule(pattern=["apachectl", "graceful"], decision="allow")
+
+# =============================================================================
+# OBSERVABILITY / SHELL UTILS — universally safe reads
+# =============================================================================
+
+prefix_rule(pattern=["ls"], decision="allow")
+prefix_rule(pattern=["pwd"], decision="allow")
+prefix_rule(pattern=["cat"], decision="allow")
+prefix_rule(pattern=["head"], decision="allow")
+prefix_rule(pattern=["tail"], decision="allow")
+prefix_rule(pattern=["less"], decision="allow")
+prefix_rule(pattern=["wc"], decision="allow")
+prefix_rule(pattern=["grep"], decision="allow")
+prefix_rule(pattern=["rg"], decision="allow")
+prefix_rule(pattern=["find"], decision="allow")
+prefix_rule(pattern=["fd"], decision="allow")
+prefix_rule(pattern=["which"], decision="allow")
+prefix_rule(pattern=["whoami"], decision="allow")
+prefix_rule(pattern=["hostname"], decision="allow")
+prefix_rule(pattern=["env"], decision="allow")
+prefix_rule(pattern=["date"], decision="allow")
+prefix_rule(pattern=["uname"], decision="allow")
+prefix_rule(pattern=["ps"], decision="allow")
+prefix_rule(pattern=["top"], decision="allow")
+prefix_rule(pattern=["htop"], decision="allow")
+prefix_rule(pattern=["df"], decision="allow")
+prefix_rule(pattern=["du"], decision="allow")
+prefix_rule(pattern=["free"], decision="allow")
+prefix_rule(pattern=["jq"], decision="allow")
+prefix_rule(pattern=["yq"], decision="allow")
+prefix_rule(pattern=["sed"], decision="allow")
+prefix_rule(pattern=["awk"], decision="allow")
+prefix_rule(pattern=["echo"], decision="allow")
+prefix_rule(pattern=["printf"], decision="allow")
+prefix_rule(pattern=["curl"], decision="allow")
+prefix_rule(pattern=["wget"], decision="allow")
+prefix_rule(pattern=["http"], decision="allow")
+
+# Pipe to bash/sh from curl/wget — always forbidden
+prefix_rule(
+    pattern = ["curl", "|", "bash"],
+    decision = "forbidden",
+    justification = "Piping remote scripts to a shell is unsafe.",
+)
+prefix_rule(
+    pattern = ["wget", "|", "bash"],
+    decision = "forbidden",
+    justification = "Piping remote scripts to a shell is unsafe.",
+)
+
+# =============================================================================
+# DATABASE CLIENTS — read allowed, destructive prompt
+# =============================================================================
+
+prefix_rule(pattern=["psql"], decision="allow")
+prefix_rule(pattern=["mysql"], decision="allow")
+prefix_rule(pattern=["redis-cli"], decision="allow")
+prefix_rule(pattern=["sqlite3"], decision="allow")
+prefix_rule(pattern=["mongosh"], decision="allow")
+
+prefix_rule(
+    pattern = ["pg_dump"],
+    decision = "allow",
+    justification = "Read-only backup operation.",
+)
+prefix_rule(
+    pattern = ["dropdb"],
+    decision = "prompt",
+    justification = "dropdb removes a database. Confirm name.",
+)
+prefix_rule(
+    pattern = ["redis-cli", "FLUSHDB"],
+    decision = "prompt",
+    justification = "FLUSHDB wipes the current Redis DB.",
+)
+prefix_rule(
+    pattern = ["redis-cli", "FLUSHALL"],
+    decision = "prompt",
+    justification = "FLUSHALL wipes ALL Redis DBs.",
+)
+
+# =============================================================================
+# TEST RUNNERS / LINTERS — all allowed
+# =============================================================================
+
+prefix_rule(pattern=["pytest"], decision="allow")
+prefix_rule(pattern=["jest"], decision="allow")
+prefix_rule(pattern=["vitest"], decision="allow")
+prefix_rule(pattern=["mocha"], decision="allow")
+prefix_rule(pattern=["eslint"], decision="allow")
+prefix_rule(pattern=["prettier"], decision="allow")
+prefix_rule(pattern=["ruff"], decision="allow")
+prefix_rule(pattern=["black"], decision="allow")
+prefix_rule(pattern=["mypy"], decision="allow")
+prefix_rule(pattern=["tsc"], decision="allow")
+prefix_rule(pattern=["golangci-lint"], decision="allow")
+prefix_rule(pattern=["gofmt"], decision="allow")
+prefix_rule(pattern=["clippy"], decision="allow")
+prefix_rule(pattern=["rustfmt"], decision="allow")
+
+# =============================================================================
+# FALLBACK
+# =============================================================================
+# Anything not matched above falls through to Codex CLI's own approval policy.

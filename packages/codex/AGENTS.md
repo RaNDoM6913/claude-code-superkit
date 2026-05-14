@@ -54,6 +54,46 @@ TODO: dev server commands
 - Check codebase for existing patterns before writing new code
 - Check packages before reimplementing
 
+## Approval Rules
+
+This kit ships `rules/default.rules` — a Codex CLI approval policy that
+declares allow / prompt / forbidden decisions for common commands.
+
+**Install:** copy `packages/codex/rules/default.rules` to `~/.codex/rules/default.rules`
+(or your project's local `.codex/rules/`) so Codex CLI picks it up.
+
+**Format (Starlark-like DSL):**
+
+```
+prefix_rule(
+    pattern = ["git", "push"],
+    decision = "allow",
+    justification = "Globally approved; force-push is handled by more specific rule.",
+)
+```
+
+**Decisions:**
+- `allow` — Codex executes silently
+- `prompt` — Codex asks before executing
+- `forbidden` — Codex refuses to execute
+
+**Coverage:**
+- Destructive system calls (`rm -rf /`, `sudo`, `dd`, `mkfs`, `shutdown`) → forbidden
+- Git / gh CLI / npm / pnpm / yarn / pip / cargo / go → mostly allowed
+- Force-push, hard reset, `git clean -fdx` → prompt
+- Docker / kubectl reads → allowed; deletes / prune → prompt
+- Systemd / pm2 / supervisorctl start/stop/restart/reload → allowed
+- Systemd enable/disable/mask → prompt
+- Nginx / Caddy / Apache config check + reload → allowed
+- `chmod`, `chown` → prompt
+- Pipe to bash from curl/wget → forbidden
+
+**Customization:** more-specific patterns take precedence. Add project-local
+rules in your own `rules/` file alongside `default.rules`.
+
+Adapted from VKirill/codex-starter-kit (MIT). See `packages/codex/rules/default.rules`
+for the complete ruleset.
+
 ## Security
 
 - SQL: parameterized queries ($1 for pgx, ? for MySQL, %s for Python)
