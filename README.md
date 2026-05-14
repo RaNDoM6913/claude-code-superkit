@@ -71,7 +71,19 @@ Keyword or AI semantic search via API.
 | **Skills** | 11 core + 6 frontend-3d + 1 frontend-ui + 3 GAN + 1 extra | project-architecture, project-scanner, writing-agents/commands/hooks/skills, **telegram-bot-builder**, **nextjs-supabase-auth**, **drizzle-orm-expert**, **ru-text** (Russian typography), **postgresql-optimization**, **redis-patterns** + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + impeccable-craft + gan-planner/generator/evaluator + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.4.0)
+## 🆕 What's New (v1.4.0 features · v1.4.1 bugfix patch)
+
+> **v1.4.1 (2026-05-14) — bugfix patch only.** No new features. Closes 12
+> defects across 4 review passes (internal audit + Codex CLI gpt-5.5 +
+> two follow-up sweeps): GAN package now actually ships in npm tarball,
+> `intake-classifier.py` no longer silently dropped on install, Codex
+> CLI install now copies `default.rules`, GateGuard hooks use atomic
+> state writes + survive clock skew, default.rules force-push bypass
+> closed, drizzle-orm-expert example no longer shadows the `users`
+> import, every README/CHANGELOG count matches actual file system.
+> [Full list in CHANGELOG.md](CHANGELOG.md).
+
+### v1.4.0 features (all available in v1.4.1):
 
 - 🧠 **3 cross-CLI specialist roles** — `minimal-change-engineer` (lines NOT written), `reality-checker` (defaults to NEEDS WORK, no fantasy A+), `codebase-onboarding-engineer` (30-60 min brief for unfamiliar repos). All on Opus + Codex SKILL.md mirrors.
 - 🎯 **GAN harness package** (`packages/gan/`) — three-agent adversarial loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by `affaan-m/everything-claude-code` (181k stars). Optional install — requires Playwright.
@@ -83,7 +95,7 @@ Keyword or AI semantic search via API.
 - 🔒 **Codex `default.rules` DSL** — Starlark-like approval policy for Codex CLI (forbid `rm -rf /`, `sudo`, `dd`; allow `git`, `npm`, `systemctl restart`, `nginx reload`; prompt on force-push, hard reset). Adapted from VKirill/codex-starter-kit.
 - 🐹 **Go references +5** — `di-frameworks.md` (uber-fx / dig / wire comparison), `graphql-patterns.md` (gqlgen), `module-management.md`, `stay-updated.md` (Go release cadence), `standard-stdlib-now.md` (what stdlib now replaces). 24 → 29 files.
 
-Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous: [v1.3.11](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.3.11).
+Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0) · [v1.3.11](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.3.11).
 
 ## 🔄 How `/dev` Works
 

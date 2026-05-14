@@ -4,8 +4,15 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-Post-v1.4.0 fixes from two review passes (internal audit + Codex CLI gpt-5.5).
-Will roll up into the next versioned release (assigned by the maintainer).
+(Move to a versioned section on next release.)
+
+## [1.4.1] — 2026-05-14
+
+Bugfix patch on top of v1.4.0 — no new features. Closes 12 defects across
+4 review passes (internal audit + Codex CLI gpt-5.5 + two follow-up sweeps).
+v1.4.0 release announcement and feature set stay intact; this release ships
+only correctness fixes so fresh `npm install` and `--codex` setups actually
+deliver what the README promised.
 
 ### Fixed — install / packaging (BLOCKER level for fresh installs)
 
