@@ -17,6 +17,7 @@
     "packages/extras/",
     "packages/frontend-3d/",
     "packages/frontend-ui/",
+    "packages/gan/",
     "packages/codex/"
   ],
   "engines": {

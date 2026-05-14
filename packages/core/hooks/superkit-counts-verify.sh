@@ -30,7 +30,7 @@ ERRORS=""
 # Core
 CORE_AGENTS=$(ls packages/core/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
 CORE_COMMANDS=$(ls packages/core/commands/*.md 2>/dev/null | wc -l | tr -d ' ')
-CORE_HOOKS=$(ls packages/core/hooks/*.sh 2>/dev/null | wc -l | tr -d ' ')
+CORE_HOOKS=$(ls packages/core/hooks/*.sh packages/core/hooks/*.py 2>/dev/null | wc -l | tr -d ' ')
 CORE_RULES=$(ls packages/core/rules/*.md 2>/dev/null | wc -l | tr -d ' ')
 
 # Stack (per-language packages under packages/stack-*/)
@@ -57,7 +57,7 @@ PKG_AGENTS=0
 PKG_HOOKS=0
 PKG_RULES=0
 PKG_COMMANDS=0
-for pkg in frontend-3d frontend-ui; do
+for pkg in frontend-3d frontend-ui gan; do
   if [ -d "packages/$pkg/agents" ]; then
     COUNT=$(ls packages/$pkg/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
     PKG_AGENTS=$((PKG_AGENTS + COUNT))
@@ -77,7 +77,7 @@ for pkg in frontend-3d frontend-ui; do
 done
 
 # Extras
-EXTRAS_AGENTS=$(ls packages/extras/*.md 2>/dev/null | wc -l | tr -d ' ')
+EXTRAS_AGENTS=$({ ls packages/extras/*.md 2>/dev/null; ls packages/extras/*/agent.md 2>/dev/null; } | wc -l | tr -d ' ')
 
 # Codex
 CODEX_SKILLS=$(find packages/codex/skills -name "SKILL.md" 2>/dev/null | wc -l | tr -d ' ')
