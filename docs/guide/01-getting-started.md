@@ -21,10 +21,10 @@ Before installing, make sure you have:
 cd /path/to/your-project
 
 # 2. Run the interactive installer (no cloning needed)
-npx claude-code-superkit
+bash setup.sh
 
 # Or with explicit options:
-npx claude-code-superkit --stacks=go,typescript --profile=strict --codex
+bash setup.sh --stacks=go,typescript --profile=strict --codex
 ```
 
 The installer walks you through four steps:

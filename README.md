@@ -105,20 +105,26 @@ Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.0](ht
 
 ## 🚀 Installation
 
+> **Note:** npm registry publish is deferred. Install via `git clone` for now.
+> When `claude-code-superkit` is published to npm, `npx claude-code-superkit`
+> will become the one-liner alternative.
+
 ### Claude Code (recommended)
 
 ```bash
-# One command — works on macOS, Linux, Windows:
-npx claude-code-superkit
+# Clone + install (works on macOS, Linux, Windows with Node.js 18+):
+git clone https://github.com/RaNDoM6913/claude-code-superkit
+cd claude-code-superkit
+bash setup.sh
 
 # With explicit options:
-npx claude-code-superkit --stacks=go,typescript --profile=strict --codex
+bash setup.sh --stacks=go,typescript --profile=strict --codex
 
 # Non-interactive (CI/CD):
-npx claude-code-superkit --defaults
+bash setup.sh --defaults
 ```
 
-`npx claude-code-superkit` — interactive installer: selects your stack, hook profile, plugins. Zero dependencies beyond Node.js. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
+`bash setup.sh` runs the same Node.js CLI as the future `npx` entry point — interactive installer that selects your stack, hook profile, plugins. Zero dependencies beyond Node.js. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
 
 ```bash
 # 3. Open Claude Code
@@ -152,7 +158,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-Or run `npx claude-code-superkit --codex` to install both Claude Code and Codex CLI support in one command. Model: **gpt-5.5** + **xhigh** reasoning.
+Or run `bash setup.sh --codex` from a cloned superkit repo to install both Claude Code and Codex CLI support in one go. Model: **gpt-5.5** + **xhigh** reasoning.
 
 ## ⌨️ Key Commands
 
@@ -224,7 +230,7 @@ CI integration included — see `.github/workflows/security.yml`.
 
 ## 🎨 Frontend Development
 
-Two sibling self-contained packages covering the full frontend surface — polished product UIs *(frontend-ui)* and scroll-driven 3D experiences *(frontend-3d)*. Install one or both during `npx claude-code-superkit`. Both run entirely on auto-dispatch: Claude routes to the right reviewer based on the files you're editing, no slash commands needed.
+Two sibling self-contained packages covering the full frontend surface — polished product UIs *(frontend-ui)* and scroll-driven 3D experiences *(frontend-3d)*. Install one or both during `bash setup.sh`. Both run entirely on auto-dispatch: Claude routes to the right reviewer based on the files you're editing, no slash commands needed.
 
 ---
 
@@ -233,7 +239,7 @@ Two sibling self-contained packages covering the full frontend surface — polis
 Production-grade reviewers for typography, color, motion, and interaction polish. Rules load only when you edit `.tsx`/`.jsx`/`.css`/`.scss`/`.html`/`.vue` files, so the kit stays weightless on backend work.
 
 ```bash
-npx claude-code-superkit
+bash setup.sh
 # Select "Frontend UI" when prompted for stacks
 ```
 
@@ -275,7 +281,7 @@ Full reference: **[docs/FRONTEND-UI.md](docs/FRONTEND-UI.md)** · Guide: **[Chap
 Production-grade reviewers for scroll-driven product showcases with GSAP ScrollTrigger, React Three Fiber, and Three.js. Built from 12+ hours of battle-tested debug experience — texture color distortion, GSAP timeline compression, UV mapping mismatches, Tailwind v3/v4 drift.
 
 ```bash
-npx claude-code-superkit
+bash setup.sh
 # Select "Frontend 3D" when prompted for stacks
 ```
 
@@ -406,7 +412,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`npx claude-code-superkit --codex` will install for Codex CLI — copies 82 skills + `default.rules` and creates AGENTS.md + config.toml (`gpt-5.5`, `xhigh`).
+`bash setup.sh --codex` (from cloned repo) will install for Codex CLI — copies 82 skills + `default.rules` and creates AGENTS.md + config.toml (`gpt-5.5`, `xhigh`).
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

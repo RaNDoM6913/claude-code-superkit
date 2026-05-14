@@ -18,7 +18,7 @@ It was extracted from 12+ hours of battle-tested experience building real 3D pro
 ### Via superkit installer (recommended)
 
 ```bash
-npx claude-code-superkit
+bash setup.sh
 # Select "Frontend 3D" when prompted for stacks
 ```
 

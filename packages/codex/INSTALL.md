@@ -5,7 +5,7 @@
 ### Option A: Via superkit installer (recommended)
 
 ```bash
-npx claude-code-superkit --codex
+bash setup.sh --codex
 ```
 
 This installs both Claude Code and Codex CLI support in one command.

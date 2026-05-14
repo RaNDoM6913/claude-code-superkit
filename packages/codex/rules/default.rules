@@ -180,6 +180,38 @@ prefix_rule(
     decision = "prompt",
     justification = "git clean -fdx removes untracked files and ignored dirs (incl. node_modules). Confirm.",
 )
+
+# History-rewriting tools — irreversible without an external backup. Always prompt.
+prefix_rule(
+    pattern = ["git", "filter-repo"],
+    decision = "prompt",
+    justification = "filter-repo rewrites entire repo history. Confirm refs and replacements.",
+)
+prefix_rule(
+    pattern = ["git", "filter-branch"],
+    decision = "prompt",
+    justification = "filter-branch rewrites history (slower / less safe than filter-repo). Confirm.",
+)
+prefix_rule(
+    pattern = ["git", "rebase", "-i"],
+    decision = "prompt",
+    justification = "Interactive rebase rewrites local history. Confirm target ref.",
+)
+prefix_rule(
+    pattern = ["git", "rebase", "--root"],
+    decision = "prompt",
+    justification = "Rebasing from root rewrites all history. Confirm.",
+)
+prefix_rule(
+    pattern = ["git", "update-ref", "-d"],
+    decision = "prompt",
+    justification = "Deletes a ref directly. Confirm.",
+)
+prefix_rule(
+    pattern = ["git", "reflog", "expire"],
+    decision = "prompt",
+    justification = "Expiring reflog removes the safety net for recently-rewritten history.",
+)
 prefix_rule(
     pattern = ["git", "clean", "-fd"],
     decision = "prompt",
@@ -425,6 +457,18 @@ prefix_rule(
 # =============================================================================
 
 prefix_rule(pattern=["psql"], decision="allow")
+# mysql -e and sqlite3 inline statements share the psql -c caveat —
+# the SQL ends up as a single argv token that prefix_rule cannot inspect.
+prefix_rule(
+    pattern = ["mysql", "-e"],
+    decision = "prompt",
+    justification = "Inline SQL via mysql -e — text is in a single argv token, cannot be inspected by prefix matching.",
+)
+prefix_rule(
+    pattern = ["mysql", "--execute"],
+    decision = "prompt",
+    justification = "Inline SQL via mysql --execute — same caveat as -e.",
+)
 prefix_rule(pattern=["mysql"], decision="allow")
 prefix_rule(pattern=["redis-cli"], decision="allow")
 prefix_rule(pattern=["sqlite3"], decision="allow")
@@ -440,15 +484,37 @@ prefix_rule(
     decision = "prompt",
     justification = "dropdb removes a database. Confirm name.",
 )
+
+# NOTE on psql -c:
+# When user runs `psql -c "DROP TABLE x"`, argv[2] is the full string
+# "DROP TABLE x", not the token "DROP". A prefix_rule pattern
+# ["psql", "-c", "DROP"] only matches when argv[2] == "DROP" exactly,
+# which never happens — the SQL statement is always at least 2 words.
+# Codex's rule engine does not support substring/regex on argv tails.
+#
+# Therefore: any psql -c (inline SQL) lands at "prompt", since we cannot
+# selectively match destructive SQL within argv[2]. The user sees the
+# full SQL string before execution. Read-only interactive psql sessions
+# (without -c) remain at the broader "psql" allow rule.
 prefix_rule(
-    pattern = ["psql", "-c", "DROP"],
+    pattern = ["psql", "-c"],
     decision = "prompt",
-    justification = "DROP statement via psql -c removes DB objects. Confirm.",
+    justification = "Inline SQL via psql -c — text is in a single argv token, cannot be inspected by prefix matching. Confirm the SQL.",
 )
 prefix_rule(
-    pattern = ["psql", "-c", "TRUNCATE"],
+    pattern = ["psql", "--command"],
     decision = "prompt",
-    justification = "TRUNCATE wipes table data. Confirm.",
+    justification = "Inline SQL via psql --command — same caveat as -c.",
+)
+prefix_rule(
+    pattern = ["psql", "-f"],
+    decision = "prompt",
+    justification = "psql -f runs a SQL file. Confirm path before execution.",
+)
+prefix_rule(
+    pattern = ["psql", "--file"],
+    decision = "prompt",
+    justification = "psql --file runs a SQL file. Confirm path before execution.",
 )
 prefix_rule(
     pattern = ["kubectl", "drain"],

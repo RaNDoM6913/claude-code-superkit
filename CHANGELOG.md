@@ -8,12 +8,21 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [1.4.1] — 2026-05-14
 
-Bugfix patch on top of v1.4.0 — no new features. Closes **15 defects** across
-5 review passes (internal audit + Codex CLI gpt-5.5 + two follow-up sweeps + a
-real-world cross-project sync scenario). v1.4.0 release announcement and feature
-set stay intact; this release ships only correctness fixes so fresh
-`npm install`, `--codex` setups, and SessionStart auto-update all actually
-deliver what the README promised.
+Bugfix patch on top of v1.4.0 — no new features. Closes **19 defects** across
+6 review passes (internal audit + Codex CLI gpt-5.5 + three follow-up sweeps +
+a real-world cross-project sync scenario). v1.4.0 release announcement and
+feature set stay intact; this release ships only correctness fixes so a fresh
+`git clone … && bash setup.sh`, `--codex` setup, and SessionStart auto-update
+all actually deliver what the README promised.
+
+### Fixed — install method documentation (npm registry deferred)
+
+- **README, docs/INSTALL-CLAUDE-CODE.md, docs/guide/01/13/14, packages/codex/INSTALL.md** — every `npx claude-code-superkit` invocation replaced with `git clone … && bash setup.sh`. `claude-code-superkit` is not yet published to the public npm registry (`npm view claude-code-superkit version` → 404). All "install in one command" wording rewritten around `bash setup.sh`. A README note explicitly states the npm publish is deferred and will become the one-liner when ready.
+
+### Fixed — Codex approval rules (round 2)
+
+- **`git filter-repo` / `git filter-branch`** — history-rewriting tools were uncovered. Added `prompt` rules, plus `git rebase -i`, `git rebase --root`, `git update-ref -d`, `git reflog expire`.
+- **`psql -c "DROP TABLE x"` matching** — `prefix_rule(["psql","-c","DROP"])` never matched because the SQL is delivered as a single argv token (`"DROP TABLE x"`), not as separate words. Codex's rule engine does not support substring/regex on argv tails. Replaced with broader `["psql","-c"]` and `["psql","--command"]` → `prompt`, so the full SQL is shown to the user before execution. Same caveat documented for `psql -f`, `psql --file`, `mysql -e`, `mysql --execute`. Read-only interactive `psql` sessions (without -c) keep the broader `allow` rule.
 
 ### Fixed — superkit-update.sh (sync logic + .py hooks)
 

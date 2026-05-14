@@ -13,7 +13,7 @@
 ## Option 1: npx (recommended)
 
 ```bash
-npx claude-code-superkit
+bash setup.sh
 ```
 
 ### CLI Options
@@ -158,7 +158,7 @@ The `evolve-check` hook also runs at session start (every 24h) and suggests `/su
 
 ```bash
 # Just re-run:
-npx claude-code-superkit@latest
+bash setup.sh
 # Choose [m] merge — adds new files, keeps your existing customizations
 ```
 

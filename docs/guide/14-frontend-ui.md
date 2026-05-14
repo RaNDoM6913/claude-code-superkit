@@ -32,7 +32,7 @@ The package ships **6 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every comp
 ### Via superkit installer (recommended)
 
 ```bash
-npx claude-code-superkit
+bash setup.sh
 # Select "Frontend UI" when prompted for stacks
 ```
 
@@ -41,7 +41,7 @@ The installer copies all agents, rules, hooks, and the skill into your `.claude/
 ### Non-interactive install
 
 ```bash
-npx claude-code-superkit --stacks=frontend-ui
+bash setup.sh --stacks=frontend-ui
 ```
 
 This is useful for CI, Dockerfiles, or teammate onboarding scripts.
@@ -49,7 +49,7 @@ This is useful for CI, Dockerfiles, or teammate onboarding scripts.
 ### Installing alongside Frontend 3D
 
 ```bash
-npx claude-code-superkit --stacks=frontend-ui,frontend-3d
+bash setup.sh --stacks=frontend-ui,frontend-3d
 ```
 
 Both packages coexist cleanly — `frontend-ui` opts out of 3D/WebGL files, `frontend-3d` opts out of pure 2D files. No overlap, no double-review.
@@ -238,4 +238,4 @@ Every hook writes its opt-out instruction in the warning itself (`Opt out: expor
 - The `impeccable-craft` skill: `packages/frontend-ui/skills/impeccable-craft/SKILL.md`
 - Attribution and licensing: `packages/frontend-ui/NOTICE.md`
 
-If you also build 3D product showcases, pair this with Chapter 13 (Frontend 3D). The two packages were designed to coexist — install both with `npx claude-code-superkit --stacks=frontend-ui,frontend-3d`.
+If you also build 3D product showcases, pair this with Chapter 13 (Frontend 3D). The two packages were designed to coexist — install both with `bash setup.sh --stacks=frontend-ui,frontend-3d`.
