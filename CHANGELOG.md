@@ -4,19 +4,21 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-### Added — convenience wrapper
-
-- **`bin/superkit-counts-verify.sh`** — thin wrapper around the canonical `packages/core/hooks/superkit-counts-verify.sh` so contributors can run the count/version check manually from the repo root without remembering the full hook path. Synthesises an empty git-commit payload when invoked interactively (no stdin) so the hook actually runs its checks instead of early-exiting. Forwards both stdin payload and exit code transparently when invoked from a pipe.
-- **CLAUDE.md Self-Audit Rule section** updated to list both the canonical hook path and the wrapper, so neither human contributors nor automated reviewers (e.g. Codex CLI) confuse "no `bin/...` path" for "no verification mechanism".
+(Move to a versioned section on next release.)
 
 ## [1.4.1] — 2026-05-14
 
-Bugfix patch on top of v1.4.0 — no new features. Closes **19 defects** across
-6 review passes (internal audit + Codex CLI gpt-5.5 + three follow-up sweeps +
+Bugfix patch on top of v1.4.0 — no new features. Closes **20 defects** across
+7 review passes (internal audit + Codex CLI gpt-5.5 + four follow-up sweeps +
 a real-world cross-project sync scenario). v1.4.0 release announcement and
 feature set stay intact; this release ships only correctness fixes so a fresh
 `git clone … && bash setup.sh`, `--codex` setup, and SessionStart auto-update
 all actually deliver what the README promised.
+
+### Added — convenience wrapper
+
+- **`bin/superkit-counts-verify.sh`** — thin wrapper around the canonical `packages/core/hooks/superkit-counts-verify.sh` so contributors can run the count/version check manually from the repo root without remembering the full hook path. Synthesises an empty git-commit payload when invoked interactively (no stdin) so the hook actually runs its checks instead of early-exiting. Forwards both stdin payload and exit code transparently when invoked from a pipe.
+- **CLAUDE.md Self-Audit Rule section** updated to list both the canonical hook path and the wrapper, so neither human contributors nor automated reviewers (e.g. Codex CLI) confuse "no `bin/...` path" for "no verification mechanism".
 
 ### Fixed — install method documentation (npm registry deferred)
 
