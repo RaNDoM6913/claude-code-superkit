@@ -109,6 +109,7 @@ VERSION                     # 1.4.1
 ## Conventions
 
 - **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.8, 1M context**) — kit automatically picks up new Opus versions without code changes.
+- **Effort**: Opus 4.8 defaults to `high`; deep specialist agents (reality-checker, security-scanner, critic/architecture reviews, gan-evaluator) are run at `xhigh`/`max`. See the per-role guidance in the user CLAUDE.md template (`packages/core/CLAUDE.md`).
 - **Codex model**: `gpt-5.5` with `model_reasoning_effort = "xhigh"`
 - **Agent format**: YAML frontmatter (name, description, model, allowed-tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)

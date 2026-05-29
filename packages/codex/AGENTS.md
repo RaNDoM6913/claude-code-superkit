@@ -180,6 +180,8 @@ Do NOT rely on a single layer — update docs proactively with every code change
 
 This project uses **gpt-5.5** with **xhigh** reasoning effort (maximum accuracy). All skills inherit this from `.codex/config.toml`. Do NOT downgrade the model or reasoning level — maximum performance is required for code review, security scanning, and test generation.
 
+Note: Claude Code (Opus 4.8) also supports `high`/`xhigh`/`max` effort levels, so the effort concept is cross-CLI — not Codex-only.
+
 ## Codex-Specific Notes
 
 ### Agent Dispatch

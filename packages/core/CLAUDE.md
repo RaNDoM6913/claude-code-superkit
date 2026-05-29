@@ -94,6 +94,15 @@ Opus 4.8 handles parallel tool calls well — use them aggressively whenever ope
 
 Only sequence calls when the result of one informs the inputs of the next (e.g. grep first, then read the hit). Do NOT serialize out of caution — parallelism is cheaper and faster, and the model is capable of reasoning over many results at once.
 
+## Effort
+
+Opus 4.8 exposes an effort dial (default `high` on Claude Code; `xhigh` and `max` for demanding work; adaptive thinking only — no thinking budgets). Match effort to the task:
+- **Deep specialists** (reality-checker, security-scanner, architecture/critic reviews, gan-evaluator) → `xhigh` or `max`.
+- **Standard reviews / feature work** → `high` (the default).
+- **Trivial mechanical edits** → default is fine.
+
+Raise effort on retries and failed verification gates rather than re-running at the same level.
+
 ## Agent Usage
 
 Use subagents when: parallel independent tasks, isolated context needed, 3+ files to analyze.
