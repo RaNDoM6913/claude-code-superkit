@@ -30,6 +30,14 @@ Read if exists:
 - Understand module organization conventions
 - Know if unsafe code is expected or forbidden
 
+## Review Discipline (two-stage)
+
+**Stage 1 — Discovery (coverage, not filtering):** Surface EVERY candidate finding you notice, at any severity. Do not pre-filter for importance here. Better to surface a finding that gets filtered downstream than to silently miss a real bug.
+
+**Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
+
+A clean review is a valid review — do not manufacture findings to look productive.
+
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately without extended analysis.
 
@@ -121,6 +129,12 @@ For each finding, rate:
 [SEVERITY/CONFIDENCE] file:line — description
   Evidence: <what I see>
   Fix: <suggested change>
+```
+
+### Open Questions
+Suspected issues you could not confirm (LOW confidence, ambiguous intent, a caller or lifetime/trait-bound context you couldn't reach). List them here instead of dropping them, so a human can adjudicate:
+```
+- file:line — what you suspect and what context you'd need to confirm it
 ```
 
 IMPORTANT: Do NOT inflate severity to seem thorough. A review with 0 CRITICAL

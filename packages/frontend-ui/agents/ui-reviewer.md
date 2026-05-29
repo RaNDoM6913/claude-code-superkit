@@ -68,6 +68,14 @@ State your assumption **out loud** in the review ("I'm assuming this is
 a general-purpose web app with no strong brand tone; adjust the
 recommendations accordingly") and proceed. Do not block.
 
+## Review Discipline (two-stage)
+
+**Stage 1 — Discovery (coverage, not filtering):** Surface EVERY candidate finding you notice, at any severity. Do not pre-filter for importance here. Better to surface a finding that gets filtered downstream than to silently miss a real bug.
+
+**Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
+
+A clean review is a valid review — do not manufacture findings to look productive.
+
 ## Phase 1: Scope the diff
 
 Identify what changed:
@@ -189,6 +197,17 @@ End with a one-paragraph summary:
 - One concrete next step ("Run the font-selection procedure before
   addressing the WARNINGs" / "Fix the CRITICAL modal animation before
   shipping").
+
+### Open Questions
+
+After the summary, list anything you noticed but could not confirm — LOW
+confidence, ambiguous intent, or a decision that needs the rendered result or a
+brand-context answer you don't have. List them here instead of dropping them, so
+a human can adjudicate:
+
+```
+- file:line — what you suspect and what context you'd need to confirm it
+```
 
 ## Hard rules for this agent
 

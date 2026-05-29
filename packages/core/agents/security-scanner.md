@@ -28,6 +28,14 @@ Before starting, read available project documentation to understand architecture
 
 **Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
 
+## Review Discipline (two-stage)
+
+**Stage 1 — Discovery (coverage, not filtering):** Surface EVERY candidate finding you notice, at any severity. Do not pre-filter for importance here. Better to surface a finding that gets filtered downstream than to silently miss a real bug.
+
+**Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
+
+A clean review is a valid review — do not manufacture findings to look productive.
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)
@@ -268,6 +276,12 @@ For each finding, rate:
 
 ### Risk Summary:
 **X critical, Y high, Z medium, W low**
+
+### Open Questions
+Suspected issues you could not confirm (LOW confidence, need to see runtime config / infra / a caller you couldn't reach). List them here instead of dropping them, so a human can adjudicate:
+```
+- [CHECK-NN] file:line — what you suspect and what context you'd need to confirm it
+```
 
 IMPORTANT: Do NOT inflate severity to seem thorough. A scan with 0 CRITICAL
 findings and 2 SUGGESTIONS is perfectly valid. If the code is secure, say so.

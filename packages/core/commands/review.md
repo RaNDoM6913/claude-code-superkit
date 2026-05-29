@@ -139,11 +139,11 @@ After all agents complete, merge all findings into a single list. Each finding m
 - `evidence` — what the agent sees in the code
 - `fix` — suggested change
 
-**Pre-filter**: immediately drop findings where:
-- confidence is LOW (<60%)
-- severity is SUGGESTION and agent is not the primary reviewer for that file type
+**Triage (route, don't drop)**: instead of silently discarding low-signal items, route them:
+- confidence is LOW (<60%) → move to the **Open Questions** bucket (carried to the final report so a human can adjudicate), not the validation queue
+- severity is SUGGESTION and agent is not the primary reviewer for that file type → keep, but de-prioritize (validate only if cheap)
 
-This reduces the validation workload.
+HIGH/MEDIUM-confidence findings proceed to validation. This keeps the validation workload focused while ensuring no real finding is silently lost — Open Questions surface what was uncertain rather than dropping it.
 
 ## Step 5 — Validate Findings (Double Verification)
 
@@ -201,6 +201,9 @@ After validation:
 ### Nit (SUGGESTION confirmed)
 - [agent-name] file:line — description
 
+### Open Questions (LOW confidence / unconfirmed — not dropped)
+- [agent-name] file:line — what was suspected and what context would confirm it
+
 5. **Summary table**:
 
 | Agent | Blocking | Important | Nit | Raw | Confirmed | Avg Confidence | Status |
@@ -218,7 +221,7 @@ Status: **FAIL** if any blocking, **WARN** if important-only, **PASS** if nits-o
 |-------|-------|--------|
 | 80-100 (HIGH) | N | Reported as findings |
 | 60-79 (MEDIUM) | N | Reported, marked "needs verification" |
-| <60 (LOW) | N | Pre-filtered, not shown |
+| <60 (LOW) | N | Routed to Open Questions (surfaced, not dropped) |
 
 ### Overall Verdict
 

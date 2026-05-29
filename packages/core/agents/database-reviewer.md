@@ -21,6 +21,14 @@ Read if exists:
 - Understand migration numbering and tooling (golang-migrate, Alembic, Prisma, etc.)
 - Identify query patterns used in the project (pgx, sqlx, Prisma, raw SQL)
 
+## Review Discipline (two-stage)
+
+**Stage 1 — Discovery (coverage, not filtering):** Surface EVERY candidate finding you notice, at any severity. Do not pre-filter for importance here. Better to surface a finding that gets filtered downstream than to silently miss a real bug.
+
+**Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
+
+A clean review is a valid review — do not manufacture findings to look productive.
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)
@@ -138,6 +146,12 @@ For each finding, rate:
 [SEVERITY/CONFIDENCE] file:line — description
   Evidence: <what I see>
   Fix: <suggested change>
+```
+
+### Open Questions
+Suspected issues you could not confirm (LOW confidence, need an EXPLAIN plan, table size, or a query path you couldn't trace). List them here instead of dropping them, so a human can adjudicate:
+```
+- file:line — what you suspect and what context you'd need to confirm it
 ```
 
 IMPORTANT: Do NOT inflate severity. A review with 0 CRITICAL and 2 SUGGESTIONS is valid. If the SQL is clean, say so.

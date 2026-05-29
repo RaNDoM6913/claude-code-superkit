@@ -343,7 +343,12 @@ Dispatch reviewer agents **in parallel** based on what changed and what's availa
 | UI components | **design-system-reviewer** (if available) |
 
 For each triggered agent, pass the list of changed files and the task description.
-Collect findings. Fix any CRITICAL or WARNING issues before proceeding.
+Each reviewer runs its two-stage discipline — discover every candidate finding, then triage by Severity + Confidence.
+
+Collect findings and triage (route, don't drop):
+- Fix any CRITICAL or WARNING issue (HIGH/MEDIUM confidence) before proceeding.
+- Carry LOW-confidence / ambiguous items into an **Open Questions** list in the Phase 8 report rather than discarding them — a human can adjudicate.
+- A clean review (no findings) is a valid result; do not pad it.
 
 ## Phase 6.5 — Critic (complex tasks only)
 
@@ -411,6 +416,10 @@ Output a summary:
 |------|--------|-------------|
 | path/to/file | Created/Modified | [description] |
 | ... | ... | ... |
+
+### Open Questions (from Phase 6 review — LOW confidence / unconfirmed, not dropped)
+- file:line — what a reviewer suspected and what context would confirm it
+- (omit this section if reviewers raised none)
 
 ### Metrics
 | Metric | Value |

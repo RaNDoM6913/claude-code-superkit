@@ -1,7 +1,7 @@
 ---
 name: go-modernizer
 description: Detect outdated Go patterns and suggest modern idioms — Go 1.21 through 1.24+ features
-tokens: 1138
+tokens: 1380
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
@@ -29,6 +29,14 @@ Read if exists:
 - Know the exact Go version constraint
 - Understand which modern patterns are already adopted
 - Identify migration blockers (CI matrix, downstream compatibility)
+
+## Review Discipline (two-stage)
+
+**Stage 1 — Discovery (coverage, not filtering):** Surface EVERY candidate finding you notice, at any severity. Do not pre-filter for importance here. Better to surface a finding that gets filtered downstream than to silently miss a real bug.
+
+**Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
+
+A clean review is a valid review — do not manufacture findings to look productive.
 
 ### Phase 1: Checklist (quick scan)
 Run through the Modernization Checklist items below. Only flag patterns where the project's Go version supports the replacement.
@@ -87,6 +95,12 @@ For each finding, provide:
   Modern: <replacement pattern>
   Min Go version: <1.XX>
   Effort: <trivial/moderate/significant>
+```
+
+### Open Questions
+Suspected modernization opportunities you could not confirm (LOW confidence — unsure the replacement is behavior-preserving here, or unsure the project's Go version permits it). List them here instead of dropping them, so a human can adjudicate:
+```
+- file:line — what you suspect and what context you'd need to confirm it
 ```
 
 IMPORTANT: Do NOT inflate severity to seem thorough. A review with 0 CRITICAL

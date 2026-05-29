@@ -20,6 +20,14 @@ Read if exists:
 
 **Use this to:** distinguish *legitimate* expected-fail-and-recover patterns from accidental silencers.
 
+## Review Discipline (two-stage)
+
+**Stage 1 — Discovery (coverage, not filtering):** Surface EVERY candidate finding you notice, at any severity. Do not pre-filter for importance here. Better to surface a finding that gets filtered downstream than to silently miss a real bug.
+
+**Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
+
+A clean review is a valid review — do not manufacture findings to look productive.
+
 ## When to Use
 
 - During `/review` pipeline — dispatched for changed code files
@@ -170,6 +178,17 @@ Pattern counts:
 - Log-and-forget (D): N
 - Catch-all (E): N
 - Linter/type suppression (F): N
+```
+
+### Open Questions
+
+Suspected silencers you could not confirm (LOW confidence — couldn't tell if the
+swallow is intentional, couldn't reach the caller, or the observability mechanism
+may live elsewhere). List them here instead of dropping them, so a human can
+adjudicate:
+
+```
+- file:line — what you suspect and what context you'd need to confirm it
 ```
 
 ## Common Fixes
