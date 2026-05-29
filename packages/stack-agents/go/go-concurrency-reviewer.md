@@ -1,7 +1,7 @@
 ---
 name: go-concurrency-reviewer
 description: Audit Go concurrency — goroutines, channels, mutexes, context propagation, race conditions
-tokens: 1602
+tokens: 1952
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
@@ -73,7 +73,7 @@ Run through all 15 items. Report violations immediately without extended analysi
 | Fan-out with errors | errgroup | Collects first error |
 | Wait for N tasks | WaitGroup | No error collection needed |
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 
 After the checklist, analyze:
 1. What concurrency pattern is this code implementing? (pipeline, fan-out/fan-in, worker pool, pub/sub)
@@ -82,7 +82,7 @@ After the checklist, analyze:
 4. Are there hidden race conditions the checklist didn't catch?
 5. Is the concurrency necessary, or would sequential code be simpler and sufficient?
 
-Show your reasoning before stating findings in Phase 2.
+Reason carefully about the concurrency pattern, deadlock scenarios, goroutine/context lifetimes, hidden races, and whether the concurrency is even necessary — then report only the conclusions (not the chain of thought).
 
 ## Audit Mode: Full-Codebase Scan
 

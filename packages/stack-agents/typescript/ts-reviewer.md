@@ -1,7 +1,7 @@
 ---
 name: ts-reviewer
 description: Review TypeScript/React code for type safety, hooks correctness, state management, and conventions
-tokens: 1353
+tokens: 1632
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
@@ -41,14 +41,14 @@ A clean review is a valid review — do not manufacture findings to look product
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately without extended analysis.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 After the checklist, analyze:
 1. What is the intent of this change?
 2. What are the possible failure modes?
 3. Are there edge cases the checklist didn't cover?
 4. Does this change affect other components?
 
-Show your reasoning before stating findings in Phase 2.
+Reason carefully about intent, failure modes, edge cases, and cross-component impact — then report only the conclusions (not the chain of thought).
 
 ## Patterns to Check
 

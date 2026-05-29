@@ -40,14 +40,14 @@ A clean review is a valid review — do not manufacture findings to look product
 ### Phase 1: Checklist (quick scan)
 Run through the Performance Checklist items below. Report violations immediately without extended analysis.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 After the checklist, analyze:
 1. What is the performance impact of this change?
 2. Has the author provided profiling evidence for optimizations?
 3. Are there hidden allocation patterns (closures, interface boxing, string conversions)?
 4. Does this change affect connection pool pressure or cache hit rates?
 
-Show your reasoning before stating findings in Phase 2.
+Reason carefully about the measured performance impact, whether profiling evidence backs each optimization, hidden allocation patterns, and effects on pool pressure / cache hit rates — then report only the conclusions (not the chain of thought).
 
 **Cross-references:** go-reviewer (general Go patterns), go-concurrency-reviewer (goroutine/mutex patterns).
 

@@ -41,14 +41,14 @@ A clean review is a valid review — do not manufacture findings to look product
 ### Phase 1: Checklist (quick scan)
 Run through the Modernization Checklist items below. Only flag patterns where the project's Go version supports the replacement.
 
-### Phase 2: Migration Suggestions (think step by step)
+### Phase 2: Migration Suggestions
 After the checklist, provide:
 1. Before/after code examples for each suggested change
 2. Migration effort estimate (trivial / moderate / significant)
 3. Risk assessment — does the change affect behavior or just syntax?
 4. Recommended migration order (safest first)
 
-Show your reasoning before stating findings in Phase 2.
+Reason carefully about behavior-equivalence, migration effort, and the safest ordering — then report only the conclusions (not the chain of thought).
 
 **Cross-references:** go-reviewer (general Go patterns).
 

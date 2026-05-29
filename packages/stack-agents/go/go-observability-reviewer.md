@@ -40,7 +40,7 @@ A clean review is a valid review — do not manufacture findings to look product
 ### Phase 1: Checklist (quick scan)
 Run through the Observability Checklist items below. Report violations immediately without extended analysis.
 
-### Phase 2: Five Signals Gap Analysis (think step by step)
+### Phase 2: Five Signals Gap Analysis
 After the checklist, perform gap analysis across all five signals:
 
 | Signal | What to check |
@@ -51,7 +51,7 @@ After the checklist, perform gap analysis across all five signals:
 | **Profiles** | pprof endpoint available? Continuous profiling configured? |
 | **Health** | Liveness and readiness probes? Dependency health checks? |
 
-Show your reasoning before stating findings in Phase 2.
+Reason carefully about each signal's coverage and where blind spots remain — then report only the conclusions (not the chain of thought).
 
 **Cross-references:** go-reviewer (general Go patterns), go-performance-reviewer (profiling, pprof).
 
