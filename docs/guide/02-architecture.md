@@ -68,7 +68,7 @@ Claude continues or finishes
     security-scanner.md       # Cross-cutting security audit
     migration-reviewer.md     # SQL migration checks
     test-generator.md         # Generates tests for new code
-    ...                       # 27 core + 9 stack agents
+    ...                       # 31 core + 9 stack agents
   commands/
     dev.md                    # 16-phase development orchestrator
     review.md                 # Unified review: detect -> dispatch -> report
@@ -125,7 +125,7 @@ Hooks are registered in `.claude/settings.json` under the `hooks` key. Each life
     "Stop": [
       {
         "hooks": [
-          { "type": "prompt", "prompt": "Verify all changes...", "model": "haiku", "timeout": 30 }
+          { "type": "prompt", "prompt": "Verify all changes...", "model": "opus", "timeout": 60 }
         ]
       }
     ]

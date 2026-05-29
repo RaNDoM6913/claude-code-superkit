@@ -7,7 +7,7 @@ This is a sanitized copy of a real production Claude Code setup from a social di
 - **17 commands** (orchestrators, service management, development workflow, workflow templates)
 - **13 hooks** (8 PostToolUse + 3 PreToolUse + PreCompact + SessionStart + Stop)
 - **11 skills** (architecture, patterns, conventions, UI standards, state management)
-- **3 rules** (coding-style, security, git-workflow)
+- **6 rules** (auto-commands, coding-style, dev-workflow, documentation, git-workflow, security)
 
 ## What makes this interesting
 - 47-check security scanner with social-app + Telegram-specific checks
@@ -75,10 +75,13 @@ This is a sanitized copy of a real production Claude Code setup from a social di
     security-scan.md       # Security scanning
     workflow.md            # Workflow templates (bugfix, hotfix, spike, refactor, dep-upgrade, security-audit)
 
-  rules/                   # 3 rules (always-active context)
+  rules/                   # 6 rules (always-active context)
+    auto-commands.md       # Auto-trigger /review, /test, /lint, /audit, /security-scan
     coding-style.md        # Go + TypeScript conventions
-    security.md            # SQL injection, XSS, secrets, auth, CORS
+    dev-workflow.md        # Auto /dev orchestration for code-changing tasks
+    documentation.md       # 15-point docs-on-change pre-commit checklist
     git-workflow.md        # Conventional commits, branch naming, no force push
+    security.md            # SQL injection, XSS, secrets, auth, CORS
 
   scripts/hooks/           # 13 hook scripts
     block-dangerous-git.sh # PreToolUse: blocks --no-verify, --force, reset --hard

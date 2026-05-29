@@ -40,14 +40,14 @@ bash setup.sh
 8. **Copies files**:
    - 31 core agents + up to 22 stack/package agents (9 stack + 4 frontend-3d + 6 frontend-ui + 3 extras) → `.claude/agents/`
    - 16 commands (15 core + 1 frontend-3d) → `.claude/commands/`
-   - 23 core hooks + up to 16 stack/package hooks (9 stack + 4 frontend-3d + 3 frontend-ui) → `.claude/scripts/hooks/`
+   - 26 core hooks + up to 16 stack/package hooks (9 stack + 4 frontend-3d + 3 frontend-ui) → `.claude/scripts/hooks/`
    - 7 rules + up to 12 stack/package rules (2 stack + 3 frontend-3d + 7 frontend-ui) → `.claude/rules/`
-   - 5 core skills + up to 7 package skills (6 frontend-3d + 1 frontend-ui) → `.claude/skills/`
+   - 11 core skills + up to 7 package skills (6 frontend-3d + 1 frontend-ui) → `.claude/skills/`
    - `settings.json` with hook wiring + enabledPlugins
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
 10. **Validates** — checks JSON, hook permissions, file presence
-11. **Optionally installs for Codex CLI** — copies 72 skills to `.codex/skills/`
+11. **Optionally installs for Codex CLI** — copies 82 skills to `.codex/skills/`
 
 ### Hook Profiles
 

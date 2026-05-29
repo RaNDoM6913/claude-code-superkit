@@ -67,8 +67,8 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 
 | Skill | Description |
 |-------|-------------|
-| `dev-orchestrator` | 16-phase development cycle: read-docs, understand, architect, pseudocode, plan, contract, validate, implement, evaluate, verify, test, goals, review, critic, document, report |
-| `review-orchestrator` | Detect changes, dispatch reviewers, **double-verify** findings, collect report |
+| `dev-orchestrator` | 16-phase development cycle: read-docs, understand, architect, pseudocode, plan, contract, validate, implement, evaluate, verify, test, verify-goals, review, critic, document, report |
+| `review-orchestrator` | Detect changes, gather git context, dispatch reviewer agents in parallel, collect and deduplicate findings |
 | `audit-orchestrator` | Parallel audit across frontend, backend, infra, security |
 | `test-runner` | Auto-detect project test runner and execute tests |
 | `lint-runner` | Auto-detect linters, run with optional --fix mode |
@@ -111,7 +111,7 @@ These are converted from core + extras agents. They are dispatched automatically
 | `database-reviewer` | Quality — PostgreSQL specialist |
 | `architect` | Quality — system design advisor |
 | `plan-checker` | Quality — 8-dimension plan validation |
-| `goal-verifier` | Quality — 4-level goal substantiation |
+| `goal-verifier` | Quality — 4-level goal substantiation, 3-state verdict (PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION) |
 | `evaluator` | Quality — calibrated QA scoring against Sprint Contract |
 | `project-architecture` | Knowledge — project architecture reference |
 | `ai-slop-cleaner` | Quality — detect and fix AI-generated code patterns |

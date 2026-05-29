@@ -4,7 +4,20 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+## [1.4.2] — 2026-05-29
+
+Adapts the kit to **Claude Opus 4.8** (released 2026-05-28) and lands an audit-driven hardening pass.
+The `opus` alias auto-routed to 4.8 with **zero agent changes** — this release catches up the
+human-readable surfaces and tunes agents/hooks to 4.8's behavior: more literal instruction-following
+(reviewers shifted to *coverage-not-filtering* so low-severity findings aren't dropped), improved honesty
+(verifier discipline + Evidence Gate), and the new effort dial (per-role `xhigh`/`max` convention +
+escalation on retry). Also fixes **three verified hook defects** (`[wip]`-on-main dead code, bare-`$PPID`
+state keys that silently never accumulated, global audit-trail hash chain), reframes reviewer audit-mode
+for the no-nested-subagents reality (Claude Code 2.1.x), syncs every **Codex + showcase** mirror, and
+reworks the README. Component counts unchanged. 33 commits since v1.4.1.
+
 - **Docs:** fixed stale counts surfaced by the audit — `docs/INSTALL-CLAUDE-CODE.md` (27→31 core agents), README docs index (13→15 chapters, added rows for ch.14 Frontend UI + ch.15 Env Vars), dropped the volatile "181k stars" figure, and pointed the GSD ecosystem row at the active `open-gsd/gsd-pi` (gsd-2 archived).
+- **Docs:** corrected stale counts/config across guides + INSTALL + Codex docs (Codex skills 72→82, core hooks 23→26 / skills 5→11, /dev "15 Phases"→16, config.toml gpt-5.4→5.5 / extra_high→xhigh, architecture agent count + Stop-hook model→opus, showcase 3→6 rules, Codex review-orchestrator/goal-verifier descriptions).
 
 - **Fix (agents):** dropped the unusable `Agent` tool from 4 frontend-3d leaf reviewers (presentation/r3f-scene/ui-design/frontend-perf) — subagents can't spawn sub-agents on Claude Code 2.1.x; matches the Go-specialist cleanup. (showcase `health-checker` retained `Agent`: its body genuinely instructs parallel sub-agent dispatch.)
 - **Fix (statusline):** live payload effort now takes precedence over the `CLAUDE_EFFORT` env var (was inverted), so a stale env value no longer masks the real per-turn effort.

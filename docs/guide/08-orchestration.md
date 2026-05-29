@@ -2,7 +2,7 @@
 
 Orchestration is where the superkit's components work together. Commands dispatch agents in parallel, collect results, and produce unified reports. This chapter explains how the three main orchestrators -- `/dev`, `/review`, and `/audit` -- work internally.
 
-## The /dev Pipeline: 15 Phases
+## The /dev Pipeline: 16 Phases
 
 `/dev <task>` is the full development orchestrator. It triggers **automatically** for all code-changing tasks (always-on via `dev-workflow.md` rule). Phase 1 complexity assessment (5 factors: file count, line changes, novelty, risk, ambiguity) determines which phases to skip.
 
