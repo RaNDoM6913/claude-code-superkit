@@ -1,5 +1,7 @@
 # ⚡ claude-code-superkit
 
+> **The quality-first kit for Claude Code & Codex** — every one of 56 agents runs on Opus (now 4.8, 1M context). No Sonnet, no Haiku, no token-cost compromises on the work that ships your code.
+
 <div align="center">
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
@@ -58,6 +60,8 @@ Keyword or AI semantic search via API.
 
 ## 📦 What's Inside
 
+**One kit, two harnesses** — full parity for Claude Code (Opus 4.8) and Codex CLI (gpt-5.5, xhigh).
+
 | Component | Count | Description |
 |-----------|-------|-------------|
 | **Core Agents** | 31 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, evaluation, AI slop cleanup, critic, visual review, comment-rot analyzer, silent-failure-hunter, **minimal-change-engineer**, **reality-checker**, **codebase-onboarding-engineer**, **behavioral-nudge-engine** — all on **Opus** |
@@ -71,19 +75,12 @@ Keyword or AI semantic search via API.
 | **Skills** | 11 core + 6 frontend-3d + 1 frontend-ui + 3 GAN + 1 extra | project-architecture, project-scanner, writing-agents/commands/hooks/skills, **telegram-bot-builder**, **nextjs-supabase-auth**, **drizzle-orm-expert**, **ru-text** (Russian typography), **postgresql-optimization**, **redis-patterns** + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + impeccable-craft + gan-planner/generator/evaluator + SkillsMP search |
 | **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
 
-## 🆕 What's New (v1.4.0 features · v1.4.1 bugfix patch)
+## 🆕 What's New
 
-> **v1.4.1 (2026-05-14) — bugfix patch only.** No new features. Closes 12
-> defects across 4 review passes (internal audit + Codex CLI gpt-5.5 +
-> two follow-up sweeps): GAN package now actually ships in npm tarball,
-> `intake-classifier.py` no longer silently dropped on install, Codex
-> CLI install now copies `default.rules`, GateGuard hooks use atomic
-> state writes + survive clock skew, default.rules force-push bypass
-> closed, drizzle-orm-expert example no longer shadows the `users`
-> import, every README/CHANGELOG count matches actual file system.
-> [Full list in CHANGELOG.md](CHANGELOG.md).
+- **v1.4.1** — 20-defect bugfix patch (see [CHANGELOG](CHANGELOG.md)).
 
-### v1.4.0 features (all available in v1.4.1):
+<details>
+<summary><b>v1.4.0 features</b> (all available in v1.4.1)</summary>
 
 - 🧠 **3 cross-CLI specialist roles** — `minimal-change-engineer` (lines NOT written), `reality-checker` (defaults to NEEDS WORK, no fantasy A+), `codebase-onboarding-engineer` (30-60 min brief for unfamiliar repos). All on Opus + Codex SKILL.md mirrors.
 - 🎯 **GAN harness package** (`packages/gan/`) — three-agent adversarial loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by `affaan-m/everything-claude-code` (181k stars). Optional install — requires Playwright.
@@ -97,6 +94,8 @@ Keyword or AI semantic search via API.
 
 Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0) · [v1.3.11](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.3.11).
 
+</details>
+
 ## 🔄 How `/dev` Works
 
 <p align="center">
@@ -105,14 +104,11 @@ Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.0](ht
 
 ## 🚀 Installation
 
-> **Note:** npm registry publish is deferred. Install via `git clone` for now.
-> When `claude-code-superkit` is published to npm, `npx claude-code-superkit`
-> will become the one-liner alternative.
-
 ### Claude Code (recommended)
 
+**1. Clone + install** (works on macOS, Linux, Windows with Node.js 18+):
+
 ```bash
-# Clone + install (works on macOS, Linux, Windows with Node.js 18+):
 git clone https://github.com/RaNDoM6913/claude-code-superkit
 cd claude-code-superkit
 bash setup.sh
@@ -124,22 +120,26 @@ bash setup.sh --stacks=go,typescript --profile=strict --codex
 bash setup.sh --defaults
 ```
 
-`bash setup.sh` runs the same Node.js CLI as the future `npx` entry point — interactive installer that selects your stack, hook profile, plugins. Zero dependencies beyond Node.js. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
+`bash setup.sh` is an interactive Node.js installer that selects your stack, hook profile, and plugins. Zero dependencies beyond Node.js. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
+
+**2. Open Claude Code, 3. install plugins, 4. run setup, 5. verify:**
 
 ```bash
-# 3. Open Claude Code
+# 2. Open Claude Code
 claude
 
-# 4. Install plugins
+# 3. Install plugins
 /plugins
 # → install: superpowers, github, context7, code-review
 
-# 5. Run intelligent setup (auto-fills docs from your code!)
+# 4. Run intelligent setup (auto-fills docs from your code!)
 /superkit-init
 
-# 6. Verify
+# 5. Verify
 /review --full
 ```
+
+> **npm note:** registry publish is deferred — install via `git clone` for now. When `claude-code-superkit` is published, `npx claude-code-superkit` will become the one-liner alternative.
 
 **`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
 - `CLAUDE.md` — populated with your tech stack, commands, conventions

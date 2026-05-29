@@ -4,6 +4,7 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **README:** added a one-line value wedge, unified the install flow, surfaced dual Claude-Code+Codex support up top, and demoted v1.4.1 bugfix detail below the fold.
 - **Fix:** Go specialist reviewers (error/concurrency/performance/observability) claimed to dispatch parallel sub-agents and declared the `Agent` tool, but subagents cannot spawn sub-agents on Claude Code 2.1.x. Reframed audit mode as orchestrator-driven fan-out and removed the unusable `Agent` tool (matching `go-reviewer`).
 - **Fix:** py/ts/rust/go/ui reviewers described spawning parallel sub-agents but lacked the `Agent` tool (unexecutable on Claude Code 2.1.x). Reframed audit mode as orchestrator-driven fan-out. Relevant on Opus 4.8, which is literal about granted tools.
 - **Opus 4.8 version refresh** — badge + CLAUDE.md templates + docs guide + showcase trailers bumped 4.7 → 4.8. The opus alias already auto-routed; this is the human-readable catch-up.
