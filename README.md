@@ -85,7 +85,7 @@ Keyword or AI semantic search via API.
 <summary><b>v1.4.0 features</b> (all available in v1.4.1)</summary>
 
 - 🧠 **3 cross-CLI specialist roles** — `minimal-change-engineer` (lines NOT written), `reality-checker` (defaults to NEEDS WORK, no fantasy A+), `codebase-onboarding-engineer` (30-60 min brief for unfamiliar repos). All on Opus + Codex SKILL.md mirrors.
-- 🎯 **GAN harness package** (`packages/gan/`) — three-agent adversarial loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by `affaan-m/everything-claude-code` (181k stars). Optional install — requires Playwright.
+- 🎯 **GAN harness package** (`packages/gan/`) — three-agent adversarial loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by `affaan-m/everything-claude-code`. Optional install — requires Playwright.
 - 🤖 **Intake classifier hook** (Python) — scoring 0-15 on RU+EN action verbs, optional `gpt-5.5-nano` LLM fallback when confidence < 0.78. Emits intent + flags (should_edit, should_plan, subagents_authorized).
 - 🛡️ **GateGuard hooks** — require `Grep`/`Read` before `Edit`/`Write`/`Bash` (advisory by default, strict mode opt-in). Forces "establish facts before action" discipline.
 - 🔍 **silent-failure-hunter expanded** — 6 categories (empty handlers / promise suppression / fallback mask / log-and-forget / catch-all / linter suppression) + per-language fix examples (TS, Python, Go, Bash).
@@ -343,7 +343,7 @@ Full reference: **[docs/FRONTEND-3D.md](docs/FRONTEND-3D.md)** · Guide: **[Chap
 See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 13 hooks, 11 skills, and 6 rules.
 
 <details>
-<summary>📖 Documentation (13 chapters + 3 examples)</summary>
+<summary>📖 Documentation (15 chapters + 3 examples)</summary>
 
 ### Guide
 
@@ -362,6 +362,8 @@ See [`packages/showcase/`](packages/showcase/) for a real production example —
 | [11 — Documentation Architecture](docs/guide/11-documentation-architecture.md) | Doc templates, tree generation, enforcement |
 | [12 — Security Scanning](docs/guide/12-security-scanning.md) | AgentShield, CI, Red Team/Blue Team |
 | [13 — Frontend 3D](docs/guide/13-frontend-3d.md) | GSAP, Three.js, R3F agents, hooks, skills, rules |
+| [14 — Frontend UI](docs/guide/14-frontend-ui.md) | Typography, color, motion, interaction reviewers, rules, hooks |
+| [15 — Env Vars & Hook Profiles](docs/guide/15-env-vars-and-hook-profiles.md) | `CLAUDE_HOOK_PROFILE`, `CLAUDE_DISABLED_HOOKS`, full env-var reference |
 
 ### Examples
 
@@ -452,7 +454,7 @@ Skills, MCP servers, design/asset resources, and repos that complement Superkit'
 | Resource | What | Link |
 |----------|------|------|
 | oh-my-claudecode | TypeScript plugin with 19 agents, 31 skills, smart model routing, auto-learner, HUD statusline | [GitHub](https://github.com/Yeachan-Heo/oh-my-claudecode) |
-| Get Shit Done (GSD-2) | Meta-prompting framework with plan validation, goal-backward verification | [GitHub](https://github.com/gsd-build/gsd-2) |
+| Get Shit Done (gsd-pi) | Meta-prompting framework with plan validation, goal-backward verification (gsd-2 now archived → open-gsd/gsd-pi) | [GitHub](https://github.com/open-gsd/gsd-pi) |
 | Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
 | Awesome MCP Servers | Curated list of MCP servers — 300+ servers across all categories | [GitHub](https://github.com/punkpeye/awesome-mcp-servers) |
 

@@ -38,7 +38,7 @@ bash setup.sh
 6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
-   - 27 core agents + up to 22 stack/package agents (9 stack + 4 frontend-3d + 6 frontend-ui + 3 extras) → `.claude/agents/`
+   - 31 core agents + up to 22 stack/package agents (9 stack + 4 frontend-3d + 6 frontend-ui + 3 extras) → `.claude/agents/`
    - 16 commands (15 core + 1 frontend-3d) → `.claude/commands/`
    - 23 core hooks + up to 16 stack/package hooks (9 stack + 4 frontend-3d + 3 frontend-ui) → `.claude/scripts/hooks/`
    - 7 rules + up to 12 stack/package rules (2 stack + 3 frontend-3d + 7 frontend-ui) → `.claude/rules/`

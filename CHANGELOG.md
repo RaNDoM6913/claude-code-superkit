@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Docs:** fixed stale counts surfaced by the audit — `docs/INSTALL-CLAUDE-CODE.md` (27→31 core agents), README docs index (13→15 chapters, added rows for ch.14 Frontend UI + ch.15 Env Vars), dropped the volatile "181k stars" figure, and pointed the GSD ecosystem row at the active `open-gsd/gsd-pi` (gsd-2 archived).
+
 - **Fix (agents):** dropped the unusable `Agent` tool from 4 frontend-3d leaf reviewers (presentation/r3f-scene/ui-design/frontend-perf) — subagents can't spawn sub-agents on Claude Code 2.1.x; matches the Go-specialist cleanup. (showcase `health-checker` retained `Agent`: its body genuinely instructs parallel sub-agent dispatch.)
 - **Fix (statusline):** live payload effort now takes precedence over the `CLAUDE_EFFORT` env var (was inverted), so a stale env value no longer masks the real per-turn effort.
 - **Fix (hooks):** guarded `superkit_session_key` calls in the 4 discipline hooks + audit-trail (fall back to the inline key if profile.sh is missing); routed audit-trail through the shared helper (DRY); registered the orphan `profile-helper_test.sh` in run-all.sh (now 11 suites); corrected the audit-trail-chain test comment.
