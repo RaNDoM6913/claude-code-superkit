@@ -24,6 +24,8 @@ For bug reports and regressions.
 3. **Verify** — run compilation checks, ensure no regressions
 4. **Test** — add regression test, run full suite
 
+> On a failed gate or retry, escalate effort to `max` for the next attempt and state that you are doing so. Do not silently re-run at the same effort.
+
 ### `hotfix` — Fix, test, deploy-check
 
 For urgent production issues. Minimal process, maximum speed.
@@ -32,6 +34,8 @@ For urgent production issues. Minimal process, maximum speed.
 1. **Fix** — implement the minimal fix (no refactoring, no improvements)
 2. **Test** — run existing tests, add regression test if quick
 3. **Deploy-check** — verify build succeeds, no breaking changes to API/DB
+
+> On a failed gate or retry, escalate effort to `max` for the next attempt and state that you are doing so. Do not silently re-run at the same effort.
 
 ### `spike` — Scope, research, summarize
 

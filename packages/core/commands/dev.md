@@ -263,6 +263,7 @@ Pass Number: 1
 
 1. If evaluator verdict = **PROCEED** → all criteria PASS → proceed to Phase 4
 2. If evaluator verdict = **ITERATE**:
+   - On a failed gate or retry, escalate effort to `max` for the next attempt and state that you are doing so. Do not silently re-run at the same effort.
    - Fix issues identified in the critique
    - Re-dispatch evaluator (pass N+1)
    - If pass count > MAX_PASSES → proceed to Phase 4 with warning:
