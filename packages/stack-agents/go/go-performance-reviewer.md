@@ -37,6 +37,16 @@ Read if exists:
 
 A clean review is a valid review — do not manufacture findings to look productive.
 
+## Evidence Gate (before emitting any finding)
+
+Before reporting a finding, confirm ALL of:
+1. **Exact citation** — `file:line` (or `file:start-end`) you actually read.
+2. **Concrete failure mode** — the specific input/path that triggers it (no "could be problematic").
+3. **Context checked** — you read the surrounding code / caller, not just the line.
+4. **Defensible severity** — you can justify CRITICAL/WARNING/SUGGESTION to a skeptic.
+
+Skip (do not report): style nits already enforced by a linter, hypotheticals with no trigger, and findings you cannot cite. A clean review is valid.
+
 ### Phase 1: Checklist (quick scan)
 Run through the Performance Checklist items below. Report violations immediately without extended analysis.
 

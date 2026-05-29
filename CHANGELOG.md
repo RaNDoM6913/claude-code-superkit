@@ -6,6 +6,7 @@ All notable changes to claude-code-superkit are documented here.
 
 - **Reviewers (Opus 4.8):** shifted from conservative filtering to a two-stage discovery→triage discipline with an "Open Questions" bucket, so 4.8's literal instruction-following no longer drops real low-severity findings. Applied across the reviewers + /review + /dev gates.
 - **Reviewers (Opus 4.8):** replaced the legacy "think step by step / show your reasoning" idiom (pre-adaptive-thinking) with a results-oriented instruction across the affected agents.
+- **Reviewers:** added a shared Evidence Gate (cite-line / concrete-trigger / context-checked / defensible-severity + skip-list + "clean review is valid") — inspired by everything-claude-code.
 - **README:** added a one-line value wedge, unified the install flow, surfaced dual Claude-Code+Codex support up top, and demoted v1.4.1 bugfix detail below the fold.
 - **README:** added a "which command" decision table, a concrete /dev walkthrough, an all-Opus rationale with third-party validation, and consolidated the ecosystem accordions.
 - **Fix:** Go specialist reviewers (error/concurrency/performance/observability) claimed to dispatch parallel sub-agents and declared the `Agent` tool, but subagents cannot spawn sub-agents on Claude Code 2.1.x. Reframed audit mode as orchestrator-driven fan-out and removed the unusable `Agent` tool (matching `go-reviewer`).

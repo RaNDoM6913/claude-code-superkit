@@ -1,7 +1,7 @@
 ---
 name: go-error-reviewer
 description: Deep audit of Go error handling — wrapping, inspection, logging, panic/recover patterns
-tokens: 1855
+tokens: 2342
 model: opus
 allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 ---
@@ -38,6 +38,16 @@ Read if exists:
 **Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
 
 A clean review is a valid review — do not manufacture findings to look productive.
+
+## Evidence Gate (before emitting any finding)
+
+Before reporting a finding, confirm ALL of:
+1. **Exact citation** — `file:line` (or `file:start-end`) you actually read.
+2. **Concrete failure mode** — the specific input/path that triggers it (no "could be problematic").
+3. **Context checked** — you read the surrounding code / caller, not just the line.
+4. **Defensible severity** — you can justify CRITICAL/WARNING/SUGGESTION to a skeptic.
+
+Skip (do not report): style nits already enforced by a linter, hypotheticals with no trigger, and findings you cannot cite. A clean review is valid.
 
 ### Phase 1: Checklist (quick scan)
 

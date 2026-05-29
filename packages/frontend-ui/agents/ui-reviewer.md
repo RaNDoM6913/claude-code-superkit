@@ -2,7 +2,7 @@
 name: ui-reviewer
 description: |
   Frontend UI code review umbrella — typography, color, spacing, motion, interaction, overall aesthetic. Covers 2D DOM UI built with React/Vue/Svelte + Tailwind / CSS / CSS-in-JS. Runs a quick umbrella scan and dispatches specialist sub-reviewers (ui-typography-reviewer, ui-color-reviewer, ui-motion-reviewer, ui-interaction-reviewer, ui-design-critic) when a specific domain needs deep attention.
-tokens: 1807
+tokens: 2226
 
   **Dispatch automatically when:**
   - User asks for "audit", "review", "polish", "critique" AND active edits are in `.tsx/.jsx/.ts/.css/.scss/.html/.vue` files
@@ -75,6 +75,16 @@ recommendations accordingly") and proceed. Do not block.
 **Stage 2 — Triage:** For each candidate, assign Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW). Report HIGH/MEDIUM-confidence findings normally. Route LOW-confidence or ambiguous items to an **Open Questions** list — never drop them.
 
 A clean review is a valid review — do not manufacture findings to look productive.
+
+## Evidence Gate (before emitting any finding)
+
+Before reporting a finding, confirm ALL of:
+1. **Exact citation** — `file:line` (or `file:start-end`) you actually read.
+2. **Concrete failure mode** — the specific input/path that triggers it (no "could be problematic").
+3. **Context checked** — you read the surrounding code / caller, not just the line.
+4. **Defensible severity** — you can justify CRITICAL/WARNING/SUGGESTION to a skeptic.
+
+Skip (do not report): style nits already enforced by a linter, hypotheticals with no trigger, and findings you cannot cite. A clean review is valid.
 
 ## Phase 1: Scope the diff
 
