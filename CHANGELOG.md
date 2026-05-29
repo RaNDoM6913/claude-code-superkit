@@ -5,6 +5,7 @@ All notable changes to claude-code-superkit are documented here.
 ## [Unreleased]
 
 - **Fix:** completed the 3-state goal-verifier verdict migration — `/dev` Phase 5.5 still branched on the old VERIFIED/PARTIAL/FAILED tokens (broken gate logic), and the Codex + showcase goal-verifier mirrors were unsynced. All now use PASS/NEEDS-ATTENTION/NEEDS-REMEDIATION + Verification Discipline.
+- **Fix (Codex sync):** reframed Codex Go-specialist mirrors off unexecutable self-spawn wording; added Review Discipline + Evidence Gate to the Codex silent-failure-hunter mirror and Verification Discipline to the Codex reality-checker mirror (matching core).
 - **Token metadata:** regenerated `tokens:` for behavioral-nudge-engine, codebase-onboarding-engineer, and ru-text skill (cleared standing drift via `node bin/inject-tokens.js`).
 
 - **Hooks (Claude Code 2.1.141+):** audited for raw ANSI/`/dev/tty` output now that hooks run without a controlling terminal — confirmed none emit terminal escapes (no migration needed; all hooks already communicate exclusively via JSON `hookSpecificOutput` or plain stderr text).

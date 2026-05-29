@@ -62,9 +62,9 @@ For each file in the diff:
 14. **Domain errors mapped to HTTP status** — handlers must map domain errors to appropriate HTTP status codes. Raw `err.Error()` must never leak to API responses.
 15. **sql.ErrNoRows / pgx.ErrNoRows mapped to domain ErrNotFound** — database "not found" must be translated at the repo boundary, not leaked to services or handlers.
 
-## Audit Mode: Parallel Sub-Agents
+## Audit Mode: Full-Codebase Scan
 
-When running in audit mode, dispatch up to 5 parallel sub-agents:
+When the caller needs a full-codebase audit, the orchestrating session dispatches multiple copies of this reviewer in parallel — one per area below — and merges their reports. This reviewer focuses on the slice it is handed; it does not spawn sub-agents itself:
 
 ### Sub-Agent 1: Swallowed Errors
 Scan for `_ =` assignments ignoring errors, empty `if err != nil {}` blocks, and error parameters ignored in callbacks.

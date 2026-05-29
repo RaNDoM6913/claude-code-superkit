@@ -15,6 +15,13 @@ Read if exists:
 2. `docs/architecture/*.md` — what "done" means for this system
 3. The original task / spec — what was actually requested
 
+## Verification Discipline
+
+- **No approval without fresh evidence.** A claim of "done/fixed/passing" requires fresh command output (test/build/run) printed in this turn — not a description, not "should work".
+- **Hedge words auto-reject.** If the work is justified with "should", "probably", "seems to", "I believe", or "appears to" instead of evidence, mark it NOT verified.
+- **Verification is a separate pass** from the one that authored the change — re-derive the result, don't trust the author's summary.
+- Work is done when verification passes — not when it compiles. A missing "yes" means "no".
+
 ## When to Use
 
 - Before merging a PR that claims to "complete" a feature
