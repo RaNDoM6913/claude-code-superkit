@@ -100,7 +100,7 @@ Covers conventional commits, no --no-verify, no force push, branch naming.
 Enforces documentation updates in the same response as code changes. Features a 15-point trigger-to-doc mapping table (e.g., "migrations staged? update database-schema.md"), subagent delegation template for explicit doc instructions, and a 4-layer enforcement stack (rule + blocking hook + dev-workflow gate + Stop hook).
 
 ### dev-workflow.md (30 lines)
-Auto-triggers the full `/dev` orchestration (8 phases) for substantial tasks — new features, multi-file bug fixes, full-stack work. Skips orchestration for simple edits, docs-only, config changes, or questions. Claude follows the workflow naturally without the user calling `/dev` explicitly.
+Auto-triggers the full `/dev` orchestration (16 phases) for substantial tasks — new features, multi-file bug fixes, full-stack work. Skips orchestration for simple edits, docs-only, config changes, or questions. Claude follows the workflow naturally without the user calling `/dev` explicitly.
 
 ### auto-commands.md (102 lines)
 Auto-triggers individual commands (`/review`, `/test`, `/lint`, `/audit --health`, `/security-scan`) when specific conditions are met — without the user explicitly calling them. Includes the **highest priority trigger**: documentation verification before every commit. Works with the `doc-check-on-commit` hook which BLOCKS commits if docs are missing.

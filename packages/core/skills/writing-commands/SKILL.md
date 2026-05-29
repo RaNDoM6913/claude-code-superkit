@@ -37,7 +37,7 @@ Phase 7: Document    → dispatch docs-reviewer agent
 Phase 8: Report      → summary table
 ```
 
-Not every command needs all 8 phases. Simple commands (lint, test) may have 2-3 phases.
+Not every command needs many phases — the full `/dev` runs 16, but simple commands (lint, test) may have 2-3 phases.
 
 ## Dispatching Agents from Commands
 

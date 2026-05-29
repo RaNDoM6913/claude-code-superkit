@@ -20,7 +20,7 @@ Dispatches up to 4 parallel audit agents (frontend, backend, infra, security). E
 ```
 /dev <describe your task>
 ```
-The dev orchestrator runs 8 phases: understand → plan → implement → verify → test → review → document → report.
+The dev orchestrator runs 16 phases (understand → plan → implement → verify → test → review → document → report, plus plan-check, sprint-contract, goal-verify, and critic gates).
 
 ### If Something Doesn't Work
 
