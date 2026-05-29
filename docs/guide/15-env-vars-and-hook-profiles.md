@@ -63,7 +63,7 @@ When to use which:
 |-----------------------------------|---------------------------------------|-------------------------------------------------------------------------------------|---------------------------------------------------------------|
 | `CLAUDE_DISABLE_AUDIT_TRAIL`      | `audit-trail.sh` (PostToolUse)        | Appends a hash-chained JSONL line per tool call to `~/.claude/audit/YYYY-MM-DD.jsonl` | Audit log filling disk; running in ephemeral container; privacy |
 | `CLAUDE_DISABLE_SETTINGS_AUDIT`   | `audit-settings-source.sh` (SessionStart) | Inspects `.claude/settings.json` git history to warn about unreviewed upstream hook changes (CVE-2025-59536 mitigation) | You fully trust the repo and don't want the warning on every session |
-| `CLAUDE_DISABLE_COMPACT_STATE`    | `compact-state-inject.sh` (PreCompact) | Injects in-flight plan/state into the compacted context so nothing is lost           | Running with abundant context (Opus 4.7 / 1M) — compaction is rare |
+| `CLAUDE_DISABLE_COMPACT_STATE`    | `compact-state-inject.sh` (PreCompact) | Injects in-flight plan/state into the compacted context so nothing is lost           | Running with abundant context (Opus 4.8 / 1M) — compaction is rare |
 | `CLAUDE_DISABLE_PLAN_GATE`        | `plan-completion-gate.sh` (Stop)      | Blocks `Stop` if an active plan has unchecked tasks                                  | Doing throw-away work outside the `/dev` flow                 |
 | `CLAUDE_DISABLE_INTENT_DETECT`    | `user-intent-detect.sh` (UserPromptSubmit) | Classifies user prompt (commit, plan, question, etc.) to hint downstream hooks       | Intent classifier misfires on your domain; you want silence    |
 | `CLAUDE_DISABLE_SUBAGENT_VALIDATE`| `subagent-stop-validate.sh` (SubagentStop) | Validates that a dispatched subagent actually produced output matching its contract  | Subagent is exploratory / free-form and the check is noisy    |
@@ -104,7 +104,7 @@ Read by `packages/core/hooks/context-monitor.sh` on every PostToolUse.
 | Env var                       | Default     | Meaning                                                              |
 |-------------------------------|-------------|----------------------------------------------------------------------|
 | `CLAUDE_CONTEXT_TOKENS_USED`  | `0`         | Current tokens in the context window. Injected by the harness.       |
-| `CLAUDE_CONTEXT_TOKENS_MAX`   | `1000000`   | Upper bound used to compute the percentage. Defaults to Opus 4.7 1M. |
+| `CLAUDE_CONTEXT_TOKENS_MAX`   | `1000000`   | Upper bound used to compute the percentage. Defaults to Opus 4.8 1M. |
 
 The hook prints a warning at 75% and a stronger warning at 90% usage. If `CLAUDE_CONTEXT_TOKENS_USED=0` (the harness is not passing it), the hook exits silently.
 
@@ -189,7 +189,7 @@ export CLAUDE_DISABLE_SUBAGENT_VALIDATE=1
 | `~/.claude/audit/` filling disk / ephemeral container    | `CLAUDE_DISABLE_AUDIT_TRAIL=1`                               |
 | Working without a `/dev` plan, plan-gate is noisy        | `CLAUDE_DISABLE_PLAN_GATE=1`                                 |
 | Intent classifier misfires on your prompts               | `CLAUDE_DISABLE_INTENT_DETECT=1`                             |
-| Long context, Opus 4.7, no need for compact state        | `CLAUDE_DISABLE_COMPACT_STATE=1`                             |
+| Long context, Opus 4.8, no need for compact state        | `CLAUDE_DISABLE_COMPACT_STATE=1`                             |
 | Exploratory subagent runs, output contract not enforced  | `CLAUDE_DISABLE_SUBAGENT_VALIDATE=1`                         |
 | Design system legitimately uses Inter / Roboto / etc.    | `CLAUDE_DISABLE_UI_FONT_CHECK=1`                             |
 | Prototyping without a color token palette yet            | `CLAUDE_DISABLE_UI_COLOR_CHECK=1`                            |

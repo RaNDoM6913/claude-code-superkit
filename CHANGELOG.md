@@ -4,7 +4,7 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-(Move to a versioned section on next release.)
+- **Opus 4.8 version refresh** — badge + CLAUDE.md templates + docs guide + showcase trailers bumped 4.7 → 4.8. The opus alias already auto-routed; this is the human-readable catch-up.
 
 ## [1.4.1] — 2026-05-14
 

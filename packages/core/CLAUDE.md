@@ -78,13 +78,13 @@ Current: `TODO: 000001..000NNN`
 
 ## Context Management
 
-Opus 4.7 provides a 1M-token context window, so compaction is rare — do not stop tasks early or abbreviate work due to context concerns. Be persistent and autonomous: complete tasks fully.
+Opus 4.8 provides a 1M-token context window, so compaction is rare — do not stop tasks early or abbreviate work due to context concerns. Opus 4.8 also recovers better after compaction, staying on task across long agentic traces. Be persistent and autonomous: complete tasks fully.
 
 For unusually long sessions that do approach the limit, save progress to `.claude/.task-state.json` before the context refreshes. When compaction happens, always preserve: modified file list, current task description, test commands, and any active plan progress. For normal work, this is not needed.
 
 ## Parallel Execution
 
-Opus 4.7 handles parallel tool calls well — use them aggressively whenever operations are independent. Batch into a single message:
+Opus 4.8 handles parallel tool calls well — use them aggressively whenever operations are independent. Batch into a single message:
 
 - Reading 3+ files → multiple `Read` calls in parallel
 - Searching for different patterns → multiple `Grep` calls in parallel

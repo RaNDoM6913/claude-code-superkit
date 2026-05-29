@@ -42,7 +42,7 @@ AUDIT_DIR="$HOME/.claude/audit"
 
 # Count tagged overrides + /dev invocations in the last 60 minutes
 # (across all audit files — today + maybe yesterday at a day boundary).
-# Window widened for Opus 4.7 1M context: sessions last longer, so 60 min
+# Window widened for Opus 4.8 1M context: sessions last longer, so 60 min
 # keeps the post-compaction summary representative of the active stretch.
 cutoff=$(date -u -v-60M +%s 2>/dev/null || date -u -d '60 minutes ago' +%s 2>/dev/null || echo 0)
 
