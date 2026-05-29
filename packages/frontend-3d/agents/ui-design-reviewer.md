@@ -3,7 +3,7 @@ name: ui-design-reviewer
 description: Anti-slop UI review — typography, color calibration, layout diversity, motion quality, interactive states. Activate when reviewing frontend components for design quality.
 tokens: 979
 model: opus
-allowed-tools: Read, Grep, Glob, Agent
+allowed-tools: Read, Grep, Glob
 ---
 
 # UI Design Reviewer

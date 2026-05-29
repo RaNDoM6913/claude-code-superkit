@@ -3,7 +3,7 @@ name: r3f-scene-reviewer
 description: Review React Three Fiber and Three.js code — color management, tone mapping, texture pipeline, GLB handling, useFrame performance, disposal patterns. Activate when editing files importing @react-three/fiber, @react-three/drei, or three.
 tokens: 960
 model: opus
-allowed-tools: Read, Grep, Glob, Agent
+allowed-tools: Read, Grep, Glob
 ---
 
 # R3F / Three.js Scene Reviewer
