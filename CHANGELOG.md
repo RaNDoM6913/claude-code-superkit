@@ -5,6 +5,7 @@ All notable changes to claude-code-superkit are documented here.
 ## [Unreleased]
 
 - **Hooks (Claude Code 2.1.141+):** audited for raw ANSI/`/dev/tty` output now that hooks run without a controlling terminal — confirmed none emit terminal escapes (no migration needed; all hooks already communicate exclusively via JSON `hookSpecificOutput` or plain stderr text).
+- **statusline.cjs:** additively surfaces Opus 4.8 effort level + a context-budget indicator when the CLI provides them (defensively gated; unchanged on older CLIs). Reads optional JSON payload from stdin (Claude Code 2.1.x), falls back gracefully when absent or on a TTY. `context_window` interpreted as CURRENT usage per 2.1.x semantics. Also honours `CLAUDE_EFFORT` env var.
 - **Advisory hooks:** warn-only PreToolUse messages could be swallowed by Claude Code; now also emitted via `hookSpecificOutput.additionalContext` (new `superkit_advise` helper) so reminders reach the model (ECC-inspired).
 - **Advisory hooks (Opus 4.8):** added per-session dedup/throttling (default 10-min window, `CLAUDE_NUDGE_WINDOW_MIN` to tune) so nudges don't spam — 4.8 self-flags (OMC-inspired). Throttles nudge frequency only; reviewer coverage is unaffected.
 - **superkit-counts-verify:** label-anchored README parsing (was positional `sed`), single-source internal-file exclusions (was magic `-2`/`-1`), and gated the network `gh repo view` behind `--check-remote`.
