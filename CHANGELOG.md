@@ -6,6 +6,7 @@ All notable changes to claude-code-superkit are documented here.
 
 - **Opus 4.8 version refresh** — badge + CLAUDE.md templates + docs guide + showcase trailers bumped 4.7 → 4.8. The opus alias already auto-routed; this is the human-readable catch-up.
 - **Fix:** `[wip]`-on-main protection in `dev-required-on-commit.sh` was dead code (`$GIT_CMD_PREFIX` used before definition); hoisted the prefix resolution + added a regression test.
+- **`lib/profile.sh`** — added shared `superkit_session_key()` (SESSION_ID → CLAUDE_HOOK_PID → PPID) to standardize per-session hook state.
 
 ## [1.4.1] — 2026-05-14
 

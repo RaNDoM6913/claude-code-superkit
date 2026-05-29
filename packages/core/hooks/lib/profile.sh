@@ -37,3 +37,10 @@ should_skip_hook() {
 
 # Keep the function available to sourcing scripts.
 export -f should_skip_hook 2>/dev/null || true
+
+# Canonical per-session key: prefer Claude Code session_id, then hook PID, then PPID.
+# Use for any TMPDIR state file that must accumulate across hook invocations in a session.
+superkit_session_key() {
+  printf '%s' "${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}"
+}
+export -f superkit_session_key 2>/dev/null || true

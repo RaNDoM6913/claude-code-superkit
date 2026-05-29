@@ -8,6 +8,7 @@ SUITES=(
   "dev-required-on-commit_test.sh"
   "dev-required-wip-on-main_test.sh"
   "json-path_test.sh"
+  "session-key-helper_test.sh"
 )
 
 TOTAL_PASS=0
