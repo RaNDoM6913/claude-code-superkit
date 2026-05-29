@@ -33,7 +33,7 @@ Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDI
 ### Phase 1: Checklist (quick scan)
 Now informed by project docs — flag violations of documented conventions as higher confidence.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 Use project context to assess cross-component impact.
 
 ## Severity / Confidence System

@@ -24,7 +24,7 @@ Read if exists:
 ### Phase 1: Checklist (quick scan)
 Run through the Review Checklist items below. Report violations immediately.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 1. What queries will this change generate?
 2. What are the performance implications at scale (100K+ rows)?
 3. Are there index implications?

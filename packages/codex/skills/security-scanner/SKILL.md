@@ -13,14 +13,14 @@ Scan the codebase for common security vulnerabilities based on OWASP guidelines 
 ### Phase 1: Checklist (quick scan)
 Run through Checks 1-18 below. Report violations immediately without extended analysis.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 After the checklist, analyze:
 1. What is the overall security posture?
 2. What are the highest-risk attack surfaces?
 3. Are there systemic patterns (e.g., consistently missing input validation)?
 4. What compensating controls exist?
 
-Show your reasoning before stating findings in Phase 2.
+Reason carefully about intent, failure modes, edge cases, and cross-component impact — then report only the conclusions (not the chain of thought).
 
 ## Checks
 
