@@ -13,6 +13,7 @@ SUITES=(
   "audit-trail-chain_test.sh"
   "warn-visibility_test.sh"
   "nudge-throttle_test.sh"
+  "counts-verify_test.sh"
 )
 
 TOTAL_PASS=0
