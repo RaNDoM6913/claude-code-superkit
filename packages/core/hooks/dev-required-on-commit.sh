@@ -150,6 +150,16 @@ budget_last_30min() {
   echo "$cnt"
 }
 
+# ── Resolve the real target repo if `-C <path>` is present ──
+# Must be defined before the override-tag block so Rule 3 ([wip]-on-main)
+# can call `$GIT_CMD_PREFIX rev-parse` to detect the current branch.
+GIT_TARGET_DIR=$(echo "$COMMAND" | sed -nE 's/.*git[[:space:]]+(-[cC][[:space:]]+([^[:space:]]+)).*/\2/p' | head -n1)
+if [ -n "$GIT_TARGET_DIR" ] && [ -d "$GIT_TARGET_DIR" ]; then
+  GIT_CMD_PREFIX="git -C $GIT_TARGET_DIR"
+else
+  GIT_CMD_PREFIX="git"
+fi
+
 # ── Override: explicit bypass tag in commit message (Task 12 validation) ──
 # Recognised tags: [quick] [no-dev] [trivial] [hotfix] [wip]
 MATCHED_TAG=$(echo "$COMMAND" | grep -oiE '\[(quick|no-dev|trivial|hotfix|wip)(:[^]]*)?\]' | head -1)
@@ -305,14 +315,6 @@ EOF
   fi
   reset_state
   exit 0
-fi
-
-# ── Resolve the real target repo if `-C <path>` is present ──
-GIT_TARGET_DIR=$(echo "$COMMAND" | sed -nE 's/.*git[[:space:]]+(-[cC][[:space:]]+([^[:space:]]+)).*/\2/p' | head -n1)
-if [ -n "$GIT_TARGET_DIR" ] && [ -d "$GIT_TARGET_DIR" ]; then
-  GIT_CMD_PREFIX="git -C $GIT_TARGET_DIR"
-else
-  GIT_CMD_PREFIX="git"
 fi
 
 STAGED=$($GIT_CMD_PREFIX diff --cached --name-only 2>/dev/null)

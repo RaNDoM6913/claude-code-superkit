@@ -6,6 +6,7 @@ DIR=$(cd "$(dirname "$0")" && pwd)
 SUITES=(
   "doc-check-on-commit_test.sh"
   "dev-required-on-commit_test.sh"
+  "dev-required-wip-on-main_test.sh"
   "json-path_test.sh"
 )
 
