@@ -16,6 +16,13 @@ Read if exists:
 2. The implementation plan/spec that was executed
 3. `git log --oneline -10` — recent commits
 
+## Verification Discipline
+
+- **No approval without fresh evidence.** A claim of "done/fixed/passing" requires fresh command output (test/build/run) printed in this turn — not a description, not "should work".
+- **Hedge words auto-reject.** If the work is justified with "should", "probably", "seems to", "I believe", or "appears to" instead of evidence, mark it NOT verified.
+- **Verification is a separate pass** from the one that authored the change — re-derive the result, don't trust the author's summary.
+- Work is done when verification passes — not when it compiles. A missing "yes" means "no".
+
 ## When to Use
 
 - After Phase 5 (Test) in /dev workflow — before review
@@ -56,7 +63,7 @@ Does real data flow through?
 ```
 ## Goal Verification Report
 
-### Overall: VERIFIED / PARTIAL / FAILED
+### Overall: PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION
 
 ### Results
 | Goal | EXISTS | SUBSTANTIVE | WIRED | DATA-FLOW |
@@ -68,9 +75,9 @@ Does real data flow through?
 1. [goal] [level] — description + evidence
 
 ### Verdict
-- VERIFIED — all goals pass all 4 levels
-- PARTIAL — some goals ≤3 levels
-- FAILED — any goal fails EXISTS or SUBSTANTIVE
+- PASS — all goals pass all 4 levels
+- NEEDS-ATTENTION — some goals ≤3 levels; list the exact in-place fixes
+- NEEDS-REMEDIATION — any goal fails EXISTS or SUBSTANTIVE; re-plan with reasons
 ```
 
 IMPORTANT: Actually read files and run grep. Don't assume — verify.

@@ -262,9 +262,9 @@ Changed files: {list from Phase 3}
 
 4-level check: EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW.
 
-**VERIFIED** → proceed to Phase 6.
-**PARTIAL** → fix data-flow issues, re-verify.
-**FAILED** → return to Phase 3 — critical artifacts missing.
+**PASS** → proceed to Phase 6.
+**NEEDS-ATTENTION** → fix the listed gaps in place, re-verify.
+**NEEDS-REMEDIATION** → return to Phase 3 / re-plan — critical artifacts missing.
 
 **Skip for simple tasks** (1 file, < 100 lines).
 
@@ -342,7 +342,7 @@ Output a summary:
 | 3.5 Evaluate | ✅ PROCEED | Pass 1/2, all criteria met |
 | 4. Verify | ✅ | Compilation clean |
 | 5. Test | ✅ | X tests, all passing |
-| 5.5 Goals | ✅ VERIFIED | All 4 levels pass |
+| 5.5 Goals | ✅ PASS | All 4 levels pass |
 | 6. Review | ✅ | [agents]: PASS |
 | 6.5 Critic | ⏭ skipped | Standard complexity |
 | 7. Document | ✅ | Updated [doc files] |
