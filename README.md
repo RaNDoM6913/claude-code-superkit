@@ -79,6 +79,7 @@ Keyword or AI semantic search via API.
 
 ## 🆕 What's New
 
+- **v1.4.2** — **Claude Opus 4.8 adaptation**: coverage-not-filtering reviewers (two-stage discovery→triage + Open Questions), per-role effort convention, Evidence Gate, verifier discipline, 3-state verdicts, three verified hook fixes, full Codex/showcase sync, and a README rework (see [CHANGELOG](CHANGELOG.md)).
 - **v1.4.1** — 20-defect bugfix patch (see [CHANGELOG](CHANGELOG.md)).
 
 <details>
@@ -94,7 +95,7 @@ Keyword or AI semantic search via API.
 - 🔒 **Codex `default.rules` DSL** — Starlark-like approval policy for Codex CLI (forbid `rm -rf /`, `sudo`, `dd`; allow `git`, `npm`, `systemctl restart`, `nginx reload`; prompt on force-push, hard reset). Adapted from VKirill/codex-starter-kit.
 - 🐹 **Go references +5** — `di-frameworks.md` (uber-fx / dig / wire comparison), `graphql-patterns.md` (gqlgen), `module-management.md`, `stay-updated.md` (Go release cadence), `standard-stdlib-now.md` (what stdlib now replaces). 24 → 29 files.
 
-Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0) · [v1.3.11](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.3.11).
+Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0).
 
 </details>
 
