@@ -20,6 +20,8 @@
 
 Battle-tested in a production app with 68+ endpoints and 50 database migrations. Features double-verification code review, 4-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration.
 
+**Why all-Opus?** On a flat-rate Claude Code subscription, downgrading agents to Sonnet/Haiku only degrades quality without saving money — even cost-optimizing kits disable model downgrade on flat-rate plans. Superkit pins every agent to the `opus` alias, so it rode straight to Opus 4.8 with zero config churn.
+
 <table>
 <tr>
 <td width="50%">
@@ -102,6 +104,14 @@ Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.0](ht
   <img src="docs/dev-flow.svg" alt="/dev — 16-phase development orchestrator: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
 </p>
 
+**Example:** `/dev add rate limiting to login`
+1. Loads CLAUDE.md + architecture docs (Phase 0)
+2. Plans + validates the plan (plan-checker gate)
+3. Implements behind a sprint contract
+4. Reviewers fan out (security-scanner, ts-reviewer) in parallel
+5. goal-verifier checks the change against the original goal
+6. Commits only when verification passes with fresh evidence
+
 ## 🚀 Installation
 
 ### Claude Code (recommended)
@@ -159,6 +169,17 @@ Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/
 ```
 
 Or run `bash setup.sh --codex` from a cloned superkit repo to install both Claude Code and Codex CLI support in one go. Model: **gpt-5.5** + **xhigh** reasoning.
+
+### Which command do I use?
+
+| I want to… | Use |
+|------------|-----|
+| Ship a feature end-to-end | `/dev <task>` |
+| Review a PR / branch | `/review --comment` |
+| Fix a bug | `/workflow bugfix` |
+| Set up a new repo | `/superkit-init` |
+| Understand an unfamiliar codebase | dispatch `codebase-onboarding-engineer` |
+| Refresh docs after drift | `/superkit-evolve` |
 
 ## ⌨️ Key Commands
 
@@ -317,50 +338,6 @@ bash setup.sh
 
 Full reference: **[docs/FRONTEND-3D.md](docs/FRONTEND-3D.md)** · Guide: **[Chapter 13](docs/guide/13-frontend-3d.md)**
 
-### 🎨 External Design & Asset Resources
-
-Personal pick-list of resources worth keeping around when shipping polished frontend work. Grouped by intent so the list scales cleanly as it grows.
-
-<details>
-<summary><b>Expand — components · inspiration · assets · platforms · skills</b></summary>
-
-#### Components & tools
-
-- **[React Bits](https://reactbits.dev)** — 110+ animated React components, copy-paste or `jsrepo` install · open-source (MIT + Commons Clause) · [DavidHDev/react-bits](https://github.com/DavidHDev/react-bits)
-- **[Unicorn.Studio](https://www.unicorn.studio)** — no-code WebGL/shader editor, ship premium hero sections without writing GLSL · freemium (free: 70 effects + 10 publishes; paid adds commercial license)
-
-#### Inspiration & references
-
-- **[Cosmos](https://www.cosmos.so)** — curated visual moodboards with color/vibe search · freemium (~500 free saves, Premium ~$8/mo)
-
-#### Assets (fonts, graphics)
-
-- **[Free Faces](https://www.freefaces.gallery)** — curated directory of free typefaces (Cursive / Display / Mono / Sans / Serif / Slab) · licenses vary per font, check each
-- **[Pixolite](https://pixolite.ru)** — free 3D icons, letters (EN/RU), backgrounds and textures (RU-language site) · free per-asset, verify terms before commercial use
-
-#### Platforms & skill marketplaces
-
-- **[21st.dev](https://21st.dev)** — AI agent deployment platform + community UI component library
-- **[SkillsMP](https://skillsmp.com)** — 500K+ agent-skill marketplace with keyword + AI semantic search API
-
-#### Community skill packs (install via `npx skills add`)
-
-| Source | Skills | Count |
-|--------|--------|-------|
-| greensock/gsap-skills | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
-| freshtechbro/claudedesignskills | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
-| Leonxlnx/taste-skill | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
-
-#### MCP server
-
-| Server | Package | Purpose |
-|--------|---------|---------|
-| gsap-master | `bruzethegreat-gsap-master-mcp-server@2.2.0` | Full GSAP API, intent analysis, production patterns |
-
-</details>
-
----
-
 ## 🏗️ Showcase
 
 See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 13 hooks, 11 skills, and 6 rules.
@@ -427,12 +404,12 @@ This toolkit is **complementary** to the [Superpowers plugin](https://github.com
 
 Install both for the complete experience.
 
-### 🧩 Recommended Companion Tools
+### 🧩 Ecosystem & companions
 
-Skills, MCP servers, and repos that complement Superkit's orchestration. Superkit provides the pipeline (hooks, commands, `/dev`); these add depth.
+Skills, MCP servers, design/asset resources, and repos that complement Superkit's orchestration. Superkit provides the pipeline (hooks, commands, `/dev`); these add depth.
 
 <details>
-<summary><b>Expand — skills · MCP servers · repos · language packs</b></summary>
+<summary><b>Expand — skills · MCP servers · design & assets · repos · language packs</b></summary>
 
 #### Skills (install separately)
 
@@ -442,25 +419,42 @@ Skills, MCP servers, and repos that complement Superkit's orchestration. Superki
 | app-store-preflight | iOS/macOS App Store review validator | [GitHub](https://github.com/truongduy2611/app-store-preflight-skills) |
 | app-store-screenshots | AI-generated App Store screenshots — device frames + marketing copy (3.2K stars) | [GitHub](https://github.com/ParthJadhav/app-store-screenshots) |
 
+#### Community skill packs (install via `npx skills add`)
+
+| Source | Skills | Count |
+|--------|--------|-------|
+| greensock/gsap-skills | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
+| freshtechbro/claudedesignskills | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
+| Leonxlnx/taste-skill | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
+
 #### MCP servers (add to `.mcp.json`)
 
 | Server | What | Package |
 |--------|------|---------|
 | 21st.dev magic | UI component search/generation | `@21st-dev/magic@latest` |
 | shadcn | shadcn/ui component library | `shadcn-mcp@latest` |
+| gsap-master | Full GSAP API, intent analysis, production patterns | `bruzethegreat-gsap-master-mcp-server@2.2.0` |
 | playwright | Browser automation/screenshots | Plugin (built-in) |
 | context7 | Library docs lookup | Plugin (built-in) |
+
+#### Design & asset resources
+
+- **[React Bits](https://reactbits.dev)** — 110+ animated React components, copy-paste or `jsrepo` install · open-source (MIT + Commons Clause) · [DavidHDev/react-bits](https://github.com/DavidHDev/react-bits)
+- **[Unicorn.Studio](https://www.unicorn.studio)** — no-code WebGL/shader editor, ship premium hero sections without writing GLSL · freemium
+- **[Cosmos](https://www.cosmos.so)** — curated visual moodboards with color/vibe search · freemium
+- **[Free Faces](https://www.freefaces.gallery)** — curated directory of free typefaces · licenses vary per font, check each
+- **[Pixolite](https://pixolite.ru)** — free 3D icons, letters (EN/RU), backgrounds and textures (RU-language site) · verify terms before commercial use
+- **[21st.dev](https://21st.dev)** — AI agent deployment platform + community UI component library
+- **[SkillsMP](https://skillsmp.com)** — 500K+ agent-skill marketplace with keyword + AI semantic search API
 
 #### Repos & platforms
 
 | Resource | What | Link |
 |----------|------|------|
-| oh-my-claudecode | 11.6K stars — TypeScript plugin with 19 agents, 31 skills, smart model routing, auto-learner, HUD statusline | [GitHub](https://github.com/Yeachan-Heo/oh-my-claudecode) |
-| Get Shit Done (GSD-2) | 41K stars — meta-prompting framework with plan validation, goal-backward verification | [GitHub](https://github.com/gsd-build/gsd-2) |
+| oh-my-claudecode | TypeScript plugin with 19 agents, 31 skills, smart model routing, auto-learner, HUD statusline | [GitHub](https://github.com/Yeachan-Heo/oh-my-claudecode) |
+| Get Shit Done (GSD-2) | Meta-prompting framework with plan validation, goal-backward verification | [GitHub](https://github.com/gsd-build/gsd-2) |
 | Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
 | Awesome MCP Servers | Curated list of MCP servers — 300+ servers across all categories | [GitHub](https://github.com/punkpeye/awesome-mcp-servers) |
-
-> Design-focused platforms (21st.dev, SkillsMP) live in **[External Design & Asset Resources](#-external-design--asset-resources)** above.
 
 #### Language-specific skill packs
 
