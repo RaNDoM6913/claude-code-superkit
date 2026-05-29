@@ -27,7 +27,7 @@ INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
 [ -z "$TOOL_NAME" ] && exit 0
 
-STREAK_FILE="${CLAUDE_EDIT_STREAK_FILE:-${TMPDIR:-/tmp}/claude-edit-streak-${PPID}}"
+STREAK_FILE="${CLAUDE_EDIT_STREAK_FILE:-${TMPDIR:-/tmp}/claude-edit-streak-$(superkit_session_key)}"
 
 case "$TOOL_NAME" in
   Bash)

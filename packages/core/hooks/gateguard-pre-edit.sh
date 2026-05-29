@@ -68,7 +68,7 @@ if [ "$TOOL_NAME" = "Bash" ]; then
 fi
 
 # State file tracks the last Grep/Read timestamp + tool call counter.
-STATE_FILE="${CLAUDE_GATEGUARD_STATE:-${TMPDIR:-/tmp}/superkit-gateguard-state-${PPID}}"
+STATE_FILE="${CLAUDE_GATEGUARD_STATE:-${TMPDIR:-/tmp}/superkit-gateguard-state-$(superkit_session_key)}"
 WINDOW_SECONDS="${CLAUDE_GATEGUARD_WINDOW:-600}"
 
 now=$(date +%s)

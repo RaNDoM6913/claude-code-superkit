@@ -27,7 +27,7 @@ case "$TOOL_NAME" in
   *) exit 0 ;;
 esac
 
-STATE_FILE="${CLAUDE_GATEGUARD_STATE:-${TMPDIR:-/tmp}/superkit-gateguard-state-${PPID}}"
+STATE_FILE="${CLAUDE_GATEGUARD_STATE:-${TMPDIR:-/tmp}/superkit-gateguard-state-$(superkit_session_key)}"
 now=$(date +%s)
 
 # Reset counter on facts-gathering tool use — atomic write via temp + mv.

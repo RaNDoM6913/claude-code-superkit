@@ -74,7 +74,33 @@ if [ -f "$STREAK_FILE" ]; then
 fi
 echo "PASS: fast profile skips"
 
+# Test 7: cross-call accumulation via SESSION_ID
+# Empirically proves whether per-session state survives across hook invocations.
+# Without fix: each `bash "$HOOK"` spawns a new PID → different PPID → count resets.
+# With fix (superkit_session_key): SESSION_ID wins, all 5 calls share one state file.
+export SESSION_ID="test-sess-$$"
+unset CLAUDE_EDIT_STREAK_FILE
+SESS_STREAK_FILE="${TMPDIR}/claude-edit-streak-${SESSION_ID}"
+rm -f "$SESS_STREAK_FILE"
+
+for i in 1 2 3 4 5; do
+  echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/fake.txt"}}' | bash "$HOOK" 2>/dev/null || true
+done
+
+SESS_COUNT=$(cat "$SESS_STREAK_FILE" 2>/dev/null || echo 0)
+if [ "$SESS_COUNT" -lt 5 ]; then
+  echo "FAIL: cross-call accumulation — state did not accumulate across invocations (count=$SESS_COUNT, expected 5)"
+  echo "  Likely cause: hook uses bare \$PPID instead of superkit_session_key()"
+  unset SESSION_ID
+  rm -f "$SESS_STREAK_FILE"
+  exit 1
+fi
+echo "PASS: cross-call accumulation via SESSION_ID (count=$SESS_COUNT)"
+
+unset SESSION_ID
+rm -f "$SESS_STREAK_FILE"
+
 # Cleanup
 rm -f "$STREAK_FILE"
 echo ""
-echo "ALL EDIT-STREAK TESTS PASSED (6/6)"
+echo "ALL EDIT-STREAK TESTS PASSED (7/7)"
