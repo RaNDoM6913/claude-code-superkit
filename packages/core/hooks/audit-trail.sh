@@ -76,7 +76,7 @@ TS=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 # ── Prepare log directory + chain state ──────────────────────────────────
 AUDIT_DIR="$HOME/.claude/audit"
-LAST_HASH_FILE="$AUDIT_DIR/.last-hash"
+LAST_HASH_FILE="$AUDIT_DIR/.last-hash-${SESSION_KEY}"
 mkdir -p "$AUDIT_DIR" 2>/dev/null
 
 PREV_HASH=$(cat "$LAST_HASH_FILE" 2>/dev/null)
@@ -114,7 +114,7 @@ LOG_FILE="$AUDIT_DIR/$(date -u +%Y-%m-%d).jsonl"
 printf '%s\n' "$LINE" >> "$LOG_FILE"
 
 # Update last-hash via mv-rename for atomicity
-TMP_HASH="$AUDIT_DIR/.last-hash.$$"
+TMP_HASH="$AUDIT_DIR/.last-hash-${SESSION_KEY}.$$"
 printf '%s' "$HASH" > "$TMP_HASH" && mv -f "$TMP_HASH" "$LAST_HASH_FILE"
 
 exit 0

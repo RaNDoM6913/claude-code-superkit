@@ -8,6 +8,7 @@ All notable changes to claude-code-superkit are documented here.
 - **Fix:** `[wip]`-on-main protection in `dev-required-on-commit.sh` was dead code (`$GIT_CMD_PREFIX` used before definition); hoisted the prefix resolution + added a regression test.
 - **`lib/profile.sh`** — added shared `superkit_session_key()` (SESSION_ID → CLAUDE_HOOK_PID → PPID) to standardize per-session hook state.
 - **Fix:** `loop-guard`, `edit-streak-check`, and both `gateguard` hooks keyed state on bare `$PPID`; migrated to the shared `superkit_session_key()` so per-session state accumulates reliably (matching `audit-trail`).
+- **Fix:** `audit-trail.sh` hash chain was a single global `.last-hash`; made it per-session (`.last-hash-<session>`) so parallel subagents no longer cross-link the chain.
 
 ## [1.4.1] — 2026-05-14
 
