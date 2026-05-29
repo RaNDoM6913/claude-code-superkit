@@ -70,3 +70,72 @@ superkit_advise() {
   fi
 }
 export -f superkit_advise 2>/dev/null || true
+
+# superkit_should_emit_advisory <message> — per-session dedup/throttle for
+# noisy ADVISORY hooks (Opus 4.8 self-flags, so repeated nudges are noise).
+#   returns 0 → emit (first time, or window elapsed)
+#   returns 1 → suppress (identical advisory already emitted within window)
+# Keyed on superkit_session_key + a hash of the message, with a sliding
+# N-minute window (CLAUDE_NUDGE_WINDOW_MIN, default 10). Setting the window
+# to 0 disables throttling entirely (always emit). On success it records the
+# emit time so the NEXT identical call within the window is suppressed.
+#
+# Scope note: this throttles advisory FREQUENCY only. It must never be used to
+# suppress or filter reviewer findings — that is a separate layer. Use it only
+# in nudge/advisory hooks (edit-streak, gateguard advisory, behavioral nudges).
+superkit_should_emit_advisory() {
+  local msg="$1"
+  local window_min="${CLAUDE_NUDGE_WINDOW_MIN:-10}"
+
+  # Non-numeric window → fall back to default; 0 → throttling disabled.
+  case "$window_min" in (*[!0-9]*|"") window_min=10 ;; esac
+  [ "$window_min" = "0" ] && return 0
+
+  local window_sec=$((window_min * 60))
+  local now
+  now=$(date +%s)
+
+  # Hash the message for a compact, collision-resistant key.
+  local hash
+  if command -v shasum >/dev/null 2>&1; then
+    hash=$(printf '%s' "$msg" | shasum -a 256 | cut -d' ' -f1)
+  elif command -v sha256sum >/dev/null 2>&1; then
+    hash=$(printf '%s' "$msg" | sha256sum | cut -d' ' -f1)
+  else
+    # Last resort: cksum (weaker, but keeps the helper functional).
+    hash=$(printf '%s' "$msg" | cksum | tr -d ' ')
+  fi
+
+  local state_file="${SUPERKIT_NUDGE_STATE:-${TMPDIR:-/tmp}/superkit-nudge-$(superkit_session_key)}"
+
+  # Look up last emit time for this hash; suppress if still inside the window.
+  if [ -f "$state_file" ]; then
+    local last_epoch
+    last_epoch=$(grep -E "^${hash} " "$state_file" 2>/dev/null | tail -1 | cut -d' ' -f2)
+    case "$last_epoch" in (*[!0-9]*|"") last_epoch="" ;; esac
+    if [ -n "$last_epoch" ] && [ "$last_epoch" -le "$now" ] \
+       && [ "$((now - last_epoch))" -lt "$window_sec" ]; then
+      return 1
+    fi
+  fi
+
+  # Record this emit. Drop the prior line for this hash, append the fresh one,
+  # then atomically replace. Also prune entries older than the window so the
+  # file can't grow unbounded over a long session.
+  local tmp="${state_file}.$$.${now}"
+  {
+    if [ -f "$state_file" ]; then
+      while IFS=' ' read -r h e _; do
+        [ -z "$h" ] && continue
+        [ "$h" = "$hash" ] && continue
+        case "$e" in (*[!0-9]*|"") continue ;; esac
+        [ "$((now - e))" -ge "$window_sec" ] && continue
+        printf '%s %s\n' "$h" "$e"
+      done < "$state_file"
+    fi
+    printf '%s %s\n' "$hash" "$now"
+  } > "$tmp" 2>/dev/null && mv -f "$tmp" "$state_file" 2>/dev/null
+  # Fail-open: if the state write failed we still emit (return 0).
+  return 0
+}
+export -f superkit_should_emit_advisory 2>/dev/null || true

@@ -125,16 +125,28 @@ EOF
   # Advisory mode: stderr nudge (human-readable transcript) PLUS a stdout
   # additionalContext emission — Claude Code can swallow non-blocking
   # PreToolUse stderr, so the JSON channel is what reliably reaches the model.
-  echo "" >&2
-  echo "🔍 GATEGUARD: no Grep/Read in recent history. Consider establishing facts first:" >&2
-  echo "   - Grep for callers / importers before changing a function" >&2
-  echo "   - Read the schema / types before changing data shape" >&2
-  echo "   - Confirm the file exists and you're editing the right one" >&2
-  echo "   (CLAUDE_GATEGUARD_STRICT=1 to enforce; CLAUDE_DISABLE_GATEGUARD=1 to silence)" >&2
-  echo "" >&2
+  #
+  # Per-session throttle (Opus 4.8 self-flags): suppress an identical nudge
+  # repeated within CLAUDE_NUDGE_WINDOW_MIN (default 10m; 0 disables). This
+  # gates the advisory EMISSION only — the strict (exit 2) block above is
+  # never throttled.
+  EMIT_ADVISORY=1
+  if command -v superkit_should_emit_advisory >/dev/null 2>&1; then
+    superkit_should_emit_advisory "gateguard-pre-edit: no recent Grep/Read before edit" || EMIT_ADVISORY=0
+  fi
 
-  if command -v superkit_advise >/dev/null 2>&1; then
-    superkit_advise "GateGuard: no recent Grep/Read before this edit/command. Establish facts first — Grep for callers/importers, Read the schema/types, confirm the file exists — before changing it. (CLAUDE_GATEGUARD_STRICT=1 to enforce; CLAUDE_DISABLE_GATEGUARD=1 to silence)"
+  if [ "$EMIT_ADVISORY" = "1" ]; then
+    echo "" >&2
+    echo "🔍 GATEGUARD: no Grep/Read in recent history. Consider establishing facts first:" >&2
+    echo "   - Grep for callers / importers before changing a function" >&2
+    echo "   - Read the schema / types before changing data shape" >&2
+    echo "   - Confirm the file exists and you're editing the right one" >&2
+    echo "   (CLAUDE_GATEGUARD_STRICT=1 to enforce; CLAUDE_DISABLE_GATEGUARD=1 to silence)" >&2
+    echo "" >&2
+
+    if command -v superkit_advise >/dev/null 2>&1; then
+      superkit_advise "GateGuard: no recent Grep/Read before this edit/command. Establish facts first — Grep for callers/importers, Read the schema/types, confirm the file exists — before changing it. (CLAUDE_GATEGUARD_STRICT=1 to enforce; CLAUDE_DISABLE_GATEGUARD=1 to silence)"
+    fi
   fi
 fi
 

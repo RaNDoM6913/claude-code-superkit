@@ -41,11 +41,20 @@ case "$TOOL_NAME" in
     echo "$count" > "$STREAK_FILE"
 
     if [ "$count" -ge 5 ]; then
-      echo "" >&2
-      echo "⚠️  WARNING: edit streak — $count consecutive edits without a verification run." >&2
-      echo "   Consider running: tests, lint, build, or any Bash command." >&2
-      echo "   Set CLAUDE_DISABLE_EDIT_STREAK=1 to silence." >&2
-      echo "" >&2
+      # Per-session throttle (Opus 4.8 self-flags). Key on a stable string
+      # (NOT the changing $count) so the same nudge isn't repeated every edit
+      # within the window. CLAUDE_NUDGE_WINDOW_MIN=0 disables throttling.
+      EMIT=1
+      if command -v superkit_should_emit_advisory >/dev/null 2>&1; then
+        superkit_should_emit_advisory "edit-streak-check: consecutive edits without verification" || EMIT=0
+      fi
+      if [ "$EMIT" = "1" ]; then
+        echo "" >&2
+        echo "⚠️  WARNING: edit streak — $count consecutive edits without a verification run." >&2
+        echo "   Consider running: tests, lint, build, or any Bash command." >&2
+        echo "   Set CLAUDE_DISABLE_EDIT_STREAK=1 to silence." >&2
+        echo "" >&2
+      fi
     fi
     ;;
 esac
