@@ -1,7 +1,7 @@
 ---
 name: goal-verifier
 description: Goal-backward verification — validates implementation results match stated goals using 4-level substantiation (exists/substantive/wired/data-flow)
-tokens: 646
+tokens: 812
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -59,12 +59,20 @@ Does real data flow through?
 - Repo executes real SQL (INSERT, SELECT, not hardcoded)
 - Frontend calls real API (requestJSON, useQuery — not mock)
 
+## Verdict (one of three)
+
+Return exactly one of these three states — the same vocabulary the GAN evaluator and the `/dev` workflow use, so the orchestrator knows whether to ship, fix-in-place, or re-plan:
+
+- **PASS** — acceptance criteria met with evidence; ship. All goals pass all 4 levels.
+- **NEEDS-ATTENTION** — minor gaps fixable in place; list the exact fixes. Some goals reach only ≤3 levels (e.g. WIRED but data-flow unproven).
+- **NEEDS-REMEDIATION** — acceptance criteria not met / wrong approach; re-plan required, with reasons. Any goal fails EXISTS or SUBSTANTIVE.
+
 ## Output Format
 
 ```
 ## Goal Verification Report
 
-### Overall: VERIFIED / PARTIAL / FAILED
+### Overall: PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION
 
 ### Results
 | Goal | EXISTS | SUBSTANTIVE | WIRED | DATA-FLOW |
@@ -76,9 +84,9 @@ Does real data flow through?
 1. [goal] [level] — description + evidence
 
 ### Verdict
-- VERIFIED — all goals pass all 4 levels
-- PARTIAL — some goals ≤3 levels
-- FAILED — any goal fails EXISTS or SUBSTANTIVE
+- PASS — all goals pass all 4 levels
+- NEEDS-ATTENTION — some goals ≤3 levels; list the exact in-place fixes
+- NEEDS-REMEDIATION — any goal fails EXISTS or SUBSTANTIVE; re-plan with reasons
 ```
 
 IMPORTANT: Actually read files and run grep. Don't assume — verify.

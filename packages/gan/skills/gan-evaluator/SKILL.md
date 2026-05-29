@@ -81,7 +81,7 @@ Use the rubric provided by gan-planner. Default scoring:
 
 ```
 EVALUATION REPORT
-Verdict: PASS | NEEDS REWORK | BLOCKED
+Verdict: PASS | NEEDS-ATTENTION | NEEDS-REMEDIATION   (or BLOCKED — reported separately, see below)
 
 Test results:
   Passed: X / Y scenarios
@@ -109,7 +109,7 @@ Required fixes (in order):
 2. <action>
 ```
 
-### Step 6: Return to generator (if NEEDS REWORK)
+### Step 6: Return to generator (if NEEDS-ATTENTION or NEEDS-REMEDIATION)
 
 The verdict + critical failures become input to the next generator iteration. The generator MUST fix only what failed — no new scope.
 
@@ -119,11 +119,15 @@ The loop ends when:
 
 ## Verdicts
 
+Same 3-state vocabulary as the `/dev` goal-verifier, so the workflow knows fix-in-place vs re-plan vs ship:
+
 | Verdict | Meaning | Next step |
 |---------|---------|-----------|
-| **PASS** | All scenarios green, anti-slop clean, edge states clear | Ship it |
-| **NEEDS REWORK** | Specific failures, generator can fix them | Re-dispatch generator with failure list |
-| **BLOCKED** | Plan is wrong / spec ambiguous / external dep broken | Escalate to user |
+| **PASS** | Acceptance criteria met with evidence — all scenarios green, anti-slop clean, edge states clear | Ship it |
+| **NEEDS-ATTENTION** | Minor gaps fixable in place — specific failures the generator can fix without re-planning | Re-dispatch generator with the exact failure list |
+| **NEEDS-REMEDIATION** | Acceptance criteria not met / wrong approach — failures imply the implementation took the wrong path | Re-plan: re-dispatch generator with reasons, or escalate if the approach itself is wrong |
+
+**BLOCKED is reported separately, not folded into the three states above.** Use BLOCKED only when the evaluation itself could not be run on the merits — plan is wrong / spec ambiguous / external dependency broken / dev server or Playwright environment failed to start. An un-runnable evaluation is not a NEEDS-REMEDIATION verdict on the work; surface it as BLOCKED and escalate to the user with the specific blocker.
 
 ## Anti-Patterns You MUST Reject
 
