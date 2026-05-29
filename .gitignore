@@ -21,3 +21,9 @@ Desktop.ini
 # (existing tracked plans remain tracked; new ones are not staged)
 docs/superpowers/plans/
 docs/superpowers/prompts/
+# Added by code-review-graph
+.code-review-graph/
+
+# Python bytecode (intake-classifier.py)
+__pycache__/
+*.pyc
