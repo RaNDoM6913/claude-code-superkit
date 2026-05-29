@@ -105,8 +105,9 @@ aesthetic — multiple defaults present."
 
 ## Phase 3: Dispatch specialists (where appropriate)
 
-Based on Phase 1, dispatch the relevant sub-reviewers **in parallel**
-(all Agent calls in a single message) when a concern is non-trivial:
+Based on Phase 1, the orchestrator dispatches the relevant sub-reviewers **in parallel**;
+this umbrella reviewer recommends WHICH specialist reviewers to run and synthesizes their findings.
+Recommend dispatch when a concern is non-trivial:
 
 | Concern | Specialist |
 |---------|------------|

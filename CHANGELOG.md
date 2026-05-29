@@ -4,6 +4,7 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Fix:** py/ts/rust/go/ui reviewers described spawning parallel sub-agents but lacked the `Agent` tool (unexecutable on Claude Code 2.1.x). Reframed audit mode as orchestrator-driven fan-out. Relevant on Opus 4.8, which is literal about granted tools.
 - **Opus 4.8 version refresh** — badge + CLAUDE.md templates + docs guide + showcase trailers bumped 4.7 → 4.8. The opus alias already auto-routed; this is the human-readable catch-up.
 - **Fix:** `[wip]`-on-main protection in `dev-required-on-commit.sh` was dead code (`$GIT_CMD_PREFIX` used before definition); hoisted the prefix resolution + added a regression test.
 - **`lib/profile.sh`** — added shared `superkit_session_key()` (SESSION_ID → CLAUDE_HOOK_PID → PPID) to standardize per-session hook state.

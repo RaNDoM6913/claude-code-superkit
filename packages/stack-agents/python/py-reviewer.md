@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 **Modes:**
 - **Coding mode** — Sequential. Apply Python conventions while writing.
 - **Review mode** — Sequential. Audit PR diffs for violations (default behavior).
-- **Audit mode** — Up to 5 parallel sub-agents for full codebase scan.
+- **Audit mode** — for a full-codebase scan, the orchestrator dispatches multiple copies of this reviewer in parallel (one per area) and merges the reports; this reviewer handles the slice it is given.
 
 # Python Code Reviewer
 

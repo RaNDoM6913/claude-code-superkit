@@ -11,7 +11,7 @@ allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 **Modes:**
 - **Coding mode** — Sequential. Apply Go conventions while writing new code.
 - **Review mode** — Sequential. Audit PR diffs for violations (default behavior).
-- **Audit mode** — Up to 5 parallel sub-agents for full codebase scan.
+- **Audit mode** — for a full-codebase scan, the orchestrator dispatches multiple copies of this reviewer in parallel (one per area) and merges the reports; this reviewer handles the slice it is given.
 
 # Go Code Reviewer
 
@@ -120,10 +120,11 @@ For each finding, rate:
   Fix: <suggested change>
 ```
 
-## Audit Mode — Parallel Sub-Agents
+## Audit Mode — Full-Codebase Scan
 
-When dispatched in **audit mode** for full codebase scan, use up to 5 parallel sub-agents (via the Agent tool):
+When the caller needs a full-codebase audit, the orchestrating session (or `/review`) dispatches multiple copies of this reviewer in parallel — one per package/area — and merges their reports. This reviewer focuses on the slice it is handed; it does not spawn sub-agents itself.
 
+Suggested area split for Go projects:
 1. **Layer violations + DI** — scan all handler/service/repo imports for layer breaches
 2. **Error handling + wrapping** — find swallowed errors, missing wrapping, log-and-return (-> See go-error-reviewer for deep audit)
 3. **Naming + code style** — MixedCaps violations, stuttering, package naming
