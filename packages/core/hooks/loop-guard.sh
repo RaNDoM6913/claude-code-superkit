@@ -29,7 +29,8 @@ fi
 FINGERPRINT=$(echo "${TOOL_NAME}:${COMMAND}" | shasum -a 256 | cut -d' ' -f1)
 
 # Log file for tracking recent calls (per-session)
-LOG_FILE="${TMPDIR:-/tmp}/claude-loop-guard-$(superkit_session_key).log"
+SESSION_KEY=$(command -v superkit_session_key >/dev/null 2>&1 && superkit_session_key || printf '%s' "${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}")
+LOG_FILE="${TMPDIR:-/tmp}/claude-loop-guard-${SESSION_KEY}.log"
 
 # Append current fingerprint
 echo "$FINGERPRINT" >> "$LOG_FILE"

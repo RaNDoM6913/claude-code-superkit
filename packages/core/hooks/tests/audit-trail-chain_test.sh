@@ -16,13 +16,15 @@ cleanup() { rm -rf "$FAKE_HOME"; }
 trap cleanup EXIT
 
 # Emit one audit event for session $1.
-# audit-trail.sh reads session_id from .session_id in the JSON payload
-# and also accepts SESSION_ID env var (used as fallback SESSION_KEY).
+# audit-trail.sh derives SESSION_KEY from the payload's .session_id field;
+# the SESSION_ID env var is only consulted as a fallback when the payload
+# omits .session_id. Here the payload always carries .session_id, so that
+# value (not any env var) drives the per-session hash file.
 emit() {
   local sid="$1"
   printf '%s' \
     '{"session_id":"'"$sid"'","tool_name":"Edit","tool_input":{"file_path":"x.txt"}}' \
-    | HOME="$FAKE_HOME" SESSION_ID="$sid" bash "$HOOK" >/dev/null 2>&1
+    | HOME="$FAKE_HOME" bash "$HOOK" >/dev/null 2>&1
 }
 
 # Interleave two sessions: A, B, A, B

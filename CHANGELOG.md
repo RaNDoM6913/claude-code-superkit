@@ -4,6 +4,7 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Fix (hooks):** guarded `superkit_session_key` calls in the 4 discipline hooks + audit-trail (fall back to the inline key if profile.sh is missing); routed audit-trail through the shared helper (DRY); registered the orphan `profile-helper_test.sh` in run-all.sh (now 11 suites); corrected the audit-trail-chain test comment.
 - **Fix:** completed the 3-state goal-verifier verdict migration — `/dev` Phase 5.5 still branched on the old VERIFIED/PARTIAL/FAILED tokens (broken gate logic), and the Codex + showcase goal-verifier mirrors were unsynced. All now use PASS/NEEDS-ATTENTION/NEEDS-REMEDIATION + Verification Discipline.
 - **Fix (Codex sync):** reframed Codex Go-specialist mirrors off unexecutable self-spawn wording; added Review Discipline + Evidence Gate to the Codex silent-failure-hunter mirror and Verification Discipline to the Codex reality-checker mirror (matching core).
 - **Token metadata:** regenerated `tokens:` for behavioral-nudge-engine, codebase-onboarding-engineer, and ru-text skill (cleared standing drift via `node bin/inject-tokens.js`).

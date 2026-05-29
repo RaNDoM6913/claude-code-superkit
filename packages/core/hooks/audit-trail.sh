@@ -40,7 +40,7 @@ INPUT=$(cat 2>/dev/null || echo '{}')
 # ── Parse payload ────────────────────────────────────────────────────────
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // "Unknown"' 2>/dev/null)
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
-SESSION_KEY="${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}"
+SESSION_KEY=$(command -v superkit_session_key >/dev/null 2>&1 && superkit_session_key || printf '%s' "${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}")
 EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // "PostToolUse"' 2>/dev/null)
 
 # Tool-specific snippet
