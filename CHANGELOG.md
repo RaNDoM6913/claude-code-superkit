@@ -7,6 +7,7 @@ All notable changes to claude-code-superkit are documented here.
 - **reality-checker / goal-verifier:** added "no approval without fresh evidence" + hedge-word auto-reject + separate-pass discipline (OMC verifier + GSD), leaning into Opus 4.8's improved honesty.
 - **gan-evaluator + /dev goal-verifier:** standardized a 3-state verdict (PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION) so the workflow knows fix-in-place vs re-plan vs ship (GSD validate-milestone). Codex GAN mirror updated.
 - **/dev + /workflow:** escalate effort to `max` on a failed gate/retry instead of re-running at the same level (leverages the Opus 4.8 effort dial; GSD-inspired).
+- **/dev:** added a fast inline self-review checkpoint (placeholders / type-consistency / spec-coverage) before the expensive subagent review gates (superpowers-inspired).
 - **Reviewers (Opus 4.8):** shifted from conservative filtering to a two-stage discovery→triage discipline with an "Open Questions" bucket, so 4.8's literal instruction-following no longer drops real low-severity findings. Applied across the reviewers + /review + /dev gates.
 - **Reviewers (Opus 4.8):** replaced the legacy "think step by step / show your reasoning" idiom (pre-adaptive-thinking) with a results-oriented instruction across the affected agents.
 - **Codex mirrors + showcase + authoring guide:** removed the legacy "think step by step / show your reasoning" idiom to match the core reviewer agents (kept Codex/showcase in sync).

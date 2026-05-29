@@ -330,6 +330,8 @@ Changed files: {list from Phase 3}
 
 ## Phase 6 — Review
 
+**Inline self-review (fast, before subagent gates):** Before dispatching reviewers, do a 30-second self-pass on the diff: (a) no placeholders/TODOs/`unimplemented` left, (b) types/signatures consistent with callers, (c) every acceptance criterion has a corresponding change. Fix obvious issues now so the expensive adversarial gates focus on real risk.
+
 Dispatch reviewer agents **in parallel** based on what changed and what's available:
 
 | Changed Files | Agent |
