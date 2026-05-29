@@ -34,7 +34,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 ## Review Process
 ### Phase 1: Checklist (quick scan)
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 
 ## Checklist
 1. **Check name** — what to grep/read, what to look for

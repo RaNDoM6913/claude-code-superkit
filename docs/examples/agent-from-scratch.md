@@ -54,7 +54,7 @@ Review Dockerfiles for security vulnerabilities, performance issues, and best pr
 
 Run through all 10 checks below. Report violations immediately.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 
 After the checklist:
 1. What is the intent of this Dockerfile?

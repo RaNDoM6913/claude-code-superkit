@@ -159,4 +159,4 @@ jq empty .claude/settings.json && echo "Valid" || echo "BROKEN"
 ## Getting Help
 
 - Open an issue: https://github.com/RaNDoM6913/claude-code-superkit/issues
-- Check the guide: `packages/core/docs/guide/`
+- Check the guide: `docs/guide/`

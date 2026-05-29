@@ -18,8 +18,6 @@ Self-contained package for **2D frontend UI design & polish**. Sibling to `front
 | Hooks | 3 | `ui-banned-fonts-check`, `ui-color-check`, `ui-animation-easing-check` |
 | Skills | 1 | `impeccable-craft` (user-invocable, opt-in) |
 
-> **Implementation status:** this package is being built incrementally. See the local plan file in `docs/superpowers/plans/` for phase-by-phase progress.
-
 ## How agents know when to fire
 
 Each agent's `description` field contains explicit dispatch rules. Example from `ui-reviewer`:

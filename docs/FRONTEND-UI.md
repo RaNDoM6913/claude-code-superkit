@@ -35,7 +35,7 @@ Both `frontend-3d` and `frontend-ui` can be installed together -- `frontend-3d` 
 
 ## Philosophy
 
-1. **Auto-dispatch, not slash-commands.** There is no `/impeccable audit` or `/ui check`. The 6 agents fire automatically based on file patterns and user intent ("audit", "review", "polish", "critique"). The umbrella `ui-reviewer` scopes the diff and delegates to specialists in parallel. Users never have to remember which reviewer to call.
+1. **Auto-dispatch, not slash-commands.** There is no `/impeccable audit` or `/ui check`. The 6 agents fire automatically based on file patterns and user intent ("audit", "review", "polish", "critique"). The umbrella `ui-reviewer` scopes the diff and recommends which specialists to run; the orchestrator dispatches them in parallel. Users never have to remember which reviewer to call.
 
 2. **Path-scoped rules.** Every rule uses `applyWhenPaths` scoped to UI files (`**/*.tsx`, `**/*.jsx`, `**/*.ts`, `**/*.css`, `**/*.scss`, `**/*.html`, `**/*.vue`, `**/tailwind.config.*`, `**/*.tokens.*`). Backend edits never trigger UI rule-loading; UI edits never miss them.
 
@@ -49,13 +49,13 @@ Both `frontend-3d` and `frontend-ui` can be installed together -- `frontend-3d` 
 
 ## Agents
 
-All agents use `model: opus`. Output follows the standard format: `[SEVERITY · CONFIDENCE] short title / file:line / what's wrong / why / concrete suggested change`. Specialists are dispatched in parallel by `ui-reviewer` when a concern is non-trivial, or directly by the user.
+All agents use `model: opus`. Output follows the standard format: `[SEVERITY · CONFIDENCE] short title / file:line / what's wrong / why / concrete suggested change`. Specialists are recommended by `ui-reviewer` and dispatched in parallel by the orchestrator when a concern is non-trivial, or invoked directly by the user.
 
 ### Dispatch matrix
 
-| Agent | Dispatches on | Does NOT dispatch on | Key checks | Delegates to |
+| Agent | Dispatches on | Does NOT dispatch on | Key checks | Recommends |
 |-------|--------------|---------------------|------------|--------------|
-| `ui-reviewer` (umbrella) | "audit/review/polish/critique" + active edits in `.tsx/.jsx/.ts/.css/.scss/.html/.vue`; 3+ UI file edits in one task; pre-commit with ≥2 `.tsx/.jsx/.css` staged | Backend (`.go/.py/.rs/.java/.rb/.cs/.kt`); 3D/WebGL/R3F (owned by `ui-design-reviewer` in `frontend-3d`); tests (`*.test.*`, `*.spec.*`); non-token configs | 11-point reflex audit (reflex fonts, `#000`/`#fff`, purple→blue, identical-card grids, big-number hero, everything-in-Card, centered-everything, identical padding, rounded-icon-above-heading, `ease-in` on UI, grey text on colored bg) | All 5 specialists in parallel based on Phase 1 scoping |
+| `ui-reviewer` (umbrella) | "audit/review/polish/critique" + active edits in `.tsx/.jsx/.ts/.css/.scss/.html/.vue`; 3+ UI file edits in one task; pre-commit with ≥2 `.tsx/.jsx/.css` staged | Backend (`.go/.py/.rs/.java/.rb/.cs/.kt`); 3D/WebGL/R3F (owned by `ui-design-reviewer` in `frontend-3d`); tests (`*.test.*`, `*.spec.*`); non-token configs | 11-point reflex audit (reflex fonts, `#000`/`#fff`, purple→blue, identical-card grids, big-number hero, everything-in-Card, centered-everything, identical padding, rounded-icon-above-heading, `ease-in` on UI, grey text on colored bg) | All 5 specialists (orchestrator dispatches them in parallel based on Phase 1 scoping) |
 | `ui-typography-reviewer` | `font-family` / `font-weight` / type-scale token changed; Google Fonts import added/changed; user asks about "fonts/type/typography/hierarchy/readability" with UI files active | Backend; 3D; tests/configs without type tokens | Reflex-font grep, type-scale ratios (flag <1.2×), line-height 1.4–1.6 body / +0.05 on light-on-dark, line-length ~65–75ch, weight variance, `font-display` hygiene, OpenType features (`tnum`, `onum`, stylistic sets) | -- (terminal specialist) |
 | `ui-color-reviewer` | Palette / theme / color-token changed; dark/light theme introduced or modified; new `oklch/hsl/rgb/hex` values; user asks about "palette/colors/theme/contrast/accessibility/dark mode" | Backend; 3D; tests | OKLCH-first audit, `#000`/`#fff` ban (CRITICAL), tinted neutrals, chroma-peak-in-middle, 60-30-10 weight, purple→blue / cyan-on-black / gradient text (CRITICAL), WCAG AA (APCA where possible), focus-ring contrast ≥3:1, theme-by-use-context justification | -- (terminal specialist) |
 | `ui-motion-reviewer` | `transition` / `@keyframes` / `animation` / `useSpring` / `AnimatePresence` / `motion.*` block added or modified; new easing `cubic-bezier`; user asks about "animation/motion/transition/easing/duration/spring" | Backend; 3D (R3F scroll-driven 3D is owned by `frontend-3d`); tests | 4-question framework (should it / why / easing / duration), `ease-in` CRITICAL, `transition: all`, `scale(0)` entry, bounce/elastic on UI, animating `width/height/top/left/margin`, `prefers-reduced-motion` gap, keyboard-action animation | -- (terminal specialist; output is the Before/After/Why table) |
@@ -402,7 +402,7 @@ Production code with attention to:
 
 ### Stage 4 -- Polish
 
-Dispatch the 5 specialists in parallel on the first implementation:
+Recommend the 5 specialists; the orchestrator dispatches them in parallel on the first implementation:
 
 1. `ui-typography-reviewer` on type system.
 2. `ui-color-reviewer` on palette.
@@ -428,7 +428,7 @@ When `y`, the installer copies from `packages/frontend-ui/` to the project's `.c
 
 - `agents/*.md` → `.claude/agents/`
 - `rules/*.md` → `.claude/rules/`
-- `hooks/*.sh` → `.claude/hooks/` (with hook entries added to `.claude/settings.json` `PostToolUse` section)
+- `hooks/*.sh` → `.claude/scripts/hooks/` (with hook entries added to `.claude/settings.json` `PostToolUse` section)
 - `skills/impeccable-craft/` → `.claude/skills/`
 
 No framework-specific configuration is needed -- the hooks trigger on file extension, the rules trigger on `applyWhenPaths` globs.

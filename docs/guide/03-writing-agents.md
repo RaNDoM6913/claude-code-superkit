@@ -41,7 +41,7 @@ A numbered list of concrete checks. Each item has a grep pattern or file path to
 
 Aim for 8--15 checklist items. More than 20 means you should split into two agents.
 
-### Phase 2: Deep Analysis (think step by step)
+### Phase 2: Deep Analysis
 
 After the checklist, the agent reasons about higher-level concerns:
 
@@ -52,7 +52,7 @@ After the checklist, the agent reasons about higher-level concerns:
 3. Are there edge cases the checklist didn't cover?
 4. Does this change affect other components?
 
-Show your reasoning before stating findings.
+Reason carefully about intent, failure modes, and edge cases — then report only the conclusions.
 ```
 
 ## Severity Levels

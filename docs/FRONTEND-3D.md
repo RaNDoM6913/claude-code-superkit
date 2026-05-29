@@ -23,7 +23,7 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 **Description:** Review scroll-driven presentation sections using GSAP ScrollTrigger, phone frame components, and 3D textures.
 
-**Allowed tools:** Read, Grep, Glob, Agent
+**Allowed tools:** Read, Grep, Glob
 
 **Activate when:** Editing scroll-driven presentation sections.
 
@@ -54,7 +54,7 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 **Description:** Review React Three Fiber and Three.js code -- color management, tone mapping, texture pipeline, GLB handling, useFrame performance, disposal patterns.
 
-**Allowed tools:** Read, Grep, Glob, Agent
+**Allowed tools:** Read, Grep, Glob
 
 **Activate when:** Editing files importing `@react-three/fiber`, `@react-three/drei`, or `three`.
 
@@ -84,7 +84,7 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 **Description:** Anti-slop UI review -- typography, color calibration, layout diversity, motion quality, interactive states.
 
-**Allowed tools:** Read, Grep, Glob, Agent
+**Allowed tools:** Read, Grep, Glob
 
 **Activate when:** Reviewing frontend components for design quality.
 
@@ -115,7 +115,7 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 **Description:** Frontend performance review -- bundle size, lazy loading, CSS containment, web vitals, image optimization.
 
-**Allowed tools:** Read, Grep, Glob, Bash, Agent
+**Allowed tools:** Read, Grep, Glob, Bash
 
 **Activate when:** Reviewing frontend code for performance.
 
