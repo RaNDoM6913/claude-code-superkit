@@ -4,6 +4,7 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Advisory hooks:** warn-only PreToolUse messages could be swallowed by Claude Code; now also emitted via `hookSpecificOutput.additionalContext` (new `superkit_advise` helper) so reminders reach the model (ECC-inspired).
 - **Effort convention (Opus 4.8):** documented per-role effort guidance (xhigh/max for deep specialists, high default) in the CLAUDE.md template + repo conventions + Codex AGENTS.md.
 - **reality-checker / goal-verifier:** added "no approval without fresh evidence" + hedge-word auto-reject + separate-pass discipline (OMC verifier + GSD), leaning into Opus 4.8's improved honesty.
 - **gan-evaluator + /dev goal-verifier:** standardized a 3-state verdict (PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION) so the workflow knows fix-in-place vs re-plan vs ship (GSD validate-milestone). Codex GAN mirror updated.

@@ -122,7 +122,9 @@ EOF
     exit 2
   fi
 
-  # Advisory mode: just a stderr nudge
+  # Advisory mode: stderr nudge (human-readable transcript) PLUS a stdout
+  # additionalContext emission — Claude Code can swallow non-blocking
+  # PreToolUse stderr, so the JSON channel is what reliably reaches the model.
   echo "" >&2
   echo "🔍 GATEGUARD: no Grep/Read in recent history. Consider establishing facts first:" >&2
   echo "   - Grep for callers / importers before changing a function" >&2
@@ -130,6 +132,10 @@ EOF
   echo "   - Confirm the file exists and you're editing the right one" >&2
   echo "   (CLAUDE_GATEGUARD_STRICT=1 to enforce; CLAUDE_DISABLE_GATEGUARD=1 to silence)" >&2
   echo "" >&2
+
+  if command -v superkit_advise >/dev/null 2>&1; then
+    superkit_advise "GateGuard: no recent Grep/Read before this edit/command. Establish facts first — Grep for callers/importers, Read the schema/types, confirm the file exists — before changing it. (CLAUDE_GATEGUARD_STRICT=1 to enforce; CLAUDE_DISABLE_GATEGUARD=1 to silence)"
+  fi
 fi
 
 exit 0

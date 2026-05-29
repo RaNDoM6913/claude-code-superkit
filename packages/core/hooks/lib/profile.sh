@@ -44,3 +44,29 @@ superkit_session_key() {
   printf '%s' "${SESSION_ID:-${CLAUDE_HOOK_PID:-$PPID}}"
 }
 export -f superkit_session_key 2>/dev/null || true
+
+# superkit_advise <message> — emit a warn-only PreToolUse advisory as JSON
+# `hookSpecificOutput.additionalContext` on stdout so it reaches the model.
+# Claude Code can swallow non-blocking PreToolUse stderr; stdout JSON is the
+# reliable channel for advisory context (ECC-inspired). Callers that also
+# print to stderr (for human-readable transcript logs) should additionally
+# call this so the model actually sees the reminder. Prefer jq (every hook in
+# this kit already assumes jq is on PATH); fall back to a manually-escaped
+# printf only if jq is unavailable, so the hook never emits invalid JSON.
+superkit_advise() {
+  local msg="$1"
+  if command -v jq >/dev/null 2>&1; then
+    jq -cn --arg m "$msg" \
+      '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$m}}'
+  else
+    # Minimal JSON string escaping: backslash, double-quote, then control chars.
+    local esc="$msg"
+    esc="${esc//\\/\\\\}"
+    esc="${esc//\"/\\\"}"
+    esc="${esc//$'\t'/\\t}"
+    esc="${esc//$'\r'/\\r}"
+    esc="${esc//$'\n'/\\n}"
+    printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","additionalContext":"%s"}}\n' "$esc"
+  fi
+}
+export -f superkit_advise 2>/dev/null || true
