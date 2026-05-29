@@ -52,6 +52,6 @@ Total criteria: 15
 | Score | Verdict |
 |-------|---------|
 | 15 / 15 | PASS |
-| 13-14 | NEEDS MINOR REWORK |
-| 10-12 | NEEDS REWORK |
+| 13-14 | NEEDS-ATTENTION |
+| 10-12 | NEEDS-REMEDIATION |
 | ≤ 9 | BLOCKED |

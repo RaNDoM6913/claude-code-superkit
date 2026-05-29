@@ -79,7 +79,14 @@ Keyword or AI semantic search via API.
 
 ## 🆕 What's New
 
-- **v1.4.2** — **Claude Opus 4.8 adaptation**: coverage-not-filtering reviewers (two-stage discovery→triage + Open Questions), per-role effort convention, Evidence Gate, verifier discipline, 3-state verdicts, three verified hook fixes, full Codex/showcase sync, and a README rework (see [CHANGELOG](CHANGELOG.md)).
+**v1.4.2 — Claude Opus 4.8 adaptation** (see [CHANGELOG](CHANGELOG.md)):
+
+- 🧠 **Opus 4.8, zero churn** — the `opus` alias auto-routed to 4.8, so all 56 agents picked it up with no config changes. New effort convention: deep specialists run at `xhigh`/`max`, with auto-escalation to `max` on a failed `/dev` gate or retry.
+- 🎯 **Coverage-not-filtering reviewers** — a two-stage discovery→triage discipline + shared Evidence Gate + an "Open Questions" bucket, so 4.8's more literal instruction-following no longer drops real low-severity findings. Applied across every reviewer + `/review` + `/dev`.
+- 🔬 **Verifier discipline + 3-state verdict** — `reality-checker` / `goal-verifier` now demand fresh evidence ("no approval without it", hedge-word auto-reject); `gan-evaluator` + `goal-verifier` standardized on PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION.
+- 🐛 **Three verified hook bug fixes** — `[wip]`-on-main protection was dead code; four discipline hooks keyed state on `$PPID` and silently never accumulated; the `audit-trail` hash chain was global. All fixed with regression tests (11 suites green).
+- 🤝 **Full Codex + showcase sync** — every reviewer modernization mirrored into the Codex skills and showcase, so all surfaces share one protocol.
+- 📝 **README + docs overhaul** — value wedge, a "which command do I use?" table, a concrete `/dev` walkthrough, an all-Opus rationale, plus ~25 stale-doc fixes caught by two all-Opus multi-agent audits.
 - **v1.4.1** — 20-defect bugfix patch (see [CHANGELOG](CHANGELOG.md)).
 
 <details>

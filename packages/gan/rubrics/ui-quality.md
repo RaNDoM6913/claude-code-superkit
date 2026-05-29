@@ -57,8 +57,8 @@ Total criteria: 17
 | Score | Verdict |
 |-------|---------|
 | 17 / 17 | PASS — ship it |
-| 14-16 / 17 | NEEDS MINOR REWORK — fix the gaps, re-evaluate |
-| 11-13 / 17 | NEEDS REWORK — significant gaps, regenerate sections |
+| 14-16 / 17 | NEEDS-ATTENTION — fix the gaps in place, re-evaluate |
+| 11-13 / 17 | NEEDS-REMEDIATION — significant gaps, regenerate sections |
 | ≤ 10 / 17 | BLOCKED — back to planner |
 
 ## Critical failures (auto-fail regardless of score)
@@ -69,4 +69,4 @@ Total criteria: 17
 - Placeholder text in the rendered output
 - No empty state defined (just shows blank div)
 
-If ANY critical failure → verdict is at most NEEDS REWORK, never PASS.
+If ANY critical failure → verdict is at most NEEDS-REMEDIATION, never PASS.

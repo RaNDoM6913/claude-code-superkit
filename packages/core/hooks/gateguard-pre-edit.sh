@@ -13,7 +13,7 @@
 # JSON decision).
 #
 # Inspired by GateGuard pattern from affaan-m/everything-claude-code
-# (Anthropic Hackathon Winner, 181k stars).
+# (Anthropic Hackathon Winner).
 #
 # Opt-out: CLAUDE_DISABLE_GATEGUARD=1
 
