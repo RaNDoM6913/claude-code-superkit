@@ -1,7 +1,7 @@
 ---
 name: codebase-onboarding-engineer
 description: First-pass analyst for unfamiliar codebases — maps tech stack, architecture layers, conventions, hot paths, and known constraints into a concise onboarding brief
-tokens: 1050
+tokens: 1387
 model: opus
 allowed-tools: Read, Grep, Glob, Bash
 ---

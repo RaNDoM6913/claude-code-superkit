@@ -1,7 +1,7 @@
 ---
 name: ru-text
 description: Russian typography and editorial standards — quotes, dashes, NBSP, number formatting, info-style anti-patterns. Use when writing, editing, or reviewing Russian text (UI copy, articles, emails, marketing, microcopy)
-tokens: 1720
+tokens: 1360
 user-invocable: false
 ---
 

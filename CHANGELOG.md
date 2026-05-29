@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Token metadata:** regenerated `tokens:` for behavioral-nudge-engine, codebase-onboarding-engineer, and ru-text skill (cleared standing drift via `node bin/inject-tokens.js`).
+
 - **Hooks (Claude Code 2.1.141+):** audited for raw ANSI/`/dev/tty` output now that hooks run without a controlling terminal — confirmed none emit terminal escapes (no migration needed; all hooks already communicate exclusively via JSON `hookSpecificOutput` or plain stderr text).
 - **statusline.cjs:** additively surfaces Opus 4.8 effort level + a context-budget indicator when the CLI provides them (defensively gated; unchanged on older CLIs). Reads optional JSON payload from stdin (Claude Code 2.1.x), falls back gracefully when absent or on a TTY. `context_window` interpreted as CURRENT usage per 2.1.x semantics. Also honours `CLAUDE_EFFORT` env var.
 - **Advisory hooks:** warn-only PreToolUse messages could be swallowed by Claude Code; now also emitted via `hookSpecificOutput.additionalContext` (new `superkit_advise` helper) so reminders reach the model (ECC-inspired).

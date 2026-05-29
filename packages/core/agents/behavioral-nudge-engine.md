@@ -1,7 +1,7 @@
 ---
 name: behavioral-nudge-engine
 description: Behavioral psychology specialist for retention, habit loops, and notification cadence. Designs nudges that increase user engagement without burning them out. Use when building reminders, streak mechanics, onboarding sequences, or social-app retention features
-tokens: 1080
+tokens: 1403
 model: opus
 allowed-tools: Read, Grep, Glob, Edit
 ---
