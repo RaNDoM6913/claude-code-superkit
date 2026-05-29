@@ -15,10 +15,12 @@
 
 | Repo | Что следим | Зачем |
 |------|-----------|-------|
-| `Yeachan-Heo/oh-my-claudecode` | Releases, новые agents/skills/hooks | Прямой конкурент, 11.6K stars |
-| `gsd-build/get-shit-done` | Releases, новые паттерны | Meta-prompting, plan validation |
+| `Yeachan-Heo/oh-my-claudecode` (ветка `main`) | Releases, новые agents/skills/hooks | Прямой конкурент, 11.6K stars |
+| `Yeachan-Heo/oh-my-claudecode` (ветка **`dev`**) | Коммиты в `dev` — там идёт актуальная работа с Opus 4.8 | Ранний доступ к новым паттернам до релиза |
+| `open-gsd/gsd-pi` (npm `@opengsd/gsd-pi`) | Releases, новые паттерны | Meta-prompting, plan validation — GSD-2 переехал сюда (старый `gsd-build/get-shit-done` архивирован) |
 | `affaan-m/everything-claude-code` | Releases, agents, skills | 28 agents, 125 skills |
 | `obra/superpowers` | Releases, новые skills | Наш plugin-зависимость |
+| Anthropic **Dynamic Workflows** / experimental **Agent Teams** | Официальные анонсы и документация (блог + platform docs) | Новые platform-level примитивы, которые могут вытеснить наши ручные оркестраторы |
 
 ## Варианты реализации
 
