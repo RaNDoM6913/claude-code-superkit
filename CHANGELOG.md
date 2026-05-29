@@ -5,6 +5,9 @@ All notable changes to claude-code-superkit are documented here.
 ## [Unreleased]
 
 - **Docs:** the 5 `/dev` flow SVGs (main `dev-flow.svg` + 4 gallery variants) + the gallery README now label the pipeline 16-phase (was 15). The diagrams visualize the 15 working phases; Phase 0 (`read-docs` — load project context) is the entry preamble, now explained in the gallery README. Resolves the diagram/text phase-count mismatch flagged in v1.4.2.
+- **Docs:** richer "What's New" for v1.4.2 in the README — full emoji-bulleted highlights (matching the v1.4.0 style) instead of a one-line summary.
+- **Fix:** GAN rubrics (`ui-quality`, `functionality`) still used the retired "NEEDS REWORK" tiers — aligned to the 3-state verdict (NEEDS-ATTENTION / NEEDS-REMEDIATION) the gan-evaluator now emits.
+- **Fix:** dropped a leftover "181k stars" figure from a `gateguard-pre-edit.sh` comment.
 
 ## [1.4.2] — 2026-05-29
 
