@@ -157,16 +157,16 @@ function getSuperkit() {
 // Claude Code 2.1.x may send { effort: "xhigh" } or { effort: { level: "xhigh" } }
 // or the env var CLAUDE_EFFORT (for hook contexts). Absent → return ''.
 function getEffortLevel(payload) {
-  // Env var takes precedence (always available in hook runs)
-  const envEffort = process.env.CLAUDE_EFFORT;
-  if (envEffort) return envEffort;
-  if (payload == null) return '';
+  // Live payload effort takes precedence — the CLI sends the real per-turn
+  // effort here, so a stale CLAUDE_EFFORT env var must not mask it.
   // Payload shape: { effort: "xhigh" } or { effort: { level: "xhigh" } }
-  const e = payload.effort;
-  if (e == null) return '';
-  if (typeof e === 'string') return e;
-  if (typeof e === 'object' && e.level != null) return String(e.level);
-  return '';
+  if (payload != null) {
+    const e = payload.effort;
+    if (typeof e === 'string' && e) return e;
+    if (e != null && typeof e === 'object' && e.level != null) return String(e.level);
+  }
+  // Fall back to the env var (available in hook runs / older CLIs).
+  return process.env.CLAUDE_EFFORT || '';
 }
 
 // ── Parse context budget from payload ─────────────────
