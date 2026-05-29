@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720" role="img" aria-label="/dev radial clock — 15 phases orbit the core, compact layout">
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="720" viewBox="0 0 720 720" role="img" aria-label="/dev radial clock — 16 phases orbit the core, compact layout">
   <defs>
     <filter id="sh" x="-10%" y="-10%" width="120%" height="130%">
       <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0f172a" flood-opacity="0.1"/>
@@ -11,7 +11,7 @@
   <rect width="720" height="720" rx="20" fill="url(#bg)" stroke="#e2e8f0" stroke-width="1.5"/>
 
   <!-- Caption -->
-  <text x="360" y="32" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" font-weight="600" fill="#64748b" letter-spacing="3">/DEV — 15 PHASES IN ORBIT</text>
+  <text x="360" y="32" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="10.5" font-weight="600" fill="#64748b" letter-spacing="3">/DEV — 16 PHASES IN ORBIT</text>
 
   <!-- Phase arcs (colored guide lines outside node ring) -->
   <path d="M 360 108 A 252 252 0 0 1 578 486" fill="none" stroke="#a5b4fc" stroke-width="5" opacity="0.6" stroke-linecap="round"/>
@@ -31,7 +31,7 @@
   <!-- /dev core pill centered -->
   <rect x="255" y="332" width="210" height="56" rx="14" fill="#ede9fe" stroke="#c4b5fd" stroke-width="2" filter="url(#sh)"/>
   <text x="360" y="357" text-anchor="middle" font-family="'SF Mono',monospace" font-size="17" font-weight="700" fill="#6d28d9">/dev &lt;task&gt;</text>
-  <text x="360" y="376" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9.5" fill="#7c3aed">15-phase orchestrator</text>
+  <text x="360" y="376" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9.5" fill="#7c3aed">16-phase orchestrator</text>
 
   <!-- Planning (steps 1-6) — indigo -->
   <g>

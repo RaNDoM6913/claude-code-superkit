@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Docs:** the 5 `/dev` flow SVGs (main `dev-flow.svg` + 4 gallery variants) + the gallery README now label the pipeline 16-phase (was 15). The diagrams visualize the 15 working phases; Phase 0 (`read-docs` — load project context) is the entry preamble, now explained in the gallery README. Resolves the diagram/text phase-count mismatch flagged in v1.4.2.
+
 ## [1.4.2] — 2026-05-29
 
 Adapts the kit to **Claude Opus 4.8** (released 2026-05-28) and lands an audit-driven hardening pass.
