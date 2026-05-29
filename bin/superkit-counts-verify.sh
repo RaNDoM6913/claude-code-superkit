@@ -7,9 +7,8 @@
 # the repo root via `bash bin/superkit-counts-verify.sh` without remembering
 # the full hook path.
 #
-# Behaviour is identical — stdin payload (PreToolUse JSON), CLI args, and exit
-# code are all passed through. Flags such as --check-remote (verify the GitHub
-# About description over the network) are forwarded to the canonical hook.
+# CLI args (e.g. --check-remote, which verifies the GitHub About description
+# over the network) are forwarded to the canonical hook.
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -20,11 +19,12 @@ if [ ! -f "$HOOK" ]; then
   exit 1
 fi
 
-# If invoked with no stdin (interactive run) synthesise an empty git-commit
-# payload so the hook actually runs its checks instead of returning exit 0
-# on "not a commit" early-out.
-if [ -t 0 ]; then
-  printf '{"tool_input":{"command":"git commit -m verify"}}' | exec bash "$HOOK" "$@"
-else
-  exec bash "$HOOK" "$@"
-fi
+# This convenience wrapper is for MANUAL runs from the repo root. It always
+# synthesises a git-commit payload so the canonical hook runs its count/version
+# checks (instead of early-exiting "not a commit"). It deliberately does NOT
+# read stdin: a previous `[ -t 0 ]` check fell through to reading stdin in
+# non-interactive contexts (CI, detached/backgrounded shells) where stdin has
+# no TTY and no EOF, hanging forever — and silently no-op'd (early-exit) when
+# stdin EOF'd empty. To feed a real PreToolUse payload, invoke the canonical
+# hook ($HOOK) directly; it reads stdin as normal.
+printf '{"tool_input":{"command":"git commit -m verify"}}' | exec bash "$HOOK" "$@"
