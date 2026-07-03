@@ -1,7 +1,7 @@
 ---
 name: gan-evaluator
 description: Runs Playwright against gan-generator's output, scores against the plan's rubric, returns concrete failures. Step 3 of 3 in GAN harness — the adversarial verification step
-tokens: 2339
+tokens: 2366
 model: opus
 allowed-tools: Read, Bash, Grep, Glob
 ---
@@ -75,7 +75,7 @@ Boot the dev server, hit each edge state with Playwright, screenshot:
 // 4. Auth state — unauthenticated, expired session
 ```
 
-For each: was the state visually clear? If "no posts yet" page shows only a spinner, that's a fail.
+For each: was the state visually clear? If "no posts yet" page shows only a spinner, that's a fail. Where screenshot baselines exist, Playwright's `toHaveScreenshot()` diff also catches visual regressions.
 
 ### Step 4: Anti-AI-slop visual checks
 

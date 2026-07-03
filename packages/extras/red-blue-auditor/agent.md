@@ -111,8 +111,8 @@ CRITICAL: 1 · HIGH: 0 · MEDIUM: 2
 1. [CRITICAL] Quote all hook variables — fix immediately
 2. [WARNING] Scope Bash permission to named commands — fix this sprint
 
-### Risk Score: 65/100
-100 − 20 (1 CRITICAL) − 15 (1 chain) = 65. Clamped to 0–100.
+### Risk Score: 35/100
+100 − 40 (2 CRITICAL: 1 LLM + 1 SAST) − 10 (1 WARNING) − 15 (1 chain) = 35. Clamped to 0–100.
 
 ### Open Questions
 - .claude/hooks/deploy.sh:30 — suspected env leak into an MCP server; needs the MCP server config to confirm.
@@ -125,4 +125,4 @@ Secure config: emit `### Findings\nNone — configuration is secure.` and `### R
 - Evidence Gate: every finding = `file:line` Read this session + a concrete exploit input; else drop or Open Questions.
 - SAST: `bash <path> --path=<root> --exit-on-critical`; exit 2 = DO NOT MERGE; scan.sh missing = "SAST SKIPPED — NOT FOUND", never fabricate output.
 - Canonical enums CRITICAL/WARNING/SUGGESTION + HIGH/MEDIUM/LOW; Risk Score starts 100, apply deltas, clamp 0–100.
-- Report only after all four phases ran; a clean config is a valid result — do not inflate risk.
+- Report only after every phase (0–4) ran; a clean config is a valid result — do not inflate risk.

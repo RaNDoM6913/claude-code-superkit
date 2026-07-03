@@ -191,7 +191,7 @@ Example of a filled `## Rubric` section:
 
 - [ ] All four scenario slots are filled (or `N/A — <reason>`), each with all four assertion checkboxes.
 - [ ] `## Rubric` names the file(s), N per rubric, N/A rows with reasons, and extra criteria (or "none").
-- [ ] Test file path and files-to-modified list are named.
+- [ ] Test file path and files-to-be-modified list are named.
 - [ ] Open questions recorded under `## Assumptions` (or "none").
 
 Not all boxes checked → the plan is not done; fill the gap, do not emit.

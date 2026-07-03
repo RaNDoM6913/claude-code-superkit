@@ -13,7 +13,7 @@ Search the SkillsMP marketplace (500K+ SKILL.md files harvested from GitHub) for
 1. Confirm `SKILLSMP_API_KEY` is set before ANY call: `[ -n "$SKILLSMP_API_KEY" ]`. If empty/unset, do not call the API — show the setup message (Error Branches) and stop. Never fabricate results.
 2. At most ONE keyword search + ONE AI search per topic. Never loop, retry, or paginate the same query hoping for better hits.
 3. Read a skill's GitHub source (`githubUrl`) before recommending it — never recommend from the search snippet alone.
-4. On any non-200 response (401/403, 429, other), stop per the Error Branches table — do not retry-loop, do not invent results.
+4. On any non-200 response (401/403, 429, other), take exactly the action in the Error Branches table — do not retry-loop, do not invent results.
 5. Zero results is a valid outcome — say so and proceed to build from scratch.
 6. Present results only in the Output Contract format below.
 
@@ -76,7 +76,7 @@ Every fork below has one exact action. Default for any unlisted failure: report 
 | HTTP 401 / 403 | status 401 or 403 | Key is invalid or expired. Show the setup message and tell the user to check/regenerate the key at https://skillsmp.com. Stop. Do not retry. |
 | HTTP 429 | status 429 | Rate limit hit (30/min or 500/day). Report "SkillsMP rate limit reached — try again after reset (midnight UTC for the daily cap)." Do NOT retry-loop. Proceed with local search only. |
 | Other non-200 / network error | status not 200 | Report "SkillsMP search unavailable (HTTP <code>)." Do not invent results. Proceed with local search only. |
-| Zero results | 200 with empty results array | Say "No SkillsMP skills found for '<query>'." Proceed to build from scratch. |
+| Zero results | 200 with an empty result list | Say "No SkillsMP skills found for '<query>'." Proceed to build from scratch. |
 
 **Setup message (show verbatim when the key is missing or invalid):**
 ```

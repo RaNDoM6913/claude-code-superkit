@@ -73,7 +73,7 @@ Boot the dev server, hit each edge state with Playwright, screenshot:
 // 4. Auth state — unauthenticated, expired session
 ```
 
-For each: was the state visually clear? If "no posts yet" page shows only a spinner, that's a fail.
+For each: was the state visually clear? If "no posts yet" page shows only a spinner, that's a fail. Where screenshot baselines exist, Playwright's `toHaveScreenshot()` diff also catches visual regressions.
 
 ### Step 4: Anti-AI-slop visual checks
 

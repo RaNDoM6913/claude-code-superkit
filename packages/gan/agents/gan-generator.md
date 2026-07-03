@@ -1,7 +1,7 @@
 ---
 name: gan-generator
 description: Implements features against a gan-planner plan. Writes code + Playwright tests in lockstep, ensures anti-slop checklist is clean. Step 2 of 3 in GAN harness
-tokens: 1708
+tokens: 1734
 model: opus
 allowed-tools: Read, Edit, Write, Bash, Grep, Glob
 ---
@@ -111,6 +111,8 @@ Before declaring done, verify the plan's anti-slop checklist:
 - [ ] No unaddressed TODO in changed files
 
 ### Step 5: Hand off to gan-evaluator
+
+Emit the hand-off note (Output Contract below); it becomes `gan-evaluator`'s input alongside the plan.
 
 ## Output Contract
 
