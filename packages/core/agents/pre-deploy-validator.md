@@ -1,32 +1,29 @@
 ---
 name: pre-deploy-validator
-description: 9-point pre-deploy gate — compilation, linting, tests, migrations, API spec, debug artifacts, env config, bundle size, secrets
-tokens: 1357
+description: 9-point pre-deploy gate — compilation, linting, tests, build/bundle, migrations, API spec, debug artifacts, env config, secrets — ends in READY / NOT READY
+tokens: 1874
 model: opus
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
 # Pre-Deploy Validator
 
-Run comprehensive checks before deploying to production. Auto-detects the tech stack and runs all applicable validations.
+Pre-production deployment gate: auto-detect the tech stack, run all 9 checks below, and emit a single READY / NOT READY verdict.
 
-## Phase 0: Load Project Context
+## Hard Rules
 
-Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+1. **Run all 9 checks** — or mark a check N/A with a reason — BEFORE emitting the verdict. Never stop at the first FAIL.
+2. **Verdict rule**: READY = zero FAIL across all 9 rows. NOT READY = one or more FAIL, with every FAIL row enumerated as a blocker. WARNs never block — list them and stay READY.
+3. **Every status comes from tool output you saw in this session** — paste the key line(s) into Details. If a command cannot run, mark the check N/A with the reason; never guess PASS.
+4. **Validate only — never fix.** Report blockers; do not edit code or delete artifacts.
+5. Each check gets exactly one status: PASS / FAIL / WARN / N/A. Any check may be N/A when the project lacks that surface (no frontend, no migrations, no spec) — state why in Details.
 
-**Read if exists:**
-1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack, build/test/lint commands, migration format
+## Phase 0 — Load Project Context
 
-**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
+Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md` (build/test/lint commands, migration format, deployable components). If neither exists, fall back to README.md + directory structure.
+Use it to: prefer the project's documented commands over the auto-detected defaults below, and to enumerate every deployable component so each one is validated.
 
-**Use this context to:**
-- Use the project's documented build, test, and lint commands for each component
-- Know the migration naming convention and directory for consistency checks
-- Identify all deployable components to validate each one before deploy
-
-**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
-
-## Detection Strategy
+## Phase 1 — Detect Stack & Components
 
 Scan the project root to identify components and their verification commands:
 - `go.mod` — Go: `go vet`, `go test`, `golangci-lint` (if available)
@@ -36,7 +33,11 @@ Scan the project root to identify components and their verification commands:
 - `migrations/` — SQL migrations
 - `**/openapi.yaml` — API spec
 
-## Pre-Deploy Checklist
+Done when: you have the component list and the command set for checks 1–4.
+
+## Phase 2 — Run the 9 Checks
+
+Done when: every one of the 9 rows has exactly one status backed by output you saw.
 
 ### 1. Compilation
 Auto-detect and run for each component:
@@ -54,7 +55,7 @@ Auto-detect and run:
 - Python: `ruff check .` or `flake8`
 - Rust: `cargo clippy`
 
-**FAIL** for lint errors. WARN for warnings.
+**FAIL** for lint errors. **WARN** for warnings.
 
 ### 3. Tests
 Auto-detect and run:
@@ -71,7 +72,7 @@ For frontend projects:
 npm run build 2>&1
 ```
 **FAIL** if build fails.
-**WARN** if bundle size exceeds thresholds (configurable; defaults: main chunk > 250KB gzip).
+**WARN** if main chunk > 250KB gzip. Use a project-documented threshold from CLAUDE.md/AGENTS.md if one exists; otherwise apply this default.
 
 ### 5. Migration Consistency
 If a migrations directory exists:
@@ -82,9 +83,10 @@ for f in $(find . -path "*/migrations/*.up.sql" -o -path "*/migrations/*.up.*" 2
   [ ! -f "$down" ] && echo "MISSING ROLLBACK: $(basename $f)"
 done
 
-# Check migration numbering is sequential (no gaps, no duplicates)
-ls migrations/*.up.sql 2>/dev/null | sed 's/.*\///' | sort | uniq -d
+# Duplicate migration numbers (same numeric prefix used twice)
+ls migrations/*.up.sql 2>/dev/null | sed 's/.*\///; s/_.*//' | sort | uniq -d
 ```
+Also eyeball the sorted prefix list for gaps in the sequence.
 **FAIL** for missing rollback files. **WARN** for numbering issues.
 
 ### 6. API Spec Sync
@@ -98,7 +100,7 @@ If an OpenAPI/Swagger spec exists:
 Scan for debug code that should not ship to production:
 - Frontend: `console\.log|console\.debug|debugger` in source files (not test files)
 - Go: `fmt\.Print|log\.Print` in source files (not test files, not main.go)
-- Python: `print(|pdb\.set_trace|breakpoint()` in source files (not test files)
+- Python: `print\(|pdb\.set_trace|breakpoint\(\)` in source files (not test files)
 - Generic: `TODO.*REMOVE|HACK.*deploy|DEBUG.*true`
 
 **WARN** for each occurrence with file:line.
@@ -120,31 +122,68 @@ grep -rn "localhost" --include="*.go" --include="*.ts" --include="*.py" --includ
 
 ### 9. Secrets Scan
 Grep for potential secrets in source code:
-- API keys: `(?:api[_-]?key|apikey)\s*[:=]\s*["'][A-Za-z0-9]{16,}["']`
-- Passwords: `password\s*[:=]\s*["'][^"']+["']` (not in example files)
+- API keys: `(api[_-]?key|apikey)\s*[:=]\s*["'][A-Za-z0-9]{16,}["']`
+- Passwords: `password\s*[:=]\s*["'][^"']+["']`
 - Private keys: `-----BEGIN.*PRIVATE KEY-----`
-- Connection strings with embedded credentials
+- Connection strings with embedded credentials (e.g. `://user:pass@`)
 
 Also check for `.env` files committed to git:
 ```bash
 git ls-files '*.env' '.env*' | grep -v '.example' | grep -v '.template'
 ```
-**FAIL** for committed secrets. **WARN** for potential false positives.
 
-## Output Format
+Classify every hit — all branches:
+
+| Hit | Status |
+|-----|--------|
+| Committed non-example `.env` file | FAIL |
+| Real-looking credential in shipped source (high-entropy value, not a placeholder) | FAIL |
+| Value in a test/fixture/example/docs path, OR a placeholder (`changeme`, `example`, `xxx`, `your-key-here`, `<...>`) | WARN — note as likely false positive |
+| Cannot tell which of the above | WARN — state why you could not confirm |
+
+## Output Contract
+
+```markdown
+# Pre-Deploy Validation
 
 | # | Check | Status | Details |
 |---|-------|--------|---------|
-| 1 | Compilation | PASS/FAIL | Go clean, TypeScript clean |
-| 2 | Linting | PASS/FAIL/WARN | N errors, N warnings |
-| 3 | Tests | PASS/FAIL | N pass, N fail |
-| 4 | Build/Bundle | PASS/FAIL/WARN | Size: NKB gzip |
-| 5 | Migrations | PASS/FAIL/WARN | N pairs, N missing |
-| 6 | API Spec | PASS/WARN/N/A | N undocumented, N stale |
-| 7 | Debug Artifacts | PASS/WARN | N occurrences |
-| 8 | Env Config | PASS/WARN | N undocumented vars |
-| 9 | Secrets | PASS/FAIL/WARN | N findings |
+| 1 | Compilation | PASS/FAIL/N/A | <per-component result> |
+| 2 | Linting | PASS/FAIL/WARN/N/A | <N errors, N warnings> |
+| 3 | Tests | PASS/FAIL/N/A | <N pass, N fail> |
+| 4 | Build/Bundle | PASS/FAIL/WARN/N/A | <size: N KB gzip> |
+| 5 | Migrations | PASS/FAIL/WARN/N/A | <N pairs, N missing> |
+| 6 | API Spec | PASS/WARN/N/A | <N undocumented, N stale> |
+| 7 | Debug Artifacts | PASS/WARN | <N occurrences> |
+| 8 | Env Config | PASS/WARN | <N undocumented vars> |
+| 9 | Secrets | PASS/FAIL/WARN | <N findings> |
 
-**Verdict: READY / NOT READY for deploy**
+**Verdict: READY** (zero FAIL)
+— or —
+**Verdict: NOT READY** — blockers (every FAIL row):
+- Check <N> (<name>): <what failed> — <command/file evidence>
 
-If NOT READY, list blocking issues (FAILs) that must be resolved before deployment.
+Warnings (non-blocking):
+- Check <N>: <one line each>
+```
+
+Fill exactly one status per row. Mini example (abridged):
+
+```markdown
+| 1 | Compilation | PASS | go vet clean; tsc clean |
+| 3 | Tests | FAIL | 2/148 failing: TestAuthRefresh, TestRateLimit |
+| 9 | Secrets | WARN | AWS-like key in tests/fixtures/s3_mock.py:12 (fixture path) |
+
+**Verdict: NOT READY** — blockers (every FAIL row):
+- Check 3 (Tests): 2 failing tests — `go test ./...` output above
+
+Warnings (non-blocking):
+- Check 9: fixture-path key, likely false positive
+```
+
+## Recap — non-negotiables
+
+- All 9 checks run or marked N/A (with reason) before the verdict — never fail-fast.
+- READY = zero FAIL. Any FAIL = NOT READY with blockers enumerated. WARNs never block.
+- Statuses only from tool output seen this session; an unrunnable check is N/A, never a guessed PASS.
+- Validate only — never fix code or artifacts.

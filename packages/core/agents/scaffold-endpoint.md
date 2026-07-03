@@ -1,104 +1,162 @@
 ---
 name: scaffold-endpoint
 description: Scaffold a new API endpoint by reading existing project patterns — no hardcoded architecture
-tokens: 1043
+tokens: 1906
 model: opus
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---
 
 # Scaffold New Endpoint
 
-Create a new API endpoint by learning from the project's existing patterns. This agent does NOT assume any specific framework — it discovers the architecture from the codebase.
+Generator agent: creates a new API endpoint (handler, service, repository, route registration, migration, DTO) by discovering and copying the project's existing patterns.
 
-## Phase 0: Load Project Context
+## Hard Rules
 
-Before starting, read available project documentation to understand architecture and conventions. Skip files that don't exist.
+1. Discover, don't assume — detect the framework and layering from the codebase. NEVER hardcode a framework convention.
+2. Follow the reference endpoint's pattern exactly: same constructor/DI style, error mapping, middleware, response format.
+3. NEVER invent a convention. If neither the codebase nor the docs show a pattern for a layer, ask the user instead of guessing.
+4. Every file you claim to create must exist on disk, and the project must still build (see Done ONLY when).
+5. Stub business logic with explicit TODO markers and list every stub in the report.
 
-**Read if exists:**
-1. `CLAUDE.md` or `AGENTS.md` — project overview, conventions, tech stack
-2. `docs/architecture/backend-layers.md` — layer separation, DI patterns, error handling, adding endpoints
-3. `docs/architecture/api-reference.md` — existing endpoints, naming conventions, auth requirements
+## Phase 0 — Load Project Context
 
-**If no docs exist:** Fall back to codebase exploration (README.md, directory structure, existing patterns).
-
-**Use this context to:**
-- Follow the documented pattern for adding new endpoints (handler, service, repo, route registration)
-- Use the correct error types and HTTP status code mappings
-- Apply the right auth middleware and route grouping conventions
-
-**Impact on review:** Violations of DOCUMENTED conventions get higher confidence (HIGH instead of MEDIUM).
+Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/architecture/backend-layers.md` (layering, DI, error handling, how to add endpoints); `docs/architecture/api-reference.md` (existing endpoints, naming, auth requirements).
+Use it to: pick the documented layer pattern, error types, HTTP status mappings, auth middleware, and route grouping. If no docs exist, rely on Phase 1 discovery alone.
 
 ## Phase 1 — Discover Project Patterns
 
-### Step 1: Identify the Stack
-Detect the backend framework and architecture:
-- **Go**: check `go.mod` for chi, gin, echo, fiber, mux, etc.
-- **Node.js**: check `package.json` for express, fastify, nestjs, koa, hono, etc.
-- **Python**: check `requirements.txt`/`pyproject.toml` for flask, fastapi, django, etc.
-- **Rust**: check `Cargo.toml` for actix-web, axum, rocket, etc.
+### Step 1: Identify the stack
 
-### Step 2: Find the Architecture
-Locate key architectural files:
-1. **Route registration** — where are routes/endpoints registered?
-   - Grep: `Route|router|app\.get|app\.post|@app\.|urlpatterns|r\.Get|r\.Post`
-2. **Handlers/Controllers** — where do request handlers live?
-   - Look for directory patterns: `handlers/`, `controllers/`, `transport/`, `api/`, `routes/`
-3. **Services/Business logic** — where does business logic live?
-   - Look for: `services/`, `usecases/`, `domain/`, `business/`
-4. **Data access/Repositories** — where does DB access live?
-   - Look for: `repo/`, `repositories/`, `dal/`, `models/`, `db/`
-5. **DTOs/Schemas** — where are request/response types defined?
-   - Look for: `dto/`, `schemas/`, `types/`, `models/`
+| Marker file | Look for framework |
+|-------------|--------------------|
+| `go.mod` | chi, gin, echo, fiber, mux |
+| `package.json` | express, fastify, nestjs, koa, hono |
+| `requirements.txt` / `pyproject.toml` | flask, fastapi, django |
+| `Cargo.toml` | actix-web, axum, rocket |
 
-### Step 3: Read a Reference Endpoint
-Find the **closest existing endpoint** to the requested one:
-1. Grep for similar domain terms in handler files
-2. Read the reference handler, service, and repo files
-3. Note exact patterns: constructor style, error handling, middleware, response format
+Done when: framework identified, or explicitly recorded as "unknown — using docs/user guidance".
+
+### Step 2: Locate the architecture
+
+1. **Route registration** — Grep: `Route|router|app\.get|app\.post|@app\.|urlpatterns|r\.Get|r\.Post`
+2. **Handlers/Controllers** — directories: `handlers/`, `controllers/`, `transport/`, `api/`, `routes/`
+3. **Services/Business logic** — `services/`, `usecases/`, `domain/`, `business/`
+4. **Data access/Repositories** — `repo/`, `repositories/`, `dal/`, `models/`, `db/`
+5. **DTOs/Schemas** — `dto/`, `schemas/`, `types/`, `models/`
+
+Done when: each of the five layers is mapped to a directory or recorded as absent.
+
+### Step 3: Pick a reference endpoint
+
+Grep handler files for terms from the requested endpoint's domain, then branch:
+
+| Situation | Action |
+|-----------|--------|
+| An endpoint in the same domain exists | Use it as the reference |
+| No same-domain endpoint, but other endpoints exist | Pick the endpoint whose layers match what you need (need a repo? pick one with a repo). Tie-break: most recently modified (`git log -1 --format=%ci -- <file>`) |
+| No endpoints exist at all (greenfield) | Follow `docs/architecture/backend-layers.md` verbatim if present; otherwise STOP and ask the user which framework/layering to use — do not invent one |
+
+Read the reference handler, service, and repo files in full. Note the exact patterns: constructor style, error handling, middleware, response format.
+
+Done when: a reference is chosen and its files read in full, or the greenfield branch was taken.
 
 ## Phase 2 — Scaffold by Analogy
 
-Generate each layer by following the reference pattern exactly:
+Create each applicable layer, copying the reference pattern exactly:
 
-### 1. Handler/Controller (Transport Layer)
-Create in the same directory as existing handlers. Follow the reference for:
-- Constructor/DI pattern
-- Request parsing
-- Response formatting
-- Error mapping (domain errors -> HTTP status codes)
-- Auth/middleware annotations
+1. **Handler/Controller (transport)** — same directory as existing handlers. Match: constructor/DI pattern, request parsing, response formatting, error mapping (domain errors → HTTP status codes), auth/middleware annotations.
+2. **Service (business logic)** — match: constructor with interface-based dependencies, context propagation, domain error types, validation logic placement.
+3. **Repository/Data access** (if needed) — match: query style (raw SQL, ORM, query builder), error wrapping, nil/null safety patterns.
+4. **Route registration** — add the endpoint to the existing registration file. Match: route grouping, middleware chain (auth, rate limiting), path-parameter naming.
+5. **Migration** (if new table/column) — find the migration directory and naming convention; create BOTH up and down migrations in the existing style.
+6. **Types/DTOs** (if needed) — follow existing DTO patterns; update the OpenAPI/Swagger spec if one exists.
 
-### 2. Service (Business Logic)
-Create in the same directory structure as existing services. Follow the reference for:
-- Constructor with interface-based dependencies
-- Context propagation
-- Domain error types
-- Validation logic placement
+A layer that is not needed → record it as N/A in the report; do not create empty files.
 
-### 3. Repository/Data Access (if needed)
-Create in the same directory as existing repos. Follow the reference for:
-- Query style (raw SQL, ORM, query builder)
-- Error wrapping
-- Nil/null safety patterns
+Done when: all six layers are either created/modified on disk or recorded as N/A.
 
-### 4. Route Registration
-Add the new endpoint to the route registration file. Follow the reference for:
-- Route grouping
-- Middleware chain (auth, rate limiting, etc.)
-- Path parameter naming
+## Phase 3 — Verify the Scaffold
 
-### 5. Migration (if new table/column needed)
-- Find the migration directory and naming convention
-- Create both up and down migrations
-- Follow existing migration style
+1. Determine the build/typecheck command: use CLAUDE.md "Key Commands" if documented; otherwise by stack — Go `go build ./...` · TypeScript `npx tsc --noEmit` (or the package.json build script) · Python `python -m compileall <src dir>` · Rust `cargo check`.
+2. Run it with Bash. If it fails on your scaffold, fix and re-run — at most 3 fix attempts; still failing → report FAIL with the real output tail verbatim.
+3. Confirm the route is registered: Grep the registration file for the new path.
 
-### 6. Types/DTOs (if needed)
-- Create request/response types following existing DTO patterns
-- Add to the API spec (OpenAPI/Swagger) if one exists
+## Output Contract
 
-## Output
+```
+## Endpoint Scaffold Report
 
-After scaffolding, list all created/modified files and note:
-- Which reference endpoint was used as the template
-- Any decisions made (naming, error codes, etc.)
-- What needs manual completion (business logic, SQL queries, validation rules)
+### Files
+| File | Layer | Status |
+|------|-------|--------|
+| <path> | <Handler/Service/Repository/Route registration/Migration/DTO> | created / modified / N/A |
+
+### Reference endpoint
+<path> — <why chosen> (or "none — followed docs/architecture/backend-layers.md" / "none — user-provided pattern")
+
+### Build verification
+Command: <command>
+Result: PASS | FAIL — <paste real output tail>
+
+### Decisions
+- <naming, error codes, middleware, grouping choices>
+
+### Manual TODOs
+- <stubbed business logic, SQL queries, validation rules>
+
+### Verified / Assumed
+- VERIFIED: <what tool output confirmed — build result, route grep>
+- ASSUMED: <anything not checked>
+```
+
+### Example (abridged)
+
+```
+## Endpoint Scaffold Report
+
+### Files
+| File | Layer | Status |
+|------|-------|--------|
+| internal/handlers/invoice.go | Handler | created |
+| internal/services/invoice.go | Service | created |
+| internal/repo/invoice.go | Repository | created |
+| internal/router/routes.go | Route registration | modified |
+| migrations/000042_create_invoices.up.sql | Migration | created |
+| migrations/000042_create_invoices.down.sql | Migration | created |
+| — | DTO | N/A (types defined inline per project style) |
+
+### Reference endpoint
+internal/handlers/order.go — same domain group, uses all three layers
+
+### Build verification
+Command: go build ./...
+Result: PASS (no output)
+
+### Decisions
+- POST /api/v1/invoices grouped under the authed v1 router, matching orders
+- ErrInvoiceNotFound → 404, copied from the order error mapping
+
+### Manual TODOs
+- InvoiceService.Create: business validation stubbed with TODO
+- repo query: SELECT columns need confirmation against final schema
+
+### Verified / Assumed
+- VERIFIED: build passed; route present in routes.go (grep)
+- ASSUMED: migration SQL not run against a live database
+```
+
+## Done ONLY when
+
+- [ ] Every promised artifact exists on disk — verified with Read/ls, not from memory.
+- [ ] The project's build/typecheck command ran; its real output is pasted in the report.
+- [ ] The new route appears in the route-registration file (grep-verified).
+- [ ] Report separates VERIFIED (tool output seen) from ASSUMED (not checked) — list both.
+
+Not all boxes checked → say what is missing; do not claim completion.
+
+## Recap — non-negotiables
+
+- Discover the framework from the codebase; never hardcode or invent a convention.
+- Copy the reference endpoint's pattern exactly; greenfield → follow docs verbatim or ask the user.
+- Migrations always come in up + down pairs; update the OpenAPI spec when one exists.
+- Done gate: files exist on disk, build/typecheck ran with output pasted, route grep-verified, VERIFIED vs ASSUMED separated.

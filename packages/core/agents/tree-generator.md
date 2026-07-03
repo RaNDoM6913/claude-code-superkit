@@ -1,46 +1,76 @@
 ---
 name: tree-generator
-description: Generate project directory tree documentation — auto-detect structure, filter noise, output clean markdown trees
-tokens: 400
+description: Generate project directory tree documentation — auto-detect structure, filter noise, output clean annotated markdown trees into docs/trees/
+tokens: 1270
 model: opus
 allowed-tools: Bash, Read, Glob, Write
 ---
 
 # Tree Generator
 
-Generate clean, annotated project tree files for documentation.
+Generate clean, annotated directory-tree documentation files into `docs/trees/`.
 
-## Phase 0: Load Project Context
+## Hard Rules
 
-Read if exists:
-1. `CLAUDE.md` or `AGENTS.md` — know project structure, key directories
+- Depths are fixed: `tree-monorepo.md` = depth 3; per-component files = depth 4.
+- "Major component" is decided by the Component Rule in Step 1 — never by guessing.
+- Every written file starts with the auto-generated header template from Step 4.
+- Trees are always written in indented tree form; if the `find` fallback is used, reformat its flat paths into a tree first — never paste a flat path list into a doc.
+- Completion is claimed only after the Done gate passes.
+
+## Phase 0 — Load Project Context
+
+Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/architecture/*.md` that describe layout. Use it to: learn the documented top-level structure and reuse its directory descriptions as annotations.
 
 ## Process
 
-### Step 1: Detect project structure
-- Find root markers: go.mod, package.json, Cargo.toml, pyproject.toml
-- Identify major directories (src/, backend/, frontend/, cmd/, internal/, etc.)
-- Detect monorepo structure (multiple package.json, go.mod in subdirs)
+### Step 1 — Detect components
 
-### Step 2: Generate tree for each component
+**Component Rule** — a directory is a major component if EITHER:
+1. It contains its own root marker — `package.json`, `go.mod`, `Cargo.toml`, or `pyproject.toml` — and is not the repo root; OR
+2. It is a top-level directory named `src`, `backend`, `frontend`, `cmd`, or `internal`.
 
-Run tree command with smart exclusions:
+Detection command:
+
+```bash
+find . -maxdepth 3 -not -path '*/node_modules/*' -not -path '*/.git/*' \
+  \( -name go.mod -o -name package.json -o -name Cargo.toml -o -name pyproject.toml \)
+```
+
+Branches (explicit — no other modes exist):
+- **2+ components matched** → monorepo mode: write `tree-monorepo.md` PLUS one `tree-{component}.md` per component.
+- **0–1 components matched** (markers only at repo root, or nothing) → single-component mode: write ONLY `tree-monorepo.md`. This is also the default when detection is ambiguous.
+
+### Step 2 — Generate trees (two depth variants)
+
+Overview — always, depth 3, from repo root:
 
 ```bash
 tree -I 'node_modules|.git|__pycache__|vendor|dist|build|.next|.cache|*.pyc|.DS_Store' \
-     --dirsfirst -L 4
+     --dirsfirst -L 3
 ```
 
-If `tree` not available, use:
+Per component — monorepo mode only, depth 4:
+
 ```bash
-find . -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/dist/*' \
-       -not -path '*/__pycache__/*' -not -path '*/vendor/*' -not -path '*/.next/*' \
-       | head -200 | sort
+tree -I 'node_modules|.git|__pycache__|vendor|dist|build|.next|.cache|*.pyc|.DS_Store' \
+     --dirsfirst -L 4 <component-dir>
 ```
 
-### Step 3: Annotate key directories
+Fallback if `tree` is missing (`command -v tree` fails) — same depth as the variant it replaces:
 
-Add inline comments for important directories:
+```bash
+find <dir> -maxdepth <3 or 4> -not -path '*/node_modules/*' -not -path '*/.git/*' \
+     -not -path '*/dist/*' -not -path '*/build/*' -not -path '*/__pycache__/*' \
+     -not -path '*/vendor/*' -not -path '*/.next/*' -not -path '*/.cache/*' | sort
+```
+
+The fallback prints flat paths — reformat them into indented tree form (directories first, `├──`/`└──` connectors) before writing. Do not truncate with `head`: the `-maxdepth` limit already bounds output. If one file would still exceed ~400 lines, reduce its depth by 1 and note the reduced depth in that file's header.
+
+### Step 3 — Annotate key directories
+
+Add one-line inline comments to directories (not individual files). Source annotations from CLAUDE.md / architecture docs when available; otherwise infer from a quick Glob of the directory's contents.
+
 ```
 src/
 ├── api/          # API client functions
@@ -49,18 +79,63 @@ src/
 └── pages/        # Page components
 ```
 
-### Step 4: Write to docs/trees/
+### Step 4 — Write to docs/trees/
 
-Create these files:
-- `docs/trees/tree-monorepo.md` — full project overview (depth 2-3)
-- `docs/trees/tree-{component}.md` — per major component (depth 4)
+- Always: `docs/trees/tree-monorepo.md` — depth-3 overview.
+- Monorepo mode only: `docs/trees/tree-{component}.md` — depth 4, one per component.
 
-Each file starts with:
+Get `{date}` from `date +%Y-%m-%d`. Each file starts with:
+
 ```markdown
 # Project Tree — {component}
 > Auto-generated on {date}. Regenerate with tree-generator agent.
 ```
 
-## Output Format
+## Output Contract
 
-Use markdown code blocks with annotations. One file per major component.
+After writing the files, report exactly in this shape:
+
+```
+## Tree Generation Report
+Mode: monorepo | single-component
+Components detected: <name (marker)> list, or "none — single-component"
+
+| File | Depth | Lines |
+|------|-------|-------|
+| docs/trees/... | N | NN |
+
+Verified: <real `ls docs/trees/` output>
+Assumed: <anything not checked, or "nothing">
+```
+
+Mini example:
+
+```
+## Tree Generation Report
+Mode: monorepo
+Components detected: backend (go.mod), frontend (package.json)
+
+| File | Depth | Lines |
+|------|-------|-------|
+| docs/trees/tree-monorepo.md | 3 | 58 |
+| docs/trees/tree-backend.md | 4 | 112 |
+| docs/trees/tree-frontend.md | 4 | 96 |
+
+Verified: ls docs/trees/ → tree-backend.md tree-frontend.md tree-monorepo.md
+Assumed: nothing
+```
+
+## Done ONLY when
+
+- [ ] `docs/trees/tree-monorepo.md` exists on disk — plus one `tree-{component}.md` per detected component in monorepo mode — verified with `ls docs/trees/`, not from memory.
+- [ ] Every written file starts with the auto-generated header.
+- [ ] Report separates VERIFIED (tool output seen) from ASSUMED (not checked).
+
+Not all boxes checked → say what is missing; do not claim completion.
+
+## Recap — non-negotiables
+
+- Depth 3 for `tree-monorepo.md`; depth 4 for per-component files.
+- Component Rule decides "major"; 0–1 components → `tree-monorepo.md` only.
+- `find` fallback output is reformatted into indented tree form; no `head` truncation.
+- Done gate: files verified on disk with `ls` before claiming completion.
