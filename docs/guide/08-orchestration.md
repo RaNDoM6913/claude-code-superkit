@@ -11,44 +11,44 @@ Phase 0: Read Docs      Read architecture docs relevant to task scope
                         |
 Phase 1: Understand     Detect stack, parse task, assess complexity (5 factors), search patterns
                         |
-Phase 1.5: Architect    [Complex only] Dispatch architect for 2-3 approaches
+Phase 2: Architect      [Complex only] Dispatch architect for 2-3 approaches
                         |
-Phase 1.7: Pseudocode   [Complex only] Draft pseudocode for core algorithm before full plan
+Phase 3: Pseudocode     [Complex only] Draft pseudocode for core algorithm before full plan
                         |
-Phase 2: Plan           Output structured checklist (DB, backend, frontend, docs)
+Phase 4: Plan           Output structured checklist (DB, backend, frontend, docs)
                         |
-Phase 2.1: Contract     Generate Sprint Contract — testable acceptance criteria (MUST/SHOULD)
+Phase 5: Contract       Generate Sprint Contract — testable acceptance criteria (MUST/SHOULD)
                         |
-Phase 2.5: Validate     Dispatch plan-checker — PASS/REVISE/BLOCK
+Phase 6: Validate Plan  Dispatch plan-checker — PASS/REVISE/BLOCK
                         |
-Phase 3: Implement      Execute plan in dependency order (migration → repo → service → handler → routes → UI)
+Phase 7: Implement      Execute plan in dependency order (migration → repo → service → handler → routes → UI)
                         |
-Phase 3.5: Evaluate     Dispatch evaluator — conditional GAN loop (PROCEED/ITERATE/ESCALATE)
+Phase 8: Evaluate       Dispatch evaluator — conditional GAN loop (PROCEED/ITERATE/ESCALATE)
                         |
-Phase 4: Verify         Dispatch health-checker or run compiler directly
+Phase 9: Verify         Dispatch health-checker or run compiler directly
                         |
-Phase 5: Test           Dispatch test-generator agent, run generated tests
+Phase 10: Test          Dispatch test-generator agent, run generated tests
                         |
-Phase 5.5: Goals        Dispatch goal-verifier — EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW
+Phase 11: Verify Goals  Dispatch goal-verifier — EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW
                         |
-Phase 6: Review         Dispatch reviewer agents in parallel based on changed file types
+Phase 12: Review        Dispatch reviewer agents in parallel based on changed file types
                         |
-Phase 6.5: Critic       [Complex only] Final quality gate: security, new-hire, ops perspectives
+Phase 13: Critic        [Complex only] Final quality gate: security, new-hire, ops perspectives
                         |
-Phase 7: Document       Dispatch docs-reviewer or update docs manually
+Phase 14: Document      Dispatch docs-reviewer or update docs manually
                         |
-Phase 8: Report         Summary table + metrics: files, tests, review, contract score, agent dispatches
+Phase 15: Report        Summary table + metrics: files, tests, review, contract score, agent dispatches
 ```
 
 Key design decisions:
 
-- **Always-on**: `/dev` triggers automatically for all code-changing tasks. Phase 1 complexity assessment (5 factors) determines which phases to skip (simple tasks skip 1.5, 2.1, 2.5, 3.5, 5.5, 6.5).
-- **Sprint Contract (Phase 2.1)**: testable acceptance criteria defined BEFORE coding. Evaluator checks these in Phase 3.5.
-- **Conditional GAN loop (Phase 3.5)**: evaluator checks contract → if FAIL, iterate (max 2-3 passes) → if scores plateau, escalate to architect.
-- **Dependency order in Phase 3**: migrations before repos, repos before services, services before handlers.
-- **Agents in Phases 5-7 run independently**: test-generator, reviewer agents, and docs-reviewer can be dispatched in parallel.
-- **Gate between phases**: if Phase 4 (verify) fails, Claude fixes errors before Phase 5 (test).
-- **Critic as independent evaluator**: Phase 6.5 evaluates from security, new-hire, and ops perspectives — different from domain-specific reviewers in Phase 6.
+- **Always-on**: `/dev` triggers automatically for all code-changing tasks. Phase 1 complexity assessment (5 factors) determines which phases to skip (simple tasks skip 2, 3, 5, 6, 8, 11, 13; standard tasks skip 2, 3, 13; complex tasks run all).
+- **Sprint Contract (Phase 5)**: testable acceptance criteria defined BEFORE coding. Evaluator checks these in Phase 8.
+- **Conditional GAN loop (Phase 8)**: evaluator checks contract → if FAIL, iterate (max 2-3 passes) → if scores plateau, escalate to architect.
+- **Dependency order in Phase 7**: migrations before repos, repos before services, services before handlers.
+- **Agents in Phases 10-14 run independently**: test-generator, reviewer agents, and docs-reviewer can be dispatched in parallel.
+- **Gate between phases**: if Phase 9 (verify) fails, Claude fixes errors before Phase 10 (test).
+- **Critic as independent evaluator**: Phase 13 evaluates from security, new-hire, and ops perspectives — different from domain-specific reviewers in Phase 12.
 
 ## How /review Works
 

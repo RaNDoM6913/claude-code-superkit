@@ -1,32 +1,66 @@
 ---
-description: Full-stack development orchestrator — always-on, 16 phases: read-docs → understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → document → report
+description: Full-stack development orchestrator — always-on, 16 phases (0–15): read-docs → understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → document → report
 argument-hint: <task-description>
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---
 
 # Development Orchestrator
 
-Automate the full development cycle: understand → plan → contract → validate → implement → evaluate → verify → test → verify goals → review → document → report.
+Run the full development cycle for the task below as 16 numbered phases. You are the orchestrator: you execute phases yourself and dispatch specialist agents at the gates.
 
 ## Task
 
 $ARGUMENTS
 
-## Phase 0 — Read Project Docs
+## Hard Rules
 
-Before planning, read `docs/architecture/` files relevant to the task scope:
-- Backend task? → read `backend-layers.md`, `api-reference.md`, `database-schema.md`
-- Frontend task? → read `frontend-state.md`
-- Auth task? → read `auth-and-sessions.md`
-- Full-stack? → read all available docs
+1. Execute phases in order 0 → 15. Skip a phase ONLY when the Skip Matrix says so for the task's complexity class.
+2. A phase is complete only when its **Done when** condition holds. If a phase produces errors, fix them before advancing.
+3. Consume gate verdicts exactly as produced: plan-checker → PASS/REVISE/BLOCK · evaluator → PROCEED/ITERATE/ESCALATE · goal-verifier → PASS/NEEDS-ATTENTION/NEEDS-REMEDIATION · critic → APPROVE/CONCERN/BLOCK.
+4. On any failed gate or retry, escalate effort to `max` for the next attempt and say you are doing so — never silently re-run at the same effort.
+5. Never claim completion while compilation or tests fail. The Phase 15 report is emitted only after every non-skipped phase has run.
+6. If the task is ambiguous, ask the user before Phase 7 (Implement) — not after.
+7. Always read existing patterns before writing new code — search first, reuse the closest implementation as reference.
 
-This ensures the plan follows existing project architecture.
+## Phase Overview & Skip Matrix
+
+Complexity (Simple / Standard / Complex) is decided in Phase 1 and never changes mid-run.
+
+| # | Phase | Simple | Standard | Complex | Gate agent |
+|---|-------|:------:|:--------:|:-------:|-----------|
+| 0 | Read Docs | ✓ | ✓ | ✓ | — |
+| 1 | Understand | ✓ | ✓ | ✓ | — |
+| 2 | Architect | — | — | ✓ | architect |
+| 3 | Pseudocode | — | — | ✓ | — |
+| 4 | Plan | ✓ | ✓ | ✓ | — |
+| 5 | Contract | — | ✓ | ✓ | — |
+| 6 | Validate Plan | — | ✓ | ✓ | plan-checker |
+| 7 | Implement | ✓ | ✓ | ✓ | — |
+| 8 | Evaluate | — | ✓ (max 2 passes) | ✓ (max 3 passes) | evaluator |
+| 9 | Verify | ✓ | ✓ | ✓ | health-checker |
+| 10 | Test | ✓ | ✓ | ✓ | test-generator |
+| 11 | Verify Goals | — | ✓ | ✓ | goal-verifier |
+| 12 | Review | ✓ | ✓ | ✓ | reviewers (parallel) |
+| 13 | Critic | — | — | ✓ | critic |
+| 14 | Document | ✓ | ✓ | ✓ | docs-reviewer |
+| 15 | Report | ✓ | ✓ | ✓ | — |
+
+## Phase 0 — Read Docs
+
+Read `docs/architecture/` files relevant to the task scope:
+- Backend task → `backend-layers.md`, `api-reference.md`, `database-schema.md`
+- Frontend task → `frontend-state.md`
+- Auth task → `auth-and-sessions.md`
+- Full-stack → all available docs
+
+Missing docs are not an error — note what was absent and continue.
+**Done when:** relevant existing docs are read (or confirmed absent).
 
 ## Phase 1 — Understand
 
-1. **Detect project stack** by scanning the repository root and subdirectories:
+1. **Detect the stack** by scanning the repository root and subdirectories:
 
-   | Marker File | Stack |
+   | Marker file | Stack |
    |---|---|
    | `go.mod` | Go backend |
    | `package.json` + `tsconfig.json` | TypeScript (check for React, Vue, Svelte, etc.) |
@@ -36,359 +70,179 @@ This ensures the plan follows existing project architecture.
    | `docker-compose.yml` | Docker infrastructure |
    | `migrations/` or `db/migrate/` | Database migrations |
 
-   Record the detected stacks — they determine which tools, agents, and conventions apply.
+2. **Parse the task**: affected components (backend, frontend, infra, bots, docs); feature / enhancement / bug fix / refactor; inputs and expected outputs.
 
-2. **Parse the task description** to determine scope:
-   - Which components are affected (backend, frontend, infra, bots, docs)?
-   - Is this a new feature, enhancement, bug fix, or refactoring?
-   - What are the inputs and expected outputs?
-
-3. **Assess complexity** using 5 factors — this determines the workflow:
+3. **Assess complexity** — score each of 5 factors, majority column wins (ties → Standard):
 
    | Factor | Simple | Standard | Complex |
    |--------|--------|----------|---------|
-   | File count | 1 | 2-5 | 6+ |
-   | Line changes | < 100 | 100-500 | 500+ |
+   | File count | 1 | 2–5 | 6+ |
+   | Line changes | < 100 | 100–500 | 500+ |
    | Novelty | Existing pattern | New pattern in existing area | New subsystem |
    | Risk | Internal, no data changes | API change, DB migration | Auth, payments, security |
    | Ambiguity | Clear spec | Some unknowns | Exploratory/open-ended |
 
-   Count how many factors fall in each column. Majority wins:
-   - **Simple** (3+ factors in Simple) → skip Phases 1.5, 2.1, 2.5, 3.5, 5.5, 6.5
-   - **Standard** (default) → full workflow, max 2 evaluator passes
-   - **Complex** (3+ factors in Complex) → full workflow + architect + critic, max 3 evaluator passes
+4. **Search the codebase** for existing related patterns: grep domain terms, endpoint paths, function names; read files that will be modified; check routing files and API specs.
 
-4. **Search the codebase** for existing patterns related to the task:
-   - Grep for relevant domain terms, endpoint paths, function names
-   - Read existing files that will be modified or serve as templates
-   - Check routing files for existing route patterns
-   - Check API specs (OpenAPI, GraphQL schema) for contracts
+5. **Identify the closest existing implementation** and read it — it is the reference pattern for Phase 7.
 
-5. **Identify the closest existing implementation** to use as a reference pattern. Always read it before writing new code.
+**Done when:** stack detected, complexity class declared, reference pattern read.
 
-## Phase 1.5 — Architect (complex tasks only)
+## Phase 2 — Architect (Complex only)
 
-**Only for complex tasks (5+ files, new subsystems, architectural decisions).**
-
-Dispatch **architect** agent:
+Dispatch **architect**:
 ```
 Design the architecture for this task:
 Task: [description]
 Current architecture: [from Phase 0 docs]
-Affected components: [from Phase 1 analysis]
-
+Affected components: [from Phase 1]
 Propose 2-3 approaches with trade-offs.
 ```
+Use the recommendation to shape Phase 4.
+**Done when:** one approach chosen, with a stated reason.
 
-Use the architect's recommendation to inform Phase 2 plan.
+## Phase 3 — Pseudocode (Complex only)
 
-## Phase 1.7 — Pseudocode (complex tasks only)
+Draft language-agnostic pseudocode for the core logic (algorithm, state machine, data pipeline): input/output contract, main control flow, error paths, data transformations. 30–50 lines maximum — longer means the task needs decomposition. No file paths, no framework syntax.
 
-**Only for complex tasks (5+ files, new subsystems, non-trivial algorithms).**
+Present to the user: "Here's the pseudocode for [core logic]. Does this match your expectations?"
+**Done when:** user approves (or explicitly waives) the pseudocode; it becomes the Phase 4 skeleton.
 
-Before writing the full plan, draft pseudocode for the core algorithm or data flow. This validates the logical approach before committing to file paths and implementation details.
+## Phase 4 — Plan
 
-### Process
-
-1. Identify the **core logic** that makes this task complex (e.g., the algorithm, state machine, data pipeline, coordination logic)
-2. Write pseudocode that covers:
-   - Input/output contract
-   - Main control flow (loops, conditions, branching)
-   - Error paths and edge cases
-   - Data transformations
-3. Present to user: "Here's the pseudocode for [core logic]. Does this match your expectations?"
-
-### Format
-
-```
-FUNCTION processTask(input):
-  VALIDATE input is not empty
-  
-  FOR EACH item IN input:
-    result = transform(item)
-    IF result.error:
-      COLLECT error, CONTINUE
-    STORE result
-  
-  IF errors > threshold:
-    ROLLBACK all stored results
-    RETURN failure(errors)
-  
-  RETURN success(results)
-```
-
-### Rules
-- Keep pseudocode **language-agnostic** — no framework-specific syntax
-- Focus on **logic**, not implementation details (no file paths, no imports)
-- Maximum 30-50 lines — if longer, the task may need decomposition
-- After user approval, use this pseudocode as the skeleton for Phase 2 plan
-
-**Skip for simple/standard tasks.**
-
-## Phase 2 — Plan
-
-Produce a structured plan before writing any code. Output as a checklist, organized by component. Include only the relevant sections:
+Produce a checklist plan organized by component — include only relevant sections:
 
 ```
 ## Implementation Plan
-
 ### Database
-- [ ] Migration: NNNN_description (if new table/column needed)
-
+- [ ] Migration: NNNN_description
 ### Backend
-- [ ] Repository/data layer: path/to/repo (new methods or file)
-- [ ] Service/business logic: path/to/service
-- [ ] DTOs/schemas: path/to/dto (if new request/response shapes)
-- [ ] Handler/controller: path/to/handler
-- [ ] Routes: path/to/routes (register new endpoints)
-- [ ] Tests: path/to/tests
-
+- [ ] Repository/data layer: path
+- [ ] Service/business logic: path
+- [ ] DTOs/schemas: path
+- [ ] Handler/controller: path
+- [ ] Routes: path
+- [ ] Tests: path
 ### Frontend
-- [ ] Types: path/to/types (if new types)
-- [ ] API client: path/to/api (new API functions)
-- [ ] State management: path/to/store (if new state needed)
-- [ ] Component/page: path/to/component
-
+- [ ] Types / API client / state / component: paths
 ### Infrastructure
 - [ ] Docker/config changes
-
 ### Documentation
-- [ ] API spec (OpenAPI, GraphQL schema)
-- [ ] Architecture docs
-- [ ] README updates
+- [ ] API spec, architecture docs, README
 ```
 
-Omit sections not relevant to the task.
+**Done when:** every planned item names a concrete file path.
 
-## Phase 2.1 — Sprint Contract (standard and complex tasks)
+## Phase 5 — Contract (Standard: 5–10 criteria · Complex: 10–20)
 
-Generate testable acceptance criteria for the implementation plan. These criteria are what the **evaluator** agent will check in Phase 3.5.
-
-### Contract Size
-- **Simple:** skip (no contract needed)
-- **Standard:** 5-10 criteria
-- **Complex:** 10-20 criteria
-
-### Contract Format
+Write testable acceptance criteria — the evaluator checks exactly these in Phase 8:
 
 ```
 ## Sprint Contract
-
-### Acceptance Criteria
-| # | Criterion | Test Method | Threshold | Priority |
-|---|-----------|------------|-----------|----------|
-| 1 | [specific, testable outcome] | [how to verify: grep, curl, test, read] | Score >= 7 | MUST |
-| 2 | ... | ... | ... | MUST/SHOULD |
+| # | Criterion | Test Method | Priority |
+|---|-----------|-------------|----------|
+| 1 | [specific, testable outcome] | [grep / curl / test / read] | MUST |
+| 2 | ... | ... | MUST/SHOULD |
 ```
 
-### Good Criteria
-- **Testable** — verifiable by reading code or running a command
-- **Specific** — "returns 200 with JSON containing user.id" not "endpoint works"
-- **Independent** — each criterion tests one thing
-- **Measurable** — clear pass/fail, not subjective
+Good criteria are testable, specific ("returns 200 with user.id in JSON", not "endpoint works"), independent, and measurable. Never include subjective items ("code is clean") or unmeasurable ones ("performance is good").
+**Done when:** every criterion has a concrete test method.
 
-### Bad Criteria (do NOT include)
-- "Code is clean" — subjective, reviewer's job
-- "Performance is good" — unmeasurable without benchmark
-- "Everything works" — too vague
+## Phase 6 — Validate Plan
 
-Pass the Sprint Contract to the **plan-checker** in Phase 2.5 for validation alongside the plan.
+Dispatch **plan-checker** with the Phase 4 plan and Phase 5 contract.
+- **PASS** → Phase 7.
+- **REVISE** → fix the blocking issues, re-dispatch (max 2 iterations, then treat as BLOCK).
+- **BLOCK** → stop; present the issues to the user.
+**Done when:** verdict is PASS.
 
-**Skip for simple tasks.**
+## Phase 7 — Implement
 
-## Phase 2.5 — Validate Plan
+Execute the plan in dependency order; for each step, read the reference pattern first, then implement.
 
-Dispatch **plan-checker** agent with the plan from Phase 2:
+1. **Migration** — next number in the project's migration directory; up + down files; parameterized DDL, `IF NOT EXISTS`, appropriate types.
+2. **Data layer** — follow the project's existing data-access patterns (Go: pgx/sqlx/gorm, nil-safe repos, `fmt.Errorf("Context.Method: %w", err)`; Python: SQLAlchemy/Django ORM; TypeScript: Prisma/TypeORM/Drizzle).
+3. **Business logic** — constructor DI via interfaces; Go: `context.Context` first param, domain errors; Python: type hints, async where applicable; TypeScript: strict types.
+4. **Transport** — follow existing handler patterns (chi, gin, echo, express, FastAPI, …); input validation at the boundary; errors mapped to proper status codes.
+5. **Routes** — register endpoints, apply auth/middleware.
+6. **Frontend** — read existing components first (animation library, styling, state); API client and types matching the backend contract.
 
-```
-Validate this implementation plan before execution.
-Plan: {full plan text}
-```
+**Done when:** every Phase 4 checklist item is implemented (no placeholders/TODOs left).
 
-**PASS** → proceed to Phase 3.
-**REVISE** → fix blocking issues, re-run plan-checker (max 2 iterations).
-**BLOCK** → stop, present issues to user.
+## Phase 8 — Evaluate
 
-**Skip for simple tasks** (1 file, < 100 lines).
+Dispatch **evaluator** with the Sprint Contract, changed-file list, and pass number.
+- **PROCEED** → Phase 9.
+- **ITERATE** → escalate effort to `max` (Hard Rule 4), fix the critique, re-dispatch as pass N+1. If passes exceed the matrix budget (Standard 2 / Complex 3) → proceed with the warning "Evaluation budget exhausted after N passes. Remaining issues: [list]". If the score did not improve vs the previous pass → proceed with an escalation note.
+- **ESCALATE** → dispatch **architect** for design review, apply its recommendation, restart from Phase 7.
+**Done when:** verdict is PROCEED, or budget exhausted with an explicit warning.
 
-## Phase 3 — Implement
+## Phase 9 — Verify
 
-Execute the plan in dependency order. For each step, read the reference pattern first, then implement.
+Dispatch **health-checker** if available; otherwise run compilation checks directly:
+Go `go vet ./...` · TypeScript `npx tsc --noEmit` · Python `mypy`/`pyright`/`python -m py_compile` · Rust `cargo check`.
+**Done when:** compilation/static checks pass with zero errors.
 
-### Execution Order
+## Phase 10 — Test
 
-1. **Migration** (if needed):
-   - Find the next migration number in the project's migration directory
-   - Create up + down migration files following project conventions
-   - Use parameterized queries, `IF NOT EXISTS`, appropriate types
+Dispatch **test-generator** for new/changed backend code: happy path, validation errors, not-found/conflict, boundary values, edge cases — following project test patterns. Then run the project's test command yourself and fix failures.
+**Done when:** the test suite runs green (paste the actual final summary line).
 
-2. **Data layer** (repository/model):
-   - Follow the project's existing patterns for data access
-   - Go: pgx/sqlx/gorm patterns, `Ready()` nil-safety, `fmt.Errorf("Context.Method: %w", err)`
-   - Python: SQLAlchemy/Django ORM/raw patterns
-   - TypeScript: Prisma/TypeORM/Drizzle patterns
+## Phase 11 — Verify Goals
 
-3. **Business logic** (service layer):
-   - Constructor dependency injection via interfaces
-   - Go: `context.Context` as first param, domain errors
-   - Python: type hints, async where applicable
-   - TypeScript: strict types, proper error handling
+Dispatch **goal-verifier** with the Phase 4 goals and changed files. It checks 4 levels: EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW.
+- **PASS** → Phase 12.
+- **NEEDS-ATTENTION** → fix the listed gaps in place, re-verify.
+- **NEEDS-REMEDIATION** → critical artifacts missing; return to Phase 7 (or Phase 4 if the plan itself was wrong).
+**Done when:** verdict is PASS.
 
-4. **Transport layer** (handlers/controllers):
-   - Follow existing handler patterns for the framework (chi, gin, echo, express, FastAPI, etc.)
-   - Input validation at the boundary
-   - Proper error mapping to HTTP status codes
+## Phase 12 — Review
 
-5. **Routes** (if needed):
-   - Register new endpoints in the router file
-   - Apply appropriate auth/middleware
+First, a 30-second inline self-pass on the diff: (a) no placeholders/TODOs/`unimplemented`, (b) types/signatures consistent with callers, (c) every acceptance criterion has a corresponding change. Fix the obvious now.
 
-6. **Frontend** (if needed):
-   - Read existing components for patterns (animation library, styling approach, state management)
-   - API client using project conventions
-   - Types matching the backend contract
+Then dispatch reviewer agents **in parallel** — every row whose pattern matches changed files AND whose agent exists in `.claude/agents/`:
 
-## Phase 3.5 — Evaluate + Iterate (standard and complex tasks)
-
-Dispatch the **evaluator** agent with the Sprint Contract and changed files:
-
-```
-Evaluate this implementation against the Sprint Contract.
-Sprint Contract: {contract from Phase 2.1}
-Changed Files: {list from Phase 3}
-Pass Number: 1
-```
-
-**Conditional iteration (GAN loop):**
-
-1. If evaluator verdict = **PROCEED** → all criteria PASS → proceed to Phase 4
-2. If evaluator verdict = **ITERATE**:
-   - On a failed gate or retry, escalate effort to `max` for the next attempt and state that you are doing so. Do not silently re-run at the same effort.
-   - Fix issues identified in the critique
-   - Re-dispatch evaluator (pass N+1)
-   - If pass count > MAX_PASSES → proceed to Phase 4 with warning:
-     "Evaluation budget exhausted after N passes. Remaining issues: [list]"
-   - If scores not improving (pass N score <= pass N-1) → proceed with escalation note
-3. If evaluator verdict = **ESCALATE**:
-   - Dispatch **architect** agent for design review
-   - Apply recommendation, restart from Phase 3
-
-**MAX_PASSES:** Simple: 0 (skip), Standard: 2, Complex: 3
-
-**Skip for simple tasks.**
-
-## Phase 4 — Verify
-
-Dispatch the **health-checker** agent (if available) or run compilation checks directly:
-
-```
-Based on detected stack, run:
-
-Go:        go vet ./...
-TypeScript: npx tsc --noEmit
-Python:     python -m py_compile / mypy / pyright
-Rust:       cargo check
-```
-
-Fix any errors before proceeding.
-
-## Phase 5 — Test
-
-Dispatch the **test-generator** agent (if available) for new backend code:
-
-```
-Generate tests for the following new/changed files:
-- [list files created/modified]
-
-Follow project test patterns. Cover:
-- Happy path
-- Validation errors
-- Not found / conflict
-- Boundary values
-- Edge cases
-```
-
-After tests are generated, run them using the project's test command. Fix any failures.
-
-## Phase 5.5 — Verify Goals
-
-Dispatch **goal-verifier** agent:
-
-```
-Verify implementation results match the original goals.
-Goals: {from Phase 2 plan}
-Changed files: {list from Phase 3}
-```
-
-4-level check: EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW.
-
-**PASS** → proceed to Phase 6.
-**NEEDS-ATTENTION** → fix the listed gaps in place, re-verify.
-**NEEDS-REMEDIATION** → return to Phase 3 / re-plan — critical artifacts missing.
-
-**Skip for simple tasks** (1 file, < 100 lines).
-
-## Phase 6 — Review
-
-**Inline self-review (fast, before subagent gates):** Before dispatching reviewers, do a 30-second self-pass on the diff: (a) no placeholders/TODOs/`unimplemented` left, (b) types/signatures consistent with callers, (c) every acceptance criterion has a corresponding change. Fix obvious issues now so the expensive adversarial gates focus on real risk.
-
-Dispatch reviewer agents **in parallel** based on what changed and what's available:
-
-| Changed Files | Agent |
+| Changed files | Agent |
 |---|---|
 | `*.go` (not migrations, not tests) | **go-reviewer**, **security-scanner** |
 | `*.sql` migrations | **migration-reviewer**, **database-reviewer** |
-| `*_repo.go` or data access files | **database-reviewer** |
-| `*.tsx`, `*.ts` | **ts-reviewer** |
-| `*.py` | **py-reviewer** (if available) |
-| `*.rs` | **rs-reviewer** (if available) |
-| Bot code | **bot-reviewer** (if available) |
-| UI components | **design-system-reviewer** (if available) |
+| Data-access files (`*_repo.go`, repositories) | **database-reviewer** |
+| `*.ts`, `*.tsx` | **ts-reviewer** |
+| `*.py` | **py-reviewer**, **security-scanner** |
+| `*.rs` | **rs-reviewer** |
+| Bot code | **bot-reviewer** |
+| UI components | **design-system-reviewer**, **ui-reviewer** |
+| OpenAPI/GraphQL spec changed | **api-contract-sync** |
+| Any changed code | **silent-failure-hunter**, **comment-rot-analyzer** |
 
-For each triggered agent, pass the list of changed files and the task description.
-Each reviewer runs its two-stage discipline — discover every candidate finding, then triage by Severity + Confidence.
+Pass each agent the changed-file list and task description. Each runs its own two-stage discipline (discover, then triage by Severity + Confidence).
 
-Collect findings and triage (route, don't drop):
-- Fix any CRITICAL or WARNING issue (HIGH/MEDIUM confidence) before proceeding.
-- Carry LOW-confidence / ambiguous items into an **Open Questions** list in the Phase 8 report rather than discarding them — a human can adjudicate.
-- A clean review (no findings) is a valid result; do not pad it.
+Triage findings — route, don't drop:
+- CRITICAL or WARNING at HIGH/MEDIUM confidence → fix before proceeding.
+- LOW confidence / ambiguous → carry into the **Open Questions** section of the Phase 15 report.
+- A clean review (0 findings) is a valid result — do not pad it.
 
-## Phase 6.5 — Critic (complex tasks only)
+**Done when:** all CRITICAL/WARNING findings fixed or explicitly deferred with reason.
 
-**Only for complex tasks (5+ files, new subsystems, security-sensitive changes).**
+## Phase 13 — Critic (Complex only)
 
-Dispatch **critic** agent with all changed files and the original task:
+Dispatch **critic** with all changed files, the original task, and the Phase 12 findings summary. It reviews from security, new-hire, and ops perspectives.
+- **APPROVE** → Phase 14.
+- **CONCERN** → address; proceed if explicitly non-blocking.
+- **BLOCK** → fix blocking issues, re-dispatch.
+**Done when:** verdict is APPROVE, or CONCERN with all concerns addressed/answered.
 
-```
-Final quality gate for this implementation:
-Task: [original description]
-Changed files: [list]
-Review findings: [summary from Phase 6]
+## Phase 14 — Document
 
-Evaluate from security, new-hire, and ops perspectives.
-```
+Dispatch **docs-reviewer** to verify documentation completeness for the changed files. Also update directly:
+1. **API spec** (OpenAPI/GraphQL) if endpoints changed.
+2. **Architecture docs** if system behavior changed.
+3. **README** if setup, commands, or structure changed.
+**Done when:** docs-reviewer reports no MISSING items for this change.
 
-**APPROVE** → proceed to Phase 7.
-**CONCERN** → address concerns, proceed if non-blocking.
-**BLOCK** → fix blocking issues, re-run critic.
+## Phase 15 — Report
 
-**Skip for simple/standard tasks and --quick mode.**
-
-## Phase 7 — Document
-
-Dispatch the **docs-reviewer** agent to verify documentation completeness:
-```
-Verify documentation was updated for these changes: [list changed files]
-```
-
-Also manually update:
-1. **API spec** — if endpoints changed (OpenAPI, GraphQL schema, etc.)
-2. **Architecture docs** — if system behavior changed
-3. **README** — if setup steps, commands, or project structure changed
-
-## Phase 8 — Report
-
-Output a summary:
+Emit only after all non-skipped phases completed:
 
 ```
 ## Development Report
@@ -397,54 +251,48 @@ Output a summary:
 [Original task description]
 
 ### Phases Executed
-| Phase | Status | Notes |
-|-------|--------|-------|
-| 0. Read Docs | ✅ | Read N architecture docs |
-| 1. Understand | ✅ | Scope: [components], [complexity] |
-| 1.5 Architect | ⏭ skipped | Standard complexity |
-| 2. Plan | ✅ | N tasks planned |
-| 2.1 Contract | ✅ | N acceptance criteria |
-| 2.5 Validate | ✅ PASS | 0 blocking |
-| 3. Implement | ✅ | N files created, M modified |
-| 3.5 Evaluate | ✅ PASS | Pass 1: X/Y criteria met |
-| 4. Verify | ✅ | Compilation clean |
-| 5. Test | ✅ | X tests, all passing |
-| 5.5 Goals | ✅ PASS | All 4 levels pass |
-| 6. Review | ✅ | [agents]: PASS |
-| 6.5 Critic | ⏭ skipped | Standard complexity |
-| 7. Document | ✅ | Updated [doc files] |
+| # | Phase | Status | Notes |
+|---|-------|--------|-------|
+| 0 | Read Docs | ✅ | N docs read |
+| 1 | Understand | ✅ | [components], [complexity] |
+| 2 | Architect | ⏭/✅ | [skipped: not Complex / approach chosen] |
+| 3 | Pseudocode | ⏭/✅ | |
+| 4 | Plan | ✅ | N items |
+| 5 | Contract | ⏭/✅ | N criteria |
+| 6 | Validate Plan | ⏭/✅ | PASS after N iterations |
+| 7 | Implement | ✅ | N created, M modified |
+| 8 | Evaluate | ⏭/✅ | PROCEED at pass N |
+| 9 | Verify | ✅ | compilation clean |
+| 10 | Test | ✅ | X tests green |
+| 11 | Verify Goals | ⏭/✅ | PASS (4/4 levels) |
+| 12 | Review | ✅ | [agents]: N findings fixed |
+| 13 | Critic | ⏭/✅ | APPROVE |
+| 14 | Document | ✅ | [docs updated] |
+| 15 | Report | ✅ | this report |
 
 ### Changes Made
 | File | Action | Description |
 |------|--------|-------------|
-| path/to/file | Created/Modified | [description] |
-| ... | ... | ... |
 
-### Open Questions (from Phase 6 review — LOW confidence / unconfirmed, not dropped)
-- file:line — what a reviewer suspected and what context would confirm it
-- (omit this section if reviewers raised none)
+### Open Questions (LOW-confidence review items — surfaced, not dropped)
+- file:line — suspicion + what would confirm it (omit section if none)
 
 ### Metrics
 | Metric | Value |
 |--------|-------|
 | Complexity | Simple / Standard / Complex |
-| Agent dispatches | N (list agents) |
-| Evaluation passes | N (FAIL → ... → PASS) |
-| Sprint contract | X/Y criteria PASS |
+| Agent dispatches | N (list) |
+| Evaluator passes | N (ITERATE → … → PROCEED) |
+| Sprint contract | X/Y criteria met |
 
 ### Suggested Commit Message
-```
 type(scope): description
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-```
 ```
 
-## Notes
+## Recap — non-negotiables
 
-- Always read existing patterns before generating new code — search first
-- Never skip tests for new endpoints or business logic
-- If the task is ambiguous, ask for clarification before Phase 3
-- If a phase produces errors, fix them before proceeding to the next phase
-- Use conventional commit format: `feat|fix|docs|refactor|chore|test|perf(scope): description`
-- Simple tasks skip Phases 1.5, 2.1, 2.5, 3.5, 5.5, 6.5
+- Phases run in order; Skip Matrix is the only source of skips.
+- Gate verdicts consumed verbatim; failed gate → retry at `max` effort, say so.
+- No completion claims over failing builds/tests; report only after all non-skipped phases.
+- LOW-confidence findings go to Open Questions, never silently dropped.
+- Conventional commits: `feat|fix|docs|refactor|chore|test|perf(scope): description`.

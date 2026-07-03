@@ -6,277 +6,171 @@ allowed-tools: Bash, Read, Grep, Glob, Agent
 
 # Unified Orchestrated Code Review
 
-Detect changed files, enrich with git context, dispatch specialized reviewer agents in parallel, validate findings with independent verification agents, collect and deduplicate results. Optionally post inline comments on GitHub PRs.
+Detect changed files, dispatch specialized reviewer agents in parallel with injected git context, independently validate every finding, and produce a deduplicated report. Optionally post the results to a GitHub PR.
 
 ## Target
 
 $ARGUMENTS
 
+## Hard Rules
+
+1. Review ONLY the diff scope — changed lines plus their surrounding context. Pre-existing issues outside the diff are out of scope (exception: `--full` reviews all tracked files).
+2. Dispatch each agent **at most once**, and only agents that exist in `.claude/agents/`.
+3. Every HIGH/MEDIUM-confidence finding passes independent validation (Step 5) before reaching the report. LOW-confidence (<60) items skip validation and go to **Open Questions** — never silently dropped.
+4. **goal-verifier** produces a verdict report (PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION), not severity findings — its output bypasses Steps 4–6 validation and lands in its own report section.
+5. Zero confirmed findings is a valid outcome — report "clean" honestly, do not pad.
+
 ## Step 1 — Parse Arguments and Detect Changes
 
-**Parse flags:**
-- `--comment` → enable GitHub PR inline comments (default: terminal only)
-- Remaining arguments → diff target
+**Flags:** `--comment` → post GitHub PR comments (default: terminal only). Remaining argument → diff target.
 
-**Determine diff base:**
-- If target matches `PR#NNN` or is a number: `gh pr diff $TARGET --name-only`
-- If target is a branch name: `git diff --name-only $TARGET...HEAD`
-- If target is `--full`: review all tracked files (`git ls-files`)
-- If empty: `git diff --name-only HEAD~1`
+**Diff base:**
+- `PR#NNN` or a number → `gh pr diff $TARGET --name-only`
+- branch name → `git diff --name-only $TARGET...HEAD`
+- `--full` → all tracked files (`git ls-files`)
+- empty → `git diff --name-only HEAD~1`
 
-**Gather structured context:**
-
+**Gather context** (run in parallel):
 ```bash
-# Changed files with line counts
-git diff --stat ${BASE}...HEAD
-
-# Full diff hunks (for agent context injection)
-git diff ${BASE}...HEAD
-
-# Recent 5 commits (for intent)
-git log --oneline -5
-
-# PR title and description (if PR mode)
-gh pr view $PR_NUMBER --json title,body 2>/dev/null
+git diff --stat ${BASE}...HEAD        # changed files + line counts
+git diff ${BASE}...HEAD               # full hunks for agent injection
+git log --oneline -5                  # intent
+gh pr view $PR_NUMBER --json title,body 2>/dev/null   # PR mode only
 ```
 
 Build a `REVIEW_CONTEXT` block:
 ```
 === REVIEW CONTEXT ===
 ## PR Info (if available)
-Title: <PR title>
-Description: <PR body, first 500 chars>
-
-## Changed Files (N files, +X/-Y lines)
-<git diff --stat output>
-
+Title / Description (first 500 chars)
+## Changed Files (N files, +X/-Y)
+<git diff --stat>
 ## Recent Commits (intent)
 <git log --oneline -5>
-
 ## Diff Hunks
-<full diff, truncated to 8000 chars per agent if needed>
+<diff, truncated to 8000 chars per agent if needed>
 === END CONTEXT ===
 ```
 
 ## Step 2 — Map Files to Agents
 
-Based on file extension and path patterns, build a dispatch plan. Each pattern maps to one or more agents:
-
-| File Pattern | Agents |
+| File pattern | Agents |
 |---|---|
-| `*.go` (excluding `*_test.go`, `migrations/`) | **go-reviewer**, **security-scanner** |
-| `migrations/*.sql` or `db/migrate/*.sql` | **migration-reviewer** |
+| `*.go` (excluding `*_test.go`, migrations) | **go-reviewer**, **security-scanner** |
+| `migrations/*.sql` or `db/migrate/*.sql` | **migration-reviewer**, **database-reviewer** |
+| Data-access files (`*_repo.go`, repositories) | **database-reviewer** |
 | `*.tsx` | **ts-reviewer**, **design-system-reviewer** |
 | `*.ts` | **ts-reviewer** |
 | `*.py` | **py-reviewer**, **security-scanner** |
 | `*.rs` | **rs-reviewer** |
 | `**/bot*/**/*.go` or `**/bot*/**/*.py` | **bot-reviewer** |
-| `*.yaml` / `*.yml` (OpenAPI/config) | **api-contract-sync** (if available) |
-| Any changed code files | **goal-verifier** (optional — if implementation plan exists in docs/superpowers/plans/) |
-| Any changed code files | **comment-rot-analyzer** |
-| Any changed code files | **silent-failure-hunter** |
+| `*.yaml` / `*.yml` (OpenAPI/GraphQL) | **api-contract-sync** |
+| Any changed code files | **silent-failure-hunter**, **comment-rot-analyzer** |
+| Any changed code files, IF an implementation plan exists in `docs/superpowers/plans/` | **goal-verifier** (verdict track — Hard Rule 4) |
 
-Rules:
-- A single agent is dispatched **at most once** even if multiple files match
-- Only dispatch agents that are actually available in the project's `.claude/agents/` directory
-- If no files match any pattern, report "No reviewable changes detected" and stop
-- List the dispatch plan before executing (agent name + matched file count)
+Rules: skip agents missing from `.claude/agents/`; if no files match any pattern, report "No reviewable changes detected" and stop; print the dispatch plan (agent + matched file count) before executing.
 
-## Step 3 — Dispatch Reviewer Agents in Parallel
+## Step 3 — Dispatch All Agents in Parallel
 
-All reviewer agents are independent — dispatch ALL triggered agents simultaneously.
+All triggered agents are independent — dispatch ALL of them simultaneously in one message. For each, inject the `REVIEW_CONTEXT` block filtered to its files:
 
-**Context injection:** When dispatching agents, include in each prompt:
-"Start with Phase 0 — read project docs (CLAUDE.md/AGENTS.md + relevant docs/architecture/ files) before starting your review."
+- **go-reviewer** → `*.go` hunks (minus tests/migrations) · **ts-reviewer** → `*.ts`/`*.tsx` · **py-reviewer** → `*.py` · **rs-reviewer** → `*.rs` · **migration-reviewer**/**database-reviewer** → SQL + data-access hunks · **bot-reviewer** → bot hunks · **design-system-reviewer** → `*.tsx`/`*.vue`/`*.svelte` UI hunks · **api-contract-sync** → spec hunks
+- Cross-cutting, receive ALL hunks: **security-scanner**, **silent-failure-hunter**, **comment-rot-analyzer**, **goal-verifier**
 
-**Parallel Group 1 (code quality)**:
-- go-reviewer, ts-reviewer, py-reviewer, rs-reviewer, bot-reviewer, migration-reviewer, design-system-reviewer
-
-**Parallel Group 2 (cross-cutting)**:
-- security-scanner, api-contract-sync
-
-Groups 1 and 2 have no dependencies — dispatch ALL simultaneously.
-
-For each agent, inject the `REVIEW_CONTEXT` block:
-
+Prompt template for each reviewer:
 ```
-You are reviewing code changes.
+Start with Phase 0 — read project docs (CLAUDE.md/AGENTS.md + relevant docs/architecture/) before reviewing.
 
-{REVIEW_CONTEXT — filtered to files relevant to this agent}
+{REVIEW_CONTEXT — filtered to your files}
 
 ## Your Task
-Review the diff hunks above against your checklist. The recent commits section
-provides intent — use it to judge whether changes are complete and consistent.
-
-Focus on:
-- Changes that contradict the stated commit intent
-- Missing pieces (e.g., commit says "add endpoint" but no route registration)
-- Regressions in existing patterns
-
-Report findings in your standard output format.
-Each finding MUST include: file path, line number(s), severity, confidence, description, evidence, suggested fix.
+Review the diff hunks against your checklist. Recent commits show intent — judge whether changes are complete and consistent with it. Focus on: contradictions with commit intent, missing pieces (e.g. "add endpoint" but no route registration), regressions in existing patterns.
+Report in your standard output format. Every finding MUST include: file, line, severity, confidence, description, evidence, fix.
 ```
 
-**Per-agent diff filtering** — only include relevant file hunks:
-- **go-reviewer**: `*.go` hunks (excluding `*_test.go`, migrations)
-- **ts-reviewer**: `*.ts` and `*.tsx` hunks
-- **py-reviewer**: `*.py` hunks
-- **rs-reviewer**: `*.rs` hunks
-- **migration-reviewer**: `*.sql` migration hunks only
-- **security-scanner**: all hunks (cross-cutting concern)
-- **bot-reviewer**: bot-related file hunks only
-- **design-system-reviewer**: `*.tsx` / `*.vue` / `*.svelte` UI component hunks
+## Step 4 — Collect and Triage Findings
 
-## Step 4 — Collect Raw Findings
+Merge all findings (excluding goal-verifier — verdict track). Each must carry: `file`, `line`, `severity` (CRITICAL/WARNING/SUGGESTION), `confidence` (HIGH ≥80 / MEDIUM 60–79 / LOW <60), `agent`, `description`, `evidence`, `fix`.
 
-After all agents complete, merge all findings into a single list. Each finding must have:
-- `file` — file path
-- `line` — line number or range
-- `severity` — CRITICAL / WARNING / SUGGESTION
-- `confidence` — HIGH / MEDIUM / LOW
-- `agent` — which agent found it
-- `description` — what's wrong
-- `evidence` — what the agent sees in the code
-- `fix` — suggested change
-
-**Triage (route, don't drop)**: instead of silently discarding low-signal items, route them:
-- confidence is LOW (<60%) → move to the **Open Questions** bucket (carried to the final report so a human can adjudicate), not the validation queue
-- severity is SUGGESTION and agent is not the primary reviewer for that file type → keep, but de-prioritize (validate only if cheap)
-
-HIGH/MEDIUM-confidence findings proceed to validation. This keeps the validation workload focused while ensuring no real finding is silently lost — Open Questions surface what was uncertain rather than dropping it.
+Triage — route, don't drop:
+- LOW confidence → **Open Questions** bucket (appears in the final report; skips validation).
+- SUGGESTION from a non-primary reviewer for that file type → keep, validate only if cheap.
+- Everything else → validation queue.
 
 ## Step 5 — Validate Findings (Double Verification)
 
-For each remaining finding, launch a **parallel validation agent** (one per finding):
+Launch one validation agent PER FINDING, all in parallel:
 
 ```
-You are a code review validator. Your job is to independently verify whether
-a reported issue is real.
+You are a code review validator. Independently verify whether a reported issue is real.
 
 ## Reported Issue
-- Agent: {agent_name}
-- File: {file}:{line}
-- Severity: {severity}
-- Description: {description}
-- Evidence: {evidence}
+Agent: {agent} · File: {file}:{line} · Severity: {severity}
+Description: {description}
+Evidence: {evidence}
 
 ## Your Task
-1. Read the file at the reported location
-2. Read surrounding context (±20 lines)
-3. Check if the issue is real:
-   - Does the code actually have this problem?
-   - Could this be a false positive? (pre-existing issue, intentional pattern, linter will catch it)
-   - Is the severity appropriate?
+1. Read the file at the reported location (the actual file, not the diff).
+2. Read ±20 lines of surrounding context.
+3. Decide: is the problem real? Could it be a false positive (pre-existing, intentional, linter-covered)? Is the severity right?
 
-## Verdict
-Reply with exactly one of:
-- CONFIRMED — the issue is real and correctly described
-- DOWNGRADE — the issue exists but severity should be lower (explain why)
-- REJECTED — false positive (explain why)
+## Verdict — reply with exactly one of:
+CONFIRMED — real and correctly described
+DOWNGRADE — real but severity should be lower (say which and why)
+REJECTED — false positive (say why)
 
-Be strict. When in doubt, REJECT. False positives waste more time than missed issues.
+Be strict. When in doubt, REJECT — false positives waste more time than missed issues.
 ```
 
-**Rules:**
-- Launch ALL validation agents in parallel (they are independent)
-- Each validator reads the actual file, not just the diff — this catches stale/wrong line references
-- REJECTED findings are dropped entirely
-- DOWNGRADED findings have their severity adjusted
+Apply verdicts: REJECTED → dropped (counted in validation stats); DOWNGRADE → severity adjusted; CONFIRMED → kept. Validators reading the real file also catch stale/wrong line references.
 
-## Step 6 — Deduplicate and Format Report
+## Step 6 — Deduplicate and Report
 
-After validation:
+1. Deduplicate: same file:line flagged twice → keep the higher-severity confirmed finding.
+2. Group and print:
 
-1. **Drop** all REJECTED findings
-2. **Apply** severity downgrades
-3. **Deduplicate**: if two agents flag the same file:line, keep the higher-severity confirmed finding
-4. **Group by severity**:
-
+```
 ### Blocking (CRITICAL confirmed)
-- [agent-name] file:line — description
-
+- [agent] file:line — description
 ### Important (WARNING confirmed)
-- [agent-name] file:line — description
-
+- [agent] file:line — description
 ### Nit (SUGGESTION confirmed)
-- [agent-name] file:line — description
+- [agent] file:line — description
+### Open Questions (LOW confidence — surfaced, not dropped)
+- [agent] file:line — suspicion + what would confirm it
+### Goal Verification (only if goal-verifier ran)
+Verdict: PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION + its gap list verbatim
+```
 
-### Open Questions (LOW confidence / unconfirmed — not dropped)
-- [agent-name] file:line — what was suspected and what context would confirm it
+3. Summary table:
 
-5. **Summary table**:
+| Agent | Blocking | Important | Nit | Raw | Confirmed | Status |
+|-------|----------|-----------|-----|-----|-----------|--------|
+| go-reviewer | 0 | 2 | 1 | 5 | 3 | PASS |
 
-| Agent | Blocking | Important | Nit | Raw | Confirmed | Avg Confidence | Status |
-|-------|----------|-----------|-----|-----|-----------|----------------|--------|
-| go-reviewer | 0 | 2 | 1 | 5 | 3 | 85% | PASS |
-| ts-reviewer | 1 | 0 | 0 | 4 | 1 | 92% | FAIL |
-| ... | | | | | | | |
+Status per agent: **FAIL** if any Blocking, **WARN** if Important only, **PASS** otherwise.
 
-Status: **FAIL** if any blocking, **WARN** if important-only, **PASS** if nits-only or clean.
-
-6. **Validation stats**: "X findings reported → Y confirmed (Z% hit rate)"
-
-### Confidence Distribution
-| Range | Count | Action |
-|-------|-------|--------|
-| 80-100 (HIGH) | N | Reported as findings |
-| 60-79 (MEDIUM) | N | Reported, marked "needs verification" |
-| <60 (LOW) | N | Routed to Open Questions (surfaced, not dropped) |
+4. Validation stats: "X findings reported → Y confirmed (Z% hit rate), R rejected".
 
 ### Overall Verdict
+**PASS / WARN / FAIL** — FAIL if any Blocking confirmed; WARN if Important only; PASS otherwise. One line naming the most critical confirmed finding (or "clean").
 
-**PASS / WARN / FAIL** — one-line summary of the most critical confirmed finding.
+## Step 7 — Post GitHub Comments (only if --comment)
 
-## Step 7 — Post GitHub Comments (if --comment)
+No `--comment` → stop here (terminal output only).
 
-**If `--comment` was NOT provided**: stop here. Output is terminal only.
+With `--comment`, post ONE summary comment via `gh pr comment $PR_NUMBER --body "..."` containing: confirmed-issue count (raw → confirmed), the Blocking/Important lists with GitHub permalinks, the summary table, and the validation hit rate. If zero confirmed issues, post the clean-review variant ("No issues found. Agents dispatched: […]. Findings: 0 confirmed of X raw.").
 
-**If `--comment` was provided and NO confirmed issues**: post summary comment:
-```bash
-gh pr comment $PR_NUMBER --body "## Code Review
-
-No issues found. Checked for bugs, security, and convention compliance.
-
-**Agents dispatched**: [list]
-**Findings**: 0 confirmed (X raw → 0 after validation)"
-```
-
-**If `--comment` was provided and confirmed issues exist**:
-
-Post a summary comment on the PR with all confirmed findings:
-```bash
-# Get the full SHA for link formatting
-FULL_SHA=$(git rev-parse HEAD)
-
-# Post summary comment
-gh pr comment $PR_NUMBER --body "## Code Review
-
-Found **N confirmed issues** (X raw findings → N after double verification).
-
-### Blocking
-- description ([file:line](https://github.com/OWNER/REPO/blob/${FULL_SHA}/file#LSTART-LEND))
-
-### Important
-- ...
-
-| Agent | Blocking | Important | Nit | Status |
-|-------|----------|-----------|-----|--------|
-| ... |
-
-Validation hit rate: Z%"
-```
-
-**Link format** (must be exact for GitHub rendering):
+Permalink format (exact, or GitHub won't render):
 ```
 https://github.com/OWNER/REPO/blob/FULL_SHA/path/to/file.ext#LSTART-LEND
 ```
-- Use full 40-char SHA (not abbreviated)
-- `#L` notation with at least 1 line of context before and after
+`FULL_SHA` = full 40-char `git rev-parse HEAD`; include ≥1 context line on each side in the range.
 
-## Notes
+## Recap — non-negotiables
 
-- All agents run on **opus** model for maximum reasoning depth
-- Double verification eliminates false positives — only confirmed issues reach the report
-- The validation step adds ~30s but dramatically improves signal-to-noise ratio
-- `--comment` requires `gh` CLI authenticated with repo access
-- Pre-existing issues are filtered out — only changes in the diff are reviewed
+- Diff scope only (unless `--full`); pre-existing issues are not findings.
+- Every reported finding survived independent validation; LOW confidence → Open Questions, never dropped silently.
+- goal-verifier is a verdict, not findings — separate report section.
+- Clean review is a valid review.
+- `--comment` requires an authenticated `gh` CLI.
