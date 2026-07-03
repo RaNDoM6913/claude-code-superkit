@@ -27,3 +27,6 @@ docs/superpowers/prompts/
 # Python bytecode (intake-classifier.py)
 __pycache__/
 *.pyc
+
+# Claude Code local session rules (owner-set, not shipped)
+CLAUDE.local.md

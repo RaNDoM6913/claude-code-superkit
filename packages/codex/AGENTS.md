@@ -171,7 +171,7 @@ If ANY answer is YES -> update docs BEFORE committing.
 
 1. **AGENTS.md (this file)** — Codex reads this on every session. Primary mechanism.
 2. **Pre-commit checklist (above)** — 15-point check before every commit.
-3. **docs-reviewer skill** — dispatched by dev-orchestrator in Phase 7 to verify completeness.
+3. **docs-reviewer skill** — run inline by dev-orchestrator in Phase 14 (Document) to verify completeness.
 4. **Plan completion gate** — plans are NOT complete until docs are updated.
 
 Do NOT rely on a single layer — update docs proactively with every code change.
@@ -184,10 +184,9 @@ Note: Claude Code (Opus 4.8) also supports `high`/`xhigh`/`max` effort levels, s
 
 ## Codex-Specific Notes
 
-### Agent Dispatch
-- Use `spawn_agent` for explicit subagent dispatch when the user has authorized parallel agent work
-- Use `wait_agent` to collect agent results when the next step depends on them
-- Keep independent reviewer prompts self-contained and dispatch them in parallel only when their file scopes do not overlap
+### Skill Execution (Codex has no subagents)
+- Codex has no subagent runtime. When an orchestrator skill says "perform X following the `<name>` skill", read `.codex/skills/<name>/SKILL.md` and execute its process inline yourself, then apply its verdict exactly as that skill defines it.
+- Run one referenced skill at a time. Keep each inline pass self-contained and do not overlap file scopes across passes.
 
 ### Planning
 - Use `update_plan` for tracking progress
@@ -195,7 +194,7 @@ Note: Claude Code (Opus 4.8) also supports `high`/`xhigh`/`max` effort levels, s
 ### Skills
 - Skills auto-activate based on description matching
 - Invoke skills by describing the task that matches the skill description
-- Multi-agent requires `[features] multi_agent = true` in config.toml
+- Orchestrator skills execute the skills they reference inline (see Skill Execution above) — there is no parallel subagent dispatch
 
 ### Local Tool Mapping
 - Search files with `rg` / `rg --files`

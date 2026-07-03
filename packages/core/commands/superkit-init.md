@@ -6,19 +6,39 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 
 # Superkit Init — Intelligent Project Setup
 
-Scan the codebase and generate **filled** documentation (not empty templates). Replaces manual CLAUDE.md filling, architecture doc writing, and rule configuration.
+## Role
 
-## Mode
+Scan the codebase, generate **filled** documentation (not empty templates), and configure superkit rules/hooks with real project paths. Replaces manual CLAUDE.md filling, architecture doc writing, and rule configuration.
 
 Parse $ARGUMENTS:
-- Default: interactive with checkpoints ("Review generated files?")
-- `--non-interactive`: skip all checkpoints, generate everything automatically
+- Empty (default) → **interactive**: pause at every checkpoint.
+- `--non-interactive` → skip all checkpoints and questions, generate everything automatically.
 
-## Phase 1 — Scan (Project Introspection)
+## Hard Rules
 
-Detect everything about this project by scanning files. Do NOT ask the user — read the code.
+1. Detect by reading code. Do NOT ask the user what their stack is — the only permitted question is the Scaffold stack question (interactive mode, empty project).
+2. Generated docs describe what EXISTS in the code, not what should exist.
+3. ALL generated text is English, including TODO placeholders.
+4. Architecture doc filenames come ONLY from the canonical table in Step 2 — never invent name variants.
+5. When something cannot be determined from code, write `TODO: [specific question]` — never guess.
+6. Every generated file starts with the generation stamp (Step 2).
+7. Emit the final report ONLY after the Done-when gate in Step 5 passes.
 
-### 1.1 Languages & Frameworks
+## Scaffold path (empty project)
+
+Step 1 declares Scaffold when NO language marker exists (no `go.mod`, `package.json`, `Cargo.toml`, `pyproject.toml`, `requirements.txt`). All steps still run in order; this matrix defines each step's behavior:
+
+| Step | Full project | Empty project (Scaffold) |
+|------|-------------|--------------------------|
+| 1 Scan | Full detection | Record "empty project". Interactive: ask "What stack will you use? [Go / TypeScript / Python / Rust / Other]". Non-interactive: stack = `TODO: define the stack` |
+| 2 Generate | Arch docs + trees + CLAUDE.md | Minimal CLAUDE.md only (project name, stack answer or the TODO above, empty structure). No arch docs, no trees |
+| 3 Configure rules | Real-path mapping | SKIP — no real paths exist yet; record "rules not configured (empty project)" for the report |
+| 4 Validate | All 3 checks | Single check: CLAUDE.md exists and starts with the generation stamp |
+| 5 Commit & report | Full report | `git add CLAUDE.md` only; use the Scaffold report variant |
+
+## Step 1 — Scan (project introspection)
+
+### Languages & frameworks
 
 | Marker | Detected As |
 |--------|-------------|
@@ -27,7 +47,7 @@ Detect everything about this project by scanning files. Do NOT ask the user — 
 | `pyproject.toml` / `requirements.txt` | Python. Read for: fastapi/django/flask |
 | `Cargo.toml` | Rust. Read for: actix/axum/rocket |
 
-### 1.2 Infrastructure
+### Infrastructure
 
 | Check | How |
 |-------|-----|
@@ -37,7 +57,7 @@ Detect everything about this project by scanning files. Do NOT ask the user — 
 | Auth | Grep for: `jwt`, `session`, `oauth`, `passport`, `auth middleware` |
 | CI/CD | `.github/workflows/`, `Dockerfile`, `docker-compose*.yml`, `.gitlab-ci.yml` |
 
-### 1.3 Structure
+### Structure
 
 ```bash
 # Detect monorepo vs single
@@ -52,27 +72,16 @@ ls -d */ | head -20
 find . -name "*.go" -o -name "*.ts" -o -name "*.py" -o -name "*.rs" | grep -v node_modules | grep -v vendor | wc -l
 ```
 
-### 1.4 Existing docs
+### Existing docs
 
 ```bash
-# What already exists?
 test -f CLAUDE.md && echo "HAS_CLAUDE_MD"
 test -f AGENTS.md && echo "HAS_AGENTS_MD"
 test -d docs/architecture && echo "HAS_ARCH_DOCS" && ls docs/architecture/
 test -f backend/docs/openapi.yaml && echo "HAS_OPENAPI"
 ```
 
-### 1.5 Scaffold Mode (empty project)
-
-If NO language markers found (no go.mod, package.json, Cargo.toml, pyproject.toml):
-
-**Interactive:** Ask "What stack will you use? [Go/TypeScript/Python/Rust/Other]"
-**Non-interactive:** Create minimal CLAUDE.md with "TODO: определить стек"
-
-Then skip to Phase 2.3 (create minimal CLAUDE.md), skip Phases 2.1-2.2, and in Phase 5 suggest:
-"Project is empty. Start with `/dev <task>`, then run `/superkit-evolve` when code exists."
-
-### 1.6 Output
+### Scan summary
 
 Summarize findings internally (do NOT save to file):
 ```
@@ -85,7 +94,9 @@ Infra: Docker Compose, GitHub Actions
 Existing docs: CLAUDE.md (TODO-heavy), no architecture docs
 ```
 
-## Phase 2 — Generate Documentation
+**Done when:** internal summary produced, OR Scaffold declared per the matrix.
+
+## Step 2 — Generate documentation
 
 For EACH detected component, read actual code and generate **filled** docs. Minimize TODOs.
 
@@ -94,39 +105,37 @@ Every generated file starts with:
 > Generated by `/superkit-init` on YYYY-MM-DD. Review and customize for your project.
 ```
 
-### 2.1 Architecture Docs
+### Architecture docs — canonical names
 
-Generate only docs relevant to detected components:
+Generate only docs matching detected components. These six filenames are canonical — each matches a shipped template in `docs-templates/architecture/` and is exactly what `/superkit-evolve` checks. Use them exactly (e.g. `api-reference.md`, not `backend-api-reference.md`; `frontend-state.md`, not `frontend-state-contracts.md`):
 
 | Condition | Generate | How |
 |-----------|----------|-----|
 | Backend detected | `docs/architecture/backend-layers.md` | Read cmd/, internal/, routes → describe layers, DI, error handling |
-| API routes found | `docs/architecture/backend-api-reference.md` | Grep route registrations → list endpoints with method, path, auth |
+| API routes found | `docs/architecture/api-reference.md` | Grep route registrations → list endpoints with method, path, auth |
 | Migrations dir exists | `docs/architecture/database-schema.md` | Read last 10 migrations → list tables, columns, constraints |
-| Auth code detected | `docs/architecture/auth-and-sessions.md` | Read auth service → describe lifecycle |
-| Frontend detected | `docs/architecture/frontend-state-contracts.md` | Read src/ → routing, state, data fetching |
+| Auth code detected | `docs/architecture/auth-and-sessions.md` | Read auth service → describe token/session lifecycle |
+| Frontend detected | `docs/architecture/frontend-state.md` | Read src/ → routing, state, data fetching |
 | Docker/CI detected | `docs/architecture/deployment.md` | Read docker-compose, Dockerfile → describe how to run |
 
 For each doc:
-1. Read 3-5 key source files in the component
-2. Write a structured doc describing what EXISTS (not what should exist)
-3. If you can't determine something → write `TODO: [specific question]`
+1. Read 3-5 key source files in the component.
+2. Write a structured doc describing what EXISTS (not what should exist).
+3. Unknown detail → `TODO: [specific question]`.
 
-### 2.2 Project Trees
+### Project trees
 
 ```bash
 mkdir -p docs/trees
 ```
 
-Generate using `tree` command (fallback to `find`):
+Generate with the `tree` command; if `tree` is unavailable, fall back to `find . -maxdepth 2 -type d -not -path '*/node_modules/*' -not -path '*/.git/*'`:
 - If monorepo: `tree-monorepo.md` (depth 2)
 - Per-component: `tree-{component}.md` (depth 3)
 
-### 2.3 CLAUDE.md
+### CLAUDE.md
 
-If CLAUDE.md doesn't exist or is the superkit TODO template, generate a filled version:
-
-Read from:
+If CLAUDE.md doesn't exist or is the superkit TODO template, generate a filled version reading from:
 - README.md → project description
 - package.json / go.mod → tech stack with versions
 - Makefile / package.json scripts → key commands
@@ -134,13 +143,13 @@ Read from:
 - Generated arch docs → architecture reference table
 - .editorconfig / linter configs → conventions
 
-### 2.4 Checkpoint (interactive mode only)
+### Checkpoint (interactive mode only)
 
 ```
 ✅ Generated documentation:
   docs/architecture/backend-layers.md (142 lines)
   docs/architecture/database-schema.md (89 lines)
-  docs/architecture/frontend-state-contracts.md (67 lines)
+  docs/architecture/frontend-state.md (67 lines)
   docs/trees/tree-monorepo.md
   docs/trees/tree-backend.md
   docs/trees/tree-frontend.md
@@ -149,56 +158,62 @@ Read from:
 Review before configuring rules? [continue / show <file> / edit <file>]
 ```
 
-In `--non-interactive` mode: skip, proceed to Phase 3.
+In `--non-interactive` mode: no checkpoint, proceed to Step 3.
 
-## Phase 3 — Configure Rules
+**Done when:** every doc from the condition table (or the Scaffold CLAUDE.md) is written to disk with the generation stamp.
 
-Adapt superkit rules to use **real project paths** (not generic patterns).
+## Step 3 — Configure rules
 
-### 3.1 documentation.md rule
+Adapt superkit rules to use **real project paths** (not generic patterns). Scaffold: skip per the matrix.
 
-Read `.claude/rules/documentation.md`. Update the trigger-to-doc mapping table with real paths detected in Phase 1:
+### documentation.md rule
+
+Read `.claude/rules/documentation.md`. Update the trigger-to-doc mapping table with real paths detected in Step 1:
 
 ```
-| # | Trigger (from Phase 1 scan) | Required Doc | File Path |
+| # | Trigger (from Step 1 scan) | Required Doc | File Path |
 |---|----------------------------|-------------|-----------|
 | 1 | {actual migrations path}/*.sql | Database schema | docs/architecture/database-schema.md |
-| 2 | {actual handlers path}/*.go | API reference | docs/architecture/backend-api-reference.md |
+| 2 | {actual handlers path}/*.go | API reference | docs/architecture/api-reference.md |
 ...
 ```
 
-### 3.2 doc-check-on-commit.sh hook
+### doc-check-on-commit.sh hook
 
 Update `.claude/scripts/hooks/doc-check-on-commit.sh` with project-specific path mappings for the smart blocker.
 
-### 3.3 Checkpoint (interactive mode only)
+### Checkpoint (interactive mode only)
 
 ```
 ✅ Configured rules with your project paths:
-  .claude/rules/documentation.md — 12-point checklist with real paths
-  .claude/scripts/hooks/doc-check-on-commit.sh — smart mapping for 12 categories
+  .claude/rules/documentation.md — N-row trigger mapping with real paths
+  .claude/scripts/hooks/doc-check-on-commit.sh — smart mapping for N categories
 
 Review? [continue / show rules]
 ```
 
-In `--non-interactive` mode: skip.
+In `--non-interactive` mode: no checkpoint.
 
-## Phase 4 — Validate
+**Done when:** both files updated with detected paths (or Scaffold skip recorded).
 
-1. **Path check** — every file path in rules and CLAUDE.md actually exists:
+## Step 4 — Validate
+
+1. **Path check** — backticked literal paths in rules and CLAUDE.md must exist (portable — no `grep -P`):
 ```bash
-# Extract all paths from documentation.md and verify
-grep -oP '`[^`]+\.(go|ts|tsx|sql|py|rs|md)`' .claude/rules/documentation.md | tr -d '`' | while read p; do
-  ls $p &>/dev/null || echo "BROKEN: $p"
-done
+grep -hoE '`[^` ]*/[^` ]*\.(go|ts|tsx|sql|py|rs|md)`' .claude/rules/documentation.md CLAUDE.md 2>/dev/null \
+  | tr -d '`' | sort -u | grep -v '\*' | while read -r p; do
+    [ -e "$p" ] || echo "BROKEN: $p"
+  done
 ```
+Extracted strings that contain `*` are glob patterns: check each with the Glob tool; a pattern with zero matches → fix it or replace with a real path. Bare filenames without `/` are code spans — ignore them.
 
-2. **Cross-reference** — CLAUDE.md migration count matches actual
-3. **Consistency** — architecture reference table lists all generated docs
+2. **Cross-reference** — migration count in CLAUDE.md matches the actual file count in the migrations directory.
 
-Fix any issues found.
+3. **Consistency** — the CLAUDE.md architecture reference table lists every doc generated in Step 2.
 
-## Phase 5 — Commit
+**Done when:** re-run after fixes prints zero `BROKEN` lines, all globs match, counts agree. Scaffold: CLAUDE.md exists with the generation stamp.
+
+## Step 5 — Commit & report
 
 ```bash
 git add docs/ CLAUDE.md .claude/rules/ .claude/scripts/hooks/
@@ -213,7 +228,19 @@ Generated:
 Co-Authored-By: Claude <noreply@anthropic.com>"
 ```
 
-Report:
+Scaffold: `git add CLAUDE.md` and a message noting the minimal scaffold.
+
+### Done ONLY when
+
+- [ ] Every file named in the report exists on disk — verified with `ls`/Read this session, not from memory.
+- [ ] Step 4 passed on its final run (zero `BROKEN`, globs match; Scaffold: stamp check passed).
+- [ ] Commit exists — `git log --oneline -1` shows it.
+- [ ] `TODOs remaining: X` equals the real count: `grep -ro 'TODO:' CLAUDE.md docs/architecture/ 2>/dev/null | wc -l`.
+
+Any box unchecked → state what is missing and fix it; do not emit the report.
+
+## Output — final report
+
 ```
 ✅ superkit-init complete!
 
@@ -225,4 +252,19 @@ Next: start coding! The /dev pipeline now has full project context.
 Run /superkit-evolve anytime to update docs as your project grows.
 ```
 
-$ARGUMENTS
+Scaffold variant — replace the middle and Next lines with:
+```
+Generated: CLAUDE.md (minimal — empty project)
+Configured: nothing — rules skipped, no real paths yet
+TODOs remaining: X
+
+Next: project is empty. Start with /dev <task>, then run /superkit-evolve once code exists.
+```
+
+## Recap — non-negotiables
+
+- Detect by reading code; the Scaffold stack question is the only question allowed.
+- Canonical doc filenames only (Step 2 table); all generated text in English.
+- Unknowns become `TODO: [specific question]` — never invented content.
+- Empty project → follow the Scaffold column for every step, including the skip of Step 3.
+- Final report only after every Done-ONLY-when box is checked.

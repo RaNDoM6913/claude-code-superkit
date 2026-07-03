@@ -139,13 +139,13 @@ Write testable acceptance criteria — the evaluator checks exactly these in Pha
 
 ```
 ## Sprint Contract
-| # | Criterion | Test Method | Priority |
-|---|-----------|-------------|----------|
-| 1 | [specific, testable outcome] | [grep / curl / test / read] | MUST |
-| 2 | ... | ... | MUST/SHOULD |
+| # | Criterion | Test Method | Threshold | Priority |
+|---|-----------|-------------|-----------|----------|
+| 1 | [specific, testable outcome] | [grep / curl / test / read] | Score ≥ 7 | MUST |
+| 2 | ... | ... | ... | MUST/SHOULD |
 ```
 
-Good criteria are testable, specific ("returns 200 with user.id in JSON", not "endpoint works"), independent, and measurable. Never include subjective items ("code is clean") or unmeasurable ones ("performance is good").
+Threshold uses the evaluator's 0–10 scale — default 7 unless a criterion warrants stricter. Good criteria are testable, specific ("returns 200 with user.id in JSON", not "endpoint works"), independent, and measurable. Never include subjective items ("code is clean") or unmeasurable ones ("performance is good").
 **Done when:** every criterion has a concrete test method.
 
 ## Phase 6 — Validate Plan
@@ -171,7 +171,7 @@ Execute the plan in dependency order; for each step, read the reference pattern 
 
 ## Phase 8 — Evaluate
 
-Dispatch **evaluator** with the Sprint Contract, changed-file list, and pass number.
+Dispatch **evaluator** with the Sprint Contract, changed-file list, pass number, and — on pass 2+ — the previous evaluation report.
 - **PROCEED** → Phase 9.
 - **ITERATE** → escalate effort to `max` (Hard Rule 4), fix the critique, re-dispatch as pass N+1. If passes exceed the matrix budget (Standard 2 / Complex 3) → proceed with the warning "Evaluation budget exhausted after N passes. Remaining issues: [list]". If the score did not improve vs the previous pass → proceed with an escalation note.
 - **ESCALATE** → dispatch **architect** for design review, apply its recommendation, restart from Phase 7.
@@ -185,7 +185,7 @@ Go `go vet ./...` · TypeScript `npx tsc --noEmit` · Python `mypy`/`pyright`/`p
 
 ## Phase 10 — Test
 
-Dispatch **test-generator** for new/changed backend code: happy path, validation errors, not-found/conflict, boundary values, edge cases — following project test patterns. Then run the project's test command yourself and fix failures.
+Dispatch **test-generator** if available — otherwise write the tests yourself — for new/changed backend code: happy path, validation errors, not-found/conflict, boundary values, edge cases — following project test patterns. Then run the project's test command yourself and fix failures.
 **Done when:** the test suite runs green (paste the actual final summary line).
 
 ## Phase 11 — Verify Goals
@@ -287,6 +287,8 @@ Emit only after all non-skipped phases completed:
 
 ### Suggested Commit Message
 type(scope): description
+
+Co-Authored-By: Claude <noreply@anthropic.com>
 ```
 
 ## Recap — non-negotiables

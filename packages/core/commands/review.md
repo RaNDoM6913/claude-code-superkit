@@ -88,13 +88,15 @@ Review the diff hunks against your checklist. Recent commits show intent — jud
 Report in your standard output format. Every finding MUST include: file, line, severity, confidence, description, evidence, fix.
 ```
 
+Exception — **goal-verifier** (verdict track, Hard Rule 4): instead of the checklist task above, give it ALL hunks plus the implementation plan path from `docs/superpowers/plans/` and request its verdict report.
+
 ## Step 4 — Collect and Triage Findings
 
 Merge all findings (excluding goal-verifier — verdict track). Each must carry: `file`, `line`, `severity` (CRITICAL/WARNING/SUGGESTION), `confidence` (HIGH ≥80 / MEDIUM 60–79 / LOW <60), `agent`, `description`, `evidence`, `fix`.
 
 Triage — route, don't drop:
 - LOW confidence → **Open Questions** bucket (appears in the final report; skips validation).
-- SUGGESTION from a non-primary reviewer for that file type → keep, validate only if cheap.
+- SUGGESTION from a non-primary reviewer for that file type → validate last; if you skip its validation, route it to Open Questions — never to the confirmed sections (Hard Rule 3).
 - Everything else → validation queue.
 
 ## Step 5 — Validate Findings (Double Verification)
@@ -152,6 +154,14 @@ Status per agent: **FAIL** if any Blocking, **WARN** if Important only, **PASS**
 
 4. Validation stats: "X findings reported → Y confirmed (Z% hit rate), R rejected".
 
+5. Confidence distribution:
+
+| Band | Count | Route |
+|------|-------|-------|
+| HIGH (80–100) | N | validated (Step 5) |
+| MEDIUM (60–79) | N | validated (Step 5) |
+| LOW (<60) | N | Open Questions — surfaced, not dropped |
+
 ### Overall Verdict
 **PASS / WARN / FAIL** — FAIL if any Blocking confirmed; WARN if Important only; PASS otherwise. One line naming the most critical confirmed finding (or "clean").
 
@@ -166,6 +176,15 @@ Permalink format (exact, or GitHub won't render):
 https://github.com/OWNER/REPO/blob/FULL_SHA/path/to/file.ext#LSTART-LEND
 ```
 `FULL_SHA` = full 40-char `git rev-parse HEAD`; include ≥1 context line on each side in the range.
+
+## Done ONLY when
+
+- [ ] Every agent in the printed dispatch plan returned (or is named as skipped/failed — never silently absent).
+- [ ] Every HIGH/MEDIUM finding carries an applied validation verdict (CONFIRMED / DOWNGRADE / REJECTED).
+- [ ] Dedup ran and the full report printed: severity groups + summary table + validation stats + confidence distribution + Overall Verdict.
+- [ ] If `--comment` was given: the PR comment was actually posted (show the `gh` output).
+
+Not all boxes checked → say what is missing; do not claim the review is complete.
 
 ## Recap — non-negotiables
 

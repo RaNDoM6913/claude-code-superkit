@@ -141,13 +141,13 @@ Write testable acceptance criteria -- Phase 8 evaluates exactly these:
 
 ```
 ## Sprint Contract
-| # | Criterion | Test Method | Priority |
-|---|-----------|-------------|----------|
-| 1 | [specific, testable outcome] | [grep / curl / test / read] | MUST |
-| 2 | ... | ... | MUST/SHOULD |
+| # | Criterion | Test Method | Threshold | Priority |
+|---|-----------|-------------|-----------|----------|
+| 1 | [specific, testable outcome] | [grep / curl / test / read] | Score >= 7 | MUST |
+| 2 | ... | ... | ... | MUST/SHOULD |
 ```
 
-Good criteria are testable, specific ("returns 200 with user.id in JSON", not "endpoint works"), independent, and measurable. Never include subjective items ("code is clean") or unmeasurable ones ("performance is good").
+Threshold uses the evaluator's 0-10 scale -- default 7 unless a criterion warrants stricter. Good criteria are testable, specific ("returns 200 with user.id in JSON", not "endpoint works"), independent, and measurable. Never include subjective items ("code is clean") or unmeasurable ones ("performance is good").
 **Done when:** every criterion has a concrete test method.
 
 ## Phase 6 -- Validate Plan

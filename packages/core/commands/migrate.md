@@ -14,7 +14,7 @@ Role: apply, roll back, or report the status of database migrations, auto-detect
 2. NEVER run `npx prisma migrate reset` (or any tool's reset/drop-and-recreate) as a routine rollback — it drops the ENTIRE database. Offer it only as a clearly labeled last resort, and only run it after the user explicitly accepts total data loss.
 3. NEVER guess a database connection string. Locate it (Step 2) or report where you looked and ask the user.
 4. Run the tool's read-only `status` command before any `up` or `down`, whenever the tool has one.
-5. If no migration tool is detected, or the detected tool has no true rollback for the requested action (Prisma, Drizzle), report that and stop — do not improvise a workaround.
+5. If no migration tool is detected, report that and stop. If the detected tool has no true rollback (Prisma, Drizzle), follow its down branch in Step 4 — present only the options listed there, auto-run none of them, and do not improvise a workaround.
 6. For `down N` with N > 1: in the confirmation (Rule 1), restate N and list the N migrations that will be reverted; if the user's answer does not clearly cover N migrations, do not run.
 7. Prefer Makefile migration targets over raw tool commands — they may include environment setup.
 
@@ -105,7 +105,7 @@ Run the Apply Command from Step 1. No confirmation gate — applying pending mig
 | Prisma | **no true down** — see Prisma branch below | same |
 | Rails | `rails db:rollback` | `rails db:rollback STEP=N` |
 | Drizzle | **not supported** — see Drizzle branch below | same |
-| Knex | `npx knex migrate:rollback` | run `npx knex migrate:rollback` N times |
+| Knex | `npx knex migrate:rollback` — reverts the last **batch**, which may contain more than one migration; list every migration in that batch in the confirmation | run `npx knex migrate:rollback` N times (each run reverts one batch) |
 
 ### Prisma down branch
 
@@ -143,4 +143,4 @@ Done when: the report matches the template, with `Result` taken from actual comm
 - Destructive commands run only after explicit user confirmation at that step, with the exact command and concrete data loss spelled out.
 - `prisma migrate reset` is never a routine rollback — last resort, explicit total-data-loss consent only.
 - Connection strings are located (Makefile/.env/compose/tool config) or asked for — never guessed.
-- Status first where supported; no tool detected or no true down → report and stop.
+- Status first where supported; no tool detected → report and stop; no true down (Prisma/Drizzle) → only the Step 4 branch options, nothing auto-run.

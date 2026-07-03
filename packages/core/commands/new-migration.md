@@ -61,7 +61,7 @@ Done when: the report + question are posted and zero files were created.
 Applies to raw-SQL tools (golang-migrate, dbmate). For Rails / Alembic / Prisma / Drizzle set dialect = `n/a` (the tool or schema owns the SQL) and go to Step 4.
 
 Check in priority order; first signal wins:
-1. **Existing migration SQL** (Grep the migrations directory): `TIMESTAMPTZ` / `JSONB` / `BIGSERIAL` → PostgreSQL · `AUTO_INCREMENT` / `ENGINE=` → MySQL · `AUTOINCREMENT` → SQLite.
+1. **Existing migration SQL** (search the migrations directory with `grep`): `TIMESTAMPTZ` / `JSONB` / `BIGSERIAL` → PostgreSQL · `AUTO_INCREMENT` / `ENGINE=` → MySQL · `AUTOINCREMENT` → SQLite.
 2. **Database driver in dependencies**: `go.mod`: `jackc/pgx` or `lib/pq` → PostgreSQL, `go-sql-driver/mysql` → MySQL, `mattn/go-sqlite3` or `modernc.org/sqlite` → SQLite · `package.json`: `pg` or `postgres` → PostgreSQL, `mysql2` → MySQL, `better-sqlite3` → SQLite · Python deps: `psycopg`/`asyncpg` → PostgreSQL, `pymysql`/`mysqlclient` → MySQL.
 3. **Connection string scheme** in `.env*` or config files: `postgres://`/`postgresql://` → PostgreSQL · `mysql://` → MySQL · `sqlite:` → SQLite.
 

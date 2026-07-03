@@ -33,7 +33,7 @@ Done-when: `scope` is exactly one of `backend` / `frontend` / `all`, and `fix` i
 
 ## Step 2 — Detect Linters
 
-Scan the project for stack markers and map each present marker to its commands. Detect with Bash only: `test -f <marker>` for files, `grep -q '<section>' pyproject.toml` for a config section, `command -v <tool>` for a tool on PATH.
+Scan the project for stack markers and map each present marker to its commands. Detect with Bash only: `test -f <marker>` for files, `grep -qF '<section>' pyproject.toml` for a config section (fixed-string `-F` so the `[...]` in section names like `[tool.ruff]` is matched literally, not as a regex character class), `command -v <tool>` for a tool on PATH.
 
 | Marker | Format Command | Lint Command | Stack |
 |--------|---------------|-------------|-------|

@@ -46,7 +46,7 @@ Key design decisions:
 - **Sprint Contract (Phase 5)**: testable acceptance criteria defined BEFORE coding. Evaluator checks these in Phase 8.
 - **Conditional GAN loop (Phase 8)**: evaluator checks contract → if FAIL, iterate (max 2-3 passes) → if scores plateau, escalate to architect.
 - **Dependency order in Phase 7**: migrations before repos, repos before services, services before handlers.
-- **Agents in Phases 10-14 run independently**: test-generator, reviewer agents, and docs-reviewer can be dispatched in parallel.
+- **Agents in Phases 10, 12, and 14 run independently**: test-generator, reviewer agents, and docs-reviewer can be dispatched in parallel.
 - **Gate between phases**: if Phase 9 (verify) fails, Claude fixes errors before Phase 10 (test).
 - **Critic as independent evaluator**: Phase 13 evaluates from security, new-hire, and ops perspectives — different from domain-specific reviewers in Phase 12.
 

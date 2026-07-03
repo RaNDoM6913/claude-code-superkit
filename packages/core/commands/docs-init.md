@@ -54,7 +54,7 @@ TODO: formatting, error handling, commit format, API style, env vars.
 | Doc | Description |
 |-----|-------------|
 | docs/architecture/*.md | TODO: fill in per generated template |
-| docs/trees/tree-project.md | Project directory structure |
+| docs/trees/tree-monorepo.md | Project directory structure |
 ```
 
 ## Output
