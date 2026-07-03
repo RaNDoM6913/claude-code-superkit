@@ -1,21 +1,45 @@
 ---
 name: nextjs-supabase-auth
 description: Expert integration of Supabase Auth with Next.js App Router — server/client boundary, middleware for session refresh, Server Components, Server Actions, RLS. Use when the task mentions Supabase auth, Next.js auth, login, signup, OAuth, protected routes, or auth middleware
-tokens: 1780
+tokens: 2155
 user-invocable: false
 ---
 
 # Next.js + Supabase Auth
 
-Expert in integrating Supabase Auth with Next.js App Router. Knows the server/client boundary, how to handle auth in middleware, Server Components, Client Components, and Server Actions.
+Expert in integrating Supabase Auth with Next.js App Router: the server/client boundary, session refresh in middleware, Server Components, Client Components, and Server Actions.
 
-## Core Principles
+## Use this skill when
 
-1. Use `@supabase/ssr` for App Router integration (NOT `@supabase/auth-helpers-nextjs` — deprecated)
-2. Refresh sessions in middleware on every request
-3. Never expose service-role key to the client
-4. Use Server Actions for auth operations when possible
-5. Understand the cookie-based session flow
+- Wiring Supabase Auth into a Next.js App Router project (`@supabase/ssr`)
+- Setting up login, signup, signout, OAuth, or magic-link / email-OTP flows
+- Protecting routes or reading the authenticated user server-side
+- Refreshing sessions in middleware
+- Writing Row-Level Security (RLS) policies for authenticated tables
+
+## Do not use this skill when
+
+- The project uses the Pages Router or the deprecated `@supabase/auth-helpers-nextjs`
+- Auth is handled by another provider (NextAuth/Auth.js, Clerk, Firebase)
+- The task is Supabase database design with no auth surface
+
+## Hard Rules
+
+1. Use `@supabase/ssr` for App Router integration. NEVER use `@supabase/auth-helpers-nextjs` (deprecated).
+2. Refresh the session in middleware on every request; the matcher MUST exclude static assets.
+3. Read the user with `getUser()` in server code, NEVER `getSession()` — `getUser()` re-validates with the auth server; `getSession()` reads cookies only and is forgeable.
+4. NEVER expose `SUPABASE_SERVICE_ROLE_KEY` to the client or any `NEXT_PUBLIC_*` var — it bypasses RLS.
+5. Prefer Server Actions for auth operations (login, signup, signout).
+6. Enable RLS on every table the anon key can reach — non-negotiable for production.
+
+## Workflow
+
+1. Create the browser and server clients (`lib/supabase/client.ts`, `lib/supabase/server.ts`) with the cookie handlers below. Done when both `createClient` helpers compile.
+2. Wire `middleware.ts` to refresh the session and redirect unauthenticated users off protected paths. Done when the matcher excludes static assets.
+3. Add the OAuth callback route (`app/auth/callback/route.ts`) if using OAuth or magic links. Done when it calls `exchangeCodeForSession`.
+4. Build auth operations as Server Actions (login / signup / signout) with `revalidatePath` + `redirect`.
+5. Read the user in Server Components with `getUser()`; redirect when it is null.
+6. Enable RLS and add SELECT/INSERT policies on every table the anon key can reach.
 
 ## Stack
 
@@ -179,7 +203,7 @@ export default async function Dashboard() {
 }
 ```
 
-**Use `getUser()`, not `getSession()`** in Server Components — `getUser()` re-validates with the auth server. `getSession()` reads cookies only and is forgeable.
+Always `getUser()` here, never `getSession()` (Hard Rule 3).
 
 ## RLS (Row-Level Security)
 
@@ -201,14 +225,14 @@ Without RLS, the anon key gives full access to any table. RLS is a non-negotiabl
 
 ## Anti-Patterns to Avoid
 
-### `getSession()` in Server Components
-`getSession()` reads cookies without validation — anyone can fake them. Use `getUser()` which re-verifies with Supabase.
+### `getSession()` in server code
+Forgeable — reads cookies without validation. Use `getUser()` (Hard Rule 3).
 
 ### Storing tokens manually
 Don't `localStorage.setItem('token', ...)`. `@supabase/ssr` handles cookies for you.
 
 ### Hardcoding `service_role` key
-`SUPABASE_SERVICE_ROLE_KEY` bypasses RLS and should NEVER be in client code or NEXT_PUBLIC_* env vars.
+`SUPABASE_SERVICE_ROLE_KEY` bypasses RLS and must NEVER be in client code or `NEXT_PUBLIC_*` env vars.
 
 ### Forgetting to revalidate after login
 After a Server Action login, call `revalidatePath('/', 'layout')` so cached UI reflects the new user.
@@ -224,5 +248,12 @@ If you read user state on mount, also subscribe to `supabase.auth.onAuthStateCha
 | OAuth redirect loops | Mismatch between Supabase project's "Site URL" and your origin |
 | RLS error "permission denied for table" | Policy missing or auth.uid() returning null |
 | Cookies set in Server Component throw | Expected — let middleware handle it, wrap in try/catch |
+
+## Recap — non-negotiables
+
+- `@supabase/ssr` only; never the deprecated auth-helpers package.
+- Middleware refreshes the session every request; matcher excludes static assets.
+- Server code reads the user via `getUser()`, never `getSession()`.
+- `SUPABASE_SERVICE_ROLE_KEY` never reaches the client; RLS is enabled on every anon-reachable table.
 
 Adapted from vibeship-spawner-skills via VKirill/codex-starter-kit (Apache 2.0).

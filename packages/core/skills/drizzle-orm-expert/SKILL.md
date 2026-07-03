@@ -25,27 +25,35 @@ TypeScript-first ORM that compiles to raw SQL with zero runtime overhead. Ideal 
 - You need a database-agnostic ORM guide
 - The task is about DB server configuration (use `postgresql-optimization`)
 
+## Hard Rules
+
+- NEVER run `drizzle-kit push` in production — it can drop columns and lose data. Use `generate` → review SQL → `migrate`.
+- ALWAYS pass `{ schema }` to `drizzle()` — without it `db.query.*` is `undefined`.
+- ALWAYS define and export `relations()` before using `db.query.*` with `with`.
+- ALWAYS use connection pooling (pgBouncer, Neon serverless, or node-pg `Pool`).
+- Use the query builder rather than raw SQL whenever it supports the operation.
+- MySQL has no `.returning()` — read `insertId` from the result instead.
+
 ## Workflow
 
-1. Identify the DB driver (PostgreSQL, SQLite, MySQL) and select the adapter
-2. Define schema in `db/schema.ts` (or domain-split `db/schema/users.ts`)
-3. Define relations separately so the relational query API (`db.query.*`) works
-4. Use `InferSelectModel` and `InferInsertModel` for type inference — never manual interfaces
-5. Run `drizzle-kit generate` then `migrate` for schema changes in production
-6. **Never** use `drizzle-kit push` in production
+1. Identify the DB driver (PostgreSQL, SQLite, MySQL) and pick the adapter (see Adapters table).
+2. Define schema in `db/schema.ts` (or domain-split `db/schema/users.ts`).
+3. Define `relations()` separately and export them so `db.query.*` with `with` resolves.
+4. Initialize the client with `{ schema }`.
+5. Derive row types with `InferSelectModel` / `InferInsertModel` — never hand-write interfaces.
+6. For production schema changes: `drizzle-kit generate` → review the SQL → `drizzle-kit migrate` (never `push`).
 
 ## Core Architecture
 
-Drizzle ORM compiles TypeScript schema definitions into prepared SQL statements at build time. There is no runtime query engine binary (unlike Prisma), which makes it edge-compatible (Cloudflare Workers, Vercel Edge Functions, Deno Deploy).
+No runtime query-engine binary (unlike Prisma), so Drizzle runs on edge runtimes — Cloudflare Workers, Vercel Edge Functions, Deno Deploy. The two APIs:
 
-Two APIs coexist:
 - **SQL-like builder**: `db.select().from().where().join().orderBy()` — close to SQL semantics
 - **Relational query API**: `db.query.users.findMany({ with: { posts: true } })` — Prisma-style nested fetching
 
 ## Schema Design
 
 ```typescript
-import { pgTable, uuid, text, timestamp, pgEnum, index, uniqueIndex } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, boolean, timestamp, pgEnum, index, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const roleEnum = pgEnum('role', ['admin', 'user', 'guest']);
 
@@ -63,8 +71,12 @@ export const posts = pgTable('posts', {
   id: uuid('id').defaultRandom().primaryKey(),
   userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }).notNull(),
   title: text('title').notNull(),
+  published: boolean('published').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 ```
+
+Every column the query examples below read (`posts.published`, `posts.createdAt`) is defined here.
 
 ## Relations API
 
@@ -79,7 +91,7 @@ export const postsRelations = relations(posts, ({ one }) => ({
   author: one(users, { fields: [posts.userId], references: [users.id] }),
 }));
 
-// Initialize client WITH schema for db.query.* to work:
+// Initialize client WITH schema so db.query.* works:
 import { drizzle } from 'drizzle-orm/node-postgres';
 import * as schema from './schema';
 export const db = drizzle(pool, { schema });
@@ -104,7 +116,7 @@ const recent = await db
 
 ### Relational
 
-In `db.query.<table>.findMany`, the `where` / `orderBy` clauses can be either a value built from the imported schema's table (`eq(users.role, 'user')`) or, with the latest relational query builder, a callback that receives the table:
+Prefer the callback form `(table, { eq }) => ...` — it avoids importing and shadowing the schema's table symbols:
 
 ```typescript
 import { users, posts } from './schema';
@@ -121,8 +133,6 @@ const activeUsers = await db.query.users.findMany({
   limit: 20,
 });
 ```
-
-Both forms work. The callback form avoids shadowing the imported `users` table when the local result variable would otherwise collide.
 
 ## Mutations
 
@@ -187,8 +197,6 @@ export default {
 | MySQL (PlanetScale) | `drizzle-orm/planetscale-serverless` |
 | MySQL (mysql2) | `drizzle-orm/mysql2` |
 
-Always pass `{ schema }` to enable `db.query.*`.
-
 ## Type Inference
 
 ```typescript
@@ -227,14 +235,6 @@ export async function createUser(formData: FormData) {
 }
 ```
 
-## Constraints
-
-- **NEVER** use `drizzle-kit push` in production — can cause data loss
-- **NEVER** write raw SQL when the query builder supports the op
-- **ALWAYS** define `relations()` before using `db.query.*` with `with`
-- **ALWAYS** use connection pooling (`pgBouncer`, `Neon serverless`, `node-pg Pool`)
-- **MySQL** doesn't support `.returning()` — read `insertId` from the result
-
 ## Common Issues
 
 | Symptom | Cause | Fix |
@@ -243,5 +243,12 @@ export async function createUser(formData: FormData) {
 | Migration conflict | Out-of-sync DB state | `generate` new migration, review SQL, `migrate` |
 | Type error on `relations` | Forgot to `export const usersRelations = relations(...)` | Add export |
 | Slow query in Edge runtime | New connection per request | Use a serverless adapter (Neon, PlanetScale) or HTTP-based driver |
+
+## Recap — non-negotiables
+
+- Never `drizzle-kit push` in production; `generate` → review SQL → `migrate`.
+- Pass `{ schema }` to `drizzle()` and export `relations()`, or `db.query.*` breaks.
+- Always pool connections; prefer the query builder over raw SQL.
+- MySQL has no `.returning()` — read `insertId` instead.
 
 Adapted from VKirill/codex-starter-kit (Apache 2.0 community skill).

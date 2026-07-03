@@ -1,35 +1,46 @@
 ---
 name: redis-patterns
-description: Redis patterns — caching (cache-aside, write-through), sessions, pub/sub, work queues, distributed locks, data structures (sorted sets, streams, hashes). Covers ioredis, node-redis, Redis 7+. Use when designing Redis usage in Node.js or Python apps
+description: Redis patterns — caching (cache-aside, write-through), sessions, pub/sub, work queues, distributed locks, data structures (sorted sets, streams, hashes). Covers ioredis, node-redis, Redis 7+. Use when designing Redis usage in Node.js/TypeScript apps
 tokens: 2000
 user-invocable: false
 ---
 
 # Redis Patterns
 
-Production patterns for Redis as a cache, session store, pub/sub bus, work queue backbone, and distributed coordination primitive.
+Production patterns for Redis as a cache, session store, pub/sub bus, work-queue backbone, and distributed-coordination primitive in Node.js/TypeScript (ioredis, node-redis, Redis 7+).
 
 ## Use this skill when
 
 - Implementing caching (cache-aside, write-through, write-back)
 - Setting up pub/sub or BLPOP-based work queues
-- Using Redis data structures (Sorted Sets, Streams, Hash, Sets)
+- Using Redis data structures (Sorted Sets, Streams, Hash, Sets, Lists)
 - Configuring ioredis for Node.js production
 - Designing key naming and TTL strategies
-- Implementing distributed locks with atomic `SET NX EX`
+- Implementing distributed locks with atomic `SET NX PX`
 
 ## Do not use this skill when
 
-- The task requires a message broker with guaranteed delivery — use BullMQ, RabbitMQ, or Kafka
-- The task is about Redis server-level configuration / cluster setup
+- You need a message broker with guaranteed delivery — use BullMQ, RabbitMQ, or Kafka
+- The task is Redis server-level configuration / cluster setup
+
+## Hard Rules
+
+1. **TTL on every SET** — the only no-TTL exception is queue keys (persistent until consumed). Locks always carry an expiry.
+2. **SCAN, never `KEYS *`** in production — `KEYS *` blocks the server on large keyspaces.
+3. **Dedicated subscriber connection** — a connection in subscribe mode cannot issue other commands.
+4. **Error handler on every client** — an unhandled `error` event crashes the Node.js process.
+5. **BullMQ clients set `maxRetriesPerRequest: null`** — otherwise connections fail under load.
+6. **Shut down with `quit()`, not `disconnect()`** — `quit()` drains in-flight commands; `disconnect()` drops them.
 
 ## Workflow
 
-1. Identify the use case: caching, pub/sub, queue, session, or rate limiting
-2. Choose the right data structure for the access pattern
-3. Design keys with `namespace:entity:id` convention
-4. Set TTL on every key (unless intentionally persistent: queues, locks-with-expiry)
-5. Validate error handling and graceful shutdown
+1. Identify the use case: caching, pub/sub, queue, session, or rate limiting.
+2. Choose the data structure that fits the access pattern (see Data Structures table).
+3. Design keys with the `scope:entity:id` convention.
+4. Set TTL on every key; the only no-TTL exception is queue keys (Hard Rule 1) — locks always carry an expiry.
+5. Validate error handling (Hard Rule 4) and graceful shutdown (Hard Rule 6).
+
+Done when: every key has a deliberate TTL or is a documented queue key, the client has an error handler attached before connecting, and shutdown calls `quit()`.
 
 ## Connection (ioredis — recommended for Node.js)
 
@@ -52,8 +63,8 @@ redis.on('ready', () => logger.info('redis ready'));
 
 - Singleton client; `lazyConnect` defers connection until first command
 - `retryStrategy` for exponential backoff
-- Separate dedicated **subscriber** connection for pub/sub (can't mix with commands)
-- **BullMQ**: `maxRetriesPerRequest: null` is mandatory
+- Separate dedicated **subscriber** connection for pub/sub (Hard Rule 3)
+- **BullMQ**: set `maxRetriesPerRequest: null` (Hard Rule 5)
 
 ## Cache-Aside Pattern
 
@@ -78,7 +89,7 @@ TTL strategy:
 - Stable data (config, user profiles): minutes to hours
 - Rarely-changing reference data: hours to days
 
-Bulk invalidation: `SCAN` + `DEL` (NEVER `KEYS *` in production).
+Bulk invalidation: `SCAN` + `DEL` (Hard Rule 2).
 
 ## Pub/Sub
 
@@ -110,7 +121,7 @@ while (true) {
 }
 ```
 
-Instant wake-up without polling. For complex queue needs use **BullMQ** built on this primitive.
+Instant wake-up without polling. For complex queue needs use **BullMQ**, built on this primitive.
 
 ## Data Structures
 
@@ -164,9 +175,9 @@ async function releaseLock(key: string, token: string) {
 }
 ```
 
-Lua script for release prevents one process releasing another's lock. Always set expiry to prevent deadlock on crash.
+The Lua release script prevents one process releasing another's lock. Always set expiry (the `PX` above) to prevent deadlock on crash — locks are never a no-TTL key (Hard Rule 1).
 
-For production-grade locking with renewal use **Redlock** algorithm or a hosted lock service.
+For production-grade locking with renewal use the **Redlock** algorithm or a hosted lock service.
 
 ## Lua Scripts
 
@@ -228,34 +239,23 @@ process.on('SIGTERM', async () => {
 });
 ```
 
-Use `quit()`, NOT `disconnect()` (latter drops in-flight commands).
+Use `quit()`, not `disconnect()` (Hard Rule 6).
 
-## Behavioral Traits
+## Common Mistakes (symptom → cause)
 
-- Sets TTL on every SET unless the key is intentionally persistent (queue, lock)
-- Uses SCAN, never `KEYS *` in production
-- Keeps subscriber connections separate from command connections
-- Attaches error event handler before connecting
-- Pipeline for batching, multi/exec for atomicity
-- BullMQ clients have `maxRetriesPerRequest: null`
-- Lua scripts for atomic read-modify-write
+- Redis stalls on a large keyspace → `KEYS *` in a hot path (Hard Rule 2).
+- Node.js process crashes on a connection blip → no `error` handler attached before connect (Hard Rule 4).
+- "Connection in subscriber mode" errors → subscribe + commands mixed on one connection (Hard Rule 3).
+- Unbounded memory growth → cache keys written without TTL (Hard Rule 1).
+- Jobs lost / commands dropped on deploy → `disconnect()` in shutdown instead of `quit()` (Hard Rule 6).
+- BullMQ connection failures under load → missing `maxRetriesPerRequest: null` (Hard Rule 5).
 
-## Common Mistakes
+## Recap — non-negotiables
 
-- `KEYS *` in production — blocks Redis on large keyspaces
-- Missing error handler — unhandled events crash the Node.js process
-- Mixing subscribe + command mode on one connection
-- No TTL on cache keys — unbounded memory growth
-- `disconnect()` in shutdown — drops in-flight commands; use `quit()`
-- Omitting `maxRetriesPerRequest: null` for BullMQ — connection failures under load
-
-## Constraints
-
-- **ALWAYS** set TTL on every SET unless intentionally persistent
-- **NEVER** use `KEYS *` in production code — use SCAN
-- **DEDICATED** connection for subscriber — never mix with commands
-- **BullMQ** clients MUST have `maxRetriesPerRequest: null`
-- **ERROR HANDLER** attached to every Redis client
-- **GRACEFUL SHUTDOWN** uses `quit()`, not `disconnect()`
+- TTL on every SET except queue keys; locks always expire.
+- SCAN, never `KEYS *`, in production.
+- Dedicated subscriber connection; error handler on every client.
+- BullMQ clients set `maxRetriesPerRequest: null`.
+- Shutdown via `quit()`, not `disconnect()`.
 
 Adapted from VKirill/codex-starter-kit (community skill).
