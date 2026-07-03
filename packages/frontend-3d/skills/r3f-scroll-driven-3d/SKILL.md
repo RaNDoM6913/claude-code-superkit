@@ -1,31 +1,39 @@
 ---
 name: r3f-scroll-driven-3d
 description: Connect GSAP ScrollTrigger to React Three Fiber — Zustand bridge, useFrame animation, scroll progress to 3D transforms. The pattern for scroll-driven 3D product showcases.
-tokens: 1081
+tokens: 1677
 ---
 
 # Scroll-Driven 3D with GSAP + R3F
 
-Architecture pattern for connecting GSAP ScrollTrigger to React Three Fiber scenes via Zustand store.
+## Purpose
 
-## Why This Pattern?
-
-**Problem:** GSAP runs in the DOM. R3F runs in WebGL. They can't communicate directly.
-
-**Solution:** Zustand store as a bridge — GSAP writes scroll progress, R3F reads it in useFrame.
+GSAP ScrollTrigger runs in the DOM; R3F runs in WebGL — they cannot talk directly. Bridge them with a Zustand store: GSAP writes scroll progress, R3F reads it in `useFrame`.
 
 ```
 [GSAP ScrollTrigger] → writes → [Zustand Store] → reads → [R3F useFrame]
        (DOM)                      (shared state)              (WebGL)
 ```
 
+## Use when / Do not use
+
+- **Use when:** scroll position drives a 3D scene — product showcases, scrollytelling, camera/model/material state tied to scroll progress.
+- **Do not use:** DOM-only scroll animation (plain ScrollTrigger, no store needed) or one-shot 3D intros with no scroll link (animate directly in `useFrame`).
+
+## Hard Rules
+
+1. `scrub` MUST be a number (e.g. `scrub: 1`), never `true` — the number adds catch-up smoothing; `true` locks 1:1 to the wheel and looks janky in 3D.
+2. Every ScrollTrigger in this pattern MUST set `invalidateOnRefresh: true` — start/end values recalculate on resize/refresh so the pinned section stays aligned.
+3. When normalizing timeline progress to 0–1, MUST extend the timeline with `tl.set({}, {}, 1)` — without it the timeline ends at the last tween and `tl.call()` positions after that point never fire.
+4. Inside `useFrame` (or any per-frame callback), read the store with `useScrollStore.getState()` — never the hook subscription, which re-renders React on every scroll tick.
+
 ## Why Zustand (Not React State/Context)?
 
 - React state/context triggers re-renders on every scroll tick (60fps = 60 re-renders/sec)
 - Zustand `getState()` reads directly without subscribing — zero re-renders
-- useFrame already runs at 60fps — just read the latest value
+- `useFrame` already runs at 60fps — just read the latest value
 
-## Implementation
+## Workflow
 
 ### Step 1: Create the store
 
@@ -61,17 +69,19 @@ gsap.registerPlugin(ScrollTrigger);
 
 export function ScrollSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const { setProgress, setTexture } = useScrollStore();
 
   useEffect(() => {
+    // getState(), not the hook — stable setters, no 60fps re-renders of this component
+    const { setProgress, setTexture } = useScrollStore.getState();
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ref.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1,                    // number, NOT true
-          invalidateOnRefresh: true,   // MUST have
+          scrub: 1,                    // Hard Rule 1: number, NOT true
+          invalidateOnRefresh: true,   // Hard Rule 2: MUST have
           pin: true,
         },
       });
@@ -87,13 +97,13 @@ export function ScrollSection() {
       // Swap texture at 50% scroll
       tl.call(() => setTexture('/textures/screen-2.png'), [], 0.5);
 
-      // CRITICAL: extend timeline to full duration
+      // Hard Rule 3: extend timeline to full duration — otherwise it ends at
+      // the last tween and tl.call() positions after that never fire
       tl.set({}, {}, 1.0);
 
     }, ref);
 
     return () => ctx.revert();
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- Zustand setters are stable references
   }, []);
 
   return <div ref={ref} style={{ height: '300vh' }} />;
@@ -115,7 +125,7 @@ export function PhoneModel() {
   useFrame(() => {
     if (!groupRef.current) return;
 
-    // CRITICAL: getState() not hook — no re-renders
+    // Hard Rule 4: getState() not hook — no re-renders
     const { progress } = useScrollStore.getState();
 
     // Rotate based on scroll
@@ -153,11 +163,47 @@ export function PhoneModel() {
 
 ## Dynamic Texture Swapping
 
+Preload every texture up front (never load inside `useFrame`), then swap `material.map` when the store value changes. Step 2's `tl.call(...)` is what drives `currentTexture`.
+
 ```tsx
-useFrame(() => {
-  const { currentTexture } = useScrollStore.getState();
-  // Load and apply texture based on store value
-});
+// components/3d/ScreenMaterial.tsx
+import { useTexture } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
+import * as THREE from 'three';
+import { useScrollStore } from '@/stores/useScrollStore';
+
+export function ScreenMaterial() {
+  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const [screen1, screen2] = useTexture([
+    '/textures/screen-1.png',
+    '/textures/screen-2.png',
+  ]);
+  const byPath: Record<string, THREE.Texture> = {
+    '/textures/screen-1.png': screen1,
+    '/textures/screen-2.png': screen2,
+  };
+
+  useFrame(() => {
+    // Hard Rule 4: getState() not hook
+    const { currentTexture } = useScrollStore.getState();
+    const next = byPath[currentTexture];
+    if (matRef.current && next && matRef.current.map !== next) {
+      matRef.current.map = next;
+      matRef.current.needsUpdate = true;
+    }
+  });
+
+  // toneMapped=false: screen UI textures should not be tone-mapped
+  return <meshBasicMaterial ref={matRef} map={screen1} toneMapped={false} />;
+}
 ```
 
-Use `tl.call(() => setTexture('/new.png'), [], timePosition)` in GSAP timeline to trigger swaps at specific scroll positions.
+For correct color space on screen textures, see the `threejs-color-management` skill.
+
+## Recap — non-negotiables
+
+- `scrub: <number>`, never `scrub: true`.
+- `invalidateOnRefresh: true` on every ScrollTrigger.
+- `tl.set({}, {}, 1)` to extend the timeline to full duration when normalizing 0–1.
+- `useScrollStore.getState()` inside `useFrame` and callbacks — never the hook subscription.

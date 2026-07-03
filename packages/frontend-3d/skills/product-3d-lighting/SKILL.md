@@ -1,14 +1,36 @@
 ---
 name: product-3d-lighting
 description: Studio lighting setups for 3D product showcases — HDRI, directional/spot/point lights, Environment from drei, shadow config, dark background optimization. Use when setting up lighting for product 3D scenes.
-tokens: 859
+tokens: 1279
 ---
 
 # Product 3D Lighting
 
-Studio lighting patterns for product showcases in React Three Fiber.
+## Purpose
 
-## Dark Background Setup (Product Hero)
+Studio lighting recipes for product showcases in React Three Fiber: three copy-paste scenes plus numeric ranges that keep results dramatic instead of washed out.
+
+## Use when / Do not use
+
+- USE when lighting a single-subject product scene in R3F (hero section, product page, showcase).
+- Do NOT use for full environments (landscapes, interiors, game levels) — these recipes assume one centered subject.
+
+## Hard Rules
+
+- Ambient intensity 0.2–0.3 on dark themes — higher washes out the drama.
+- `environmentIntensity` 0.1–0.2 for dark themes, 0.3–0.5 for light themes.
+- Every key light gets a softer fill from the opposite side — a single light means harsh shadows.
+- `ContactShadows` opacity 0.3–0.5, never 1.0.
+- Colored accent lights stay at intensity 0.3–0.5 — subtle beats obvious.
+- Wrap the product in `<Float>` — static products read as screenshots.
+
+## Workflow
+
+1. Pick a recipe: dark/black background hero → Recipe 1 · white/light page, even light → Recipe 2 · cinematic reflections on a glossy product → Recipe 3 · unsure → Recipe 1 (most common product pattern).
+2. Paste the recipe, replace `<ProductModel />` with your model, adjust positions/intensities only within the Hard Rules ranges.
+3. Check the result against the Common Mistakes table before shipping.
+
+## Recipe 1 — Dark Background (Product Hero)
 
 The most common product showcase pattern — dark/black background with dramatic lighting.
 
@@ -61,7 +83,7 @@ function ProductScene() {
 }
 ```
 
-## Light Background Setup (Clean Product)
+## Recipe 2 — Light Background (Clean Product)
 
 For white/light product pages — even lighting, minimal shadows.
 
@@ -76,7 +98,7 @@ For white/light product pages — even lighting, minimal shadows.
 </Canvas>
 ```
 
-## Studio Lights Pattern (Advanced)
+## Recipe 3 — Lightformer Studio (Advanced)
 
 Using drei Lightformer for cinematic studio lighting:
 
@@ -116,14 +138,14 @@ import { Lightformer, Environment } from '@react-three/drei';
 
 ## Common Mistakes
 
-| Mistake | Fix |
-|---------|-----|
-| Too much ambient light | Keep ambient 0.2-0.3 for dark themes. Washes out drama |
-| Environment intensity too high | 0.1-0.2 for dark themes, 0.3-0.5 for light |
-| No fill light | Always add a softer opposite light. Single light = harsh shadows |
-| Shadow too dark | `ContactShadows opacity={0.3-0.5}`, not 1.0 |
-| No idle animation | `<Float>` adds life. Static products look like screenshots |
-| Colored light too strong | Accent intensity 0.3-0.5. Subtle > obvious |
+| Mistake | Fix | Why |
+|---------|-----|-----|
+| Ambient above 0.3 on dark theme | Set ambient intensity 0.2–0.3 | High ambient washes out the drama |
+| `environmentIntensity` too high | 0.1–0.2 dark themes, 0.3–0.5 light | Strong reflections flatten the shading |
+| Single light, no fill | Add a softer light from the opposite side | One light source means harsh shadows |
+| `ContactShadows` opacity 1.0 | Use opacity 0.3–0.5 | Full-black shadow looks pasted on |
+| Static product, no idle motion | Wrap the model in `<Float>` | Static products look like screenshots |
+| Colored accent too strong | Keep accent intensity 0.3–0.5 | Subtle brand tint beats an obvious color cast |
 
 ## Environment Presets
 
@@ -135,3 +157,10 @@ import { Lightformer, Environment } from '@react-three/drei';
 | `sunset` | Golden, warm | Premium/luxury |
 | `dawn` | Cool, blue | Tech/modern |
 | `night` | Dark, moody | Gaming/dark UI |
+
+## Recap — non-negotiables
+
+- Dark theme: ambient 0.2–0.3, `environmentIntensity` 0.1–0.2.
+- Always pair the key light with a softer fill from the opposite side.
+- `ContactShadows` opacity 0.3–0.5; colored accents 0.3–0.5.
+- Give the product `<Float>` idle motion.

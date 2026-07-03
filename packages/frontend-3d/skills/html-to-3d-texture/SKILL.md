@@ -1,20 +1,49 @@
 ---
 name: html-to-3d-texture
-description: Capture HTML/React components as PNG textures for 3D models — html2canvas, CanvasTexture, capture pipeline, resolution settings. Use when you need to display web UI on a 3D surface.
-tokens: 1013
+description: Capture HTML/React components as PNG or canvas textures for 3D model screens — Playwright, html2canvas, live CanvasTexture, resolution guide, rounded-corner masking.
+tokens: 1514
 ---
 
 # HTML to 3D Texture Pipeline
 
-Capture React components as PNG images for use as textures on 3D model screens.
+## Purpose
 
-## Architecture
+Display web UI on a 3D surface: render a React component, capture it as a PNG or canvas, apply it as a Three.js texture on the model's screen mesh.
 
 ```
-React Component → Capture (Playwright/html2canvas) → PNG → Three.js Texture → 3D Mesh
+React Component → Capture (Playwright/html2canvas) → PNG/Canvas → Three.js Texture → 3D Mesh
 ```
 
-## Method 1: Playwright Capture (recommended for quality)
+## Use when / Do not use
+
+- **Use when**: a 3D model (phone, laptop, tablet) must show real web UI on its screen.
+- **Do not use when**: the UI must stay clickable/scrollable on the 3D surface — a texture is a flat image. Use `@react-three/drei` `<Html>` instead.
+
+## Hard Rules
+
+- Set `texture.colorSpace = THREE.SRGBColorSpace` on every texture built from a capture — otherwise colors wash out.
+- Capture at 2x (`deviceScaleFactor: 2` / `scale: 2`) — 1x textures look blurry on retina screens.
+- html2canvas re-parses the entire DOM subtree on every call — this cost applies to Method 2 AND Method 3. In any repeated-capture loop, cap refresh at 1–2 fps for production; higher rates (e.g. 10 fps) are local-dev demos only.
+
+## Workflow
+
+1. Pick the capture method from the decision table below.
+2. Capture at 2x using that method's code.
+3. Post-process if the screen needs rounded corners (sharp recipe below).
+4. Apply as texture with `SRGBColorSpace` set (PNG → `THREE.TextureLoader`; canvas → `THREE.CanvasTexture`).
+
+## Decision table — which method
+
+| Content on the 3D screen | Method |
+|--------------------------|--------|
+| Static — never changes at runtime | **Method 1** — Playwright PNG (build-time) |
+| Changes on discrete events (user action, data loaded) | **Method 2** — one-shot html2canvas per event |
+| Changes continuously (timers, animations, live data) | **Method 3** — throttled html2canvas loop |
+| Must remain interactive (clicks, scroll, inputs) | Not a texture — drei `<Html>` |
+
+Default when unsure: **Method 1** — best quality, zero runtime cost.
+
+## Method 1: Playwright Capture (build-time, best quality)
 
 Best for: production screenshots, pixel-perfect captures.
 
@@ -51,9 +80,9 @@ async function capture() {
 capture();
 ```
 
-## Method 2: html2canvas (runtime capture)
+## Method 2: One-shot html2canvas (event-driven runtime capture)
 
-Best for: dynamic content that changes during session.
+Best for: content that changes on discrete events. Call once per change event (button click, data arrival) — do NOT wrap this in an interval; that is Method 3.
 
 ```tsx
 import html2canvas from 'html2canvas';
@@ -74,13 +103,13 @@ async function captureToTexture(element: HTMLElement): Promise<THREE.CanvasTextu
 }
 ```
 
-## Method 3: CanvasTexture from React (live updates)
+## Method 3: Throttled html2canvas loop (continuous updates)
 
-Best for: real-time UI displayed on 3D surface.
-
-**Performance warning:** html2canvas re-parses the entire DOM subtree on every call. At 10fps this is CPU-intensive. For production, reduce to 1-2fps or use `requestAnimationFrame` with throttling. For simpler cases, consider `@react-three/drei`'s `<Html>` component instead.
+Best for: UI that changes continuously while displayed on the 3D surface. Same capture as Method 2, driven by a timer — so the html2canvas cost from Hard Rules repeats every tick. Keep `FPS` at 1–2 in production.
 
 ```tsx
+const FPS = 2; // production-safe (1-2 fps). 10 fps = local-dev demo only — CPU-heavy.
+
 function useHTMLTexture(ref: React.RefObject<HTMLDivElement>) {
   const textureRef = useRef<THREE.CanvasTexture | null>(null);
 
@@ -95,7 +124,7 @@ function useHTMLTexture(ref: React.RefObject<HTMLDivElement>) {
         textureRef.current = new THREE.CanvasTexture(canvas);
         textureRef.current.colorSpace = THREE.SRGBColorSpace;
       }
-    }, 1000 / 10); // 10fps refresh
+    }, 1000 / FPS);
 
     return () => clearInterval(interval);
   }, [ref]);
@@ -145,3 +174,10 @@ await sharp('screen.png')
 - Remove debug borders/outlines before capture
 - Test with `sips -g pixelWidth -g pixelHeight` (macOS) to verify dimensions
 - Set `backgroundColor: null` for transparent backgrounds when needed
+
+## Recap — non-negotiables
+
+- `SRGBColorSpace` on every capture-derived texture.
+- Capture at 2x, always.
+- Repeated html2canvas capture: 1–2 fps in production; 10 fps only as a labeled local-dev demo value.
+- Unsure which method: Method 1 (Playwright PNG).

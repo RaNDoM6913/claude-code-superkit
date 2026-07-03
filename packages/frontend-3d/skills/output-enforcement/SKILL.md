@@ -1,12 +1,25 @@
 ---
 name: output-enforcement
 description: Anti-laziness enforcement — bans placeholder patterns (// ..., // TODO, // rest of code), enforces complete code generation, handles token-limit splits cleanly. Activate for every code generation task.
-tokens: 429
+tokens: 595
 ---
 
 # Full Output Enforcement
 
-Never produce incomplete code. Every response must contain complete, runnable code.
+## Purpose
+
+Every response contains complete, runnable code — no placeholders, no elided sections.
+
+**Use when:** any code-generation task (new files, edits, refactors).
+**Do not use:** prose-only responses with no code output.
+
+## Hard Rules
+
+1. NEVER emit a banned pattern (list below) in generated code.
+2. Write every file complete, from first line to last.
+3. If output must split, break ONLY at a complete function/class boundary and add a `[PAUSED …]` marker.
+4. If a banned pattern appears in your draft, rewrite that section in full before responding — never send the draft as-is.
+5. Every `import` must resolve, every type must be defined, every called function must exist.
 
 ## Banned Patterns
 
@@ -28,42 +41,39 @@ These MUST NEVER appear in generated code:
 # TODO
 ```
 
-## Execution Protocol
+`/* ... */` is banned when it stands in for omitted code; a block comment with real content is fine.
 
-### Before Writing Code
+## Workflow
 
-1. **Scope:** Count files and functions to generate
-2. **Build:** Write every file completely — no shortcuts
-3. **Cross-check:** Verify every import resolves, every type exists, every function is defined
-
-### During Writing
-
-- Write complete file from first line to last
-- If a file is too long for one response, write to a clean breakpoint (complete function/class)
-- Mark pause point: `[PAUSED — 3 of 7 files complete. Continuing with AuthService.ts]`
-
-### Quick Check (Run Before Every Response)
-
-1. Search for banned patterns in your response
-2. Verify every `import` has a matching `export`
-3. Verify every type reference has a definition
-4. Verify no function calls reference undefined functions
+1. **Scope** — count the files and functions to generate.
+2. **Build** — write every file completely, no shortcuts.
+3. **Cross-check** — every import resolves, every type exists, every function call targets a defined function.
+4. **Self-check before sending** — search your draft for banned patterns:
+   - Pattern found → rewrite that section completely, then repeat this step.
+   - No pattern found → send.
 
 ## Token Limit Handling
 
-If approaching token limit mid-file:
+If approaching the token limit mid-file:
 
-1. Finish the current function/class completely
-2. Add pause marker with progress tracking
-3. In next response, continue from the marker — don't repeat completed code
+1. Finish the current function/class completely.
+2. Add a pause marker with progress tracking.
+3. In the next response, continue from the marker — do not repeat completed code.
 
-**Format:**
+**Marker formats:**
+
+```
+[PAUSED — 3 of 7 files complete. Continuing with AuthService.ts]
+```
+
 ```
 [PAUSED — AuthController.ts: 4 of 6 methods complete]
 [Completed: login, logout, refresh, validate]
 [Remaining: resetPassword, changeEmail]
 ```
 
-## The Rule
+## Recap — non-negotiables
 
-**Incomplete code is worse than no code.** A placeholder `// TODO` becomes invisible tech debt. A complete implementation can be reviewed, tested, and shipped.
+- Zero banned patterns in output; found in draft → rewrite the section in full before sending.
+- Split only at a complete function/class boundary, always with a PAUSED marker.
+- **Incomplete code is worse than no code.** A placeholder `// TODO` becomes invisible tech debt; a complete implementation can be reviewed, tested, and shipped.
