@@ -6,15 +6,24 @@ user-invocable: false
 
 # GAN Generator
 
-The second agent in the GAN harness. Takes a plan from `gan-planner` and writes the **production code + Playwright tests** that satisfy it. Every scenario must have an implementation and a test.
+Step 2 of 3 in the GAN harness. Takes a plan from `gan-planner` and writes the production code + Playwright tests that satisfy it. Every scenario gets an implementation AND its own test. Codex CLI has no subagents: run this as the second of three skills in sequence — the planner's markdown plan is your input, and your hand-off note feeds the evaluator step.
 
-## Phase 0: Load Plan
+## Hard Rules
+
+- NEVER `test.skip` / `xit` / disable a failing test to reach green — fix the code or the test.
+- NEVER mock the project's own backend in e2e tests; mock only external services and injected failures (e.g., route → 500).
+- The happy-path persistence assertion (`page.reload()` + re-assert) is non-negotiable.
+- Implement ONLY what the plan scopes — no extra features, abstractions, or "improvements".
+- Max 3 fix attempts per failing test; after the 3rd, stop and hand off `Local test result: FAILED` with details — an honest FAILED beats a disabled test or an endless loop.
+- Every plan scenario gets both an implementation and its own `test()` block.
+
+## Phase 0 — Load Plan
 
 The input is a markdown plan from `gan-planner`. Read it carefully:
 1. Identify all scenarios (happy + edge + error + auth)
 2. Identify the file list (what to modify, what to create)
 3. Identify the test file location
-4. Identify the anti-slop checklist
+4. Identify the anti-slop checklist (the plan's `## Rubric` section is for `gan-evaluator` — pass it through untouched)
 
 If anything in the plan is ambiguous → STOP and ask for clarification. Do NOT guess.
 
@@ -24,7 +33,7 @@ If anything in the plan is ambiguous → STOP and ask for clarification. Do NOT 
 
 For each file in the plan's "Files to be modified" list:
 - Read the existing file (if it exists)
-- Apply minimum changes to fulfill scenarios — see `minimal-change-engineer` discipline
+- Apply the smallest change that fulfills the scenarios (`minimal-change-engineer` discipline: no drive-by refactors, no new abstractions for a single use)
 - Do NOT add extra abstractions, features, or "improvements" not in the plan
 - Keep imports tidy
 
@@ -76,22 +85,24 @@ test.describe('<feature>', () => {
 });
 ```
 
+`loginAs` is NOT a Playwright built-in — import the project's auth helper (check existing e2e tests for one) or define it before copying this pattern.
+
 ### Step 3: Run tests locally
 
 ```bash
 npx playwright test tests/e2e/<feature>.spec.ts
 ```
 
-If any test fails:
-- Debug the failure (don't just disable the test)
-- Fix the implementation
-- Re-run until green
+If a test fails:
+1. Debug the failure — read the error and trace; never disable the test.
+2. Fix the implementation (or the test, if the test itself is wrong) and re-run.
+3. Count attempts per failing test: one attempt = one fix + one re-run. After 3 failed attempts on the SAME test, stop fixing it. Record it in the hand-off note as `Local test result: FAILED — <test name>: <last error> (3 fix attempts: <what you tried>)` and continue to Step 4. The evaluator/human decides what happens next.
 
 ### Step 4: Anti-slop self-check
 
 Before declaring done, verify the plan's anti-slop checklist:
 
-- [ ] No `console.log` left behind: `grep -rn 'console\.log' src/ | grep -v test`
+- [ ] No `console.log` left behind: `grep -rn 'console\.log' src/ app/ components/ | grep -v test | grep -v node_modules` (same scope `gan-evaluator` uses; adjust roots to the project layout)
 - [ ] No "Lorem ipsum" / "Click me" / placeholder text
 - [ ] Brand colors applied (look at `tailwind.config` for the brand palette)
 - [ ] Loading + error + empty states all rendered
@@ -99,7 +110,9 @@ Before declaring done, verify the plan's anti-slop checklist:
 
 ### Step 5: Hand off to gan-evaluator
 
-Produce a hand-off note:
+Emit the hand-off note (Output Contract below); it becomes the evaluator step's input alongside the plan.
+
+## Output Contract
 
 ```
 ## Generator hand-off
@@ -108,7 +121,7 @@ Files modified:
 - <file> — <what changed>
 Tests added:
 - <test file>
-Local test result: <green / fail with details>
+Local test result: <green | FAILED — <test name>: <last error> (<n> fix attempts: <what you tried>)>
 
 Self-checklist:
 - [✓] No console.log
@@ -117,6 +130,10 @@ Self-checklist:
 - [✓] Loading + error + empty states present
 - [✓] All TODOs addressed
 ```
+
+Example `Local test result` lines:
+- `Local test result: green (4/4 passed)`
+- `Local test result: FAILED — error state test: expected /something went wrong/i, got blank page (3 fix attempts: added error boundary, fixed route mock glob, awaited response)`
 
 ## Anti-patterns You MUST Avoid
 
@@ -132,8 +149,21 @@ Self-checklist:
 - Date/time assertions (use `Date.now()` mocking or relative time)
 - Random IDs in URLs (use regex match: `toHaveURL(/\/posts\/[a-z0-9-]+/)`)
 
-## Memory Anchor
+## Done ONLY when
 
-A generator that passes tests but leaves placeholder text or generic styling produces the worst output: features that look done but feel half-built. Every scenario has visual AND functional assertions for a reason.
+- [ ] Every plan scenario has an implementation and its own `test()` block on disk — verified with Read/ls, not from memory.
+- [ ] `npx playwright test <spec>` ran; its real result is in the hand-off note.
+- [ ] Result is green, OR reported honestly as FAILED after ≤3 fix attempts per test — never a skipped/disabled test.
+- [ ] Anti-slop self-checklist complete; hand-off note emitted in the exact template.
 
-Inspired by GAN pattern from affaan-m/everything-claude-code.
+Not all boxes checked → say what is missing; do not claim completion.
+
+## Recap — non-negotiables
+
+- Never skip/disable a test to reach green.
+- Persistence assertion in the happy path, always.
+- Scope = the plan, nothing more.
+- 3 fix attempts per failing test, then hand off FAILED with details.
+- Done-gate: artifacts verified on disk + real test output in the hand-off note.
+
+*Pattern adapted from `affaan-m/everything-claude-code`.*
