@@ -127,9 +127,22 @@ function processFile(filePath) {
   if (descIdx !== -1) {
     // Handle possible multi-line description (YAML block) — find next top-level key
     let insertAt = descIdx + 1;
-    // If the description continues onto next lines (indented), skip those
-    while (insertAt < lines.length && /^\s+/.test(lines[insertAt])) {
-      insertAt++;
+    // If the description continues onto next lines (indented), skip those.
+    // Blank lines inside a YAML block scalar are continuations too — skip a
+    // blank line when a later indented line follows (fixes tokens: being
+    // inserted mid-description in multi-paragraph block descriptions).
+    while (insertAt < lines.length) {
+      if (/^\s+/.test(lines[insertAt])) {
+        insertAt++;
+      } else if (
+        lines[insertAt].trim() === '' &&
+        insertAt + 1 < lines.length &&
+        /^\s+/.test(lines[insertAt + 1])
+      ) {
+        insertAt++;
+      } else {
+        break;
+      }
     }
     lines.splice(insertAt, 0, `tokens: ${newTokens}`);
   } else {
