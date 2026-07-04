@@ -1,7 +1,7 @@
 ---
 name: interaction-polish
 description: "Interactive element polish — buttons, modals, drawers, forms, focus states, loading, UX writing. The invisible details that compound into 'feels right'. Auto-loaded when editing UI files."
-tokens: 2928
+tokens: 2837
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"
@@ -17,19 +17,39 @@ applyWhenPaths:
 
 # Interaction Polish
 
-Most of these details are ones users never consciously notice. That is
-the point. When a feature works exactly as someone assumes it should,
-they proceed without thinking about it — that is the goal. The aggregate
-of these invisible-correctness decisions is the difference between
-interfaces that feel right and interfaces that feel cheap.
+Users never consciously notice these details — their aggregate is the
+difference between interfaces that feel right and interfaces that feel
+cheap.
+
+**Token note:** CSS custom properties used below are defined in the
+sibling frontend-ui rules — `--ease-snappy` and `--ease-drawer` in
+`motion-and-animation.md`, `--accent-500` in `color-and-contrast.md`,
+`--space-*` in `spatial-and-layout.md`. `--text-sm`/`--text-md` are
+illustrative names for steps of the 5-step type scale in
+`typography-guidelines.md` (which fixes the scale, not token names).
+If the project defines its own tokens, substitute those names; never
+emit a variable the project does not define.
+
+## Hard requirements (7)
+
+1. Every button has an `:active` state.
+2. Every interactive element has a `:focus-visible` ring at ≥3:1
+   contrast against both the element and its background.
+3. Touch hit targets are at least 44×44px.
+4. Elements exit in the reverse of their entry direction (spatial
+   consistency).
+5. Form errors render inline under the field; validate on blur or on
+   submit — never on focus.
+6. Disabled controls look disabled: opacity 0.5 + `cursor: not-allowed`.
+7. Opening a modal locks body scroll with `padding-right` compensation
+   for the removed scrollbar.
 
 ## Buttons
 
 ### Must respond to press
 
-Every button needs a `:active` state. Without one, users cannot tell
-whether the interface registered their click before the action
-completes.
+Without an `:active` state users cannot tell whether the click
+registered before the action completes.
 
 ```css
 .button:active {
@@ -38,48 +58,44 @@ completes.
 }
 ```
 
-The scale value matters: `0.97` reads as "pressed"; `0.90` reads as
-"broken"; anything above `0.98` is imperceptible. Duration 100–160ms.
+`0.97` reads as "pressed"; `0.90` reads as "broken"; anything above
+`0.98` is imperceptible. Duration 100–160ms.
 
-### Must indicate state
+### State lifecycle (5 states)
 
-A submit button that posts a form should NOT look identical before,
-during, and after submission. Transition the button through states:
+A submit button must not look identical before, during, and after
+submission:
 
-- **Idle** → shows the action text ("Sign up")
-- **Pressed** → `:active` scale feedback (100ms)
-- **Loading** → spinner + disabled; optionally the text changes to
+- **Idle** — shows the action text ("Sign up").
+- **Pressed** — `:active` scale feedback (100ms).
+- **Loading** — spinner + disabled; optionally text changes to
   "Signing up…". Disable pointer events but keep visual identity —
   don't grey out into invisibility.
-- **Success** → brief affirmative state (checkmark + "Done!"), 1s max,
-  then return to idle OR redirect.
-- **Error** → shake or subtle red flash, inline error message, remain
-  enabled so user can retry.
+- **Success** — brief affirmative state (checkmark + "Done!"), 1s max.
+  Then: if the action navigates, redirect; otherwise return to idle.
+- **Error** — shake or subtle red flash + inline error message; keep
+  the button enabled so the user can retry.
 
 ### Size and hit target
 
-- Minimum hit target: 44×44px (touch). On desktop 32×32 may be
-  acceptable for dense tools, but it's a tradeoff against accessibility.
-- Primary button text at `--text-sm` to `--text-md`; secondary/tertiary
-  buttons often one step smaller.
+- Minimum hit target: 44×44px (touch). Desktop-only dense tools may use
+  32×32 — an explicit tradeoff against accessibility.
+- Primary button text one step below body size to body size
+  (`--text-sm` to `--text-md`); secondary/tertiary often one step
+  smaller.
 - Padding: `--space-sm --space-md` is the canonical sane default.
-- Buttons with only an icon (no label): provide an accessible name via
-  `aria-label`; add a tooltip on hover with a delay ≥400ms.
+- Icon-only buttons: accessible name via `aria-label` + hover tooltip
+  with delay ≥400ms.
 
 ### Disabled state
 
-A disabled button should look disabled from 20 feet away. Common
-pattern: reduce opacity to 0.5, cursor: not-allowed. **Never** ship
-a button that looks identical when disabled — users will click it
-repeatedly and wonder why nothing happens.
+Reduce opacity to 0.5, `cursor: not-allowed` — disabled must be obvious
+from 20 feet away. A button that looks identical when disabled gets
+clicked repeatedly while nothing happens.
 
 ## Modals & drawers
 
 ### Spatial consistency
-
-An element entering from a direction should exit in the reverse of that
-direction — it's why swipe-to-dismiss feels natural on toasts that
-arrived from the same edge.
 
 | Component | Entry | Exit |
 |-----------|-------|------|
@@ -88,12 +104,10 @@ arrived from the same edge.
 | Drawer (side panel) | Slide in from the edge it's anchored to | Slide out to the same edge |
 | Popover/dropdown | Scale-in from `transform-origin: <trigger>` | Scale-out to trigger point |
 
-### Modals scale from center; popovers scale from trigger
+### Transform origin: modals from center, popovers from trigger
 
-This is a common mistake. Modals are spatial events — they arrive at
-the center of the screen as an interruption. Popovers are spatial
-extensions of the trigger — they should visually "grow from" the
-element that triggered them.
+Modals are interruptions arriving at screen center; popovers are
+extensions of their trigger and must visually grow from it.
 
 ```css
 /* Modal — scales from center */
@@ -107,7 +121,8 @@ element that triggered them.
 
 ### Drawer physics
 
-iOS-style drawer uses `--ease-drawer` (from `motion-and-animation.md`):
+iOS-style drawer uses `--ease-drawer` (defined in
+`motion-and-animation.md`):
 
 ```css
 .drawer {
@@ -115,57 +130,54 @@ iOS-style drawer uses `--ease-drawer` (from `motion-and-animation.md`):
 }
 ```
 
-For draggable drawers, use a spring (not duration-based) so the drawer
-maintains velocity if the user flicks it.
+Draggable drawers use a spring, not a duration, so the drawer keeps
+velocity when the user flicks it.
 
 ### Overlay and scroll-lock
 
-- Overlay behind modals/drawers should be a semi-transparent surface
-  derived from the page neutral (e.g., `oklch(15% 0.01 <hue> / 0.5)`),
-  not pure `rgba(0,0,0,0.5)`. Tint even the overlay.
-- Lock body scroll when a modal opens. Don't forget `padding-right`
-  compensation for the scrollbar, or the page will visibly jump.
+- Overlay behind modals/drawers: a semi-transparent surface derived
+  from the page neutral (e.g. `oklch(15% 0.01 <hue> / 0.5)`), not pure
+  `rgba(0,0,0,0.5)`. Tint even the overlay.
+- Lock body scroll when a modal opens, with `padding-right`
+  compensation for the scrollbar — otherwise the page visibly jumps.
 
 ## Forms
 
 ### Label placement
 
-- Top-aligned labels above inputs: best readability, easiest on mobile.
-  Use this by default.
-- Left-aligned labels beside inputs: only appropriate for dense desktop
-  forms where users complete the form repeatedly (internal tools).
-- Floating labels: skip them for serious forms. They hide context and
-  have known accessibility issues with zoom/translate.
+- Top-aligned above the input — the default; best readability, easiest
+  on mobile.
+- Left-aligned beside the input — only for dense desktop forms
+  completed repeatedly (internal tools).
+- Floating labels — skip for serious forms: they hide context and have
+  known accessibility issues with zoom/translate.
 
 ### Validation timing
 
 - **On submit:** most forms.
-- **On blur:** email, phone, username — where users expect immediate
-  feedback after finishing a field.
-- **On typing:** passwords (strength), slug fields — where live feedback
+- **On blur:** email, phone, username — users expect feedback right
+  after finishing the field.
+- **On typing:** password strength, slug fields — live feedback
   actively helps.
-- **Never:** on focus. Users haven't done anything yet.
+- **Never on focus:** the user hasn't done anything yet.
 
 ### Error messages
 
-- Place errors INLINE, directly under the offending field. Not in a
-  banner at the top of the form.
-- Be specific: "Please enter an email address" is generic. "This looks
-  like a phone number — did you mean to enter an email?" is helpful.
-- Don't say "Invalid input" — tell the user what's invalid and how to
-  fix it.
-
-See the UX writing section below for more.
+- Inline, directly under the offending field — not in a banner at the
+  top of the form.
+- Specific: "This looks like a phone number — did you mean to enter an
+  email?" beats generic "Please enter an email address". Never bare
+  "Invalid input" — say what is invalid and how to fix it. (More in UX
+  writing below.)
 
 ### Success
 
-Small forms: redirect or toast. Don't force the user to read a
-two-paragraph confirmation.
+Small forms: redirect or toast — not a two-paragraph confirmation.
 
 ## Focus states
 
-**Required on every interactive element.** Focus is how keyboard users
-navigate; missing focus styles is an accessibility blocker.
+Required on every interactive element — missing focus styles is an
+accessibility blocker for keyboard users.
 
 ```css
 :focus-visible {
@@ -175,12 +187,11 @@ navigate; missing focus styles is an accessibility blocker.
 }
 ```
 
-Use `:focus-visible` (not `:focus`) so mouse users don't see focus
-rings on click — only keyboard users will.
-
-**Contrast:** the focus ring must be ≥3:1 against both the element and
-its surrounding background. Default browser rings disappear on colored
-surfaces; always ship your own.
+- Use `:focus-visible`, not `:focus`, so mouse clicks don't show rings
+  — only keyboard focus does.
+- Ring contrast ≥3:1 against both the element and its surrounding
+  background. Default browser rings disappear on colored surfaces —
+  always ship your own.
 
 ## Loading patterns
 
@@ -189,76 +200,64 @@ surfaces; always ship your own.
 | Wait duration | Pattern |
 |---------------|---------|
 | < 300ms | Nothing. Users don't perceive this as a wait. |
-| 300ms – 1s | Spinner or skeleton (spinner is fine for actions, skeleton for content loading) |
+| 300ms – 1s | Spinner or skeleton (spinner for actions, skeleton for content loading) |
 | 1s – 10s | Skeleton with shimmer; informative progress if estimatable. |
 | > 10s | Progress bar with percentage + explanation; option to cancel. |
 
-### Skeletons over spinners for content
+### Skeletons for content, spinners for actions
 
-Skeletons give users an idea of the layout before content arrives,
-reducing perceived load time. Spinners give no information beyond "it's
-working". Use skeletons for:
-- Lists
-- Cards / card grids
-- Article/post content
-- Dashboards
+Skeletons preview the layout before content arrives, reducing perceived
+load time; spinners only say "it's working".
 
-Use spinners for:
-- Button-triggered mutations (save, delete)
-- Full-page navigation
-- Quick <1s loads where a skeleton would flash
+- Skeletons: lists · cards/card grids · article/post content ·
+  dashboards.
+- Spinners: button-triggered mutations (save, delete) · full-page
+  navigation · quick <1s loads where a skeleton would flash.
 
 ### Perceived performance tricks
 
-- **Skeletons that match the real content's layout closely.** If your
-  skeleton is a generic grey box and the content is a headline + 3
-  paragraphs + image, the transition feels jarring. Match the shape.
-- **Optimistic UI for mutations.** Show the new state immediately;
-  revert with a toast if the mutation fails. This feels 10× faster
-  than an honest spinner.
-- **Speed up the spinner.** A spinner rotating at 1.2s/rev feels slower
-  than one at 0.8s/rev. Same load time, different perception.
-- **Instant tooltips after the first.** Radix and similar libraries
-  skip both the delay and the animation for subsequent tooltips in the
-  same toolbar. This makes the whole toolbar feel faster.
+- **Skeletons match the real content's shape.** Headline + 3 paragraphs
+  + image — not one generic grey box, or the swap feels jarring.
+- **Optimistic UI for mutations:** show the new state immediately;
+  revert with a toast if the mutation fails.
+- **Speed up the spinner:** 0.8s/rev feels faster than 1.2s/rev — same
+  load time, different perception.
+- **Instant tooltips after the first** in the same toolbar (Radix
+  pattern) — skip both delay and animation; the whole toolbar feels
+  faster.
 
 ## Empty states
 
-Empty states are opportunities, not failures. Don't just show "No
-results."
+Empty states are opportunities — never a bare "No data" in 14px grey
+text.
 
-- **Prescriptive:** show what the user should do next. "Create your
-  first project" + a call-to-action button.
-- **Contextual:** if it's empty because of a filter, say so: "No items
-  match `status: archived`" + a "Clear filter" button.
-- **Visual:** a small illustration or icon anchors the empty state and
-  makes it feel designed. Generic "sad cloud" icons are a cliché —
-  match your design language.
-- **Never:** ship a bare "No data" message in 14px grey text.
+- **Prescriptive:** show the next step — "Create your first project" +
+  call-to-action button.
+- **Contextual:** if a filter caused it, say so — "No items match
+  `status: archived`" + a "Clear filter" button.
+- **Visual:** a small illustration or icon in your design language —
+  generic "sad cloud" icons are a cliché.
 
 ## UX writing
 
 ### Button labels
 
-- **Verbs, not nouns.** "Save changes", not "Save". "Create project",
-  not "Create". If the action is obvious from context, a verb alone is
-  fine ("Save", "Delete"), but `[Verb Object]` is the default.
-- **First-person is occasionally appropriate** for commitment language:
-  "I'll decide later" reads warmer than "Decide later".
-- **Avoid "OK" and "Cancel" as primary button labels.** Instead: "Save
-  changes" / "Discard". "Delete project" / "Keep it". Making the button
-  describe its own action reduces the risk of a mis-click.
-- **Destructive actions:** label the confirmation button with the
-  specific destructive verb ("Delete", "Archive", "Remove from team"),
-  not "Confirm". The user's finger is muscle-memoried to "Confirm".
+- Verbs with objects: "Save changes", "Create project". `[Verb Object]`
+  is the default; a bare verb ("Save", "Delete") only when context
+  makes it obvious.
+- First-person for commitment language: "I'll decide later" reads
+  warmer than "Decide later".
+- Replace "OK"/"Cancel" pairs with self-describing actions: "Save
+  changes" / "Discard"; "Delete project" / "Keep it" — a button that
+  describes its own action reduces mis-clicks.
+- Destructive confirmations use the specific destructive verb
+  ("Delete", "Archive", "Remove from team") — never "Confirm"; the
+  user's finger is muscle-memoried to "Confirm".
 
 ### Error messages
 
-- Lead with what went wrong from the user's point of view, not from the
-  system's.
-- Offer a path forward.
-
-Examples:
+Lead with what went wrong from the user's point of view; offer a path
+forward.
 
 | ✗ | ✓ |
 |---|---|
@@ -266,43 +265,43 @@ Examples:
 | `Network error` | `We lost the connection. Retrying…` (+ retry button) |
 | `Invalid input` | `Phone number should be in international format (+1 555…)` |
 
-### Empty states (copy)
+### Empty-state copy
 
-- "You haven't created any projects yet." + `[Create your first project]`
-- Not: "No projects found."
+- "You haven't created any projects yet." + `[Create your first
+  project]` — not "No projects found."
 
 ### Confirmations
 
-- "Are you sure?" is lazy. Be specific: "Delete this project and its 24
+- Be specific, not "Are you sure?": "Delete this project and its 24
   files? This cannot be undone."
-- Irrecoverable actions should require typing the resource name, not
-  just clicking a button.
+- Irrecoverable actions require typing the resource name, not just
+  clicking a button.
 
 ## Tooltips
 
-- Delay on first hover: 400–700ms. Don't flash tooltips the instant the
+- Delay on first hover: 400–700ms — no instant flashing when the
   cursor enters.
-- After the first tooltip opens in a toolbar, subsequent tooltips in
-  the same toolbar should open instantly (Radix pattern).
-- Never put critical information only in a tooltip — mobile users and
-  keyboard users may not trigger it.
-- Short. "Save changes (⌘S)" — not a sentence.
+- Subsequent tooltips in the same toolbar open instantly (Radix
+  pattern).
+- Critical information never lives only in a tooltip — mobile and
+  keyboard users may never trigger it.
+- Short: "Save changes (⌘S)" — not a sentence.
 
 ## Responsiveness (the UI feel, not layout)
 
 - **Optimistic updates** for user mutations (likes, bookmarks,
-  toggles). Revert quietly on failure.
-- **Debounce, don't throttle, user-initiated input** (search, filter).
-  Debounce at 150–300ms.
-- **Prefetch** on hover for links the user is likely to click.
-  Next.js and similar frameworks expose this — use it.
-- **Warm the cache** for expected next screens (e.g., after user opens
-  a list, prefetch the top 3 detail views).
+  toggles); revert quietly on failure.
+- **Debounce, don't throttle,** user-initiated input (search, filter)
+  at 150–300ms.
+- **Prefetch on hover** for links the user is likely to click —
+  Next.js and similar frameworks expose this.
+- **Warm the cache** for expected next screens (after a list opens,
+  prefetch the top 3 detail views).
 
 ## Interaction rules of execution
 
 **DO:**
-- Give every button a `:active` state.
+- Give every button an `:active` state.
 - Use `:focus-visible` for keyboard focus rings; contrast ≥3:1.
 - Match entry direction to exit direction (spatial consistency).
 - Scale modals from center, popovers from trigger.

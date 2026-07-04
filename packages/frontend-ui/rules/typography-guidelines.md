@@ -1,7 +1,7 @@
 ---
 name: typography-guidelines
 description: "Typography rules — modular scales, fluid sizing, pairing, line-height, tracking, font-selection procedure, and the reflex_fonts_to_reject list. Auto-loaded when editing UI files."
-tokens: 1707
+tokens: 1775
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"
@@ -17,32 +17,31 @@ applyWhenPaths:
 
 # Typography Guidelines
 
-## Principles (always apply — no reference lookup required)
+## Principles (hard rules — apply to every UI edit)
 
-1. **Modular scale with fluid sizing on content, fixed scales on product UI.**
-   - On marketing pages and long-form content: use `clamp()` for heading
-     sizes so they flow with viewport.
-   - On app UIs, dashboards, and dense product surfaces: use fixed `rem`
-     scales. No major design system uses fluid type in product UI, and
-     fluid type inside dense tables is chaos.
-2. **Fewer sizes, more contrast.** Aim for a 5-step scale with a 1.25×
-   minimum ratio between steps. Eight sizes at 1.1× apart produces a flat
-   hierarchy that reads as undesigned.
-3. **Line-height scales inversely with line length.** Narrow columns want
-   tighter leading (1.2–1.35). Wide columns want looser (1.5–1.6). For
-   light text on dark backgrounds, **add 0.05–0.1 to your normal
-   line-height** — light type reads as lighter weight and needs more
-   breathing room.
-4. **Cap body line-length at ~65–75ch.** Use `max-width: 65ch` (or `75ch`)
-   on text blocks. Body text wider than that is fatiguing.
-5. **Pair a distinctive display font with a refined body font.** Never use
-   a single font family for an entire page — you lose hierarchy tools.
+1. **Fluid type on content, fixed type in product UI.** Marketing pages
+   and long-form content: size headings with `clamp()` so they flow with
+   the viewport. App UIs, dashboards, forms, and dense tables: fixed
+   `rem` scales — no major design system uses fluid type in product UI,
+   and fluid type inside dense tables is chaos.
+2. **Fewer sizes, more contrast.** Use a 5-step scale with a **1.25×
+   minimum ratio** between steps. Eight sizes at 1.1× apart produce a
+   flat hierarchy that reads as undesigned.
+3. **Line-height scales inversely with line length.** Narrow columns:
+   1.2–1.35. Wide columns: 1.5–1.6. For light text on dark backgrounds,
+   **add 0.05–0.1 to your normal line-height** — light type reads as
+   lighter weight and needs more breathing room.
+4. **Cap body line-length at 65–75ch.** Put `max-width: 65ch` (up to
+   `75ch`) on text blocks. Wider body text is fatiguing.
+5. **Pair a distinctive display font with a refined body font.** Never
+   use a single font family for an entire page — you lose hierarchy
+   tools.
 
-## The font-selection procedure
+## The font-selection procedure (4 steps, in order)
 
-The model's natural failure mode is: "I was told not to use Inter, so I
-will pick my next favorite font, which becomes the new monoculture." The
-procedure below is designed to break that reflex.
+This procedure exists to break one reflex: "I was told not to use
+Inter, so I will pick my next favorite font" — which becomes the new
+monoculture.
 
 ### Step 1 — Write the brief in 3 concrete words
 
@@ -60,56 +59,47 @@ Concrete examples:
 The three words will produce mutually exclusive type choices, which is
 the point.
 
-### Step 2 — List the fonts you would reach for
+### Step 2 — List your reflex picks, then reject them
 
-Write down the 3 fonts you would normally pick given those words.
+Write down the 3 fonts you would normally pick given those words. Check
+every one against the canonical `reflex_fonts_to_reject` list — it
+lives in `ui-anti-patterns.md`, section "The reflex_fonts_to_reject
+list" (Inter, Fraunces, Playfair and Playfair Display, Space Grotesk,
+and all system defaults are on it; read the full list there — this file
+deliberately does not carry a second copy). Most of what you wrote down
+will be on it. Reject every font on that list for this project,
+including the one you were about to pick.
 
-Most of what you will write will be in the list below. This is the
-`reflex_fonts_to_reject` list. It exists because every model was trained
-on the same tasteful-blog typography and reaches for the same faces.
+### Step 3 — Pick candidates from a catalog, brief words in mind
 
-```
-reflex_fonts_to_reject:
-  Fraunces
-  Newsreader
-  Lora
-  Crimson, Crimson Pro, Crimson Text
-  Playfair, Playfair Display
-  Cormorant, Cormorant Garamond
-  Syne
-  IBM Plex Sans, IBM Plex Serif, IBM Plex Mono
-  Space Mono, Space Grotesk
-  Inter
-  DM Sans, DM Serif Display, DM Serif Text
-  Outfit
-  Plus Jakarta Sans
-  Instrument Sans, Instrument Serif
-  (and all system defaults: Arial, Helvetica, Roboto, Open Sans)
-```
+Ordered branches — use the first one that applies:
 
-Reject every font on that list for this project. Including the one you
-were about to pick.
+1. **Web access available (WebFetch/WebSearch):** browse these catalogs
+   with the three words held in mind:
+   - Google Fonts (filter aggressively — avoid the top 20)
+   - Pangram Pangram
+   - Future Fonts
+   - Adobe Fonts
+   - ABC Dinamo
+   - Klim Type Foundry
+   - Velvetyne
+   - OH no Type Co
+   - Uncut
+2. **No web access:** propose 5–8 candidates recalled from those same
+   foundries' catalogs. Verify each candidate is absent from the
+   `reflex_fonts_to_reject` list before shortlisting it.
+3. **Project cannot load web fonts at all** (offline target, no font
+   pipeline): choose the most distinctive face already bundled with the
+   project, or compose a deliberate system-safe stack — and state
+   explicitly in your summary that the reject list was relaxed for this
+   reason only.
 
-### Step 3 — Browse a catalog with the 3 brief words in mind
-
-Go look at a catalog with the three words held in mind. Sources:
-
-- Google Fonts (filter aggressively — avoid the top 20)
-- Pangram Pangram
-- Future Fonts
-- Adobe Fonts
-- ABC Dinamo
-- Klim Type Foundry
-- Velvetyne
-- OH no Type Co
-- Uncut
-
-Look for something that fits the brand **as a physical object**: a museum
-exhibit caption, a hand-painted shop sign, a 1970s mainframe terminal
-manual, a fabric label sewn inside a coat, a children's book printed on
-cheap newsprint, a laminated menu from a highway diner. Reject the first
-thing that "looks designy" — that is the trained reflex too. Keep
-looking.
+In every branch, look for something that fits the brand **as a physical
+object**: a museum exhibit caption, a hand-painted shop sign, a 1970s
+mainframe terminal manual, a fabric label sewn inside a coat, a
+children's book printed on cheap newsprint, a laminated menu from a
+highway diner. Reject the first thing that "looks designy" — that is
+the trained reflex too. Keep looking.
 
 ### Step 4 — Cross-check against reflex
 
@@ -153,30 +143,6 @@ Example:
 .table-num { font-feature-settings: "tnum", "lnum"; }
 ```
 
-## Typography rules of execution
-
-**DO:**
-- Use a modular type scale with `clamp()` for marketing headings.
-- Use fixed `rem` scales for product UI.
-- Vary font weights and sizes to create clear visual hierarchy.
-- Vary font choices across projects. If your last project was a serif
-  display with sans body, look at sans display / monospace / slab for
-  the next one.
-- Pair a distinctive display font with a refined body font.
-
-**DO NOT:**
-- Use overused fonts: Inter, Roboto, Arial, Open Sans, system defaults,
-  or any font in `reflex_fonts_to_reject`. Look further.
-- Use monospace typography as lazy shorthand for "technical/developer
-  vibes".
-- Place large rounded-corner icons above every heading. They rarely add
-  value and make sites look templated.
-- Use one font family for the entire page.
-- Let the type scale collapse — size ratios below 1.2× read as flat.
-- Set long body passages in all-caps. Reserve all-caps for short labels
-  and headings, ≤6 words.
-- Use fluid type inside dense product UIs (forms, tables, dashboards).
-
 ## Tracking (letter-spacing)
 
 - Display type (large headings, 40px+) often wants **slightly negative**
@@ -187,6 +153,31 @@ Example:
   (`+0.05em` to `+0.12em`) for readability.
 - Never apply the same tracking value across the whole scale. Tracking
   is optical and must vary with size.
+
+## Typography rules of execution
+
+**DO:**
+- Vary font weights and sizes to create clear visual hierarchy.
+- Vary font choices across projects. If your last project was a serif
+  display with sans body, look at sans display / monospace / slab for
+  the next one.
+- Pair a distinctive display font with a refined body font.
+
+**DO NOT:**
+- Use any font on the canonical `reflex_fonts_to_reject` list
+  (`ui-anti-patterns.md`, section "The reflex_fonts_to_reject list") —
+  Inter, Roboto, Playfair, system defaults, all of them. Run the 4-step
+  procedure above instead.
+- Use monospace typography as lazy shorthand for "technical/developer
+  vibes".
+- Place large rounded-corner icons above every heading. They rarely add
+  value and make sites look templated.
+- Use one font family for the entire page.
+- Let the type scale collapse — step ratios below 1.25× read as flat.
+- Set long body passages in all-caps. Reserve all-caps for short labels
+  and headings, ≤6 words.
+- Use fluid type in product UI (forms, tables, dashboards) — Principle 1:
+  fixed `rem` scales there.
 
 ---
 

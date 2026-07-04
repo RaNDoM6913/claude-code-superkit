@@ -1,7 +1,7 @@
 ---
 name: motion-and-animation
 description: "UI motion rules — the 4-question animation framework, easing curves, duration tables, springs, reduced motion. Auto-loaded when editing UI files."
-tokens: 2417
+tokens: 2655
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"
@@ -17,16 +17,33 @@ applyWhenPaths:
 
 # Motion & Animation
 
-Motion is the detail users don't consciously notice, but the aggregate
-of correct motion is why some interfaces feel "right" and others feel
-cheap. The opposite — animation for animation's sake, everywhere — is
-worse than no animation at all.
+Correct motion in aggregate is why an interface feels "right"; animation
+for its own sake is worse than none.
+
+## Hard rules
+
+1. Ask the 4 questions below, in order, before writing any animation.
+2. **Scope:** this rule governs 2D UI element transitions.
+   3D/scroll-scrub contexts are governed by gsap-conventions
+   (frontend-3d package), which allows `power2.in` for viewport-exit
+   animations.
+3. Easing in 2D UI: `ease-out` for enter/exit, `ease-in-out` for
+   on-screen morphing, `linear` for constant motion. No `ease-in` in
+   this scope (3D exception in rule 2).
+4. Keep UI animations under 300ms unless genuinely explanatory.
+5. Animate `transform` and `opacity` by default; never animate layout
+   properties (`width`, `height`, `top`, `left`, `margin`). Name exact
+   properties — never `transition: all`.
+6. Honor `prefers-reduced-motion` (blocks below); skipping it is an
+   accessibility bug.
+7. Bounce/elastic: none in standard UI transitions; a subtle bounce
+   (0.1–0.3) is allowed only for drag-release and playful gestures.
 
 ## The 4-question framework (ask in order, before writing any animation)
 
 ### Question 1 — Should this animate at all?
 
-Answer first by frequency of exposure:
+Decide by frequency of exposure:
 
 | User exposure | Default |
 |---------------|---------|
@@ -35,37 +52,35 @@ Answer first by frequency of exposure:
 | Occasional (modals, drawers, toasts, navigating between sections) | Standard animation — the meat of UI motion. |
 | Rare or first-time (onboarding, celebratory moments, form submission success) | Can be expressive and expansive. |
 
-**Never animate keyboard-initiated actions.** Keyboard shortcuts are
-used by power users hundreds of times daily. An animation on
-<kbd>⌘K</kbd> command palette open adds delay to the exact moment the
-user is trying to be fast. Raycast's command palette has no open/close
-animation, and that is not an oversight — it is the right call for
-something used that often.
+**Keyboard-initiated actions get no animation** (<kbd>⌘K</kbd> palette
+open, shortcut navigation): power users trigger them hundreds of times
+daily, and animation delays the exact moment they are trying to be
+fast. Raycast's command palette opens with no animation by design.
 
-Applied corollary: **an animation a user will see 50 times today has
-to earn its keep.** If you cannot clearly state what purpose it serves,
-remove it.
+An animation a user sees 50 times today has to earn its keep — if you
+cannot state its purpose (Question 2), remove it.
 
 ### Question 2 — What is the purpose?
 
-Every animation should answer "why does this animate?" with one of these:
+Every animation must answer "why does this animate?" with one of these
+five purposes:
 
-- **Spatial consistency.** A toast slides in from the right; when the
-  user swipes it away to the right, they intuit where it went because
-  it entered from there. Entry direction = exit direction.
-- **State indication.** A button morphs shape to signal the state
-  change (idle → loading → success). Without motion, the state change
-  feels invisible.
-- **Explanation.** A marketing animation that demonstrates a feature's
-  workflow in 3 seconds.
-- **Feedback.** A button scales 0.97 on `:active`, confirming the
-  interface registered the press before the action completes.
-- **Preventing jarring change.** An element suddenly appearing or
-  disappearing without transition reads as a bug. Fade + slight
-  scale-from-0.95 avoids that.
+1. **Spatial consistency.** A toast slides in from the right; when the
+   user swipes it away to the right, they intuit where it went because
+   it entered from there. Entry direction = exit direction.
+2. **State indication.** A button morphs shape to signal the state
+   change (idle → loading → success). Without motion, the state change
+   feels invisible.
+3. **Explanation.** A marketing animation that demonstrates a feature's
+   workflow in 3 seconds.
+4. **Feedback.** A button scales 0.97 on `:active`, confirming the
+   interface registered the press before the action completes.
+5. **Preventing jarring change.** An element suddenly appearing or
+   disappearing without transition reads as a bug. Fade + slight
+   scale-from-0.95 avoids that.
 
-If the answer is "it looks cool" and the user sees it often, don't do
-it.
+If the answer is "it looks cool" and the user sees it often, remove the
+animation.
 
 ### Question 3 — What easing should it use?
 
@@ -88,18 +103,20 @@ Is the element entering or exiting the screen?
     Default fallback → ease-out
 ```
 
-**Never use `ease-in` for UI animations.** `ease-in` starts slow, which
-makes the interface feel sluggish at the exact moment the user is
-watching most closely. A dropdown with `ease-in` at 300ms *feels*
-slower than the same dropdown with `ease-out` at 300ms, because
-`ease-in` delays the initial movement. `ease-in` is for elements
-*leaving* the screen in a way that should feel heavy (rarely
-appropriate in UI).
+**Entries and exits both use `ease-out` in 2D UI.** `ease-out` starts
+fast, so the user sees immediate motion; `ease-in` starts slow, so a
+300ms dropdown with `ease-in` feels more sluggish than the identical
+dropdown with `ease-out`. Do not use `ease-in` for 2D UI element
+transitions. 3D/scroll-scrub contexts are governed by gsap-conventions
+(frontend-3d package), which allows `power2.in` for viewport-exit
+animations — that exception never applies to the UI transitions covered
+here.
 
 #### Custom curves (stronger than the CSS defaults)
 
 CSS's built-in `ease-out` / `ease-in-out` are too weak to feel
-intentional. Use custom `cubic-bezier()` curves:
+intentional. Use these four custom `cubic-bezier()` curves by default —
+curves built from scratch are almost never better:
 
 ```css
 :root {
@@ -117,9 +134,6 @@ intentional. Use custom `cubic-bezier()` curves:
 }
 ```
 
-Use these by default. Built from scratch curves are almost never better
-than these four.
-
 ### Question 4 — How long should it take?
 
 | Element | Duration |
@@ -133,33 +147,31 @@ than these four.
 | Page transition (SPA) | 300–500ms |
 | Marketing explainer / onboarding demo | Can be 500–2000ms+ |
 
-**Keep UI animations under 300ms** unless they're genuinely
-explanatory. A 180ms dropdown feels more responsive than a 400ms one;
-the shorter duration is almost always better.
-
-**Perceived-performance nuance:** a faster-spinning spinner makes the
-app feel faster even when the actual load time is identical. Speed
-signal > truth signal for loading affordance.
+**Keep UI animations under 300ms** unless they are genuinely
+explanatory — a 180ms dropdown feels more responsive than a 400ms one.
+Perceived-performance nuance: a faster-spinning spinner makes the app
+feel faster even when actual load time is identical.
 
 ## Springs vs duration-based
 
-Springs simulate physics — they don't have fixed durations; they settle
-based on stiffness/damping/mass parameters. Use them when:
+Springs simulate physics — no fixed duration; they settle from
+stiffness/damping/mass parameters. Use them for:
 
 - **Drag-with-momentum gestures** — swipe-to-dismiss a sheet, flick a
   card. Springs maintain velocity across release.
 - **Decorative mouse-tracking interactions** — a subtle parallax on a
-  hero element. Tying visuals directly to mouse position (no spring)
-  feels artificial and computery. `useSpring` gives it life.
+  hero element. Binding visuals directly to mouse position (no spring)
+  feels artificial and computery; `useSpring` gives it life.
 - **"Alive"-feeling UI elements** — Apple's Dynamic Island, responsive
   icons that subtly settle.
-- **Gestures that can be interrupted mid-animation.** Springs preserve
-  velocity when interrupted; CSS animations restart from zero.
+- **Gestures interruptible mid-animation** — springs preserve velocity
+  when interrupted; CSS animations restart from zero.
 
-Don't use them for:
-- Simple state transitions (open/close, in/out). Duration-based
-  ease-out is more predictable and easier to tune.
-- Anything functional where predictability matters more than
+Do not use springs for:
+
+- Simple state transitions (open/close, in/out) — duration-based
+  `ease-out` is more predictable and easier to tune.
+- Functional contexts where predictability matters more than
   naturalness (trading interface, banking, medical).
 
 ### Spring configuration patterns
@@ -172,9 +184,9 @@ Don't use them for:
 { type: "spring", mass: 1, stiffness: 100, damping: 10 }
 ```
 
-Keep `bounce` subtle (0.1–0.3) when you use it. Avoid bounce in UI
-unless the interaction genuinely asks for it (drag-to-dismiss, playful
-notification).
+Standard UI transitions use no bounce. When the interaction is a
+drag-release or playful gesture (drag-to-dismiss, playful
+notification), a subtle `bounce` of 0.1–0.3 is allowed — never higher.
 
 ### Mouse-tracking springs — example
 
@@ -203,20 +215,21 @@ const rotation = useSpring(mouseX * 0.1, {
 }
 ```
 
-This blanket rule is the safe default. For app-specific motion (JS-
-driven), check `window.matchMedia('(prefers-reduced-motion: reduce)')`
-and short-circuit the animation. Users with vestibular disorders need
-this; skipping it is an accessibility bug.
+This blanket rule is the safe default. For JS-driven motion, check
+`window.matchMedia('(prefers-reduced-motion: reduce)')` and
+short-circuit the animation. Users with vestibular disorders need this;
+skipping it is an accessibility bug.
 
 ## Motion rules of execution
 
 **DO:**
-- Ask the 4 questions before writing any animation.
-- Use custom `cubic-bezier` curves (stronger than CSS defaults).
+- Ask the 4 questions in order before writing any animation.
+- Use the four custom `cubic-bezier` curves above (stronger than CSS
+  defaults).
 - Use `ease-out` for entry/exit, `ease-in-out` for on-screen morph.
 - Keep UI animations under 300ms by default.
 - Specify exact properties in transitions (`transition: transform
-  200ms ease-out`), not `transition: all`.
+  200ms ease-out`).
 - Animate `transform` and `opacity` — they're compositor-accelerated.
   Other properties trigger layout/paint and can stutter.
 - Use springs for drag/momentum/interruptible gestures.
@@ -226,22 +239,31 @@ this; skipping it is an accessibility bug.
 
 **DO NOT:**
 - Animate keyboard-initiated actions (⌘K open, etc.).
-- Use `ease-in` for UI animations.
-- Use `transition: all` — specify exact properties.
-- Ship bounce/elastic easing in UI (feels dated, 2014 Material).
+- Use `ease-in` for 2D UI transitions (3D/scroll-scrub viewport exits
+  follow gsap-conventions, which allows `power2.in`).
+- Use `transition: all` — name exact properties.
+- Ship bounce/elastic in standard UI transitions — a subtle bounce
+  (0.1–0.3) is allowed only for drag-release/playful gestures.
 - Animate for decoration alone if the user sees it 50×/day.
 - Animate `width`, `height`, `top`, `left`, `margin` — use `transform`.
-- Forget reduced motion.
-- Use scale(0) as entry — scale(0.95) reads as natural.
+- Skip reduced motion.
+- Use `scale(0)` as entry — `scale(0.95)` reads as natural.
 - Use the same duration everywhere. Duration is a property, not a
   constant.
 
 ## Output format for motion review
 
-When reviewing UI motion code, output a `| Before | After | Why |`
-markdown table — one row per issue found, the "Why" column carrying the
-reasoning. Do not use bulleted lists with "Before:" and "After:" on
-separate lines. Example:
+When reviewing UI motion code, output exactly this markdown table — one
+row per issue found, the "Why" column carrying the reasoning. Bulleted
+lists with "Before:" and "After:" on separate lines are not accepted.
+
+```markdown
+| Before | After | Why |
+| --- | --- | --- |
+| `<offending code>` | `<replacement code>` | <one-line reason> |
+```
+
+Filled example:
 
 | Before | After | Why |
 | --- | --- | --- |

@@ -8,109 +8,97 @@ tokens: 1888
 ## HARD RULE
 Code changes affecting logic, API, architecture, or behavior MUST include documentation updates **IN THE SAME RESPONSE** as the code. Code without updated docs = **INCOMPLETE TASK**. NEVER defer docs to "later" or "next commit".
 
-## 15-Point Pre-Commit Checklist
+## 11-Point Pre-Commit Checklist
 
-Before EVERY `git commit`, walk through this table. If the "Trigger" column matches any staged file, the "Required Doc" MUST also be staged.
+Before EVERY `git commit`: if a Trigger matches any staged file, the Required Doc MUST also be staged. Multiple rows can match — satisfy all of them.
 
-| # | Trigger (changed files) | Required Doc | Example Path |
-|---|-------------------------|-------------|-----------|
-| 1 | `*/migrations/*.sql` | Database schema | `docs/architecture/database-schema.md` |
-| 2 | `*/migrations/*.sql` | Migration counter in CLAUDE.md | `CLAUDE.md` |
-| 3 | `*/handlers/*.go` or `*/routes*.go` | API reference | `docs/architecture/api-reference.md` |
-| 4 | `*/handlers/*.go` or `*/routes*.go` | OpenAPI spec | `docs/openapi.yaml` |
-| 5 | `*/app/*.go` or `*/middleware*.go` | Backend layers | `docs/architecture/backend-layers.md` |
-| 6 | `*/services/auth/*.go` | Auth & sessions | `docs/architecture/auth-and-sessions.md` |
-| 7 | `*/services/media/*.go` | Media/photo pipeline | `docs/architecture/photo-pipeline.md` |
-| 8 | `*/services/feed/*.go` | Feed algorithm | `docs/architecture/feed.md` |
-| 9 | `*/services/notifications/*.go` | Notification system | `docs/architecture/notifications.md` |
-| 10 | `*/services/payments/*.go` or `*/store/*.go` | Payments/store | `docs/architecture/payments.md` |
-| 11 | `*/src/**/*.ts(x)` (frontend) | Frontend architecture | `docs/architecture/frontend.md` |
-| 12 | `*/src/pages/onboarding/*` | Onboarding flow | `docs/architecture/onboarding.md` |
-| 13 | Bot source files (`*bot*/*.go`) | Bot docs | `docs/architecture/bot-*.md` |
-| 14 | Config files affecting behavior | Deployment docs | `docs/deployment.md` |
-| 15 | Any new file (`git diff --diff-filter=A`) | Project trees | `docs/trees/` (relevant tree file) |
-| 16 | `go.mod` or `package.json` (new dependency added) | README — update Tech Stack section | `README.md`, `README_FULL.md`, `backend/README.md` |
-| 17 | New `internal/` package created | README — update Project Structure | `README.md`, `CLAUDE.md` |
-| 18 | `config.example.yaml` or `.env.example` changed | README — update Configuration section | `README.md`, `backend/README.md` |
-| 19 | New service directory in `services/` | README — update Architecture section | `README.md`, `CLAUDE.md` |
+| # | Trigger (staged files) | Required Doc |
+|---|------------------------|--------------|
+| 1 | `*/migrations/*.sql`, `*/db/migrate/*` | `docs/architecture/database-schema.md` AND `CLAUDE.md` (migration counter) |
+| 2 | `*/handlers/*.go`, `*/routes*.go`, `*/router*.go` | `docs/architecture/api-reference.md` OR `docs/openapi.yaml` |
+| 3 | `*/app/**`, `*/middleware*`, `*/jobs/**`, `*/workers/**`, `*/cmd/**` | `docs/architecture/backend-layers.md` |
+| 4 | `*/services/auth/**` | `docs/architecture/auth-and-sessions.md` |
+| 5 | Any other `*/services/<name>/**` | matching `docs/architecture/<service-doc>.md` — see example map below |
+| 6 | Frontend `src/**/*.ts`, `src/**/*.tsx` | `docs/architecture/frontend-state.md` |
+| 7 | ANY new non-test code file (`git diff --cached --diff-filter=A`) | relevant `docs/trees/tree-*.md` |
+| 8 | NEW dependency in `go.mod` / `package.json` | `README.md` Tech Stack section (or `CLAUDE.md`) |
+| 9 | `config.example.*`, `config.sample.*`, `.env.example` | `README.md` Configuration section |
+| 10 | Deploy/infra config changing runtime behavior (Dockerfile, compose, CI/CD) | `docs/architecture/deployment.md` |
+| 11 | New service directory or new `internal/` package | `README.md` Project Structure AND `CLAUDE.md` |
 
-**If ANY row matches, update the Required Doc BEFORE committing.** Multiple rows can match simultaneously. Adapt file paths to your project structure.
+The `doc-check-on-commit.sh` hook hard-blocks commits for most rows; rows it does not cover are equally mandatory under this rule.
 
-**README Rule:** When dependencies, packages, or config shape change — the project README files MUST reflect this. A project where `go.mod` lists samber/oops but README says "errors via fmt.Errorf" is lying to every new developer who reads it.
+**README rule:** when dependencies or config shape change, README MUST reflect it. A `go.mod` listing samber/oops while README says "errors via fmt.Errorf" lies to every new developer.
 
-## Subagent Instructions
+### Project-Specific Example Map — ADAPT TO YOUR PROJECT
 
-When delegating work to subagents (Agent tool), the parent MUST include explicit documentation instructions. Never say "update docs" generically. Instead, list EVERY specific file:
+EXAMPLE rows from a production Telegram app — NOT generic. Replace paths and doc names with YOUR services, and keep this map in sync with the `case` statements in `doc-check-on-commit.sh` (the shipped hook hardcodes exactly these mappings — always edit the rule and the hook together).
 
-**Template for subagent prompts:**
-```
-After making code changes, update these documentation files:
-1. `docs/architecture/<specific-file>.md` — describe what to update
-2. `CLAUDE.md` — update <specific section> (e.g., migration counter, Active Plans)
-3. `docs/trees/<specific-tree>.md` — regenerate if files were added/removed
-4. `docs/openapi.yaml` — add/update endpoint definitions
-```
+| Trigger (any depth) | Required Doc |
+|---------------------|--------------|
+| `*/services/media/**` | `docs/architecture/photo-pipeline.md` |
+| `*/services/moderation/**` | `docs/architecture/moderation-pipeline.md` |
+| `*/services/feed/**`, `*/services/antiabuse/**` | `docs/architecture/feed-and-antiabuse.md` |
+| `*/services/entitlements/**`, `*/services/store/**`, `*/services/payments/**` | `docs/architecture/entitlements-and-store.md` |
+| `*/services/notifications/**` | `docs/architecture/notification-system.md` |
+| `*/bot_moderator/**`, `*/bot_support/**`, `*/tgbots/**`, `*/bots/**` | `docs/architecture/bot-moderator.md` / `bot-support.md` |
 
-Subagents MUST NOT commit without documentation updates. If a subagent cannot determine which docs to update, it must ask the parent agent rather than skip docs.
-
-## When NOT Needed
+## When Docs Are NOT Needed
 
 - Pure refactors (no behavior change, same API contract)
 - Test-only changes (`*_test.go`, `*.test.ts`, `*.spec.ts`)
-- Config/env changes (`.env`, `*.yaml`, `*.json` unless it is `openapi.yaml`)
 - Typo fixes in non-doc files
-- Dependency patch/minor updates (but NEW dependencies or major upgrades that change tech stack → update README)
+- Dependency patch/minor updates (NEW dependencies or major upgrades → row 8)
+
+**Config precedence rule:** a config change that alters runtime behavior or config shape other developers must know (example/sample config files, new config keys, deploy settings) → docs required per rows 9–10. Purely local/dev values (`.env` values, secrets, local overrides, editor settings) → exempt.
 
 ## Enforcement (4 layers)
 
 | Layer | Mechanism | Type | When |
 |-------|-----------|------|------|
-| 1. **This rule** | Claude reads on every session | Proactive | Always — primary mechanism |
-| 2. **PreToolUse hook** | `doc-check-on-commit.sh` | Hard block (exit 2) | Before every `git commit` — smart file-to-doc mapping |
-| 3. **Dev workflow gate** | `dev-workflow.md` Documentation Gate | Phase gate | Phase 7 of /dev — blocks completion without docs |
-| 4. **Stop hook** | `stop-verification` | Safety net | Session end — opus-level check |
+| 1. **This rule** | loaded every session | Proactive | Always — primary mechanism |
+| 2. **PreToolUse hook** | `doc-check-on-commit.sh` | Hard block (exit 2) | Before every `git commit` — maps staged files to required docs, blocks if missing |
+| 3. **/dev Document phase** | `dev.md` phase gate | Phase gate | /dev cannot reach Report until docs are updated |
+| 4. **Stop hook** | prompt-type Stop hook inline in `settings.json` | Safety net | Session end — verifies docs updated when logic/API/architecture changed |
 
-The hook (layer 2) performs smart analysis: it maps each staged code file to its required documentation file and **blocks the commit** if any required doc is missing. Do NOT rely on the hook alone — update docs proactively with every code change.
+Do NOT rely on layers 2–4 — update docs proactively with every code change (layer 1).
 
 ### What CANNOT satisfy the doc requirement
 
-The hook explicitly **excludes** these paths from counting as "docs updated":
+The hook excludes these paths from counting as "docs updated":
 
-- `docs/superpowers/plans/**` — planning and intent files
-- `docs/superpowers/specs/**` — design specs
-- `docs/superpowers/research/**` — research notes
-- `memory/**` — memory vault (auto-generated or behavioural notes)
-- `CHANGELOG.md`, `HISTORY.md` — release history
-- `docs/active-plans-archive.md` — historical archive of finished plans
+- `docs/superpowers/plans/**`, `docs/superpowers/specs/**`, `docs/superpowers/research/**`
+- `memory/**`
+- `CHANGELOG.md`, `HISTORY.md`
+- `docs/active-plans-archive.md`
 
-**Why:** these are meta-work, not architecture docs. A contract change in `handlers/auth_handler.go` must be reflected in `docs/architecture/auth-and-sessions.md` — not "described in the plan file". The plan describes intent; the architecture doc describes the current behaviour of the system.
-
-### Historical bug (fixed 2026-04-14)
-
-Before this date, `doc-check-on-commit.sh` read the tool command from `.command` in the PreToolUse JSON payload. Claude Code actually sends the command at `.tool_input.command` — so `.command` was always `null`, the hook saw an empty `COMMAND`, and silently exited 0 on every commit. **The hook never blocked a single commit during that period.** The same bug affected `superkit-counts-verify.sh`, `config-protection.sh`, `security-patterns.sh`, and `loop-guard.sh` — all now read `.tool_input.*` first with the legacy `.command` / `.file_path` path as a fallback for defence-in-depth.
-
-### Coverage of the path-to-doc map
-
-| Source path (any depth) | Required doc(s) |
-|-------------------------|-----------------|
-| `*/migrations/*.sql` | `database-schema.md` + `CLAUDE.md` migration counter |
-| `*/handlers/*.go`, `*/routes*.go` | `api-reference.md` OR `openapi.yaml` |
-| `*/services/auth/**` | `auth-and-sessions.md` |
-| `*/services/media/**` | `photo-pipeline.md` |
-| `*/services/moderation/**` | `moderation-pipeline.md` |
-| `*/services/feed/**`, `*/services/antiabuse/**` | `feed-and-antiabuse.md` |
-| `*/services/{entitlements,store,payments}/**` | `entitlements-and-store.md` |
-| `*/services/notifications/**` | `notification-system.md` |
-| `*/app/**`, `*/middleware/**`, `*/jobs/**`, `*/workers/**`, `*/cmd/**` | `backend-layers.md` (+ `docs/trees/tree-*.md` if the file is NEW) |
-| `*/repo/**` (NEW file only) | `docs/trees/tree-*.md` |
-| `*/bot_{moderator,support}/**`, `*/tgbots/**`, `*/bots/**` | `bot-*.md` |
-| `*/src/**/*.{ts,tsx}` (except `presentation/`) | `frontend-*.md` |
-
-New paths must be added to this table AND to the `case` statements in `doc-check-on-commit.sh` simultaneously.
+These are meta-work: a plan describes intent; the architecture doc describes current system behavior. A contract change in `handlers/auth_handler.go` belongs in `docs/architecture/auth-and-sessions.md` — never "described in the plan file".
 
 ## Plan Completion Gate
 
 When finishing an implementation plan (superpowers writing-plans / executing-plans):
-- **BEFORE marking the plan as complete**, run the 15-point checklist above
-- If any docs are stale — update them as the FINAL task
-- A plan is NOT complete until docs are updated
+
+1. BEFORE marking the plan complete, run the 11-point checklist above; update any stale doc as the FINAL task.
+2. After a plan completes, `plan-completion-gate.sh` sets a marker: the next code commit MUST stage a `docs/architecture/*` file OR carry `[plan-docs-deferred: <plan-id>: <reason ≥15 chars>]` in the commit message.
+3. A plan is NOT complete until docs are updated.
+
+## Subagent Instructions
+
+When delegating via the Agent tool, list EVERY specific doc file — never say "update docs" generically:
+
+```
+After making code changes, update these documentation files:
+1. `docs/architecture/<specific-file>.md` — <what to update>
+2. `CLAUDE.md` — <specific section> (e.g., migration counter, Active Plans)
+3. `docs/trees/<specific-tree>.md` — regenerate if files were added/removed
+4. `docs/openapi.yaml` — add/update endpoint definitions
+```
+
+Subagents MUST NOT commit without doc updates. A subagent that cannot determine which docs to update asks the parent — it does not skip docs.
+
+## Recap — non-negotiables
+
+- Docs ship IN THE SAME RESPONSE as the code — code without docs = INCOMPLETE TASK.
+- Before every commit, walk the 11-point checklist; every matching row's doc must be staged.
+- Plans/specs/memory/CHANGELOG never satisfy the doc requirement — only architecture docs, trees, README, CLAUDE.md, openapi.yaml do.
+- A plan is NOT complete until the checklist passes.

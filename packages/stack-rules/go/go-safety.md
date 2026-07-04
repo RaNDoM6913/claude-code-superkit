@@ -2,10 +2,12 @@
 alwaysApply: false
 applyWhenPaths:
   - "**/*.go"
-tokens: 302
+tokens: 414
 ---
 
 # Go Safety Guardrails
+
+Apply to every Go file you write or edit. In reviews, a violation of these is at least WARNING; panic, data-race, or leak paths are CRITICAL.
 
 ## Nil Traps
 - Always `make()` maps before write — nil map panics: `m := make(map[K]V)`
@@ -15,11 +17,11 @@ tokens: 302
 ## Concurrency
 - Every goroutine needs a shutdown mechanism: `ctx.Done()`, done channel, or explicit signal
 - Only senders close channels — closing a closed channel panics
-- Include `ctx.Done()` case in every `select` statement
+- Every `select` that can block, in code where a `ctx` is in scope, needs a `ctx.Done()` case. Exempt: non-blocking `select` with `default`, and code with no context available
 - No `time.After` in loops — creates new timer (and leak) per iteration. Use `time.NewTimer` + `Reset()`
 
 ## Memory
-- Append can alias backing array — always use return value: `s = append(s, x)`, never `append(s, x)` alone
+- `append` may grow into a new array or reuse the old one — always assign the result back to the SAME slice: `s = append(s, x)`. Hazard: `b := append(a, x)` compiles but `b` can share `a`'s backing array, so a write through one mutates the other. Need an independent slice → `copy` explicitly
 - `defer` in loops accumulates all defers until function exit — wrap body in closure or extract to function
 - Sub-slice of large slice retains entire backing array in memory — copy if keeping small piece of large data
 

@@ -4,24 +4,33 @@ applyWhenPaths:
   - "**/presentation/**"
   - "**/src/**/*.tsx"
   - "**/src/**/*.jsx"
-tokens: 548
+tokens: 827
 ---
 
 # GSAP ScrollTrigger Conventions
 
-Mandatory rules for GSAP ScrollTrigger animations. Violations cause visual bugs.
+Mandatory rules for GSAP scroll-driven animation code. Violations cause visual bugs.
 
-## Timeline Extension (CRITICAL)
+**Scope:** this rule governs scroll-scrubbed presentation timelines and 3D scene motion. Interactive 2D UI element transitions (buttons, dropdowns, modals, hovers) follow `motion-and-animation.md` (frontend-ui package) instead — including its ease rules.
 
-After EVERY `gsap.timeline()` creation, add:
+## 1. Timeline Extension — normalized scrub timelines ONLY
+
+Precondition — apply this rule only when BOTH hold:
+
+- the timeline is driven by ScrollTrigger `scrub`, AND
+- its positions are normalized to the 0–1 range (the Phase Object pattern, rule 6).
+
+Then, immediately after creating the timeline, add:
 
 ```tsx
-tl.set({}, {}, 1.0); // no-op keyframe at position 1.0 — forces timeline to span full duration
+tl.set({}, {}, 1.0); // no-op keyframe at position 1.0 — forces timeline to span the full 0–1 range
 ```
 
-**Why:** Without this, animations compress into the first 10% of scroll range. The empty `set()` creates a no-op keyframe that tells GSAP the timeline extends to position 1.0.
+**Why:** without it, animations compress into the first ~10% of the scroll range.
 
-## Scrub Must Be a Number
+Duration-based (non-scrub) timelines: do NOT add this line — position `1.0` is meaningless there and inserts a stray keyframe.
+
+## 2. Scrub Must Be a Number
 
 ```tsx
 // WRONG
@@ -35,7 +44,7 @@ scrub: 0.3     // very responsive
 
 **Why:** `scrub: true` (boolean) causes jerky, non-smooth scrolling behavior.
 
-## invalidateOnRefresh
+## 3. invalidateOnRefresh
 
 Every ScrollTrigger config MUST include:
 
@@ -46,9 +55,9 @@ scrollTrigger: {
 }
 ```
 
-**Why:** Without it, calculated positions break on window resize.
+**Why:** without it, calculated positions break on window resize.
 
-## Context Cleanup
+## 4. Context Cleanup
 
 All animations MUST be inside `gsap.context()` with cleanup:
 
@@ -62,11 +71,11 @@ useEffect(() => {
 }, []);
 ```
 
-**Why:** Without context, animations leak memory and break on React re-renders.
+**Why:** without context, animations leak memory and break on React re-renders.
 
-## Centralized GSAP Import
+## 5. Centralized GSAP Import
 
-Import GSAP from your project's setup file, not directly:
+Import GSAP from the project's setup module, never directly:
 
 ```tsx
 // WRONG
@@ -77,9 +86,21 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { gsap, ScrollTrigger } from '@/lib/gsap-setup';
 ```
 
-**Why:** Ensures plugins are registered once, consistently.
+If no setup module exists yet, create one first (adjust the path to the project's alias):
 
-## Phase Object for Timeline Positions
+```tsx
+// lib/gsap-setup.ts
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+export { gsap, ScrollTrigger };
+```
+
+**Why:** ensures plugins are registered exactly once, consistently.
+
+## 6. Phase Object for Timeline Positions
 
 Use named constants, not magic numbers:
 
@@ -96,11 +117,13 @@ const P = {
 tl.fromTo(element, { opacity: 0 }, { opacity: 1, duration: P.entryEnd - P.entryStart }, P.entryStart);
 ```
 
-## Ease Standards
+## 7. Ease Standards — scroll/3D contexts only
+
+This table applies to scroll-scrubbed timelines and 3D scene motion. For 2D UI element transitions, use the ease rules in `motion-and-animation.md` (frontend-ui package): ease-out there, never ease-in.
 
 | Use Case | Ease | Why |
 |----------|------|-----|
 | Entrances | `power3.out` | Fast start, gentle stop |
 | Crossfades | `power2.inOut` | Smooth both directions |
 | Subtle motion | `sine.in` / `sine.out` | Barely perceptible |
-| Exits | `power2.in` | Gentle start, fast finish |
+| Viewport exits | `power2.in` | Gentle start, fast finish — allowed for scroll/3D exits only |

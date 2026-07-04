@@ -1,7 +1,7 @@
 ---
 name: spatial-and-layout
 description: "Spacing, layout, grids, responsive design — 4pt scale, rhythm over uniformity, container queries for components, viewport queries for pages. Auto-loaded when editing UI files."
-tokens: 1735
+tokens: 1717
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"
@@ -17,29 +17,29 @@ applyWhenPaths:
 
 # Spatial Design & Layout
 
-## Principles (always apply)
+## Hard rules (always apply)
 
-1. **4pt spacing scale, semantic names.** Use `--space-xs`, `--space-sm`,
-   `--space-md`, `--space-lg`, `--space-xl` — not `--spacing-8` or
-   `--p-12`. Pixel-named tokens lose all flexibility the moment a
-   designer changes the scale. Canonical 4pt steps: **4, 8, 12, 16, 24,
-   32, 48, 64, 96, 128**. 8pt is too coarse — you will often want 12px
-   between two values.
-2. **Use `gap`, not margins, for sibling spacing.** Flexbox and Grid
-   `gap` eliminates margin-collapse bugs and the cleanup hacks that come
-   with them. Reserve margins for the outside of a component.
-3. **Vary spacing to create hierarchy.** A heading with extra space
-   above it reads as more important — make use of that. Identical
-   padding everywhere makes interfaces feel monotonous and templated.
+1. **Use the canonical spacing scale with semantic token names.** Canonical
+   steps in px: **2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128** — 4pt multiples
+   plus a single 2px hairline step (`--space-3xs`, for hairline gaps and icon
+   nudges). This list and the token block below are the SAME set — use no
+   spacing value outside it. Name tokens by size role (`--space-xs`,
+   `--space-md`), never by pixel value (`--spacing-8`, `--p-12`) — pixel names
+   break the moment the scale changes. 8pt-only is too coarse; 12px between
+   two values is common.
+2. **Use `gap`, not margins, for sibling spacing** inside flex/grid
+   containers — `gap` cannot margin-collapse. Reserve margins for the outside
+   of a component.
+3. **Vary spacing to create hierarchy.** Different relationships get
+   different values — use the mapping in "Visual rhythm" below. A heading
+   with extra space above it reads as more important.
 4. **Self-adjusting grids over media queries for card content.**
-   `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` is a
-   breakpoint-free responsive grid. Reach for media queries only when
-   the layout genuinely needs to rearrange, not when a grid needs to
-   reflow.
-5. **Container queries for components, viewport queries for pages.**
-   A card inside a sidebar should react to the sidebar's width, not
-   the viewport's. Use `@container` for component responsiveness,
-   `@media` for page-level layout changes.
+   `grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))` reflows
+   without breakpoints. Add media queries only when the layout must genuinely
+   rearrange, not when a grid needs to reflow.
+5. **Container queries for components, viewport queries for pages.** A card
+   inside a sidebar reacts to the sidebar's width via `@container`; use
+   `@media` for page-level layout changes only.
 
 ## The spacing scale (canonical)
 
@@ -59,7 +59,7 @@ applyWhenPaths:
 }
 ```
 
-Alternatively, fluid spacing for responsive marketing pages:
+Fluid spacing variants for responsive marketing pages:
 
 ```css
 --space-section: clamp(3rem, 8vw, 8rem);
@@ -67,24 +67,19 @@ Alternatively, fluid spacing for responsive marketing pages:
 ```
 
 Rule of thumb: **fluid spacing for sections, fixed spacing inside
-components.** A `Card` should have predictable `--space-md` padding;
-the gap between the `Card` and the next `Card` can breathe with
-viewport.
+components.** A `Card` gets predictable `--space-md` padding; the gap between
+one `Card` and the next can breathe with the viewport.
 
 ## Visual rhythm
 
-Rhythm comes from VARIATION, not from uniform application of a single
-value.
+Rhythm comes from VARIATION, not from uniform application of a single value.
+Relationship → token:
 
-- Tight groupings → `--space-xs` to `--space-sm` between related items
-- Section separation → `--space-xl` or `--space-2xl`
-- Major breaks → `--space-3xl` or fluid `clamp()` values
+- Tight groupings (related items) → `--space-xs` to `--space-sm`
 - Heading-to-body gap (related) → `--space-sm`
 - Body-to-next-heading gap (transitional) → `--space-xl`
-
-A common mistake is to use `--space-md` between everything because it
-"looks fine." It looks uniformly fine. Nothing is emphasised, because
-everything is at the same weight.
+- Section separation → `--space-xl` or `--space-2xl`
+- Major breaks → `--space-3xl` or fluid `clamp()` values
 
 ## Grid patterns
 
@@ -98,14 +93,13 @@ everything is at the same weight.
 }
 ```
 
-This grid naturally reflows from 4 columns at desktop to 1 column at
-mobile, without any media queries. Use it for homogeneous card
-collections.
+Reflows from 4 columns at desktop to 1 at mobile with zero media queries.
+Use for homogeneous card collections.
 
 ### The broken grid (for emphasis)
 
-Intentionally break the grid for hero content, featured items, or
-visual punctuation:
+Intentionally break the grid for hero content, featured items, or visual
+punctuation:
 
 ```css
 .feature-grid {
@@ -119,15 +113,14 @@ visual punctuation:
 }
 ```
 
-This is how editorial/magazine layouts get their rhythm. Uniform 3-up
-card grids feel templated; a 2-1-1 pattern with one cell spanning
-feels designed.
+Uniform 3-up card grids feel templated; a 2-1-1 pattern with one spanning
+cell feels designed.
 
 ### The asymmetric hero
 
-Left-aligned text + asymmetric image placement reads as "designed".
-Centered text + centered image reads as "template". Default to
-asymmetric unless there's a reason not to.
+Left-aligned text + asymmetric image placement reads as "designed". Centered
+text + centered image reads as "template". Default to asymmetric unless
+there is a specific reason not to.
 
 ## Container queries
 
@@ -148,9 +141,8 @@ For components that appear in multiple layouts (sidebar, main, modal):
 }
 ```
 
-The card adapts to its container's width, not the viewport's. A 320px
-card in a narrow sidebar stays stacked even if the viewport is 1920px
-wide.
+The card adapts to its container's width, not the viewport's: a 320px card
+in a narrow sidebar stays stacked even on a 1920px viewport.
 
 ## Fluid vs fixed — when to choose which
 
@@ -180,14 +172,14 @@ Default set — mobile-first:
 @media (min-width: 1536px) { /* max-out */ }
 ```
 
-Prefer **`min-width`** (mobile-first) over `max-width` (desktop-first).
-It composes better — each breakpoint adds features rather than removing
-them.
+Prefer **`min-width`** (mobile-first) over `max-width` (desktop-first): each
+breakpoint adds features rather than removing them.
 
 ## Spatial rules of execution
 
 **DO:**
-- Use a 4pt spacing scale with semantic token names.
+- Use the canonical spacing scale (2px hairline + 4pt steps) with semantic
+  token names.
 - Use `gap` for sibling spacing inside flex/grid containers.
 - Vary spacing for hierarchy — different values between different
   relationships.
@@ -196,22 +188,23 @@ them.
 - Use viewport queries for page-level layout changes only.
 - Use fluid `clamp()` spacing on marketing page sections.
 - Break the grid intentionally for hero or featured content.
+- Cap body text blocks at `max-width: 65ch`–`75ch` — the same 65–75ch limit
+  as `typography-guidelines.md`.
 
 **DO NOT:**
 - Wrap everything in cards. Not every section needs a container.
 - Nest cards inside cards. Visual noise; flatten.
-- Ship the "3 identical cards with icon + heading + body" template.
-  Use a broken grid, use a single hero card, use an unordered list with
-  visual hierarchy — do something more considered.
+- Ship the "3 identical cards with icon + heading + body" template. Use a
+  broken grid, a single hero card, or a list with visual hierarchy — do
+  something more considered.
 - Ship the "big number / small label / stat row / gradient accent"
   hero-metrics template. It is the default for AI dashboards. Break it.
-- Use identical spacing between every element. Introduces monotony.
-- Center everything. Asymmetric left-aligned typically feels more
-  designed.
-- Use fluid typography/spacing inside dense product UI. Predictability
-  > fluidity when users repeat the same action 100× a day.
-- Let body text wrap beyond ~80 characters. `max-width: 65–75ch` on
-  text blocks.
+- Use identical spacing between every element. Monotony — nothing is
+  emphasised when everything sits at the same weight.
+- Center everything. Asymmetric left-aligned typically feels more designed.
+- Use fluid typography/spacing inside dense product UI. Predictability >
+  fluidity when users repeat the same action 100× a day.
+- Let body text run wider than 75ch (see the DO cap above).
 
 ---
 

@@ -22,7 +22,16 @@ tokens: 409
 - Accept interfaces, return structs. Keep interfaces small
 
 ## Error Handling
-- Always wrap: `fmt.Errorf("MethodName: %w", err)` — lowercase, no punctuation
+- Always wrap with caller context: `fmt.Errorf("Type.Method: %w", err)` — free-text parts lowercase, no trailing punctuation
+
+```go
+// BAD — logs AND returns, no context
+log.Printf("save failed: %v", err)
+return err
+// GOOD — wrap with caller name, return only
+return fmt.Errorf("UserRepo.Save: %w", err)
+```
+
 - Log OR return, never both. Handlers log; services/repos return
 - Sentinel errors (`var ErrNotFound = errors.New(...)`) for expected domain conditions
 - `errors.Is()` / `errors.As()` for inspection, never `==` or type assertion

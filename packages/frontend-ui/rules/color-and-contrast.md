@@ -1,7 +1,7 @@
 ---
 name: color-and-contrast
 description: "Color system rules — OKLCH over HSL, tinted neutrals, 60-30-10 weight, contrast, dark/light theme selection by use context. Auto-loaded when editing UI files."
-tokens: 2033
+tokens: 2498
 alwaysApply: false
 applyWhenPaths:
   - "**/*.tsx"
@@ -121,9 +121,13 @@ scaling as the accent scale.
 
 ## Contrast and accessibility
 
-- **Text on background:** WCAG AA requires 4.5:1 for body text, 3:1 for
-  18px+ or 14px+ bold. Use APCA where you can; it correlates better with
-  readability than WCAG's formulas.
+- **Metric selection is deterministic — no judgment call.** WCAG AA is
+  the hard floor in every project: ≥ 4.5:1 for body text, ≥ 3:1 for
+  large text (18px+ or 14px+ bold). Additionally check APCA targets
+  (Lc ≥ 60 body, Lc ≥ 45 large — APCA correlates better with
+  readability) ONLY when the project already ships APCA tooling
+  (search `package.json` and lockfile for "apca"). No APCA tooling
+  found → check WCAG only; do not guess Lc values.
 - **Do NOT use gray text on colored backgrounds.** Gray on a colored
   surface reads as washed out. Instead, use a shade of the background
   color — for an accent-tinted card, the body text should be a deep
@@ -137,7 +141,7 @@ scaling as the accent scale.
 
 ## Modern CSS color tools
 
-Use them. They are well-supported in 2025.
+All supported in every modern browser — use them in new code.
 
 ```css
 /* Perceptually uniform lightness scale */
@@ -179,15 +183,46 @@ background: light-dark(var(--neutral-0), var(--neutral-95));
 
 ## Validation procedure (before shipping a palette)
 
+Pick the branch with one test: can you render CSS and view the result
+this session (browser, Playwright, screenshot tooling)? Yes → Branch A.
+No, or unsure → Branch B. Never claim a render or simulator run that
+did not happen.
+
+**Branch A — rendering available:**
+
 1. Render the full neutral scale beside `#808080`. If any step looks
    identical to pure gray, increase its chroma by 0.002.
-2. Render accent 500 on neutral 0, neutral 95, and a competitor
-   accent. If it feels chromatic-stable across all three, proceed.
+2. Render accent-500 on neutral-0 and on neutral-95, and compute its
+   WCAG contrast against both. Below 3:1 on either surface → adjust
+   accent-500 lightness until both pass.
 3. Run the palette through a deuteranopia / protanopia simulator
    (e.g., Sim Daltonism, Stark). If status colors collapse onto each
    other, re-hue them.
 4. Check text on every background used — minimum 4.5:1 for body,
    3:1 for large.
+
+**Branch B — no rendering (the normal editing session).** Validate
+numerically from the token values:
+
+1. Read every neutral token: chroma ≥ 0.005 and one consistent hue
+   angle across the scale. Any step at chroma 0 → retint it (add
+   0.002 minimum).
+2. Compute the WCAG ratio for every text-on-background pair with a
+   Bash `python3`/`node` one-liner: linearize each sRGB channel
+   (c/12.92 if c ≤ 0.03928, else ((c+0.055)/1.055)^2.4); relative
+   luminance L = 0.2126R + 0.7152G + 0.0722B; ratio =
+   (L_lighter + 0.05) / (L_darker + 0.05). Concrete hex/rgb pairs give
+   an exact ratio; an oklch value or unresolved `var()` chain you
+   cannot convert → estimate from the lightness difference and label
+   the number "estimated".
+3. Status colors: no simulator ran, so hue alone must not carry
+   meaning — every status indicator pairs color with an icon or text
+   label, or adjacent status colors differ by ≥ 15 lightness points.
+4. Report each check as VERIFIED (with the computed numbers) or
+   NOT RUN — in this branch the render and simulator checks are always
+   NOT RUN; say so explicitly. An estimated (not exactly computed)
+   value caps that check's confidence at MEDIUM — the same rule
+   `ui-color-reviewer` applies to contrast findings.
 
 ---
 
