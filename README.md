@@ -79,14 +79,19 @@ Keyword or AI semantic search via API.
 
 ## 🆕 What's New
 
-**v1.4.2 — Claude Opus 4.8 adaptation** (see [CHANGELOG](CHANGELOG.md)):
+**v1.5.0 — the Opus 4.8 reliability rework** (see [CHANGELOG](CHANGELOG.md)):
 
-- 🧠 **Opus 4.8, zero churn** — the `opus` alias auto-routed to 4.8, so all 56 agents picked it up with no config changes. New effort convention: deep specialists run at `xhigh`/`max`, with auto-escalation to `max` on a failed `/dev` gate or retry.
-- 🎯 **Coverage-not-filtering reviewers** — a two-stage discovery→triage discipline + shared Evidence Gate + an "Open Questions" bucket, so 4.8's more literal instruction-following no longer drops real low-severity findings. Applied across every reviewer + `/review` + `/dev`.
-- 🔬 **Verifier discipline + 3-state verdict** — `reality-checker` / `goal-verifier` now demand fresh evidence ("no approval without it", hedge-word auto-reject); `gan-evaluator` + `goal-verifier` standardized on PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION.
-- 🐛 **Three verified hook bug fixes** — `[wip]`-on-main protection was dead code; four discipline hooks keyed state on `$PPID` and silently never accumulated; the `audit-trail` hash chain was global. All fixed with regression tests (11 suites green).
-- 🤝 **Full Codex + showcase sync** — every reviewer modernization mirrored into the Codex skills and showcase, so all surfaces share one protocol.
-- 📝 **README + docs overhaul** — value wedge, a "which command do I use?" table, a concrete `/dev` walkthrough, an all-Opus rationale, plus ~25 stale-doc fixes caught by two all-Opus multi-agent audits.
+- 🏗️ **The whole prompt surface, rebuilt** — all 117 files (56 agents, 16 commands, 22 skills, 20 rules) reworked against a single failure-mode playbook for the weaker executor: **Hard Rules** up top + a **Recap** at the bottom (lost-in-the-middle guard), an **exact fenced Output Contract** with a filled example, **Evidence Gates** (reviewers) / **Done-gates** (generators), canonical severity + confidence enums with LOW routed to Open Questions (never dropped), and ripgrep-safe two-pass greps.
+- 🔄 **`/dev` linearized 0–15** — phase numbering now matches the dev-flow SVGs exactly (fractional 1.5/2.1/… retired), with a single Skip Matrix, a per-phase Done-when, and gate verdicts consumed verbatim. `/review` reworked too — goal-verifier moved to its own verdict track and Step 2/3 dispatch resynced (silent-failure-hunter, comment-rot-analyzer, api-contract-sync, database-reviewer now actually fire).
+- 🐛 **frontend-ui dispatch restored** — a prior `inject-tokens` bug had injected `tokens:` mid-`description` in all 6 agents, making every Dispatch/Do-NOT-dispatch condition invisible to Claude Code's dispatcher. Fixed in the tool and all 6 agents, so routing works again.
+- 🔧 **Real-API honesty pass** — nonexistent `maps.NewWithSize()` and Playwright `--device-scale-factor` removed, `prisma migrate reset` demoted from "rollback" to a guarded last resort, `drizzle-kit push` → `migrate`, and dead Go `references/` paths fixed for the installed layout.
+- 🤖 **GAN contract redesigned end-to-end** — the plan now carries a mandatory `## Rubric` handoff, the evaluator scores `X/N` against the named rubrics, `BLOCKED` is reserved for un-runnable evaluations only, and the generator fix-loop is capped at 3 attempts.
+- 📚 **Meta-skills teach the new conventions** — `writing-agents` and `writing-commands` now encode the full playbook (skeleton, canonical enums, Evidence/Done-gate blocks, the command contract), so every future component inherits it; authoring guides (ch.3–5) + examples synced.
+- 📐 **Rules layer consolidated** — `documentation.md` collapsed into ONE canonical table verified against the enforcement hook (the old "15-Point" list had 19 rows and disagreed with it), TGApp specifics moved to marked "ADAPT" example blocks, and the 10 frontend rules unified under binding cross-file decisions (reflex at 3+, a single canonical font-reject list, explicit gsap↔motion scoping, typography pinned at 1.25×).
+- 🔬 **Adversarially verified, file by file** — every rewrite done by one model instance and verified by another (~200 subagents, 0 unresolved escalations), catching copy-paste-breaking code bugs and dropped checks before they shipped. Plus hook-coherence fixes: subagent-stop-validate no longer guards ghost agents, `/security-scan` triggers realigned to what the command actually audits, and the ui-reviewer name collision documented as intended precedence.
+- 🔜 **Codex mirrors next** — beyond the already-synced `/dev` trio + GAN, the remaining Codex skill mirrors are scheduled for the next release.
+
+- **v1.4.2** — Claude Opus 4.8 adaptation: `opus` alias auto-routed all 56 agents to 4.8; effort-dial convention, coverage-not-filtering reviewers, verifier discipline, 3 verified hook fixes, full Codex + showcase sync (see [CHANGELOG](CHANGELOG.md)).
 - **v1.4.1** — 20-defect bugfix patch (see [CHANGELOG](CHANGELOG.md)).
 
 <details>
@@ -102,7 +107,7 @@ Keyword or AI semantic search via API.
 - 🔒 **Codex `default.rules` DSL** — Starlark-like approval policy for Codex CLI (forbid `rm -rf /`, `sudo`, `dd`; allow `git`, `npm`, `systemctl restart`, `nginx reload`; prompt on force-push, hard reset). Adapted from VKirill/codex-starter-kit.
 - 🐹 **Go references +5** — `di-frameworks.md` (uber-fx / dig / wire comparison), `graphql-patterns.md` (gqlgen), `module-management.md`, `stay-updated.md` (Go release cadence), `standard-stdlib-now.md` (what stdlib now replaces). 24 → 29 files.
 
-Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0).
+Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0).
 
 </details>
 

@@ -2,7 +2,19 @@
 
 All notable changes to claude-code-superkit are documented here.
 
-## [Unreleased]
+## [1.5.0] — 2026-07-04
+
+**The Opus 4.8 reliability rework.** Every prompt surface of the kit — 56 agents, 16 commands,
+22 skills, 20 rules (117 files) — was audited against a failure-mode playbook for weaker
+executors and rebuilt: Hard Rules at the top + Recap at the bottom (lost-in-the-middle guard),
+exact fenced Output Contracts with filled examples, Evidence Gates for reviewers / Done-gates
+for generators, one canonical severity+confidence vocabulary with LOW routed to Open Questions
+(never dropped), linear numbering everywhere (incl. `/dev` renumbered to phases 0–15 matching
+the dev-flow SVGs), ripgrep-safe greps, and real-API honesty (invented flags and stdlib calls
+removed). Every rewrite was adversarially verified by an independent model instance —
+~200 subagents, 0 unresolved escalations — then a kit-wide consistency sweep came back clean.
+Counts unchanged; no breaking changes. Codex mirrors beyond the /dev trio + GAN are scheduled
+for the next release.
 
 - **Fix (hooks + wiring coherence, pre-release):** `subagent-stop-validate.sh` no longer validates ghost agents — `playwright-test-generator` → `e2e-test-generator` (its generated-but-not-run guard now actually fires) and the nonexistent `audit-security` dropped; the security branch now matches the severity token `CRITICAL` only, so confidence "HIGH" in the new `[WARNING/HIGH]` finding format no longer false-triggers the do-not-merge warning (all 11 hook test suites pass). **/security-scan auto-triggers realigned to capability** in auto-commands.md: the command audits `.claude/` configuration, so its triggers now fire on config/MCP/install events — application-code security (auth files, new deps, CI/CD) is explicitly routed to the **security-scanner** agent via /review and /dev. **ui-reviewer name collision documented as intended precedence**: on a fresh install with both packages the frontend-ui umbrella (richer superset) overwrites the core agent, merge mode keeps the pre-existing file — noted in the core agent, the frontend-ui README, and verified against `copyFile` semantics.
 - **Final sweep (Opus 4.8 rework, batch 7 — kit-wide consistency + authoring docs):** post-rework consistency greps came back clean across all packages — zero fractional /dev phase references, zero confidence-band or severity-enum drift, zero TGApp leaks in core, every `references/*.md` pointer and dispatch-table agent name resolves, every "N-point" label matches its actual item count, `superkit-counts-verify` passes. The authoring surfaces were the last carriers of the old conventions and are now synced to the reworked meta-skills: **guide ch.3** teaches the full new agent format (body skeleton with Hard Rules/Phase 0/Output Contract/Recap, canonical confidence bands with LOW → Open Questions, Evidence Gate + Done-gate section, opus-only, complete rewritten Dockerfile-reviewer example); **guide ch.4** teaches the command contract ($ARGUMENTS exactly once, Done-when per phase, gated report, destructive-action gates — /deploy example updated); **examples/agent-from-scratch** rebuilt around the new format with the sample output moved to the exact contract sections and checklist severity tags remapped to canonical enums; **guide ch.5 + examples/hook-pipeline** Stop-hook model corrected haiku → opus (matches settings.json since v1.4.2).
