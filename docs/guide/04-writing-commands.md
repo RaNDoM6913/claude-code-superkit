@@ -2,6 +2,8 @@
 
 Commands are slash-invoked workflows that Claude executes as structured instructions. They can orchestrate agents, run tools, and produce reports. The user types `/command-name <arguments>` and Claude follows the command's Markdown as a step-by-step plan.
 
+> **Canonical reference:** the `writing-commands` skill is the source of truth for the command contract summarized here. Where this chapter and the skill differ, the skill wins.
+
 ## Command Format
 
 Command files are Markdown with YAML frontmatter. Place them in `.claude/commands/`.
@@ -24,14 +26,15 @@ allowed-tools: Bash, Read, Edit, Write, Glob, Grep, Agent
 
 ## The $ARGUMENTS Variable
 
-`$ARGUMENTS` is replaced with whatever the user types after the command name.
+`$ARGUMENTS` is replaced with whatever the user types after the command name. Reference it **exactly once**, at the step that parses it -- zero occurrences loses the user's input, and two make consumption ambiguous. Name that step so the parse point is unmistakable:
 
 ```markdown
-## Target
-$ARGUMENTS
+## Step 1 -- Parse Arguments
+
+Arguments: $ARGUMENTS
 ```
 
-If the user types `/review main..HEAD`, then `$ARGUMENTS` becomes `main..HEAD`. If no arguments are given, it becomes an empty string -- your command should handle that case with a default.
+If the user types `/review main..HEAD`, then `$ARGUMENTS` becomes `main..HEAD`. If no arguments are given, it becomes an empty string -- the parse step should match empty first and fall back to a default, and end with an explicit else so no input is silently ignored.
 
 ## Orchestrator Pattern
 
@@ -49,6 +52,10 @@ Phase 8: Report      --> Summary table with results
 ```
 
 Simple commands like `/lint` or `/test` need only 2--3 phases (detect, run, report).
+
+Each phase (and each step) ends with a `Done when:` line -- a verifiable exit condition (a file exists, a command's real output was seen, an agent report arrived). The final Report phase is **gated**: emit it only after every non-skipped phase's `Done when:` holds, and list anything unfinished under "Not done" rather than claiming it complete.
+
+Destructive actions -- `git checkout`/`stash`, file deletion, running migrations -- get a gate: record the restore state **before** the action, and always run a restore step **after** it, on success and on failure alike.
 
 ## Dispatching Agents from Commands
 
@@ -125,13 +132,17 @@ allowed-tools: Bash, Read, Grep, Glob, Agent
 # Pre-Deploy Validation
 
 Validate the project is ready for deployment by running tests, security audit,
-and documentation checks.
+and documentation checks. Stop early on any blocking failure.
 
-## Target Environment
+## Phase 1: Parse Arguments and Gather State
 
-$ARGUMENTS (default: staging)
+Arguments: $ARGUMENTS
 
-## Phase 1: Detect Stack and Gather State
+- Empty --> target environment `staging` (default).
+- `staging` or `production` --> use as the target environment.
+- Else --> treat as `staging` and note the unrecognized input in the report.
+
+Then gather state:
 
 1. Scan for `go.mod`, `package.json`, `Cargo.toml`, `pyproject.toml`
 2. Run `git log --oneline -10` to see recent changes
@@ -139,6 +150,9 @@ $ARGUMENTS (default: staging)
 4. Check for uncommitted changes: `git status --short`
 
 If uncommitted changes exist, warn and ask whether to proceed.
+
+Done when: the target environment is fixed and the stack, migrations, and
+working-tree state have been read.
 
 ## Phase 2: Run Tests
 
@@ -150,14 +164,18 @@ Based on detected stack, run the full test suite (not -short):
 
 If any test fails, STOP and report failures. Do not proceed to deploy.
 
+Done when: the detected stack's suite ran and its real output was seen.
+
 ## Phase 3: Security Audit
 
 Dispatch the **security-scanner** agent:
 
 > Run ALL 18 checks against the codebase. This is a pre-deploy audit
-> for the $ARGUMENTS environment. Report every finding.
+> for the target environment. Report every finding.
 
 If any CRITICAL finding exists, STOP and report. Do not proceed.
+
+Done when: the security-scanner report was received and no CRITICAL finding is open.
 
 ## Phase 4: Documentation Check
 
@@ -166,9 +184,12 @@ Dispatch the **docs-reviewer** agent (if available):
 > Verify API specs match routes, READMEs are current, architecture docs
 > reflect the actual code.
 
+Done when: the docs-reviewer report was received (or the phase was skipped because the agent is unavailable).
+
 ## Phase 5: Report
 
-Output a deployment readiness report:
+Emit this report ONLY after Phases 1--4 are done; list any unfinished phase
+under "Not done" instead of claiming a clean result.
 
 | Check | Status | Details |
 |-------|--------|---------|
@@ -181,11 +202,14 @@ Output a deployment readiness report:
 **Verdict: READY / NOT READY**
 
 If NOT READY, list the blocking items in priority order.
+
+Done when: the report reflects the actual output of every non-skipped phase.
 ```
 
 ## Tips
 
-- Always include `$ARGUMENTS` somewhere in the document so user input is accessible
+- Reference `$ARGUMENTS` exactly once, at the step that parses it -- not scattered across the document
+- Give every step a `Done when:` exit condition, and gate the final report on all of them holding
 - Reference agents by their exact filename (without `.md`)
 - Keep commands focused -- one primary purpose per command
 - For complex workflows, name each phase clearly so progress is visible

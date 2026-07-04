@@ -330,7 +330,7 @@ Here's what a full pipeline looks like with multiple hook types:
           {
             "type": "prompt",
             "prompt": "Before finishing, verify all changed files compile and pass lint. Report any issues.",
-            "model": "haiku"
+            "model": "opus"
           }
         ]
       }

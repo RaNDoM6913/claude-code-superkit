@@ -72,13 +72,13 @@ If any required doc is missing from the staged files, the hook exits with code 2
 
 ## Prompt-Based Hooks (Stop Event)
 
-The Stop event uses a different mechanism -- it sends a prompt to a lightweight model (haiku) that returns a JSON decision:
+The Stop event uses a different mechanism -- it sends a prompt to a reasoning model (opus — see settings.json) that returns a JSON decision:
 
 ```json
 {
   "type": "prompt",
   "prompt": "Verify all changed files compile. Respond with {\"decision\": \"allow\"} or {\"decision\": \"block\", \"reason\": \"...\"}.",
-  "model": "haiku",
+  "model": "opus",
   "timeout": 30,
   "statusMessage": "Verifying session changes..."
 }
