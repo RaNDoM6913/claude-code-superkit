@@ -55,12 +55,13 @@ case "$AGENT_TYPE" in
       fi
     fi
     ;;
-  security-scanner|red-blue-auditor|audit-security)
-    if printf '%s' "$MSG" | grep -qE '(HIGH|CRITICAL|SEVERITY:\s*(HIGH|CRITICAL))'; then
-      warn "HIGH or CRITICAL security finding reported. Do NOT merge until resolved or explicitly waived."
+  security-scanner|red-blue-auditor)
+    # Match the severity token only — confidence "HIGH" (e.g. "[WARNING/HIGH]") must not trigger this
+    if printf '%s' "$MSG" | grep -qE '\bCRITICAL\b'; then
+      warn "CRITICAL security finding reported. Do NOT merge until resolved or explicitly waived."
     fi
     ;;
-  test-generator|playwright-test-generator)
+  test-generator|e2e-test-generator)
     if printf '%s' "$MSG" | grep -qiE 'Generated [0-9]+ tests'; then
       if ! printf '%s' "$MSG" | grep -qiE '(\b(pass|fail|running|go test|npm test|pytest|cargo test|PASS|FAIL)\b|tests? (ran|passed|failed))'; then
         warn "Tests were generated but there is no evidence they were executed. Run them before committing."

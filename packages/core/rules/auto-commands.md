@@ -1,6 +1,6 @@
 ---
 alwaysApply: true
-tokens: 1231
+tokens: 1483
 ---
 
 # Auto Command Triggers
@@ -70,14 +70,18 @@ Commands Claude MUST invoke automatically when a condition below matches — wit
 
 ## /security-scan — Auto Security Check
 
+`/security-scan` audits `.claude/` configuration (AgentShield) — its triggers therefore fire on configuration changes, not on application code:
+
 | Trigger | Condition |
 |---------|-----------|
-| Auth/security code changed | Files matching: `*auth*`, `*session*`, `*permission*`, `*crypto*`, `*secret*`, `*token*` |
-| New dependency added | After `npm install`, `go get`, `pip install`, or `cargo add` |
-| CI/CD config changed | `.github/workflows/*`, `Dockerfile`, `docker-compose*` |
+| Claude config changed | Any file under `.claude/` edited: `settings*.json`, `agents/*`, `hooks/*`, `commands/*`, `rules/*` |
+| MCP wiring changed | `.mcp.json` or `mcpServers` blocks edited |
+| Kit install/update ran | After `npx claude-code-superkit` or `setup.sh` completes |
+
+For application-code security (auth files, new dependencies, CI/CD configs), rely on **security-scanner** — /review and the /dev Review phase auto-dispatch it for exactly those changes.
 
 **Behavior:**
-- `/security-scan` runs AgentShield on `.claude/` configuration; auto-triggered scans use the plain scan — no `--fix`, no `--opus`
+- Auto-triggered scans use the plain scan — no `--fix`, no `--opus`
 - AgentShield grades on its own `critical / high / medium / low` scale — relay it verbatim, never remap to the kit's CRITICAL / WARNING / SUGGESTION
 - For auto-triggered scans, report only `critical` and `high` findings
 - Do NOT auto-fix security issues — always report to the user first (Hard Rule 4)
@@ -117,4 +121,4 @@ When multiple auto-triggers fire, run in this order:
 4. `/security-scan` (catches vulnerabilities)
 5. `/audit --health` (overall health, lowest priority)
 
-Early stop: if **fewer than 3 files** changed AND every command already run in this order reported zero issues → skip the remaining lower-priority commands. Exception: a command whose own trigger condition matched still runs (e.g., `/security-scan` after an auth-file edit).
+Early stop: if **fewer than 3 files** changed AND every command already run in this order reported zero issues → skip the remaining lower-priority commands. Exception: a command whose own trigger condition matched still runs (e.g., `/security-scan` after a `.claude/` config edit).

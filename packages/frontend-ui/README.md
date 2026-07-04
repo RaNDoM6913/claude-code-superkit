@@ -14,6 +14,8 @@ Self-contained package for **2D frontend UI design & polish**. Sibling to `front
 | Type | Count | Files |
 |------|-------|-------|
 | Agents | 6 | `ui-reviewer`, `ui-typography-reviewer`, `ui-color-reviewer`, `ui-motion-reviewer`, `ui-interaction-reviewer`, `ui-design-critic` |
+
+> **Name precedence:** the core package also ships a (simpler) `ui-reviewer`. On a fresh install with both selected, this package's umbrella copies later and wins — intended, it is the richer superset. In merge mode a pre-existing `ui-reviewer.md` is kept.
 | Rules | 7 | `frontend-design-aesthetics`, `typography-guidelines`, `color-and-contrast`, `spatial-and-layout`, `motion-and-animation`, `interaction-polish`, `ui-anti-patterns` |
 | Hooks | 3 | `ui-banned-fonts-check`, `ui-color-check`, `ui-animation-easing-check` |
 | Skills | 1 | `impeccable-craft` (user-invocable, opt-in) |
