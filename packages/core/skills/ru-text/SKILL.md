@@ -1,7 +1,7 @@
 ---
 name: ru-text
 description: Russian typography and editorial standards — quotes, dashes, NBSP, number formatting, info-style anti-patterns. Use when writing, editing, or reviewing Russian text (UI copy, articles, emails, marketing, microcopy)
-tokens: 1768
+tokens: 1771
 user-invocable: false
 ---
 
@@ -134,7 +134,7 @@ Example strings are shown in backticks (`` ` ``); the backticks are delimiters, 
 
 Before delivering Russian text, confirm every box (`␣` = NBSP):
 
-- [ ] Quotes: «␣» primary, „␣“ nested (U+201C closing, never ASCII)
+- [ ] Quotes: «ёлочки» primary, „лапки“ nested (U+201C closing, never ASCII)
 - [ ] Dashes: — in text, – in ranges, - only in compounds; max 1–2 per paragraph
 - [ ] NBSP after single-letter prepositions (в, к, с, о, у, и, а)
 - [ ] Ellipsis: … (single char)

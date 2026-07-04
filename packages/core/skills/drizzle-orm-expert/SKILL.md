@@ -93,7 +93,10 @@ export const postsRelations = relations(posts, ({ one }) => ({
 
 // Initialize client WITH schema so db.query.* works:
 import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
 import * as schema from './schema';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 export const db = drizzle(pool, { schema });
 ```
 
@@ -103,7 +106,7 @@ Many-to-many requires an explicit junction table — Drizzle has no implicit joi
 
 ### SQL-like builder
 ```typescript
-import { eq, and, desc, count } from 'drizzle-orm';
+import { eq, and, desc } from 'drizzle-orm';
 
 const recent = await db
   .select({ id: posts.id, title: posts.title, author: users.email })
@@ -119,8 +122,6 @@ const recent = await db
 Prefer the callback form `(table, { eq }) => ...` — it avoids importing and shadowing the schema's table symbols:
 
 ```typescript
-import { users, posts } from './schema';
-
 const activeUsers = await db.query.users.findMany({
   where: (user, { eq }) => eq(user.role, 'user'),
   orderBy: (user, { desc }) => desc(user.createdAt),
@@ -158,9 +159,13 @@ await db.insert(users)
 ## Transactions
 
 ```typescript
+import { sql } from 'drizzle-orm';
+
 await db.transaction(async (tx) => {
-  await tx.insert(orders).values(order);
-  await tx.update(inventory).set({ stock: sql`stock - 1` });
+  const [author] = await tx.insert(users).values({ email: 'A@B.C' }).returning();
+  await tx.update(users)
+    .set({ email: sql`lower(${users.email})` })   // sql`` escape hatch, columns interpolate safely
+    .where(eq(users.id, author.id));
   // any throw → rollback
 });
 ```
@@ -200,7 +205,7 @@ export default {
 ## Type Inference
 
 ```typescript
-import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
+import type { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 type User = InferSelectModel<typeof users>;
 type NewUser = InferInsertModel<typeof users>;
 ```
@@ -230,6 +235,7 @@ export default async function Dashboard() {
 // Server Action
 'use server';
 import { db } from '@/db';
+import { users } from '@/db/schema';
 export async function createUser(formData: FormData) {
   await db.insert(users).values({ email: formData.get('email') as string });
 }

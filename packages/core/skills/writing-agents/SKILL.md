@@ -1,7 +1,7 @@
 ---
 name: writing-agents
 description: How to write Claude Code agents — playbook skeleton, canonical severity/confidence enums, Evidence Gate, Output Contract, dispatch patterns
-tokens: 2320
+tokens: 2453
 user-invocable: false
 ---
 
@@ -114,6 +114,8 @@ A clean review (0 findings) is a valid result — do not manufacture findings.
 Not all boxes checked → say what is missing; do not claim completion.
 ```
 
+Multi-phase reviewers may also end with a "Done ONLY when" checklist of per-phase completion criteria — the pattern `critic.md` and `code-reviewer.md` use.
+
 ## Dispatch Priority
 
 If a **stack-specific reviewer** exists (e.g., `go-reviewer` for `*.go`), it is dispatched **instead of** `code-reviewer` for matching files. `code-reviewer` covers files no specialist claims.
@@ -149,6 +151,15 @@ Reviews Dockerfiles for security and build hygiene, producing evidence-gated fin
 ## Phase 0 — Load Project Context
 Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/architecture/deployment.md`.
 Use it to: learn base-image, registry, and deploy conventions. Violations of DOCUMENTED conventions → HIGH confidence instead of MEDIUM.
+
+## Evidence Gate
+Report a finding ONLY if all four hold:
+1. **Citation** — exact `file:line` you Read in this session, never from memory.
+2. **Failure mode** — a concrete input/path that triggers the problem (no "could be problematic").
+3. **Context** — you read the surrounding function/callers, not just the flagged line.
+4. **Severity** you can defend to a skeptic.
+If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
+A clean review (0 findings) is a valid result — do not manufacture findings.
 
 ## Process
 1. **Locate** — Glob `**/Dockerfile*`, Read each hit. Done when: every file Read or reported `NOT FOUND`.

@@ -1,7 +1,7 @@
 ---
 name: redis-patterns
 description: Redis patterns — caching (cache-aside, write-through), sessions, pub/sub, work queues, distributed locks, data structures (sorted sets, streams, hashes). Covers ioredis, node-redis, Redis 7+. Use when designing Redis usage in Node.js/TypeScript apps
-tokens: 2000
+tokens: 2081
 user-invocable: false
 ---
 
@@ -69,7 +69,7 @@ redis.on('ready', () => logger.info('redis ready'));
 ## Cache-Aside Pattern
 
 ```typescript
-async function getUser(id: string): Promise<User> {
+async function getUser(id: string): Promise<User | null> {
   const key = `cache:user:${id}`;
   const cached = await redis.get(key);
   if (cached) return JSON.parse(cached);
@@ -145,7 +145,7 @@ const results = await redis
   .exec();
 
 // Multi/Exec — atomic transaction (all-or-nothing)
-const results = await redis
+const txResults = await redis
   .multi()
   .decrby('inventory:x', 1)
   .lpush('orders', orderId)

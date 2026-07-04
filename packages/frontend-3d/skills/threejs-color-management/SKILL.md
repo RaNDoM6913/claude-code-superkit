@@ -100,7 +100,7 @@ Global setting. Compresses HDR values into displayable range.
   map={screenTexture}
   toneMapped={false}
 />
-// + texture.colorSpace = THREE.SRGBColorSpace
+// + screenTexture.colorSpace = THREE.SRGBColorSpace
 // + Canvas gl={{ toneMapping: THREE.NoToneMapping }} if UI is the primary visual
 ```
 

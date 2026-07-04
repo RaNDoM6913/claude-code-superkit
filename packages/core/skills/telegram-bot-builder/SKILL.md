@@ -90,6 +90,7 @@ function pageKeyboard(items, page, perPage) {
 bot.action(/^page:(\d+)$/, async (ctx) => {
   await ctx.answerCbQuery();                               // Hard Rule 2
   const page = Number(ctx.match[1]);
+  const items = await listItems();                         // your data source
   await ctx.editMessageText('Page ' + (page + 1), pageKeyboard(items, page, 5));
 });
 ```

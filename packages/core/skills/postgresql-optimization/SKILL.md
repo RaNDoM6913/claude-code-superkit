@@ -1,7 +1,7 @@
 ---
 name: postgresql-optimization
 description: PostgreSQL optimization — query tuning, indexing, EXPLAIN analysis, configuration, maintenance, and monitoring. Use when slow queries, missing indexes, vacuum lag, or performance bottlenecks are suspected
-tokens: 1670
+tokens: 1994
 user-invocable: false
 ---
 
@@ -89,7 +89,7 @@ CREATE INDEX CONCURRENTLY idx_orders_user_created
 ## Query Optimization
 
 - Rewrite subqueries as JOINs where the planner struggles
-- Use CTEs (`WITH ...`) for readability and sequential execution control
+- Use CTEs (`WITH ...`) for readability; add `AS MATERIALIZED` when you need an optimization fence — PostgreSQL 12+ inlines plain CTEs
 - Cursor-based pagination for large feeds (offset is O(n))
 - Use `LIMIT` in subqueries to bound work
 - Avoid functions on indexed columns in `WHERE` — prevents index use

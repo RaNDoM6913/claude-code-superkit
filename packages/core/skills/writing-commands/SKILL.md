@@ -1,7 +1,7 @@
 ---
 name: writing-commands
 description: How to write Claude Code slash commands — canonical skeleton, orchestrator pattern, agent dispatch, auto-detection
-tokens: 1736
+tokens: 1771
 user-invocable: false
 ---
 
@@ -40,7 +40,7 @@ allowed-tools: Bash, Read, Edit, Write, Glob, Grep, Agent  # only what this comm
 
 Body, in this order:
 
-1. **Title + Role** — 1–2 sentences: what it does, when it stops early.
+1. **Title + Role** — 1–2 sentences: one primary purpose per command — what it does, when it stops early.
 2. **Hard Rules** — ≤7 MUST/NEVER bullets; include destructive-action gates where relevant.
 3. **Numbered Steps** — Step 1, Step 2, … each with concrete actions and `Done when:`. `$ARGUMENTS` sits in the parse step (`Arguments: $ARGUMENTS`).
 4. **Output template** — exact fenced template the report must follow, plus a "Done ONLY when" checklist for longer commands.
@@ -156,8 +156,9 @@ Done when: mode fixed.
 
 1. `go.mod` exists → run `gofmt -l . && go vet ./...`
 2. `tsconfig.json` exists → run `npx tsc --noEmit && npx eslint .`
+3. Neither exists → report "No supported linter detected." and stop.
 
-Done when: every detected stack's linter ran and its real output was seen.
+Done when: every detected stack's linter ran and its real output was seen (or the no-linter case was reported).
 
 ## Step 3 — Report
 
