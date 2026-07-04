@@ -160,3 +160,58 @@ npm install gsap
 ---
 
 *Add recommendations via PR or issue.*
+
+## Ecosystem & Companions (moved from README)
+
+Skills, MCP servers, design/asset resources, and repos that complement Superkit's orchestration — Superkit provides the pipeline (hooks, commands, `/dev`); these add depth.
+
+### Skills (install separately)
+
+| Skill | What | Link |
+|-------|------|------|
+| ui-ux-pro-max | Design system generation (161 rules, 71 styles, 73 fonts) | [GitHub](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
+| app-store-preflight | iOS/macOS App Store review validator | [GitHub](https://github.com/truongduy2611/app-store-preflight-skills) |
+| app-store-screenshots | AI-generated App Store screenshots — device frames + marketing copy (3.2K stars) | [GitHub](https://github.com/ParthJadhav/app-store-screenshots) |
+
+### Community skill packs (install via `npx skills add`)
+
+| Source | Skills | Count |
+|--------|--------|-------|
+| greensock/gsap-skills | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
+| freshtechbro/claudedesignskills | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
+| Leonxlnx/taste-skill | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
+
+### MCP servers (add to `.mcp.json`)
+
+| Server | What | Package |
+|--------|------|---------|
+| 21st.dev magic | UI component search/generation | `@21st-dev/magic@latest` |
+| shadcn | shadcn/ui component library | `shadcn-mcp@latest` |
+| gsap-master | Full GSAP API, intent analysis, production patterns | `bruzethegreat-gsap-master-mcp-server@2.2.0` |
+| playwright | Browser automation/screenshots | Plugin (built-in) |
+| context7 | Library docs lookup | Plugin (built-in) |
+
+### Design & asset resources
+
+- **[React Bits](https://reactbits.dev)** — 110+ animated React components, copy-paste or `jsrepo` install · open-source (MIT + Commons Clause) · [DavidHDev/react-bits](https://github.com/DavidHDev/react-bits)
+- **[Unicorn.Studio](https://www.unicorn.studio)** — no-code WebGL/shader editor, ship premium hero sections without writing GLSL · freemium
+- **[Cosmos](https://www.cosmos.so)** — curated visual moodboards with color/vibe search · freemium
+- **[Free Faces](https://www.freefaces.gallery)** — curated directory of free typefaces · licenses vary per font, check each
+- **[Pixolite](https://pixolite.ru)** — free 3D icons, letters (EN/RU), backgrounds and textures (RU-language site) · verify terms before commercial use
+- **[21st.dev](https://21st.dev)** — AI agent deployment platform + community UI component library
+- **[SkillsMP](https://skillsmp.com)** — 500K+ agent-skill marketplace with keyword + AI semantic search API
+
+### Repos & platforms
+
+| Resource | What | Link |
+|----------|------|------|
+| oh-my-claudecode | TypeScript plugin with 19 agents, 31 skills, smart model routing, auto-learner, HUD statusline | [GitHub](https://github.com/Yeachan-Heo/oh-my-claudecode) |
+| Get Shit Done (gsd-pi) | Meta-prompting framework with plan validation, goal-backward verification (gsd-2 now archived → open-gsd/gsd-pi) | [GitHub](https://github.com/open-gsd/gsd-pi) |
+| Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
+| Awesome MCP Servers | Curated list of MCP servers — 300+ servers across all categories | [GitHub](https://github.com/punkpeye/awesome-mcp-servers) |
+
+### Language-specific skill packs
+
+| Plugin | Focus | Skills | Install |
+|--------|-------|--------|---------|
+| [cc-skills-golang](https://github.com/samber/cc-skills-golang) | Production-grade Go patterns | 40 skills | `npx skills add https://github.com/samber/cc-skills-golang --skill '*'` |

@@ -10,9 +10,6 @@
 ![Hardened by](https://img.shields.io/badge/prompts_hardened_by-Claude_Fable_5-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.5-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
-**Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
-**All agents on Opus. Maximum accuracy. Zero compromises.**
-
 [🚀 Quick Start](#-installation) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
 </div>
@@ -51,9 +48,9 @@ AgentShield (102 rules) + Red/Blue adversarial audit.
 </td>
 <td width="50%">
 
-### 🔎 SkillsMP Integration
-Search 500K+ community skills before building.
-Keyword or AI semantic search via API.
+### 🤖 GAN Adversarial Loop
+Optional three-agent harness: planner → generator → evaluator.
+Your feature is attacked against binary rubrics before it ships (Playwright required).
 
 </td>
 </tr>
@@ -76,22 +73,48 @@ Every prompt in the kit was engineered by **Claude Fable 5** — Anthropic's Myt
 
 Contracts instead of vibes — Opus executes best when every judgment call is a decision table and every output has an exact contract.
 
+## 🔄 How `/dev` Works
+
+<p align="center">
+  <img src="docs/dev-flow.svg" alt="/dev — 16-phase development orchestrator: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
+</p>
+
+**Example:** `/dev add rate limiting to login`
+1. Loads CLAUDE.md + architecture docs (Phase 0)
+2. Plans + validates the plan (plan-checker gate)
+3. Implements behind a sprint contract
+4. Reviewers fan out (security-scanner, ts-reviewer) in parallel
+5. goal-verifier checks the change against the original goal
+6. Commits only when verification passes with fresh evidence
+
 ## 📦 What's Inside
 
 **One kit, two harnesses** — full parity for Claude Code (Opus 4.8) and Codex CLI (gpt-5.5, xhigh).
 
-| Component | Count | Description |
-|-----------|-------|-------------|
-| **Core Agents** | 31 | Code review, security, testing, audit, debugging, health, tree gen, DB review, architecture, docs review, plan validation, goal verification, evaluation, AI slop cleanup, critic, visual review, comment-rot analyzer, silent-failure-hunter, **minimal-change-engineer**, **reality-checker**, **codebase-onboarding-engineer**, **behavioral-nudge-engine** — all on **Opus** |
-| **Stack Agents** | 19 | Go (6: reviewer, error, concurrency, performance, modernizer, observability), TypeScript, Python, Rust, Frontend-3D (4: presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer), **Frontend-UI (6: ui-reviewer umbrella + typography / color / motion / interaction / design-critic)** |
-| **GAN Agents** | 3 | **gan-planner**, **gan-generator**, **gan-evaluator** — adversarial verification loop (optional package, requires Playwright) |
-| **Extra Agents** | 3 | Bot reviewer (Telegram/Discord/Slack), design system reviewer, red-blue auditor |
+| Component | Count | What you get |
+|-----------|-------|--------------|
+| **Core Agents** | 31 | Code review, security, testing, audit, debugging, docs, planning gates (plan-checker · evaluator · goal-verifier · critic), health, scaffolding — all on **Opus** |
+| **Stack Agents** | 19 | Go ×6 · TypeScript · Python · Rust · Frontend-3D ×4 · Frontend-UI ×6 |
+| **GAN Agents** | 3 | planner → generator → evaluator adversarial loop (optional package, requires Playwright) |
+| **Extra Agents** | 3 | bot-reviewer (Telegram/Discord/Slack) · design-system-reviewer · red-blue-auditor |
 | **Extra Skills** | 1 | [SkillsMP](https://skillsmp.com) search — 500K+ community skills marketplace |
-| **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, `/capture-screen` |
-| **Hooks** | 42 shipped + 2 internal + Stop | 26 shipped core (incl. intake-classifier.py, gateguard pair, edit-streak, audit-trail, audit-settings CVE-2025-59536, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, /dev hard-enforce trio) + 9 stack (Go error/context/safety/golangci-lint + format-on-edit per language) + 4 frontend-3d (gsap/r3f/tailwind/bundle-size) + 3 frontend-ui (banned-fonts/color/animation-easing) |
-| **Rules** | 19 shipped + 1 internal | 7 core (coding style, security path-scoped, git workflow, documentation, auto dev workflow, auto command triggers, frontend-aesthetics path-scoped) + superkit-integrity (internal) + 2 stack (go-conventions, go-safety) + 3 frontend-3d (gsap-conventions, threejs-conventions, frontend-aesthetics-3d) + 7 frontend-ui (frontend-design-aesthetics, typography-guidelines, color-and-contrast, spatial-and-layout, motion-and-animation, interaction-polish, ui-anti-patterns) + 1 Codex `default.rules` (approval policy DSL) |
-| **Skills** | 11 core + 6 frontend-3d + 1 frontend-ui + 3 GAN + 1 extra | project-architecture, project-scanner, writing-agents/commands/hooks/skills, **telegram-bot-builder**, **nextjs-supabase-auth**, **drizzle-orm-expert**, **ru-text** (Russian typography), **postgresql-optimization**, **redis-patterns** + threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement + impeccable-craft + gan-planner/generator/evaluator + SkillsMP search |
-| **Plugins** | 4 base + 3 optional | superpowers, github, context7, code-review + code-simplifier, playwright, frontend-design |
+| **Commands** | 16 | `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/pair` + 10 more |
+| **Hooks** | 42 shipped + 2 internal + Stop | 26 core · 9 stack · 4 frontend-3d · 3 frontend-ui — git safety, formatting, discipline, /dev enforcement, CVE-2025-59536 guard |
+| **Rules** | 19 shipped + 1 internal | 7 core · 2 stack · 3 frontend-3d · 7 frontend-ui + Codex `default.rules` approval-policy DSL |
+| **Skills** | 11 core + 6 frontend-3d + 1 frontend-ui + 3 GAN + 1 extra | authoring meta-skills, stack knowledge (Telegram bots · Supabase auth · Drizzle · PostgreSQL · Redis · Russian typography), 3D pipeline, GAN mirrors |
+| **Plugins** | 4 base + 3 optional | superpowers · github · context7 · code-review (+ code-simplifier · playwright · frontend-design) |
+
+<details>
+<summary><b>Full component list</b> — every agent, command, hook, rule, and skill by name</summary>
+
+- **Core agents (31):** code-reviewer, security-scanner, silent-failure-hunter, comment-rot-analyzer, ai-slop-cleaner, database-reviewer, migration-reviewer, docs-reviewer, api-contract-sync, ui-reviewer, visual-reviewer, test-generator, e2e-test-generator, audit-backend, audit-frontend, audit-infra, health-checker, pre-deploy-validator, dependency-checker, debug-observer, tree-generator, scaffold-endpoint, architect, plan-checker, evaluator, goal-verifier, critic, minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
+- **Stack agents (19):** go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer, presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer, ui-reviewer (umbrella), ui-typography-reviewer, ui-color-reviewer, ui-motion-reviewer, ui-interaction-reviewer, ui-design-critic
+- **Commands (16):** `/dev`, `/review`, `/audit`, `/workflow`, `/superkit-init`, `/superkit-evolve`, `/test`, `/lint`, `/migrate`, `/new-migration`, `/commit`, `/docs-init`, `/security-scan`, `/benchmark`, `/pair`, `/capture-screen`
+- **Hooks (42 shipped):** 26 core (incl. intake-classifier.py, gateguard pair, edit-streak, audit-trail, audit-settings CVE-2025-59536, plan-completion-gate, user-intent-detect, subagent-stop-validate, compact-state-inject, /dev hard-enforce trio) · 9 stack (Go error/context/safety/golangci-lint + format-on-edit per language) · 4 frontend-3d (gsap/r3f/tailwind/bundle-size) · 3 frontend-ui (banned-fonts/color/animation-easing)
+- **Rules (19 shipped):** 7 core (coding style, security, git workflow, documentation, dev workflow, auto command triggers, frontend-aesthetics) · 2 Go · 3 frontend-3d (gsap/threejs/aesthetics-3d) · 7 frontend-ui (design-aesthetics, typography, color, spatial, motion, interaction, anti-patterns)
+- **Skills (22):** project-architecture, project-scanner, writing-agents/commands/hooks, telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns · threejs-color-management, r3f-scroll-driven-3d, gltf-debugging, html-to-3d-texture, product-3d-lighting, output-enforcement · impeccable-craft · gan-planner/generator/evaluator · skillsmp-search
+
+</details>
 
 ## 🆕 What's New
 
@@ -108,20 +131,6 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 - 🔜 **Codex mirrors next** — beyond the already-synced `/dev` trio + GAN, the remaining Codex skill mirrors are scheduled for the next release.
 
 Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0)
-
-## 🔄 How `/dev` Works
-
-<p align="center">
-  <img src="docs/dev-flow.svg" alt="/dev — 16-phase development orchestrator: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
-</p>
-
-**Example:** `/dev add rate limiting to login`
-1. Loads CLAUDE.md + architecture docs (Phase 0)
-2. Plans + validates the plan (plan-checker gate)
-3. Implements behind a sprint contract
-4. Reviewers fan out (security-scanner, ts-reviewer) in parallel
-5. goal-verifier checks the change against the original goal
-6. Commits only when verification passes with fresh evidence
 
 ## 🚀 Installation
 
@@ -197,22 +206,16 @@ Or run `bash setup.sh --codex` from a cloned superkit repo to install both Claud
 | Command | What it does |
 |---------|-------------|
 | `/dev <task>` | 16-phase orchestrator: read-docs → understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
-| `/workflow <template>` | Predefined workflows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
-| `/audit` | Parallel audit: up to 4 agents (frontend, backend, infra, security) |
-| `/audit --health` | Quick health dashboard — dispatches only health-checker (~30s vs ~5min) |
-| `/test` | Auto-detect stack and run tests |
-| `/lint` | Auto-detect stack and run linters |
-| `/commit` | Conventional commit with secret scanning |
-| `/new-migration` | Create migration file pair (up + down) |
-| `/migrate` | Apply or rollback database migrations |
-| `/superkit-init` | Intelligent project setup: scan codebase → generate filled docs → configure rules with real paths |
-| `/superkit-evolve` | Incremental doc update: detect drift (migrations, trees, missing docs) → fix |
-| `/docs-init` | Scaffold architecture documentation (redirects to `/superkit-init`) |
-| `/security-scan` | Run security scan on .claude/ configs |
-| `/benchmark` | Run Go benchmarks with benchstat comparison |
+| `/audit [--health]` | Parallel audit: up to 4 agents (frontend, backend, infra, security); `--health` = 30-second dashboard |
+| `/workflow <template>` | Predefined flows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
+| `/superkit-init` | Intelligent setup: scan codebase → generate **filled** docs → configure rules with real paths |
+| `/superkit-evolve` | Detect and fix documentation drift (stale counters, missing docs, outdated trees) |
 | `/pair` | AI pair programming — Driver, Navigator, TDD, Review, Debug modes |
-| `/capture-screen` | Capture React components as PNG textures for 3D model screens |
+| `/security-scan` | AgentShield scan of `.claude/` configs (102 rules) |
+| `/commit` | Conventional commit with secret scanning |
+
+All 16 commands with flags and examples: **[Chapter 1](docs/guide/01-getting-started.md)**.
 
 ## 🔧 Hook Profiles
 
@@ -227,10 +230,6 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 | `strict` | Everything + go vet on every edit + stop verification |
 
 Disable specific hooks without editing `settings.json`: `CLAUDE_DISABLED_HOOKS=hook1,hook2`. Full env-var reference: **[Chapter 15](docs/guide/15-env-vars-and-hook-profiles.md)**.
-
-## ❓ Troubleshooting
-
-See [TROUBLESHOOTING.md](TROUBLESHOOTING.md) for common issues, platform-specific guidance, and FAQ.
 
 ## 🛡️ Security
 
@@ -260,98 +259,25 @@ Or use the built-in command: `/security-scan`.
 
 CI integration included — see `.github/workflows/security.yml`.
 
-## 🎨 Frontend Development
+## 🎨 Frontend Packages
 
-Two sibling self-contained packages covering the full frontend surface — polished product UIs *(frontend-ui)* and scroll-driven 3D experiences *(frontend-3d)*. Install one or both during `bash setup.sh`. Both run entirely on auto-dispatch: Claude routes to the right reviewer based on the files you're editing, no slash commands needed.
+Two self-contained sibling packages — install one or both during `bash setup.sh`. Both run entirely on auto-dispatch: rules load only when you edit matching files, so the kit stays weightless on backend work.
 
----
+### 🖌️ `frontend-ui` — 2D UI & polish
 
-### 🖌️ `frontend-ui` — 2D UI & Polish
+Six reviewers (umbrella + typography / color / motion / interaction / design-critic), seven path-scoped rules, three advisory hooks, and the opt-in **impeccable-craft** shape-then-build skill. The stack that stops AI-reflex design: banned-font detection, OKLCH color discipline, Emil Kowalski's 4-question animation framework, an 11-item reflex audit with hard thresholds.
 
-Production-grade reviewers for typography, color, motion, and interaction polish. Rules load only when you edit `.tsx`/`.jsx`/`.css`/`.scss`/`.html`/`.vue` files, so the kit stays weightless on backend work.
+**6 agents · 7 rules · 3 hooks · 1 skill** — full reference: [docs/FRONTEND-UI.md](docs/FRONTEND-UI.md) · [Chapter 14](docs/guide/14-frontend-ui.md) · Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill)
 
-```bash
-bash setup.sh
-# Select "Frontend UI" when prompted for stacks
-```
+### 🎬 `frontend-3d` — scroll-driven 3D & animation
 
-#### 🔍 Agents (6)
+Four reviewers (GSAP ScrollTrigger presentations, R3F scenes, 3D UI design, frontend perf), six skills distilled from 12+ hours of real debug pain (texture color distortion, timeline compression, UV mismatches), four hooks, three rules, and `/capture-screen` for turning React components into 3D-model textures.
 
-- **ui-reviewer** — umbrella dispatcher, 11-item reflex audit, delegates to the 5 specialists below
-- **ui-typography-reviewer** — 4-step font-selection procedure, modular scale, `reflex_fonts_to_reject` list, line-height/length, font-loading hygiene
-- **ui-color-reviewer** — OKLCH over HSL, tinted neutrals, palette cohesion, theme-by-use-context decision table, WCAG/APCA contrast
-- **ui-motion-reviewer** — Emil Kowalski's 4-question animation framework, custom cubic-bezier constants, duration table, spring vs duration, reduced-motion
-- **ui-interaction-reviewer** — buttons (`:active`, hit targets), modals (transform-origin, focus trap), forms (validation timing), focus-visible, loading patterns, microcopy
-- **ui-design-critic** — holistic gestalt critique (*"does it feel designed?"*), narrative output, reflex audit scaled across the whole diff
+**4 agents · 6 skills · 4 hooks · 3 rules · 1 command** — full reference: [docs/FRONTEND-3D.md](docs/FRONTEND-3D.md) · [Chapter 13](docs/guide/13-frontend-3d.md)
 
-#### 📏 Rules (7) — path-scoped, zero main-context tax
+## 📚 Documentation, Showcase & Ecosystem
 
-- **frontend-design-aesthetics** — anti-slop, anti-center, anti-generic UI
-- **typography-guidelines** — font-selection procedure + banned-fonts list (Inter, DM Sans, Fraunces, etc.)
-- **color-and-contrast** — OKLCH, tinted neutrals, theme decision table
-- **spatial-and-layout** — 4pt scale, rhythm, container queries
-- **motion-and-animation** — custom easing constants, duration table, 4-question framework
-- **interaction-polish** — buttons, modals, drawers, forms, focus, loading, empty states, microcopy
-- **ui-anti-patterns** — banned fonts, colors, layouts, motion, interactions
-
-#### 🪝 Hooks (3) — advisory, triggered on save
-
-- **ui-banned-fonts-check** — detects `Inter`, `DM Sans`, `Fraunces`, and other reflex-reject families
-- **ui-color-check** — pure `#000`/`#fff`, purple→blue gradients, gradient text, 3+ `hsl()` without `oklch()`
-- **ui-animation-easing-check** — `ease-in` on UI, `transition: all`, `scale(0)` entry, layout-property animation
-
-#### 🛠️ Skill (opt-in)
-
-- **impeccable-craft** — 4-stage shape-then-build flow: Shape → Refine → Implement → Polish. For building UI from scratch with user check-ins at drift points.
-
-Full reference: **[docs/FRONTEND-UI.md](docs/FRONTEND-UI.md)** · Guide: **[Chapter 14](docs/guide/14-frontend-ui.md)** · Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill)
-
----
-
-### 🎬 `frontend-3d` — Scroll-driven 3D & Animation
-
-Production-grade reviewers for scroll-driven product showcases with GSAP ScrollTrigger, React Three Fiber, and Three.js. Built from 12+ hours of battle-tested debug experience — texture color distortion, GSAP timeline compression, UV mapping mismatches, Tailwind v3/v4 drift.
-
-```bash
-bash setup.sh
-# Select "Frontend 3D" when prompted for stacks
-```
-
-#### 🔍 Agents (4)
-
-- **presentation-reviewer** *(16 checks)* — GSAP ScrollTrigger, phone frames, combined sections, 3D textures
-- **r3f-scene-reviewer** *(15 checks)* — color management, performance, GLB handling, R3F patterns
-- **ui-design-reviewer** *(16 checks)* — typography, color, layout, motion, states, glassmorphism
-- **frontend-perf-reviewer** *(12 checks)* — bundle size, lazy loading, CSS containment, web vitals
-
-#### 📚 Skills (6)
-
-- **threejs-color-management** — sRGB vs Linear, toneMapping, debug checklist
-- **r3f-scroll-driven-3d** — GSAP → Zustand → R3F bridge pattern
-- **gltf-debugging** — runtime GLB inspection, UV debugging
-- **html-to-3d-texture** — capture HTML as PNG for 3D models
-- **product-3d-lighting** — studio lighting for product showcases
-- **output-enforcement** — anti-laziness, complete code generation
-
-#### 🪝 Hooks (4)
-
-- **gsap-pattern-check** — `scrub: true`, missing `invalidateOnRefresh`, no `tl.set` extension, no `gsap.context()`
-- **r3f-color-check** — deprecated `sRGBEncoding`, missing `colorSpace`, wrong material for screens
-- **tailwind-version-guard** — v3/v4 syntax mismatches (`@tailwind` vs `@import`, config format)
-- **bundle-size-warn** — heavy imports: moment, lodash, THREE namespace, MUI, antd, framer-motion
-
-#### 📏 Rules (3) & Command (1)
-
-- **gsap-conventions** — `scrub` as number, `invalidateOnRefresh`, `tl.set({},{},1.0)`, `gsap.context()` cleanup
-- **threejs-conventions** — `meshBasicMaterial` for screens, UV copy on texture swap, `getState()` in `useFrame`
-- **frontend-aesthetics-3d** — anti-center bias, spring physics, staggered reveals, 3D atmosphere
-- **`/capture-screen [port]`** — capture React components as PNG textures for 3D model screens (Playwright + sharp)
-
-Full reference: **[docs/FRONTEND-3D.md](docs/FRONTEND-3D.md)** · Guide: **[Chapter 13](docs/guide/13-frontend-3d.md)**
-
-## 🏗️ Showcase
-
-See [`packages/showcase/`](packages/showcase/) for a real production example — a production social app with 28 agents, 17 commands, 13 hooks, 11 skills, and 6 rules.
+**Guide:** 15 chapters + 3 worked examples — from first install to writing your own agents, hooks, and orchestrators.
 
 <details>
 <summary>📖 Documentation (15 chapters + 3 examples)</summary>
@@ -386,6 +312,8 @@ See [`packages/showcase/`](packages/showcase/) for a real production example —
 
 </details>
 
+**Showcase:** [`packages/showcase/`](packages/showcase/) — a real production social app's `.claude/` setup: 28 agents, 17 commands, 13 hooks, 11 skills, 6 rules.
+
 <details>
 <summary>🤝 Codex CLI Support</summary>
 
@@ -408,84 +336,23 @@ See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
 </details>
 
-## ⚡ Using with Superpowers Plugin
+### ⚡ Superpowers plugin
 
-This toolkit is **complementary** to the [Superpowers plugin](https://github.com/obra/superpowers):
-
-- **superkit** = infrastructure (agents, hooks, commands, review pipeline)
-- **superpowers** = process (TDD, debugging, brainstorming, verification)
-
-Install both for the complete experience.
+Superkit is **complementary** to [Superpowers](https://github.com/obra/superpowers): superkit = infrastructure (agents, hooks, commands, review pipeline), superpowers = process (TDD, debugging, brainstorming, verification). Install both.
 
 ### 🧩 Ecosystem & companions
 
-Skills, MCP servers, design/asset resources, and repos that complement Superkit's orchestration. Superkit provides the pipeline (hooks, commands, `/dev`); these add depth.
+Curated skills, MCP servers, design/asset resources, community repos, and language packs that pair well with Superkit live in **[docs/recommendations.md](docs/recommendations.md)** — including the [SkillsMP](https://skillsmp.com) 500K+ skills marketplace searchable via the built-in `skillsmp-search` skill.
 
-<details>
-<summary><b>Expand — skills · MCP servers · design & assets · repos · language packs</b></summary>
+### 📎 More
 
-#### Skills (install separately)
-
-| Skill | What | Link |
-|-------|------|------|
-| ui-ux-pro-max | Design system generation (161 rules, 71 styles, 73 fonts) | [GitHub](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) |
-| app-store-preflight | iOS/macOS App Store review validator | [GitHub](https://github.com/truongduy2611/app-store-preflight-skills) |
-| app-store-screenshots | AI-generated App Store screenshots — device frames + marketing copy (3.2K stars) | [GitHub](https://github.com/ParthJadhav/app-store-screenshots) |
-
-#### Community skill packs (install via `npx skills add`)
-
-| Source | Skills | Count |
-|--------|--------|-------|
-| greensock/gsap-skills | gsap-core, timeline, scrolltrigger, plugins, utils, react, performance, frameworks | 8 |
-| freshtechbro/claudedesignskills | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
-| Leonxlnx/taste-skill | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
-
-#### MCP servers (add to `.mcp.json`)
-
-| Server | What | Package |
-|--------|------|---------|
-| 21st.dev magic | UI component search/generation | `@21st-dev/magic@latest` |
-| shadcn | shadcn/ui component library | `shadcn-mcp@latest` |
-| gsap-master | Full GSAP API, intent analysis, production patterns | `bruzethegreat-gsap-master-mcp-server@2.2.0` |
-| playwright | Browser automation/screenshots | Plugin (built-in) |
-| context7 | Library docs lookup | Plugin (built-in) |
-
-#### Design & asset resources
-
-- **[React Bits](https://reactbits.dev)** — 110+ animated React components, copy-paste or `jsrepo` install · open-source (MIT + Commons Clause) · [DavidHDev/react-bits](https://github.com/DavidHDev/react-bits)
-- **[Unicorn.Studio](https://www.unicorn.studio)** — no-code WebGL/shader editor, ship premium hero sections without writing GLSL · freemium
-- **[Cosmos](https://www.cosmos.so)** — curated visual moodboards with color/vibe search · freemium
-- **[Free Faces](https://www.freefaces.gallery)** — curated directory of free typefaces · licenses vary per font, check each
-- **[Pixolite](https://pixolite.ru)** — free 3D icons, letters (EN/RU), backgrounds and textures (RU-language site) · verify terms before commercial use
-- **[21st.dev](https://21st.dev)** — AI agent deployment platform + community UI component library
-- **[SkillsMP](https://skillsmp.com)** — 500K+ agent-skill marketplace with keyword + AI semantic search API
-
-#### Repos & platforms
-
-| Resource | What | Link |
-|----------|------|------|
-| oh-my-claudecode | TypeScript plugin with 19 agents, 31 skills, smart model routing, auto-learner, HUD statusline | [GitHub](https://github.com/Yeachan-Heo/oh-my-claudecode) |
-| Get Shit Done (gsd-pi) | Meta-prompting framework with plan validation, goal-backward verification (gsd-2 now archived → open-gsd/gsd-pi) | [GitHub](https://github.com/open-gsd/gsd-pi) |
-| Everything Claude Code | 28 agents, 125 skills, 60 commands — comprehensive harness performance system | [GitHub](https://github.com/affaan-m/everything-claude-code) |
-| Awesome MCP Servers | Curated list of MCP servers — 300+ servers across all categories | [GitHub](https://github.com/punkpeye/awesome-mcp-servers) |
-
-#### Language-specific skill packs
-
-| Plugin | Focus | Skills | Install |
-|--------|-------|--------|---------|
-| [cc-skills-golang](https://github.com/samber/cc-skills-golang) | Production-grade Go patterns | 40 skills | `npx skills add https://github.com/samber/cc-skills-golang --skill '*'` |
-
-</details>
+- **[Troubleshooting](TROUBLESHOOTING.md)** — common issues, platform-specific guidance, FAQ
+- **[Detailed install guide](docs/INSTALL-CLAUDE-CODE.md)** — step-by-step setup with prerequisites
+- **[Design & tool recommendations](docs/recommendations.md)** — App Store, 3D, and animation tools
 
 ## 👥 Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and hooks.
-
-## 📚 More
-
-- **[Design & tool recommendations](docs/recommendations.md)** — curated list of App Store, 3D, and animation tools
-- **[Troubleshooting](TROUBLESHOOTING.md)** — common issues and FAQ
-- **[Detailed install guide](docs/INSTALL-CLAUDE-CODE.md)** — step-by-step setup with prerequisites
 
 ## 📄 License
 
