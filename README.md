@@ -1,12 +1,13 @@
 # ⚡ claude-code-superkit
 
-> **The quality-first kit for Claude Code & Codex** — every one of 56 agents runs on Opus (now 4.8, 1M context). No Sonnet, no Haiku, no token-cost compromises on the work that ships your code.
+> **The quality-first kit for Claude Code & Codex** — every one of 56 agents runs on Opus (now 4.8, 1M context). No Sonnet, no Haiku, no token-cost compromises on the work that ships your code. Every prompt hardened for the Opus executor by **Claude Fable 5**, a tier above Opus.
 
 <div align="center">
 
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 ![Agents](https://img.shields.io/badge/56_agents-Opus_4.8-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
+![Hardened by](https://img.shields.io/badge/prompts_hardened_by-Claude_Fable_5-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-gpt--5.5-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 **Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI.**
@@ -60,6 +61,21 @@ Keyword or AI semantic search via API.
 
 ---
 
+## 🧬 Hardened by a Stronger Model
+
+Every prompt in the kit was engineered by **Claude Fable 5** — Anthropic's Mythos-class model, a tier above Opus — for a weaker model to execute reliably: Fable writes the instructions, Opus 4.8 runs them. In v1.5.0 all 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That was ~200 subagents with 0 unresolved escalations, closed by a kit-wide consistency sweep that came back clean. The result is a fixed countermeasure for each way a weaker executor tends to drift:
+
+| Opus failure mode | Countermeasure baked into every file |
+|-------------------|--------------------------------------|
+| Lost-in-the-middle | Hard Rules at the top + Recap at the bottom |
+| Premature "done" | Done-gates — generators verify artifacts on disk and run what they generate |
+| Invented APIs / files | Evidence Gates (findings only with `file:line` actually read; `NOT FOUND` over invention) + a real-API honesty pass |
+| Vague judgment calls | Decision tables with explicit defaults |
+| Vocabulary drift | One canonical severity / confidence / verdict enum set |
+| Fractional numbering | Linear phases / steps everywhere |
+
+Contracts instead of vibes — Opus executes best when every judgment call is a decision table and every output has an exact contract.
+
 ## 📦 What's Inside
 
 **One kit, two harnesses** — full parity for Claude Code (Opus 4.8) and Codex CLI (gpt-5.5, xhigh).
@@ -79,7 +95,7 @@ Keyword or AI semantic search via API.
 
 ## 🆕 What's New
 
-**v1.5.0 — the Opus 4.8 reliability rework** (see [CHANGELOG](CHANGELOG.md)):
+**v1.5.0 — the Opus 4.8 reliability rework, authored & adversarially verified by Claude Fable 5** (see [CHANGELOG](CHANGELOG.md)):
 
 - 🏗️ **The whole prompt surface, rebuilt** — all 117 files (56 agents, 16 commands, 22 skills, 20 rules) reworked against a single failure-mode playbook for the weaker executor: **Hard Rules** up top + a **Recap** at the bottom (lost-in-the-middle guard), an **exact fenced Output Contract** with a filled example, **Evidence Gates** (reviewers) / **Done-gates** (generators), canonical severity + confidence enums with LOW routed to Open Questions (never dropped), and ripgrep-safe two-pass greps.
 - 🔄 **`/dev` linearized 0–15** — phase numbering now matches the dev-flow SVGs exactly (fractional 1.5/2.1/… retired), with a single Skip Matrix, a per-phase Done-when, and gate verdicts consumed verbatim. `/review` reworked too — goal-verifier moved to its own verdict track and Step 2/3 dispatch resynced (silent-failure-hunter, comment-rot-analyzer, api-contract-sync, database-reviewer now actually fire).
@@ -91,25 +107,7 @@ Keyword or AI semantic search via API.
 - 🔬 **Adversarially verified, file by file** — every rewrite done by one model instance and verified by another (~200 subagents, 0 unresolved escalations), catching copy-paste-breaking code bugs and dropped checks before they shipped. Plus hook-coherence fixes: subagent-stop-validate no longer guards ghost agents, `/security-scan` triggers realigned to what the command actually audits, and the ui-reviewer name collision documented as intended precedence.
 - 🔜 **Codex mirrors next** — beyond the already-synced `/dev` trio + GAN, the remaining Codex skill mirrors are scheduled for the next release.
 
-- **v1.4.2** — Claude Opus 4.8 adaptation: `opus` alias auto-routed all 56 agents to 4.8; effort-dial convention, coverage-not-filtering reviewers, verifier discipline, 3 verified hook fixes, full Codex + showcase sync (see [CHANGELOG](CHANGELOG.md)).
-- **v1.4.1** — 20-defect bugfix patch (see [CHANGELOG](CHANGELOG.md)).
-
-<details>
-<summary><b>v1.4.0 features</b> (all available in v1.4.1)</summary>
-
-- 🧠 **3 cross-CLI specialist roles** — `minimal-change-engineer` (lines NOT written), `reality-checker` (defaults to NEEDS WORK, no fantasy A+), `codebase-onboarding-engineer` (30-60 min brief for unfamiliar repos). All on Opus + Codex SKILL.md mirrors.
-- 🎯 **GAN harness package** (`packages/gan/`) — three-agent adversarial loop (`gan-planner` → `gan-generator` → `gan-evaluator`) with Playwright + anti-AI-slop rubrics. Inspired by `affaan-m/everything-claude-code`. Optional install — requires Playwright.
-- 🤖 **Intake classifier hook** (Python) — scoring 0-15 on RU+EN action verbs, optional `gpt-5.5-nano` LLM fallback when confidence < 0.78. Emits intent + flags (should_edit, should_plan, subagents_authorized).
-- 🛡️ **GateGuard hooks** — require `Grep`/`Read` before `Edit`/`Write`/`Bash` (advisory by default, strict mode opt-in). Forces "establish facts before action" discipline.
-- 🔍 **silent-failure-hunter expanded** — 6 categories (empty handlers / promise suppression / fallback mask / log-and-forget / catch-all / linter suppression) + per-language fix examples (TS, Python, Go, Bash).
-- 🎨 **behavioral-nudge-engine agent** — retention psychology, habit loops, notification cadence design. Fogg Behavior Model + onboarding/re-engagement templates. Useful for social apps.
-- 📚 **TGApp / general skills bundle** — `telegram-bot-builder` (Telegraf/grammY/aiogram), `nextjs-supabase-auth` (App Router + RLS), `drizzle-orm-expert`, `ru-text` (Russian typography: «», NBSP, тире, ₽), `postgresql-optimization`, `redis-patterns`.
-- 🔒 **Codex `default.rules` DSL** — Starlark-like approval policy for Codex CLI (forbid `rm -rf /`, `sudo`, `dd`; allow `git`, `npm`, `systemctl restart`, `nginx reload`; prompt on force-push, hard reset). Adapted from VKirill/codex-starter-kit.
-- 🐹 **Go references +5** — `di-frameworks.md` (uber-fx / dig / wire comparison), `graphql-patterns.md` (gqlgen), `module-management.md`, `stay-updated.md` (Go release cadence), `standard-stdlib-now.md` (what stdlib now replaces). 24 → 29 files.
-
-Full release notes: [CHANGELOG.md](CHANGELOG.md). Previous releases: [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0).
-
-</details>
+Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0)
 
 ## 🔄 How `/dev` Works
 

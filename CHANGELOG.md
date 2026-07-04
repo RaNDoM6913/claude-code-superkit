@@ -2,6 +2,10 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [Unreleased]
+
+- **Docs (README):** added the "🧬 Hardened by a Stronger Model" story — the v1.5.0 rework was authored and adversarially verified by **Claude Fable 5** (Anthropic's Mythos-class tier above Opus), with the failure-mode → countermeasure table; new `prompts hardened by Claude Fable 5` badge; tagline and What's New lead updated accordingly. What's New trimmed to the current release only — older release summaries replaced by a "Previous releases" links line (history lives in CHANGELOG + GitHub Releases). GitHub About extended with the Fable mention (format spec in CLAUDE.md synced).
+
 ## [1.5.0] — 2026-07-04
 
 **The Opus 4.8 reliability rework.** Every prompt surface of the kit — 56 agents, 16 commands,

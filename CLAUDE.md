@@ -126,7 +126,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
 2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
 3. **CLAUDE.md** (this file) — counts table, structure section
-4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (N), commands (N), hooks (N), skills (N), and rules (N) for Claude Code and Codex CLI. All agents on Opus." — THIS IS MANDATORY AND MUST NOT BE SKIPPED
+4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (N), commands (N), hooks (N), skills (N), and rules (N) for Claude Code and Codex CLI. All agents on Opus 4.8 — every prompt hardened by Claude Fable 5." — THIS IS MANDATORY AND MUST NOT BE SKIPPED
 5. **GitHub Release** — `gh release edit` if release already exists for this version
 
 ### Tier 2 — Update when relevant:
