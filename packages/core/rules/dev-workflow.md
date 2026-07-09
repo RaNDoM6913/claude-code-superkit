@@ -56,7 +56,7 @@ Three hooks enforce this rule technically:
 - `presentation/` changes (see the frontend-3d package documentation)
 - `.claude/` and `memory/` changes
 
-**Override tags** (added to the commit message):
+**Override tags** — the tag must **open a line** of the commit message: either the very start of the subject line or on its own trailer line (`^\s*[tag…]`). A tag merely mentioned mid-sentence — or anywhere in the command outside the `-m` / `--message` payload — is **not** an override and does not bypass the gate. (This keeps the escape hatch intentional: a memory note that simply *describes* `[no-dev: …]` never triggers a bypass or a block.)
 
 | Tag | When to use | Rationale requirements |
 |-----|-------------|------------------------|

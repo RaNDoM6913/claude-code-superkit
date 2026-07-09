@@ -5,7 +5,10 @@ HOOK="$(cd "$(dirname "$0")/.." && pwd)/dev-required-on-commit.sh"
 TMP=$(mktemp -d); cd "$TMP"
 git init -q && git -c user.email=t@t -c user.name=t checkout -q -b main
 git -c user.email=t@t -c user.name=t commit -q --allow-empty -m "init"
-echo "x" > a.txt && git add a.txt
+# Stage a CODE file: the wip-on-main rule lives in the override branch, which
+# (after the D3 fix) is reached only for non-exempt code commits. A non-code
+# ([wip] on a .txt) commit now correctly short-circuits to exit 0.
+echo "package main" > a.go && git add a.go
 
 PAYLOAD='{"tool_name":"Bash","tool_input":{"command":"git commit -m \"[wip] x\""}}'
 OUT=$(printf '%s' "$PAYLOAD" | bash "$HOOK" 2>&1); RC=$?

@@ -160,9 +160,64 @@ else
   GIT_CMD_PREFIX="git"
 fi
 
+# ── Exempt-only short-circuit (D3 fix) ──
+# Determine whether the commit stages a non-exempt CODE file. This MUST run
+# before the override branch: an exempt-only commit (docs / .claude/ /
+# memory/ / tests / presentation/) needs neither /dev nor an override tag,
+# so we exit 0 here and a tag merely *mentioned* in such a commit's message
+# can never trigger a block. Depends only on $GIT_CMD_PREFIX and $COMMAND.
+# Preserves the counter — no reset_state, no log_cycle — exactly as the old
+# exempt exit did.
+STAGED=$($GIT_CMD_PREFIX diff --cached --name-only 2>/dev/null)
+if [ -z "$STAGED" ] && echo "$COMMAND" | grep -qE '(^|[[:space:]])(-a|--all)([[:space:]]|$)'; then
+  STAGED=$($GIT_CMD_PREFIX diff --name-only 2>/dev/null)
+fi
+
+HAS_CODE=false
+while IFS= read -r f; do
+  [ -z "$f" ] && continue
+  case "$f" in
+    *.go|*.ts|*.tsx|*.js|*.jsx|*.py|*.rs|*.sql|*.rb|*.java|*.kt|*.cs|*.swift|*.c|*.cpp|*.h|*.hpp)
+      # Skip test / presentation / .claude / memory / docs
+      case "$f" in
+        *_test.go|*test_*.go|*.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx) continue ;;
+        presentation/*|*/presentation/*) continue ;;
+        .claude/*|*/.claude/*|memory/*|*/memory/*) continue ;;
+      esac
+      HAS_CODE=true
+      break
+      ;;
+  esac
+done <<< "$STAGED"
+
+if [ "$HAS_CODE" = false ]; then
+  # Docs-only or exempt-only commit — no /dev required. Preserve counter.
+  exit 0
+fi
+
 # ── Override: explicit bypass tag in commit message (Task 12 validation) ──
 # Recognised tags: [quick] [no-dev] [trivial] [hotfix] [wip]
-MATCHED_TAG=$(echo "$COMMAND" | grep -oiE '\[(quick|no-dev|trivial|hotfix|wip)(:[^]]*)?\]' | head -1)
+#
+# INTENTIONAL match (D3 fix): only the commit-message payload is inspected,
+# and the tag must OPEN a line — the subject line or its own trailer line.
+# A tag mentioned mid-sentence (or anywhere OUTSIDE -m/--message, e.g. a
+# filename) does NOT count as an override. We isolate the message with '#'
+# parameter expansion (shortest match → first -m/--message flag), strip one
+# enclosing quote to expose the subject's first char, then require the tag
+# at a line start (^\s*[tag]). Rare no-space forms (-m"x") fall back to no
+# override — an intentional tag is cheap to re-add correctly.
+MSG_REGION="$COMMAND"
+case "$COMMAND" in
+  *--message=*)  MSG_REGION="${COMMAND#*--message=}" ;;
+  *--message\ *) MSG_REGION="${COMMAND#*--message }" ;;
+  *-m\ *)        MSG_REGION="${COMMAND#*-m }" ;;
+esac
+MSG_REGION="${MSG_REGION#\"}"
+MSG_REGION="${MSG_REGION#\'}"
+MATCHED_TAG=$(printf '%s\n' "$MSG_REGION" \
+  | sed -E 's/^[[:space:]]+//' \
+  | grep -oiE '^\[(quick|no-dev|trivial|hotfix|wip)(:[^]]*)?\]' \
+  | head -1)
 if [ -n "$MATCHED_TAG" ]; then
   if [ "$OVERRIDE_DISABLED" = true ]; then
     cat >&2 <<EOF
@@ -317,34 +372,9 @@ EOF
   exit 0
 fi
 
-STAGED=$($GIT_CMD_PREFIX diff --cached --name-only 2>/dev/null)
-if [ -z "$STAGED" ] && echo "$COMMAND" | grep -qE '(^|[[:space:]])(-a|--all)([[:space:]]|$)'; then
-  STAGED=$($GIT_CMD_PREFIX diff --name-only 2>/dev/null)
-fi
-
-HAS_CODE=false
-while IFS= read -r f; do
-  [ -z "$f" ] && continue
-  case "$f" in
-    *.go|*.ts|*.tsx|*.js|*.jsx|*.py|*.rs|*.sql|*.rb|*.java|*.kt|*.cs|*.swift|*.c|*.cpp|*.h|*.hpp)
-      # Skip test / presentation / .claude / memory / docs
-      case "$f" in
-        *_test.go|*test_*.go|*.test.ts|*.test.tsx|*.spec.ts|*.spec.tsx) continue ;;
-        presentation/*|*/presentation/*) continue ;;
-        .claude/*|*/.claude/*|memory/*|*/memory/*) continue ;;
-      esac
-      HAS_CODE=true
-      break
-      ;;
-  esac
-done <<< "$STAGED"
-
-if [ "$HAS_CODE" = false ]; then
-  # Docs-only or exempt-only commit — no /dev required. Preserve counter.
-  exit 0
-fi
-
 # ── Check edit budget ──
+# (Reached only for a genuine CODE commit with no valid override tag —
+#  the exempt-only short-circuit above already returned 0 for exempt files.)
 COUNT=$(cat "$COUNTER" 2>/dev/null || echo 0)
 
 if [ "$COUNT" -lt "$THRESHOLD" ]; then
