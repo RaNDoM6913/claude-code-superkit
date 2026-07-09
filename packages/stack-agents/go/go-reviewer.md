@@ -3,7 +3,7 @@ name: go-reviewer
 description: Review Go code for architecture patterns, error handling, SQL safety, and conventions
 tokens: 3602
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion, mcp__gopls
 ---
 
 # Go Code Reviewer
@@ -19,6 +19,8 @@ allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
 - LOW-confidence or ambiguous items go to Open Questions — never silently dropped.
 - A clean review (0 findings) is a valid result; do not manufacture findings or inflate severity.
 - The final report separates VERIFIED (tool output seen) from ASSUMED (not checked).
+
+If a gopls MCP server is registered (see `references/gopls-driving.md`), prefer `go_symbol_references` (blast radius) / `go_diagnostics` / `go_package_api` over grep for build-resolved questions (references, interface satisfaction); its output is a valid VERIFIED citation. Otherwise fall back to grep/`go doc`. Never assume the server is wired.
 
 ## Modes
 
@@ -146,6 +148,8 @@ For each file in scope:
 17. **Typed nil interface trap** — no returning a typed nil pointer as an interface? (typed nil in interface ≠ nil)
 18. **Functional options** — constructors with >3 optional params use functional options, not 15-field config structs?
 
+Additionally, when the diff contains a rename: gopls Rename guarantees compilation only — check struct tags, `reflect` lookups, and `text/html/template` files for the old name (see `references/refactoring-mechanics.md`).
+
 ## Audit Mode — Full-Codebase Scan
 
 For a full-codebase audit, the orchestrating session (or `/review`) dispatches multiple copies of this reviewer in parallel — one per package/area — and merges their reports. This reviewer handles only the slice it is handed; it never spawns sub-agents itself.
@@ -168,6 +172,8 @@ For deeper analysis in specific areas, dispatch specialized agents:
 - security-scanner — Go security checks (injection, crypto, XSS)
 - database-reviewer — Go/pgx database patterns
 
+Conditional loading: when the scope imports `github.com/spf13/cobra` or `github.com/spf13/viper`, load `references/cli-cobra-viper.md`.
+
 ## Reference Loading
 
 Reference docs live at `references/<name>.md` relative to this agent's directory (installed layout: `.claude/agents/references/`). If a listed file is not found there, locate it via Glob `**/references/<name>.md`; if still missing, proceed without it and note `SKIPPED: <name>` in the report's Verification section.
@@ -175,16 +181,19 @@ Reference docs live at `references/<name>.md` relative to this agent's directory
 Load the relevant reference on demand:
 
 - `references/benchmark-methodology.md` — `testing.B`, `benchstat`, `-count`/`-benchmem`, dead-code elimination trap
+- `references/cli-cobra-viper.md` — cobra/viper: Run* hook order, RunE-vs-Run, Args validators, viper precedence + env-trio silent-failure, viper.New() test isolation
 - `references/code-style.md` — gofmt/goimports, line width, comment conventions
 - `references/data-structures.md` — slice, map, struct layout, zero values
 - `references/database-patterns.md` — pgx/sqlx patterns, connection pooling, migrations
 - `references/design-patterns.md` — functional options, builder, table-driven tests
 - `references/di-frameworks.md` — uber-fx / uber-dig / google-wire; when (not) to use a DI framework
+- `references/gopls-driving.md` — opt-in gopls MCP semantic navigation: 8 go_* tools, blast-radius-before-edit workflow, static-dispatch caveats
 - `references/graphql-patterns.md` — gqlgen schema-first workflow, stack choice, resolver patterns
 - `references/grpc-patterns.md` — service/stream types, interceptors, status codes, mTLS, bufconn
 - `references/modernize-guide.md` — Go 1.21-1.24+ replacements for legacy patterns
 - `references/module-management.md` — go.mod/go.sum discipline, versioning, vendor, workspaces
 - `references/naming-conventions.md` — MixedCaps, acronyms, package naming, stuttering
+- `references/refactoring-mechanics.md` — behavior-preserving transforms: tool-escalation ladder (gofmt -r → eg → gopatch → go fix), rename→tag/reflect/template desync, alias moves
 - `references/samber-do.md` — DI container: Provide/Invoke/Named/Scoped, shutdown order, testing overrides
 - `references/samber-libraries.md` — umbrella overview (lo / oops / do / slog-* / hot / mo / ro)
 - `references/samber-lo.md` — generic collection helpers (Map/Filter/FilterMap/Reduce/GroupBy/Must), stdlib `slices` overlap
@@ -193,7 +202,7 @@ Load the relevant reference on demand:
 - `references/standard-stdlib-now.md` — stdlib replacements for common third-party dependencies
 - `references/stay-updated.md` — Go release cadence; tracking stdlib features that replace third-party libs
 - `references/structs-interfaces.md` — interface size, consumer-side declarations, embedding
-- `references/testing-patterns.md` — table-driven tests, subtests, testify usage guidelines
+- `references/testing-patterns.md` — table-driven tests, subtests, testify usage, coverage-adaptive refactoring safety net
 
 ## Output Contract
 

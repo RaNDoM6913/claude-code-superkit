@@ -217,6 +217,8 @@ Then dispatch reviewer agents **in parallel** — every row whose pattern matche
 
 Pass each agent the changed-file list and task description. Each runs its own two-stage discipline (discover, then triage by Severity + Confidence).
 
+Go path, opt-in: if a gopls MCP server is registered, Go edits use `go_symbol_references` (blast radius) before touching a definition and `go_diagnostics` after — never assume the server is wired.
+
 Triage findings — route, don't drop:
 - CRITICAL or WARNING at HIGH/MEDIUM confidence → fix before proceeding.
 - LOW confidence / ambiguous → carry into the **Open Questions** section of the Phase 15 report.

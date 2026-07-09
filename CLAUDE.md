@@ -18,7 +18,7 @@ packages/
     docs-templates/         # Architecture doc templates
   stack-agents/             # Language-specific reviewers
     go/                     # go-reviewer + 5 specialized (error, concurrency, performance, modernizer, observability)
-      references/           # 29 Go knowledge documents (+5 in v1.4.0: di-frameworks, graphql-patterns, module-management, stay-updated, standard-stdlib-now)
+      references/           # 32 Go knowledge documents (+5 in v1.4.0: di-frameworks, graphql-patterns, module-management, stay-updated, standard-stdlib-now; +3 unreleased: refactoring-mechanics, cli-cobra-viper, gopls-driving)
     typescript/             # ts-reviewer
     python/                 # py-reviewer
     rust/                   # rs-reviewer

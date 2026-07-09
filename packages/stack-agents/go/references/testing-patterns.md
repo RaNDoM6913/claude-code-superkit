@@ -377,6 +377,79 @@ func TestRender(t *testing.T) {
 // Verify: go test -run TestRender
 ```
 
+## Coverage-Adaptive Refactoring Safety Net
+
+Before you refactor (see `refactoring-mechanics.md`), measure the test coverage
+of the *exact code you are about to move* and let that number set your caution.
+Coverage is a floor for safety, not a target — the point is to know whether a
+transform is guarded before you make it.
+
+**Diagnostic — measure the blast radius's own coverage:**
+
+```bash
+go test -covermode=atomic -coverpkg=./... -coverprofile=cover.out ./...
+go tool cover -func=cover.out   # per-function %, find the code you'll touch
+go tool cover -html=cover.out   # line-level view of what's exercised
+```
+
+Read the **per-function** column, not the package total — a package at 75% can
+hide a 0%-covered function you are about to rewrite.
+
+**Tier your transforms by that function's coverage:**
+
+| Coverage of the target | Posture | Allowed transforms |
+|-----------------------|---------|--------------------|
+| **≥ 80%** | Guarded | Aggressive transforms OK — any ladder rung, including hand-written `dst` surgery. Tests will catch a regression. |
+| **40–80%** | Harden first | Add tests over the untested branches, *then* transform. Prefer construction-guaranteed rungs (`gofmt -r`, `eg`, gopls, `//go:fix`). |
+| **< 40%** | Feathers mode | Write characterization tests and install seams *before any transform*; restrict to construction-guaranteed tools only. No freehand edits. |
+
+### Characterization tests (distinct from Golden Files)
+
+A **characterization test** pins the code's *current* behavior — bugs and all —
+so a refactor can prove it changed nothing. You are not asserting what the code
+*should* do; you are recording what it *does* today, so any drift fails loudly.
+Feed representative inputs, run the code, and assert on whatever it returns
+right now (even if that value is wrong — a `// KNOWN BUG: preserved` comment
+belongs there, and the fix is a *separate, behavioral* commit).
+
+This is a different intent from the **Golden Files** section above. Golden files
+are one *implementation technique* — a good way to store a large characterization
+expectation on disk — but characterization is the *purpose*: locking behavior
+before a structural change. A `cmp.Diff` against an inline `want` is equally a
+characterization test when its job is to pin legacy behavior.
+
+### Object seams for untested code
+
+Legacy code is often untestable because it reaches out to a concrete dependency
+(a `*sql.DB`, a clock, an HTTP client) it constructs itself. Introduce an
+**object seam**: extract the *smallest* interface the code actually uses, at the
+*consumer* side, and inject it — now the untested unit is exercisable with a
+fake.
+
+```go
+// Seam: the consumer declares only what it needs (design-patterns.md §5).
+type rowQuerier interface {
+    QueryContext(ctx context.Context, q string, args ...any) (*sql.Rows, error)
+}
+
+func loadUsers(ctx context.Context, db rowQuerier) ([]User, error) { /* ... */ }
+// Prod passes *sql.DB; the characterization test passes a fake rowQuerier.
+```
+
+The seam is itself a refactor — introduce it *before* the transform you actually
+want, in its own commit, guarded by the characterization tests it enables.
+
+### Caveats
+
+- **Statement coverage ≠ branch coverage.** `go test` reports statements
+  executed, not branch/condition combinations. An 85% function can still have an
+  untested error path — read `-html` output, don't trust the number alone.
+- **`go test ./...` silently omits packages with no `_test.go` file.** They do
+  not appear as 0% — they simply vanish from the report. Only `-coverpkg=./...`
+  forces every package into the profile, revealing the truly-zero ones.
+- **Run `deadcode -test ./...` first.** Do not spend characterization effort on
+  code that nothing reaches; prune it (see `refactoring-mechanics.md`) instead.
+
 ## Test Helpers
 
 ```go

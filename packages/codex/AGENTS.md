@@ -258,6 +258,8 @@ gan-planner, gan-generator, gan-evaluator
 **Stack-specific reviewers (optional):**
 go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer
 
+**Go semantic navigation via gopls MCP (optional, opt-in):** if a gopls MCP server is registered (Codex: `[mcp_servers]` in config.toml; Claude Code: `claude mcp add gopls -- gopls mcp`), prefer its `go_symbol_references` / `go_diagnostics` / `go_package_api` tools over grep for build-resolved Go questions (references, interface satisfaction, blast radius). Never assume it is wired — with no server registered, fall back to grep + `go doc`.
+
 **Go knowledge skills (optional, auto-activated by description matching):**
 
 | Skill | Category |

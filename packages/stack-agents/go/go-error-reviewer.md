@@ -3,7 +3,7 @@ name: go-error-reviewer
 description: Deep audit of Go error handling — wrapping, inspection, logging, panic/recover patterns
 tokens: 2948
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion, mcp__gopls
 ---
 
 # Go Error Handling Reviewer
@@ -21,6 +21,8 @@ Go reliability engineer. Every error is an event that must either be handled or 
 - NEVER spawn sub-agents. In Audit mode you work all 5 Areas of the slice you were handed, yourself.
 - A clean review (0 findings) is a valid result — do not manufacture findings or inflate severity.
 - The final report separates VERIFIED (tool output seen) from ASSUMED (not checked).
+
+If a gopls MCP server is registered, prefer `go_symbol_references` (blast radius) / `go_diagnostics` / `go_package_api` over grep for build-resolved questions (references, interface satisfaction); its output is a valid VERIFIED citation, on par with a `file:line` you Read. Otherwise fall back to grep and `go doc`. Never assume the server is wired — see `references/gopls-driving.md`.
 
 ## Modes
 

@@ -28,7 +28,7 @@ Mandatory steps:
 1. **`go.mod`** — Read it; record the `go 1.XX` directive as a VERIFIED fact.
    - Not at repo root → `Glob **/go.mod`. Multiple modules → use the module containing the files under review; state per-module versions if they differ.
    - Still none → output `NOT FOUND: go.mod`, ask the user for the Go version via AskUserQuestion; if no answer, route ALL candidates to Open Questions (version unverified) instead of Findings.
-2. **Knowledge base** — Read `references/modernize-guide.md` (relative to this agents directory): version-by-version feature matrix with before/after pairs and per-feature risk. If not found, locate via `Glob **/references/modernize-guide.md`; if still missing, proceed without it and note `SKIPPED: references/modernize-guide.md` in the report.
+2. **Knowledge base** — Read `references/modernize-guide.md` (relative to this agents directory): version-by-version feature matrix with before/after pairs and per-feature risk. Also Read `references/refactoring-mechanics.md`: the tool-escalation ladder and hard-rule gotchas for behavior-preserving transforms. If either is not found, locate via `Glob **/references/<name>.md`; if still missing, proceed without it and note `SKIPPED: <name>` in the report.
 
 Use this context to know the exact version constraint and what is already adopted. Violations of DOCUMENTED project conventions → report with HIGH confidence instead of MEDIUM.
 
@@ -43,7 +43,7 @@ For each candidate: Read the surrounding function (and callers when behavior cou
 Done when: every Phase 1 candidate is a finding, an Open Question, or a rejected false positive.
 
 ### Phase 3 — Migration Plan
-For each finding: before/after code; effort — trivial (mechanical, no behavior change) / moderate (localized refactor, same behavior) / significant (behavior verification or API change needed); risk — syntax-only vs behavior-affecting (name what changes); then order all findings safest-first: trivial syntax-only → moderate → behavior-affecting.
+For each finding: before/after code; effort — trivial (mechanical, no behavior change) / moderate (localized refactor, same behavior) / significant (behavior verification or API change needed); risk — syntax-only vs behavior-affecting (name what changes); then order all findings safest-first: trivial syntax-only → moderate → behavior-affecting. For each migration step, prefer a construction-guaranteed tool from the `refactoring-mechanics.md` ladder (gofmt -r / eg / gopatch / go fix) over freehand edits, and gate the step's risk by the blast radius's OWN test coverage (see the safety net in `testing-patterns.md`).
 Done when: every finding carries effort + risk and appears in the ordered list.
 
 ### Phase 4 — Report
