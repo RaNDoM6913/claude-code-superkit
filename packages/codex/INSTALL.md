@@ -92,7 +92,7 @@ These are converted from core + extras agents. They are dispatched automatically
 |-------|----------|
 | `code-reviewer` | Quality — generic code review |
 | `comment-rot-analyzer` | Quality |
-| `security-scanner` | Security — OWASP + 47 checks |
+| `security-scanner` | Security — OWASP top-10 + 18 generic checks |
 | `silent-failure-hunter` | Quality |
 | `audit-frontend` | Audit — frontend code quality (15 checks) |
 | `audit-backend` | Audit — backend code quality (15 checks) |

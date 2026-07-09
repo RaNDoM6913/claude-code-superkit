@@ -118,19 +118,18 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 🆕 What's New
 
-**v1.5.0 — the Opus 4.8 reliability rework, authored & adversarially verified by Claude Fable 5** (see [CHANGELOG](CHANGELOG.md)):
+**v1.5.1 — upstream adoption & quality-compactness, applied by Opus, verified by Claude Fable 5** (see [CHANGELOG](CHANGELOG.md)):
 
-- 🏗️ **The whole prompt surface, rebuilt** — all 117 files (56 agents, 16 commands, 22 skills, 20 rules) reworked against a single failure-mode playbook for the weaker executor: **Hard Rules** up top + a **Recap** at the bottom (lost-in-the-middle guard), an **exact fenced Output Contract** with a filled example, **Evidence Gates** (reviewers) / **Done-gates** (generators), canonical severity + confidence enums with LOW routed to Open Questions (never dropped), and ripgrep-safe two-pass greps.
-- 🔄 **`/dev` linearized 0–15** — phase numbering now matches the dev-flow SVGs exactly (fractional 1.5/2.1/… retired), with a single Skip Matrix, a per-phase Done-when, and gate verdicts consumed verbatim. `/review` reworked too — goal-verifier moved to its own verdict track and Step 2/3 dispatch resynced (silent-failure-hunter, comment-rot-analyzer, api-contract-sync, database-reviewer now actually fire).
-- 🐛 **frontend-ui dispatch restored** — a prior `inject-tokens` bug had injected `tokens:` mid-`description` in all 6 agents, making every Dispatch/Do-NOT-dispatch condition invisible to Claude Code's dispatcher. Fixed in the tool and all 6 agents, so routing works again.
-- 🔧 **Real-API honesty pass** — nonexistent `maps.NewWithSize()` and Playwright `--device-scale-factor` removed, `prisma migrate reset` demoted from "rollback" to a guarded last resort, `drizzle-kit push` → `migrate`, and dead Go `references/` paths fixed for the installed layout.
-- 🤖 **GAN contract redesigned end-to-end** — the plan now carries a mandatory `## Rubric` handoff, the evaluator scores `X/N` against the named rubrics, `BLOCKED` is reserved for un-runnable evaluations only, and the generator fix-loop is capped at 3 attempts.
-- 📚 **Meta-skills teach the new conventions** — `writing-agents` and `writing-commands` now encode the full playbook (skeleton, canonical enums, Evidence/Done-gate blocks, the command contract), so every future component inherits it; authoring guides (ch.3–5) + examples synced.
-- 📐 **Rules layer consolidated** — `documentation.md` collapsed into ONE canonical table verified against the enforcement hook (the old "15-Point" list had 19 rows and disagreed with it), TGApp specifics moved to marked "ADAPT" example blocks, and the 10 frontend rules unified under binding cross-file decisions (reflex at 3+, a single canonical font-reject list, explicit gsap↔motion scoping, typography pinned at 1.25×).
-- 🔬 **Adversarially verified, file by file** — every rewrite done by one model instance and verified by another (~200 subagents, 0 unresolved escalations), catching copy-paste-breaking code bugs and dropped checks before they shipped. Plus hook-coherence fixes: subagent-stop-validate no longer guards ghost agents, `/security-scan` triggers realigned to what the command actually audits, and the ui-reviewer name collision documented as intended precedence.
-- 🔜 **Codex mirrors next** — beyond the already-synced `/dev` trio + GAN, the remaining Codex skill mirrors are scheduled for the next release.
+- 🐛 **Shipped-defect fixes** — superseded `synctest.Run` → the stable `synctest.Test` (go-doc-verified on 1.26.4), fx's blocking-`OnStart` example moved to a goroutine, a `google/wire` archived-Aug-2025 caution, and `git push --force-with-lease` **finally usable** through the safety hook (plus a working-tree-discard gate) — shipped with a 26-case regression suite.
+- 🚀 **Go 1.25/1.26 currency** — `wg.Go`, `errors.AsType[E error]` (the *error* constraint, not the rumored `[E any]`), 1.24 `tool` directives, stdlib KDFs, container-aware GOMAXPROCS — plus the **`os.Root` path-traversal security stream** (`os.OpenRoot` confinement, stdlib CSRF via `http.CrossOriginProtection`, bcrypt 72-byte `ErrPasswordTooLong` handling).
+- 📚 **Five new Go references — 29 → 34** — `refactoring-mechanics` (the behavior-preserving tool ladder), `cli-cobra-viper`, opt-in `gopls-driving` (semantic navigation MCP), `rest-openapi-patterns`, and live-triage `troubleshooting`.
+- 🔍 **Evidence Gate → external symbols on all six stack reviewers** (+ their Codex mirrors) — a finding hinging on a stdlib/third-party symbol must be verified with `go doc` / installed `node_modules` types / `inspect.signature` / the local cargo registry, or labeled **ASSUMED** — never asserted from memory.
+- 🪜 **Solution Ladder + canonical YAGNI anti-patterns** land in the always-on rules (adopted from ponytail after a 4-agent audit — craftsmanship A−, supply chain CLEAN) with the **safety counterweight in the same breath**: validation, error-handling, security, a11y and anything explicitly requested are never simplified away. Minimal never means fragile.
+- 🔧 **Workflow & docs discipline** — `/workflow` `bugfix` is now **red-first** (write the failing repro before the fix) and `refactor` gained a leading green **Baseline**; a lean Nygard **ADR template** with a one-line `/dev` opt-in nudge; and an MCP-hygiene reframe (universally-useful AND stateful, pinned versions, honest cost).
+- 📟 **Statusline context fallback** — on CLIs without native `context_window` the ctx segment is reconstructed from the transcript's trailing usage record (no more blank or mis-scaled context readout); the native path stays byte-identical.
+- 🧪 **Machine-enforced Claude↔Codex parity** — a new `mirror-invariants` suite pins 79 invariant substrings across the 6 reviewer pairs, the severity enums, and the Solution-Ladder mirror, so drift now **fails CI** instead of waiting for a human checklist (13 suites total).
 
-Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0)
+Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.5.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.0) · [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0)
 
 ## 🚀 Installation
 
@@ -225,7 +224,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 
 | Profile | Behavior |
 |---------|----------|
-| `fast` | Only git safety + console.log warning |
+| `fast` | Critical safety only: git guard, secret scan, settings audit, doc-check commit gate |
 | `standard` (default) | All core hooks + stack formatters |
 | `strict` | Everything + go vet on every edit + stop verification |
 

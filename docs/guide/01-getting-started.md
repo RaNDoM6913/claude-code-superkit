@@ -29,7 +29,7 @@ bash setup.sh --stacks=go,typescript --profile=strict --codex
 
 The installer walks you through four steps:
 
-1. **[1/4] Stack selection** — Go, TypeScript, Python, Rust (pick any combination)
+1. **[1/4] Stack selection** — Go, TypeScript, Python, Rust, Frontend 3D, Frontend UI (pick any combination)
 2. **[2/4] Extras** — bot reviewer, design system reviewer
 3. **[3/4] Hook profile** — fast, standard, or strict
 4. **[4/4] Plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional

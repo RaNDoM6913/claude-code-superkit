@@ -50,13 +50,13 @@ exit 0
 Return exit code 2 with a message on stderr:
 
 ```bash
-if echo "$COMMAND" | grep -qE 'git\s+push\s+.*--force'; then
-  echo "BLOCKED: Force push is not allowed." >&2
+if echo "$COMMAND" | grep -qE '(^|[[:space:]])--force([[:space:]=]|$)'; then
+  echo "BLOCKED: Force push is not allowed. Use --force-with-lease." >&2
   exit 2
 fi
 ```
 
-Claude sees the block message and must find an alternative approach.
+Claude sees the block message and must find an alternative approach. Note the token-anchored regex: a naive `--force` substring match would also block the safe `--force-with-lease` — the exact bug the shipped `block-dangerous-git.sh` fixed in v1.5.1 (its regression suite in `hooks/tests/` shows the full pass/block matrix).
 
 ### Smart file-to-doc mapping (doc-check-on-commit)
 
@@ -99,7 +99,7 @@ fi
 
 | Profile | What runs | When to use |
 |---------|-----------|-------------|
-| `fast` | Only git safety + console.log warning | Quick edits, exploration |
+| `fast` | Critical safety only: git guard, secret scan, settings audit, doc-check commit gate | Quick edits, exploration |
 | `standard` | All core hooks + stack formatters | Normal development (default) |
 | `strict` | Everything + go vet / cargo check on every edit + Stop verification | Pre-release, critical code |
 

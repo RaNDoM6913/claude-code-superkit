@@ -79,7 +79,7 @@ Claude continues or finishes
     migrate.md                # Run database migrations
     new-migration.md          # Scaffold new migration files
   scripts/hooks/
-    block-dangerous-git.sh    # PreToolUse: blocks --no-verify, --force, etc.
+    block-dangerous-git.sh    # PreToolUse: blocks --no-verify, force push, working-tree discards, etc.
     console-log-warning.sh    # PostToolUse: warns on console.log in TS
     typecheck-on-edit.sh      # PostToolUse: tsc --noEmit after TS edits
     format-on-edit.sh         # PostToolUse: gofmt after Go edits

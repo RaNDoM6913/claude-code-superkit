@@ -152,7 +152,7 @@ Current: `TODO: 000001..000NNN`
 
 ### Pre-Commit Checklist (15 points):
 
-Before EVERY commit, check if any apply:
+Before EVERY commit, check if any apply. The doc names below are the SHOWCASE example map (a real social app) — ADAPT the rows to your project's own `docs/architecture/` set:
 
 1. **API changed?** -> update `docs/architecture/backend-api-reference.md` + OpenAPI spec
 2. **Frontend behavior changed?** -> update `docs/architecture/frontend-state-contracts.md`

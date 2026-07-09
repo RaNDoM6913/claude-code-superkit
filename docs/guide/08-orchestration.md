@@ -43,9 +43,11 @@ Phase 15: Report        Summary table + metrics: files, tests, review, contract 
 Key design decisions:
 
 - **Always-on**: `/dev` triggers automatically for all code-changing tasks. Phase 1 complexity assessment (5 factors) determines which phases to skip (simple tasks skip 2, 3, 5, 6, 8, 11, 13; standard tasks skip 2, 3, 13; complex tasks run all).
+- **ADR nudge in Phase 2**: when the chosen architecture has real alternatives and lasting consequences (framework, data model, protocol, security choice), `/dev` appends an Architecture Decision Record from `docs-templates/adr-template.md` recording the rejected options and why — skipped for trivial or easily-reversible choices.
 - **Sprint Contract (Phase 5)**: testable acceptance criteria defined BEFORE coding. Evaluator checks these in Phase 8.
 - **Conditional GAN loop (Phase 8)**: evaluator checks contract → if FAIL, iterate (max 2-3 passes) → if scores plateau, escalate to architect.
 - **Dependency order in Phase 7**: migrations before repos, repos before services, services before handlers.
+- **Solution Ladder in Phase 7**: before writing any new code, Claude walks the ladder from the coding-style rule and stops at the first rung that holds — not needed (YAGNI) → reuse in codebase → stdlib → native platform feature → installed dependency, with a new dependency the last resort.
 - **Agents in Phases 10, 12, and 14 run independently**: test-generator, reviewer agents, and docs-reviewer can be dispatched in parallel.
 - **Gate between phases**: if Phase 9 (verify) fails, Claude fixes errors before Phase 10 (test).
 - **Critic as independent evaluator**: Phase 13 evaluates from security, new-hire, and ops perspectives — different from domain-specific reviewers in Phase 12.

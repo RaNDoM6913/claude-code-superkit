@@ -16,15 +16,18 @@ fi
 | Hook | fast | standard | strict |
 |------|------|----------|--------|
 | block-dangerous-git (PreToolUse) | yes | yes | yes |
-| console-log-warning (PostToolUse) | yes | yes | yes |
+| security-patterns (PostToolUse) | yes | yes | yes |
+| audit-settings-source (SessionStart) | yes | yes | yes |
+| doc-check-on-commit (PreToolUse) | yes | yes | yes |
+| console-log-warning (PostToolUse) | -- | yes | yes |
 | migration-safety (PostToolUse) | -- | yes | yes |
 | bundle-import-check (PostToolUse) | -- | yes | yes |
 | format-on-edit / gofmt (PostToolUse) | -- | yes | yes |
 | typecheck-on-edit / tsc (PostToolUse) | -- | yes | yes |
 | go-vet-on-edit (PostToolUse) | -- | -- | yes |
 | cargo-check-on-edit (PostToolUse) | -- | -- | yes |
-| pre-compact-save (PreCompact) | yes | yes | yes |
-| session-context-restore (SessionStart) | yes | yes | yes |
+| pre-compact-save (PreCompact) | -- | yes | yes |
+| session-context-restore (SessionStart) | -- | yes | yes |
 | Stop verification (Stop prompt) | -- | yes | yes |
 
 **When to use each:**

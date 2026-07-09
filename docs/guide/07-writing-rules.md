@@ -61,11 +61,11 @@ Both rules and hooks influence behavior, but they work differently:
 
 Use **rules** for guidelines Claude should follow. Use **hooks** for constraints that must be enforced mechanically. Often you want both: a rule saying "never force push" and a hook that blocks `git push --force`.
 
-## The Six Default Rules
+## The Seven Default Rules
 
-The superkit ships with six rules:
+The superkit ships with seven rules:
 
-### coding-style.md (22 lines)
+### coding-style.md (68 lines)
 ```markdown
 ---
 alwaysApply: true
@@ -90,20 +90,25 @@ alwaysApply: true
 - Check packages before reimplementing
 ```
 
-### security.md (13 lines)
+The shipped file also carries **Investigate Before Answering**, **Surgical Changes**, a **Solution Ladder** (not needed / YAGNI → reuse → stdlib → native platform → installed dependency, with a *new* dependency the last resort), and a canonical **YAGNI anti-pattern** list — all balanced by a safety counterweight: input validation, error handling, security, and accessibility are never simplified away, and anything explicitly requested is never dropped.
+
+### security.md (29 lines)
 Covers SQL injection, XSS, secrets, auth, input validation, file uploads, CORS.
 
-### git-workflow.md (9 lines)
+### git-workflow.md (14 lines)
 Covers conventional commits, no --no-verify, no force push, branch naming.
 
-### documentation.md (70 lines)
+### documentation.md (106 lines)
 Enforces documentation updates in the same response as code changes. Features a 15-point trigger-to-doc mapping table (e.g., "migrations staged? update database-schema.md"), subagent delegation template for explicit doc instructions, and a 4-layer enforcement stack (rule + blocking hook + dev-workflow gate + Stop hook).
 
-### dev-workflow.md (30 lines)
+### dev-workflow.md (77 lines)
 Auto-triggers the full `/dev` orchestration (16 phases) for substantial tasks — new features, multi-file bug fixes, full-stack work. Skips orchestration for simple edits, docs-only, config changes, or questions. Claude follows the workflow naturally without the user calling `/dev` explicitly.
 
-### auto-commands.md (102 lines)
+### auto-commands.md (124 lines)
 Auto-triggers individual commands (`/review`, `/test`, `/lint`, `/audit --health`, `/security-scan`) when specific conditions are met — without the user explicitly calling them. Includes the **highest priority trigger**: documentation verification before every commit. Works with the `doc-check-on-commit` hook which BLOCKS commits if docs are missing.
+
+### frontend-aesthetics.md (53 lines)
+The only path-scoped rule of the seven (`applyWhenPaths: **/*.tsx|jsx|vue|svelte|css|scss`) — loads only when frontend files are touched. Baseline design taste for projects without the full frontend-ui package; the dedicated frontend-ui rules supersede it when installed.
 
 ## Full Example: "no-orm" Rule
 

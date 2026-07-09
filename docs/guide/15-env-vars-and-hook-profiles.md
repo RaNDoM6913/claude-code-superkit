@@ -12,8 +12,8 @@ Coarse-grained selector that every profile-aware hook reads at the top of its sc
 
 | Profile    | What runs                                                                                                   | Typical use              |
 |------------|-------------------------------------------------------------------------------------------------------------|--------------------------|
-| `fast`     | Only unconditional safety hooks (`block-dangerous-git`, `security-patterns`, `context-monitor`, `console-log-warning`). All profile-aware hooks exit early. | CI, scripted runs, quick scratch sessions |
-| `standard` | Everything from `fast` **plus** the full core enforcement suite: audit trail, settings audit, compact-state injection, plan-completion gate, user-intent detect, subagent-stop validation, loop-guard, migration-safety, evolve-check, dev-edit-counter, doc-check-on-commit, dev-required-on-commit, bundle-import-check, stack formatters (go/ts/py/rust), frontend-3d lint hooks. | Day-to-day local development (default) |
+| `fast`     | Only the critical-safety allowlist: `block-dangerous-git`, `security-patterns`, `audit-settings-source`, `doc-check-on-commit`. Every other profile-aware hook exits early. | CI, scripted runs, quick scratch sessions |
+| `standard` | Everything from `fast` **plus** the full core enforcement suite: audit trail, compact-state injection, plan-completion gate, user-intent detect, subagent-stop validation, loop-guard, migration-safety, evolve-check, dev-edit-counter, dev-required-on-commit, bundle-import-check, stack formatters (go/ts/py/rust), frontend-3d lint hooks. | Day-to-day local development (default) |
 | `strict`   | Everything in `standard` **plus** stricter go toolchain (`go-vet-on-edit`, `golangci-lint-on-edit` run on every edit instead of on commit). | Pre-release, hardening passes, reviewing external contributions |
 
 ### How to set a profile
@@ -51,7 +51,7 @@ Instead of setting individual opt-out flags, you can pass a comma-separated list
 export CLAUDE_DISABLED_HOOKS=loop-guard,edit-streak-check,context-monitor
 ```
 
-This is handled by the shared helper `packages/core/hooks/lib/profile.sh` that every shipping hook sources on entry. Works for all 37 non-internal hooks. Takes precedence over `CLAUDE_HOOK_PROFILE=fast` (a hook listed here is always skipped regardless of profile). The hook's own `CLAUDE_DISABLE_<NAME>` flag is still honoured when set — `CLAUDE_DISABLED_HOOKS` is just a terser superset syntax.
+This is handled by the shared helper `packages/core/hooks/lib/profile.sh` that every shipping hook sources on entry. Works for every shipping hook that sources the shared profile lib. Takes precedence over `CLAUDE_HOOK_PROFILE=fast` (a hook listed here is always skipped regardless of profile). The hook's own `CLAUDE_DISABLE_<NAME>` flag is still honoured when set — `CLAUDE_DISABLED_HOOKS` is just a terser superset syntax.
 
 When to use which:
 - **`CLAUDE_DISABLED_HOOKS=a,b,c`** — CI/CD one-off, testing a single scenario, cross-environment diff
@@ -79,7 +79,7 @@ When to use which:
 
 ### 2.3 Hooks without an opt-out flag
 
-These run in every non-`fast` session by design and must be disabled by editing `.claude/settings.json` instead:
+These have no dedicated opt-out flag and must be disabled by editing `.claude/settings.json` (or via `CLAUDE_DISABLED_HOOKS`) instead. Most run in every non-`fast` session; `block-dangerous-git`, `security-patterns`, and `doc-check-on-commit` run even in `fast`:
 
 - `block-dangerous-git.sh` (safety)
 - `security-patterns.sh` (secret-leak detection)
@@ -97,14 +97,14 @@ All stack and 3D hooks honour `CLAUDE_HOOK_PROFILE=fast` as a global kill switch
 
 ---
 
-## 3. Context-monitor variables
+## 3. Context-monitor & statusline variables
 
-Read by `packages/core/hooks/context-monitor.sh` on every PostToolUse.
+Read by `packages/core/hooks/context-monitor.sh` (PostToolUse warnings) and — for `CLAUDE_CONTEXT_TOKENS_MAX` — by the statusline's `ctx%` readout.
 
 | Env var                       | Default     | Meaning                                                              |
 |-------------------------------|-------------|----------------------------------------------------------------------|
 | `CLAUDE_CONTEXT_TOKENS_USED`  | `0`         | Current tokens in the context window. Injected by the harness.       |
-| `CLAUDE_CONTEXT_TOKENS_MAX`   | `1000000`   | Upper bound used to compute the percentage. Defaults to Opus 4.8 1M. |
+| `CLAUDE_CONTEXT_TOKENS_MAX`   | `1000000`   | Upper bound used to compute the percentage. Defaults to Opus 4.8 1M. Also read by the statusline — see the note below. |
 
 The hook prints a warning at 75% and a stronger warning at 90% usage. If `CLAUDE_CONTEXT_TOKENS_USED=0` (the harness is not passing it), the hook exits silently.
 
@@ -113,6 +113,8 @@ Override only if you're running a smaller model or want artificially earlier war
 ```bash
 CLAUDE_CONTEXT_TOKENS_MAX=200000 claude   # warn as if using a 200k model
 ```
+
+**Also consumed by the statusline.** `packages/core/helpers/statusline.cjs` reads `CLAUDE_CONTEXT_TOKENS_MAX` when resolving the window for its `ctx:NN%` segment. On CLIs that pass no native `context_window`, the statusline reconstructs current usage by summing the latest usage record in the session transcript, then resolves the window by precedence: `CLAUDE_CONTEXT_TOKENS_MAX` → a `[1m]` marker in the model id → a >200k-tokens-used heuristic → 200k default. Set this var if that fallback mis-scales your reading (e.g. a 1M-context model whose id carries no `[1m]` marker). The whole path is fail-open — a bad or missing value never breaks the statusline; it just falls back.
 
 ---
 

@@ -34,7 +34,7 @@ bash setup.sh
 2. **Installs superpowers plugin** — auto-clones from GitHub if missing
 3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup + replace), or abort
 4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust, Frontend 3D, Frontend UI (multi-select)
-5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer, red-blue-auditor
+5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer (red-blue-auditor is flag-only via `--extras=`)
 6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
@@ -53,7 +53,7 @@ bash setup.sh
 
 | Profile | What runs | Best for |
 |---------|-----------|----------|
-| `fast` | Git safety + console.log warning | Quick iteration, large diffs |
+| `fast` | Critical safety only: git guard, secret scan, settings audit, doc-check commit gate | Quick iteration, large diffs |
 | `standard` | All core + stack hooks | Daily development (default) |
 | `strict` | Everything + go vet/cargo check per edit | Pre-release, critical code |
 

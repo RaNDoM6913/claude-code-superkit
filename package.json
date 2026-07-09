@@ -1,6 +1,6 @@
 {
   "name": "claude-code-superkit",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI. All agents on Opus.",
   "type": "module",
   "bin": {
@@ -28,8 +28,15 @@
     "test:smoke": "node test/smoke.test.js"
   },
   "keywords": [
-    "claude-code", "codex", "ai-agents", "cli", "scaffolding",
-    "code-review", "hooks", "skills", "opus"
+    "claude-code",
+    "codex",
+    "ai-agents",
+    "cli",
+    "scaffolding",
+    "code-review",
+    "hooks",
+    "skills",
+    "opus"
   ],
   "author": "RaNDoM6913",
   "license": "MIT",
