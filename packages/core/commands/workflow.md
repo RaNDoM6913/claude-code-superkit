@@ -37,10 +37,10 @@ $ARGUMENTS
 
 For bug reports and regressions.
 
-1. **Triage** — reproduce the bug, identify root cause (dispatch **debug-observer**). Done when: the bug is reproduced (or exact reproduction steps are documented) and one root cause is named.
-2. **Fix** — implement the fix following existing patterns. Done when: the fix is applied and the changed files compile.
+1. **Triage** — reproduce the bug as a failing test, identify root cause (dispatch **debug-observer**). Done when: a failing test that reproduces the bug exists (red) and one root cause is named.
+2. **Fix** — implement the fix following existing patterns. Done when: the fix is applied, the changed files compile, and the previously-failing test now passes (green).
 3. **Verify** — run compilation checks, ensure no regressions. Done when: build/typecheck passes with no new errors.
-4. **Test** — add a regression test, run the full suite. Done when: a test covering this bug exists and the full suite passes.
+4. **Test** — run the full suite and add any additional coverage the fix warrants. Done when: the full suite passes with no regressions.
 
 ### `hotfix` — Fix, test, deploy-check
 
@@ -58,14 +58,15 @@ For exploration and investigation. No code changes — research only.
 2. **Research** — explore the codebase, read docs, search for patterns, check dependencies. Done when: enough evidence is gathered to answer the scoped question.
 3. **Summarize** — structured findings with recommendations and next steps. Done when: the report contains findings, recommendations, and next steps. Spike produces a report, not code — use the findings to plan implementation separately.
 
-### `refactor` — Inventory, plan, migrate, verify
+### `refactor` — Baseline, inventory, plan, migrate, verify
 
 For restructuring code without changing behavior.
 
-1. **Inventory** — list all files/functions affected, map dependencies. Done when: the affected file/function list and dependency map are written.
-2. **Plan** — define the target structure, migration order, rollback strategy. Done when: target structure, leaf-first migration order, and rollback strategy are all stated.
-3. **Migrate** — execute changes in dependency order (leaf files first). Done when: every planned file is migrated leaf-first and compiles.
-4. **Verify** — compilation clean, all tests pass, no behavior changes (dispatch **health-checker**). Done when: build is clean, the full suite passes, and health-checker reports no behavior change.
+1. **Baseline** — confirm the affected tests exist and pass green before any change; if coverage is thin, write characterization tests first. Done when: the affected suite is green, or characterization tests were added and are green.
+2. **Inventory** — list all files/functions affected, map dependencies. Done when: the affected file/function list and dependency map are written.
+3. **Plan** — define the target structure, migration order, rollback strategy. Done when: target structure, leaf-first migration order, and rollback strategy are all stated.
+4. **Migrate** — execute changes in dependency order (leaf files first). Done when: every planned file is migrated leaf-first and compiles.
+5. **Verify** — compilation clean, all tests pass, no behavior changes (dispatch **health-checker**). Done when: build is clean, the full suite passes, and health-checker reports no behavior change.
 
 ### `dep-upgrade` — Assess, upgrade, fix-breaking, verify
 
@@ -120,10 +121,10 @@ Nil-pointer panic in checkout when cart is empty
 ### Phases
 | Phase | Status | Result | Notes |
 |-------|--------|--------|-------|
-| Triage | done | root cause: unchecked cart.Items[0] | debug-observer reproduced with empty cart |
-| Fix | done | guard added in checkout.go | followed existing early-return pattern |
+| Triage | done | root cause: unchecked cart.Items[0]; failing repro test written (red) | debug-observer reproduced with empty cart |
+| Fix | done | guard added in checkout.go; repro test now passes (green) | followed existing early-return pattern |
 | Verify | done | build clean, 0 new errors | |
-| Test | done | 1 regression test added, 214 pass | |
+| Test | done | full suite green, 214 pass | no further coverage needed |
 
 ### Changes Made
 | File | Action | Description |

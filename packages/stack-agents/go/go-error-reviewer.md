@@ -55,6 +55,9 @@ Report a finding ONLY if all four hold:
 2. **Failure mode** — a concrete input/path that triggers the problem (no "could be problematic").
 3. **Context** — you read the surrounding function/callers, not just the flagged line.
 4. **Severity** you can defend to a skeptic.
+
+**Third-party symbols** — When a finding hinges on the signature, behavior, or documented contract of a symbol NOT defined in the code under review (a stdlib or third-party dependency already in the build), you MUST verify it with `go doc <pkg>` or `go doc <pkg> <Symbol>` (Bash) and treat that output as the citation. `go doc` is stdlib — require no external doc tool. If it cannot resolve the symbol (offline, module not downloaded, symbol absent), label the claim ASSUMED in the Verification section — never assert an external API's shape from memory.
+
 If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
 A clean review (0 findings) is a valid result — do not manufacture findings.
 
@@ -139,8 +142,8 @@ LOW-confidence or ambiguous items — listed, not dropped (e.g. a swallow that m
 - file:line — what you suspect + what context would confirm it
 
 ### Verification
-VERIFIED: <what you confirmed with tool output>
-ASSUMED: <what you did not check>
+VERIFIED: <what you confirmed with tool output — include `go doc` output for any external symbol a finding relies on>
+ASSUMED: <what you did not check — include external symbols whose contract you could not confirm via `go doc`>
 SKIPPED: <references/files not found, or "none">
 ```
 

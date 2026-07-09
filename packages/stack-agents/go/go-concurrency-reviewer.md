@@ -70,6 +70,8 @@ Report a finding ONLY if all four hold:
 3. **Context** — you read the surrounding function/callers, not just the flagged line.
 4. **Severity** you can defend to a skeptic.
 
+**Third-party symbols** — When a finding hinges on the signature, behavior, or documented contract of a symbol NOT defined in the code under review (a stdlib or third-party dependency already in the build), you MUST verify it with `go doc <pkg>` or `go doc <pkg> <Symbol>` (Bash) and treat that output as the citation. `go doc` is stdlib — require no external doc tool. If it cannot resolve the symbol (offline, module not downloaded, symbol absent), label the claim ASSUMED in the Verification section — never assert an external API's shape from memory.
+
 If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
 A clean review (0 findings) is a valid result — do not manufacture findings.
 
@@ -160,8 +162,8 @@ Emit exactly this structure:
 (or "None")
 
 ### Verification
-VERIFIED: <files Read / greps run / commands executed this session>
-ASSUMED: <anything stated without tool evidence>
+VERIFIED: <files Read / greps run / commands executed this session — include `go doc` output for any external symbol a finding relies on>
+ASSUMED: <anything stated without tool evidence — include external symbols whose contract you could not confirm via `go doc`>
 NOT FOUND / SKIPPED: <missing files, skipped references> (or "None")
 ```
 

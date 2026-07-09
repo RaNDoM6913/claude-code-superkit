@@ -73,6 +73,8 @@ Report a finding ONLY if all four hold:
 3. **Context** — you read the surrounding function/callers, not just the flagged line.
 4. **Severity** you can defend to a skeptic.
 
+**Third-party symbols** — When a finding hinges on the signature, behavior, or documented contract of a symbol NOT defined in the code under review (a stdlib or third-party dependency already in the build), you MUST verify it with `go doc <pkg>` or `go doc <pkg> <Symbol>` (Bash) and treat that output as the citation. `go doc` is stdlib — require no external doc tool. If it cannot resolve the symbol (offline, module not downloaded, symbol absent), label the claim ASSUMED in the Verification section — never assert an external API's shape from memory.
+
 Skip list (discard at Triage, do not report): style nits already enforced by a linter; hypotheticals with no trigger; anything you cannot cite.
 If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
 A clean review (0 findings) is a valid result — do not manufacture findings.
@@ -215,8 +217,8 @@ LOW-confidence or ambiguous items — listed, not dropped:
 (or "None")
 
 ### Verification
-VERIFIED: <what you confirmed via tool output>
-ASSUMED: <what you did not check>
+VERIFIED: <what you confirmed via tool output — include `go doc` output for any external symbol a finding relies on>
+ASSUMED: <what you did not check — include external symbols whose contract you could not confirm via `go doc`>
 SKIPPED: <references/files not found, if any; else "none">
 ```
 
