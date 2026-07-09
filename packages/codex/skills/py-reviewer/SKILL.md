@@ -26,6 +26,8 @@ Before reporting a finding, confirm ALL of:
 
 Skip (do not report): style nits already enforced by a linter, hypotheticals with no trigger, and findings you cannot cite. A clean review is valid.
 
+**External symbols:** when a finding depends on a stdlib/third-party symbol's signature or contract (not defined in the reviewed code), verify it against the project's environment with `python3 -c "import inspect, <mod>; print(inspect.signature(<mod>.<fn>))"` or `python3 -m pydoc <mod>.<fn>` (both stdlib) — or label it ASSUMED; never assert an external API from memory.
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)

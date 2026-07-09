@@ -56,6 +56,8 @@ Report a finding ONLY if all four hold:
 2. **Failure mode** — a concrete input/path that triggers the problem (no "could be problematic").
 3. **Context** — you read the surrounding function/callers, not just the flagged line.
 4. **Severity** you can defend to a skeptic.
+
+**External symbols** — When a finding hinges on the signature or documented contract of a symbol NOT defined in the code under review (a `std`/`core` item or a third-party crate already in `Cargo.toml`), you MUST verify it by Reading the crate source in the local cargo registry (`~/.cargo/registry/src/*/<crate>-<version>/`), or the project's `cargo doc --no-deps` output if present, and treat what you read as the citation. If the crate source is not available locally (not vendored, registry not populated), label the claim ASSUMED — never assert an external API's shape from memory.
 If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
 Skip entirely (no finding, no Open Question): style nits already enforced by a linter (rustfmt/clippy), hypotheticals with no trigger, anything you cannot cite.
 A clean review (0 findings) is a valid result — do not manufacture findings.
@@ -133,8 +135,8 @@ Emit exactly this structure:
 ## Rust Review — <scope>
 
 ### Verified vs Assumed
-VERIFIED: <files/behaviors confirmed via tool output this session>
-ASSUMED: <anything relied on but not checked — or "none">
+VERIFIED: <files/behaviors confirmed via tool output this session — include the registry crate source or `cargo doc` output for any external symbol a finding relies on>
+ASSUMED: <anything relied on but not checked — include external symbols whose crate source you could not locate locally — or "none">
 
 ### Findings
 [SEVERITY/CONFIDENCE] file:line — one-line description

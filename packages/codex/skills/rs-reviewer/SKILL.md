@@ -26,6 +26,8 @@ Before reporting a finding, confirm ALL of:
 
 Skip (do not report): style nits already enforced by a linter, hypotheticals with no trigger, and findings you cannot cite. A clean review is valid.
 
+**External symbols:** when a finding depends on a `std`/third-party symbol's signature or contract (not defined in the reviewed code), verify it by reading the crate source in the local cargo registry (`~/.cargo/registry/src/*/<crate>-<version>/`) or the project's `cargo doc --no-deps` output — or, if the crate source isn't available locally, label it ASSUMED; never assert an external API from memory.
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)

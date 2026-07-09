@@ -26,6 +26,8 @@ Before reporting a finding, confirm ALL of:
 
 Skip (do not report): style nits already enforced by a linter, hypotheticals with no trigger, and findings you cannot cite. A clean review is valid.
 
+**External symbols:** when a finding depends on a stdlib/third-party symbol's signature or contract (not defined in the reviewed code), verify it by reading the installed type declarations under `node_modules/<pkg>/` (the `.d.ts` files, or the `package.json` `"types"`/`"exports"` entry) — the types on disk are the contract — or label it ASSUMED; never assert an external API from memory.
+
 ## Review Process
 
 ### Phase 1: Checklist (quick scan)

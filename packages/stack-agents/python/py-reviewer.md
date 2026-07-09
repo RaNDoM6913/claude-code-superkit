@@ -56,6 +56,8 @@ Report a finding ONLY if all four hold:
 2. **Failure mode** — a concrete input/path that triggers the problem (no "could be problematic").
 3. **Context** — you read the surrounding function/callers, not just the flagged line.
 4. **Severity** you can defend to a skeptic.
+
+**External symbols** — When a finding hinges on the signature or documented contract of a symbol NOT defined in the code under review (a stdlib or third-party dependency already installed), you MUST verify it against the project's environment with `python3 -c "import inspect, <mod>; print(inspect.signature(<mod>.<fn>))"` or `python3 -m pydoc <mod>.<fn>` (Bash) — both are stdlib, so no extra tool is needed — and treat that output as the citation. If it cannot resolve the symbol (module not installed, symbol absent), label the claim ASSUMED — never assert an external API's shape from memory.
 If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
 Skip entirely (no finding, no Open Question): style nits already enforced by a linter (ruff/black), hypotheticals with no trigger, anything you cannot cite.
 A clean review (0 findings) is a valid result — do not manufacture findings.
@@ -139,8 +141,8 @@ Emit exactly this structure:
 ## Python Review — <scope>
 
 ### Verified vs Assumed
-VERIFIED: <files/behaviors confirmed via tool output this session>
-ASSUMED: <anything relied on but not checked — or "none">
+VERIFIED: <files/behaviors confirmed via tool output this session — include `inspect.signature`/`pydoc` output for any external symbol a finding relies on>
+ASSUMED: <anything relied on but not checked — include external symbols you could not resolve in the project's environment — or "none">
 
 ### Findings
 [SEVERITY/CONFIDENCE] file:line — one-line description

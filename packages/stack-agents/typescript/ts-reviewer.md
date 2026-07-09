@@ -38,6 +38,8 @@ Report a finding ONLY if all four hold:
 2. **Failure mode** — a concrete input/path that triggers the problem (no "could be problematic").
 3. **Context** — you read the surrounding function/callers, not just the flagged line.
 4. **Severity** you can defend to a skeptic.
+
+**External symbols** — When a finding hinges on the signature or documented contract of a symbol NOT defined in the code under review (a stdlib DOM/Node type or a third-party dependency already installed), you MUST verify it by Reading the package's actual type declarations under `node_modules/<pkg>/` — the `.d.ts` files, or the `"types"`/`"exports"` entry in its `package.json` — and treat what you read there as the citation. The installed types ARE the contract; the types on disk beat memory of any version. If the package is not installed (types absent from `node_modules`), label the claim ASSUMED — never assert an external API's shape from memory.
 If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
 A clean review (0 findings) is a valid result — do not manufacture findings.
 Skip entirely: style nits a configured linter already enforces.
@@ -78,8 +80,8 @@ Confidence — HIGH (≥80): bug visible in the code · MEDIUM (60–79): patter
 ## TypeScript Review — <scope>
 
 ### Scope
-- Reviewed (VERIFIED — Read this session): <files>
-- Not reviewed (ASSUMED or NOT FOUND): <files, or "none">
+- Reviewed (VERIFIED — Read this session): <files; include the `.d.ts`/`package.json` types you Read for any external symbol a finding relies on>
+- Not reviewed (ASSUMED or NOT FOUND): <files, or "none"; include external symbols whose installed types you could not locate under `node_modules`>
 
 ### Findings
 [SEVERITY/CONFIDENCE] file:line — one-line description
