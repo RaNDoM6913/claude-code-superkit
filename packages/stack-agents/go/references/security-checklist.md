@@ -85,6 +85,14 @@ func CheckPassword(password, hash string) bool {
 }
 ```
 
+**bcrypt caps input at 72 bytes.** Current `x/crypto/bcrypt.GenerateFromPassword`
+returns `bcrypt.ErrPasswordTooLong` for longer input — propagate that error (the
+`HashPassword` above already returns it). Do NOT add a `len(pw) > 72` guard:
+truncating silently weakens the hash, and a boundary-specific error message leaks
+the limit to an attacker. For genuinely long passphrases use argon2id/scrypt, or a
+deliberate, documented SHA-256 pre-hash (base64-encode the digest first, so an
+embedded NUL byte can't truncate the input) before bcrypt.
+
 **Argon2 (preferred for new projects):**
 
 ```go
@@ -95,6 +103,11 @@ func HashPasswordArgon2(password string, salt []byte) []byte {
     // time=3, memory=64MB, threads=4, keyLen=32
 }
 ```
+
+**Stdlib KDFs (Go 1.24+):** `crypto/pbkdf2`, `crypto/hkdf`, and `crypto/sha3` are
+now in the standard library — no `golang.org/x/crypto` import needed for these.
+Password hashing (bcrypt, argon2, scrypt) still lives in `x/crypto`; reach for
+stdlib `pbkdf2.Key` only for legacy/interop, argon2id for new password storage.
 
 ### Random Number Generation
 
@@ -180,6 +193,19 @@ func CORSMiddleware(allowedOrigins []string) func(http.Handler) http.Handler {
 // WRONG — wildcard origin with credentials
 w.Header().Set("Access-Control-Allow-Origin", "*")
 w.Header().Set("Access-Control-Allow-Credentials", "true") // conflict!
+```
+
+### CSRF (Cross-Origin Protection)
+
+Go 1.25+ ships stdlib CSRF protection: `http.CrossOriginProtection` rejects
+non-safe cross-origin browser requests (detected via the `Sec-Fetch-Site` header,
+with an `Origin`/`Host` fallback). Safe methods (GET/HEAD/OPTIONS) stay allowed —
+keep them side-effect-free. Wrap mutating routes with it as middleware; add known
+cross-origin callers with `csrf.AddTrustedOrigin`.
+
+```go
+csrf := http.NewCrossOriginProtection()
+handler := csrf.Handler(mux) // rejects cross-origin POST/PUT/PATCH/DELETE
 ```
 
 ### Security Headers
@@ -335,7 +361,7 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
     // Reset reader
     file.Seek(0, io.SeekStart)
 
-    // Path traversal prevention
+    // Filename sanitation (NOT confinement — see os.Root below)
     safeName := filepath.Base(header.Filename) // strip directory components
     if safeName == "." || safeName == "/" {
         respondError(w, http.StatusBadRequest, "invalid filename")
@@ -347,6 +373,61 @@ func HandleUpload(w http.ResponseWriter, r *http.Request) {
     // ...
 }
 ```
+
+### os.Root scoped file access (Go 1.24+)
+
+`filepath.Base` sanitizes the *name*, but it does not confine the *write*. Once
+you `filepath.Join(uploadDir, name)` — especially if the tree contains a symlink,
+or `name` is rebuilt from other input — an attacker can still escape the directory.
+Confine the operations themselves with `os.OpenRoot`: open the directory once, then
+do every file operation through the returned `*os.Root`. Any name that resolves
+outside the tree — including through a symlink — returns an error instead of
+escaping.
+
+```go
+import "os"
+
+root, err := os.OpenRoot(uploadDir) // open the upload dir once as a root
+if err != nil {
+    return err
+}
+defer root.Close()
+
+// root.Create / root.Open / root.OpenFile / root.ReadFile / root.WriteFile all
+// confine to the tree. storedName cannot climb out of uploadDir.
+dst, err := root.Create(storedName)
+if err != nil {
+    return err // e.g. name escaped the root, or a symlink pointed outside
+}
+defer dst.Close()
+```
+
+**Before Go 1.24 (no os.Root):** guard lexically with `filepath.IsLocal`, then
+confirm containment with a separator-aware `filepath.Rel` check — never a raw
+`strings.HasPrefix` on cleaned paths:
+
+```go
+if !filepath.IsLocal(name) { // rejects absolute paths, "..", empty, Windows reserved names
+    return ErrInvalidFilename
+}
+full := filepath.Join(uploadDir, name)
+rel, err := filepath.Rel(uploadDir, full) // separator-aware containment
+if err != nil || rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+    return ErrInvalidFilename // resolved outside uploadDir
+}
+```
+
+**Explicitly:**
+- `filepath.Clean` + `strings.HasPrefix(path, dir)` is NOT robust confinement — it
+  is fooled by prefix collisions (`/data/uploads` vs `/data/uploads-evil`) and is
+  blind to symlinks. Use `os.Root`, or `IsLocal` + `Rel` as above — noting the
+  `IsLocal`+`Rel` fallback is itself purely lexical (symlink-blind): if the tree
+  may contain symlinks, resolve with `filepath.EvalSymlinks` first or require Go 1.24+.
+- `os.Root` is NOT a full sandbox. It blocks path and symlink escape only; per the
+  stdlib docs it does **not** protect against traversal of filesystem boundaries,
+  Linux bind mounts, `/proc` special files, or Unix device files inside the tree.
+- Keep `filepath.Base` as filename sanitation (strip directory components before
+  storing), never as your containment boundary.
 
 ## When to Use
 
