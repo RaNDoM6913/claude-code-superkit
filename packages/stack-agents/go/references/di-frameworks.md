@@ -30,8 +30,19 @@ type Server struct {
 func NewServer(lc fx.Lifecycle, db *sql.DB, cfg *Config) *Server {
     s := &Server{db: db, cfg: cfg}
     lc.Append(fx.Hook{
-        OnStart: func(ctx context.Context) error { return s.Start(ctx) },
-        OnStop:  func(ctx context.Context) error { return s.Stop(ctx) },
+        // OnStart MUST return quickly. Run blocking work (Serve/accept loops) in a
+        // goroutine so dependent hooks can start; do teardown in OnStop honoring ctx.
+        OnStart: func(ctx context.Context) error {
+            ln, err := net.Listen("tcp", cfg.Addr)
+            if err != nil {
+                return err
+            }
+            go s.Serve(ln) // blocking accept loop off the startup path
+            return nil
+        },
+        OnStop: func(ctx context.Context) error {
+            return s.Shutdown(ctx) // honor ctx deadline (StopTimeout, default 15s)
+        },
     })
     return s
 }
@@ -50,6 +61,11 @@ func main() {
 
 **Pros:** Lifecycle hooks, parameter/result objects, fx.Module for grouping, built-in signal handling.
 **Cons:** Reflection-based — startup is slower. Errors at startup, not at compile time.
+
+**Review notes.**
+- `fx.Module` decorators are descendant-scoped: an `fx.Decorate` inside a module only rewrites providers for that module and its children, but a top-level `fx.Decorate` leaks globally to every provider. Keep decorators inside the module that owns them.
+- `StartTimeout` / `StopTimeout` default to **15s**. A hook that runs longer (slow migration, drain) fails the lifecycle — raise the bound via `fx.StartTimeout` / `fx.StopTimeout`, don't let a hook silently rely on more.
+- Validate the DI graph in CI without starting the app: `fx.New(...).Err()` builds and type-checks the whole graph (missing or ambiguous providers surface here) but never runs `OnStart`.
 
 ## uber-dig — Just the DI container
 
@@ -91,6 +107,11 @@ Then run `wire ./...` to generate `wire_gen.go` containing the actual constructo
 **Pros:** Zero reflection, zero runtime cost, errors are compile-time. Generated code is readable.
 **Cons:** Extra build step (`wire gen`). Errors require understanding the codegen output.
 
+**Review notes.**
+- **Cleanup functions.** A provider returning `(T, func(), error)` registers a cleanup. wire chains cleanups in **reverse** provider order and handles partial failure: if a later provider errors, the already-built providers' cleanups still run. In generated call sites always nil-guard before deferring — `if cleanup != nil { defer cleanup() }` — since a provider may return a nil cleanup.
+- **Interface binding.** wire forbids implicit interface satisfaction: a concrete type is not substituted for an interface automatically. A missing `wire.Bind(new(Iface), new(*Impl))` is a **compile-time break** in the generated code, not a runtime surprise.
+- **Currency caution.** google/wire was **archived by its owner on Aug 25, 2025** and is no longer maintained (feature-complete, read-only). It still builds and works, but expect no fixes or new features — weigh this before adopting it for a new project.
+
 ## Comparison
 
 | Aspect | uber-fx | uber-dig | google-wire | samber/do |
@@ -115,7 +136,7 @@ Then run `wire ./...` to generate `wire_gen.go` containing the actual constructo
 |-----------|------|
 | Full microservice with HTTP + workers + signal handling | **uber-fx** |
 | Library that needs an injection container, not an app framework | **uber-dig** |
-| Compile-time guarantees mandated, codegen acceptable | **google-wire** |
+| Compile-time guarantees mandated, codegen acceptable | **google-wire** (archived Aug 2025 — feature-complete but unmaintained) |
 | Lightweight, generics-first, no codegen | **samber/do** (see samber-do.md) |
 | Small CLI / single-process tool | Manual wiring (no framework) |
 

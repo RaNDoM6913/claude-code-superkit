@@ -345,11 +345,13 @@ for user, err := range db.Users() {
 
 **Risk: LOW-MEDIUM** — synctest is test-only, omitzero is targeted.
 
+Use synctest.Test in Go 1.25+; synctest.Run was the Go 1.24 experimental API (behind GOEXPERIMENT=synctest).
+
 #### testing/synctest
 
 ```go
 // See testing-patterns.md for full example
-synctest.Run(func() {
+synctest.Test(t, func(t *testing.T) {
     // Deterministic goroutine scheduling
     // time.Sleep is virtual (instant)
     // synctest.Wait() blocks until all goroutines are blocked

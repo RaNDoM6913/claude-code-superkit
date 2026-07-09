@@ -41,7 +41,7 @@ Subscribe to the [go-announce](https://groups.google.com/g/golang-announce) mail
 | `pkg/errors` | `errors.Wrap` → standard `fmt.Errorf("%w", err)` |
 | `github.com/stretchr/objx` | `slices` / `maps` for most cases |
 | `github.com/go-redis/cache` | depends — keep using |
-| `github.com/google/wire` | still useful for compile-time DI |
+| `github.com/google/wire` | still works for compile-time DI, but archived Aug 25 2025 — feature-complete and unmaintained |
 | Manual rand seeding | `math/rand/v2` (auto-seeded) |
 | Hand-written http muxers | `net/http.ServeMux` with method matching (1.22+) |
 

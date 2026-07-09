@@ -190,15 +190,17 @@ func TestWorker(t *testing.T) {
 }
 ```
 
-## synctest (Go 1.24+)
+## synctest (Go 1.24 experimental / Go 1.25+ stable)
 
 Deterministic goroutine scheduling for testing concurrent code. Eliminates flaky timing-dependent tests.
+
+Use synctest.Test in Go 1.25+; synctest.Run was the Go 1.24 experimental API (behind GOEXPERIMENT=synctest).
 
 ```go
 import "testing/synctest"
 
 func TestDebouncer(t *testing.T) {
-    synctest.Run(func() {
+    synctest.Test(t, func(t *testing.T) {
         var count atomic.Int32
         debounce := NewDebouncer(100*time.Millisecond, func() {
             count.Add(1)
