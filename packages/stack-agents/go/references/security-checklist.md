@@ -208,6 +208,10 @@ csrf := http.NewCrossOriginProtection()
 handler := csrf.Handler(mux) // rejects cross-origin POST/PUT/PATCH/DELETE
 ```
 
+### API Documentation Exposure
+
+Never ship the Swagger/OpenAPI UI publicly in production — gate it behind auth or disable it; an open `/swagger` endpoint maps your entire API surface for an attacker. See `rest-openapi-patterns.md`.
+
 ### Security Headers
 
 ```go

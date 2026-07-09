@@ -14,6 +14,9 @@ Copy relevant templates to your project's `docs/architecture/` directory and fil
 | `deployment.md` | Production deployment process |
 | `api-contracts.md` | External API integrations |
 | `data-flow.md` | Complex multi-step data flows |
+| `../adr-template.md` | A significant choice with real alternatives to record — copies to `docs/adr/NNNN-<slug>.md`, not `architecture/` |
+
+> **ADR template.** `adr-template.md` lives one level up (not in `architecture/`) because ADRs target a separate `docs/adr/` namespace. Use it only for decisions with real alternatives and lasting consequences (framework/library choice, data-model shape, protocol/API style, security model) — never for trivial or reversible choices. It records the WHY and the rejected alternatives, which the current-state architecture docs deliberately do not.
 
 ## How to use
 

@@ -123,6 +123,10 @@ For each doc:
 2. Write a structured doc describing what EXISTS (not what should exist).
 3. Unknown detail → `TODO: [specific question]`.
 
+### Decision records (optional — offer, never force)
+
+Ask the user whether to seed a `docs/adr/` namespace for architecture decision records (separate from the current-state architecture docs above; no filename collision). If they accept, create `docs/adr/` with a short `README.md` index — a one-line purpose plus a note to copy `docs-templates/adr-template.md` to `docs/adr/NNNN-<slug>.md` for any significant choice with real alternatives. If they decline, skip it silently.
+
 ### Project trees
 
 ```bash

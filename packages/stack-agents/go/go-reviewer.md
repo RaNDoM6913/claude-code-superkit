@@ -194,6 +194,7 @@ Load the relevant reference on demand:
 - `references/module-management.md` — go.mod/go.sum discipline, versioning, vendor, workspaces
 - `references/naming-conventions.md` — MixedCaps, acronyms, package naming, stuttering
 - `references/refactoring-mechanics.md` — behavior-preserving transforms: tool-escalation ladder (gofmt -r → eg → gopatch → go fix), rename→tag/reflect/template desync, alias moves
+- `references/rest-openapi-patterns.md` — swaggo annotations + oapi-codegen spec-first, @Security/swaggerignore/stale-docs footguns, Swagger-UI-in-prod checklist
 - `references/samber-do.md` — DI container: Provide/Invoke/Named/Scoped, shutdown order, testing overrides
 - `references/samber-libraries.md` — umbrella overview (lo / oops / do / slog-* / hot / mo / ro)
 - `references/samber-lo.md` — generic collection helpers (Map/Filter/FilterMap/Reduce/GroupBy/Must), stdlib `slices` overlap
@@ -203,6 +204,7 @@ Load the relevant reference on demand:
 - `references/stay-updated.md` — Go release cadence; tracking stdlib features that replace third-party libs
 - `references/structs-interfaces.md` — interface size, consumer-side declarations, embedding
 - `references/testing-patterns.md` — table-driven tests, subtests, testify usage, coverage-adaptive refactoring safety net
+- `references/troubleshooting.md` — live runtime triage: symptom tree, Delve, GODEBUG traces, goroutine dumps, safe prod pprof, flaky-test recipe
 
 ## Output Contract
 

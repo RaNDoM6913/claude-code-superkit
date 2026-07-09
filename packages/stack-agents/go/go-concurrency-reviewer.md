@@ -140,6 +140,7 @@ For detailed patterns, read (paths relative to the agents directory):
 - `references/channel-patterns.md`
 - `references/sync-primitives.md`
 - `references/context-propagation.md`
+- For live hang / goroutine-leak triage (goroutine dumps, `GODEBUG=schedtrace`), see `references/troubleshooting.md`.
 
 If a file is not found there, locate it via Glob `**/references/<name>.md`; if still missing, proceed without it and note `SKIPPED: <name>` in the report.
 

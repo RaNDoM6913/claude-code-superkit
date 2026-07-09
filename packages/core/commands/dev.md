@@ -98,7 +98,7 @@ Current architecture: [from Phase 0 docs]
 Affected components: [from Phase 1]
 Propose 2-3 approaches with trade-offs.
 ```
-Use the recommendation to shape Phase 4.
+Use the recommendation to shape Phase 4. If the chosen approach had real alternatives and lasting consequences (framework/data-model/protocol/security choice), append an ADR to `docs/adr/` from `docs-templates/adr-template.md` recording the rejected alternatives and why — skip for trivial or easily-reversible choices.
 **Done when:** one approach chosen, with a stated reason.
 
 ## Phase 3 — Pseudocode (Complex only)
