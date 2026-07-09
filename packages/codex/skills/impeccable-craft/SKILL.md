@@ -1,6 +1,6 @@
 ---
 name: impeccable-craft
-description: Opt-in shape-then-build flow for creating UI from scratch with maximum intentionality. 4-stage cycle: shape → refine → implement → polish. Invoke only when explicitly asked for "craft a UI" or "impeccable approach".
+description: "Opt-in shape-then-build flow for creating UI from scratch with maximum intentionality. 4-stage cycle: shape → refine → implement → polish. Invoke only when explicitly asked for \"craft a UI\" or \"impeccable approach\"."
 user-invocable: true
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: dev-orchestrator
-description: Full-stack development orchestrator -- always-on, 16 phases (0-15): read-docs -> understand -> architect -> pseudocode -> plan -> contract -> validate -> implement -> evaluate -> verify -> test -> goals -> review -> critic -> document -> report
+description: "Full-stack development orchestrator -- always-on, 16 phases (0-15): read-docs -> understand -> architect -> pseudocode -> plan -> contract -> validate -> implement -> evaluate -> verify -> test -> goals -> review -> critic -> document -> report"
 user-invocable: true
 ---
 

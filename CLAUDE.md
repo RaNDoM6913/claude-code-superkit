@@ -88,7 +88,7 @@ docs/
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
-VERSION                     # 1.4.2
+VERSION                     # current release version (keep in sync with package.json)
 ```
 
 ## Current Counts
