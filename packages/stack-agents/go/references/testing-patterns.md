@@ -284,6 +284,9 @@ func TestDatabaseIntegration(t *testing.T) {
 ```
 
 ```bash
+# Canonical local/CI invocation — race detector + test-order shuffle
+go test -race -shuffle=on ./...
+
 # Run only unit tests (default, no tags)
 go test ./...
 
@@ -293,6 +296,8 @@ go test -tags=integration ./...
 # Run all tests
 go test -tags=integration ./...
 ```
+
+`go test -race -shuffle=on ./...` is the canonical local/CI invocation: `-race` surfaces data races and `-shuffle=on` surfaces hidden inter-test ordering dependencies. Reserve `-race` for correctness/CI runs, not every incremental save — it costs a 2–3× slowdown.
 
 ## testcontainers
 

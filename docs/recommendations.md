@@ -181,15 +181,23 @@ Skills, MCP servers, design/asset resources, and repos that complement Superkit'
 | freshtechbro/claudedesignskills | threejs-webgl, react-three-fiber, modern-web-design + 19 others | 22 |
 | Leonxlnx/taste-skill | design-taste-frontend, output-enforcement, soft, minimalist, brutalist, redesign, stitch | 7 |
 
-### MCP servers (add to `.mcp.json`)
+### MCP servers — add sparingly
 
-| Server | What | Package |
-|--------|------|---------|
-| 21st.dev magic | UI component search/generation | `@21st-dev/magic@latest` |
-| shadcn | shadcn/ui component library | `shadcn-mcp@latest` |
-| gsap-master | Full GSAP API, intent analysis, production patterns | `bruzethegreat-gsap-master-mcp-server@2.2.0` |
-| playwright | Browser automation/screenshots | Plugin (built-in) |
-| context7 | Library docs lookup | Plugin (built-in) |
+Superkit is a curated harness, not an everything-connector. Every MCP server you register (in `.mcp.json`) costs tool-schema tokens on **every** Opus turn — the schemas are re-sent each request — and widens your supply-chain / attack surface. An MCP is a standing tax, not a free add-on.
+
+**Two-part test before you add one:** the integration must (1) be universally useful across your work AND (2) genuinely need a *live, stateful session* — a running browser, a long-lived connection. If the task is really just a lookup or a one-shot command, a **skill or CLI wrapper is the better shape**: same capability, zero per-turn schema cost, smaller attack surface.
+
+**Discipline for every MCP you keep:** one line of rationale (why it earns its per-turn cost) + a **pinned version**. Never bare `@latest` — an unpinned server silently adopts upstream changes you never reviewed.
+
+The five below are common requests, judged honestly against the test:
+
+| Server | What | Verdict | Package |
+|--------|------|---------|---------|
+| playwright | Browser automation/screenshots | **Needs a session** — drives a live browser; a genuine MCP fit | Plugin (built-in) |
+| context7 | Library docs lookup | Better as a **docs-lookup skill** — it's a stateless fetch | Plugin (built-in) |
+| 21st.dev magic | UI component search/generation | Better as a **skill/CLI** — search + generate is stateless | `@21st-dev/magic` — pin a version before adding |
+| shadcn | shadcn/ui component library | Better as a **skill/CLI** — `npx shadcn` already does this statelessly | `shadcn-mcp` — pin a version before adding |
+| gsap-master | Full GSAP API, intent analysis, production patterns | Better as a **skill** — see the gsap skill packs above | `bruzethegreat-gsap-master-mcp-server@2.2.0` |
 
 ### Design & asset resources
 

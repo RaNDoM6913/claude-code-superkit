@@ -144,6 +144,8 @@ go test -run ^$ -bench=BenchmarkProcess -benchmem -count=10 > new.txt
 benchstat old.txt new.txt
 ```
 
+**Capture the two passes serially on the same quiet machine.** Run the `old.txt` pass, then the `new.txt` pass — never concurrently, and never on different hardware. Concurrent captures reintroduce the CPU/cache/scheduler contention that benchstat's `p`-values exist to remove, silently corrupting the comparison. This is orthogonal to the `-cpu` sweep, which varies `GOMAXPROCS` *within* a single pass.
+
 Output:
 
 ```
@@ -243,6 +245,7 @@ Derived:
 | Laptop on battery / thermal throttle | CPU downclocks mid-run | Plug in; close browser; disable Turbo Boost for stability if benchmarking often |
 | `-benchtime=100x` in CI | Each op might take milliseconds; 100 samples is nothing | `-benchtime=2s` or more |
 | Comparing across Go versions or hardware | Apples to oranges | Benchmark on the same machine, same `go version` |
+| Capturing variants concurrently | benchstat still shows a delta, but it is contention, not code | Run the two passes serially |
 | Ignoring `allocs/op` delta | CPU looks equal, but allocations doubled | Always read all three columns |
 | `b.ReportAllocs` missing | `B/op` / `allocs/op` missing from output | Add `b.ReportAllocs()` at the top |
 

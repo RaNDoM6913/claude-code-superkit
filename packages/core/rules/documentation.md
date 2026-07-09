@@ -8,6 +8,8 @@ tokens: 1888
 ## HARD RULE
 Code changes affecting logic, API, architecture, or behavior MUST include documentation updates **IN THE SAME RESPONSE** as the code. Code without updated docs = **INCOMPLETE TASK**. NEVER defer docs to "later" or "next commit".
 
+**Editing integrity.** Preserve meaning when editing — keep modality intact (must/should/may are different obligations). Preserve conditions, warnings, required actions. A cleaner sentence that changes obligations is wrong. No marketing vocabulary, no invented rationale in docs. *(Authoring principle from the golang-documentation skill.)*
+
 ## 11-Point Pre-Commit Checklist
 
 Before EVERY `git commit`: if a Trigger matches any staged file, the Required Doc MUST also be staged. Multiple rows can match — satisfy all of them.

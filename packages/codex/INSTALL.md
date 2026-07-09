@@ -44,6 +44,8 @@ cp claude-code-superkit/packages/codex/config.toml ~/.codex/config.toml
 
 The default model is **gpt-5.5** with **xhigh** reasoning effort (maximum). Edit `config.toml` to change.
 
+> **MCP hygiene:** `config.toml` can register MCP servers under `[mcp_servers.*]` (see the commented `playwright` / `context7` examples). Add them sparingly — every registered server costs tool-schema tokens on **every** turn and widens your supply-chain / attack surface. Before adding one, apply the two-part test: the integration must be universally useful *and* genuinely need a live, stateful session (a running browser, a long-lived connection). If it's really just a lookup or a one-shot command, a skill is the better shape. Pin every server you keep to a concrete version — never bare `@latest` — and note one line of rationale for why it earns its per-turn cost.
+
 ### Step 4: Set up AGENTS.md
 
 ```bash

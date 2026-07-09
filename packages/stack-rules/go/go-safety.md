@@ -2,7 +2,7 @@
 alwaysApply: false
 applyWhenPaths:
   - "**/*.go"
-tokens: 414
+tokens: 512
 ---
 
 # Go Safety Guardrails
@@ -29,3 +29,7 @@ Apply to every Go file you write or edit. In reviews, a violation of these is at
 - `int64` -> `int32` truncates silently — use explicit conversion with bounds check
 - Float `==` comparison unreliable — use epsilon: `math.Abs(a-b) < epsilon`
 - Integer overflow wraps silently — check bounds before arithmetic on user input
+
+## Linter Suppression
+- `//nolint` directives MUST name the specific linter AND carry a justification comment (nolintlint style: `//nolint:gosec // reason`). A bare or unjustified `//nolint` is at least WARNING
+- NEVER suppress a security linter (`gosec`, `bodyclose`, `sqlclosecheck`) without a documented strong reason — a suppressed security linter with no documented reason is CRITICAL

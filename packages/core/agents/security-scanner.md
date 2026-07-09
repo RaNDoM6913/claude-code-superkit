@@ -10,6 +10,8 @@ allowed-tools: Bash, Read, Grep, Glob
 
 Reviewer agent: scans the codebase against 31 numbered security checks (CHECK-01..31), triages every hit through an Evidence Gate, and produces a prioritized mitigation roadmap.
 
+**Requires:** govulncheck (go install golang.org/x/vuln/cmd/govulncheck@latest) — CHECK-09 degrades gracefully when absent.
+
 ## Hard Rules
 
 1. Execute every check the Applicability table marks in scope; report the rest as N/A. Never silently skip a check.
@@ -130,7 +132,7 @@ Error responses don't reveal account existence; login failures generic ("invalid
 ## Claude Code Configuration Checks (CHECK-19..25)
 
 ### CHECK-19 — Secrets in Settings (CRITICAL)
-Grep `.claude/settings.json` and `settings.local.json`: key-like strings `[A-Za-z0-9_-]{32,}` in values; token prefixes `sk-`, `ghp_`, `gho_`, `Bearer `; literal values under `"password"`/`"secret"`/`"token"` keys.
+Grep `.claude/settings.json`, `settings.local.json`, and any standalone `.mcp.json` or `.kiro/settings/mcp.json`: key-like strings `[A-Za-z0-9_-]{32,}` in values; token prefixes `sk-`, `ghp_`, `gho_`, `github_pat_`, `AIza`, `xox`, `Bearer `; literal values under `"password"`/`"secret"`/`"token"` keys. The `[A-Za-z0-9_-]{32,}` rule already covers the high-entropy fallback for keys with no known prefix — no separate entropy heuristic needed.
 
 ### CHECK-20 — Wildcard Permissions (WARNING)
 `permissions.allow`: `Bash(*)` or bare `Bash` without deny patterns; `Write(*)` without path restrictions; missing deny list for destructive commands.

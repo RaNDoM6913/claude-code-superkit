@@ -234,9 +234,29 @@ import (
 - **TODO format** — `// TODO(username): description` with context on when/why
 - **Magic numbers** — extract to named constants: `const maxPageSize = 100`
 
+## Doc-Comment Quality
+
+The godoc name-prefix rule above governs FORM; this governs SUBSTANCE — a doc comment can be present yet hollow, and that is still a defect. Flag these anti-patterns:
+
+| Anti-pattern | Why it fails | Fix direction |
+|--------------|--------------|---------------|
+| Pure paraphrase | Restates the code in prose; adds nothing beyond what the signature already shows. | State WHY the symbol exists or the non-obvious contract it upholds. |
+| Signature restatement | `// GetUser gets a user by ID` — echoes the name and parameters. | Document what the signature cannot show: errors returned, side effects, invariants. |
+| Marketing vocabulary | "seamlessly", "powerful", "robust", "enterprise-grade" — subjective, unverifiable adjectives. | Delete the adjective; state the concrete behavior or guarantee. |
+| Invented rationale | A "because…" the author guessed, not grounded in the code or a decision record. | Cite only rationale you can source; otherwise describe behavior, not motive. |
+| Groundless future claims | "will support X", "designed to scale to…" — promises not backed by code. | Document what the code does today; drop speculative roadmap. |
+| Hollow filler | "This is a helper", "Handles the logic" — words with no content. | Replace with the specific responsibility, or delete if the name already says it. |
+
+**Writing principles:**
+1. **Why-not-What** — the code already shows what; the comment explains why, or the non-obvious contract.
+2. **Remove marketing — state facts** — no subjective adjectives; only verifiable behavior and guarantees.
+3. **Never invent rationale** — cite only rationale grounded in the code or a decision record.
+4. **Mandatory name + verb-phrase prefix** — exported symbols start with the name plus a verb phrase (`// Service handles user operations.`), per the godoc rule above.
+
 ## When to Use
 
 Apply these rules during any Go code review for style compliance. Flag violations as:
 - **CRITICAL**: Missing error returns, deeply nested control flow (>3 levels)
 - **WARNING**: Functions over 50 lines, missing doc comments on exports, else-after-return
 - **SUGGESTION**: Line length over 100, unnamed constants, unnecessary named returns
+- **Doc-comment quality**: hollow / paraphrase / marketing doc comments → WARNING (SUGGESTION when purely stylistic)

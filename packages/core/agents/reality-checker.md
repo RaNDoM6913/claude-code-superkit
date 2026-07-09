@@ -52,6 +52,7 @@ Use it to: ground the assessment in the project's real expectations, not generic
 | "UI matches design" | Side-by-side: spec image + actual screenshot at correct viewport |
 | "Performance improved" | Before/after benchmark with same input, run 3+ times |
 | "Security reviewed" | Specific threats considered (list them) + mitigations applied (list them) |
+| "Background job / async work runs" | Dispatch a no-op job onto the real (non-sync) queue/scheduler, run one worker/tick, show the resulting side effect (log line, row, metric) — not "the worker should pick it up" |
 
 If evidence is missing → that claim is [✗], and the verdict cannot be READY.
 
