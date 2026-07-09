@@ -170,7 +170,7 @@ Done when: the detected stack's suite ran and its real output was seen.
 
 Dispatch the **security-scanner** agent:
 
-> Run ALL 18 checks against the codebase. This is a pre-deploy audit
+> Run ALL 31 checks against the codebase. This is a pre-deploy audit
 > for the target environment. Report every finding.
 
 If any CRITICAL finding exists, STOP and report. Do not proceed.

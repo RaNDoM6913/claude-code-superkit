@@ -80,7 +80,7 @@ packages/gan/
 │   ├── gan-generator/SKILL.md
 │   └── gan-evaluator/SKILL.md
 ├── rubrics/
-│   ├── ui-quality.md          # 17-criterion UI rubric
+│   ├── ui-quality.md          # 21-criterion UI rubric
 │   └── functionality.md       # 15-criterion API/backend rubric
 └── README.md
 ```
