@@ -158,7 +158,7 @@ Dispatch **plan-checker** with the Phase 4 plan and Phase 5 contract.
 
 ## Phase 7 — Implement
 
-Execute the plan in dependency order; for each step, read the reference pattern first, then implement.
+Execute the plan in dependency order; for each step, read the reference pattern first, then implement. Before writing any NEW code, walk the Solution Ladder (coding-style rule) and stop at the first rung that holds: not needed → reuse in codebase → stdlib → native platform feature → installed dependency; a new dependency is the last resort.
 
 1. **Migration** — next number in the project's migration directory; up + down files; parameterized DDL, `IF NOT EXISTS`, appropriate types.
 2. **Data layer** — follow the project's existing data-access patterns (Go: pgx/sqlx/gorm, nil-safe repos, `fmt.Errorf("Context.Method: %w", err)`; Python: SQLAlchemy/Django ORM; TypeScript: Prisma/TypeORM/Drizzle).

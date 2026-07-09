@@ -53,6 +53,17 @@ TODO: dev server commands
 ### Search First
 - Check codebase for existing patterns before writing new code
 - Check packages before reimplementing
+- Name the precedent you follow (file:line) — or state explicitly that no precedent was found after searching
+
+### Solution Ladder (before writing new code)
+Stop at the first rung that holds:
+1. Doesn't need to exist (YAGNI)? — don't write it
+2. Already in this codebase? — reuse it
+3. Stdlib covers it? — use stdlib; don't reimplement, don't add a dependency
+4. Native platform feature covers it? — use it (`<input type="date">` over a picker lib, CSS over JS, a DB constraint over app-level checks)
+5. An installed dependency covers it? — use it; never add a NEW dependency for what stdlib, the platform, or a few lines can do
+
+Mark a deliberate simplification with a comment naming its ceiling and the upgrade trigger. Minimal never means fragile: input validation at trust boundaries, error handling, security, and accessibility are never simplified away — and anything explicitly requested is never dropped.
 
 ## Approval Rules
 

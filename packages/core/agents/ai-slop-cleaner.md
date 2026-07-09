@@ -67,7 +67,7 @@ func getUserByID(db *sql.DB, id string) (*User, error) {
 - Generic types where concrete types suffice
 - Interface for a single implementation (no testing need)
 
-**Action:** Replace with direct, simple code. YAGNI.
+**Action:** Replace with direct, simple code. YAGNI. (canonical YAGNI anti-pattern list: rules/coding-style.md)
 
 ### Category 4: Template/Boilerplate Slop
 - Empty error handlers (`catch (e) {}`)

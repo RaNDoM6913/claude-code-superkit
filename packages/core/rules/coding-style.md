@@ -1,6 +1,6 @@
 ---
 alwaysApply: true
-tokens: 403
+tokens: 755
 ---
 
 # Coding Style
@@ -26,6 +26,27 @@ Always-on discipline for every response that touches code: verify before you cla
 ## Search First
 - Check codebase for existing patterns before writing new code
 - Check packages before reimplementing
+- Name the precedent you follow (file:line) — or state explicitly that no precedent was found after searching
+
+## Solution Ladder (before writing new code)
+
+Stop at the first rung that holds:
+1. Doesn't need to exist (YAGNI)? — don't write it (anti-patterns below).
+2. Already in this codebase? — reuse it (Search First above).
+3. Stdlib covers it? — use stdlib; don't reimplement, don't add a dependency.
+4. Native platform feature covers it? — use it: `<input type="date">` over a picker lib, CSS over JS, a DB constraint over app-level checks.
+5. An installed dependency covers it? — use it. Never add a NEW dependency for what stdlib, the platform, or a few lines can do.
+
+Mark a deliberate simplification with a comment naming its ceiling and the upgrade trigger: `// simplified: global lock; per-account locks if throughput matters`.
+
+Minimal never means fragile: input validation at trust boundaries, error handling, security, and accessibility are never simplified away — and anything explicitly requested is never dropped.
+
+## YAGNI Anti-Patterns (canonical)
+- Abstraction with one implementation
+- Config option nobody sets
+- Scaffolding "for later"
+- Wrapper that adds nothing over what it wraps
+- Dead flag/parameter kept "just in case"
 
 ## General
 - Use language-standard formatter

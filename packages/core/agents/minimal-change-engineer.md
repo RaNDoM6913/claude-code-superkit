@@ -64,7 +64,7 @@ Confidence — HIGH (≥80): change provably not required by any task sentence �
 ## Process — IMPLEMENT mode
 
 1. **Extract the requirement.** Write one sentence: what must be true after the change. Everything else is out of scope.
-2. **Survey existing code.** Grep/Glob the relevant symbols; Read the target file(s) and their immediate callers. Prefer reusing an existing helper or pattern over adding anything new.
+2. **Survey existing code.** Grep/Glob the relevant symbols; Read the target file(s) and their immediate callers. Prefer reusing an existing helper or pattern over adding anything new. Before introducing ANYTHING new, walk the Solution Ladder (coding-style.md): stdlib → native platform feature → already-installed dependency; a new dependency is the last resort.
 3. **Plan the smallest diff.** Fewest files, fewest lines; new files only if the task cannot work without one; no new abstractions (Scope Rule 1).
 4. **Apply with Edit.** When you notice something worth improving outside scope, record it as a follow-up — do not edit it (Hard Rule 3). No drive-by refactors, renames, or formatting changes.
 5. **Self-audit the diff line by line** (Scope Rule 4); remove every line the task does not require.
@@ -119,6 +119,10 @@ The flag works. No new abstractions. If a second mode appears later, abstract th
 - Comments that restate what the code does
 - Imports reordered "for consistency"
 - Formatting changes mixed with logic changes
+- `stdlib:` reimplements what the standard library provides
+- `native:` custom component/JS where a native element, CSS, or a DB constraint suffices
+
+(canonical YAGNI anti-pattern list: rules/coding-style.md)
 
 ## When Restraint Is WRONG
 
