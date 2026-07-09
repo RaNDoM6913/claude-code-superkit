@@ -341,7 +341,7 @@ for user, err := range db.Users() {
 }
 ```
 
-### Go 1.24 — testing/synctest, omitzero, Weak Pointers
+### Go 1.24 — testing/synctest, omitzero, Weak Pointers, runtime.AddCleanup
 
 **Risk: LOW-MEDIUM** — synctest is test-only, omitzero is targeted.
 
@@ -391,6 +391,116 @@ type Cache[K comparable, V any] struct {
 // Allows GC to collect values when no strong references exist
 ```
 
+#### runtime.AddCleanup
+
+Replaces `runtime.SetFinalizer` for releasing non-GC resources. Unlike finalizers, cleanups attach to any pointer, run concurrently, and don't resurrect the object.
+
+```go
+import "runtime"
+
+func NewFile(fd int) *File {
+    f := &File{fd: fd}
+    // Release the OS descriptor once f is unreachable.
+    runtime.AddCleanup(f, func(fd int) { syscall.Close(fd) }, fd)
+    return f
+}
+```
+
+Rules: `arg` must not equal `ptr` (`AddCleanup` panics), and neither `cleanup` nor `arg` may reference `ptr` (that keeps it alive forever, so the cleanup never runs). Prefer explicit `Close()`/`defer` — cleanups are a safety net, not a guarantee, and may not run before program exit.
+
+### Go 1.25 — sync.WaitGroup.Go, reflect.TypeAssert, synctest stable
+
+**Risk: LOW** — additive APIs; no behavior change to existing code.
+
+#### sync.WaitGroup.Go
+
+Collapses the `Add(1)` / `go` / `defer Done()` triad into one call.
+
+**Before:**
+```go
+var wg sync.WaitGroup
+for _, item := range items {
+    wg.Add(1)
+    go func() {
+        defer wg.Done()
+        process(item)
+    }()
+}
+wg.Wait()
+```
+
+**After:**
+```go
+var wg sync.WaitGroup
+for _, item := range items {
+    wg.Go(func() { process(item) }) // Add + goroutine + Done in one call
+}
+wg.Wait()
+```
+
+`f` must not panic, and `wg.Go` propagates no error or cancellation — reach for `errgroup.WithContext` when you need either. See `sync-primitives.md`.
+
+#### reflect.TypeAssert
+
+```go
+// Go 1.25: assert a concrete type straight off a reflect.Value
+v, ok := reflect.TypeAssert[*User](rv) // was: rv.Interface().(*User)
+```
+
+Avoids the `interface{}` boxing of `Value.Interface()` on hot reflection paths.
+
+#### Container-aware GOMAXPROCS
+
+Go 1.25 defaults `GOMAXPROCS` to the cgroup CPU limit when running in a container — drop `go.uber.org/automaxprocs`, it's now redundant.
+
+#### testing/synctest.Test now stable
+
+`synctest.Test` graduated from the 1.24 experiment (`GOEXPERIMENT=synctest`, `synctest.Run`) — no build flag needed. See `testing-patterns.md`.
+
+### Go 1.26 — errors.AsType, slog.NewMultiHandler, ReverseProxy.Rewrite
+
+**Risk: LOW** — additive APIs plus one deprecation to migrate off.
+
+#### errors.AsType
+
+Generic typed extraction — drops the pointer-to-target dance of `errors.As`.
+
+```go
+// Before (Go <1.26)
+var verr *ValidationError
+if errors.As(err, &verr) { use(verr) }
+
+// After (Go 1.26+)
+if verr, ok := errors.AsType[*ValidationError](err); ok { use(verr) }
+```
+
+Signature: `func AsType[E error](err error) (E, bool)`. Keep `errors.As` while you still build against Go <1.26. See `error-inspection.md`.
+
+#### slog.NewMultiHandler
+
+```go
+// Stdlib fan-out — one record to several handlers
+logger := slog.New(slog.NewMultiHandler(jsonHandler, sentryHandler))
+```
+
+Covers simple fan-out without `samber/slog-multi`; keep slog-multi for middleware/routing depth.
+
+#### httputil.ReverseProxy.Rewrite
+
+`ReverseProxy.Director` is deprecated in favor of `.Rewrite`, which receives a `*httputil.ProxyRequest` (both inbound `In` and outbound `Out`).
+
+```go
+// Before: proxy.Director = func(req *http.Request) { ... }
+proxy.Rewrite = func(r *httputil.ProxyRequest) {
+    r.SetURL(backend)   // route the outbound request to backend (*url.URL)
+    r.SetXForwarded()   // set X-Forwarded-For / -Host / -Proto
+}
+```
+
+#### Green Tea GC now the default
+
+The Green Tea garbage collector (experimental in 1.25 behind `GOEXPERIMENT=greenteagc`) is on by default — no code change; expect lower GC overhead on allocation-heavy workloads.
+
 ## Version Migration Decision Table
 
 | Current Version | Target | Priority Items | Risk |
@@ -401,6 +511,8 @@ type Cache[K comparable, V any] struct {
 | 1.21 | 1.22+ | Enhanced ServeMux, range-over-int | LOW |
 | 1.22 | 1.23+ | Iterators (if needed), unique package | MEDIUM |
 | 1.23 | 1.24+ | synctest for tests, omitzero, weak pointers | LOW |
+| 1.24 | 1.25+ | wg.Go, reflect.TypeAssert, synctest.Test stable, drop automaxprocs | LOW |
+| 1.25 | 1.26+ | errors.AsType, slog.NewMultiHandler, ReverseProxy.Rewrite (Director deprecated) | LOW |
 
 ## When to Use
 

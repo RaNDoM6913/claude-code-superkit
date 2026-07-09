@@ -49,7 +49,7 @@ For each file in the diff:
 1. **Never discard errors** — no `_ = doSomething()` when `doSomething` returns an error. Every error must be checked or explicitly documented why it's safe to ignore.
 2. **Always wrap with context** — `fmt.Errorf("MethodName: %w", err)` so the call chain is traceable. Bare `return err` loses context.
 3. **Errors logged OR returned, never both** — logging an error and then returning it causes duplicate log entries. Choose one: log and handle, or wrap and return.
-4. **errors.Is() / errors.As() instead of direct comparison** — never `err == sql.ErrNoRows`. Always `errors.Is(err, sql.ErrNoRows)` to support wrapped errors.
+4. **errors.Is() / errors.As() instead of direct comparison** — never `err == sql.ErrNoRows`. Always `errors.Is(err, sql.ErrNoRows)` to support wrapped errors. On Go 1.26+, `errors.AsType[E error](err)` is the generic form of `errors.As` for typed extraction — returns `(value, ok)`, no pointer-to-target.
 5. **errors.Join() for multiple errors** — when accumulating errors (e.g., batch operations, cleanup), use `errors.Join()` instead of discarding subsequent errors.
 6. **Sentinel errors for expected conditions** — `var ErrNotFound = errors.New("not found")` for conditions callers need to check. Not string matching.
 7. **Custom error types for rich context** — when callers need to extract structured data (HTTP status, error code, metadata), define a type implementing `error`.

@@ -106,6 +106,22 @@ func (e *DomainError) As(target any) bool {
 }
 ```
 
+## errors.AsType — Extract Typed Errors (Go 1.26+)
+
+Generic form of `errors.As`: returns the extracted error and a bool instead of writing through a pointer. Same chain-traversal semantics — one fewer variable.
+
+```go
+// Extract through the chain (Go 1.26+)
+if verr, ok := errors.AsType[*ValidationError](err); ok {
+    fmt.Println(verr.Field)   // "email"
+    fmt.Println(verr.Message) // "invalid format"
+}
+```
+
+The signature is `func AsType[E error](err error) (E, bool)` — the type parameter is constrained to `error`, so `E` must itself be an error type. Prefer it over `errors.As` for the common single-extraction case: no `var target` declaration, no `&target`, and the result type is inferred at the call site.
+
+Keep `errors.As` while you still compile against Go <1.26 (`AsType` didn't exist before), and when you already hold a pointer to write into.
+
 ## errors.Unwrap — Manual Traversal
 
 Returns the next error in the chain. Rarely needed directly — prefer `errors.Is`/`errors.As`.
@@ -203,6 +219,7 @@ if errors.Is(err, context.DeadlineExceeded) {
 | `err == ErrX` | `errors.Is(err, ErrX)` |
 | `err != ErrX` | `!errors.Is(err, ErrX)` |
 | `err.(*TypeX)` | `errors.As(err, &target)` |
+| `errors.As(err, &target)` | `errors.AsType[T](err)` (Go 1.26+) |
 | `switch err.(type)` | Sequential `errors.As` checks |
 | `err == nil` | Keep as `err == nil` (no change needed) |
 

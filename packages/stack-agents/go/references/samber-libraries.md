@@ -223,6 +223,8 @@ handler := slogmulti.Pipe(
 logger := slog.New(handler)
 ```
 
+**Go 1.26+:** for plain fan-out (one record → several handlers), stdlib `slog.NewMultiHandler(...)` now covers it — reach for `slog-multi` when you need its middleware / `Pipe` / routing depth, as above.
+
 ## hot — In-Memory Cache
 
 **Import:** `github.com/samber/hot`

@@ -112,11 +112,52 @@ package main
 
 For test-only files: `//go:build integration` then `go test -tags=integration ./...`.
 
+## Pinning executable tools (Go 1.24+)
+
+Build-time tools (linters, code generators, `govulncheck`, `modernize`) should be version-pinned in `go.mod` so every checkout and CI run uses the same binary. Go 1.24 added first-class `tool` directives for this.
+
+```bash
+# Add a tool — records it in go.mod and pins the version in go.sum
+go get -tool golang.org/x/vuln/cmd/govulncheck@latest
+
+# Run a pinned tool (builds from the pinned module, not $PATH)
+go tool govulncheck ./...
+
+# Install every tool directive into $GOBIN (e.g. in CI images)
+go install tool
+```
+
+This writes a `tool` block to `go.mod`:
+
+```
+tool (
+    golang.org/x/vuln/cmd/govulncheck
+    golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize
+)
+```
+
+**Rule:** Go 1.24+ → use `tool` directives. On older toolchains, fall back to the `tools.go` pattern (a build-tagged file with blank imports plus a matching `require`):
+
+```go
+//go:build tools
+
+package tools
+
+import _ "golang.org/x/vuln/cmd/govulncheck"
+```
+
+Either way the goal is a reproducible, pinned tool version — never rely on `go install ...@latest` on a shared machine, which silently drifts.
+
 ## Vulnerability scan
 
 ```bash
+# Quick one-off (unpinned)
 go install golang.org/x/vuln/cmd/govulncheck@latest
 govulncheck ./...
+
+# Reproducible default: pin as a tool directive (Go 1.24+), run via `go tool`
+go get -tool golang.org/x/vuln/cmd/govulncheck
+go tool govulncheck ./...
 ```
 
 Run in CI; failures are usually CVEs in deps that need an upgrade.

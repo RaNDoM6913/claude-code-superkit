@@ -230,6 +230,29 @@ db, err := getDB()        // computed on first call, cached after
 
 Wait for a fixed number of goroutines to complete.
 
+### Go 1.25+: wg.Go
+
+`wg.Go(f)` spawns `f` in a new goroutine and tracks it in one call — replacing the `Add(1)` / `go` / `defer Done()` triad and its easy-to-forget footguns (the classic Add-inside-goroutine race shown below).
+
+```go
+func processAll(ctx context.Context, items []Item) {
+    var wg sync.WaitGroup
+
+    for _, item := range items {
+        wg.Go(func() { process(ctx, item) }) // Add + goroutine + Done, atomically
+    }
+
+    wg.Wait()
+}
+```
+
+**Rules:**
+- Go 1.25+ only — keep the classic `Add`/`Done` form below as the fallback for older toolchains.
+- `f` must not panic — `wg.Go` does not recover; a panic crashes the program. Recover inside `f` if it can fail.
+- No error or cancellation propagation. When you need to collect the first error or cancel siblings, use `errgroup.WithContext` (see the errgroup section below), not `wg.Go`.
+
+### Classic Add/Done (all versions)
+
 ```go
 func processAll(ctx context.Context, items []Item) {
     var wg sync.WaitGroup

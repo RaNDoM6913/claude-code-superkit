@@ -133,6 +133,31 @@ Compatible with most existing log shippers via JSON output.
 
 `crypto/rand` for randomness; `crypto/subtle.ConstantTimeCompare` for secret comparison; `crypto/ed25519`, `crypto/aes`, etc. cover most needs without third-party libs.
 
+### KDFs and hashes now in stdlib (Go 1.24)
+
+Three `golang.org/x/crypto` packages graduated into the standard library — reach for these first:
+
+| Was: `golang.org/x/crypto/...` | Now: stdlib |
+|--------------------------------|-------------|
+| `pbkdf2` | `crypto/pbkdf2` |
+| `hkdf` | `crypto/hkdf` |
+| `sha3` | `crypto/sha3` |
+
+```go
+import (
+    "crypto/pbkdf2"
+    "crypto/sha256"
+)
+
+// Go 1.24: pbkdf2.Key returns (key, error) — always check the error
+dk, err := pbkdf2.Key(sha256.New, password, salt, 600_000, 32)
+if err != nil {
+    return err
+}
+```
+
+Still on `x/crypto` (no stdlib equivalent yet): `bcrypt`, `argon2`, `scrypt` for password hashing.
+
 ## Built-ins worth using
 
 | Built-in | What |

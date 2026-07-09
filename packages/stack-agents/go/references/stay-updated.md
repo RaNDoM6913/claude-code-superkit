@@ -33,6 +33,21 @@ Subscribe to the [go-announce](https://groups.google.com/g/golang-announce) mail
 - Updated `os.Root` for safe file ops
 - Updated runtime cleanup hooks
 
+### 1.25
+- `sync.WaitGroup.Go(f)` — spawn + track a goroutine in one call (replaces `Add(1)`/`go`/`defer Done()`)
+- `testing/synctest.Test` now stable (was `synctest.Run` behind `GOEXPERIMENT=synctest` in 1.24)
+- `net/http.CrossOriginProtection` — built-in CSRF defense for browser requests
+- Container-aware `GOMAXPROCS` default — respects cgroup CPU limits (`go.uber.org/automaxprocs` now redundant)
+- `reflect.TypeAssert[T](v)` — typed assertion off a `reflect.Value` without `.Interface()`
+- Green Tea GC experimental (`GOEXPERIMENT=greenteagc`)
+
+### 1.26
+- `errors.AsType[E error](err)` — generic typed extraction, no pointer-to-target dance (see `error-inspection.md`)
+- `slog.NewMultiHandler(...)` — stdlib fan-out to multiple handlers
+- Green Tea GC now the default (no flag)
+- `httputil.ReverseProxy.Rewrite` replaces the deprecated `.Director`
+- `encoding/json/v2` experimental behind `GOEXPERIMENT=jsonv2` — keep `encoding/json`
+
 ## Standard library now replaces these third-party libs
 
 | Was: | Now use: |
@@ -50,8 +65,9 @@ Subscribe to the [go-announce](https://groups.google.com/g/golang-announce) mail
 The `go fix` tool is being replaced by `go fix -modernize`. Run it periodically:
 
 ```bash
-go install golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize@latest
-modernize -fix ./...
+# Go 1.24+ tool directive: pin the version in go.mod, run reproducibly
+go get -tool golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize
+go tool modernize -fix ./...
 ```
 
 Catches:

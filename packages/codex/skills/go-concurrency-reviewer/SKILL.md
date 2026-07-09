@@ -41,7 +41,7 @@ Run through all 15 items. Report violations immediately without extended analysi
 7. **Directed channels** — Directed channel types used in function signatures (`chan<-`, `<-chan`)
 8. **Select has ctx.Done** — `ctx.Done()` case in every `select` statement
 9. **Right primitive** — Channel vs Mutex vs Atomic — correct primitive for the use case (see decision table)
-10. **WaitGroup vs errgroup** — Correct choice for error propagation needs
+10. **WaitGroup vs errgroup** — Correct choice for error propagation needs. On Go 1.25+, prefer `wg.Go(f)` over `Add(1)`/`go`/`defer Done()` for the fire-and-wait case; errgroup still owns error collection and cancellation.
 11. **No goroutine leaks** — Every spawned goroutine has a verified exit path (goleak in tests)
 12. **sync.Map usage** — `sync.Map` only for append-only or disjoint-key patterns, not general-purpose maps
 13. **No time.After in loops** — `time.After` in loops leaks a timer per iteration; use `time.NewTimer` + `Reset()`
