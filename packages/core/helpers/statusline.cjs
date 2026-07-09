@@ -7,7 +7,7 @@
 'use strict';
 
 const { execSync } = require('child_process');
-const { existsSync, readFileSync, readdirSync } = require('fs');
+const { existsSync, readFileSync, readdirSync, openSync, fstatSync, readSync, closeSync } = require('fs');
 const { join } = require('path');
 
 // ── Read optional JSON payload from stdin (non-blocking, 50ms window) ─────────
@@ -169,21 +169,85 @@ function getEffortLevel(payload) {
   return process.env.CLAUDE_EFFORT || '';
 }
 
+// ── Transcript-based context fallback (older CLIs w/o native context_window) ──
+// Reads only the trailing bytes of the JSONL transcript (last ~256KB — respects
+// the 2s render budget on huge transcripts), then scans BACKWARDS for the latest
+// line carrying a usage record and sums its input-token fields. Fully fail-open:
+// any error (missing/unreadable file, all-bad JSON) → null. Never throws.
+function readLatestContextTokens(transcriptPath) {
+  try {
+    if (typeof transcriptPath !== 'string' || !transcriptPath) return null;
+    const fd = openSync(transcriptPath, 'r');
+    try {
+      const size = fstatSync(fd).size;
+      const readLen = Math.min(size, 262144);           // last ~256KB only
+      const buf = Buffer.alloc(readLen);
+      readSync(fd, buf, 0, readLen, size - readLen);
+      const lines = buf.toString('utf8').split('\n');
+      for (let i = lines.length - 1; i >= 0; i--) {     // newest → oldest
+        const line = lines[i].trim();
+        if (!line) continue;
+        let obj;
+        try { obj = JSON.parse(line); } catch { continue; }  // skip bad/truncated line
+        const usage = (obj && obj.message && obj.message.usage) || (obj && obj.usage);
+        if (usage && typeof usage === 'object'
+            && ('input_tokens' in usage || 'cache_read_input_tokens' in usage
+                || 'cache_creation_input_tokens' in usage)) {
+          return (usage.input_tokens || 0)
+            + (usage.cache_read_input_tokens || 0)
+            + (usage.cache_creation_input_tokens || 0);
+        }
+      }
+      return null;
+    } finally { closeSync(fd); }
+  } catch { return null; }
+}
+
+// Resolve the context window size for the transcript fallback path.
+// Precedence: env override → model '[1m]' marker → >200k heuristic → 200k default.
+function resolveContextWindowTokens(usedTokens, modelString) {
+  const env = process.env.CLAUDE_CONTEXT_TOKENS_MAX;
+  if (typeof env === 'string' && env.trim()) {
+    const n = parseInt(env, 10);
+    if (Number.isFinite(n) && n > 0) return n;
+  }
+  if (typeof modelString === 'string' && /\[1m\]/i.test(modelString)) return 1000000;
+  if (typeof usedTokens === 'number' && usedTokens > 200000) return 1000000;
+  return 200000;
+}
+
 // ── Parse context budget from payload ─────────────────
 // Claude Code 2.1.x: context_window = CURRENT usage (not cumulative).
-// Older CLIs: absent → render nothing.
+// Older CLIs: no native field → derive usage from the transcript instead.
 function getContextBudget(payload) {
   if (payload == null) return '';
-  // Look for context_window (current tokens used) and optionally context_window_max
+  // Native path (Claude Code 2.1.x provides current-token semantics) — unchanged.
   const used = payload.context_window ?? payload.context_tokens_used ?? null;
-  if (used == null || typeof used !== 'number') return '';
-  const max = payload.context_window_max ?? payload.context_tokens_max
-    ?? (typeof process.env.CLAUDE_CONTEXT_TOKENS_MAX === 'string'
-        ? parseInt(process.env.CLAUDE_CONTEXT_TOKENS_MAX, 10) || null
-        : null)
-    ?? 1000000;  // default: Opus 4.8 1M
-  const pct = Math.round((used / max) * 100);
-  return `ctx:${pct}%`;
+  if (used != null) {
+    if (typeof used !== 'number') return '';
+    const max = payload.context_window_max ?? payload.context_tokens_max
+      ?? (typeof process.env.CLAUDE_CONTEXT_TOKENS_MAX === 'string'
+          ? parseInt(process.env.CLAUDE_CONTEXT_TOKENS_MAX, 10) || null
+          : null)
+      ?? 1000000;  // default: Opus 4.8 1M
+    const pct = Math.round((used / max) * 100);
+    return `ctx:${pct}%`;
+  }
+  // Fallback path: both native fields absent → measure from the transcript.
+  if (typeof payload.transcript_path === 'string' && payload.transcript_path) {
+    const fallbackUsed = readLatestContextTokens(payload.transcript_path);
+    if (fallbackUsed == null) return '';
+    // Model string: the '[1m]' marker rides on model.id (e.g. claude-opus-4-8[1m]);
+    // combine id + display_name so either field can carry it.
+    const m = payload.model;
+    const modelString = typeof m === 'string'
+      ? m
+      : (m && typeof m === 'object' ? `${m.id || ''} ${m.display_name || ''}` : '');
+    const max = resolveContextWindowTokens(fallbackUsed, modelString);
+    const pct = Math.round((fallbackUsed / max) * 100);
+    return `ctx:${pct}%`;
+  }
+  return '';
 }
 
 // ── Build status line ──────────────────────────────────
