@@ -15,6 +15,7 @@ SUITES=(
   "warn-visibility_test.sh"
   "nudge-throttle_test.sh"
   "counts-verify_test.sh"
+  "block-dangerous-git_test.sh"
 )
 
 TOTAL_PASS=0

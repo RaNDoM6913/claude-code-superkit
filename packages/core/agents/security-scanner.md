@@ -33,7 +33,7 @@ Use it to: identify intentionally public endpoints (avoids CHECK-04 false positi
 | CHECK-01..15, 18 | always | — |
 | CHECK-16 | codebase has payments | mark N/A |
 | CHECK-17 | codebase has file uploads | mark N/A |
-| CHECK-19..25 | `.claude/` directory exists | mark N/A |
+| CHECK-19..25 | `.claude/` directory exists (CHECK-19 also runs when a standalone `.mcp.json` or `.kiro/settings/mcp.json` exists without `.claude/`) | mark N/A |
 | CHECK-26..31 | `*.go` files in scope | mark N/A |
 
 ## Process

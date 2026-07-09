@@ -27,10 +27,13 @@ EOF
   exit 2
 fi
 
-if echo "$COMMAND" | grep -qE 'git\s+push\s+.*\-\-force|git\s+push\s+.*\-f\b'; then
+if { echo "$COMMAND" | grep -qE 'git[[:space:]]+push' \
+     && echo "$COMMAND" | grep -qE '(^|[[:space:]])(--force([[:space:]=]|$)|-f([[:space:]]|$))'; } \
+   || echo "$COMMAND" | grep -qE 'git[[:space:]]+push[[:space:]]+[^[:space:]]+[[:space:]]+\+'; then
   cat >&2 <<'EOF'
 BLOCKED: Force push is not allowed.
   Why: overwrites remote history; collaborators' clones break silently.
+       +refspec pushes (git push origin +main) force non-fast-forward too.
   Suggested alternative:
     git push --force-with-lease          # safe — refuses if remote moved
     git push --force-with-lease=<branch>  # even safer — scopes to your ref
@@ -59,6 +62,40 @@ BLOCKED: git branch -D force-deletes.
     git branch -d <name>                  # safe — refuses if unmerged
     git push origin --delete <name>       # delete remote counterpart
     git reflog show <name>                # recover if you just -D'd one
+EOF
+  exit 2
+fi
+
+if echo "$COMMAND" | grep -qE 'git[[:space:]]+checkout[[:space:]]+(\.([[:space:]]|$)|--([[:space:]]|$)|-f([[:space:]]|$)|--force([[:space:]]|$))'; then
+  cat >&2 <<'EOF'
+BLOCKED: git checkout discards uncommitted changes.
+  Why: checkout of '.', '--', '-f', or '--force' overwrites working-tree
+       edits with no undo — the uncommitted work is gone for good.
+  Suggested alternative:
+    git stash push -u -m before-discard   # preserve WIP first
+    git restore --source=<ref> <path>     # narrow, per-file restore
+EOF
+  exit 2
+fi
+
+if echo "$COMMAND" | grep -qE 'git[[:space:]]+clean[[:space:]]+-[A-Za-z]*f|git[[:space:]]+clean[[:space:]]+.*--force'; then
+  cat >&2 <<'EOF'
+BLOCKED: git clean -f permanently deletes untracked files.
+  Why: removes untracked files/dirs outright — git cannot recover them.
+  Suggested alternative:
+    git clean -n                          # dry run — list what WOULD be removed
+    git stash push -u                     # stash untracked instead of deleting
+EOF
+  exit 2
+fi
+
+if echo "$COMMAND" | grep -qE 'git[[:space:]]+switch[[:space:]]+.*(--discard-changes|--force([[:space:]]|$)|-[A-Za-z]*f([[:space:]]|$)|-C([[:space:]]|$))'; then
+  cat >&2 <<'EOF'
+BLOCKED: git switch --discard-changes / -C throws away work.
+  Why: forces the switch and drops uncommitted changes with no undo.
+  Suggested alternative:
+    git stash push -u -m before-switch    # preserve WIP first
+    git switch <branch>                   # plain switch keeps your changes
 EOF
   exit 2
 fi
