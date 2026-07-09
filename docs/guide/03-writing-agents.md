@@ -125,6 +125,8 @@ If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` -- never
 A clean review (0 findings) is a valid result -- do not manufacture findings.
 ```
 
+A tool-verified fact counts as a citation too: when a finding hinges on an EXTERNAL symbol's contract (stdlib or a third-party dependency), the stack reviewers verify it against the installed artifact — `go doc`, `node_modules` type declarations, `inspect.signature`, the local cargo registry — or label the claim ASSUMED. Never asserted from memory.
+
 **Generators carry a Done-gate.** An agent that writes files or code must prove the work exists before it claims completion:
 
 ```markdown
