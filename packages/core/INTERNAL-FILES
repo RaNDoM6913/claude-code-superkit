@@ -1,0 +1,16 @@
+# INTERNAL-FILES — single source of truth for repo-only files.
+#
+# These files live under packages/core/ but must NEVER ship into a consumer's
+# .claude/. They only function inside the superkit repo itself (self-audit
+# tooling). Listing them once here stops the skip-list from drifting across the
+# three call sites that consume it:
+#   - lib/installer.js                             (skips them during install)
+#   - packages/core/hooks/superkit-counts-verify.sh (subtracts them from shipped counts)
+#   - packages/core/hooks/superkit-update.sh        (skips them during update)
+#
+# Format: one packages/core-relative path per line. Lines starting with '#' and
+# blank lines are ignored by parsers. The dirname of each path (hooks/ or rules/)
+# selects its category. Never expand this list without evidence.
+hooks/superkit-counts-verify.sh
+hooks/verify-hooks.sh
+rules/superkit-integrity.md

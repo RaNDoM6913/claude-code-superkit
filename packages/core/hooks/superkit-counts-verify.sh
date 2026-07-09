@@ -23,21 +23,45 @@ for arg in "$@"; do
   esac
 done
 
-# ── Internal-file ship-list (single source of truth) ────────────────
-# These files live in packages/core/ but are NEVER installed into a user's
-# .claude/ — they only run inside the superkit repo itself. They must be
-# subtracted from the on-disk core counts to get the public "shipped" counts.
-# Keep this list IN SYNC with lib/installer.js:
-#   SUPERKIT_INTERNAL_HOOKS = ['superkit-counts-verify.sh', 'verify-hooks.sh']
-#   SUPERKIT_INTERNAL_RULES = ['superkit-integrity.md']
-SUPERKIT_INTERNAL_HOOKS="superkit-counts-verify.sh verify-hooks.sh"
-SUPERKIT_INTERNAL_RULES="superkit-integrity.md"
+# ── Internal-file ship-list (derived from the manifest) ─────────────
+# packages/core/INTERNAL-FILES is the single source of truth for repo-only files
+# that are NEVER installed into a user's .claude/. They must be subtracted from
+# the on-disk core counts to get the public "shipped" counts. We DERIVE the
+# per-category lists (and thus the subtraction amounts) from that manifest so
+# this hook, lib/installer.js, and superkit-update.sh never drift.
+MANIFEST_FILE="packages/core/INTERNAL-FILES"
+
+# manifest_category <hooks|rules> — echo space-separated basenames for the
+# manifest entries whose dirname matches the category. Silent when the manifest
+# is absent (the caller applies the FALLBACK below).
+manifest_category() {
+  local category="$1" line dir base
+  [ -f "$MANIFEST_FILE" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line#"${line%%[![:space:]]*}"}"   # ltrim
+    line="${line%"${line##*[![:space:]]}"}"   # rtrim
+    [ -z "$line" ] && continue
+    case "$line" in \#*) continue ;; esac
+    dir="${line%/*}"; base="${line##*/}"
+    [ "$dir" = "$category" ] && printf '%s ' "$base"
+  done < "$MANIFEST_FILE"
+}
+
+SUPERKIT_INTERNAL_HOOKS="$(manifest_category hooks)"
+SUPERKIT_INTERNAL_RULES="$(manifest_category rules)"
+# FALLBACK: if the manifest is missing/unreadable, fall back to the previous
+# hard-coded values — a broken verifier is worse than a stale list. These
+# literals live ONLY inside this clearly-marked fallback.
+if [ -z "${SUPERKIT_INTERNAL_HOOKS// }" ] && [ -z "${SUPERKIT_INTERNAL_RULES// }" ]; then
+  SUPERKIT_INTERNAL_HOOKS="superkit-counts-verify.sh verify-hooks.sh"  # FALLBACK
+  SUPERKIT_INTERNAL_RULES="superkit-integrity.md"                      # FALLBACK
+fi
 
 # count_internal_present <dir> <space-separated-basenames>
 # Counts how many of the named internal files actually exist in <dir>, so the
-# subtraction tracks reality instead of a magic constant. If someone renames
-# or removes an internal file (and updates installer.js + this list), the
-# shipped count stays correct automatically.
+# subtraction tracks reality (and the manifest's per-category line count)
+# instead of a magic constant. Renaming/removing an internal file in the
+# manifest keeps the shipped count correct automatically.
 count_internal_present() {
   local dir="$1"; shift
   local n=0 f
@@ -161,9 +185,9 @@ REFERENCE_DOCS=$(ls packages/stack-agents/go/references/*.md 2>/dev/null | wc -l
 # Totals — include frontend-3d (and any future self-contained pkg) in stack sums
 TOTAL_AGENTS=$((CORE_AGENTS + STACK_AGENTS + PKG_AGENTS + EXTRAS_AGENTS))
 # Internal-only core hooks/rules aren't shipped to users — subtract the ones
-# that actually exist on disk (named ship-list above, in sync with
-# installer.js) so TOTAL_* matches the public README/GitHub/CLAUDE.md counts.
-# No magic constant: the count tracks the named list against reality.
+# that actually exist on disk (manifest-derived ship-list above) so TOTAL_*
+# matches the public README/GitHub/CLAUDE.md counts. No magic constant: the
+# count tracks the manifest's per-category entries against reality.
 INTERNAL_HOOKS_PRESENT=$(count_internal_present "packages/core/hooks" $SUPERKIT_INTERNAL_HOOKS)
 INTERNAL_RULES_PRESENT=$(count_internal_present "packages/core/rules" $SUPERKIT_INTERNAL_RULES)
 SHIPPED_CORE_HOOKS=$((CORE_HOOKS - INTERNAL_HOOKS_PRESENT))

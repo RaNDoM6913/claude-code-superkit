@@ -17,6 +17,7 @@ SUITES=(
   "counts-verify_test.sh"
   "block-dangerous-git_test.sh"
   "mirror-invariants_test.sh"
+  "internal-manifest_test.sh"
 )
 
 TOTAL_PASS=0
