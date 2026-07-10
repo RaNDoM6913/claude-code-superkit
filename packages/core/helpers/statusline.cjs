@@ -169,14 +169,17 @@ function getEffortLevel(payload) {
   return process.env.CLAUDE_EFFORT || '';
 }
 
-// ── Transcript-based context fallback (older CLIs w/o native context_window) ──
-// Reads only the trailing bytes of the JSONL transcript (last ~256KB — respects
-// the 2s render budget on huge transcripts), then scans BACKWARDS for the latest
-// line carrying a usage record and sums its input-token fields. Fully fail-open:
-// any error (missing/unreadable file, all-bad JSON) → null. Never throws.
-function readLatestContextTokens(transcriptPath) {
+// ── Transcript tail scan (context fallback + ultracode marker) ────────────
+// Reads only the trailing ~256KB of the JSONL transcript (respects the 2s
+// render budget on huge transcripts), then scans BACKWARDS for the latest
+// usage record, and — in the same pass — tracks the last `/effort` echo
+// (`Set effort level to <value>`) so an ultracode session can show a badge.
+// Caveat: a marker older than the trailing window is missed (badge silently
+// off — fail-safe). Fully fail-open: any error → { used: null, ultra: false }.
+function scanTranscriptTail(transcriptPath) {
+  const empty = { used: null, ultra: false };
   try {
-    if (typeof transcriptPath !== 'string' || !transcriptPath) return null;
+    if (typeof transcriptPath !== 'string' || !transcriptPath) return empty;
     const fd = openSync(transcriptPath, 'r');
     try {
       const size = fstatSync(fd).size;
@@ -184,23 +187,30 @@ function readLatestContextTokens(transcriptPath) {
       const buf = Buffer.alloc(readLen);
       readSync(fd, buf, 0, readLen, size - readLen);
       const lines = buf.toString('utf8').split('\n');
+      let used = null;
+      let lastEffortCmd = null;
+      for (const line of lines) {
+        const m = line.match(/Set effort level to (\w+)/);
+        if (m) lastEffortCmd = m[1];
+      }
       for (let i = lines.length - 1; i >= 0; i--) {     // newest → oldest
         const line = lines[i].trim();
-        if (!line) continue;
+        if (!line || line[0] !== '{') continue;
         let obj;
         try { obj = JSON.parse(line); } catch { continue; }  // skip bad/truncated line
         const usage = (obj && obj.message && obj.message.usage) || (obj && obj.usage);
         if (usage && typeof usage === 'object'
             && ('input_tokens' in usage || 'cache_read_input_tokens' in usage
                 || 'cache_creation_input_tokens' in usage)) {
-          return (usage.input_tokens || 0)
+          used = (usage.input_tokens || 0)
             + (usage.cache_read_input_tokens || 0)
             + (usage.cache_creation_input_tokens || 0);
+          break;
         }
       }
-      return null;
+      return { used, ultra: lastEffortCmd === 'ultracode' };
     } finally { closeSync(fd); }
-  } catch { return null; }
+  } catch { return empty; }
 }
 
 // Resolve the context window size for the transcript fallback path.
@@ -216,12 +226,31 @@ function resolveContextWindowTokens(usedTokens, modelString) {
   return 200000;
 }
 
+// ── Shared bar rendering (ctx + rate limits speak one visual language) ─────
+function formatK(n) {
+  if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
+  if (n >= 1000) return `${Math.round(n / 1000)}k`;
+  return `${n}`;
+}
+function bar10(pct) {
+  const filled = Math.max(0, Math.min(10, Math.round((pct / 100) * 10)));
+  return '█'.repeat(filled) + '░'.repeat(10 - filled);
+}
+function heatColour(pct) {
+  return pct >= 80 ? '\x1b[31m' : pct >= 50 ? '\x1b[33m' : '\x1b[32m';
+}
+
+function renderCtx(used, max) {
+  const pct = Math.min(100, Math.round((used / max) * 100));
+  return `ctx ${heatColour(pct)}${bar10(pct)}\x1b[0m ${pct}% ${formatK(used)}`;
+}
+
 // ── Parse context budget from payload ─────────────────
 // Claude Code 2.1.x: context_window = CURRENT usage (not cumulative).
 // Older CLIs: no native field → derive usage from the transcript instead.
-function getContextBudget(payload) {
+function getContextBudget(payload, scanned) {
   if (payload == null) return '';
-  // Native path (Claude Code 2.1.x provides current-token semantics) — unchanged.
+  // Native path (Claude Code 2.1.x provides current-token semantics).
   const used = payload.context_window ?? payload.context_tokens_used ?? null;
   if (used != null) {
     if (typeof used !== 'number') return '';
@@ -230,24 +259,58 @@ function getContextBudget(payload) {
           ? parseInt(process.env.CLAUDE_CONTEXT_TOKENS_MAX, 10) || null
           : null)
       ?? 1000000;  // default: Opus 4.8 1M
-    const pct = Math.round((used / max) * 100);
-    return `ctx:${pct}%`;
+    return renderCtx(used, max);
   }
-  // Fallback path: both native fields absent → measure from the transcript.
-  if (typeof payload.transcript_path === 'string' && payload.transcript_path) {
-    const fallbackUsed = readLatestContextTokens(payload.transcript_path);
-    if (fallbackUsed == null) return '';
+  // Fallback path: both native fields absent → measured from the transcript.
+  if (scanned && scanned.used != null) {
     // Model string: the '[1m]' marker rides on model.id (e.g. claude-opus-4-8[1m]);
     // combine id + display_name so either field can carry it.
     const m = payload.model;
     const modelString = typeof m === 'string'
       ? m
       : (m && typeof m === 'object' ? `${m.id || ''} ${m.display_name || ''}` : '');
-    const max = resolveContextWindowTokens(fallbackUsed, modelString);
-    const pct = Math.round((fallbackUsed / max) * 100);
-    return `ctx:${pct}%`;
+    const max = resolveContextWindowTokens(scanned.used, modelString);
+    return renderCtx(scanned.used, max);
   }
   return '';
+}
+
+// ── REAL 5h / weekly rate-limit bars ───────────────────────────────────────
+// Claude Code pipes rate_limits.{five_hour,seven_day}.{used_percentage,
+// resets_at} for Claude subscribers (same data as /usage). Absent (API-key
+// billing, session start) → segments silently skipped.
+function rateLimitSegments(payload) {
+  const out = [];
+  const rls = payload && payload.rate_limits;
+  if (!rls || typeof rls !== 'object') return out;
+  const seg = (label, rl) => {
+    if (!rl || typeof rl !== 'object') return null;
+    const pct = rl.used_percentage;
+    if (typeof pct !== 'number' || !Number.isFinite(pct)) return null;
+    const p = Math.max(0, Math.min(100, pct));
+    // resets_at arrives as epoch seconds OR an ISO string depending on CLI build
+    let resetSec = null;
+    const r = rl.resets_at;
+    if (typeof r === 'number' && r > 0) resetSec = r > 1e12 ? r / 1000 : r;
+    else if (typeof r === 'string' && r) {
+      const t = Date.parse(r);
+      if (Number.isFinite(t)) resetSec = t / 1000;
+    }
+    let eta = '';
+    if (resetSec) {
+      let sLeft = Math.max(0, Math.round(resetSec - Date.now() / 1000));
+      const d = Math.floor(sLeft / 86400);
+      const h = Math.floor((sLeft % 86400) / 3600);
+      const mm = Math.floor((sLeft % 3600) / 60);
+      eta = d > 0 ? ` ${d}d${h}h` : h > 0 ? ` ${h}h${mm}m` : ` ${mm}m`;
+    }
+    return `${label} ${heatColour(p)}${bar10(p)}\x1b[0m ${Math.round(p)}%${eta}`;
+  };
+  const s5 = seg('5h', rls.five_hour);
+  const sw = seg('W', rls.seven_day);
+  if (s5) out.push(s5);
+  if (sw) out.push(sw);
+  return out;
 }
 
 // ── Build status line ──────────────────────────────────
@@ -262,7 +325,10 @@ const agentCount = getAgentCount();
 const task = getContextHint();
 const skVersion = getSuperkit();
 const effortLevel = getEffortLevel(stdinPayload);
-const contextBudget = getContextBudget(stdinPayload);
+const tp = stdinPayload && typeof stdinPayload.transcript_path === 'string'
+  ? stdinPayload.transcript_path : '';
+const scanned = (tp && existsSync(tp)) ? scanTranscriptTail(tp) : { used: null, ultra: false };
+const contextBudget = getContextBudget(stdinPayload, scanned);
 
 const parts = [];
 
@@ -293,16 +359,33 @@ if (counts.length > 0) parts.push(counts.join(' '));
 // Superkit version
 if (skVersion) parts.push(`sk${skVersion}`);
 
-// Effort level (Opus 4.8 + Claude Code 2.1.x) — absent on older CLIs
-if (effortLevel) parts.push(`⚙${effortLevel}`);
+// Model + effort (heat-graded) + ultracode badge.
+// Model in cyan; effort BOLD, coloured by intensity (high=green, xhigh=yellow,
+// max=red); ⟁ULTRA in bright magenta while the session's /effort is ultracode.
+{
+  const m = stdinPayload && stdinPayload.model;
+  const modelName = m && typeof m === 'object' ? (m.display_name || m.id) : (typeof m === 'string' ? m : '');
+  const effortColour = {
+    low: '\x1b[1;94m', medium: '\x1b[1;96m', high: '\x1b[1;92m',
+    xhigh: '\x1b[1;93m', max: '\x1b[1;91m',
+  }[effortLevel] || '\x1b[1;96m';
+  const effortStr = effortLevel ? `${effortColour}⚙${effortLevel}\x1b[0m` : '';
+  const ultraStr = scanned.ultra ? '\x1b[1;95m⟁ULTRA\x1b[0m' : '';
+  const segment = [modelName ? `\x1b[36m${modelName}\x1b[0m` : '', effortStr, ultraStr]
+    .filter(Boolean).join(' ');
+  if (segment) parts.push(segment);
+}
 
-// Context budget (Claude Code 2.1.x current-token semantics) — absent on older CLIs
+// Context bar (native or transcript-derived) — absent on older CLIs w/o transcript
 if (contextBudget) parts.push(contextBudget);
 
-// Active task (truncate to 30 chars)
+// Real 5h / weekly rate-limit bars (subscription sessions only)
+for (const seg of rateLimitSegments(stdinPayload)) parts.push(seg);
+
+// Active task (from .claude/.task-state.json currentTask; truncate to 30 chars)
 if (task) {
   const short = task.length > 30 ? task.slice(0, 27) + '...' : task;
-  parts.push(short);
+  parts.push(`\x1b[2m» ${short}\x1b[0m`);
 }
 
 process.stdout.write(parts.join(' | '));
