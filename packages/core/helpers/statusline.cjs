@@ -327,6 +327,11 @@ const contextBudget = getContextBudget(stdinPayload, scanned);
 
 const parts = [];
 
+// Claude Code paints uncoloured statusline text muted gray → the two live text
+// fields (branch, task) carry an explicit bright colour; CLAUDE_STATUSLINE_THEME=light
+// flips it to black for light terminals.
+const BRIGHT_FG = (process.env.CLAUDE_STATUSLINE_THEME || '').toLowerCase() === 'light' ? '\x1b[30m' : '\x1b[97m';
+
 // Profile indicator
 const profileIcon = { fast: 'F', standard: 'S', strict: 'X' }[profile] || 'S';
 parts.push(`[${profileIcon}]`);
@@ -336,7 +341,7 @@ if (git.branch) {
   let branchStr = git.branch;
   if (git.staged) branchStr += '+';
   if (git.dirty) branchStr += '*';
-  parts.push(branchStr);
+  parts.push(`${BRIGHT_FG}${branchStr}\x1b[0m`);
 }
 
 // Stacks
@@ -380,11 +385,7 @@ for (const seg of rateLimitSegments(stdinPayload)) parts.push(seg);
 // Active task (from .claude/.task-state.json currentTask; truncate to 30 chars)
 if (task) {
   const short = task.length > 30 ? task.slice(0, 27) + '...' : task;
-  // Claude Code renders uncoloured statusline text in its own muted gray, so the
-  // task carries an explicit colour: bright white by default, black when the user
-  // sets CLAUDE_STATUSLINE_THEME=light (light terminals).
-  const taskFg = (process.env.CLAUDE_STATUSLINE_THEME || '').toLowerCase() === 'light' ? '\x1b[30m' : '\x1b[97m';
-  parts.push(`${taskFg}» ${short}\x1b[0m`);
+  parts.push(`${BRIGHT_FG}» ${short}\x1b[0m`);
 }
 
 process.stdout.write(parts.join(' | '));
