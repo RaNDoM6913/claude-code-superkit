@@ -3,36 +3,75 @@
 # Triggers on: SessionStart
 # Profile: all (fast, standard, strict)
 #
-# Reads .claude/.superkit-meta (created by setup.sh) to find the
-# superkit clone path. Compares install version (meta) vs source version
-# (clone's VERSION file), pulls remote if behind, and re-copies updated
-# files when install lags source.
+# Reads .claude/.superkit-meta (created by setup.sh) to find the superkit clone
+# path. Compares install version (meta) vs source version (clone's VERSION file),
+# pulls remote if behind, and re-syncs updated files when install lags source.
+#
+# CONTRACT (rewritten 2026-07-10 — see the D1 defect brief):
+#   1. SELF-BOOTSTRAP first. The consumer runs its OWN copy of this script, so the
+#      sync that ships a fix would otherwise be performed by the old, blind copy.
+#      Before anything else, if the source clone's copy of this script differs from
+#      the installed copy, replace the installed copy and re-exec it (guarded by an
+#      env sentinel against re-exec loops).
+#   2. NEVER copy a repo-only internal file (derived from packages/core/INTERNAL-FILES).
+#   3. PRISTINE-PRESERVE. A consumer file is only overwritten when its CONTENT equals
+#      the same file's blob at the install-baseline tag (v$INSTALL_VERSION) OR at any
+#      of the last ~5 released tags. No tag matches → treat as locally customized →
+#      preserve it and report it. Any uncertainty (missing tag, git error, no temp)
+#      → PRESERVE (fail-safe). Content-only compare (cmp), never mtime, and NEVER
+#      against the clone's HEAD/worktree blob (that is the *new* content, useless as
+#      a pristine test).
+#   4. A file absent in the consumer is created (that is not a clobber). Hooks stay +x.
+#   5. Coverage: core agents/commands/hooks(.sh,.py)/rules/skills, hooks/lib/*.sh,
+#      stack-agents (+ references), stack-hooks, stack-rules. statusline.cjs is
+#      installer-only and intentionally NOT synced.
+#   6. Report one compact line at SessionStart, plus the preserved paths when any.
 #
 # Two independent triggers for sync:
-#   1. Install-version lags source-version (someone pulled the clone but
-#      did not sync this repo). Cheap local check, no network required.
+#   1. Install-version lags source-version (someone pulled the clone but did not
+#      sync this repo). Cheap local check, no network required.
 #   2. Source clone is behind remote — pull, then re-check version.
 
-# Read meta file
+# ── Read meta file (entry condition) ─────────────────────────────────
 META_FILE="$CLAUDE_PROJECT_DIR/.claude/.superkit-meta"
 if [ ! -f "$META_FILE" ]; then
   exit 0  # superkit source not tracked, skip
 fi
 
 source "$META_FILE"
+SUPERKIT_STACKS="${SUPERKIT_STACKS:-}"
 
-# Verify source exists
+# Verify source exists (safety exits)
 if [ ! -d "$SUPERKIT_SOURCE" ]; then
   exit 0  # clone directory missing, skip silently
 fi
-
 if [ ! -f "$SUPERKIT_SOURCE/VERSION" ]; then
   exit 0  # not a valid superkit clone
 fi
 
+# ── (1) SELF-BOOTSTRAP ───────────────────────────────────────────────
+# Replace the installed copy of THIS script with the source's copy before doing
+# anything destructive, then re-exec the fresh copy. The env sentinel breaks any
+# re-exec loop. Guarded so a missing source/local copy, or an identical pair,
+# is a no-op. This is the ONE file we always overwrite from source — it is
+# self-managed infrastructure, so it is deliberately excluded from the pristine
+# sync loop below (a consumer never "customizes" the updater).
+SELF_SRC="$SUPERKIT_SOURCE/packages/core/hooks/superkit-update.sh"
+SELF_LOCAL="$CLAUDE_PROJECT_DIR/.claude/scripts/hooks/superkit-update.sh"
+if [ "${SUPERKIT_UPDATE_BOOTSTRAPPED:-}" != "1" ] \
+   && [ -f "$SELF_SRC" ] && [ -f "$SELF_LOCAL" ] \
+   && ! cmp -s "$SELF_SRC" "$SELF_LOCAL"; then
+  if cp "$SELF_SRC" "$SELF_LOCAL" 2>/dev/null; then
+    chmod +x "$SELF_LOCAL" 2>/dev/null
+    export SUPERKIT_UPDATE_BOOTSTRAPPED=1
+    exec bash "$SELF_LOCAL" "$@"
+  fi
+  # If the copy failed we fall through and run the current (old) logic once.
+fi
+
 # ── Cheap version check FIRST (no network) ───────────────────────────
-# Detects the case where someone manually pulled the clone (or another
-# project synced first) — install in this repo lags the source clone.
+# Detects the case where someone manually pulled the clone (or another project
+# synced first) — install in this repo lags the source clone.
 SOURCE_VERSION=$(cat "$SUPERKIT_SOURCE/VERSION" | tr -d '[:space:]')
 INSTALL_VERSION="$SUPERKIT_VERSION"
 
@@ -41,9 +80,8 @@ if [ "$INSTALL_VERSION" != "$SOURCE_VERSION" ]; then
   NEED_SYNC=true
 fi
 
-# Rate limit: check remote at most once per 6 hours. Version-mismatch
-# bypasses the rate limit (we already know we need to sync — no point
-# delaying just because we recently checked remote).
+# Rate limit: check remote at most once per 6 hours. Version-mismatch bypasses
+# the rate limit (we already know we need to sync).
 LAST_UPDATE_FILE="$HOME/.claude/.superkit-update-last-check"
 NOW=$(date +%s)
 LAST=$(cat "$LAST_UPDATE_FILE" 2>/dev/null || echo "0")
@@ -61,7 +99,7 @@ fi
 
 # ── Network check ────────────────────────────────────────────────────
 if [ "$SKIP_REMOTE_CHECK" = "false" ]; then
-  echo "$NOW" > "$LAST_UPDATE_FILE"
+  echo "$NOW" > "$LAST_UPDATE_FILE" 2>/dev/null
 
   cd "$SUPERKIT_SOURCE" 2>/dev/null && git fetch --quiet 2>/dev/null
   LOCAL=$(cd "$SUPERKIT_SOURCE" && git rev-parse HEAD 2>/dev/null)
@@ -88,81 +126,213 @@ if [ "$NEED_SYNC" = "false" ]; then
   exit 0
 fi
 
-# ── Re-copy core files (non-destructive: overwrites existing, adds new) ──
+# ── Sync setup ───────────────────────────────────────────────────────
 NEW_VERSION="$SOURCE_VERSION"
 OLD_VERSION="$INSTALL_VERSION"
 PACKAGES="$SUPERKIT_SOURCE/packages"
 CLAUDE_DIR="$CLAUDE_PROJECT_DIR/.claude"
 
-# Core agents
-for f in "$PACKAGES/core/agents/"*.md; do
-  [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/agents/$(basename "$f")"
-done
+# ── Internal-file ship-list (derived from the manifest) ──────────────
+# packages/core/INTERNAL-FILES is the single source of truth for repo-only files
+# that must NEVER be installed into a consumer's .claude/. We DERIVE the per-
+# category basename lists from it so this hook, lib/installer.js, and
+# superkit-counts-verify.sh never drift.
+MANIFEST_FILE="$SUPERKIT_SOURCE/packages/core/INTERNAL-FILES"
+manifest_category() {
+  local category="$1" line dir base
+  [ -f "$MANIFEST_FILE" ] || return 0
+  while IFS= read -r line || [ -n "$line" ]; do
+    line="${line#"${line%%[![:space:]]*}"}"   # ltrim
+    line="${line%"${line##*[![:space:]]}"}"   # rtrim
+    [ -z "$line" ] && continue
+    case "$line" in \#*) continue ;; esac
+    dir="${line%/*}"; base="${line##*/}"
+    [ "$dir" = "$category" ] && printf '%s ' "$base"
+  done < "$MANIFEST_FILE"
+}
+SUPERKIT_INTERNAL_HOOKS="$(manifest_category hooks)"
+SUPERKIT_INTERNAL_RULES="$(manifest_category rules)"
+# FALLBACK: manifest missing/unreadable → previous hard-coded values. A broken
+# updater is worse than a stale list. Literals live ONLY on these FALLBACK lines.
+if [ -z "${SUPERKIT_INTERNAL_HOOKS// }" ] && [ -z "${SUPERKIT_INTERNAL_RULES// }" ]; then
+  SUPERKIT_INTERNAL_HOOKS="superkit-counts-verify.sh verify-hooks.sh"  # FALLBACK
+  SUPERKIT_INTERNAL_RULES="superkit-integrity.md"                      # FALLBACK
+fi
 
-# Core commands
-for f in "$PACKAGES/core/commands/"*.md; do
-  [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/commands/$(basename "$f")"
-done
+in_list() {  # <needle> <space-separated-haystack>
+  local needle="$1" hay="$2" x
+  for x in $hay; do [ "$x" = "$needle" ] && return 0; done
+  return 1
+}
 
-# Core hooks (.sh AND .py — added .py 2026-05-14 for intake-classifier.py)
-for f in "$PACKAGES/core/hooks/"*.sh; do
-  [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/scripts/hooks/$(basename "$f")"
-done
-for f in "$PACKAGES/core/hooks/"*.py; do
-  [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/scripts/hooks/$(basename "$f")"
-done
+# ── Tags to compare against (pristine test) ──────────────────────────
+# Baseline = the version the consumer customized FROM (v$INSTALL_VERSION), plus
+# the last ~5 released tags so a file that is merely STALE (never synced, e.g.
+# references/) still matches a released blob and updates rather than freezes.
+RECENT_TAGS=$(git -C "$SUPERKIT_SOURCE" tag --list 'v*' --sort=-v:refname 2>/dev/null | head -5)
+CHECK_TAGS=$(printf 'v%s\n%s\n' "$INSTALL_VERSION" "$RECENT_TAGS" | awk 'NF && !seen[$0]++')
 
-# Core rules
-for f in "$PACKAGES/core/rules/"*.md; do
-  [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/rules/$(basename "$f")"
-done
+# One reusable temp for git-show output; one for the preserved list. If mktemp
+# fails, is_pristine treats every file as unverifiable → preserve (fail-safe).
+GITSHOW_TMP=$(mktemp 2>/dev/null) || GITSHOW_TMP=""
+PRESERVED_TMP=$(mktemp 2>/dev/null) || PRESERVED_TMP=""
+trap 'rm -f "$GITSHOW_TMP" "$PRESERVED_TMP" 2>/dev/null' EXIT
 
-# Core skills (SKILL.md + any other files inside each skill dir)
-for skill_dir in "$PACKAGES/core/skills/"*/; do
-  skill_name=$(basename "$skill_dir")
-  mkdir -p "$CLAUDE_DIR/skills/$skill_name"
-  [ -f "$skill_dir/SKILL.md" ] && cp "$skill_dir/SKILL.md" "$CLAUDE_DIR/skills/$skill_name/SKILL.md"
-  for sf in "$skill_dir"*; do
-    if [ -f "$sf" ] && [ "$(basename "$sf")" != "SKILL.md" ]; then
-      cp "$sf" "$CLAUDE_DIR/skills/$skill_name/$(basename "$sf")"
+# is_pristine <consumer_abs_path> <packages-relative-source-path>
+# Returns 0 (safe to overwrite) iff the consumer's CONTENT matches the file's
+# blob at one of CHECK_TAGS. Returns 1 (preserve) on any non-match/uncertainty.
+is_pristine() {
+  local consumer="$1" rel="$2" tag
+  [ -n "$GITSHOW_TMP" ] || return 1   # no temp → cannot prove → preserve
+  while IFS= read -r tag; do
+    [ -z "$tag" ] && continue
+    if git -C "$SUPERKIT_SOURCE" show "${tag}:packages/${rel}" > "$GITSHOW_TMP" 2>/dev/null; then
+      cmp -s "$consumer" "$GITSHOW_TMP" && return 0
     fi
+  done <<EOF
+$CHECK_TAGS
+EOF
+  return 1
+}
+
+SYNCED=0
+PRESERVED=0
+SKIPPED=0
+
+# sync_file <src_abs> <dst_abs> <src_packages_rel> [exec]
+#   absent in consumer → create · pristine → overwrite · else → preserve+report
+sync_file() {
+  local src="$1" dst="$2" rel="$3" x="${4:-}"
+  [ -f "$src" ] || return 0
+  if [ ! -e "$dst" ]; then
+    mkdir -p "$(dirname "$dst")" 2>/dev/null
+    if cp "$src" "$dst" 2>/dev/null; then
+      [ "$x" = "exec" ] && chmod +x "$dst" 2>/dev/null
+      SYNCED=$((SYNCED + 1))
+    fi
+    return 0
+  fi
+  if is_pristine "$dst" "$rel"; then
+    if cp "$src" "$dst" 2>/dev/null; then
+      [ "$x" = "exec" ] && chmod +x "$dst" 2>/dev/null
+      SYNCED=$((SYNCED + 1))
+    fi
+  else
+    PRESERVED=$((PRESERVED + 1))
+    [ -n "$PRESERVED_TMP" ] && printf '%s\n' "$dst" >> "$PRESERVED_TMP"
+  fi
+}
+
+# ── Core agents ──────────────────────────────────────────────────────
+for f in "$PACKAGES/core/agents/"*.md; do
+  [ -f "$f" ] || continue
+  b=$(basename "$f")
+  sync_file "$f" "$CLAUDE_DIR/agents/$b" "core/agents/$b"
+done
+
+# ── Core commands ────────────────────────────────────────────────────
+for f in "$PACKAGES/core/commands/"*.md; do
+  [ -f "$f" ] || continue
+  b=$(basename "$f")
+  sync_file "$f" "$CLAUDE_DIR/commands/$b" "core/commands/$b"
+done
+
+# ── Core hooks (.sh AND .py) — skip internal + the self-managed updater ──
+for f in "$PACKAGES/core/hooks/"*.sh "$PACKAGES/core/hooks/"*.py; do
+  [ -f "$f" ] || continue
+  b=$(basename "$f")
+  [ "$b" = "superkit-update.sh" ] && continue   # self-managed via bootstrap
+  if in_list "$b" "$SUPERKIT_INTERNAL_HOOKS"; then
+    SKIPPED=$((SKIPPED + 1)); continue
+  fi
+  sync_file "$f" "$CLAUDE_DIR/scripts/hooks/$b" "core/hooks/$b" exec
+done
+
+# ── Core hook library (hooks/lib/*.sh — the :108 glob never descended here) ──
+for f in "$PACKAGES/core/hooks/lib/"*.sh; do
+  [ -f "$f" ] || continue
+  b=$(basename "$f")
+  sync_file "$f" "$CLAUDE_DIR/scripts/hooks/lib/$b" "core/hooks/lib/$b" exec
+done
+
+# ── Core rules — skip internal ───────────────────────────────────────
+for f in "$PACKAGES/core/rules/"*.md; do
+  [ -f "$f" ] || continue
+  b=$(basename "$f")
+  if in_list "$b" "$SUPERKIT_INTERNAL_RULES"; then
+    SKIPPED=$((SKIPPED + 1)); continue
+  fi
+  sync_file "$f" "$CLAUDE_DIR/rules/$b" "core/rules/$b"
+done
+
+# ── Core skills (SKILL.md + any sibling files inside each skill dir) ──
+for skill_dir in "$PACKAGES/core/skills/"*/; do
+  [ -d "$skill_dir" ] || continue
+  skill_name=$(basename "$skill_dir")
+  for sf in "$skill_dir"*; do
+    [ -f "$sf" ] || continue
+    b=$(basename "$sf")
+    sync_file "$sf" "$CLAUDE_DIR/skills/$skill_name/$b" "core/skills/$skill_name/$b"
   done
 done
 
-# Stack agents (if stacks configured)
+# ── Stack packages (only for installed stacks) ───────────────────────
 for stack in $SUPERKIT_STACKS; do
+  # Stack agents
   if [ -d "$PACKAGES/stack-agents/$stack" ]; then
     for f in "$PACKAGES/stack-agents/$stack/"*.md; do
-      [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/agents/$(basename "$f")"
+      [ -f "$f" ] || continue
+      b=$(basename "$f")
+      sync_file "$f" "$CLAUDE_DIR/agents/$b" "stack-agents/$stack/$b"
+    done
+    # Stack agent references (on-demand knowledge docs — never synced before)
+    if [ -d "$PACKAGES/stack-agents/$stack/references" ]; then
+      for f in "$PACKAGES/stack-agents/$stack/references/"*.md; do
+        [ -f "$f" ] || continue
+        b=$(basename "$f")
+        sync_file "$f" "$CLAUDE_DIR/agents/references/$b" "stack-agents/$stack/references/$b"
+      done
+    fi
+  fi
+  # Stack hooks (.sh AND .py)
+  if [ -d "$PACKAGES/stack-hooks/$stack" ]; then
+    for f in "$PACKAGES/stack-hooks/$stack/"*.sh "$PACKAGES/stack-hooks/$stack/"*.py; do
+      [ -f "$f" ] || continue
+      b=$(basename "$f")
+      sync_file "$f" "$CLAUDE_DIR/scripts/hooks/$b" "stack-hooks/$stack/$b" exec
     done
   fi
-  if [ -d "$PACKAGES/stack-hooks/$stack" ]; then
-    for f in "$PACKAGES/stack-hooks/$stack/"*.sh; do
-      [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/scripts/hooks/$(basename "$f")"
-    done
-    for f in "$PACKAGES/stack-hooks/$stack/"*.py; do
-      [ -f "$f" ] && cp "$f" "$CLAUDE_DIR/scripts/hooks/$(basename "$f")"
+  # Stack rules (never synced before — go-safety.md drifted two releases)
+  if [ -d "$PACKAGES/stack-rules/$stack" ]; then
+    for f in "$PACKAGES/stack-rules/$stack/"*.md; do
+      [ -f "$f" ] || continue
+      b=$(basename "$f")
+      sync_file "$f" "$CLAUDE_DIR/rules/$b" "stack-rules/$stack/$b"
     done
   fi
 done
 
 # Settings.json — SKIP (user may have customized it)
 # CLAUDE.md — SKIP (user fills it with project info)
+# statusline.cjs — SKIP (installer-only; consumers legitimately fork it)
 
-# Make hooks executable
+# Keep hooks executable (matches the installer's +x behavior)
 chmod +x "$CLAUDE_DIR/scripts/hooks/"*.sh 2>/dev/null
 chmod +x "$CLAUDE_DIR/scripts/hooks/"*.py 2>/dev/null
+chmod +x "$CLAUDE_DIR/scripts/hooks/lib/"*.sh 2>/dev/null
 
-# Update meta
+# ── Update meta version ──────────────────────────────────────────────
 sed -i.bak "s/SUPERKIT_VERSION=.*/SUPERKIT_VERSION=\"$NEW_VERSION\"/" "$META_FILE" 2>/dev/null
 rm -f "$META_FILE.bak"
 
-echo ""
-echo "✅ superkit auto-updated: $OLD_VERSION → $NEW_VERSION"
-AGENT_COUNT=$(ls "$CLAUDE_DIR/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
-CMD_COUNT=$(ls "$CLAUDE_DIR/commands/"*.md 2>/dev/null | wc -l | tr -d ' ')
-echo "   $AGENT_COUNT agents, $CMD_COUNT commands synced from $SUPERKIT_SOURCE"
-echo "   Changelog: https://github.com/RaNDoM6913/claude-code-superkit/releases"
-echo ""
+# ── Report (compact — lands in every session start) ──────────────────
+echo "superkit-update: $SYNCED synced · $PRESERVED preserved (locally customized) · $SKIPPED skipped (internal) · $OLD_VERSION → $NEW_VERSION"
+if [ "$PRESERVED" -gt 0 ] && [ -n "$PRESERVED_TMP" ] && [ -f "$PRESERVED_TMP" ]; then
+  while IFS= read -r dpath; do
+    [ -z "$dpath" ] && continue
+    echo "  preserved: $dpath"
+  done < "$PRESERVED_TMP"
+  echo "  review with: git -C $SUPERKIT_SOURCE show v$OLD_VERSION:packages/<srcpath> | diff - <consumerpath>"
+fi
 
 exit 0

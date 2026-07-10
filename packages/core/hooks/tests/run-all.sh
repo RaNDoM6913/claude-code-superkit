@@ -18,6 +18,7 @@ SUITES=(
   "block-dangerous-git_test.sh"
   "mirror-invariants_test.sh"
   "internal-manifest_test.sh"
+  "superkit-update_test.sh"
 )
 
 TOTAL_PASS=0
