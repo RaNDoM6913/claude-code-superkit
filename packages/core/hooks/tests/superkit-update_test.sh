@@ -200,6 +200,88 @@ else
   pass "(g) ADR template NOT reported (doc template — silence is correct)"
 fi
 
+# ─────────────────────────────────────────────────────────────────────
+# (h) MANIFEST FALLBACK — must be PER CATEGORY (v1.5.2 fix)
+# A manifest that loses just one category's lines must still protect that
+# category via the hard-coded fallback; the healthy category keeps reading
+# from the manifest. Manifest mutations below are working-tree-only.
+# ─────────────────────────────────────────────────────────────────────
+echo ""
+echo "── (h) manifest fallback variants"
+MANIFEST="$P/core/INTERNAL-FILES"
+MANIFEST_BAK="$WORK/manifest.bak"
+cp "$MANIFEST" "$MANIFEST_BAK"
+
+# (h1) hooks-only manifest → rules category empty → rules MUST fall back
+printf 'hooks/superkit-counts-verify.sh\nhooks/verify-hooks.sh\n' > "$MANIFEST"
+C_H1="$WORK/consumer_h1"; build_consumer "$C_H1" 0.0.2
+OUT_H1="$(run_updater "$C_H1")"
+if [ ! -e "$C_H1/.claude/rules/superkit-integrity.md" ]; then
+  pass "(h1) hooks-only manifest: superkit-integrity.md still NOT copied (rules fallback)"
+else
+  fail "(h1) hooks-only manifest: superkit-integrity.md LEAKED into consumer"
+fi
+if [ ! -e "$C_H1/.claude/scripts/hooks/verify-hooks.sh" ]; then
+  pass "(h1) hooks-only manifest: hooks still skipped (from manifest)"
+else
+  fail "(h1) hooks-only manifest: verify-hooks.sh copied"
+fi
+if echo "$OUT_H1" | grep -q "no 'rules/' entries"; then
+  pass "(h1) empty category warned on stderr"
+else
+  fail "(h1) no stderr warning for the empty rules category"
+fi
+
+# (h2) rules-only manifest → hooks category empty → hooks MUST fall back
+printf 'rules/superkit-integrity.md\n' > "$MANIFEST"
+C_H2="$WORK/consumer_h2"; build_consumer "$C_H2" 0.0.2
+OUT_H2="$(run_updater "$C_H2")"
+if [ ! -e "$C_H2/.claude/scripts/hooks/verify-hooks.sh" ]; then
+  pass "(h2) rules-only manifest: verify-hooks.sh still NOT copied (hooks fallback)"
+else
+  fail "(h2) rules-only manifest: verify-hooks.sh LEAKED into consumer"
+fi
+if [ ! -e "$C_H2/.claude/rules/superkit-integrity.md" ]; then
+  pass "(h2) rules-only manifest: rules still skipped (from manifest)"
+else
+  fail "(h2) rules-only manifest: superkit-integrity.md copied"
+fi
+
+# (h3) manifest present but ALL lines commented → both categories fall back
+printf '# nothing here\n# hooks/superkit-counts-verify.sh\n' > "$MANIFEST"
+C_H3="$WORK/consumer_h3"; build_consumer "$C_H3" 0.0.2
+OUT_H3="$(run_updater "$C_H3")"
+if [ ! -e "$C_H3/.claude/rules/superkit-integrity.md" ] && [ ! -e "$C_H3/.claude/scripts/hooks/verify-hooks.sh" ]; then
+  pass "(h3) all-commented manifest: both categories fall back, nothing leaked"
+else
+  fail "(h3) all-commented manifest: an internal file leaked"
+fi
+
+# (h4) manifest MISSING entirely → both fall back, silently (pre-manifest clones)
+rm -f "$MANIFEST"
+C_H4="$WORK/consumer_h4"; build_consumer "$C_H4" 0.0.2
+OUT_H4="$(run_updater "$C_H4")"
+if [ ! -e "$C_H4/.claude/rules/superkit-integrity.md" ] && [ ! -e "$C_H4/.claude/scripts/hooks/verify-hooks.sh" ]; then
+  pass "(h4) missing manifest: both categories fall back, nothing leaked"
+else
+  fail "(h4) missing manifest: an internal file leaked"
+fi
+if echo "$OUT_H4" | grep -q "entries"; then
+  fail "(h4) missing manifest warned (should be silent — benign for pre-manifest clones)"
+else
+  pass "(h4) missing manifest stays silent"
+fi
+
+# (h5) complete manifest restored → all three skipped again (from the manifest)
+cp "$MANIFEST_BAK" "$MANIFEST"
+C_H5="$WORK/consumer_h5"; build_consumer "$C_H5" 0.0.2
+OUT_H5="$(run_updater "$C_H5")"
+if echo "$OUT_H5" | grep -qE '· 3 skipped \(internal\)' && [ ! -e "$C_H5/.claude/rules/superkit-integrity.md" ]; then
+  pass "(h5) complete manifest: 3 internal skipped, no fallback needed"
+else
+  fail "(h5) complete manifest: skip accounting wrong"
+fi
+
 # ── Summary ──────────────────────────────────────────────────────────
 echo ""
 TOTAL=$((PASS + FAIL))

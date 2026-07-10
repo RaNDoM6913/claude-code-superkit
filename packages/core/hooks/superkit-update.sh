@@ -152,10 +152,20 @@ manifest_category() {
 }
 SUPERKIT_INTERNAL_HOOKS="$(manifest_category hooks)"
 SUPERKIT_INTERNAL_RULES="$(manifest_category rules)"
-# FALLBACK: manifest missing/unreadable → previous hard-coded values. A broken
-# updater is worse than a stale list. Literals live ONLY on these FALLBACK lines.
-if [ -z "${SUPERKIT_INTERNAL_HOOKS// }" ] && [ -z "${SUPERKIT_INTERNAL_RULES// }" ]; then
+# FALLBACK — PER CATEGORY: each list independently falls back to its hard-coded
+# literal when its own manifest lookup yields nothing. (A joint both-empty guard
+# let a manifest that lost just one category's lines silently ship that
+# category's internal files — the exact D2 leak the manifest exists to prevent.)
+# A broken updater is worse than a stale list. Literals live ONLY on the
+# FALLBACK lines. When the manifest EXISTS but a category is empty, we warn on
+# stderr — a silent fallback is how a corrupted manifest stays invisible; a
+# MISSING manifest stays silent (benign: the source clone predates it).
+if [ -z "${SUPERKIT_INTERNAL_HOOKS// }" ]; then
+  [ -f "$MANIFEST_FILE" ] && echo "⚠ superkit-update: INTERNAL-FILES manifest has no 'hooks/' entries — using built-in fallback list" >&2
   SUPERKIT_INTERNAL_HOOKS="superkit-counts-verify.sh verify-hooks.sh"  # FALLBACK
+fi
+if [ -z "${SUPERKIT_INTERNAL_RULES// }" ]; then
+  [ -f "$MANIFEST_FILE" ] && echo "⚠ superkit-update: INTERNAL-FILES manifest has no 'rules/' entries — using built-in fallback list" >&2
   SUPERKIT_INTERNAL_RULES="superkit-integrity.md"                      # FALLBACK
 fi
 
