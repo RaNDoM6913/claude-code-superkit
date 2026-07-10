@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Statusline (final layout + now synced to consumers):** the shipped `helpers/statusline.cjs` line was trimmed to the essentials — `v<version> | branch | model ⚙effort ⟁ULTRA | task | ctx bar | 5h | W` — dropping the `[S]`/stack/component-count clutter (only a `[strict]` badge surfaces the non-default profile). AND it is no longer installer-only: `superkit-update.sh` now syncs `statusline.cjs` under the SAME pristine rule as everything else — a consumer who forked it keeps their fork (preserved + reported), an untouched copy gets the upstream improvements, an absent one is created (34-case updater suite: absent→created + forked→preserved).
+
 ## [1.5.2] — 2026-07-10
 
 **The auto-sync integrity release.** Five defects found by dogfooding the kit in a real

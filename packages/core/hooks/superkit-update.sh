@@ -23,8 +23,8 @@
 #      a pristine test).
 #   4. A file absent in the consumer is created (that is not a clobber). Hooks stay +x.
 #   5. Coverage: core agents/commands/hooks(.sh,.py)/rules/skills, hooks/lib/*.sh,
-#      stack-agents (+ references), stack-hooks, stack-rules. statusline.cjs is
-#      installer-only and intentionally NOT synced.
+#      stack-agents (+ references), stack-hooks, stack-rules, and helpers/statusline.cjs
+#      — all under the same pristine rule (a forked statusline is preserved).
 #   6. Report one compact line at SessionStart, plus the preserved paths when any.
 #
 # Two independent triggers for sync:
@@ -339,7 +339,11 @@ fi
 
 # Settings.json — SKIP (user may have customized it)
 # CLAUDE.md — SKIP (user fills it with project info)
-# statusline.cjs — SKIP (installer-only; consumers legitimately fork it)
+
+# statusline.cjs — synced under the SAME pristine rule as everything else: a
+# consumer who forked it keeps their fork (preserved + reported); an untouched
+# copy gets the upstream improvements; an absent one is created.
+sync_file "$PACKAGES/core/helpers/statusline.cjs" "$CLAUDE_DIR/scripts/statusline.cjs" "core/helpers/statusline.cjs"
 
 # Keep hooks executable (matches the installer's +x behavior)
 chmod +x "$CLAUDE_DIR/scripts/hooks/"*.sh 2>/dev/null

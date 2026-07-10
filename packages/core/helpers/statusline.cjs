@@ -311,12 +311,7 @@ function rateLimitSegments(payload) {
 // ── Build status line ──────────────────────────────────
 const stdinPayload = readStdinPayload();
 
-const profile = getProfile();
-const stacks = getStacks();
 const git = getGitInfo();
-const migrations = getMigrationCount();
-const hookCount = getHookCount();
-const agentCount = getAgentCount();
 const task = getContextHint();
 const skVersion = getSuperkit();
 const effortLevel = getEffortLevel(stdinPayload);
@@ -327,37 +322,21 @@ const contextBudget = getContextBudget(stdinPayload, scanned);
 
 const parts = [];
 
-// Claude Code paints uncoloured statusline text muted gray → the two live text
+// Claude Code paints uncoloured statusline text muted gray → the live text
 // fields (branch, task) carry an explicit bright colour; CLAUDE_STATUSLINE_THEME=light
 // flips it to black for light terminals.
 const BRIGHT_FG = (process.env.CLAUDE_STATUSLINE_THEME || '').toLowerCase() === 'light' ? '\x1b[30m' : '\x1b[97m';
 
-// Profile indicator — only surface a badge for the non-default 'strict' profile
-// (worth knowing it's on); fast/standard render nothing to keep the line clean.
-if (profile === 'strict') parts.push('[strict]');
+// Superkit version — bold magenta, leads the line.
+if (skVersion) parts.push(`\x1b[1;35mv${skVersion}\x1b[0m`);
 
-// Git branch + status
+// Git branch + status (bright fg)
 if (git.branch) {
   let branchStr = git.branch;
   if (git.staged) branchStr += '+';
   if (git.dirty) branchStr += '*';
   parts.push(`${BRIGHT_FG}${branchStr}\x1b[0m`);
 }
-
-// Stacks
-if (stacks.length > 0) {
-  parts.push(stacks.join('/'));
-}
-
-// Counts
-const counts = [];
-if (agentCount > 0) counts.push(`${agentCount}ag`);
-if (hookCount > 0) counts.push(`${hookCount}hk`);
-if (migrations > 0) counts.push(`${migrations}mig`);
-if (counts.length > 0) parts.push(counts.join(' '));
-
-// Superkit version
-if (skVersion) parts.push(`sk${skVersion}`);
 
 // Model + effort (heat-graded) + ultracode badge.
 // Model in cyan; effort BOLD, coloured by intensity (high=green, xhigh=yellow,
@@ -376,16 +355,16 @@ if (skVersion) parts.push(`sk${skVersion}`);
   if (segment) parts.push(segment);
 }
 
+// Active task (from .claude/.task-state.json currentTask; truncate to 40 chars)
+if (task) {
+  const short = task.length > 40 ? task.slice(0, 37) + '...' : task;
+  parts.push(`${BRIGHT_FG}${short}\x1b[0m`);
+}
+
 // Context bar (native or transcript-derived) — absent on older CLIs w/o transcript
 if (contextBudget) parts.push(contextBudget);
 
 // Real 5h / weekly rate-limit bars (subscription sessions only)
 for (const seg of rateLimitSegments(stdinPayload)) parts.push(seg);
-
-// Active task (from .claude/.task-state.json currentTask; truncate to 30 chars)
-if (task) {
-  const short = task.length > 30 ? task.slice(0, 27) + '...' : task;
-  parts.push(`${BRIGHT_FG}${short}\x1b[0m`);
-}
 
 process.stdout.write(parts.join(' | '));

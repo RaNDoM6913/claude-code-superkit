@@ -66,6 +66,7 @@ wf "$P/stack-agents/go/references/ref.md"        "REF-DOC"           # reference
 wf "$P/stack-rules/go/gosafe.md"                 "GOSAFE"            # stack-rules coverage
 wf "$P/stack-hooks/go/gohook.sh"                 "GOHOOK"
 wf "$P/core/docs-templates/adr-template.md"      "ADR-TEMPLATE-BODY" # project-root ADR template (create-if-missing)
+wf "$P/core/helpers/statusline.cjs"              "STATUSLINE-V3"     # (i) synced under the pristine rule
 
 # versioned files: pristine.md, ahook.sh, custom.md change every release
 write_v() {
@@ -143,6 +144,7 @@ chk "(e) absent stack-rule → created"          "$CONSUMER/.claude/rules/gosafe
 chk "(e) absent stack-hook → created"          "$CONSUMER/.claude/scripts/hooks/gohook.sh" "GOHOOK"
 chk "(e) absent skill file → created"          "$CONSUMER/.claude/skills/demo/SKILL.md" "SKILL-BODY"
 chk "(e) absent ADR template → created at project root" "$CONSUMER/docs-templates/adr-template.md" "ADR-TEMPLATE-BODY"
+chk "(i) absent statusline → created at .claude/scripts/" "$CONSUMER/.claude/scripts/statusline.cjs" "STATUSLINE-V3"
 
 # self-bootstrap: the installed copy must have been replaced by the source copy
 if grep -qF 'LOCAL-STUB-MARKER' "$CONSUMER/.claude/scripts/hooks/superkit-update.sh"; then
@@ -198,6 +200,23 @@ if echo "$OUT_G" | grep -qF "$CONSUMER_G/docs-templates/adr-template.md"; then
   fail "(g) customized ADR template wrongly named in preserved report"
 else
   pass "(g) ADR template NOT reported (doc template — silence is correct)"
+fi
+
+# ─────────────────────────────────────────────────────────────────────
+# (i-fork) FORKED statusline.cjs → preserved (consumers legitimately fork it)
+# ─────────────────────────────────────────────────────────────────────
+echo ""
+echo "── (i-fork) run: a forked statusline is preserved, not clobbered"
+CONSUMER_I="$WORK/consumer_i"
+build_consumer "$CONSUMER_I" 0.0.2
+wf "$CONSUMER_I/.claude/scripts/statusline.cjs" "MY-FORKED-STATUSLINE"
+OUT_I="$(run_updater "$CONSUMER_I")"
+echo "$OUT_I" | sed 's/^/   [out] /'
+chk "(i-fork) forked statusline → preserved byte-identical" "$CONSUMER_I/.claude/scripts/statusline.cjs" "MY-FORKED-STATUSLINE"
+if echo "$OUT_I" | grep -qF "$CONSUMER_I/.claude/scripts/statusline.cjs"; then
+  pass "(i-fork) forked statusline named in the preserved report"
+else
+  fail "(i-fork) forked statusline NOT reported"
 fi
 
 # ─────────────────────────────────────────────────────────────────────
