@@ -332,9 +332,9 @@ const parts = [];
 // flips it to black for light terminals.
 const BRIGHT_FG = (process.env.CLAUDE_STATUSLINE_THEME || '').toLowerCase() === 'light' ? '\x1b[30m' : '\x1b[97m';
 
-// Profile indicator
-const profileIcon = { fast: 'F', standard: 'S', strict: 'X' }[profile] || 'S';
-parts.push(`[${profileIcon}]`);
+// Profile indicator — only surface a badge for the non-default 'strict' profile
+// (worth knowing it's on); fast/standard render nothing to keep the line clean.
+if (profile === 'strict') parts.push('[strict]');
 
 // Git branch + status
 if (git.branch) {
