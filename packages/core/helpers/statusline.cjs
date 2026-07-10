@@ -227,11 +227,6 @@ function resolveContextWindowTokens(usedTokens, modelString) {
 }
 
 // ── Shared bar rendering (ctx + rate limits speak one visual language) ─────
-function formatK(n) {
-  if (n >= 1000000) return `${(n / 1000000).toFixed(1)}M`;
-  if (n >= 1000) return `${Math.round(n / 1000)}k`;
-  return `${n}`;
-}
 function bar10(pct) {
   const filled = Math.max(0, Math.min(10, Math.round((pct / 100) * 10)));
   return '█'.repeat(filled) + '░'.repeat(10 - filled);
@@ -242,7 +237,7 @@ function heatColour(pct) {
 
 function renderCtx(used, max) {
   const pct = Math.min(100, Math.round((used / max) * 100));
-  return `ctx ${heatColour(pct)}${bar10(pct)}\x1b[0m ${pct}% ${formatK(used)}`;
+  return `ctx ${heatColour(pct)}${bar10(pct)}\x1b[0m ${pct}%`;
 }
 
 // ── Parse context budget from payload ─────────────────
