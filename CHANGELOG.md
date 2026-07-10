@@ -2,6 +2,10 @@
 
 All notable changes to claude-code-superkit are documented here.
 
+## [Unreleased]
+
+- **Fix (auto-sync integrity — 5 defects found by dogfooding in a real consumer project):** `superkit-update.sh` no longer blind-clobbers customized consumer files — a file is overwritten only when its content matches a released tag's blob (`v<installed>` + last 5 tags); no match or any uncertainty → **preserved and reported** at SessionStart (`N synced · M preserved · K skipped (internal)`), with a self-bootstrap `exec` so the fixed updater applies before its first sync, and coverage extended to `stack-rules/`, stack `references/` and `hooks/lib/` (19→22-case fixture suite; dry-run against a copy of the consumer: 102 synced, all 7 known customizations preserved). Repo-only files (`superkit-counts-verify.sh`, `verify-hooks.sh`, `superkit-integrity.md`) can no longer leak: one shared `packages/core/INTERNAL-FILES` manifest now feeds the installer, the counts hook and the updater (enforced by `internal-manifest_test.sh`). `dev-required-on-commit.sh` no longer blocks its own exempt commits — the exempt-only short-circuit runs before the override branch, and override tags must OPEN a message line (prose mentioning `[no-dev:…]` is not an override; `-m`/`--message`/`--message=` payload extraction; counter semantics preserved; 18 cases). `block-dangerous-git.sh` no longer matches its own commit messages — `-m`/`--message`/heredoc payloads are stripped before the guards run while chained real commands still block (38 cases + 11 adversarial orchestrator checks). The ADR template now actually installs (unconditional, idempotent, project-root `docs-templates/adr-template.md`; updater creates it when missing, never overwrites; `/dev`'s nudge degrades silently when absent). `v1.5.1` tag created locally as the pristine-check baseline.
+
 ## [1.5.1] — 2026-07-10
 
 **The upstream-adoption & quality-compactness release.** The best of three public kits —
