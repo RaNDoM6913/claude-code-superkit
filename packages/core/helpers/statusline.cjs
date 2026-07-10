@@ -235,28 +235,45 @@ function heatColour(pct) {
   return pct >= 80 ? '\x1b[31m' : pct >= 50 ? '\x1b[33m' : '\x1b[32m';
 }
 
+function renderCtxPct(pct) {
+  const p = Math.max(0, Math.min(100, Math.round(pct)));
+  return `ctx ${heatColour(p)}${bar10(p)}\x1b[0m ${p}%`;
+}
 function renderCtx(used, max) {
-  const pct = Math.min(100, Math.round((used / max) * 100));
-  return `ctx ${heatColour(pct)}${bar10(pct)}\x1b[0m ${pct}%`;
+  return renderCtxPct((used / max) * 100);
 }
 
 // ── Parse context budget from payload ─────────────────
-// Claude Code 2.1.x: context_window = CURRENT usage (not cumulative).
-// Older CLIs: no native field → derive usage from the transcript instead.
+// Claude Code 2.1.x sends context_window as an OBJECT:
+//   { total_input_tokens, context_window_size, used_percentage, … }
+// Older CLIs sent a bare token count there; the oldest sent nothing at all,
+// in which case usage is measured from the transcript instead.
 function getContextBudget(payload, scanned) {
   if (payload == null) return '';
-  // Native path (Claude Code 2.1.x provides current-token semantics).
-  const used = payload.context_window ?? payload.context_tokens_used ?? null;
-  if (used != null) {
-    if (typeof used !== 'number') return '';
-    const max = payload.context_window_max ?? payload.context_tokens_max
-      ?? (typeof process.env.CLAUDE_CONTEXT_TOKENS_MAX === 'string'
-          ? parseInt(process.env.CLAUDE_CONTEXT_TOKENS_MAX, 10) || null
-          : null)
-      ?? 1000000;  // default: Opus 4.8 1M
-    return renderCtx(used, max);
+
+  const cw = payload.context_window;
+
+  if (cw && typeof cw === 'object') {
+    // used_percentage is the number the CLI itself reports in /context — prefer
+    // it, so the bar and /context can never disagree.
+    if (typeof cw.used_percentage === 'number') return renderCtxPct(cw.used_percentage);
+    if (typeof cw.total_input_tokens === 'number' && cw.context_window_size > 0) {
+      return renderCtx(cw.total_input_tokens, cw.context_window_size);
+    }
+    // Object present but carries no usable numbers → fall through to the transcript.
+  } else {
+    const used = cw ?? payload.context_tokens_used ?? null;
+    if (typeof used === 'number') {
+      const max = payload.context_window_max ?? payload.context_tokens_max
+        ?? (typeof process.env.CLAUDE_CONTEXT_TOKENS_MAX === 'string'
+            ? parseInt(process.env.CLAUDE_CONTEXT_TOKENS_MAX, 10) || null
+            : null)
+        ?? 1000000;  // default: Opus 4.8 1M
+      return renderCtx(used, max);
+    }
   }
-  // Fallback path: both native fields absent → measured from the transcript.
+
+  // Fallback path: no usable native field → measured from the transcript.
   if (scanned && scanned.used != null) {
     // Model string: the '[1m]' marker rides on model.id (e.g. claude-opus-4-8[1m]);
     // combine id + display_name so either field can carry it.
