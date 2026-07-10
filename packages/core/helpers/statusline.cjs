@@ -385,7 +385,7 @@ for (const seg of rateLimitSegments(stdinPayload)) parts.push(seg);
 // Active task (from .claude/.task-state.json currentTask; truncate to 30 chars)
 if (task) {
   const short = task.length > 30 ? task.slice(0, 27) + '...' : task;
-  parts.push(`${BRIGHT_FG}» ${short}\x1b[0m`);
+  parts.push(`${BRIGHT_FG}${short}\x1b[0m`);
 }
 
 process.stdout.write(parts.join(' | '));
