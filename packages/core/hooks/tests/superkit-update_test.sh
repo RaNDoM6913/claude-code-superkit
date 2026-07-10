@@ -65,6 +65,7 @@ wf "$P/stack-agents/go/goagent.md"               "GOAGENT"
 wf "$P/stack-agents/go/references/ref.md"        "REF-DOC"           # references coverage
 wf "$P/stack-rules/go/gosafe.md"                 "GOSAFE"            # stack-rules coverage
 wf "$P/stack-hooks/go/gohook.sh"                 "GOHOOK"
+wf "$P/core/docs-templates/adr-template.md"      "ADR-TEMPLATE-BODY" # project-root ADR template (create-if-missing)
 
 # versioned files: pristine.md, ahook.sh, custom.md change every release
 write_v() {
@@ -141,6 +142,7 @@ chk "(e) absent hooks/lib file → created"      "$CONSUMER/.claude/scripts/hook
 chk "(e) absent stack-rule → created"          "$CONSUMER/.claude/rules/gosafe.md" "GOSAFE"
 chk "(e) absent stack-hook → created"          "$CONSUMER/.claude/scripts/hooks/gohook.sh" "GOHOOK"
 chk "(e) absent skill file → created"          "$CONSUMER/.claude/skills/demo/SKILL.md" "SKILL-BODY"
+chk "(e) absent ADR template → created at project root" "$CONSUMER/docs-templates/adr-template.md" "ADR-TEMPLATE-BODY"
 
 # self-bootstrap: the installed copy must have been replaced by the source copy
 if grep -qF 'LOCAL-STUB-MARKER' "$CONSUMER/.claude/scripts/hooks/superkit-update.sh"; then
@@ -178,6 +180,25 @@ else
   fail "(f) preserved file not reported"
 fi
 chk "(f) missing baseline: file matching walked tag v0.0.1 still synced" "$CONSUMER_F/.claude/scripts/hooks/ahook.sh" "S3"
+
+# ─────────────────────────────────────────────────────────────────────
+# (g) ADR TEMPLATE — project-root, create-if-missing, never clobber/report
+# ─────────────────────────────────────────────────────────────────────
+echo ""
+echo "── (g) run: pre-existing ADR template stays untouched & unreported"
+CONSUMER_G="$WORK/consumer_g"
+build_consumer "$CONSUMER_G" 0.0.2
+# Plant a locally-edited ADR template at the PROJECT root (not .claude/)
+wf "$CONSUMER_G/docs-templates/adr-template.md" "MY-CUSTOM-ADR"
+OUT_G="$(run_updater "$CONSUMER_G")"
+echo "$OUT_G" | sed 's/^/   [out] /'
+
+chk "(g) pre-existing ADR template → left untouched" "$CONSUMER_G/docs-templates/adr-template.md" "MY-CUSTOM-ADR"
+if echo "$OUT_G" | grep -qF "$CONSUMER_G/docs-templates/adr-template.md"; then
+  fail "(g) customized ADR template wrongly named in preserved report"
+else
+  pass "(g) ADR template NOT reported (doc template — silence is correct)"
+fi
 
 # ── Summary ──────────────────────────────────────────────────────────
 echo ""

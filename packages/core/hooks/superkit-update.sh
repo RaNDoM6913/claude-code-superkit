@@ -312,6 +312,21 @@ for stack in $SUPERKIT_STACKS; do
   fi
 done
 
+# ── ADR template (project root, create-if-missing only) ──────────────
+# dev.md Phase 2 + superkit-init.md reference docs-templates/adr-template.md at
+# the PROJECT root (NOT .claude/ — note CLAUDE_DIR points at .claude). Create it
+# when absent so the nudge never dangles (counts as synced). If present, leave it
+# untouched and do NOT report it as preserved: it's a doc template consumers
+# legitimately edit, so silence — not "preserved (locally customized)" — is right.
+ADR_SRC="$PACKAGES/core/docs-templates/adr-template.md"
+ADR_DST="$CLAUDE_PROJECT_DIR/docs-templates/adr-template.md"
+if [ -f "$ADR_SRC" ] && [ ! -e "$ADR_DST" ]; then
+  mkdir -p "$(dirname "$ADR_DST")" 2>/dev/null
+  if cp "$ADR_SRC" "$ADR_DST" 2>/dev/null; then
+    SYNCED=$((SYNCED + 1))
+  fi
+fi
+
 # Settings.json — SKIP (user may have customized it)
 # CLAUDE.md — SKIP (user fills it with project info)
 # statusline.cjs — SKIP (installer-only; consumers legitimately fork it)
