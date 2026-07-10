@@ -380,7 +380,11 @@ for (const seg of rateLimitSegments(stdinPayload)) parts.push(seg);
 // Active task (from .claude/.task-state.json currentTask; truncate to 30 chars)
 if (task) {
   const short = task.length > 30 ? task.slice(0, 27) + '...' : task;
-  parts.push(`» ${short}`);  // default fg — readable on dark AND light themes
+  // Claude Code renders uncoloured statusline text in its own muted gray, so the
+  // task carries an explicit colour: bright white by default, black when the user
+  // sets CLAUDE_STATUSLINE_THEME=light (light terminals).
+  const taskFg = (process.env.CLAUDE_STATUSLINE_THEME || '').toLowerCase() === 'light' ? '\x1b[30m' : '\x1b[97m';
+  parts.push(`${taskFg}» ${short}\x1b[0m`);
 }
 
 process.stdout.write(parts.join(' | '));
