@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // statusline.cjs — Claude Code status bar for superkit
-// Shows: profile, stacks, git branch, migration count, hooks, context hints
-//        + effort level + context budget (when Claude Code 2.1.x provides them)
+// Shows: superkit version, git branch, model + effort (+ ⟁ULTRA badge),
+//        context bar, and real 5h/weekly rate-limit bars. Every segment fail-open.
 // Pure Node.js, no external dependencies, 2s timeout on all execSync calls
 
 'use strict';
@@ -131,16 +131,6 @@ function getAgentCount() {
   try {
     return readdirSync(agentsDir).filter(f => f.endsWith('.md')).length;
   } catch { return 0; }
-}
-
-function getContextHint() {
-  const stateFile = join(projectDir, '.claude', '.task-state.json');
-  if (!existsSync(stateFile)) return '';
-  try {
-    const state = JSON.parse(readFileSync(stateFile, 'utf8'));
-    if (state.currentTask) return state.currentTask;
-  } catch { /* skip */ }
-  return '';
 }
 
 function getSuperkit() {
@@ -329,7 +319,6 @@ function rateLimitSegments(payload) {
 const stdinPayload = readStdinPayload();
 
 const git = getGitInfo();
-const task = getContextHint();
 const skVersion = getSuperkit();
 const effortLevel = getEffortLevel(stdinPayload);
 const tp = stdinPayload && typeof stdinPayload.transcript_path === 'string'
@@ -339,9 +328,9 @@ const contextBudget = getContextBudget(stdinPayload, scanned);
 
 const parts = [];
 
-// Claude Code paints uncoloured statusline text muted gray → the live text
-// fields (branch, task) carry an explicit bright colour; CLAUDE_STATUSLINE_THEME=light
-// flips it to black for light terminals.
+// Claude Code paints uncoloured statusline text muted gray → the git branch
+// carries an explicit bright colour; CLAUDE_STATUSLINE_THEME=light flips it
+// to black for light terminals.
 const BRIGHT_FG = (process.env.CLAUDE_STATUSLINE_THEME || '').toLowerCase() === 'light' ? '\x1b[30m' : '\x1b[97m';
 
 // Superkit version — bold magenta, leads the line.
@@ -370,12 +359,6 @@ if (git.branch) {
   const segment = [modelName ? `\x1b[36m${modelName}\x1b[0m` : '', effortStr, ultraStr]
     .filter(Boolean).join(' ');
   if (segment) parts.push(segment);
-}
-
-// Active task (from .claude/.task-state.json currentTask; truncate to 40 chars)
-if (task) {
-  const short = task.length > 40 ? task.slice(0, 37) + '...' : task;
-  parts.push(`${BRIGHT_FG}${short}\x1b[0m`);
 }
 
 // Context bar (native or transcript-derived) — absent on older CLIs w/o transcript
