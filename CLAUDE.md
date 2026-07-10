@@ -13,6 +13,7 @@ packages/
     helpers/                # 1 helper (statusline.cjs)
     rules/                  # 8 rules (+1 superkit-internal)
     skills/                 # 11 skills · incl. v1.4.0: telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns
+    INTERNAL-FILES          # repo-only skip manifest (feeds installer / counts gate / updater)
     settings.json           # Hook wiring + statusLine
     CLAUDE.md               # Template for users
     docs-templates/         # Architecture doc templates
@@ -197,7 +198,8 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `packages/core/commands/workflow.md` | Workflow templates: bugfix, hotfix, spike, refactor, dep-upgrade, security-audit |
 | `packages/core/commands/review.md` | Double-verification review with --comment flag |
 | `packages/frontend-3d/README.md` | Frontend 3D package — agents, hooks, skills, rules, commands for GSAP/Three.js/R3F |
-| `packages/core/helpers/statusline.cjs` | Claude Code status bar — stack detector scans root + 1 level of subdirs (monorepo-aware) |
+| `packages/core/helpers/statusline.cjs` | Claude Code status bar — monorepo-aware stack detector; ctx heat bar + real 5h/W rate-limit bars from the CLI payload; model+effort+⟁ULTRA; `CLAUDE_STATUSLINE_THEME=light` for light terminals |
+| `packages/core/hooks/superkit-update.sh` | SessionStart auto-updater — pristine-check vs released tags, preserves+reports customized consumer files, self-bootstraps, skips INTERNAL-FILES |
 | `docs/dev-flow.svg` | Hand-authored `/dev` 16-phase flow diagram embedded in main `README.md` |
 | `docs/dev-flow-variants/` | Alternative layouts (timeline / radial / waterfall / node graph) with gallery `README.md` |
 

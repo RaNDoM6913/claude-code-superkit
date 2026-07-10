@@ -33,9 +33,10 @@ PKG_COMMANDS=$(ls packages/frontend-3d/commands/*.md | wc -l)
 SKILLS=$(find packages/{core,frontend-3d,frontend-ui,gan,extras} -name SKILL.md | wc -l)
 CODEX_SKILLS=$(find packages/codex/skills -name SKILL.md | wc -l)
 
-# Shipped totals — subtract superkit-internal files (never installed:
-# hooks superkit-counts-verify.sh + verify-hooks.sh; rule superkit-integrity.md)
-AGENTS=$((CORE_AGENTS + STACK_AGENTS + PKG_AGENTS + EXTRAS_AGENTS))   # 31+9+13+3 = 56 at v1.4.2
+# Shipped totals — subtract superkit-internal files (never installed;
+# canonical list: packages/core/INTERNAL-FILES — the single source of truth
+# consumed by lib/installer.js, superkit-counts-verify.sh and superkit-update.sh)
+AGENTS=$((CORE_AGENTS + STACK_AGENTS + PKG_AGENTS + EXTRAS_AGENTS))   # 31+9+13+3 = 56
 HOOKS=$((CORE_HOOKS - 2 + STACK_HOOKS + PKG_HOOKS))                   # 26+9+7    = 42
 RULES=$((CORE_RULES - 1 + STACK_RULES + PKG_RULES))                   # 7+2+10    = 19
 COMMANDS=$((CORE_COMMANDS + PKG_COMMANDS))                            # 15+1      = 16

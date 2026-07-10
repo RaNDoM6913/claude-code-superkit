@@ -95,8 +95,8 @@ If auto-install in setup.sh failed (network error, etc.):
 - Check that `audit-frontend.md`, `audit-backend.md` etc. are present
 - If using merge mode, some agents may not have been copied — re-run setup.sh with overwrite
 
-### Statusline shows no context percentage (`ctx:NN%`)
-- On Claude Code builds that pass a native context window, the `ctx:NN%` segment appears automatically.
+### Statusline shows no context percentage (`ctx` bar)
+- On Claude Code builds that pass a native context window, the `ctx ██████░░░░ NN%` segment appears automatically.
 - On older CLIs that pass no native `context_window`, the statusline reconstructs usage from the session transcript — if `ctx%` is still blank, the transcript path wasn't supplied to the statusline; update Claude Code.
 - If `ctx%` shows but looks mis-scaled (e.g. a 1M-context model reading near 100%), set the real window: `export CLAUDE_CONTEXT_TOKENS_MAX=1000000`. The resolution path is fail-open, so this never breaks the statusline — see [Chapter 15](docs/guide/15-env-vars-and-hook-profiles.md).
 
