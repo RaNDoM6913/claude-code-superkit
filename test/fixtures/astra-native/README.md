@@ -42,5 +42,9 @@ audit. The fixtures use `scoreVerifiedCase`, whose command/evidence inputs canno
 be replaced by caller success claims. Separate local process tests exercise
 invalid output, timeout, truncation, and failed execution.
 No model is invoked or evaluated.
+The separate `runtime-evidence.test.js` uses synthetic internal collector traces
+to test the optional model-attempt entry point, `scoreModelVerifiedCase`.
+Request/worker labels do not count as observed identity. These tests do not prove
+live model routing or tier eligibility; provider adapters remain pending.
 Remaining scoring dimensions, runner interfaces, other scenarios and roles,
 and live behavioral acceptance remain pending in W00B.

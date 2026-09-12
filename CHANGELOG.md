@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Astra-native migration (W00B-9):** added a model-attempt scoring gate for complete model/effort observations in protected collector traces. Requested/worker labels, mismatches, conflicts, and unavailable/truncated traces cannot pass. Tests use synthetic identities; live adapters, evaluations, and tier eligibility remain pending.
+
 - **Astra-native migration (W00B-8):** evidence now binds selected source/instruction snapshots. Scoring rechecks those files before and after loading evidence, rejecting stale inputs and changed manifests. Real-process and mutation tests cover the boundary; selection completeness and full model acceptance remain pending.
 
 - **Astra-native migration (W00B-7):** run-bound evidence now supplies verification observations directly to scoring. The loader parses only hash-verified bytes, rejects incomplete/truncated payloads, and preserves failed command evidence. Tests cover real process failures, replay, file replacement, and seven caught mutations; model baselines remain pending.

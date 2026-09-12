@@ -6870,9 +6870,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
       ],
-      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
+      "rationale": "W00B-9 partial evidence-backed scoring and normalized runtime identity gate; live provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6916,9 +6917,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
       ],
-      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
+      "rationale": "W00B-9 partial evidence-backed scoring and normalized runtime identity gate; live provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6975,9 +6977,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
       ],
-      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
+      "rationale": "W00B-9 partial evidence-backed scoring and normalized runtime identity gate; live provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -7150,6 +7153,76 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
       "rationale": "W00B-8 selected source/instruction snapshot binding; complete instruction delivery and model acceptance remain pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/runtime-evidence.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+      ],
+      "rationale": "W00B-9 normalized collector runtime identity comparison; live adapters, provenance, and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+      ],
+      "rationale": "W00B-9 normalized collector runtime identity comparison; live adapters, provenance, and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity-suite.inputs.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+      ],
+      "rationale": "W00B-9 normalized collector runtime identity comparison; live adapters, provenance, and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity-suite.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+      ],
+      "rationale": "W00B-9 normalized collector runtime identity comparison; live adapters, provenance, and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity-suite.record.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+      ],
+      "rationale": "W00B-9 normalized collector runtime identity comparison; live adapters, provenance, and model acceptance pending.",
       "deferral": null
     }
   ]

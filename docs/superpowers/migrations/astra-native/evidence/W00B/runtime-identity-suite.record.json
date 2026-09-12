@@ -1,0 +1,12 @@
+{
+  "version": 4,
+  "snapshotSha256": "4b5271fced30deba6f6a168109ad5c697e638bd3ec321607c6072f5dbb30168a",
+  "runId": "46454294-4c63-430a-bd40-c6c0a12b3fcf",
+  "caseId": "w00b9-deterministic-suite",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "artifactPath": "runtime-identity-suite.json",
+  "sha256": "264c2e0adc5db83334ce70193c11c31b901890cbecc1f68f93ae57b99e2daa90"
+}

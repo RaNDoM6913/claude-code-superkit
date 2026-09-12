@@ -231,3 +231,56 @@ export function loadVerificationEvidence(root, recordPath, expectedIdentity) {
     return { pass: false, reason: failureReason(error), observation: FAILED_OBSERVATION };
   }
 }
+
+function validRuntimePair(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    && nonemptyString(value.model) && !value.model.includes('\0')
+    && nonemptyString(value.effort) && !value.effort.includes('\0');
+}
+
+/** Internal normalized collector trace, not a provider-native event schema.
+ * Only a trusted adapter may label events as source=runtime. This checks that
+ * declaration and verified bytes; provider adapters/authentication remain pending.
+ * The expectation must already be approved by caller routing policy/registry.
+ */
+export function loadRuntimeEvidence(root, recordPath, expectedIdentity, expectedRuntime) {
+  let observed = null;
+  try {
+    if (!validRuntimePair(expectedRuntime)) reject('invalid-runtime-expectation');
+    const { record, bytes } = readVerifiedEvidence(root, recordPath, expectedIdentity);
+    const trace = parseJson(bytes, 'invalid-runtime-trace');
+    if (!validIdentity(trace) || trace.version !== 1 || trace.kind !== 'runtime-identity'
+        || typeof trace.truncated !== 'boolean' || !Array.isArray(trace.events) || trace.events.length > 256
+        || trace.events.some((event) => !event || typeof event !== 'object' || Array.isArray(event)
+          || !nonemptyString(event.type))) reject('invalid-runtime-trace');
+    if (!sameIdentity(trace, record)) reject('runtime-identity-mismatch');
+    if (trace.truncated) reject('incomplete-runtime-evidence');
+    let unavailable = false;
+    for (const event of trace.events) {
+      if (!['runtime.identity', 'runtime.unavailable'].includes(event.type)) {
+        if (event.type.startsWith('runtime.')) reject('invalid-runtime-trace');
+        continue;
+      }
+      if (event.source !== 'runtime') reject('untrusted-runtime-event');
+      if (event.runId !== record.runId) reject('runtime-event-run-mismatch');
+      if (event.type === 'runtime.unavailable') {
+        if (!nonemptyString(event.code)) reject('invalid-runtime-trace');
+        unavailable = true;
+        continue;
+      }
+      if (!validRuntimePair(event.observed)) reject('incomplete-runtime-identity');
+      if (observed && (observed.model !== event.observed.model || observed.effort !== event.observed.effort)) {
+        reject('conflicting-runtime-identity');
+      }
+      observed = Object.freeze({ model: event.observed.model, effort: event.observed.effort });
+    }
+    if (unavailable) reject('runtime-unavailable');
+    if (!observed) reject('runtime-unobserved');
+    if (observed.model !== expectedRuntime.model) reject('model-mismatch');
+    if (observed.effort !== expectedRuntime.effort) reject('effort-mismatch');
+    return { pass: true, reason: null, observed };
+  } catch (error) {
+    const reason = failureReason(error);
+    return { pass: false, reason, observed: ['model-mismatch', 'effort-mismatch'].includes(reason) ? observed : null };
+  }
+}
