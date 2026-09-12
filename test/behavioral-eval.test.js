@@ -10,6 +10,7 @@ const cases = JSON.parse(readFileSync(new URL('cases.json', fixtures), 'utf8'));
 
 const repairSpec = { id: 'repair-null', kind: 'implementation', expected: { commandsPass: true } };
 const claimedSuccess = { response: { status: 'complete' }, exitCode: 0 };
+const positiveObservation = { commands: [{ exitCode: 0 }], scopePass: true, evidencePass: true };
 
 test('self-reported success cannot override failed verification', async () => {
   const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
@@ -17,13 +18,117 @@ test('self-reported success cannot override failed verification', async () => {
   assert.equal(scoreCase(repairSpec, claimedSuccess, observation).pass, false);
 });
 
-test('positive observations pass only the commands, scope, and evidence gates', async () => {
+test('positive execution and observations pass only the implemented gates', async () => {
   const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
   assert.deepEqual(scoreCase(repairSpec, claimedSuccess, {
     commands: [{ exitCode: 0 }], scopePass: true, evidencePass: true,
   }), {
-    pass: true, coverage: 'commands-scope-evidence-only',
+    pass: true,
+    coverage: 'commands-scope-evidence-output-execution-only',
+    checks: { commands: 1, scope: 1, evidence: 1, output: 1, execution: 1 },
   });
+});
+
+for (const [label, response] of [
+  ['absent', undefined], ['null', null], ['empty object', {}],
+  ['array', []], ['boolean', true], ['number', 1],
+  ['malformed JSON text', '{'], ['unparsed JSON text', '{"status":"complete"}'],
+  ['missing status', { message: 'done' }], ['incomplete', { status: 'incomplete' }],
+  ['blocked', { status: 'blocked' }], ['unknown status', { status: 'success' }],
+  ['non-string status', { status: true }],
+]) {
+  test(`${label} worker response cannot pass output validation`, async () => {
+    const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+    const result = scoreCase(repairSpec, { response, exitCode: 0 }, positiveObservation);
+    assert.equal(result.pass, false);
+    assert.equal(result.checks.output, 0);
+    assert.equal(result.checks.execution, 1);
+  });
+}
+
+for (const [label, execution] of [
+  ['absent execution', undefined], ['null execution', null],
+  ['missing exit', { response: { status: 'complete' } }],
+  ['null exit', { ...claimedSuccess, exitCode: null }],
+  ['failed exit', { ...claimedSuccess, exitCode: 7 }],
+  ['string exit', { ...claimedSuccess, exitCode: '0' }],
+  ['signal termination', { ...claimedSuccess, signal: 'SIGTERM' }],
+  ['process error', { ...claimedSuccess, error: { code: 'ENOENT' } }],
+]) {
+  test(`${label} cannot pass execution validation`, async () => {
+    const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+    const result = scoreCase(repairSpec, execution, positiveObservation);
+    assert.equal(result.pass, false);
+    assert.equal(result.checks.execution, 0);
+  });
+}
+
+test('score exposes every observed failure without stopping at the first gate', async () => {
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  assert.deepEqual(scoreCase(repairSpec, undefined, undefined), {
+    pass: false,
+    coverage: 'commands-scope-evidence-output-execution-only',
+    checks: { commands: 0, scope: 0, evidence: 0, output: 0, execution: 0 },
+  });
+});
+
+for (const { label, stdout, exitCode, outputPass, pass } of [
+  { label: 'complete output and successful exit', stdout: '{"status":"complete"}', exitCode: 0, outputPass: 1, pass: true },
+  { label: 'complete output followed by failed exit', stdout: '{"status":"complete"}', exitCode: 7, outputPass: 1, pass: false },
+  { label: 'successful exit without output', stdout: '', exitCode: 0, outputPass: 0, pass: false },
+  { label: 'successful exit with malformed output', stdout: '{', exitCode: 0, outputPass: 0, pass: false },
+]) {
+  test(`real worker process: ${label}`, async () => {
+    const child = spawnSync(process.execPath, ['-e',
+      'process.stdout.write(process.argv[1]); process.exit(Number(process.argv[2]));', stdout, String(exitCode),
+    ], { encoding: 'utf8', timeout: 10_000, maxBuffer: 128 * 1024 });
+    assert.ifError(child.error);
+    assert.equal(child.signal, null);
+    assert.equal(child.status, exitCode);
+    assert.equal(child.stdout, stdout);
+    let response;
+    if (outputPass) response = JSON.parse(child.stdout);
+    else assert.throws(() => JSON.parse(child.stdout), SyntaxError);
+    const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+    const result = scoreCase(repairSpec, {
+      response, exitCode: child.status, signal: child.signal, error: child.error,
+    }, positiveObservation);
+    assert.equal(result.pass, pass);
+    assert.equal(result.checks.output, outputPass);
+    assert.equal(result.checks.execution, exitCode === 0 ? 1 : 0);
+  });
+}
+
+test('real process signal termination rejects a previously complete response', async () => {
+  const child = spawnSync(process.execPath, ['-e', 'process.kill(process.pid, "SIGTERM");'], {
+    encoding: 'utf8', timeout: 10_000, maxBuffer: 128 * 1024,
+  });
+  assert.ifError(child.error);
+  assert.equal(child.status, null);
+  assert.equal(child.signal, 'SIGTERM');
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  const result = scoreCase(repairSpec, {
+    response: { status: 'complete' }, exitCode: child.status, signal: child.signal,
+  }, positiveObservation);
+  assert.equal(result.pass, false);
+  assert.equal(result.checks.output, 1);
+  assert.equal(result.checks.execution, 0);
+});
+
+test('real spawn failure cannot pass using a previously complete response', async (t) => {
+  const root = mkdtempSync(join(tmpdir(), 'astra-missing-worker-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const child = spawnSync(join(root, 'missing-executable'), [], {
+    encoding: 'utf8', timeout: 10_000, maxBuffer: 128 * 1024,
+  });
+  assert.equal(child.error?.code, 'ENOENT');
+  assert.equal(child.status, null);
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  const result = scoreCase(repairSpec, {
+    response: { status: 'complete' }, exitCode: child.status, signal: child.signal, error: child.error,
+  }, positiveObservation);
+  assert.equal(result.pass, false);
+  assert.equal(result.checks.execution, 0);
 });
 
 for (const field of ['scopePass', 'evidencePass']) {

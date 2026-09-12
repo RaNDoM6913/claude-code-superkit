@@ -6844,7 +6844,8 @@
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
       ],
       "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
       "deferral": null
@@ -6860,7 +6861,8 @@
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
       ],
       "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
       "deferral": null
@@ -6903,7 +6905,8 @@
       "status": "in-progress",
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
       ],
       "rationale": "W00B-2 partial command-verification gate; other scoring dimensions and model acceptance pending.",
       "deferral": null
@@ -6934,6 +6937,20 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md"
       ],
       "rationale": "W00B-3 strict scope/evidence boolean gates; independent artifact audits and full acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
+      ],
+      "rationale": "W00B-4 partial output/execution validation and per-gate diagnostics; full behavioral acceptance pending.",
       "deferral": null
     }
   ]

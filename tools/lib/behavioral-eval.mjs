@@ -1,8 +1,13 @@
 /**
- * W00B partial scorer: observed commands plus scope/evidence boolean gates.
+ * W00B partial scorer: commands, scope/evidence flags, output, and execution.
  * `pass` covers only these gates, never overall implementation/model acceptance.
- * Evidence provenance, output, routing, and other dimensions are pending.
+ * Pending: full output schema, evidence provenance, runtime model/effort identity,
+ * model evaluations, CLI runner, and the remaining acceptance dimensions.
  */
+function isRecord(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
 export function scoreCase(caseSpec, execution, observation) {
   if (caseSpec?.kind !== 'implementation' || caseSpec.expected?.commandsPass !== true) {
     throw new Error('unsupported case: only implementation commandsPass=true is implemented');
@@ -12,9 +17,20 @@ export function scoreCase(caseSpec, execution, observation) {
   // The caller must independently verify commands, scope, and evidence;
   // this scorer consumes observations and does not perform those audits itself.
   const commands = observation?.commands;
-  const pass = Array.isArray(commands) && commands.length > 0
-    && commands.every((command) => command?.exitCode === 0)
-    && observation.scopePass === true
-    && observation.evidencePass === true;
-  return { pass, coverage: 'commands-scope-evidence-only' };
+  const checks = {
+    commands: Number(Array.isArray(commands) && commands.length > 0
+      && commands.every((command) => command?.exitCode === 0)),
+    scope: Number(observation?.scopePass === true),
+    evidence: Number(observation?.evidencePass === true),
+    // Input is a parsed response object. Parsing raw output belongs to the caller.
+    output: Number(isRecord(execution) && isRecord(execution.response)
+      && execution.response.status === 'complete'),
+    execution: Number(isRecord(execution) && execution.exitCode === 0
+      && execution.signal == null && execution.error == null),
+  };
+  return {
+    pass: Object.values(checks).every((value) => value === 1),
+    coverage: 'commands-scope-evidence-output-execution-only',
+    checks,
+  };
 }
