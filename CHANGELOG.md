@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Astra-native migration (W00B-3):** partial scoring now requires explicit true scope/evidence observations alongside successful commands. Negative and missing flags reject claimed success; independent artifact audits and full model acceptance remain pending.
+
 - **Astra-native migration (W00B-2):** added a partial command-verification scorer that rejects failed or missing observations despite claimed success. Tests include real fixture exits and a mutation that proves false success is caught; full scoring and model acceptance remain pending.
 
 - **Astra-native migration (W00B-1):** added executable clean/defect lookup fixtures with a shared Node test and observed red/green outcomes. This checks fixture behavior only; scoring, other scenarios, and model baselines remain pending.

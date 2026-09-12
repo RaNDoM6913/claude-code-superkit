@@ -17,17 +17,44 @@ test('self-reported success cannot override failed verification', async () => {
   assert.equal(scoreCase(repairSpec, claimedSuccess, observation).pass, false);
 });
 
-test('observed successful commands pass only the command verification gate', async () => {
+test('positive observations pass only the commands, scope, and evidence gates', async () => {
   const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
-  assert.deepEqual(scoreCase(repairSpec, claimedSuccess, { commands: [{ exitCode: 0 }] }), {
-    pass: true, coverage: 'command-verification-only',
+  assert.deepEqual(scoreCase(repairSpec, claimedSuccess, {
+    commands: [{ exitCode: 0 }], scopePass: true, evidencePass: true,
+  }), {
+    pass: true, coverage: 'commands-scope-evidence-only',
   });
+});
+
+for (const field of ['scopePass', 'evidencePass']) {
+  for (const value of [false, undefined]) {
+    test(`${field} ${value === undefined ? 'absent' : 'false'} rejects claimed success`, async () => {
+      const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+      const observation = { commands: [{ exitCode: 0 }], scopePass: true, evidencePass: true };
+      if (value === undefined) delete observation[field];
+      else observation[field] = value;
+      const execution = { response: { status: 'complete', scopePass: true, evidencePass: true }, exitCode: 0 };
+      assert.equal(scoreCase(repairSpec, execution, observation).pass, false);
+    });
+  }
+}
+
+test('scope and evidence require boolean true rather than truthy observations', async () => {
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  for (const field of ['scopePass', 'evidencePass']) {
+    for (const value of [null, 'true', 1, {}]) {
+      const observation = { commands: [{ exitCode: 0 }], scopePass: true, evidencePass: true, [field]: value };
+      assert.equal(scoreCase(repairSpec, claimedSuccess, observation).pass, false);
+    }
+  }
 });
 
 test('absent or incomplete command evidence cannot pass verification', async () => {
   const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
   for (const commands of [undefined, [], [{}], [{ exitCode: null }], [{ exitCode: '0' }]]) {
-    assert.equal(scoreCase(repairSpec, claimedSuccess, { commands }).pass, false);
+    assert.equal(scoreCase(repairSpec, claimedSuccess, {
+      commands, scopePass: true, evidencePass: true,
+    }).pass, false);
   }
 });
 
@@ -59,10 +86,6 @@ for (const fixture of cases) {
     assert.ifError(result.error);
     assert.equal(result.signal, null, output);
     assert.equal(result.status, fixture.deterministicChecks.exitCode, output);
-    const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
-    assert.equal(scoreCase(repairSpec, claimedSuccess, {
-      commands: [{ exitCode: result.status }],
-    }).pass, fixture.id === 'clean');
     assert.match(output, new RegExp(`^# pass ${fixture.deterministicChecks.passed}$`, 'm'));
     assert.match(output, new RegExp(`^# fail ${fixture.deterministicChecks.failed}$`, 'm'));
     if (fixture.id === 'defect') {
@@ -70,6 +93,11 @@ for (const fixture of cases) {
       assert.match(output, /name: 'TypeError'/);
       assert.match(output, /src\/lookup\.js:1:\d+/);
     }
+    const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+    // These flags are controlled test inputs, not an automated scope/provenance audit.
+    assert.equal(scoreCase(repairSpec, claimedSuccess, {
+      commands: [{ exitCode: result.status }], scopePass: true, evidencePass: true,
+    }).pass, fixture.id === 'clean');
     t.diagnostic(`${fixture.id}: child exit ${result.status}; ${fixture.deterministicChecks.passed} passed, ${fixture.deterministicChecks.failed} failed`);
   });
 }
