@@ -8,9 +8,37 @@ import { dirname, join } from 'node:path';
 const fixtures = new URL('./fixtures/astra-native/', import.meta.url);
 const cases = JSON.parse(readFileSync(new URL('cases.json', fixtures), 'utf8'));
 
-// This is a deterministic fixture check, not a model run or a behavioral scorer.
+const repairSpec = { id: 'repair-null', kind: 'implementation', expected: { commandsPass: true } };
+const claimedSuccess = { response: { status: 'complete' }, exitCode: 0 };
+
+test('self-reported success cannot override failed verification', async () => {
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  const observation = { commands: [{ exitCode: 0 }, { exitCode: 1 }], scopePass: true, evidencePass: true };
+  assert.equal(scoreCase(repairSpec, claimedSuccess, observation).pass, false);
+});
+
+test('observed successful commands pass only the command verification gate', async () => {
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  assert.deepEqual(scoreCase(repairSpec, claimedSuccess, { commands: [{ exitCode: 0 }] }), {
+    pass: true, coverage: 'command-verification-only',
+  });
+});
+
+test('absent or incomplete command evidence cannot pass verification', async () => {
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  for (const commands of [undefined, [], [{}], [{ exitCode: null }], [{ exitCode: '0' }]]) {
+    assert.equal(scoreCase(repairSpec, claimedSuccess, { commands }).pass, false);
+  }
+});
+
+test('the partial scorer does not grade review cases as implementation', async () => {
+  const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+  assert.throws(() => scoreCase(cases[0], claimedSuccess, { commands: [{ exitCode: 0 }] }), /unsupported case/);
+});
+
+// Real child exits also exercise the partial scorer; no model runs are involved.
 for (const fixture of cases) {
-  test(`lookup fixture: ${fixture.id}`, (t) => {
+  test(`lookup fixture: ${fixture.id}`, async (t) => {
     const root = mkdtempSync(join(tmpdir(), 'astra-lookup-'));
     t.after(() => rmSync(root, { recursive: true, force: true }));
     for (const file of fixture.files) {
@@ -31,6 +59,10 @@ for (const fixture of cases) {
     assert.ifError(result.error);
     assert.equal(result.signal, null, output);
     assert.equal(result.status, fixture.deterministicChecks.exitCode, output);
+    const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
+    assert.equal(scoreCase(repairSpec, claimedSuccess, {
+      commands: [{ exitCode: result.status }],
+    }).pass, fixture.id === 'clean');
     assert.match(output, new RegExp(`^# pass ${fixture.deterministicChecks.passed}$`, 'm'));
     assert.match(output, new RegExp(`^# fail ${fixture.deterministicChecks.failed}$`, 'm'));
     if (fixture.id === 'defect') {

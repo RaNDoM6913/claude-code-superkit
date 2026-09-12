@@ -22,5 +22,8 @@ Golden findings, command expectations, and case metadata remain outside it in
 shared regression test is public task input; it is not a hidden grading key.
 
 The `expected` review criteria are definitions for future model runs and are not
-scored here. No model is invoked or evaluated. Runner/scorer interfaces, other
-scenarios and roles, and live behavioral acceptance remain pending in W00B.
+scored here. Child exits also exercise the partial implementation command gate
+in `scoreCase` using a separate repair specification. Its `pass` covers command
+verification only, never full acceptance. No model is invoked or evaluated.
+Remaining scoring dimensions, runner interfaces, other scenarios and roles,
+and live behavioral acceptance remain pending in W00B.
