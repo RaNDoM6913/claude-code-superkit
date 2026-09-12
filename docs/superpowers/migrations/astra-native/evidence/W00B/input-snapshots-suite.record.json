@@ -1,0 +1,12 @@
+{
+  "version": 4,
+  "snapshotSha256": "78607ed18509494a58af1427312297e49951a29f4ff1e709ea1b1591c6ed128f",
+  "runId": "9c492e5c-ecd7-4ce8-94f9-5dd768f65209",
+  "caseId": "w00b8-selected-input-suite",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "artifactPath": "input-snapshots-suite.json",
+  "sha256": "bef058a52a63287774f515b4962f2962b1eaafae96b6e3679c94fd990cc1935f"
+}

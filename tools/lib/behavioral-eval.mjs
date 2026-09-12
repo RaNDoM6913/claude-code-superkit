@@ -1,4 +1,4 @@
-import { loadVerificationEvidence } from './verification-evidence.mjs';
+import { loadVerificationEvidence, verifyInputSnapshot } from './verification-evidence.mjs';
 
 /**
  * W00B partial scorer: commands, scope/evidence flags, output, and execution.
@@ -10,18 +10,32 @@ function isRecord(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-/** Evidence-backed entry point. Scope is still independently supplied; command
- * results and evidence acceptance come exclusively from the verified artifact.
+/** Evidence-backed entry point. Recheck the selected inputs before and after
+ * loading evidence. Scope remains independently supplied; successful snapshots
+ * do not establish selection completeness or defend edits restored between checks.
  */
 export function scoreVerifiedCase(caseSpec, execution, {
-  evidenceRoot, recordPath, expectedIdentity, scopePass,
+  workspaceRoot, snapshotPath, evidenceRoot, recordPath, expectedIdentity, scopePass,
 } = {}) {
-  const evidence = typeof caseSpec?.id === 'string' && caseSpec.id === expectedIdentity?.caseId
-    ? loadVerificationEvidence(evidenceRoot, recordPath, expectedIdentity)
-    : { reason: 'case-mismatch', observation: { commands: [], evidencePass: false } };
+  let inputs = { pass: false, reason: 'not-checked' };
+  let evidence = { reason: 'case-mismatch', observation: { commands: [], evidencePass: false } };
+  if (typeof caseSpec?.id === 'string' && caseSpec.id === expectedIdentity?.caseId) {
+    inputs = verifyInputSnapshot(workspaceRoot, evidenceRoot, snapshotPath, expectedIdentity?.snapshotSha256);
+    evidence = inputs.pass
+      ? loadVerificationEvidence(evidenceRoot, recordPath, expectedIdentity)
+      : { reason: 'input-snapshot-invalid', observation: { commands: [], evidencePass: false } };
+    if (evidence.pass) {
+      inputs = verifyInputSnapshot(workspaceRoot, evidenceRoot, snapshotPath, expectedIdentity.snapshotSha256);
+    }
+  }
+  const score = scoreCase(caseSpec, execution, { ...evidence.observation, scopePass });
   return {
-    ...scoreCase(caseSpec, execution, { ...evidence.observation, scopePass }),
+    ...score,
+    pass: score.pass && inputs.pass,
+    checks: { ...score.checks, inputs: Number(inputs.pass) },
+    coverage: 'inputs-commands-scope-evidence-output-execution-only',
     evidenceReason: evidence.reason,
+    inputReason: inputs.reason,
   };
 }
 

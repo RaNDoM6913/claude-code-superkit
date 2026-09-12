@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Astra-native migration (W00B-8):** evidence now binds selected source/instruction snapshots. Scoring rechecks those files before and after loading evidence, rejecting stale inputs and changed manifests. Real-process and mutation tests cover the boundary; selection completeness and full model acceptance remain pending.
+
 - **Astra-native migration (W00B-7):** run-bound evidence now supplies verification observations directly to scoring. The loader parses only hash-verified bytes, rejects incomplete/truncated payloads, and preserves failed command evidence. Tests cover real process failures, replay, file replacement, and seven caught mutations; model baselines remain pending.
 
 - **Astra-native migration (W00B-6):** evidence records now require trusted case ID and exact command argv. Intact artifacts from another case or command are rejected; version 1 records cannot silently acquire identity. Run-level replay protection and full model acceptance remain pending.

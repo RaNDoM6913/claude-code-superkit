@@ -1,25 +1,32 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import fs, { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import fs, { mkdirSync, mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { syncBuiltinESMExports } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { captureEvidence, loadVerificationEvidence } from '../tools/lib/verification-evidence.mjs';
+import { captureEvidence, captureInputSnapshot, loadVerificationEvidence } from '../tools/lib/verification-evidence.mjs';
 import { scoreVerifiedCase } from '../tools/lib/behavioral-eval.mjs';
 
-const identity = { runId: 'attempt-a', caseId: 'repair-null', command: ['node', '--test', 'test/lookup.test.js'] };
+const snapshotSha256 = '618160f357e9fbd52b49a7c040e10aaf062ea2cb6f8a926d8a145a2aa3454d30';
+const identity = { snapshotSha256, runId: 'attempt-a', caseId: 'repair-null', command: ['node', '--test', 'test/lookup.test.js'] };
 const spec = { id: identity.caseId, kind: 'implementation', expected: { commandsPass: true } };
 const execution = { response: { status: 'complete' }, exitCode: 0 };
 const payload = {
-  version: 1, ...identity, exitCode: 0, signal: null, error: null,
+  version: 2, ...identity, exitCode: 0, signal: null, error: null,
   stdout: 'verified stdout', stderr: '', truncated: false,
 };
 
 function evidence(t, bytes, capturedIdentity = identity) {
   const root = mkdtempSync(join(tmpdir(), 'astra-observation-'));
   t.after(() => rmSync(root, { recursive: true, force: true }));
+  const workspaceRoot = join(root, 'workspace');
+  mkdirSync(join(workspaceRoot, 'src'), { recursive: true });
+  writeFileSync(join(workspaceRoot, 'src/lookup.js'), 'abc');
+  writeFileSync(join(workspaceRoot, 'TASK.md'), 'abc');
+  const snapshot = captureInputSnapshot(workspaceRoot, root, 'inputs.json', { sources: ['src/lookup.js'], instructions: ['TASK.md'] });
+  assert.equal(snapshot.sha256, snapshotSha256);
   writeFileSync(join(root, 'verification.json'), bytes);
   captureEvidence(root, 'verification.json', 'record.json', capturedIdentity);
   return root;
@@ -27,7 +34,7 @@ function evidence(t, bytes, capturedIdentity = identity) {
 
 function score(root, overrides = {}) {
   return scoreVerifiedCase(spec, execution, {
-    evidenceRoot: root, recordPath: 'record.json', expectedIdentity: identity, scopePass: true, ...overrides,
+    workspaceRoot: join(root, 'workspace'), snapshotPath: 'inputs.json', evidenceRoot: root, recordPath: 'record.json', expectedIdentity: identity, scopePass: true, ...overrides,
   });
 }
 
@@ -43,6 +50,63 @@ test('loader derives command observations and raw output from verified artifact 
   const result = score(root);
   assert.equal(result.pass, true);
   assert.equal(result.evidenceReason, null);
+});
+
+for (const path of ['src/lookup.js', 'TASK.md']) {
+  test(`scoring rejects changed ${path} despite intact passing evidence`, (t) => {
+    const root = evidence(t, JSON.stringify(payload));
+    assert.equal(score(root).pass, true);
+    writeFileSync(join(root, 'workspace', path), 'changed after verification');
+    const result = score(root, { inputsPass: true, evidencePass: true });
+    assert.equal(result.pass, false);
+    assert.equal(result.checks.inputs, 0);
+    assert.equal(result.inputReason, 'input-mismatch');
+  });
+}
+
+test('missing snapshot configuration cannot be waived by caller flags', (t) => {
+  const root = evidence(t, JSON.stringify(payload));
+  const result = score(root, { snapshotPath: undefined, inputsPass: true });
+  assert.equal(result.pass, false);
+  assert.equal(result.checks.inputs, 0);
+});
+
+test('a replaced snapshot manifest cannot redefine the evidence run inputs', (t) => {
+  const root = evidence(t, JSON.stringify(payload));
+  writeFileSync(join(root, 'workspace', 'src/lookup.js'), 'changed');
+  captureInputSnapshot(join(root, 'workspace'), root, 'new-inputs.json', {
+    sources: ['src/lookup.js'], instructions: ['TASK.md'],
+  });
+  const result = score(root, { snapshotPath: 'new-inputs.json' });
+  assert.equal(result.pass, false);
+  assert.equal(result.inputReason, 'snapshot-mismatch');
+});
+
+test('scoring rechecks inputs after loading evidence to catch an intervening edit', (t) => {
+  const root = evidence(t, JSON.stringify(payload));
+  const artifactStat = statSync(join(root, 'verification.json'));
+  const realRead = fs.readSync;
+  let changed = false;
+  fs.readSync = (fd, ...args) => {
+    const count = realRead(fd, ...args);
+    const current = fs.fstatSync(fd);
+    if (!changed && count === 0 && current.dev === artifactStat.dev && current.ino === artifactStat.ino) {
+      changed = true;
+      writeFileSync(join(root, 'workspace', 'TASK.md'), 'new instructions');
+    }
+    return count;
+  };
+  syncBuiltinESMExports();
+  try {
+    const result = score(root);
+    assert.equal(changed, true);
+    assert.equal(result.pass, false);
+    assert.equal(result.checks.inputs, 0);
+    assert.equal(result.inputReason, 'input-mismatch');
+  } finally {
+    fs.readSync = realRead;
+    syncBuiltinESMExports();
+  }
 });
 
 test('verified failing exit cannot be overridden by caller or payload success claims', (t) => {
@@ -69,7 +133,7 @@ for (const [label, changes] of [
   ['success plus signal', { signal: 'SIGTERM' }],
   ['success plus process error', { error: { code: 'ENOENT' } }],
   ['unfinished process', { exitCode: null }], ['missing truncation state', { truncated: undefined }],
-  ['invalid truncation state', { truncated: 'false' }], ['unknown payload version', { version: 2 }],
+  ['invalid truncation state', { truncated: 'false' }], ['unknown payload version', { version: 3 }],
 ]) {
   test(`${label} is invalid even under a matching artifact hash`, (t) => {
     const root = evidence(t, JSON.stringify({ ...payload, ...changes }));
@@ -140,7 +204,7 @@ test('editing a failed command artifact into success cannot change acceptance', 
 test('scoring binds the expected evidence case to the requested implementation case', (t) => {
   const root = evidence(t, JSON.stringify(payload));
   const result = scoreVerifiedCase({ ...spec, id: 'another-case' }, execution, {
-    evidenceRoot: root, recordPath: 'record.json', expectedIdentity: identity, scopePass: true,
+    workspaceRoot: join(root, 'workspace'), snapshotPath: 'inputs.json', evidenceRoot: root, recordPath: 'record.json', expectedIdentity: identity, scopePass: true,
   });
   assert.equal(result.pass, false);
   assert.equal(result.evidenceReason, 'case-mismatch');
@@ -202,7 +266,7 @@ for (const scenario of [
     const empty = mkdtempSync(join(tmpdir(), 'astra-verifier-'));
     t.after(() => rmSync(empty, { recursive: true, force: true }));
     const expected = {
-      runId: randomUUID(), caseId: spec.id,
+      snapshotSha256, runId: randomUUID(), caseId: spec.id,
       command: scenario.missing ? [join(empty, 'missing-executable')] : [process.execPath, '-e', scenario.script],
     };
     const child = spawnSync(expected.command[0], expected.command.slice(1), {
@@ -212,13 +276,13 @@ for (const scenario of [
     if (scenario.signal) assert.equal(child.signal, scenario.signal);
     assert.equal(child.error?.code, scenario.error);
     const artifact = {
-      version: 1, ...expected, exitCode: child.status, signal: child.signal,
+      version: 2, ...expected, exitCode: child.status, signal: child.signal,
       error: child.error ? { code: child.error.code } : null,
       stdout: child.stdout ?? '', stderr: child.stderr ?? '', truncated: child.error?.code === 'ENOBUFS',
     };
     const root = evidence(t, JSON.stringify(artifact), expected);
     const result = scoreVerifiedCase(spec, execution, {
-      evidenceRoot: root, recordPath: 'record.json', expectedIdentity: expected, scopePass: true,
+      workspaceRoot: join(root, 'workspace'), snapshotPath: 'inputs.json', evidenceRoot: root, recordPath: 'record.json', expectedIdentity: expected, scopePass: true,
     });
     assert.equal(result.pass, scenario.commandPass === 1);
     assert.equal(result.checks.commands, scenario.commandPass);

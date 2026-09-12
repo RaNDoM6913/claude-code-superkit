@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { captureEvidence } from '../tools/lib/verification-evidence.mjs';
+import { captureEvidence, captureInputSnapshot } from '../tools/lib/verification-evidence.mjs';
 
 const fixtures = new URL('./fixtures/astra-native/', import.meta.url);
 const cases = JSON.parse(readFileSync(new URL('cases.json', fixtures), 'utf8'));
@@ -182,11 +182,19 @@ for (const fixture of cases) {
     }
     mkdirSync(join(root, 'test'));
     copyFileSync(new URL('lookup.test.js', fixtures), join(root, 'test/lookup.test.js'));
+    writeFileSync(join(root, 'TASK.md'), fixture.packet.task);
+    const evidenceRoot = mkdtempSync(join(tmpdir(), 'astra-lookup-evidence-'));
+    t.after(() => rmSync(evidenceRoot, { recursive: true, force: true }));
+    const snapshot = captureInputSnapshot(root, evidenceRoot, 'inputs.json', {
+      sources: ['package.json', 'src/lookup.js', 'test/lookup.test.js'], instructions: ['TASK.md'],
+    });
 
-    // Only source and the public regression test enter the eventual worker root.
-    // Case metadata, packets, and golden expectations stay in this parent process.
+    // The worker root contains package.json, lookup source, the public regression
+    // test, and TASK.md instructions. Case metadata and golden expectations stay
+    // in this parent process; the input manifest stays in the collector directory.
     const { NODE_TEST_CONTEXT, ...env } = process.env;
     const expectedIdentity = {
+      snapshotSha256: snapshot.sha256,
       runId: randomUUID(),
       caseId: fixture.id,
       command: [process.execPath, '--test', '--test-reporter=tap', 'test/lookup.test.js'],
@@ -208,19 +216,19 @@ for (const fixture of cases) {
     const { scoreVerifiedCase } = await import('../tools/lib/behavioral-eval.mjs');
     // Collector-owned evidence stays outside the worker tree. Scoring loads the
     // captured exit code; neither this caller nor worker claims replace it.
-    const evidenceRoot = mkdtempSync(join(tmpdir(), 'astra-lookup-evidence-'));
-    t.after(() => rmSync(evidenceRoot, { recursive: true, force: true }));
     writeFileSync(join(evidenceRoot, 'verification.json'), JSON.stringify({
-      version: 1, ...expectedIdentity, exitCode: result.status,
+      version: 2, ...expectedIdentity, exitCode: result.status,
       signal: result.signal, error: null, truncated: false,
       stdout: result.stdout, stderr: result.stderr,
     }));
     captureEvidence(evidenceRoot, 'verification.json', 'record.json', expectedIdentity);
     const scored = scoreVerifiedCase({ ...repairSpec, id: fixture.id }, claimedSuccess, {
+      workspaceRoot: root, snapshotPath: 'inputs.json',
       evidenceRoot, recordPath: 'record.json', expectedIdentity, scopePass: true,
     });
     assert.equal(scored.evidenceReason, null);
     assert.equal(scored.checks.evidence, 1);
+    assert.equal(scored.checks.inputs, 1);
     assert.equal(scored.pass, fixture.id === 'clean');
     t.diagnostic(`${fixture.id}: child exit ${result.status}; ${fixture.deterministicChecks.passed} passed, ${fixture.deterministicChecks.failed} failed`);
   });

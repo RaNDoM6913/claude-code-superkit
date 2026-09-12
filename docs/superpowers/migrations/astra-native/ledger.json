@@ -6848,9 +6848,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
-      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
+      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6868,9 +6869,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
-      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6913,9 +6915,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
-      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
+      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6971,9 +6974,10 @@
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
-      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
+      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6987,9 +6991,10 @@
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
-      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
+      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -7029,9 +7034,10 @@
       "baselineSha256": null,
       "status": "in-progress",
       "evidence": [
-        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
       ],
-      "rationale": "W00B-7 run-bound verification observations and evidence-backed scoring; model acceptance remains pending.",
+      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -7074,6 +7080,76 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
       ],
       "rationale": "W00B-7 run-bound verification observations and evidence-backed scoring; model acceptance remains pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/input-snapshot.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+      ],
+      "rationale": "W00B-8 selected source/instruction snapshot binding; complete instruction delivery and model acceptance remain pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+      ],
+      "rationale": "W00B-8 selected source/instruction snapshot binding; complete instruction delivery and model acceptance remain pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots-suite.inputs.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+      ],
+      "rationale": "W00B-8 selected source/instruction snapshot binding; complete instruction delivery and model acceptance remain pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots-suite.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+      ],
+      "rationale": "W00B-8 selected source/instruction snapshot binding; complete instruction delivery and model acceptance remain pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots-suite.record.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+      ],
+      "rationale": "W00B-8 selected source/instruction snapshot binding; complete instruction delivery and model acceptance remain pending.",
       "deferral": null
     }
   ]

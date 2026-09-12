@@ -28,12 +28,14 @@ Each fixture's exit/stdout/stderr artifact and SHA-256 record live in a separate
 collector-owned temporary directory; `loadVerificationEvidence` derives command
 results and the evidence flag from those exact verified bytes.
 Changed/missing artifacts fail verification, and capture refuses to overwrite
-an existing record. Version 3 records bind the artifact to a fresh parent-generated
-run ID, case ID, and exact command argv; verification rejects a different attempt,
-case, or command even with intact bytes. Expected identity is defined before
-process execution, outside worker control. The collector must not reuse run IDs.
-This does not authenticate the collector or establish source/instruction identity.
-The scorer's `pass` covers commands, scope/evidence flags, parsed completion output,
+an existing record. Version 4 records bind the artifact to a fresh parent-generated
+run ID, case ID, exact command argv, and the digest of an input snapshot. The
+collector captures selected source files and public `TASK.md` instructions before
+running the command. Scoring checks their contents before and after loading evidence.
+Changed selected inputs or a different expected snapshot reject old results.
+Expected identity stays outside worker control, and run IDs must not be reused.
+This does not authenticate the collector or discover unselected dependencies.
+The scorer's `pass` covers selected input contents, commands, scope/evidence flags, parsed completion output,
 and successful execution. The result includes per-gate 0/1 diagnostics and explicit
 partial coverage; it never represents full acceptance or an independent artifact
 audit. The fixtures use `scoreVerifiedCase`, whose command/evidence inputs cannot

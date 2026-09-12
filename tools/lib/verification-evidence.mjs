@@ -5,6 +5,8 @@ import { TextDecoder } from 'node:util';
 
 const ARTIFACT_LIMIT = 2 * 1024 * 1024;
 const RECORD_LIMIT = 64 * 1024;
+const INPUT_FILE_LIMIT = 128;
+const INPUT_BYTE_LIMIT = 8 * 1024 * 1024;
 
 function reject(reason) {
   throw Object.assign(new Error(reason), { reason });
@@ -55,6 +57,7 @@ const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 function validIdentity(identity) {
   return identity !== null && typeof identity === 'object' && !Array.isArray(identity)
+    && typeof identity.snapshotSha256 === 'string' && /^[a-f0-9]{64}$/.test(identity.snapshotSha256)
     && typeof identity.runId === 'string' && identity.runId.trim().length > 0
     && !identity.runId.includes('\0')
     && typeof identity.caseId === 'string' && identity.caseId.trim().length > 0
@@ -65,7 +68,8 @@ function validIdentity(identity) {
 }
 
 function sameIdentity(actual, expected) {
-  return actual.runId === expected.runId && actual.caseId === expected.caseId
+  return actual.snapshotSha256 === expected.snapshotSha256
+    && actual.runId === expected.runId && actual.caseId === expected.caseId
     && actual.command.length === expected.command.length
     && actual.command.every((arg, index) => arg === expected.command[index]);
 }
@@ -83,11 +87,75 @@ function failureReason(error) {
     : error.code === 'ELOOP' ? 'unsafe-path' : 'read-error');
 }
 
+function validSelection(selection) {
+  if (!selection || typeof selection !== 'object' || Array.isArray(selection)
+      || !Array.isArray(selection.sources) || !selection.sources.length
+      || !Array.isArray(selection.instructions) || !selection.instructions.length) return false;
+  const paths = [...selection.sources, ...selection.instructions];
+  return paths.length <= INPUT_FILE_LIMIT && paths.every((path) => typeof path === 'string' && path.length > 0)
+    && new Set(paths).size === paths.length;
+}
+
+/** Capture only the trusted caller's explicit source/instruction selection.
+ * Selection completeness is not inferred. Store this manifest outside the worker root.
+ */
+export function captureInputSnapshot(workspaceRoot, evidenceRoot, snapshotPath, selection) {
+  if (!validSelection(selection)) reject('invalid-selection');
+  let totalBytes = 0;
+  const files = [];
+  for (const [group, kind] of [['sources', 'source'], ['instructions', 'instruction']]) {
+    for (const path of [...selection[group]].sort()) {
+      const bytes = readBounded(workspaceRoot, path, ARTIFACT_LIMIT);
+      totalBytes += bytes.length;
+      if (totalBytes > INPUT_BYTE_LIMIT) reject('too-large');
+      files.push(Object.freeze({ kind, path, sha256: hash(bytes) }));
+    }
+  }
+  const manifest = Object.freeze({ version: 1, files: Object.freeze(files) });
+  const serialized = `${JSON.stringify(manifest, null, 2)}\n`;
+  if (Buffer.byteLength(serialized) > RECORD_LIMIT) reject('too-large');
+  writeFileSync(evidencePath(evidenceRoot, snapshotPath, true), serialized, { flag: 'wx', mode: 0o600 });
+  return Object.freeze({ ...manifest, sha256: hash(Buffer.from(serialized)) });
+}
+
+/** Compare selected current files to the externally trusted manifest digest.
+ * This is a point-in-time content check, not monitoring or a filesystem sandbox.
+ */
+export function verifyInputSnapshot(workspaceRoot, evidenceRoot, snapshotPath, expectedSha256) {
+  try {
+    if (typeof expectedSha256 !== 'string' || !/^[a-f0-9]{64}$/.test(expectedSha256)) reject('invalid-snapshot-hash');
+    const bytes = readBounded(evidenceRoot, snapshotPath, RECORD_LIMIT);
+    if (hash(bytes) !== expectedSha256) reject('snapshot-mismatch');
+    const manifest = parseJson(bytes, 'invalid-snapshot');
+    if (!manifest || manifest.version !== 1 || !Array.isArray(manifest.files)
+        || manifest.files.length > INPUT_FILE_LIMIT
+        || manifest.files.some((file) => !file || !['source', 'instruction'].includes(file.kind)
+          || typeof file.path !== 'string' || typeof file.sha256 !== 'string'
+          || !/^[a-f0-9]{64}$/.test(file.sha256))) reject('invalid-snapshot');
+    const selection = {
+      sources: manifest.files.filter((file) => file.kind === 'source').map((file) => file.path),
+      instructions: manifest.files.filter((file) => file.kind === 'instruction').map((file) => file.path),
+    };
+    if (!validSelection(selection)) reject('invalid-snapshot');
+    let totalBytes = 0;
+    for (const file of manifest.files) {
+      const current = readBounded(workspaceRoot, file.path, ARTIFACT_LIMIT);
+      totalBytes += current.length;
+      if (totalBytes > INPUT_BYTE_LIMIT) reject('too-large');
+      if (hash(current) !== file.sha256) reject('input-mismatch');
+    }
+    return { pass: true, reason: null };
+  } catch (error) {
+    return { pass: false, reason: failureReason(error) };
+  }
+}
+
 /** Snapshot artifact bytes into a new record; an existing record is never replaced. */
 export function captureEvidence(root, artifactPath, recordPath, identity) {
   if (!validIdentity(identity)) reject('invalid-identity');
   const record = Object.freeze({
-    version: 3,
+    version: 4,
+    snapshotSha256: identity.snapshotSha256,
     runId: identity.runId,
     caseId: identity.caseId,
     command: Object.freeze([...identity.command]),
@@ -103,7 +171,7 @@ export function captureEvidence(root, artifactPath, recordPath, identity) {
 function readVerifiedEvidence(root, recordPath, expectedIdentity) {
   if (!validIdentity(expectedIdentity)) reject('invalid-identity');
   const record = parseJson(readBounded(root, recordPath, RECORD_LIMIT), 'invalid-record');
-  if (!record || Array.isArray(record) || record.version !== 3 || !validIdentity(record)
+  if (!record || Array.isArray(record) || record.version !== 4 || !validIdentity(record)
       || typeof record.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(record.sha256)) {
     reject('invalid-record');
   }
@@ -136,7 +204,7 @@ export function loadVerificationEvidence(root, recordPath, expectedIdentity) {
   try {
     const { record, bytes } = readVerifiedEvidence(root, recordPath, expectedIdentity);
     const payload = parseJson(bytes, 'invalid-payload');
-    if (!validIdentity(payload) || payload.version !== 1
+    if (!validIdentity(payload) || payload.version !== 2
         || typeof payload.stdout !== 'string' || typeof payload.stderr !== 'string'
         || typeof payload.truncated !== 'boolean'
         || !(payload.signal === null || nonemptyString(payload.signal))
