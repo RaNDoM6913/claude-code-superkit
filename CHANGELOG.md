@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Astra-native migration (W00B-6):** evidence records now require trusted case ID and exact command argv. Intact artifacts from another case or command are rejected; version 1 records cannot silently acquire identity. Run-level replay protection and full model acceptance remain pending.
+
 - **Astra-native migration (W00B-5):** capture-once SHA-256 evidence records now verify real fixture artifacts before scoring. Missing/changed files and unsafe or oversized inputs fail closed; replay/identity binding and full model acceptance remain pending.
 
 - **Astra-native migration (W00B-4):** partial scoring rejects missing/invalid completion output and failed worker processes, and reports five individual 0/1 checks. Real subprocess cases and six caught mutations verify the boundaries; full output schema, evidence provenance, runtime identity, and model acceptance remain pending.

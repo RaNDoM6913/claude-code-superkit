@@ -185,7 +185,11 @@ for (const fixture of cases) {
     // Only source and the public regression test enter the eventual worker root.
     // Case metadata, packets, and golden expectations stay in this parent process.
     const { NODE_TEST_CONTEXT, ...env } = process.env;
-    const result = spawnSync(process.execPath, ['--test', '--test-reporter=tap', 'test/lookup.test.js'], {
+    const expectedIdentity = {
+      caseId: fixture.id,
+      command: [process.execPath, '--test', '--test-reporter=tap', 'test/lookup.test.js'],
+    };
+    const result = spawnSync(expectedIdentity.command[0], expectedIdentity.command.slice(1), {
       cwd: root, env, encoding: 'utf8', timeout: 10_000, maxBuffer: 128 * 1024,
     });
     const output = result.stdout + result.stderr;
@@ -207,8 +211,8 @@ for (const fixture of cases) {
     writeFileSync(join(evidenceRoot, 'verification.json'), JSON.stringify({
       caseId: fixture.id, exitCode: result.status, stdout: result.stdout, stderr: result.stderr,
     }));
-    captureEvidence(evidenceRoot, 'verification.json', 'record.json');
-    const evidence = verifyEvidence(evidenceRoot, 'record.json');
+    captureEvidence(evidenceRoot, 'verification.json', 'record.json', expectedIdentity);
+    const evidence = verifyEvidence(evidenceRoot, 'record.json', expectedIdentity);
     assert.deepEqual(evidence, { pass: true, reason: null });
     assert.equal(scoreCase(repairSpec, claimedSuccess, {
       commands: [{ exitCode: result.status }], scopePass: true, evidencePass: evidence.pass,

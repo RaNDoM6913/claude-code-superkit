@@ -52,20 +52,46 @@ function readBounded(root, path, limit) {
 
 const hash = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
+function validIdentity(identity) {
+  return identity !== null && typeof identity === 'object' && !Array.isArray(identity)
+    && typeof identity.caseId === 'string' && identity.caseId.trim().length > 0
+    && !identity.caseId.includes('\0')
+    && Array.isArray(identity.command) && identity.command.length > 0
+    && Array.from(identity.command).every((arg) => typeof arg === 'string' && !arg.includes('\0'))
+    && identity.command[0].length > 0;
+}
+
 /** Snapshot artifact bytes into a new record; an existing record is never replaced. */
-export function captureEvidence(root, artifactPath, recordPath) {
-  const record = Object.freeze({ version: 1, artifactPath, sha256: hash(readBounded(root, artifactPath, ARTIFACT_LIMIT)) });
-  writeFileSync(evidencePath(root, recordPath, true), `${JSON.stringify(record, null, 2)}\n`, { flag: 'wx', mode: 0o600 });
+export function captureEvidence(root, artifactPath, recordPath, identity) {
+  if (!validIdentity(identity)) reject('invalid-identity');
+  const record = Object.freeze({
+    version: 2,
+    caseId: identity.caseId,
+    command: Object.freeze([...identity.command]),
+    artifactPath,
+    sha256: hash(readBounded(root, artifactPath, ARTIFACT_LIMIT)),
+  });
+  const serialized = `${JSON.stringify(record, null, 2)}\n`;
+  if (Buffer.byteLength(serialized) > RECORD_LIMIT) reject('too-large');
+  writeFileSync(evidencePath(root, recordPath, true), serialized, { flag: 'wx', mode: 0o600 });
   return record;
 }
 
-/** Verify integrity against a trusted record; this does not authenticate its author. */
-export function verifyEvidence(root, recordPath) {
+/** Expected identity must come from the trusted caller, not the record or worker output.
+ * Matching identity and bytes does not authenticate the collector or distinguish runs.
+ */
+export function verifyEvidence(root, recordPath, expectedIdentity) {
   try {
+    if (!validIdentity(expectedIdentity)) reject('invalid-identity');
     const record = JSON.parse(readBounded(root, recordPath, RECORD_LIMIT).toString('utf8'));
-    if (!record || Array.isArray(record) || record.version !== 1
+    if (!record || Array.isArray(record) || record.version !== 2 || !validIdentity(record)
         || typeof record.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(record.sha256)) {
       reject('invalid-record');
+    }
+    if (record.caseId !== expectedIdentity.caseId
+        || record.command.length !== expectedIdentity.command.length
+        || record.command.some((arg, index) => arg !== expectedIdentity.command[index])) {
+      reject('identity-mismatch');
     }
     const matches = hash(readBounded(root, record.artifactPath, ARTIFACT_LIMIT)) === record.sha256;
     return { pass: matches, reason: matches ? null : 'hash-mismatch' };

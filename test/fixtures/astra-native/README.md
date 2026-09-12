@@ -27,8 +27,11 @@ in `scoreCase` using a separate repair specification and a controlled scope flag
 Each fixture's exit/stdout/stderr artifact and SHA-256 record live in a separate
 collector-owned temporary directory; `verifyEvidence` supplies the evidence flag.
 Changed/missing artifacts fail verification, and capture refuses to overwrite
-an existing record. The hash proves integrity relative to a trusted snapshot,
-not authorship or case/command authenticity.
+an existing record. Version 2 records also bind the artifact to the parent-defined
+case ID and exact command argv; verification rejects a different case or command
+even with intact bytes. Expected identity is defined before process execution,
+outside worker control. This does not authenticate the collector or distinguish
+separate runs of the same case/command.
 The scorer's `pass` covers commands, scope/evidence flags, parsed completion output,
 and successful execution. The result includes per-gate 0/1 diagnostics and explicit
 partial coverage; it never represents full acceptance or an independent artifact
