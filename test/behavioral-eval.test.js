@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { captureEvidence, verifyEvidence } from '../tools/lib/verification-evidence.mjs';
 
 const fixtures = new URL('./fixtures/astra-native/', import.meta.url);
 const cases = JSON.parse(readFileSync(new URL('cases.json', fixtures), 'utf8'));
@@ -199,9 +200,18 @@ for (const fixture of cases) {
       assert.match(output, /src\/lookup\.js:1:\d+/);
     }
     const { scoreCase } = await import('../tools/lib/behavioral-eval.mjs');
-    // These flags are controlled test inputs, not an automated scope/provenance audit.
+    // Collector-owned evidence stays outside the worker tree. Hashing proves
+    // integrity against this snapshot, not command authenticity or scope.
+    const evidenceRoot = mkdtempSync(join(tmpdir(), 'astra-lookup-evidence-'));
+    t.after(() => rmSync(evidenceRoot, { recursive: true, force: true }));
+    writeFileSync(join(evidenceRoot, 'verification.json'), JSON.stringify({
+      caseId: fixture.id, exitCode: result.status, stdout: result.stdout, stderr: result.stderr,
+    }));
+    captureEvidence(evidenceRoot, 'verification.json', 'record.json');
+    const evidence = verifyEvidence(evidenceRoot, 'record.json');
+    assert.deepEqual(evidence, { pass: true, reason: null });
     assert.equal(scoreCase(repairSpec, claimedSuccess, {
-      commands: [{ exitCode: result.status }], scopePass: true, evidencePass: true,
+      commands: [{ exitCode: result.status }], scopePass: true, evidencePass: evidence.pass,
     }).pass, fixture.id === 'clean');
     t.diagnostic(`${fixture.id}: child exit ${result.status}; ${fixture.deterministicChecks.passed} passed, ${fixture.deterministicChecks.failed} failed`);
   });

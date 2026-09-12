@@ -1,6 +1,6 @@
 # Astra-native migration ledger
 
-Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readable ledger contains 544 tracked and untracked repository surfaces. Current baseline evidence is `pass-with-environment-resolution`; see `baseline.json` and `evidence/W00A/baseline/` for exact exits and outputs.
+Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readable ledger contains 547 tracked and untracked repository surfaces. Current baseline evidence is `pass-with-environment-resolution`; see `baseline.json` and `evidence/W00A/baseline/` for exact exits and outputs.
 
 ## Artifact accounting
 
@@ -11,7 +11,7 @@ Ledger, baseline, README, and checked-in evidence are inventory surfaces. Files 
 | Wave | Scope | Status | Evidence / report |
 |---|---|---|---|
 | W00A | Inventory, ledger, and repository baseline | verified | [Acceptance](evidence/W00A/report.md) |
-| W00B | Behavioral corpus, scoring, and model baseline | in-progress | [W00B-1 fixtures](evidence/W00B/lookup-fixtures.md); [W00B-2 command gate](evidence/W00B/failed-verification.md); [W00B-3 scope/evidence](evidence/W00B/scope-evidence.md); [W00B-4 output/execution](evidence/W00B/output-execution.md) |
+| W00B | Behavioral corpus, scoring, and model baseline | in-progress | [Current checkpoint](evidence/W00B/evidence-integrity.md) |
 | W01 | Astra/Sol runtime and proven fallback | pending | — |
 | W02A | Ownership, authoring, and safe synchronization | pending | — |
 | W02B | Token accounting and contract delivery | pending | — |
@@ -46,5 +46,5 @@ Ledger, baseline, README, and checked-in evidence are inventory surfaces. Files 
 ## Open items
 
 - W00A accepted after independent Sol review, two corrections, and Astra verification; original sandbox exception and successful focused rerun are preserved.
-- W00B-1 adds executable clean/defect lookup fixtures and deterministic red/green evidence. W00B-2 adds the partial command-verification scorer; W00B-3 adds strict scope/evidence boolean gates; W00B-4 adds output/execution gates and per-gate diagnostics. Remaining scenarios, scoring dimensions, runner, and all model baseline/acceptance runs are pending. Next bounded block: verification-evidence artifact hashes (see W00B-4 checkpoint). The original baseline.json remains immutable.
+- W00B-1 adds executable clean/defect lookup fixtures and deterministic red/green evidence. W00B-2 adds the partial command-verification scorer; W00B-3 adds strict scope/evidence boolean gates; W00B-4 adds output/execution gates and per-gate diagnostics; W00B-5 verifies fixture evidence artifact hashes against capture-once records. Remaining scenarios, scoring dimensions, runner, and all model baseline/acceptance runs are pending. Next bounded block: evidence case/command binding (see current checkpoint). The original baseline.json remains immutable.
 - All later waves remain pending; no test, evaluation, review, or Astra gate is inferred from inventory status.

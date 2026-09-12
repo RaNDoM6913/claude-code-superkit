@@ -6845,7 +6845,8 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md"
       ],
       "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
       "deferral": null
@@ -6862,7 +6863,8 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md"
       ],
       "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
       "deferral": null
@@ -6951,6 +6953,48 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
       ],
       "rationale": "W00B-4 partial output/execution validation and per-gate diagnostics; full behavioral acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "tools/lib/verification-evidence.mjs",
+      "kind": "tool",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md"
+      ],
+      "rationale": "W00B-5 evidence artifact integrity relative to capture-once records; identity binding and full acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/verification-evidence.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md"
+      ],
+      "rationale": "W00B-5 evidence artifact integrity relative to capture-once records; identity binding and full acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md"
+      ],
+      "rationale": "W00B-5 evidence artifact integrity relative to capture-once records; identity binding and full acceptance pending.",
       "deferral": null
     }
   ]

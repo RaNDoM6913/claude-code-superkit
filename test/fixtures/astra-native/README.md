@@ -23,8 +23,13 @@ shared regression test is public task input; it is not a hidden grading key.
 
 The `expected` review criteria are definitions for future model runs and are not
 scored here. Child exits also exercise the partial implementation command gate
-in `scoreCase` using a separate repair specification and controlled scope/evidence
-flags. Its `pass` covers commands, scope/evidence flags, parsed completion output,
+in `scoreCase` using a separate repair specification and a controlled scope flag.
+Each fixture's exit/stdout/stderr artifact and SHA-256 record live in a separate
+collector-owned temporary directory; `verifyEvidence` supplies the evidence flag.
+Changed/missing artifacts fail verification, and capture refuses to overwrite
+an existing record. The hash proves integrity relative to a trusted snapshot,
+not authorship or case/command authenticity.
+The scorer's `pass` covers commands, scope/evidence flags, parsed completion output,
 and successful execution. The result includes per-gate 0/1 diagnostics and explicit
 partial coverage; it never represents full acceptance or an independent artifact
 audit. Separate local process tests exercise invalid output and failed execution.
