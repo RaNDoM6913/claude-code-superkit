@@ -6818,6 +6818,76 @@
       "evidence": [],
       "rationale": "Repository documentation or release-facing artifact assigned to final documentation.",
       "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md"
+      ],
+      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/behavioral-eval.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md"
+      ],
+      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/fixtures/astra-native/README.md",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md"
+      ],
+      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/fixtures/astra-native/cases.json",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md"
+      ],
+      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/fixtures/astra-native/lookup.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md"
+      ],
+      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "deferral": null
     }
   ]
 }

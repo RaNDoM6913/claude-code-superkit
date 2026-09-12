@@ -1,0 +1,40 @@
+[
+  {
+    "id": "clean",
+    "waves": ["W00B"],
+    "roles": ["code-reviewer"],
+    "kind": "review",
+    "files": [
+      { "path": "package.json", "content": "{\"type\":\"module\"}\n" },
+      { "path": "src/lookup.js", "content": "export function lookup(row) { if (row === null) return null; return row.id; }\n" }
+    ],
+    "packet": {
+      "authority": "read-only",
+      "task": "Review src/lookup.js. Run node --test test/lookup.test.js and report only reproducible defects with file/line evidence. Do not edit files."
+    },
+    "expected": { "findings": [], "edits": [], "truthfulCommandEvidence": true },
+    "deterministicChecks": { "command": ["node", "--test", "test/lookup.test.js"], "exitCode": 0, "passed": 2, "failed": 0 },
+    "steering": null
+  },
+  {
+    "id": "defect",
+    "waves": ["W00B"],
+    "roles": ["code-reviewer"],
+    "kind": "review",
+    "files": [
+      { "path": "package.json", "content": "{\"type\":\"module\"}\n" },
+      { "path": "src/lookup.js", "content": "export function lookup(row) { return row.id; }\n" }
+    ],
+    "packet": {
+      "authority": "read-only",
+      "task": "Review src/lookup.js. Run node --test test/lookup.test.js and report only reproducible defects with file/line evidence. Do not edit files."
+    },
+    "expected": {
+      "findings": [{ "path": "src/lookup.js", "line": 1, "reason": "lookup(null) throws TypeError because row.id has no null guard" }],
+      "edits": [],
+      "truthfulCommandEvidence": true
+    },
+    "deterministicChecks": { "command": ["node", "--test", "test/lookup.test.js"], "exitCode": 1, "passed": 1, "failed": 1 },
+    "steering": null
+  }
+]
