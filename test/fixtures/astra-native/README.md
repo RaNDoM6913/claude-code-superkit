@@ -25,17 +25,20 @@ The `expected` review criteria are definitions for future model runs and are not
 scored here. Child exits also exercise the partial implementation command gate
 in `scoreCase` using a separate repair specification and a controlled scope flag.
 Each fixture's exit/stdout/stderr artifact and SHA-256 record live in a separate
-collector-owned temporary directory; `verifyEvidence` supplies the evidence flag.
+collector-owned temporary directory; `loadVerificationEvidence` derives command
+results and the evidence flag from those exact verified bytes.
 Changed/missing artifacts fail verification, and capture refuses to overwrite
-an existing record. Version 2 records also bind the artifact to the parent-defined
-case ID and exact command argv; verification rejects a different case or command
-even with intact bytes. Expected identity is defined before process execution,
-outside worker control. This does not authenticate the collector or distinguish
-separate runs of the same case/command.
+an existing record. Version 3 records bind the artifact to a fresh parent-generated
+run ID, case ID, and exact command argv; verification rejects a different attempt,
+case, or command even with intact bytes. Expected identity is defined before
+process execution, outside worker control. The collector must not reuse run IDs.
+This does not authenticate the collector or establish source/instruction identity.
 The scorer's `pass` covers commands, scope/evidence flags, parsed completion output,
 and successful execution. The result includes per-gate 0/1 diagnostics and explicit
 partial coverage; it never represents full acceptance or an independent artifact
-audit. Separate local process tests exercise invalid output and failed execution.
+audit. The fixtures use `scoreVerifiedCase`, whose command/evidence inputs cannot
+be replaced by caller success claims. Separate local process tests exercise
+invalid output, timeout, truncation, and failed execution.
 No model is invoked or evaluated.
 Remaining scoring dimensions, runner interfaces, other scenarios and roles,
 and live behavioral acceptance remain pending in W00B.

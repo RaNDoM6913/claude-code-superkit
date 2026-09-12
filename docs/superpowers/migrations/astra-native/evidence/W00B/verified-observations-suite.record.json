@@ -1,0 +1,11 @@
+{
+  "version": 3,
+  "runId": "39acc3d6-1d19-494f-91f3-c546048f668b",
+  "caseId": "w00b7-repository-suite",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "artifactPath": "verified-observations-suite.json",
+  "sha256": "1853b4f1499a9278f52b2c3fb01bec3784413c55f2294c33a23681dee3c1e398"
+}

@@ -6847,9 +6847,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
       ],
-      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6866,7 +6867,8 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
       ],
       "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
       "deferral": null
@@ -6910,9 +6912,10 @@
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/failed-verification.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/scope-evidence.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/output-execution.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
       ],
-      "rationale": "W00B-2 partial command-verification gate; other scoring dimensions and model acceptance pending.",
+      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6967,9 +6970,10 @@
       "status": "in-progress",
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
       ],
-      "rationale": "W00B-5 evidence artifact integrity relative to capture-once records; identity binding and full acceptance pending.",
+      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -6982,9 +6986,10 @@
       "status": "in-progress",
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
       ],
-      "rationale": "W00B-5 evidence artifact integrity relative to capture-once records; identity binding and full acceptance pending.",
+      "rationale": "W00B-7 run-bound artifact observations and partial evidence-backed scoring; source/instruction provenance and model acceptance pending.",
       "deferral": null
     },
     {
@@ -7013,6 +7018,62 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md"
       ],
       "rationale": "W00B-6 trusted case/command identity binding; cross-run replay protection and full acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/verification-observations.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+      ],
+      "rationale": "W00B-7 run-bound verification observations and evidence-backed scoring; model acceptance remains pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+      ],
+      "rationale": "W00B-7 run-bound verification observations and evidence-backed scoring; model acceptance remains pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations-suite.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+      ],
+      "rationale": "W00B-7 run-bound verification observations and evidence-backed scoring; model acceptance remains pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations-suite.record.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md"
+      ],
+      "rationale": "W00B-7 run-bound verification observations and evidence-backed scoring; model acceptance remains pending.",
       "deferral": null
     }
   ]

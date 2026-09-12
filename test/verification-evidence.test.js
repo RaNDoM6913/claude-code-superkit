@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { captureEvidence, verifyEvidence } from '../tools/lib/verification-evidence.mjs';
 import { scoreCase } from '../tools/lib/behavioral-eval.mjs';
 
-const identity = { caseId: 'clean', command: ['node', '--test', 'test/lookup.test.js'] };
+const identity = { runId: 'run-a', caseId: 'clean', command: ['node', '--test', 'test/lookup.test.js'] };
 
 function directory(t) {
   const root = mkdtempSync(join(tmpdir(), 'astra-evidence-'));
@@ -15,6 +15,7 @@ function directory(t) {
 }
 
 for (const [label, expected] of [
+  ['another run', { ...identity, runId: 'run-b' }],
   ['another case', { ...identity, caseId: 'defect' }],
   ['another executable', { ...identity, command: ['other-node', '--test', 'test/lookup.test.js'] }],
   ['another test file', { ...identity, command: ['node', '--test', 'test/unrelated.test.js'] }],
@@ -39,18 +40,18 @@ for (const [label, expected] of [
 test('command identity preserves argument boundaries instead of joining strings', (t) => {
   const root = directory(t);
   writeFileSync(join(root, 'output.txt'), 'abc');
-  captureEvidence(root, 'output.txt', 'record.json', { caseId: 'args', command: ['node', 'a b', ''] });
-  assert.deepEqual(verifyEvidence(root, 'record.json', { caseId: 'args', command: ['node', 'a b', ''] }), { pass: true, reason: null });
-  assert.deepEqual(verifyEvidence(root, 'record.json', { caseId: 'args', command: ['node', 'a', 'b', ''] }), { pass: false, reason: 'identity-mismatch' });
+  captureEvidence(root, 'output.txt', 'record.json', { runId: 'args-run', caseId: 'args', command: ['node', 'a b', ''] });
+  assert.deepEqual(verifyEvidence(root, 'record.json', { runId: 'args-run', caseId: 'args', command: ['node', 'a b', ''] }), { pass: true, reason: null });
+  assert.deepEqual(verifyEvidence(root, 'record.json', { runId: 'args-run', caseId: 'args', command: ['node', 'a', 'b', ''] }), { pass: false, reason: 'identity-mismatch' });
 });
 
 test('identity is mandatory and must be valid on capture and verification', (t) => {
   const root = directory(t);
   writeFileSync(join(root, 'output.txt'), 'abc');
-  for (const invalid of [undefined, null, {}, { caseId: ' ', command: ['node'] },
-    { caseId: 'clean', command: [] }, { caseId: 'clean', command: 'node --test' },
-    { caseId: 'clean', command: [''] }, { caseId: 'clean', command: ['node', 1] },
-    { caseId: 'clean', command: ['node', '\0'] }, { caseId: 'clean', command: Array(1) }]) {
+  for (const invalid of [undefined, null, {}, { ...identity, runId: undefined }, { ...identity, runId: '' }, { ...identity, runId: ' ' }, { ...identity, runId: 1 }, { ...identity, runId: '\0' }, { runId: 'run-a', caseId: ' ', command: ['node'] },
+    { runId: 'run-a', caseId: 'clean', command: [] }, { runId: 'run-a', caseId: 'clean', command: 'node --test' },
+    { runId: 'run-a', caseId: 'clean', command: [''] }, { runId: 'run-a', caseId: 'clean', command: ['node', 1] },
+    { runId: 'run-a', caseId: 'clean', command: ['node', '\0'] }, { runId: 'run-a', caseId: 'clean', command: Array(1) }]) {
     assert.throws(() => captureEvidence(root, 'output.txt', 'record.json', invalid), /invalid-identity/);
     assert.equal(existsSync(join(root, 'record.json')), false);
     assert.deepEqual(verifyEvidence(root, 'record.json', invalid), { pass: false, reason: 'invalid-identity' });
@@ -61,7 +62,7 @@ test('legacy or missing record identity cannot satisfy an expected identity', (t
   const root = directory(t);
   writeFileSync(join(root, 'output.txt'), 'abc');
   const record = captureEvidence(root, 'output.txt', 'record.json', identity);
-  for (const invalid of [{ ...record, version: 1 }, { ...record, caseId: undefined },
+  for (const invalid of [{ ...record, version: 1 }, { ...record, version: 2 }, { ...record, runId: undefined }, { ...record, caseId: undefined },
     { ...record, command: [] }, { ...record, command: 'node --test' }]) {
     writeFileSync(join(root, 'record.json'), JSON.stringify(invalid));
     assert.deepEqual(verifyEvidence(root, 'record.json', identity), { pass: false, reason: 'invalid-record' });
@@ -71,20 +72,20 @@ test('legacy or missing record identity cannot satisfy an expected identity', (t
 test('captured command identity is a frozen copy of caller input', (t) => {
   const root = directory(t);
   writeFileSync(join(root, 'output.txt'), 'abc');
-  const input = { caseId: 'clean', command: ['node', '--test'] };
+  const input = { runId: 'run-a', caseId: 'clean', command: ['node', '--test'] };
   const record = captureEvidence(root, 'output.txt', 'record.json', input);
   input.command.push('different.test.js');
   input.caseId = 'defect';
   assert.deepEqual(record.command, ['node', '--test']);
   assert.throws(() => record.command.push('changed'), TypeError);
-  assert.deepEqual(verifyEvidence(root, 'record.json', { caseId: 'clean', command: ['node', '--test'] }), { pass: true, reason: null });
+  assert.deepEqual(verifyEvidence(root, 'record.json', { runId: 'run-a', caseId: 'clean', command: ['node', '--test'] }), { pass: true, reason: null });
 });
 
 test('capture rejects a record exceeding the verifier limit before creating it', (t) => {
   const root = directory(t);
   writeFileSync(join(root, 'output.txt'), 'abc');
   assert.throws(() => captureEvidence(root, 'output.txt', 'record.json', {
-    caseId: 'clean', command: ['node', 'x'.repeat(64 * 1024)],
+    runId: 'run-a', caseId: 'clean', command: ['node', 'x'.repeat(64 * 1024)],
   }), /too-large/);
   assert.equal(existsSync(join(root, 'record.json')), false);
 });
@@ -94,7 +95,7 @@ test('captured evidence uses the known SHA-256 of the actual artifact bytes', (t
   writeFileSync(join(root, 'output.txt'), 'abc');
   const record = captureEvidence(root, 'output.txt', 'record.json', identity);
   assert.deepEqual(record, {
-    version: 2, ...identity, artifactPath: 'output.txt',
+    version: 3, ...identity, artifactPath: 'output.txt',
     sha256: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
   });
   assert.deepEqual(JSON.parse(readFileSync(join(root, 'record.json'), 'utf8')), record);
@@ -149,7 +150,7 @@ test('artifact paths cannot escape the evidence directory', (t) => {
   writeFileSync(join(outside, 'output.txt'), 'abc');
   for (const artifactPath of ['../output.txt', join(outside, 'output.txt'), 'a/../output.txt', 'a\\output.txt']) {
     writeFileSync(join(root, 'record.json'), JSON.stringify({
-      version: 2, ...identity, artifactPath,
+      version: 3, ...identity, artifactPath,
       sha256: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
     }));
     assert.deepEqual(verifyEvidence(root, 'record.json', identity), { pass: false, reason: 'unsafe-path' });
@@ -164,7 +165,7 @@ test('symlinked artifacts and parent directories cannot supply evidence', (t) =>
   symlinkSync(outside, join(root, 'linked-directory'));
   for (const artifactPath of ['linked.txt', 'linked-directory/output.txt']) {
     writeFileSync(join(root, 'record.json'), JSON.stringify({
-      version: 2, ...identity, artifactPath,
+      version: 3, ...identity, artifactPath,
       sha256: 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
     }));
     assert.deepEqual(verifyEvidence(root, 'record.json', identity), { pass: false, reason: 'unsafe-path' });
@@ -175,7 +176,7 @@ test('oversized evidence and directory artifacts are rejected', (t) => {
   const root = directory(t);
   writeFileSync(join(root, 'large.txt'), Buffer.alloc(2 * 1024 * 1024 + 1));
   assert.throws(() => captureEvidence(root, 'large.txt', 'record.json', identity), /too-large/);
-  const record = { version: 2, ...identity, artifactPath: 'large.txt', sha256: '0'.repeat(64) };
+  const record = { version: 3, ...identity, artifactPath: 'large.txt', sha256: '0'.repeat(64) };
   writeFileSync(join(root, 'record.json'), JSON.stringify(record));
   assert.deepEqual(verifyEvidence(root, 'record.json', identity), { pass: false, reason: 'too-large' });
   writeFileSync(join(root, 'record.json'), Buffer.alloc(64 * 1024 + 1));
