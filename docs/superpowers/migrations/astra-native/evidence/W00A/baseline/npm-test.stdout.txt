@@ -1,0 +1,54 @@
+
+> claude-code-superkit@1.5.2 test
+> node --test test/*.test.js
+
+▶ Codex package assets
+  ✔ uses current Codex model and reasoning effort names (1.019375ms)
+  ✔ does not advertise legacy Codex model or reasoning names in active Codex docs (1.183042ms)
+  ✔ keeps the Codex skill authoring guide Codex-native (0.720166ms)
+  ✔ normalizes future Claude agent conversions for Codex (0.182459ms)
+  ✔ does not leave unambiguous Claude-only markers in Codex skills (10.553917ms)
+  ✔ requires explicit user-invocable metadata on every Codex skill (3.504292ms)
+  ✔ prefers AGENTS.md whenever Codex skills ask for project context (2.774875ms)
+  ✔ does not point Codex documentation review at Claude-only storage paths (0.125375ms)
+  ✔ uses Codex workflow names instead of legacy slash-command pipeline names (2.051125ms)
+✔ Codex package assets (22.776ms)
+▶ buildSettings
+  ✔ returns base settings with no stacks or plugins (1.45875ms)
+  ✔ adds stack hooks to PostToolUse (0.108083ms)
+  ✔ adds optional plugins (0.05375ms)
+  ✔ does not mutate original object (0.044208ms)
+  ✔ dedupes hook files that appear multiple times (0.045375ms)
+  ✔ does not re-add a hook already present in the base settings (0.0465ms)
+✔ buildSettings (2.4725ms)
+▶ smoke test: --defaults install
+  ✔ installs with --defaults without errors (74.055542ms)
+  ✔ creates .claude/ directory (0.090958ms)
+  ✔ creates agents (0.049542ms)
+  ✔ creates valid settings.json (0.122417ms)
+  ✔ creates CLAUDE.md (0.045958ms)
+  ✔ creates hooks directory (0.0475ms)
+  ✔ creates .superkit-meta (0.056833ms)
+  ✔ installs docs-templates/adr-template.md at project root (0.059583ms)
+  ✔ does not overwrite an existing adr-template.md on re-install (65.004792ms)
+✔ smoke test: --defaults install (181.101208ms)
+▶ countFiles
+  ✔ counts .md files in a directory (0.999792ms)
+  ✔ returns 0 for empty directory (0.333083ms)
+  ✔ returns 0 for non-existent directory (0.073541ms)
+✔ countFiles (1.870542ms)
+▶ copyFile
+  ✔ copies file in fresh mode (0.780208ms)
+  ✔ skips existing file in merge mode (0.455333ms)
+✔ copyFile (1.373542ms)
+▶ isInsideGitRepo
+  ✔ returns true in a git repo (10.900875ms)
+✔ isInsideGitRepo (10.983583ms)
+ℹ tests 30
+ℹ suites 6
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 228.582875

@@ -1,0 +1,1 @@
+<repo>/packages/core/hooks/tests/dev-required-on-commit_test.sh: line 175: <home>/.claude/state/dev-cycles-test-dev-required-<pid>.jsonl: Operation not permitted

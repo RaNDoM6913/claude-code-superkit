@@ -1,0 +1,23 @@
+dev-required-on-commit_test.sh — regression suite
+
+  ✓ A: 0 edits + code staged → ALLOW (exit=0)
+  ✓ B: 3 edits + code + no /dev → BLOCK (exit=2)
+  ✓ C: 3 edits + [quick: …] rationale → ALLOW (exit=0)
+    (state reset verified)
+  ✓ D: 3 edits + /dev marker → ALLOW (exit=0)
+  ✓ E: 5 edits + docs-only → ALLOW (exempt) (exit=0)
+  ✓ F: [no-dev: …] rationale → ALLOW (exit=0)
+  ✓ G: bare [quick] (no rationale) → BLOCK (exit=2)
+  ✓ H: [quick: tiny] under 15 chars → BLOCK (exit=2)
+  ✓ I: bare [hotfix] (no ticket) → BLOCK (exit=2)
+  ✓ J: [hotfix: #42 …] ticket → ALLOW (exit=0)
+  ✓ K: [hotfix: no-ticket: …] explicit justification → ALLOW (exit=0)
+  ✓ L: memory-only + prose tag mention → ALLOW (exempt) (exit=0)
+  ✓ M: memory-only + no tag → ALLOW (exempt) (exit=0)
+  ✓ N: .claude-only → ALLOW (exempt) (exit=0)
+  ✓ O: code + penalty + real leading tag → BLOCK (penalty) (exit=2)
+  ✓ P: code + valid leading tag, no penalty → ALLOW (exit=0)
+  ✓ P-state: allow-override cycle appended
+  ✓ Q: code + mid-sentence tag mention → BLOCK (not an override) (exit=2)
+
+Results: 18 passed, 0 failed

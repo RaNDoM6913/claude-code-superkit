@@ -1,0 +1,16 @@
+── ui-color-check.sh tests ──
+  ✓ A) pure #000 in color
+  ✓ B) pure #fff in background
+  ✓ C) rgb(0,0,0) in color
+  ✓ D) Tailwind bg-black
+  ✓ E) gradient text (background-clip+linear-gradient)
+  ✓ F) purple-to-blue gradient
+  ✓ G) 3+ hsl without oklch
+  ✓ H) oklch-only palette silent
+  ✓ I) Non-UI file silent
+  ✓ J) box-shadow with rgba(0,0,0,0.5) — not a color declaration on color/background
+  ✓ K) Single hsl (not palette) silent
+  ✓ L) Opt-out via CLAUDE_DISABLE_UI_COLOR_CHECK
+
+── Results ──
+  Pass: 12  Fail: 0

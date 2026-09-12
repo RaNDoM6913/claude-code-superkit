@@ -1,0 +1,256 @@
+✔ an unowned nested surface fails inventory gate (1.025583ms)
+✔ deleted source is not silently forgotten (0.095666ms)
+✔ collectSurfaces includes tracked hidden files and untracked source files (55.759125ms)
+✔ reconcileLedger reports invalid ownership instead of guessing it closed (0.116166ms)
+✔ retired and deferred rows require explicit disposition evidence (0.085625ms)
+✔ a mirror must exist in the current inventory even if another row names it (0.052917ms)
+✔ classification recognizes stack reviewers and stack hook programs (0.105666ms)
+✔ collectSurfaces omits a tracked file deleted from the working tree for stale reconciliation (39.011417ms)
+✔ collectSurfaces hashes a symlink itself without reading its external target (37.487667ms)
+✔ collectSurfaces measures instruction files but not ordinary documentation (37.171041ms)
+✔ reconcileLedger rejects an invented migration wave (0.077ms)
+✖ nonhistorical preserved and verified rows require existing evidence surfaces (0.536292ms)
+✖ capture refuses to overwrite initialized artifacts without mutating any file (4090.859834ms)
+✖ baseline evidence is incomplete when the required summary is empty (2.917042ms)
+✖ baseline evidence fails when the core failure has no successful focused rerun (2.273583ms)
+✖ baseline evidence fails for an unrelated command failure even when a rerun exists (2.43075ms)
+✔ baseline evidence accepts only the exact documented environment resolution (2.354292ms)
+✖ approved responsibility paths have explicit first-touch waves (0.088792ms)
+✖ explicit mirrors cover command aliases and keep the UI reviewer sources distinct (0.212917ms)
+✖ GAN skills are Codex-native counterparts of GAN agents (0.067125ms)
+✖ stale claim scan includes explicit TOML and JavaScript text surfaces but skips binaries (0.968834ms)
+✖ CLI reports a usage error when an option flag has no value (30.187125ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 12
+ℹ fail 10
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4350.304041
+
+✖ failing tests:
+
+test at test/migration-inventory.test.js:204:1
+✖ nonhistorical preserved and verified rows require existing evidence surfaces (0.536292ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /preserved.*evidence/i. Input:
+
+  ''
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:215:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '',
+    expected: /preserved.*evidence/i,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:219:1
+✖ capture refuses to overwrite initialized artifacts without mutating any file (4090.859834ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:228:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /already initialized/i,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:232:1
+✖ baseline evidence is incomplete when the required summary is empty (2.917042ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'pass'
+  - 'incomplete'
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:235:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pass',
+    expected: 'incomplete',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:238:1
+✖ baseline evidence fails when the core failure has no successful focused rerun (2.273583ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'pass-with-environment-resolution'
+  - 'fail'
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:242:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pass-with-environment-resolution',
+    expected: 'fail',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:251:1
+✖ baseline evidence fails for an unrelated command failure even when a rerun exists (2.43075ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'pass-with-environment-resolution'
+  - 'fail'
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:253:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'pass-with-environment-resolution',
+    expected: 'fail',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:261:1
+✖ approved responsibility paths have explicit first-touch waves (0.088792ms)
+  AssertionError [ERR_ASSERTION]: tools/superkit-eval.mjs
+
+  null !== 'W00B'
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:287:44)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: null,
+    expected: 'W00B',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:290:1
+✖ explicit mirrors cover command aliases and keep the UI reviewer sources distinct (0.212917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+  + []
+  - [
+  -   'packages/core/commands/dev.md'
+  - ]
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:291:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'packages/core/commands/dev.md' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:301:1
+✖ GAN skills are Codex-native counterparts of GAN agents (0.067125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + 'shared-generated'
+  - 'codex-native'
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:303:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'shared-generated',
+    expected: 'codex-native',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:307:1
+✖ stale claim scan includes explicit TOML and JavaScript text surfaces but skips binaries (0.968834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+  + []
+  - [
+  -   'packages/codex/config.toml',
+  -   'lib/codex.js'
+  - ]
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:320:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'packages/codex/config.toml', 'lib/codex.js' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:326:1
+✖ CLI reports a usage error when an option flag has no value (30.187125ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 2
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:328:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,17 @@
+── ui-animation-easing-check.sh tests ──
+  ✓ A) ease-in on transition
+  ✓ B) ease-in-out is fine
+  ✓ C) ease-out is fine
+  ✓ D) transition: all
+  ✓ E) Tailwind transition-all
+  ✓ F) scale(0) in transform
+  ✓ G) scale(0.95) is fine
+  ✓ H) Tailwind scale-0
+  ✓ I) transitioning width
+  ✓ J) transitioning height
+  ✓ K) transitioning transform + opacity is fine
+  ✓ L) Non-UI file silent
+  ✓ M) Opt-out via CLAUDE_DISABLE_UI_ANIM_CHECK
+
+── Results ──
+  Pass: 13  Fail: 0

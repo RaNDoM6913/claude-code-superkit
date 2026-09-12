@@ -1,0 +1,73 @@
+[
+  {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.49,
+    "stdoutPath": "npm-test.stdout.txt",
+    "stderrPath": "npm-test.stderr.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "test:smoke"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.46,
+    "stdoutPath": "smoke.stdout.txt",
+    "stderrPath": "smoke.stderr.txt"
+  },
+  {
+    "command": [
+      "bash",
+      "packages/core/hooks/tests/run-all.sh"
+    ],
+    "exitCode": 1,
+    "durationSeconds": 6.86,
+    "stdoutPath": "core-hooks.stdout.txt",
+    "stderrPath": "core-hooks.stderr.txt"
+  },
+  {
+    "command": [
+      "bash",
+      "packages/frontend-ui/hooks/tests/ui-color-check_test.sh"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.27,
+    "stdoutPath": "ui-color.stdout.txt",
+    "stderrPath": "ui-color.stderr.txt"
+  },
+  {
+    "command": [
+      "bash",
+      "packages/frontend-ui/hooks/tests/ui-animation-easing-check_test.sh"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.27,
+    "stdoutPath": "ui-easing.stdout.txt",
+    "stderrPath": "ui-easing.stderr.txt"
+  },
+  {
+    "command": [
+      "bash",
+      "packages/frontend-ui/hooks/tests/ui-banned-fonts-check_test.sh"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.3,
+    "stdoutPath": "ui-fonts.stdout.txt",
+    "stderrPath": "ui-fonts.stderr.txt"
+  },
+  {
+    "command": [
+      "bash",
+      "bin/superkit-counts-verify.sh"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.15,
+    "stdoutPath": "counts.stdout.txt",
+    "stderrPath": "counts.stderr.txt"
+  }
+]
