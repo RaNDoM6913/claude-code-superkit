@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Repository workflow:** saved the owner-approved working agreement for outcome-based batches, parallel implementation, risk-based review, and economical verification/context use; linked from contributor AGENTS.md and CLAUDE.md.
+
 - **Astra-native migration (W00B-11):** added executable ambiguity, noise, and unavailable-tool cases with normalized safe-recovery scoring. Bound command evidence to validated fixture oracles, rejecting unrelated TAP/ENOENT processes. Live context budgets, steering, and model evaluations remain pending.
 
 - **Astra-native migration (W00B-10):** added normalized clean/defect review scoring with FP/FN, exact finding evidence, truthful command outcomes, and an independent read-only workspace audit. Correct defect review can pass while its test fails; live review text normalization and model baselines remain pending.

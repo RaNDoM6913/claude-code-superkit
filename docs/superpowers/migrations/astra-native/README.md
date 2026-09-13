@@ -1,6 +1,6 @@
 # Astra-native migration ledger
 
-Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readable ledger contains 577 tracked and untracked repository surfaces. Current baseline evidence is `pass-with-environment-resolution`; see `baseline.json` and `evidence/W00A/baseline/` for exact exits and outputs.
+Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readable ledger contains 579 tracked and untracked repository surfaces. Current baseline evidence is `pass-with-environment-resolution`; see `baseline.json` and `evidence/W00A/baseline/` for exact exits and outputs.
 
 ## Artifact accounting
 
@@ -44,6 +44,8 @@ Ledger, baseline, README, and checked-in evidence are inventory surfaces. Files 
 | W10B | Conditional merge and next release | pending | — |
 
 ## Open items
+
+- Migration implementation is paused by the owner. On resumption, apply [the repository working agreement](../../../WORKING_AGREEMENT.md) and reassess the minimum mandatory W00B closure scope before further implementation.
 
 - W00A accepted after independent Sol review, two corrections, and Astra verification; original sandbox exception and successful focused rerun are preserved.
 - W00B has executable lookup fixtures and partial evidence-backed scoring. The current checkpoint covers run identity, verified observations, input snapshots, and a normalized runtime model/effort gate. Live provider adapters, remaining corpus/scoring dimensions, runner, and model baselines are pending. Clean/defect reviewer scoring and a bounded read-only tree audit are implemented. Ambiguity/noise/unavailable-tool cases and partial recovery scoring are implemented. Next: remaining failed-verification/insufficient-tier contracts; live steering stays pending. The original baseline.json remains immutable.

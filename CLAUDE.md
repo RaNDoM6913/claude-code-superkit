@@ -2,6 +2,10 @@
 
 Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI. All agents on Opus.
 
+## Contributor Working Agreement
+
+For work on Superkit itself, read [docs/WORKING_AGREEMENT.md](docs/WORKING_AGREEMENT.md) once per session. It defines the owner-approved scope, parallel implementation, risk-based review, verification, and token-economy rules. Preserve mandatory project checks and current task authorization boundaries.
+
 ## Project Structure
 
 ```

@@ -7444,6 +7444,34 @@
       ],
       "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
       "deferral": null
+    },
+    {
+      "path": "AGENTS.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "verified",
+      "evidence": [
+        "docs/WORKING_AGREEMENT.md"
+      ],
+      "rationale": "Owner-approved repository contributor policy; no product migration or shipped component change.",
+      "deferral": null
+    },
+    {
+      "path": "docs/WORKING_AGREEMENT.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "verified",
+      "evidence": [
+        "docs/WORKING_AGREEMENT.md"
+      ],
+      "rationale": "Owner-approved repository contributor policy; no product migration or shipped component change.",
+      "deferral": null
     }
   ]
 }
