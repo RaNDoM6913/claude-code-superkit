@@ -5,7 +5,7 @@ import { randomUUID } from 'node:crypto';
 import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { captureEvidence, captureInputSnapshot } from '../tools/lib/verification-evidence.mjs';
+import { captureEvidence, captureInputSnapshot, captureReviewWorkspace } from '../tools/lib/verification-evidence.mjs';
 
 const fixtures = new URL('./fixtures/astra-native/', import.meta.url);
 const cases = JSON.parse(readFileSync(new URL('cases.json', fixtures), 'utf8'));
@@ -199,6 +199,7 @@ for (const fixture of cases) {
       caseId: fixture.id,
       command: [process.execPath, '--test', '--test-reporter=tap', 'test/lookup.test.js'],
     };
+    const reviewBefore = captureReviewWorkspace(root, evidenceRoot, 'review.before.json', expectedIdentity);
     const result = spawnSync(expectedIdentity.command[0], expectedIdentity.command.slice(1), {
       cwd: root, env, encoding: 'utf8', timeout: 10_000, maxBuffer: 128 * 1024,
     });
@@ -230,6 +231,21 @@ for (const fixture of cases) {
     assert.equal(scored.checks.evidence, 1);
     assert.equal(scored.checks.inputs, 1);
     assert.equal(scored.pass, fixture.id === 'clean');
+    // Synthetic normalized review output, scored against the real fixture process.
+    const { scoreVerifiedReviewCase } = await import('../tools/lib/review-eval.mjs');
+    const reviewed = scoreVerifiedReviewCase(fixture, {
+      exitCode: 0,
+      response: {
+        status: 'complete', edits: [], commands: [{ command: expectedIdentity.command, exitCode: result.status }],
+        findings: fixture.id === 'defect' ? [{ path: 'src/lookup.js', line: 1, issue: 'null-dereference',
+          trigger: 'lookup(null)', reason: 'Null reaches row.id without a guard.' }] : [],
+      },
+    }, {
+      workspaceRoot: root, snapshotPath: 'inputs.json', evidenceRoot, recordPath: 'record.json', expectedIdentity,
+      reviewSnapshotPath: 'review.before.json', reviewSnapshotSha256: reviewBefore.sha256, scopePass: true,
+    });
+    assert.equal(reviewed.pass, true, JSON.stringify(reviewed));
+    assert.equal(reviewed.checks.readOnly, 1);
     t.diagnostic(`${fixture.id}: child exit ${result.status}; ${fixture.deterministicChecks.passed} passed, ${fixture.deterministicChecks.failed} failed`);
   });
 }

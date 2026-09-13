@@ -48,3 +48,9 @@ Request/worker labels do not count as observed identity. These tests do not prov
 live model routing or tier eligibility; provider adapters remain pending.
 Remaining scoring dimensions, runner interfaces, other scenarios and roles,
 and live behavioral acceptance remain pending in W00B.
+
+The lookup cases also exercise normalized review scoring: no findings on clean,
+one exact null-dereference finding on defect, truthful TAP reproduction, and no
+workspace edits. A collector-owned before-review tree snapshot checks unselected
+files and permissions too. The normalized responses are synthetic; no Markdown
+review parser, semantic prose grader, or live model evaluation is implied.

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { closeSync, constants, fstatSync, lstatSync, openSync, readSync, realpathSync, writeFileSync } from 'node:fs';
+import { closeSync, constants, fstatSync, lstatSync, opendirSync, openSync, readSync, realpathSync, writeFileSync } from 'node:fs';
 import { isAbsolute, join } from 'node:path';
 import { TextDecoder } from 'node:util';
 
@@ -7,6 +7,7 @@ const ARTIFACT_LIMIT = 2 * 1024 * 1024;
 const RECORD_LIMIT = 64 * 1024;
 const INPUT_FILE_LIMIT = 128;
 const INPUT_BYTE_LIMIT = 8 * 1024 * 1024;
+const REVIEW_ENTRY_LIMIT = 256;
 
 function reject(reason) {
   throw Object.assign(new Error(reason), { reason });
@@ -14,12 +15,13 @@ function reject(reason) {
 
 // The evidence root belongs to the trusted collector, outside the worker tree.
 // These checks reject static escapes; they are not a hostile-filesystem sandbox.
+function validRelativePath(path) {
+  return typeof path === 'string' && path.length > 0 && !isAbsolute(path) && !/[\\:\0]/.test(path)
+    && path.split('/').every((part) => part && part !== '.' && part !== '..');
+}
+
 function evidencePath(root, relativePath, creating = false) {
-  if (typeof relativePath !== 'string' || !relativePath || isAbsolute(relativePath)
-      || /[\\:\0]/.test(relativePath)
-      || relativePath.split('/').some((part) => !part || part === '.' || part === '..')) {
-    reject('unsafe-path');
-  }
+  if (!validRelativePath(relativePath)) reject('unsafe-path');
   let path = realpathSync(root);
   const parts = relativePath.split('/');
   for (const [index, part] of parts.entries()) {
@@ -147,6 +149,95 @@ export function verifyInputSnapshot(workspaceRoot, evidenceRoot, snapshotPath, e
     return { pass: true, reason: null };
   } catch (error) {
     return { pass: false, reason: failureReason(error) };
+  }
+}
+
+function reviewTree(workspaceRoot) {
+  const root = realpathSync(workspaceRoot);
+  const rootStat = lstatSync(root);
+  if (!rootStat.isDirectory()) reject('not-directory');
+  const entries = [];
+  let totalBytes = 0;
+  function walk(parent = '') {
+    const directory = opendirSync(join(root, parent));
+    const names = [];
+    try {
+      let entry;
+      while ((entry = directory.readSync()) !== null) {
+        if (names.length + entries.length >= REVIEW_ENTRY_LIMIT) reject('too-large');
+        names.push(entry.name);
+      }
+    } finally {
+      directory.closeSync();
+    }
+    for (const name of names.sort()) {
+      if (entries.length >= REVIEW_ENTRY_LIMIT) reject('too-large');
+      const path = parent ? `${parent}/${name}` : name;
+      if (!validRelativePath(path)) reject('unsafe-path');
+      const stat = lstatSync(join(root, path));
+      if (stat.isSymbolicLink()) reject('unsafe-path');
+      const mode = stat.mode & 0o7777;
+      if (stat.isDirectory()) {
+        entries.push(Object.freeze({ path, kind: 'directory', mode }));
+        walk(path);
+      } else if (stat.isFile()) {
+        const bytes = readBounded(root, path, ARTIFACT_LIMIT);
+        totalBytes += bytes.length;
+        if (totalBytes > INPUT_BYTE_LIMIT) reject('too-large');
+        entries.push(Object.freeze({ path, kind: 'file', mode, sha256: hash(bytes) }));
+      } else reject('not-file');
+    }
+  }
+  walk();
+  return { rootMode: rootStat.mode & 0o7777, entries: Object.freeze(entries) };
+}
+
+/** Capture before any reviewer work, outside its workspace. This compares final
+ * tree/content/permission state, not every filesystem operation or restored edits.
+ */
+export function captureReviewWorkspace(workspaceRoot, evidenceRoot, snapshotPath, identity) {
+  if (!validIdentity(identity)) reject('invalid-identity');
+  const tree = reviewTree(workspaceRoot);
+  const snapshot = Object.freeze({ version: 1, kind: 'review-workspace',
+    snapshotSha256: identity.snapshotSha256, runId: identity.runId, caseId: identity.caseId,
+    command: Object.freeze([...identity.command]), ...tree });
+  const serialized = `${JSON.stringify(snapshot, null, 2)}\n`;
+  if (Buffer.byteLength(serialized) > RECORD_LIMIT) reject('too-large');
+  writeFileSync(evidencePath(evidenceRoot, snapshotPath, true), serialized, { flag: 'wx', mode: 0o600 });
+  return Object.freeze({ ...snapshot, sha256: hash(Buffer.from(serialized)) });
+}
+
+export function verifyReviewWorkspace(workspaceRoot, evidenceRoot, snapshotPath, expectedSha256, expectedIdentity) {
+  try {
+    if (!validIdentity(expectedIdentity)) reject('invalid-identity');
+    if (typeof expectedSha256 !== 'string' || !/^[a-f0-9]{64}$/.test(expectedSha256)) reject('invalid-review-snapshot-hash');
+    const bytes = readBounded(evidenceRoot, snapshotPath, RECORD_LIMIT);
+    if (hash(bytes) !== expectedSha256) reject('review-snapshot-mismatch');
+    const before = parseJson(bytes, 'invalid-review-snapshot');
+    const validMode = (mode) => Number.isInteger(mode) && mode >= 0 && mode <= 0o7777;
+    if (!validIdentity(before) || before.version !== 1 || before.kind !== 'review-workspace'
+        || !validMode(before.rootMode) || !Array.isArray(before.entries) || before.entries.length > REVIEW_ENTRY_LIMIT
+        || before.entries.some((entry) => !entry || !validRelativePath(entry.path) || !validMode(entry.mode)
+          || !['file', 'directory'].includes(entry.kind)
+          || (entry.kind === 'file' && (typeof entry.sha256 !== 'string' || !/^[a-f0-9]{64}$/.test(entry.sha256))))
+        || new Set(before.entries.map((entry) => entry.path)).size !== before.entries.length) reject('invalid-review-snapshot');
+    if (!sameIdentity(before, expectedIdentity)) reject('identity-mismatch');
+    const after = reviewTree(workspaceRoot);
+    const oldEntries = new Map(before.entries.map((entry) => [entry.path, entry]));
+    const newEntries = new Map(after.entries.map((entry) => [entry.path, entry]));
+    const edits = [];
+    if (before.rootMode !== after.rootMode) edits.push({ path: '.', change: 'modified' });
+    for (const path of [...new Set([...oldEntries.keys(), ...newEntries.keys()])].sort()) {
+      const old = oldEntries.get(path);
+      const current = newEntries.get(path);
+      if (!old) edits.push({ path, change: 'added' });
+      else if (!current) edits.push({ path, change: 'removed' });
+      else if (old.kind !== current.kind || old.mode !== current.mode || old.sha256 !== current.sha256) edits.push({ path, change: 'modified' });
+    }
+    return { pass: edits.length === 0, reason: edits.length ? 'workspace-changed' : null,
+      edits: Object.freeze(edits.map((edit) => Object.freeze(edit))) };
+  } catch (error) {
+    return { pass: false, reason: failureReason(error), edits: null };
   }
 }
 

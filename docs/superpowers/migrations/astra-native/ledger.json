@@ -6849,9 +6849,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-integrity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
       ],
-      "rationale": "W00B-8 selected input snapshots and partial evidence-backed scoring; full provenance and model acceptance pending.",
+      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
       "deferral": null
     },
     {
@@ -6871,9 +6872,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
       ],
-      "rationale": "W00B-9 partial evidence-backed scoring and normalized runtime identity gate; live provenance and model acceptance pending.",
+      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
       "deferral": null
     },
     {
@@ -6885,9 +6887,10 @@
       "baselineSha256": null,
       "status": "in-progress",
       "evidence": [
-        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
       ],
-      "rationale": "W00B-1 executable lookup fixture slice; remaining behavioral corpus and model acceptance pending.",
+      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
       "deferral": null
     },
     {
@@ -6978,9 +6981,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
       ],
-      "rationale": "W00B-9 partial evidence-backed scoring and normalized runtime identity gate; live provenance and model acceptance pending.",
+      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
       "deferral": null
     },
     {
@@ -7223,6 +7227,118 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md"
       ],
       "rationale": "W00B-9 normalized collector runtime identity comparison; live adapters, provenance, and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "tools/lib/review-eval.mjs",
+      "kind": "tool",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/review-eval.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/review-workspace.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/review-integration.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes-suite.inputs.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes-suite.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes-suite.record.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+      ],
+      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
       "deferral": null
     }
   ]

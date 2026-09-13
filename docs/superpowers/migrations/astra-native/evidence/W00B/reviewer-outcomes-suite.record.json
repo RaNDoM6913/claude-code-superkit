@@ -1,0 +1,12 @@
+{
+  "version": 4,
+  "snapshotSha256": "2bf294827aefeca1432d48a6df7831e117133b115d6244043cd39e6b711cdac0",
+  "runId": "0a75e1f6-490f-45cc-a523-06b390d105f6",
+  "caseId": "w00b10-deterministic-suite",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "artifactPath": "reviewer-outcomes-suite.json",
+  "sha256": "1592d7be5230b3736e1b764e10f6e4bc748fe694720f43159bc9605a07b07fc6"
+}
