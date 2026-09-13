@@ -1,4 +1,5 @@
 import { loadRuntimeEvidence, loadVerificationEvidence, verifyInputSnapshot, verifyReviewWorkspace } from './verification-evidence.mjs';
+import { matchesFixtureCommand, validFixtureCommand } from './fixture-command.mjs';
 
 const record = (value) => value !== null && typeof value === 'object' && !Array.isArray(value);
 const text = (value) => typeof value === 'string' && value.trim().length > 0;
@@ -23,6 +24,7 @@ export function scoreReviewCase(caseSpec, execution, observation) {
       || !findings(caseSpec.expected?.findings) || !Array.isArray(caseSpec.expected.edits)
       || caseSpec.expected.edits.length !== 0 || caseSpec.expected.truthfulCommandEvidence !== true
       || !Number.isSafeInteger(caseSpec.deterministicChecks?.exitCode)
+      || !validFixtureCommand(caseSpec.deterministicChecks?.command)
       || !Number.isSafeInteger(caseSpec.deterministicChecks.passed) || caseSpec.deterministicChecks.passed < 0
       || !Number.isSafeInteger(caseSpec.deterministicChecks.failed) || caseSpec.deterministicChecks.failed < 0
       || !Array.isArray(caseSpec.deterministicChecks.requiredOutput) || !caseSpec.deterministicChecks.requiredOutput.length
@@ -54,7 +56,8 @@ export function scoreReviewCase(caseSpec, execution, observation) {
   const actualCommandsValid = commands(actualCommands) && actualCommands.length === 1;
   const claimedCommandsValid = commands(response?.commands);
   const checks = {
-    commands: Number(actualCommandsValid && actualCommands[0].exitCode === caseSpec.deterministicChecks.exitCode
+    commands: Number(actualCommandsValid && matchesFixtureCommand(caseSpec.deterministicChecks.command, actualCommands[0].command, observation?.workspaceRoot)
+      && actualCommands[0].exitCode === caseSpec.deterministicChecks.exitCode
       && actualCommands[0].signal == null && actualCommands[0].error == null),
     reproduction: Number(actualCommandsValid && typeof actualCommands[0].stdout === 'string'
       && new RegExp(`^# pass ${caseSpec.deterministicChecks.passed}$`, 'm').test(actualCommands[0].stdout)
@@ -98,7 +101,7 @@ export function scoreVerifiedReviewCase(caseSpec, execution, source = {}) {
       source.reviewSnapshotPath, source.reviewSnapshotSha256, source.expectedIdentity);
     if (inputs.pass) inputs = verifyInputSnapshot(source.workspaceRoot, source.evidenceRoot, source.snapshotPath, source.expectedIdentity.snapshotSha256);
   }
-  const score = scoreReviewCase(caseSpec, execution, { ...evidence.observation, edits: audit.edits, scopePass: source.scopePass });
+  const score = scoreReviewCase(caseSpec, execution, { ...evidence.observation, workspaceRoot: source.workspaceRoot, edits: audit.edits, scopePass: source.scopePass });
   return {
     ...score, pass: score.pass && inputs.pass && audit.pass,
     checks: { ...score.checks, inputs: Number(inputs.pass) },

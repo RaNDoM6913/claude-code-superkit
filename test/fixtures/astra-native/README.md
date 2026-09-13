@@ -1,56 +1,41 @@
-# Lookup fixtures (W00B-1)
+# Deterministic Astra-native fixtures
 
-Run both variants from the repository root:
+The corpus contains clean, defect, noise, ambiguous, and unavailable-tool cases.
+Run the fixture and recovery checks from the repository root:
 
 ```sh
-node --test test/behavioral-eval.test.js
+node --test test/behavioral-eval.test.js test/review-eval.test.js test/recovery-eval.test.js
 ```
 
-`cases.json` contains two literal source trees and the first review case
-definitions. The focused test materializes each tree in a separate temporary
-directory, copies the shared `lookup.test.js` into `test/lookup.test.js`, and
-executes Node there. Both variants check null input and an existing row.
-Temporary trees are removed after each run.
+The lookup harness materializes the three review cases in separate temporary
+workspaces, adds the shared public lookup.test.js and TASK.md, then runs Node.
+Clean exits 0 with two passing tests; defect and noise exit 1 with the expected
+null TypeError. Normalized review scoring accepts the correct finding while
+implementation scoring still rejects the failing command. Extra noise findings
+are out of scope. The declared noise context-file budget is not measured yet.
 
-The healthy child must exit 0 (two tests pass). The defective child must exit 1
-(the null test throws TypeError at `src/lookup.js:1`; the existing-row test passes).
-The parent suite passes only when both outcomes match. The defect is intentional.
+The recovery harness materializes the ambiguity and unavailable-tool cases.
+Its Node policy test proves the two null behaviors differ. Its missing-compiler
+probe produces a real ENOENT. Correct normalized recovery asks the exact open
+question or reports unavailable tooling; it does not invent a decision, build
+result, finding, or edit. Completed reporting or blocked status may describe this
+safe reaction, but neither implies successful implementation.
 
-Only literal files and the public regression test enter the temporary workspace.
-Golden findings, command expectations, and case metadata remain outside it in
-`cases.json`. This is fixture layout separation, not a security sandbox. The
-shared regression test is public task input; it is not a hidden grading key.
+Literal source, public tests and task instructions enter the worker workspace.
+Case metadata, golden findings/questions, and expected command evidence remain
+outside it. Collector-owned input and before-review tree snapshots also stay
+outside worker control. Evidence record v4 and verification payload v2 bind run,
+case, command argv and input digest; file hashes and audit comparisons reject
+stale inputs, altered artifacts, and observed workspace writes. Capture never
+overwrites the original expectation. Temporary trees are cleaned up.
 
-The `expected` review criteria are definitions for future model runs and are not
-scored here. Child exits also exercise the partial implementation command gate
-in `scoreCase` using a separate repair specification and a controlled scope flag.
-Each fixture's exit/stdout/stderr artifact and SHA-256 record live in a separate
-collector-owned temporary directory; `loadVerificationEvidence` derives command
-results and the evidence flag from those exact verified bytes.
-Changed/missing artifacts fail verification, and capture refuses to overwrite
-an existing record. Version 4 records bind the artifact to a fresh parent-generated
-run ID, case ID, exact command argv, and the digest of an input snapshot. The
-collector captures selected source files and public `TASK.md` instructions before
-running the command. Scoring checks their contents before and after loading evidence.
-Changed selected inputs or a different expected snapshot reject old results.
-Expected identity stays outside worker control, and run IDs must not be reused.
-This does not authenticate the collector or discover unselected dependencies.
-The scorer's `pass` covers selected input contents, commands, scope/evidence flags, parsed completion output,
-and successful execution. The result includes per-gate 0/1 diagnostics and explicit
-partial coverage; it never represents full acceptance or an independent artifact
-audit. The fixtures use `scoreVerifiedCase`, whose command/evidence inputs cannot
-be replaced by caller success claims. Separate local process tests exercise
-invalid output, timeout, truncation, and failed execution.
-No model is invoked or evaluated.
-The separate `runtime-evidence.test.js` uses synthetic internal collector traces
-to test the optional model-attempt entry point, `scoreModelVerifiedCase`.
-Request/worker labels do not count as observed identity. These tests do not prove
-live model routing or tier eligibility; provider adapters remain pending.
-Remaining scoring dimensions, runner interfaces, other scenarios and roles,
-and live behavioral acceptance remain pending in W00B.
+The scorer checks normalized facts, exact locations, recorded commands and
+explicit outcome fields; it does not parse native Markdown or semantically judge
+arbitrary prose. Runtime identity tests use synthetic internal collector traces,
+not real provider observations or model evaluations. Collector authentication,
+complete selection/provenance, restored transient writes and actual worker read
+measurement remain outside these partial guarantees.
 
-The lookup cases also exercise normalized review scoring: no findings on clean,
-one exact null-dereference finding on defect, truthful TAP reproduction, and no
-workspace edits. A collector-owned before-review tree snapshot checks unselected
-files and permissions too. The normalized responses are synthetic; no Markdown
-review parser, semantic prose grader, or live model evaluation is implied.
+Full remaining corpus/role coverage, provider adapters, live steering, model
+baselines, and the generic runner remain pending. No live model evaluation is
+implied by a green deterministic fixture suite.

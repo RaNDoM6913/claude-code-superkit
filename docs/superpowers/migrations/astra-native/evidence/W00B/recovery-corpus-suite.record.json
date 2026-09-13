@@ -1,0 +1,12 @@
+{
+  "version": 4,
+  "snapshotSha256": "26ac350990c2cc0b1bd81557ce21548a9a668043049d91756092aea4ae85eaae",
+  "runId": "764c822a-122b-4bc7-bbcd-971ee69f4bf5",
+  "caseId": "w00b11-deterministic-suite",
+  "command": [
+    "npm",
+    "test"
+  ],
+  "artifactPath": "recovery-corpus-suite.json",
+  "sha256": "e0283c7136a997c971011893cf89bf8f9c151aa326a6291c3cc7f97672e1269b"
+}

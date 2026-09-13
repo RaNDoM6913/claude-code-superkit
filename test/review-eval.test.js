@@ -6,6 +6,7 @@ import { scoreReviewCase } from '../tools/lib/review-eval.mjs';
 const cases = JSON.parse(readFileSync(new URL('./fixtures/astra-native/cases.json', import.meta.url), 'utf8'));
 const clean = cases.find((item) => item.id === 'clean');
 const defect = cases.find((item) => item.id === 'defect');
+const noise = cases.find((item) => item.id === 'noise');
 const command = ['node', '--test', 'test/lookup.test.js'];
 const finding = {
   path: 'src/lookup.js', line: 1, issue: 'null-dereference', trigger: 'lookup(null)',
@@ -33,6 +34,14 @@ test('a reproduced defect may complete review while its regression test fails', 
   assert.equal(score.checks.commands, 1);
   assert.equal(score.checks.truthfulCommands, 1);
   assert.deepEqual(score.metrics, { falsePositives: 0, falseNegatives: 0 });
+});
+
+test('noise permits only the scoped genuine finding, not unrelated archive findings', () => {
+  assert.equal(scoreReviewCase(noise, execution([finding], 1), observed(1)).pass, true);
+  const extra = { path: 'archive/legacy.js', line: 1, issue: 'null-dereference', trigger: 'legacyName(null)', reason: 'Out-of-scope legacy access.' };
+  const score = scoreReviewCase(noise, execution([finding, extra], 1), observed(1));
+  assert.equal(score.pass, false);
+  assert.deepEqual(score.metrics, { falsePositives: 1, falseNegatives: 0 });
 });
 
 test('a finding on clean code is a false positive', () => {
@@ -135,7 +144,16 @@ test('scope, evidence and execution remain independent required gates', () => {
 
 test('review authority and oracle expectations must be explicit', () => {
   for (const invalid of [{ ...clean, kind: 'implementation' }, { ...clean, packet: { authority: 'edit' } },
+    { ...clean, deterministicChecks: { ...clean.deterministicChecks, command: undefined } },
     { ...clean, expected: { ...clean.expected, findings: undefined } }]) {
     assert.throws(() => scoreReviewCase(invalid, execution(), observed(0)), /unsupported review case/);
   }
+});
+
+test('truthful but unrelated command cannot replace the review oracle', () => {
+  const observation = observed(0);
+  observation.commands[0].command = ['node', 'fake.js'];
+  const run = execution();
+  run.response.commands[0].command = ['node', 'fake.js'];
+  assert.equal(scoreReviewCase(clean, run, observation).pass, false);
 });

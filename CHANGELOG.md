@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Astra-native migration (W00B-11):** added executable ambiguity, noise, and unavailable-tool cases with normalized safe-recovery scoring. Bound command evidence to validated fixture oracles, rejecting unrelated TAP/ENOENT processes. Live context budgets, steering, and model evaluations remain pending.
+
 - **Astra-native migration (W00B-10):** added normalized clean/defect review scoring with FP/FN, exact finding evidence, truthful command outcomes, and an independent read-only workspace audit. Correct defect review can pass while its test fails; live review text normalization and model baselines remain pending.
 
 - **Astra-native migration (W00B-9):** added a model-attempt scoring gate for complete model/effort observations in protected collector traces. Requested/worker labels, mismatches, conflicts, and unavailable/truncated traces cannot pass. Tests use synthetic identities; live adapters, evaluations, and tier eligibility remain pending.

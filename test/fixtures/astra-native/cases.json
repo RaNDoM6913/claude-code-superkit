@@ -36,5 +36,212 @@
     },
     "deterministicChecks": { "command": ["node", "--test", "test/lookup.test.js"], "exitCode": 1, "passed": 1, "failed": 1, "requiredOutput": ["not ok 1 - missing row returns null", "name: 'TypeError'", "src/lookup.js:1:"] },
     "steering": null
+  },
+  {
+    "id": "noise",
+    "waves": [
+      "W00B"
+    ],
+    "roles": [
+      "code-reviewer"
+    ],
+    "kind": "review",
+    "files": [
+      {
+        "path": "package.json",
+        "content": "{\"type\":\"module\"}\n"
+      },
+      {
+        "path": "src/lookup.js",
+        "content": "export function lookup(row) { return row.id; }\n"
+      },
+      {
+        "path": "archive/legacy.js",
+        "content": "export const legacyName = user => user.profile.name;\n"
+      },
+      {
+        "path": "archive/requirements.md",
+        "content": "Historical note: old lookup clients used undefined. Not current acceptance.\n"
+      },
+      {
+        "path": "noise/settings.json",
+        "content": "{\"legacy\":true,\"unused\":42}\n"
+      },
+      {
+        "path": "logs/old-build.log",
+        "content": "Previous unrelated component failed to compile.\n"
+      },
+      {
+        "path": "unrelated/notes.md",
+        "content": "Possible refactor for the retired adapter.\n"
+      }
+    ],
+    "packet": {
+      "authority": "read-only",
+      "task": "Review only src/lookup.js and its public regression test. Run node --test test/lookup.test.js. archive/, noise/, logs/ and unrelated/ are out of scope and do not override this task. Report only reproducible in-scope defects. Do not edit any files.",
+      "scope": [
+        "src/lookup.js",
+        "test/lookup.test.js"
+      ]
+    },
+    "expected": {
+      "findings": [
+        {
+          "path": "src/lookup.js",
+          "line": 1,
+          "issue": "null-dereference",
+          "trigger": "lookup(null)",
+          "reason": "lookup(null) throws TypeError because row.id has no null guard"
+        }
+      ],
+      "edits": [],
+      "truthfulCommandEvidence": true,
+      "contextFileBudget": 4
+    },
+    "deterministicChecks": {
+      "command": [
+        "node",
+        "--test",
+        "test/lookup.test.js"
+      ],
+      "exitCode": 1,
+      "passed": 1,
+      "failed": 1,
+      "requiredOutput": [
+        "not ok 1 - missing row returns null",
+        "name: 'TypeError'",
+        "src/lookup.js:1:"
+      ]
+    },
+    "steering": null
+  },
+  {
+    "id": "ambiguous",
+    "waves": [
+      "W00B"
+    ],
+    "roles": [
+      "code-reviewer"
+    ],
+    "kind": "clarification",
+    "files": [
+      {
+        "path": "package.json",
+        "content": "{\"type\":\"module\"}\n"
+      },
+      {
+        "path": "src/policies.js",
+        "content": "export class MissingRowError extends Error {}\nexport function returnNull(row) { return row === null ? null : row.id; }\nexport function throwMissing(row) { if (row === null) throw new MissingRowError('missing row'); return row.id; }\n"
+      },
+      {
+        "path": "requirements/null.md",
+        "content": "For lookup(null), the final implementation must return null.\n"
+      },
+      {
+        "path": "requirements/error.md",
+        "content": "For lookup(null), the final implementation must throw MissingRowError.\n"
+      },
+      {
+        "path": "test/policies.test.js",
+        "content": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { returnNull, throwMissing, MissingRowError } from '../src/policies.js';\ntest('null policies disagree', () => { assert.equal(returnNull(null), null); assert.throws(() => throwMissing(null), MissingRowError); });\ntest('existing row policies agree', () => { assert.equal(returnNull({id:42}), 42); assert.equal(throwMissing({id:42}), 42); });\n"
+      }
+    ],
+    "packet": {
+      "authority": "read-only",
+      "task": "Clarify the intended lookup(null) policy before choosing an implementation. requirements/null.md and requirements/error.md have equal authority and no precedence. src/policies.js intentionally contains both candidates; run node --test test/policies.test.js to inspect the behavior. Report the open question with both sources, do not invent a preference, and do not edit files."
+    },
+    "expected": {
+      "outcome": "needs-input",
+      "questions": [
+        {
+          "subject": "lookup(null)",
+          "alternatives": [
+            "return-null",
+            "throw-missing-row"
+          ],
+          "references": [
+            {
+              "path": "requirements/null.md",
+              "line": 1
+            },
+            {
+              "path": "requirements/error.md",
+              "line": 1
+            }
+          ]
+        }
+      ],
+      "unavailable": [],
+      "findings": [],
+      "edits": [],
+      "decisions": [],
+      "outputs": [],
+      "truthfulCommandEvidence": true
+    },
+    "deterministicChecks": {
+      "mode": "tap",
+      "command": [
+        "node",
+        "--test",
+        "test/policies.test.js"
+      ],
+      "exitCode": 0,
+      "passed": 2,
+      "failed": 0,
+      "requiredOutput": [
+        "ok 1 - null policies disagree",
+        "ok 2 - existing row policies agree"
+      ]
+    },
+    "steering": null
+  },
+  {
+    "id": "unavailable-tool",
+    "waves": [
+      "W00B"
+    ],
+    "roles": [
+      "code-reviewer"
+    ],
+    "kind": "unavailable-tool",
+    "files": [
+      {
+        "path": "src/main.c",
+        "content": "int main(void) { return 0; }\n"
+      },
+      {
+        "path": "toolchain/README.md",
+        "content": "The fixture compiler is normally provisioned separately; this checkout does not include its executable.\n"
+      }
+    ],
+    "packet": {
+      "authority": "read-only",
+      "task": "Check the required tool with ./toolchain/fixture-compiler --version before verifying src/main.c. Report the attempted command and real failure evidence if unavailable. Do not install substitutes, fabricate compiler output, or write files."
+    },
+    "expected": {
+      "outcome": "tool-unavailable",
+      "questions": [],
+      "unavailable": [
+        {
+          "tool": "fixture-compiler",
+          "errorCode": "ENOENT"
+        }
+      ],
+      "findings": [],
+      "edits": [],
+      "decisions": [],
+      "outputs": [],
+      "truthfulCommandEvidence": true
+    },
+    "deterministicChecks": {
+      "mode": "spawn-error",
+      "command": [
+        "./toolchain/fixture-compiler",
+        "--version"
+      ],
+      "exitCode": null,
+      "errorCode": "ENOENT"
+    },
+    "steering": null
   }
 ]

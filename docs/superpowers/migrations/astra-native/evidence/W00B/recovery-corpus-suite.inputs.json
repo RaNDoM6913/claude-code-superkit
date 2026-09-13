@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "files": [
+    {
+      "kind": "source",
+      "path": "package.json",
+      "sha256": "ba0815f525a2c7b2a1eb54b12657dc0a6ab617089516139cd7d48513b625ba19"
+    },
+    {
+      "kind": "source",
+      "path": "test/behavioral-eval.test.js",
+      "sha256": "2d0315538988fd2dba31843f45d8ffe1f5167f0a3396dcaac2fac7c1a6c81ea5"
+    },
+    {
+      "kind": "source",
+      "path": "test/fixtures/astra-native/cases.json",
+      "sha256": "bf415ab3f64413f7da0efc63be0c16c728910c079f6e2866581d587a7b01c2c2"
+    },
+    {
+      "kind": "source",
+      "path": "test/fixtures/astra-native/lookup.test.js",
+      "sha256": "2d60ff7b81edd073f7bffbf50d49968f04002382df43d81f22dcd0889fecdb89"
+    },
+    {
+      "kind": "source",
+      "path": "test/input-snapshot.test.js",
+      "sha256": "dc29d0d01435f428926a3eb40c4e847c31e83f7159ff5f78889f18e4ce2b757e"
+    },
+    {
+      "kind": "source",
+      "path": "test/recovery-eval.test.js",
+      "sha256": "486cefb506e2e86983e31a19fc448909341c67c0a7655ff70948337fb762d3b9"
+    },
+    {
+      "kind": "source",
+      "path": "test/review-eval.test.js",
+      "sha256": "a3a3fdf6a3bb9ae419a9b4deea210c64e6740b89d2c62e089a660e8559dc78fb"
+    },
+    {
+      "kind": "source",
+      "path": "test/review-integration.test.js",
+      "sha256": "dea0fd95cbec9b2ab92e4d48ddde1d49e5e17133358f51387ed603f944b028a6"
+    },
+    {
+      "kind": "source",
+      "path": "test/review-workspace.test.js",
+      "sha256": "38445cd9ed2ac1880a84189896abe645c9c325b86f0822ed7f29964235053926"
+    },
+    {
+      "kind": "source",
+      "path": "test/runtime-evidence.test.js",
+      "sha256": "88b713a78a4db6162ff42a802e96a3b2588ca881300a87504ac12f644abca010"
+    },
+    {
+      "kind": "source",
+      "path": "test/verification-evidence.test.js",
+      "sha256": "70ccf9d6bab5f0f028bd06bccfea8b6a58a2362c786913f09fbfb2987746439c"
+    },
+    {
+      "kind": "source",
+      "path": "test/verification-observations.test.js",
+      "sha256": "2b54ce0011ebb34b23780f00cb6d86b85e784b84d49b28ea8af792d34b82444b"
+    },
+    {
+      "kind": "source",
+      "path": "tools/lib/behavioral-eval.mjs",
+      "sha256": "bbdf12f018bcbc79a042c85b1df2a4fb67f6b2a4770ba7cdb57a1b41d59063fb"
+    },
+    {
+      "kind": "source",
+      "path": "tools/lib/fixture-command.mjs",
+      "sha256": "c388b0c6befed6bb88b71b52597a0b6802e4e5a1fe27582eaf80fc75f6a0a01b"
+    },
+    {
+      "kind": "source",
+      "path": "tools/lib/recovery-eval.mjs",
+      "sha256": "451853ad3e3618985d6d8a960d65565ebaec5e9d29626124a0c173c4fccc7ea6"
+    },
+    {
+      "kind": "source",
+      "path": "tools/lib/review-eval.mjs",
+      "sha256": "dd139b6fd00487ee7f10b79866490a47ada6f641f90ad83ac834389871a8a1ea"
+    },
+    {
+      "kind": "source",
+      "path": "tools/lib/verification-evidence.mjs",
+      "sha256": "32a4e479c0a3b6f891609ea03a8b161b83aa26915029eb502c88a04837f4ecaf"
+    },
+    {
+      "kind": "instruction",
+      "path": "docs/superpowers/specs/2026-09-12-astra-native-superkit-design.md",
+      "sha256": "2d8d8bb8f01e78bf75e16347ba725058430851e39f8a7f4abdcc77321a86288c"
+    },
+    {
+      "kind": "instruction",
+      "path": "packages/codex/skills/code-reviewer/SKILL.md",
+      "sha256": "706653335d0902559ca62315d8938469a05927bfdf1795ab554c404c832067fa"
+    }
+  ]
+}

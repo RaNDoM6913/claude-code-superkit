@@ -6850,9 +6850,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/evidence-identity.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
       ],
-      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
+      "rationale": "W00B-11 recovery corpus and validated oracle command binding; full live behavior acceptance pending.",
       "deferral": null
     },
     {
@@ -6873,9 +6874,10 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/verified-observations.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/input-snapshots.md",
         "docs/superpowers/migrations/astra-native/evidence/W00B/runtime-identity.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
       ],
-      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
+      "rationale": "W00B-11 recovery corpus and validated oracle command binding; full live behavior acceptance pending.",
       "deferral": null
     },
     {
@@ -6888,9 +6890,10 @@
       "status": "in-progress",
       "evidence": [
         "docs/superpowers/migrations/astra-native/evidence/W00B/lookup-fixtures.md",
-        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
       ],
-      "rationale": "W00B-10 deterministic reviewer outcomes, reproduction oracle and read-only audit; full model acceptance pending.",
+      "rationale": "W00B-11 recovery corpus and validated oracle command binding; full live behavior acceptance pending.",
       "deferral": null
     },
     {
@@ -7238,9 +7241,10 @@
       "baselineSha256": null,
       "status": "in-progress",
       "evidence": [
-        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
       ],
-      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "rationale": "W00B-11 recovery corpus and validated oracle command binding; full live behavior acceptance pending.",
       "deferral": null
     },
     {
@@ -7252,9 +7256,10 @@
       "baselineSha256": null,
       "status": "in-progress",
       "evidence": [
-        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
       ],
-      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "rationale": "W00B-11 recovery corpus and validated oracle command binding; full live behavior acceptance pending.",
       "deferral": null
     },
     {
@@ -7280,9 +7285,10 @@
       "baselineSha256": null,
       "status": "in-progress",
       "evidence": [
-        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
+        "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md",
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
       ],
-      "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "rationale": "W00B-11 recovery corpus and validated oracle command binding; full live behavior acceptance pending.",
       "deferral": null
     },
     {
@@ -7339,6 +7345,104 @@
         "docs/superpowers/migrations/astra-native/evidence/W00B/reviewer-outcomes.md"
       ],
       "rationale": "W00B-10 normalized reviewer outcomes and bounded read-only audit; live normalization and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "tools/lib/recovery-eval.mjs",
+      "kind": "tool",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "tools/lib/fixture-command.mjs",
+      "kind": "tool",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "test/recovery-eval.test.js",
+      "kind": "test",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md",
+      "kind": "doc",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus-suite.inputs.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus-suite.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
+      "deferral": null
+    },
+    {
+      "path": "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus-suite.record.json",
+      "kind": "config",
+      "owner": "repo-internal",
+      "mirrors": [],
+      "wave": "W00B",
+      "baselineSha256": null,
+      "status": "in-progress",
+      "evidence": [
+        "docs/superpowers/migrations/astra-native/evidence/W00B/recovery-corpus.md"
+      ],
+      "rationale": "W00B-11 recovery corpus and fixture command binding; live behavior measurements and model acceptance pending.",
       "deferral": null
     }
   ]

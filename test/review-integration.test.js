@@ -17,7 +17,7 @@ function setup(t) {
   writeFileSync(join(workspaceRoot, 'source.js'), 'source');
   writeFileSync(join(workspaceRoot, 'TASK.md'), 'review without edits');
   const inputs = captureInputSnapshot(workspaceRoot, evidenceRoot, 'inputs.json', { sources: ['source.js'], instructions: ['TASK.md'] });
-  const expectedIdentity = { snapshotSha256: inputs.sha256, runId: 'review-attempt', caseId: clean.id, command: ['node', '--test'] };
+  const expectedIdentity = { snapshotSha256: inputs.sha256, runId: 'review-attempt', caseId: clean.id, command: ['node', '--test', 'test/lookup.test.js'] };
   const before = captureReviewWorkspace(workspaceRoot, evidenceRoot, 'before.json', expectedIdentity);
   writeFileSync(join(evidenceRoot, 'verification.json'), JSON.stringify({
     version: 2, ...expectedIdentity, exitCode: 0, signal: null, error: null, truncated: false,

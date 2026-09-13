@@ -171,7 +171,7 @@ test('the partial scorer does not grade review cases as implementation', async (
 });
 
 // Real child exits also exercise the partial scorer; no model runs are involved.
-for (const fixture of cases) {
+for (const fixture of cases.filter((item) => item.kind === 'review')) {
   test(`lookup fixture: ${fixture.id}`, async (t) => {
     const root = mkdtempSync(join(tmpdir(), 'astra-lookup-'));
     t.after(() => rmSync(root, { recursive: true, force: true }));
@@ -209,7 +209,7 @@ for (const fixture of cases) {
     assert.equal(result.status, fixture.deterministicChecks.exitCode, output);
     assert.match(output, new RegExp(`^# pass ${fixture.deterministicChecks.passed}$`, 'm'));
     assert.match(output, new RegExp(`^# fail ${fixture.deterministicChecks.failed}$`, 'm'));
-    if (fixture.id === 'defect') {
+    if (fixture.deterministicChecks.exitCode === 1) {
       assert.match(output, /not ok 1 - missing row returns null/);
       assert.match(output, /name: 'TypeError'/);
       assert.match(output, /src\/lookup\.js:1:\d+/);
@@ -237,8 +237,8 @@ for (const fixture of cases) {
       exitCode: 0,
       response: {
         status: 'complete', edits: [], commands: [{ command: expectedIdentity.command, exitCode: result.status }],
-        findings: fixture.id === 'defect' ? [{ path: 'src/lookup.js', line: 1, issue: 'null-dereference',
-          trigger: 'lookup(null)', reason: 'Null reaches row.id without a guard.' }] : [],
+        findings: fixture.id === 'clean' ? [] : [{ path: 'src/lookup.js', line: 1, issue: 'null-dereference',
+          trigger: 'lookup(null)', reason: 'Null reaches row.id without a guard.' }],
       },
     }, {
       workspaceRoot: root, snapshotPath: 'inputs.json', evidenceRoot, recordPath: 'record.json', expectedIdentity,
