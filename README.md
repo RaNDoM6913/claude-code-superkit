@@ -89,7 +89,7 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). The first native GPT role package is under development; behavioral migration acceptance remains pending.
+**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). Native GPT role packages are under development; behavioral migration acceptance remains pending.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -326,7 +326,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Six decision and acceptance roles have Astra-authored native instructions; `native-skills.txt` protects them and their two orchestrators from Claude-agent conversion. Configuration and repository checks do not establish live model quality or availability.
+`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. The native authoring scope includes six decision/acceptance roles and four delivery roles: minimal-change-engineer, codebase-onboarding-engineer, scaffold-endpoint, and ai-slop-cleaner. `native-skills.txt` protects these ten roles and two orchestrator callers from Claude-agent conversion. Configuration and repository checks do not establish live model quality or availability; the [roadmap](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks acceptance separately.
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

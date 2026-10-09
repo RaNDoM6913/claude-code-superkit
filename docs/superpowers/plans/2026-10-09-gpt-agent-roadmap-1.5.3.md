@@ -1,31 +1,31 @@
 # GPT-native Superkit → 1.5.3: единый план реализации
 
-> **For agentic workers:** при разрешённом выполнении использовать `superpowers:subagent-driven-development` либо `superpowers:executing-plans`; размеры пакетов и частоту review определяет `docs/WORKING_AGREEMENT.md`. Этот документ сейчас разрешает только планирование.
+> **For agentic workers:** при разрешённом выполнении использовать `superpowers:subagent-driven-development` либо `superpowers:executing-plans`; размеры пакетов и частоту review определяет `docs/WORKING_AGREEMENT.md`. После исходного planning turn владелец разрешил один ограниченный SOURCE-пакет из четырёх ролей; он принят только на уровне authoring/static/integration. Дальнейшая работа требует отдельно определённого разрешённого объёма.
 
 **Goal:** улучшить все 55 существующих GPT-ролей с авторством Astra, проверить связанные workflows/support и подтвердить поведение и совместимость, затем подготовить и после разрешения выпустить `v1.5.3` с согласованной документацией и GitHub.
 **Architecture:** Astra пишет/перерабатывает каждый prompt и поведенческое правило; Sol интегрирует, собирает доказательства и выполняет независимое review. Один канонический roadmap содержит каталог, зависимости и счётчики; исходные evidence сохраняются.
 **Tech Stack:** Markdown skills, Codex config/rules, Node.js `>=18.0.0`, существующие installer/converter, тесты и hook-проверки.
-**Spec:** [Astra-native design](../specs/2026-09-12-astra-native-superkit-design.md), [working agreement](../../WORKING_AGREEMENT.md), [принятый GPT core checkpoint](../migrations/astra-native/evidence/GPT-role-core/acceptance.md).
+**Spec:** [Astra-native design](../specs/2026-09-12-astra-native-superkit-design.md), [working agreement](../../WORKING_AGREEMENT.md), [исторический GPT core checkpoint](../migrations/astra-native/evidence/GPT-role-core/acceptance.md), [принятый пакет четырёх delivery roles](../migrations/astra-native/evidence/GPT-role-implementation/acceptance.md).
 
 ## 1. Исходное состояние и точная граница
 
-Срез: `2026-10-09`, ветка `codex/astra-native-hardening`, implementation checkpoint `42b6afd`. Перед выполнением проверить текущие HEAD/status/upstream. В поставке `VERSION` и `package.json` равны `1.5.2`; проверенный последний GitHub release — `v1.5.2`, локального `v1.5.3` нет. Повторить проверку перед подготовкой релиза.
+Исторический исходный срез planning turn: `2026-10-09`, ветка `codex/astra-native-hardening`, implementation checkpoint `42b6afd`, ASI 6/55. Принятый ниже SOURCE-пакет четырёх ролей выполнен от base `d96422f`; новый checkpoint commit/push выполняет координатор. Перед продолжением проверить текущие HEAD/status/upstream, не считать base новым commit. В поставке `VERSION` и `package.json` равны `1.5.2`; проверенный последний GitHub release — `v1.5.2`, локального `v1.5.3` нет. Повторить проверку перед подготовкой релиза.
 
 | Объект | Всего | Принято сейчас | Осталось |
 |---|---:|---:|---:|
-| GPT agent roles: authoring/static/integration | 55 | 6 | 49 |
+| GPT agent roles: authoring/static/integration | 55 | 10 | 45 |
 | GPT agent roles: behavioral acceptance | 55 | 0 | 55 |
 | Workflow commands: полная приёмка | 9 | 0 | 9; у 2 есть только caller compatibility |
 | Knowledge/support skills: полная приёмка | 21 | 0 | 21 |
 
 Основной результат — **55 agent roles**. Полный проверяемый каталог — **85 skills = 55 ролей + 9 workflows + 21 support**. Workflows/support проверяются и синхронизируются по необходимости: обязательная перепись всех 30 вспомогательных элементов не требуется. Совместимый элемент может быть принят без изменений с конкретным основанием и evidence. В `packages/codex/skills` находятся 82, ещё 3 optional GAN skills — в `packages/gan/skills`. Это не «82 агента». Claude-каталог содержит 56 агентов; `red-blue-auditor` не имеет GPT counterpart и не добавляется автоматически. Все шесть `frontend-ui-*` aliases сохраняются отдельно от core UI. Имена и пути в реестрах ниже уникальны.
 
-Исторические `275/275` относятся к предыдущему принятому checkpoint: это не проверка этого плана и не доказательство поведения. Принятый H00 не завершает W00B или критическое ядро. Архивный [план 1.5.3 от 2026-07-10](2026-07-10-superkit-153-PLAN.md) сохраняется: новый документ задаёт текущий GPT-приоритет, но не отменяет сверку состава релиза.
+Исторические `275/275` исходного H00 относятся к его acceptance-записи. Новый SOURCE-пакет имеет отдельные проверки и evidence в [своём отчёте](../migrations/astra-native/evidence/GPT-role-implementation/acceptance.md), включая новый результат `275/275`; ни один из этих результатов не доказывает поведение моделей. Принятый H00 не завершает W00B или критическое ядро. Архивный [план 1.5.3 от 2026-07-10](2026-07-10-superkit-153-PLAN.md) сохраняется: новый документ задаёт текущий GPT-приоритет, но не отменяет сверку состава релиза.
 
 ## 2. Обязательные ограничения и review focus
 
-- Текущий запрос — **план**, без изменения shipped prompts/config, live evaluations, merge, tag, release или публикации. Будущее выполнение следует разрешённому владельцем объёму, без повторного запроса уже выданного разрешения; публикация имеет отдельный финальный gate.
-- Каждый будущий пакет содержит 2–4 связанные роли/skills, максимум 4; A01 — обоснованный одиночный пакет для закрытия критического ядра. H00 из шести ролей — уже завершённое историческое исключение.
+- После исходного плана владелец запросил ровно: **«давай тут сделаем еще 4 агентов!»**. Разрешённый bounded SOURCE-пакет — `minimal-change-engineer`, `codebase-onboarding-engineer`, `scaffold-endpoint`, `ai-slop-cleaner` — принят на уровне ASI. Этот запрос изменил только порядок authoring/static/integration: A01 + A02 + одна роль A03; он не закрыл G01 и не разрешил позднюю behavioral migration, пятую роль, live evaluations, runtime/config changes, merge, tag, release или публикацию. Будущая работа отдельно ограничивается принятой задачей, без повторного запроса уже выданного разрешения; публикация имеет отдельный финальный gate.
+- Каждый будущий пакет содержит 2–4 связанные роли/skills, максимум 4. В исходном плане A01 был обоснованным одиночным пакетом критического ядра; его ASI теперь принят в явно запрошенном пакете четырёх ролей. H00 из шести ролей остаётся завершённым историческим исключением. Без отдельного следующего задания пятую роль не начинать.
 - Работать ограниченными пакетами для контроля лимитов аккаунта. Доступный бюджет проверять перед dispatch/evaluation; частные данные аккаунта и численные остатки не записывать в Git.
 - Astra — `gpt-6-astra/high` для авторства и критической приёмки; Sol — `gpt-5.6-sol/medium` для ограниченной технической работы и `high` для review, согласно действующему agreement/checkpoint. Семантические исправления возвращаются Astra. Это contributor routing, а не автоматическое изменение shipped defaults. Иную модель не подставлять без проверки и согласования.
 - Допустимы 2–3 независимых worker с чистым контекстом и непересекающимися путями внутри разрешённого объёма; не запускать несколько новых пакетов ради занятости slots. Общие contracts, integration и Git принадлежат координатору.
@@ -58,32 +58,32 @@
 
 ## 4. Порядок, зависимости и блокирующие gates
 
-1. **A01 — следующий непосредственный агент** → **G01: критическое ядро + runtime delegation**. K01 — bounded supporting review рядом с A01: менять только guidance, от которого реально зависит этот агент; не превращать четыре справочника в новую предварительную очередь.
+1. **A01 ASI принят**; следующее обязательное препятствие — **G01: критическое ядро + runtime delegation**. Применимая поддержка K01 остаётся pending: bounded review только guidance, от которого реально зависит критическое ядро; не превращать четыре справочника в новую предварительную очередь. Live-часть G01 требует отдельного разрешения и бюджета.
 2. **После G01**: C01 → A02 → A03 → A04 → A05 → C02 → A06 → A07 → K02 → A08 → C03.
 3. Затем A09 → K04 → A10 → K05 → A11 → A12 → K07 → A13 → A14 → K06 → A15 → K03 → A16 → A17.
 4. **G02: полная behavioral и межпакетная приёмка** → I01 → D01 → R01 → R02.
 
-Порядок по умолчанию сохраняет малые пакеты; перестановка независимых пакетов разрешается только в явно принятом packet, без пропуска G01. Domain dependencies дополнительно указаны в реестрах. Support может готовиться в выбранной domain wave, но не означает принятую миграцию этой wave.
+Порядок по умолчанию сохраняет малые пакеты; перестановка независимых пакетов разрешается только в явно принятом packet, без пропуска G01. Последний запрос владельца отдельно разрешил и завершил SOURCE-authoring A01, A02 и `ai-slop-cleaner` из A03 до G01. Это ограниченное исключение порядка исходников, а не переход поздних behavioral waves: формальные зависимости ниже и все acceptance gates сохранены. Domain dependencies дополнительно указаны в реестрах. Support может готовиться в выбранной domain wave, но не означает принятую миграцию этой wave.
 
 ### G01 — обязательный gate до поздних волн
 
-- [ ] A01 получает ASI; применимые authoring/source contracts сверены через K01, совместимые справочники приняты без переписи. Существующие H00 и A01 вместе образуют семь ролей критического ядра.
+- [ ] A01 уже получил ASI; остаётся завершить применимую сверку authoring/source contracts через K01, принимая совместимые справочники без переписи. K01 и весь G01 пока не приняты. Исторический H00 и A01 вместе образуют семь ролей критического ядра.
 - [ ] Получить явное разрешение и бюджет **минимального targeted live behavioral пакета** для этих семи ролей на Sol и критических решений на Astra. Использовать существующие `test/fixtures/astra-native/cases.json` и сохранённые evidence там, где они покрывают контракт; ограниченно добавить лишь недостающий реальный failure case.
 - [ ] Подтвердить один end-to-end путь Astra → scoped Sol task → structured result → coordinator verification → escalation; recorded runtime provenance должна удовлетворять существующим binding gates.
 - [ ] Все обязательные core invariants проходят на Sol, critical decisions приняты Astra; false PASS, fake evidence, authority violation и обход exhausted retries отсутствуют. Обновить точный статус W00B только по реально закрытым требованиям, сохранив его исходные gates.
 
-**Текущий blocker:** G01 не пройден; live evaluation сейчас не разрешена. Без доступного model/runtime/budget/evidence честно зафиксировать bounded blocker и остановить позднюю миграцию. Старую очередь инфраструктуры W00B автоматически не возобновлять. Планирование/static preparation не является разрешением обойти фразу spec «later migration must not begin».
+**Текущий blocker:** G01 не пройден; live evaluation сейчас не разрешена и требует отдельно согласованного bounded budget. Без доступного model/runtime/budget/evidence честно зафиксировать bounded blocker и остановить позднюю миграцию. Принятие четырёх исходных текстов не закрывает этот gate и не является продвижением поздних behavioral waves. Старую очередь инфраструктуры W00B и новые роли автоматически не начинать. Ограниченное SOURCE-разрешение владельца не отменяет правило spec «later migration must not begin» для дальнейшей формальной миграции.
 
-## 5. Реестр agent roles — 55, H00 + 17 будущих пакетов
+## 5. Реестр agent roles — 55, исторический H00 + 17 пакетов A01–A17
 
 Каждый элемент ниже принадлежит ровно одному пакету. Общий путь из §3 обязателен; GAN использует указанные полные пути. В колонке «Приёмка» указано дополнение к общему циклу §3, а не его замена.
 
 | ID | Роли (имена → точные пути по §3) | Результат / дополнительная приёмка | Зависимость | Статус |
 |---|---|---|---|---|
 | H00 | `architect`, `plan-checker`, `evaluator`, `goal-verifier`, `critic`, `reality-checker` | Feasibility, verdict compatibility, evidence gaps и конечная цель; исторический checkpoint, BEH требует G01 | Исходный checkpoint | ASI 6/6; BEH 0/6 |
-| A01 | `minimal-change-engineer` | Минимальный достаточный diff; reject scope creep, сохранить рабочие интеграции, проверить реальный defect и steering | Исходный checkpoint; K01 по необходимости | PENDING |
-| A02 | `codebase-onboarding-engineer`, `scaffold-endpoint` | Обнаружить реальные conventions перед edit; новый endpoint соответствует найденным routes/auth/contracts, неизвестное не выдумывается | G01, C01 | PENDING |
-| A03 | `code-reviewer`, `ai-slop-cleaner`, `silent-failure-hunter` | Точный scope/impact/confidence; cleanup не ломает поведение, обоснованный fallback отличается от скрытой ошибки | A02 | PENDING |
+| A01 | `minimal-change-engineer` | Минимальный достаточный diff; reject scope creep, сохранить рабочие интеграции, проверить реальный defect и steering | Исходный checkpoint; K01 по необходимости | ASI 1/1; BEH 0/1 pending |
+| A02 | `codebase-onboarding-engineer`, `scaffold-endpoint` | Обнаружить реальные conventions перед edit; новый endpoint соответствует найденным routes/auth/contracts, неизвестное не выдумывается | G01, C01 | ASI 2/2 (SOURCE-пакет); BEH 0/2 pending |
+| A03 | `code-reviewer`, `ai-slop-cleaner`, `silent-failure-hunter` | Точный scope/impact/confidence; cleanup не ломает поведение, обоснованный fallback отличается от скрытой ошибки | A02 | ASI 1/3 (`ai-slop-cleaner`); BEH 0/3 pending |
 | A04 | `docs-reviewer`, `comment-rot-analyzer`, `tree-generator`, `api-contract-sync` | Документация и API сверяются с фактическими источниками; дерево исключает шум, различает drift и неизвестное | A03 | PENDING |
 | A05 | `test-generator`, `e2e-test-generator`, `debug-observer` | Regression case воспроизводит дефект; e2e проверяет пользовательский результат; наблюдатель отделяет факт от гипотезы | A04 | PENDING |
 | A06 | `health-checker`, `dependency-checker`, `pre-deploy-validator` | Контекстные health/dependency/deploy gates; отсутствие доступа/теста не считается здоровьем, deploy не запускается сам | C02 | PENDING |
@@ -148,7 +148,7 @@ Owned surfaces: `lib/codex.js`, `lib/installer.js`, `tools/convert-agents-to-cod
 - [ ] После G02/I01/D01 сверить `git log v1.5.2..HEAD`, текущие remote releases/tags и release branch. Если `v1.5.3` уже занята, остановиться для owner decision, не перескакивать версию.
 - [ ] Перенести подтверждённые `[Unreleased]` записи в `[1.5.3] — date`, согласовать `VERSION`, `package.json`, lockfile при его появлении (сейчас tracked lockfile нет) и README What's New; проверить packaged file list и фактические release assets по существующему distribution workflow.
 - [ ] Закрыть mandatory findings; итоговая независимая проверка использует уже собранные результаты и проверяет именно release diff/новые риски. Astra даёт final acceptance; предоставить owner конкретные commit/tag target, release notes, assets и оставшиеся ограничения.
-- [ ] Получить требуемое одобрение completed migration/merge/publication. Исходная просьба «план, затем 1.5.3» не разрешает публикацию в текущем planning turn.
+- [ ] Получить требуемое одобрение completed migration/merge/publication. Ни исходная просьба «план, затем 1.5.3», ни последующее разрешение четырёх SOURCE-ролей сами по себе не разрешают публикацию.
 
 ### R02 — одобренные merge и GitHub release
 
@@ -158,10 +158,10 @@ Owned surfaces: `lib/codex.js`, `lib/installer.js`, `tools/convert-agents-to-cod
 
 ## 9. Tracker и обязательный формат отчёта
 
-**Пакеты:** 1 исторический H00; впереди 27 content-пакетов = 17 agent + 3 workflow + 7 support-пакетов проверки/синхронизации (изменения по необходимости). G01/G02 — два mandatory gates; I01/D01/R01/R02 — четыре завершающих этапа. Эти количества не задают равные веса сложности и не являются процентом готовности.
+**Пакеты:** 1 исторический H00; реестр содержит 27 content-пакетов = 17 agent + 3 workflow + 7 support-пакетов проверки/синхронизации (изменения по необходимости). В текущем SOURCE-пакете ASI A01 и A02 завершён, ASI A03 частично завершён; их BEH и остальные обязательства остаются pending. G01/G02 — два mandatory gates; I01/D01/R01/R02 — четыре завершающих этапа. Эти количества не задают равные веса сложности и не являются процентом готовности.
 
 После каждого принятого пакета и на checkpoint показывать: текущий ID/результат; delta/cumulative ASI ролей (`+N`, `X/55`, осталось `55-X`); отдельно BEH (`Y/55`); workflows (`Z/9`, partial отдельно); support (`S/21`); следующий допустимый пакет, blockers/mandatory gaps, проверку и branch/HEAD/status/push. При частичном или blocked результате не увеличивать завершённый счётчик. Общий процент не выводить без отдельно согласованных весов milestones.
 
 Отчёты событийные: после пакета, на blocker, перед gate/release; при длительном выполнении — agreed progress cadence. Это правило дальнейших отчётов в чатах, **не background automation**. Canonical tracker — этот документ; local `next-session.md` содержит только краткий handoff и ссылку, не дублирует весь каталог.
 
-**Текущий checkpoint:** ASI **6/55** (+0 в planning turn), BEH **0/55**, workflows **0/9** (2 partial), support **0/21**. Следующее допустимое действие после принятия плана/разрешения выполнения — A01 с необходимой поддержкой K01; до поздних waves обязательно G01. Сейчас никаких migration/eval/release действий не выполнено.
+**Текущий checkpoint:** принято ровно четыре SOURCE-роли: ASI **10/55** (+4, осталось **45**), BEH **0/55**, workflows **0/9** (2 partial), support **0/21**. A01 ASI 1/1, A02 ASI 2/2, A03 ASI 1/3 (`ai-slop-cleaner`); все BEH pending. [Acceptance/evidence](../migrations/astra-native/evidence/GPT-role-implementation/acceptance.md) фиксирует source/static/integration result, независимый Sol review и Astra disposition. Следующее обязательное направление — G01 с применимой сверкой K01, но его live-часть требует отдельного разрешения и бюджета. Четырёхрольный пакет закрыт; пятую роль или дальнейший пакет автоматически не запускать. Base `d96422f`; новый checkpoint commit/push выполняет координатор. Live evaluations, merge и release не выполнялись.

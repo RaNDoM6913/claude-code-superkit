@@ -59,7 +59,7 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 82 skills (added: 3 cross-CLI roles, 6 TGApp skills, behavioral-nudge, 3 GAN, silent-failure-hunter expansion)
+    skills/                 # 82 skills; native roles and protected callers listed in native-skills.txt
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
     config.toml             # gpt-6-astra/high coordinator; gpt-5.6-sol/medium worker fallback
     AGENTS.md               # Template (incl. new "Approval Rules" section)

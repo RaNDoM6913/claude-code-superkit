@@ -1,118 +1,44 @@
 ---
 name: ai-slop-cleaner
-description: Clean AI-generated code patterns — redundant comments, unnecessary abstractions, over-engineering, template code
+description: Review or remove evidence-backed redundant code and commentary within an authorized scope while preserving behavior. Use for a focused cleanup after implementation or before review, not feature work or logic fixes.
 user-invocable: false
+tokens: 1221
 ---
 
 # AI Slop Cleaner
 
-Detect and fix common AI-generated code anti-patterns. Behavior-preserving cleanup — no logic changes, only readability and quality improvements.
+Improve readability by removing demonstrated redundancy without changing behavior. “AI-generated” appearance is a search hint, not evidence that code is wrong or disposable. A clean result with no changes is valid. Use after implementation or before review; in `dev-orchestrator`, these are Phase 7 — Implement and Phase 12 — Review, not a substitute for its intervening acceptance gates.
 
-## Phase 0: Load Project Context
+## Scope and authority
 
-Read if exists:
-1. `AGENTS.md` — project conventions, coding style
-2. `.editorconfig` or linter configs — formatting rules
+Start with the request, target diff/paths, applicable project instructions, relevant style/lint configuration, and tests/contracts. Review requests are read-only; cleanup requests permit only authorized behavior-preserving edits. Inspect relevant callers, exports, generated-code markers, and framework use before deciding something is redundant. Preserve dirty work owned by others.
 
-**Use this context to:** distinguish project conventions from AI slop (e.g., the project MAY want verbose comments).
+If the scope or evidence is ambiguous, ask the question that resolves it and leave the uncertain code unchanged. Do not sweep the repository, reformat unrelated code, rename public APIs, add features, change configuration, or make external writes because of this role. Report logic/security defects separately for bounded authorized follow-up.
 
-## When to Use
+## Assess candidates, not quotas
 
-- After AI-assisted implementation (post Phase 3 in dev-orchestrator)
-- Before code review (catch slop before reviewers waste time on it)
-- Standalone cleanup pass on existing codebase
+- **Comments:** remove prose that adds no information beyond nearby code when project conventions allow. Preserve rationale, warnings, meaningful TODOs, API documentation, licenses, directives, generated markers, compiler/linter controls, and tooling annotations. A comment describing “what” can still document a public contract.
+- **Helpers and abstractions:** consider simplifying wrappers, factories, strategies, generic types, interfaces, or speculative flags only when their purpose and consumers are understood. One-use helpers may express a domain, testing, transaction, resource-lifetime, or side-effect boundary; one implementation can still justify an interface. Neither count is a deletion rule.
+- **Compatibility and apparent dead code:** inspect public exports, indirect/reflection-based consumers, serialization, framework callbacks, and generated uses. Preserve required parameter positions, `_` placeholders, default arms, and re-exports unless evidence establishes removal is safe within scope. Type exhaustiveness does not prove external/runtime inputs cannot reach a branch.
+- **Template residue:** identify unnecessary assertions, unreachable scaffolding, empty handlers, and incomplete TODOs, but distinguish redundancy from missing behavior. Changing a swallowed error into logging, propagation, retry, or failure handling changes behavior and is not cleanup; report it separately.
+- **Style:** simplify needless locals, prefixes, boolean wrappers, or verbose names only when supported by local idiom and language semantics. Preserve return types, truthiness/coercion, evaluation order, side effects, resource cleanup, public signatures, and observable behavior. A shorter expression is not automatically equivalent.
 
-## Detection Checklist
+For each candidate, explain what makes it redundant and what evidence supports equivalence. Keep uncertain candidates as observations rather than labeling them safe to delete. In edit mode, apply a coherent bounded set of justified changes; no category, finding, line-reduction, or renaming quotas.
 
-### Category 1: Redundant Comments (MOST COMMON)
-```
-// This function returns the user      <- states the obvious
-// Import the http package             <- describes the import
-// Create a new instance               <- describes the constructor
-// Check if the value is nil           <- restates the code
-// TODO: implement this                <- left by AI, not real TODO
-```
+## Verification and stopping
 
-**Action:** Remove comments that restate what the code already says. Keep comments that explain WHY, not WHAT.
+Inspect the final diff and use focused regression evidence for affected behavior plus applicable compiler/linter checks and mandatory project gates. Compilation/lint success alone does not prove semantic equivalence. Where equivalence is uncertain and no adequate check exists, retain the original code and state the gap.
 
-### Category 2: Unnecessary Abstractions
-```
-// One-use helper wrapping a single call
-func getUserByID(db *sql.DB, id string) (*User, error) {
-    return db.QueryRow("SELECT ...").Scan(...)
-}
-// Called exactly ONCE
-```
+Reuse checks only when their command, result, relevant code, inputs, and environment are recorded and unchanged. Rerun for relevant changes or concrete uncertainty, not after every cleanup category by ritual. Stop once the authorized scope is assessed and supported edits are verified, or report the specific blocker without broadening the task.
 
-**Action:** Inline one-use helpers. If a function is called once and its name matches what it does, it's noise.
+## Output
 
-### Category 3: Over-Engineering
-- Feature flags for non-configurable behavior
-- Backwards-compatibility shims with zero consumers
-- Strategy/factory patterns for 1 implementation
-- Generic types where concrete types suffice
-- Interface for a single implementation (no testing need)
+Return a compact cleanup report:
 
-**Action:** Replace with direct, simple code. YAGNI.
+- Mode and examined scope; changed paths or “no justified cleanup.”
+- Applied/proposed changes with locations, rationale, and equivalence evidence.
+- Uncertain candidates left unchanged, reasons they may be intentional, and separate behavior-changing findings with impact/confidence.
+- Check commands/results or applicable prior evidence; not-run checks, coverage gaps, and exact remaining action.
+- Execution as independent worker or inline/self-review. Follow explicit model/effort routing; report requested or labeled configured model/effort separately from observed runtime model/effort with evidence. Use UNSPECIFIED for an absent request/default and UNVERIFIED for unavailable runtime evidence. The latter is a reporting limitation, not a new acceptance gate.
 
-### Category 4: Template/Boilerplate Slop
-- Empty error handlers (`catch (e) {}`)
-- Unused function parameters (especially `_` placeholders)
-- Default switch/match cases that can't be reached
-- Unnecessary type assertions on already-typed values
-- Re-exporting types that are never imported from the re-export
-
-**Action:** Remove dead code. Trust the type system.
-
-### Category 5: AI Writing Style
-- Overly formal variable names (`retrievedUserData` vs `user`)
-- Unnecessary prefixes (`strName`, `bIsActive`)
-- Method chains wrapped in meaningless variables
-- `return true` / `return false` instead of `return condition`
-- Ternary wrapping a boolean (`x ? true : false`)
-
-**Action:** Simplify to idiomatic style for the language.
-
-## Process
-
-1. **Scan** — Grep for patterns from each category across changed files
-2. **Classify** — Group findings by category
-3. **Filter** — Remove false positives (comments that DO add value, abstractions that ARE reused)
-4. **Fix** — Apply fixes. ONE category at a time to keep diffs reviewable
-5. **Verify** — Run compiler/linter after each category to ensure no breakage
-
-## Output Format
-
-### Severity
-- **SLOP** — AI-generated noise. Safe to remove.
-- **BORDERLINE** — Could go either way. Flag for human decision.
-
-### Format:
-```
-[SLOP] file:line — description
-  Pattern: <what was found>
-  Fix: <what to change>
-
-[BORDERLINE] file:line — description
-  Pattern: <what was found>
-  Reason it might be intentional: <explanation>
-```
-
-### Summary:
-```
-## AI Slop Cleanup Report
-
-Scanned: N files
-Found: X patterns (Y SLOP, Z BORDERLINE)
-Fixed: W patterns
-Skipped: V (borderline, left for human review)
-
-Categories:
-- Redundant comments: N removed
-- Unnecessary abstractions: N inlined
-- Over-engineering: N simplified
-- Template slop: N cleaned
-- AI writing style: N fixed
-```
-
-IMPORTANT: This agent ONLY cleans. It does NOT refactor logic, add features, or change behavior. Every fix must be provably behavior-preserving.
+Do not claim behavior preservation beyond the inspected scope and supporting evidence, or present a proposed edit as already applied.

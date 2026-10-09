@@ -7,12 +7,17 @@ Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readabl
 The [2026-10-09 roadmap](../../../superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md)
 is the current owner-requested plan and progress tracker. Its primary scope is
 55 GPT agent roles (52 in `packages/codex`, plus 3 optional GAN roles); 9 workflows
-and 21 supporting skills are tracked separately for compatibility. Six roles
+and 21 supporting skills are tracked separately for compatibility. Ten roles
 have authoring/static/integration acceptance, and zero have recorded target-model
 behavioral acceptance. Two workflow callers have partial compatibility changes,
 which are not counted as completed workflow migrations. These counts do not mark
 the original migration gates below complete. Version 1.5.3 is the planned release
 after the scoped work, mandatory acceptance, and documentation updates.
+
+The latest [four-role delivery checkpoint](evidence/GPT-role-implementation/acceptance.md)
+adds minimal-change-engineer, codebase-onboarding-engineer, scaffold-endpoint, and
+ai-slop-cleaner at the source/static/integration level. G01 remains pending;
+source progress does not qualify later behavioral waves or release readiness.
 
 ## Artifact accounting
 

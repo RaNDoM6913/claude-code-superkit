@@ -23,6 +23,10 @@ const nativeSkills = [
   'reality-checker',
   'dev-orchestrator',
   'review-orchestrator',
+  'minimal-change-engineer',
+  'codebase-onboarding-engineer',
+  'scaffold-endpoint',
+  'ai-slop-cleaner',
 ];
 
 function tempRepository(t) {

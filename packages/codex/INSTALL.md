@@ -81,11 +81,11 @@ Track the project's non-secret `AGENTS.md` and `.codex/config.toml` so collabora
 
 ### 36 Agent Skills (auto-dispatched by orchestrators)
 
-These include converted core/extras roles and native GPT roles. The first Astra-authored group is `architect`, `plan-checker`, `evaluator`, `goal-verifier`, `critic`, and `reality-checker`. They distinguish observed defects, unavailable evidence, and task-specific acceptance. `native-skills.txt` protects these roles and the dev/review orchestrators from conversion overwrites. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
+These include converted core/extras roles and native GPT roles. The Astra-authored decision/acceptance group is `architect`, `plan-checker`, `evaluator`, `goal-verifier`, `critic`, and `reality-checker`. The delivery group is `minimal-change-engineer`, `codebase-onboarding-engineer`, `scaffold-endpoint`, and `ai-slop-cleaner`. `native-skills.txt` protects these ten roles and the dev/review callers (12 entries) from conversion overwrites. This is source ownership, not proof of behavioral acceptance. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers
-- `codebase-onboarding-engineer` — 30-60 min onboarding brief
+- `codebase-onboarding-engineer` — task-focused repository brief with verified facts and explicit unknowns
 - `behavioral-nudge-engine` — retention psychology, habit loops
 
 | Skill | Category |
