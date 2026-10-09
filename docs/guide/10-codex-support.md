@@ -21,7 +21,7 @@ superkit works with both Claude Code and OpenAI Codex CLI. This chapter explains
 
 **Skills are 100% compatible.** The SKILL.md format (frontmatter + markdown body) is identical in Claude Code and Codex. No conversion needed for skills.
 
-**Agents convert to skills.** Claude Code agents (with `model:` and `allowed-tools:` frontmatter) become Codex skills by removing those fields and adding `user-invocable: false`.
+**Converted and native roles coexist.** The converter normalizes Claude agents into Codex skills. Roles listed in `packages/codex/native-skills.txt` are authored natively for GPT and preserved by the converter; a missing declared native role stops conversion before any writes.
 
 **Commands convert to user-invocable skills.** Slash commands become skills with `user-invocable: true`. Users activate them by saying "use the dev-orchestrator skill" instead of typing `/dev`.
 
@@ -42,10 +42,14 @@ When running `setup.sh`, answer "y" to "Also install for Codex CLI?":
 
 ```
 Also install for Codex CLI? [y/N] y
-✓ Symlinked Codex skills → ~/.agents/skills/superkit
-✓ Created AGENTS.md template
-✓ Created .codex/config.toml
+Copied 82 Codex skills → .codex/skills/
+Created AGENTS.md template
+Copied shipped Codex config template → .codex/config.toml
 ```
+
+The installer copies skills into the current project. Existing project
+instructions, Codex config, and approval rules are preserved and reported as
+skipped; a manual symlink setup is a separate option below.
 
 ### Manual
 
@@ -64,13 +68,19 @@ cp /path/to/claude-code-superkit/packages/codex/config.toml .codex/config.toml
 Codex uses TOML instead of JSON for configuration:
 
 ```toml
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+web_search = "live"
 
 [features]
-multi_agent = true    # Required for orchestrator skills
-web_search = true
+multi_agent = true
+
+[agents]
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
 ```
+
+Astra coordinates and accepts critical decisions; Sol performs bounded delegated work. Skills themselves do not select a model. Explicit dispatch settings override the subagent defaults, and the runtime must support the requested model and effort. The installer preserves an existing project config. Configuration validation is separate from live behavioral acceptance, which remains pending for the migration.
 
 ## Tool Mapping
 

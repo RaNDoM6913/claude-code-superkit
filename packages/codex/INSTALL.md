@@ -42,7 +42,7 @@ cp claude-code-superkit/packages/codex/config.toml .codex/config.toml
 cp claude-code-superkit/packages/codex/config.toml ~/.codex/config.toml
 ```
 
-The default model is **gpt-5.5** with **xhigh** reasoning effort (maximum). Edit `config.toml` to change.
+The default coordinator is **gpt-6-astra / high**, with **gpt-5.6-sol / medium** as the subagent fallback. For an existing configuration, merge the model and agent settings rather than replacing your custom settings. The installer preserves existing project config and approval rules; applying new defaults to an existing installation requires an explicit merge.
 
 > **MCP hygiene:** `config.toml` can register MCP servers under `[mcp_servers.*]` (see the commented `playwright` / `context7` examples). Add them sparingly — every registered server costs tool-schema tokens on **every** turn and widens your supply-chain / attack surface. Before adding one, apply the two-part test: the integration must be universally useful *and* genuinely need a live, stateful session (a running browser, a long-lived connection). If it's really just a lookup or a one-shot command, a skill is the better shape. Pin every server you keep to a concrete version — never bare `@latest` — and note one line of rationale for why it earns its per-turn cost.
 
@@ -61,7 +61,7 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 # - Architecture references
 ```
 
-> ⚠️ **Critical:** `AGENTS.md` and `.codex/config.toml` MUST be tracked in git. These files are Codex's enforcement mechanism (documentation rules, coding standards, architecture references). If they're not committed, anyone who clones the repo gets zero enforcement. Unlike Claude Code which uses hook scripts, Codex relies entirely on these files for project context.
+Track the project's non-secret `AGENTS.md` and `.codex/config.toml` so collaborators receive the same instructions and configuration. Instructions guide behavior; runtime permissions and approval rules provide separate controls. Do not commit credentials or machine-specific secrets.
 
 ## What Gets Installed
 
@@ -81,10 +81,10 @@ cp claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
 
 ### 36 Agent Skills (auto-dispatched by orchestrators)
 
-These are converted from core + extras agents. They are dispatched automatically by orchestrator skills (dev, review, audit) based on file patterns and project stack. **v1.4.0 added 4 specialist roles:**
+These include converted core/extras roles and native GPT roles. The first Astra-authored group is `architect`, `plan-checker`, `evaluator`, `goal-verifier`, `critic`, and `reality-checker`. They distinguish observed defects, unavailable evidence, and task-specific acceptance. `native-skills.txt` protects these roles and the dev/review orchestrators from conversion overwrites. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
-- `reality-checker` — defaults to NEEDS WORK, demands evidence
+- `reality-checker` — checks readiness claims against applicable evidence and reports external blockers
 - `codebase-onboarding-engineer` — 30-60 min onboarding brief
 - `behavioral-nudge-engine` — retention psychology, habit loops
 
@@ -200,16 +200,24 @@ Plus 1 Codex approval rules file (`packages/codex/rules/default.rules`) + 3 GAN 
 
 ## Model Configuration
 
-The default `config.toml` uses **gpt-5.5** with **xhigh** reasoning — maximum performance:
+The default `config.toml` separates coordinator and subagent models:
 
 ```toml
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+web_search = "live"
+
+[features]
+multi_agent = true
+
+[agents]
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
 ```
 
-Available reasoning levels: `low`, `medium`, `high`, `xhigh`. We use `xhigh` for maximum accuracy.
+Skills are instructions used by the agent that loads them; skill frontmatter does not select the execution model. The agent defaults apply when a dispatch omits model or effort. Explicit task routing should select the intended model and effort, with substantive Sol review at `high` and critical decisions accepted by Astra. The supported effort levels and model availability depend on the installed runtime and account.
 
-All skills inherit this model. Unlike Claude Code (where each agent has its own `model:` field), Codex uses a single global model from config.toml.
+These settings were checked against Codex CLI `0.162.0-alpha.17.2` and the [official configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference). They declare routing; they do not prove a live task ran on that model. Model behavioral acceptance remains pending. The owner-required Astra authorship rule for Superkit contributors is documented in [WORKING_AGREEMENT.md](../../docs/WORKING_AGREEMENT.md).
 
 ## What's NOT Available in Codex
 
@@ -237,7 +245,7 @@ ls -la AGENTS.md
 # Check skills are installed
 ls .codex/skills/
 
-# Check config (should show gpt-5.5)
+# Check coordinator and subagent defaults (or your preserved custom settings)
 cat .codex/config.toml
 
 # Run Codex to test

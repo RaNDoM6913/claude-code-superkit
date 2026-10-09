@@ -96,13 +96,21 @@ when slots permit. Terra/Luna production eligibility is still unproven. These
 worker choices do not override the shipped Claude asset model conventions.
 Other tasks follow their explicitly approved runtime/model routing.
 
+For GPT-layer prompts and behavioral rules, Astra authors or reworks the
+instructions; every changed prompt receives Astra participation. Sol performs
+bounded implementation, integration, evidence collection, and checks, and may
+review prompt changes, but does not autonomously rewrite their behavior. This
+contributor rule is separate from model defaults shipped to kit consumers.
+
 Keep the migration's authorization boundaries: stable checkpoint commit/push on
 codex/astra-native-hardening is authorized; merge/release require their existing
 approval and acceptance gates. Live model evaluations remain restricted by the
-current task instructions. Read the current migration checkpoint on resumption;
-first reassess the minimum mandatory W00B exit scope instead of adding another
-optional infrastructure layer. This pause applies to the migration, not unrelated
-work separately authorized by the owner.
+current task instructions. Read the latest task direction and migration
+`next-session.md` checkpoint on resumption. The owner's current priority is
+concrete GPT-role prompt improvement with Astra participation; do not
+automatically resume the older W00B tooling queue. W00B and behavioral acceptance
+remain incomplete, and prompt authoring does not waive their mandatory gates or
+authorize live evaluations, merge, or release.
 
 For the owner's Codex sessions, preserve the established 500,000-token context
 handoff agreement. Use current-session telemetry with its timestamp, never summed

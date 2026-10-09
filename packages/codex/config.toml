@@ -1,12 +1,16 @@
 # claude-code-superkit — Codex CLI configuration
 # Place in .codex/config.toml (project) or ~/.codex/config.toml (global)
 
-model = "gpt-5.5"
-model_reasoning_effort = "xhigh"
+model = "gpt-6-astra"
+model_reasoning_effort = "high"
+web_search = "live"
 
 [features]
 multi_agent = true
-web_search = true
+
+[agents]
+default_subagent_model = "gpt-5.6-sol"
+default_subagent_reasoning_effort = "medium"
 
 # MCP servers (uncomment as needed)
 # [mcp_servers.playwright]

@@ -1,0 +1,8 @@
+architect
+plan-checker
+evaluator
+goal-verifier
+critic
+reality-checker
+dev-orchestrator
+review-orchestrator

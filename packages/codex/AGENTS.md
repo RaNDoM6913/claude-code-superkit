@@ -67,8 +67,9 @@ Mark a deliberate simplification with a comment naming its ceiling and the upgra
 
 ## Approval Rules
 
-This kit ships `rules/default.rules` — a Codex CLI approval policy that
-declares allow / prompt / forbidden decisions for common commands.
+This kit ships `rules/default.rules` — execution rules for commands outside the
+sandbox. Rules do not grant task authority or override the active sandbox and
+approval settings.
 
 **Install:** copy `packages/codex/rules/default.rules` to `~/.codex/rules/default.rules`
 (or your project's local `.codex/rules/`) so Codex CLI picks it up.
@@ -78,15 +79,15 @@ declares allow / prompt / forbidden decisions for common commands.
 ```
 prefix_rule(
     pattern = ["git", "push"],
-    decision = "allow",
-    justification = "Globally approved; force-push is handled by more specific rule.",
+    decision = "prompt",
+    justification = "Push changes remote state; inspect target and flags.",
 )
 ```
 
 **Decisions:**
-- `allow` — Codex executes silently
-- `prompt` — Codex asks before executing
-- `forbidden` — Codex refuses to execute
+- `allow` — permits a matching command at the execution-rule layer
+- `prompt` — requires approval, subject to the runtime's approval policy
+- `forbidden` — forbids a matching command
 
 **Coverage:**
 - Destructive system calls (`rm -rf /`, `sudo`, `dd`, `mkfs`, `shutdown`) → forbidden
@@ -97,10 +98,15 @@ prefix_rule(
 - Systemd enable/disable/mask → prompt
 - Nginx / Caddy / Apache config check + reload → allowed
 - `chmod`, `chown` → prompt
-- Pipe to bash from curl/wget → forbidden
+- `curl`, `wget`, `bash -c`, and `sh -c` → prompt; this is not a blanket
+  prohibition of downloading and executing a script
 
-**Customization:** more-specific patterns take precedence. Add project-local
-rules in your own `rules/` file alongside `default.rules`.
+**Matching:** patterns match literal argv prefixes. When multiple rules match,
+the most restrictive decision wins: `forbidden` > `prompt` > `allow`.
+Simple shell commands may be split for checking; complex shell syntax may be
+checked as the whole shell invocation. Do not infer complete shell or SQL
+inspection from prefix rules. Validate custom rules with the installed Codex
+`execpolicy check` command before relying on them.
 
 Adapted from VKirill/codex-starter-kit (MIT). See `packages/codex/rules/default.rules`
 for the complete ruleset.
@@ -182,22 +188,54 @@ If ANY answer is YES -> update docs BEFORE committing.
 
 1. **AGENTS.md (this file)** — Codex reads this on every session. Primary mechanism.
 2. **Pre-commit checklist (above)** — 15-point check before every commit.
-3. **docs-reviewer skill** — run inline by dev-orchestrator in Phase 14 (Document) to verify completeness.
+3. **docs-reviewer skill** — used by dev-orchestrator in Phase 14 (Document) to verify completeness.
 4. **Plan completion gate** — plans are NOT complete until docs are updated.
 
 Do NOT rely on a single layer — update docs proactively with every code change.
 
 ## Model Configuration
 
-This project uses **gpt-5.5** with **xhigh** reasoning effort (maximum accuracy). All skills inherit this from `.codex/config.toml`. Do NOT downgrade the model or reasoning level — maximum performance is required for code review, security scanning, and test generation.
+The shipped `.codex/config.toml` selects **gpt-6-astra / high** for the coordinator
+and **gpt-5.6-sol / medium** as the subagent fallback. Configuration is a default,
+not evidence of which model executed a task or of independent review. Honor the
+user's explicit routing and verify available models/efforts before dispatch.
 
-Note: Claude Code (Opus 4.8) also supports `high`/`xhigh`/`max` effort levels, so the effort concept is cross-CLI — not Codex-only.
+Astra owns architecture, shared prompt/behavior contracts, consequential
+security/authority/data-loss decisions, and final high-risk acceptance. Sol may
+perform bounded implementation, evidence collection, and review with an explicit
+task packet. Use a supported effort appropriate to the task (normally high for
+substantive review); do not silently substitute another model or lower effort.
+If required Astra acceptance is unavailable, report it as pending rather than
+delegating that acceptance to a fallback model.
+
+These are consumer runtime defaults. Superkit's contributor model choices and
+prompt-authoring agreement are maintained separately in its repository working
+agreement; they do not alter the model conventions of shipped Claude assets.
 
 ## Codex-Specific Notes
 
-### Skill Execution (Codex has no subagents)
-- Codex has no subagent runtime. When an orchestrator skill says "perform X following the `<name>` skill", read `.codex/skills/<name>/SKILL.md` and execute its process inline yourself, then apply its verdict exactly as that skill defines it.
-- Run one referenced skill at a time. Keep each inline pass self-contained and do not overlap file scopes across passes.
+### Skill Execution and Delegation
+- Read the named skill and preserve its authority, evidence, and verdict contract.
+  Check actual runtime delegation tools and user authorization before spawning;
+  a skill name alone does not create an agent or grant additional permissions.
+- When delegation is available and authorized, use clean worker contexts by
+  default. Supply explicit model and reasoning effort, objective, owned scope,
+  relevant contracts, permitted tools/actions, acceptance checks, and required
+  return evidence. Include full history only when specifically necessary.
+- Parallelize independent work within available slots and use disjoint ownership
+  for edits. Workers must preserve others' changes and may not recursively fan out
+  unless assigned. The coordinator integrates results and accepts the outcome.
+- If delegation or explicit routing is unavailable, perform suitable skills as
+  separate inline passes and disclose the missing independence/routing. Do not
+  claim an independent review or waive a mandatory independent/Astra gate.
+- Review roles are read-only; their verdicts do not authorize edits, external
+  writes, merge, or release. Implement corrections in a separately authorized
+  implementation step. Preserve prior user authorization; ask only for a missing
+  decision or permission that blocks the next action.
+- Reuse checks when command/results, relevant code, inputs, and environment are
+  recorded and unchanged. Rerun for relevant change or concrete uncertainty.
+  Report mandatory unknowns separately from observed failures; neither becomes
+  success because a retry budget is exhausted.
 
 ### Planning
 - Use `update_plan` for tracking progress
@@ -205,7 +243,8 @@ Note: Claude Code (Opus 4.8) also supports `high`/`xhigh`/`max` effort levels, s
 ### Skills
 - Skills auto-activate based on description matching
 - Invoke skills by describing the task that matches the skill description
-- Orchestrator skills execute the skills they reference inline (see Skill Execution above) — there is no parallel subagent dispatch
+- Orchestrator skills use available, authorized delegation or disclosed inline
+  execution as described above.
 
 ### Local Tool Mapping
 - Search files with `rg` / `rg --files`
@@ -287,8 +326,8 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 
 | Skill | Auto-trigger when |
 |-------|-------------------|
-| `dev-orchestrator` | New feature, bug fix touching 2+ files, 100+ lines in one file, migration + service |
-| `review-orchestrator` | After completing work on 3+ files, before commit with 5+ files changed |
+| `dev-orchestrator` | Work needs coordinated planning, implementation, and acceptance across meaningful dependencies or risks |
+| `review-orchestrator` | Requested code review, consequential behavior/contract changes, or a required project review gate |
 | `test-runner` | After feature implementation, bug fix, refactor, or test file edits |
 | `lint-runner` | Before any commit with code changes (not docs-only) |
 | `audit-orchestrator` | When touching infrastructure, CI/CD, or security-sensitive code (use health-only mode for quick check) |
@@ -308,7 +347,8 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 - Already inside `dev-orchestrator` (it includes review + test)
 - User explicitly says "just do X" / "quick fix"
 - Docs-only or config-only changes
-- Single file with < 50 lines changed
+- A narrow low-risk change can use focused checks; file or line count alone never
+  waives a mandatory review or safety gate.
 
 ## Active Plans
 

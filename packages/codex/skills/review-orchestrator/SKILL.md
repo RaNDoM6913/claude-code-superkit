@@ -1,12 +1,13 @@
 ---
 name: review-orchestrator
-description: Unified review orchestrator — detect changes, gather git context, dispatch reviewer agents in parallel, collect and deduplicate findings
+description: Coordinate requested code review or required review gates by identifying changed scope, selecting available reviewers, and consolidating evidence and findings.
 user-invocable: true
+tokens: 1668
 ---
 
 # Unified Orchestrated Code Review
 
-Detect changed files, enrich with git context, dispatch the right reviewer agents in parallel, collect and deduplicate findings.
+Detect changed scope, gather relevant context, use available and authorized reviewers, and collect/deduplicate findings. Review is read-only: do not fix files, post comments, merge, or perform external writes without a separate authorized action. Follow project model/effort routing; Astra accepts high-risk decisions, while Sol may gather evidence or review bounded scope.
 
 ## Target
 
@@ -47,7 +48,7 @@ Build a `REVIEW_CONTEXT` block:
 <git log --oneline -5>
 
 ## Diff Hunks
-<full diff, truncated to 8000 chars per agent if needed>
+<relevant complete diff, or exact references the reviewer can read>
 === END CONTEXT ===
 ```
 
@@ -69,12 +70,12 @@ Based on file extension and path patterns, build a dispatch plan. Each pattern m
 Rules:
 - A single agent is dispatched **at most once** even if multiple files match
 - Only dispatch agents that are actually available in the project's skills directory
-- If no files match any pattern, report "No reviewable changes detected" and stop
+- If no pattern matches, report the unmatched scope and whether a suitable generic review is available; do not call unreviewed changes a clean pass.
 - List the dispatch plan before executing (agent name + matched file count)
 
 ## Step 3 — Dispatch Agents in Parallel
 
-All reviewer agents are independent — use `spawn_agent` to dispatch ALL triggered agents simultaneously. Use `wait_agent` / `wait` to collect results.
+Inspect available delegation tools and authorization before dispatch. For independent scopes, use supported concurrency within available slots and clean worker contexts with explicit model/effort. Supply scope, read-only authority, criteria, relevant evidence, and required output. If delegation or routing is unavailable, perform suitable skills as separate inline passes and disclose self-review; mandatory independence/Astra acceptance remains pending.
 
 **Parallel Group 1 (code quality)**:
 - go-reviewer (if triggered)
@@ -89,12 +90,17 @@ All reviewer agents are independent — use `spawn_agent` to dispatch ALL trigge
 - security-scanner (if triggered)
 - api-contract-sync (if triggered)
 
-Groups 1 and 2 have no dependencies — dispatch ALL simultaneously.
+Groups 1 and 2 can run concurrently when their assigned scopes are independent and runtime capacity permits. Reviewers may not recursively delegate unless assigned.
 
 For each agent, inject the `REVIEW_CONTEXT` block into the prompt:
 
 ```
 You are reviewing code changes.
+
+Model/effort: <explicit supported route from task/project policy>
+Authority: read-only; no edits or external writes.
+Scope/criteria: <exact diff identity, owned review scope, requested contract>
+Existing evidence: <commands/results bound to code, inputs, and environment>
 
 {REVIEW_CONTEXT — filtered to files relevant to this agent}
 
@@ -107,7 +113,7 @@ Focus on:
 - Missing pieces (e.g., commit says "add endpoint" but no route registration)
 - Regressions in existing patterns
 
-Report findings in your standard output format.
+Report findings in your standard format, plus coverage (COMPLETE/PARTIAL/UNAVAILABLE), evidence references, and unresolved mandatory criteria. Zero findings is valid. Mark any unreviewed scope explicitly. Reuse results only for unchanged relevant code, inputs, environment, and recorded command/results; rerun for concrete uncertainty or relevant change.
 ```
 
 **Per-agent diff filtering** — only include relevant file hunks:
@@ -125,7 +131,7 @@ Report findings in your standard output format.
 After all agents complete:
 
 1. **Merge** all findings into a unified report
-2. **Deduplicate**: if two agents flag the same file:line, keep the higher-severity finding
+2. **Deduplicate** by root cause and impact, preserving distinct issues on the same line and unresolved blockers from prior reviews.
 3. **Group by severity**:
 
 ### Blocking
@@ -145,8 +151,8 @@ After all agents complete:
 | ts-reviewer | 1 | 0 | 3 | FAIL |
 | ... | | | | |
 
-Status: **FAIL** if any blocking finding, **WARN** if important-only, **PASS** if nits-only or clean.
+Status: **FAIL** if a supported blocking finding or unresolved mandatory acceptance condition prevents progression; distinguish defects from missing evidence. **WARN** for non-blocking concerns or partial optional coverage. **PASS** only when assigned coverage is complete, mandatory conditions are met, and remaining items are nits-only or clean. Carry each reviewer's coverage and evidence status into the summary; no findings is not proof of complete review.
 
 ### Overall Verdict
 
-**PASS / WARN / FAIL** — one-line summary of the most critical finding.
+**PASS / WARN / FAIL** — one-line reason, coverage, and any required next action. Preserve native plan-checker/evaluator/goal-verifier/critic verdicts when included; do not translate unresolved mandatory criteria into PASS. Missing required capability ends the review with an incomplete result, not endless retries.

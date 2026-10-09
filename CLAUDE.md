@@ -61,7 +61,7 @@ packages/
   codex/                    # Codex CLI support
     skills/                 # 82 skills (added: 3 cross-CLI roles, 6 TGApp skills, behavioral-nudge, 3 GAN, silent-failure-hunter expansion)
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
-    config.toml             # gpt-5.5, xhigh
+    config.toml             # gpt-6-astra/high coordinator; gpt-5.6-sol/medium worker fallback
     AGENTS.md               # Template (incl. new "Approval Rules" section)
     INSTALL.md              # Guide
   showcase/                 # Production example (28 agents, 17 commands, 13 hooks, 11 skills, 6 rules)
@@ -115,7 +115,7 @@ VERSION                     # current release version (keep in sync with package
 
 - **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.8, 1M context**) — kit automatically picks up new Opus versions without code changes.
 - **Effort**: Opus 4.8 defaults to `high`; deep specialist agents (reality-checker, security-scanner, critic/architecture reviews, gan-evaluator) are run at `xhigh`/`max`. See the per-role guidance in the user CLAUDE.md template (`packages/core/CLAUDE.md`).
-- **Codex model**: `gpt-5.5` with `model_reasoning_effort = "xhigh"`
+- **Codex model**: `gpt-6-astra` with `model_reasoning_effort = "high"`; subagent fallback `gpt-5.6-sol` / `medium`. Contributor routing and GPT prompt authorship follow `docs/WORKING_AGREEMENT.md`.
 - **Agent format**: YAML frontmatter (name, description, model, allowed-tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)
 - **Output format**: Severity (CRITICAL/WARNING/SUGGESTION) + Confidence (HIGH/MEDIUM/LOW)

@@ -1,6 +1,6 @@
 # ⚡ claude-code-superkit
 
-> **The quality-first kit for Claude Code & Codex** — every one of 56 agents runs on Opus (now 4.8, 1M context). No Sonnet, no Haiku, no token-cost compromises on the work that ships your code. Every prompt hardened for the Opus executor by **Claude Fable 5**, a tier above Opus.
+> **The quality-first kit for Claude Code & Codex** — all 56 Claude agents run on Opus (now 4.8, 1M context), with prompts hardened for that executor by **Claude Fable 5**. The Codex layer has separate GPT instructions and Astra/Sol configuration.
 
 <div align="center">
 
@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 ![Agents](https://img.shields.io/badge/56_agents-Opus_4.8-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Hardened by](https://img.shields.io/badge/prompts_hardened_by-Claude_Fable_5-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
-![Codex](https://img.shields.io/badge/Codex-gpt--5.5-00A67E?style=for-the-badge&logo=openai&logoColor=white)
+![Codex](https://img.shields.io/badge/Codex-Astra%20%2B%20Sol-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 [🚀 Quick Start](#-installation) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
@@ -60,7 +60,7 @@ Your feature is attacked against binary rubrics before it ships (Playwright requ
 
 ## 🧬 Hardened by a Stronger Model
 
-Every prompt in the kit was engineered by **Claude Fable 5** — Anthropic's Mythos-class model, a tier above Opus — for a weaker model to execute reliably: Fable writes the instructions, Opus 4.8 runs them. In v1.5.0 all 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That was ~200 subagents with 0 unresolved escalations, closed by a kit-wide consistency sweep that came back clean. The result is a fixed countermeasure for each way a weaker executor tends to drift:
+The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The current native GPT role core is authored separately by Astra; its behavioral acceptance remains pending. The Claude-layer countermeasures include:
 
 | Opus failure mode | Countermeasure baked into every file |
 |-------------------|--------------------------------------|
@@ -89,7 +89,7 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — full parity for Claude Code (Opus 4.8) and Codex CLI (gpt-5.5, xhigh).
+**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). The first native GPT role package is under development; behavioral migration acceptance remains pending.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -184,7 +184,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-Or run `bash setup.sh --codex` from a cloned superkit repo to install both Claude Code and Codex CLI support in one go. Model: **gpt-5.5** + **xhigh** reasoning.
+Or run `bash setup.sh --codex` from a cloned superkit repo to install both Claude Code and Codex CLI support in one go. Defaults: **gpt-6-astra / high** coordinator and **gpt-5.6-sol / medium** subagents.
 
 ### Which command do I use?
 
@@ -317,7 +317,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
-| Model | Opus (per agent) | **gpt-5.5** (global config) |
+| Model | Opus (per agent) | **gpt-6-astra / high** coordinator; **gpt-5.6-sol / medium** subagent default |
 | Agents / Skills | 56 agents | 82 skills in `packages/codex/skills/` (9 commands + 36 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 82) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
 | Hooks | 42 shipped (26 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + 2 internal + Stop | — (inline rules in AGENTS.md) |
@@ -326,7 +326,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`bash setup.sh --codex` (from cloned repo) will install for Codex CLI — copies 82 skills + `default.rules` and creates AGENTS.md + config.toml (`gpt-5.5`, `xhigh`).
+`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Six decision and acceptance roles have Astra-authored native instructions; `native-skills.txt` protects them and their two orchestrators from Claude-agent conversion. Configuration and repository checks do not establish live model quality or availability.
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

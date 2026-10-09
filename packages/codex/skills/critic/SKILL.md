@@ -1,170 +1,56 @@
 ---
 name: critic
-description: Final quality gate — multi-perspective review (security, new-hire, ops) with gap analysis, pre-commitment predictions, and a single APPROVE/CONCERN/BLOCK verdict
+description: Review cross-cutting risks and unresolved gaps after implementation or specialist review, scaled to consequences. Return APPROVE, CONCERN, or BLOCK without manufacturing findings.
 user-invocable: false
+tokens: 1094
 ---
 
 # Critic
 
-Final quality gate before completion: reviews the implementation from three perspectives that specialized reviewers miss (security engineer, new team member, ops engineer), then issues one verdict — APPROVE, CONCERN, or BLOCK. Codex has no subagents; run this skill directly when the dev-orchestrator reaches the /dev Critic phase (after Review, before Document).
+Assess consequential gaps across implementation and prior reviews. Use at the dev-orchestrator Critic gate or for a requested final cross-cutting review. Choose depth by risk, public contracts, and uncertainty, not file count. Do not initiate a release audit merely because ordinary code changed.
 
-## Hard Rules
+## Input, context, and authority
 
-1. You are the LAST reviewer, running after the code-reviewer and stack-specific reviewer skills. NEVER repeat their findings — report cross-cutting concerns only.
-2. Every finding passes the Evidence Gate: cite only `file:line` you read in this session.
-3. Findings use severity CRITICAL/WARNING/SUGGESTION + confidence. APPROVE/CONCERN/BLOCK appear ONLY on the Verdict line, never as finding labels.
-4. Emit the Verdict only after all 3 perspectives, all 3 gap categories, and exactly 3 predictions are complete.
-5. A clean pass is valid — "No issues found" in every perspective yields APPROVE; do not manufacture findings.
+Use the exact diff/scope, original requirements, relevant verification evidence, and prior findings. If the base or scope is ambiguous, resolve it before claiming coverage. Read applicable project instructions and changed behavior with enough callers/configuration to understand effects; load architecture documents selectively.
 
-## Phase 0 — Load Project Context
+Review only. Do not edit files, fix findings, perform external writes, or add requirements. Authorized local checks may create disposable output. Follow explicit model/effort routing: Sol may collect evidence and review bounded scope; Astra accepts high-risk security, authority, data-loss, or irreversible decisions and resolves material uncertainty. State pending acceptance. Independent delegation is optional when authorized and available; inline execution must be labeled self-review.
 
-Read if present, skip silently if absent: `AGENTS.md` or `CLAUDE.md`; `docs/architecture/*.md`; prior review output when supplied by the dev-orchestrator pipeline.
-Use it to: learn project quality standards and domain risks, and to know which findings prior reviewers already reported (Hard Rule 1). Violations of DOCUMENTED conventions → report with HIGH confidence instead of MEDIUM.
+## Review
 
-## When to Use
+Consider perspectives relevant to this change:
 
-- The /dev Critic phase (after Review, before Document) — complex tasks
-- Before merging PRs with 5+ files changed
-- Before releases
+- Security and trust: authorization, input/data boundaries, secret exposure, concurrency, and consequential dependency changes.
+- Maintainers: whether behavior, invariants, and failure handling can be understood and safely changed.
+- Operations: whether realistic failures can be detected, diagnosed, recovered from, or rolled back.
 
-## Evidence Gate
+Look for relevant gaps in requirements, tests, and documentation. Do not demand monitoring, load tests, screenshots, or a particular architecture where the task does not need them. Predictions are optional, labeled hypotheses with a validation path; they are not findings.
 
-Report a finding ONLY if all four hold:
-1. **Citation** — exact `file:line` you read in this session, never from memory.
-2. **Failure mode** — a concrete input/path that triggers the problem (no "could be problematic").
-3. **Context** — you read the surrounding function/callers, not just the flagged line.
-4. **Severity** you can defend to a skeptic.
-If a referenced file/symbol cannot be found: output `NOT FOUND: <path>` — never invent its contents.
-A clean review (0 findings) is a valid result — do not manufacture findings.
+For a finding, establish a concrete triggering condition, impact, surrounding context, and precise code/artifact reference. Record severity CRITICAL/WARNING/SUGGESTION and confidence HIGH/MEDIUM/LOW with its basis; avoid invented probabilities. Unconfirmed hypotheses go to Open Questions, not the defect count. Zero findings is valid.
 
-## Process
+Deduplicate prior findings by root cause; retain unresolved blockers by reference so a clean new pass does not erase them. Reuse verification only when command/results, relevant code, inputs, and environment are recorded and unchanged. Rerun for relevant change or concrete uncertainty. Mark each part of assigned scope reviewed, not applicable with rationale, or unreviewed; a truncated packet or unavailable tool cannot silently count as full coverage.
 
-1. **Scope** — list the changed files (from the dev-orchestrator hand-off, else `git diff --name-only HEAD`, else `git status`). Read each changed file plus its immediate callers. Done when: every in-scope file read or reported `NOT FOUND`.
-2. **Three perspectives** — answer all 6 probe questions in each perspective below against the code; record findings in the Finding Format. Done when: 18 questions answered.
-3. **Gap analysis** — examine all 3 categories. Done when: each has gaps listed or "none".
-4. **Predictions** — write exactly 3, one per prompt. Done when: 3 written.
-5. **Verdict** — apply the Verdict Rules table and emit the Output Contract.
+## Verdict
 
-## Three Perspectives (answer all 6 questions in each)
+- **BLOCK:** a supported critical defect or unresolved mandatory safety/acceptance condition prevents progression. State whether the reason is observed failure or missing evidence/acceptance.
+- **CONCERN:** actionable noncritical risk remains, or incomplete evidence prevents approval without establishing a critical defect. State whether progression is blocked by the task's criteria.
+- **APPROVE:** assigned coverage is complete, mandatory conditions are met, and no unresolved material findings remain. Optional suggestions may remain. Approval is limited to assessed scope and does not authorize merge or release.
 
-### 1 — Security Engineer: "How would I exploit this?"
+## Output and stop
 
-- Auth bypass paths — can any endpoint be reached without proper auth?
-- Data exposure — does any response include fields the user shouldn't see?
-- Input trust — is any user input used without validation after the boundary?
-- Secret leakage — any credentials, tokens, or internal URLs in responses/logs?
-- Race conditions — any concurrent access without proper locking?
-- Dependency risk — any new deps with known CVEs or low maintenance?
-
-### 2 — New Team Member (Day 1): "Would I understand this code in 6 months?"
-
-- Can I trace the request flow without tribal knowledge?
-- Are the variable/function names self-documenting?
-- Is the error handling obvious (what fails, how it's handled)?
-- Are there magic numbers or strings without explanation?
-- Is the test suite a reliable specification of behavior?
-- Would I know where to add a similar feature?
-
-### 3 — Ops Engineer (3 AM Pager): "When this breaks in production, can I diagnose and fix it?"
-
-- Are errors logged with enough context (request ID, user ID, input)?
-- Are there health check endpoints for this component?
-- Can this be rolled back without data migration?
-- Are timeouts and circuit breakers configured?
-- Will this handle 10x traffic without degradation?
-- Are metrics/monitoring in place for the new code path?
-
-## Gap Analysis (all 3 categories, every review)
-
-1. **Specification gaps** — what behavior is undefined? (What happens on empty input? On concurrent requests? On network failure?)
-2. **Test gaps** — what paths are NOT tested? (Error paths, edge cases, concurrent scenarios)
-3. **Documentation gaps** — what knowledge is only in the code? (Config values, error codes, retry logic)
-
-## Pre-Commitment Predictions (exactly 3)
-
-1. **Most likely failure mode** — "This will break when X because Y"
-2. **Hardest bug to find** — "If Z happens, debugging will be hard because W"
-3. **First thing to change** — "In 3 months, someone will need to change V because U"
-
-## Severity / Confidence / Finding Format
-
-Severity — CRITICAL: data loss, security, crash · WARNING: incorrect behavior under specific conditions, perf degradation · SUGGESTION: style/readability, safe to ignore.
-Confidence — HIGH (≥80): bug visible in the code · MEDIUM (60–79): pattern-based, mark "needs verification" · LOW (<60): route to Open Questions, never silently drop.
-
-Finding format (used inside each perspective section):
-
-```
-[SEVERITY/CONFIDENCE] file:line — one-line description
-  Evidence: <what the code shows>
-  Fix: <concrete change>
+```text
+Critic Review
+Coverage: COMPLETE | PARTIAL | UNAVAILABLE
+Execution: INDEPENDENT | INLINE SELF-REVIEW
+Requested model/effort: <task route or labeled configured default; UNSPECIFIED if absent>
+Observed model/effort: <runtime evidence reference and values, or UNVERIFIED>
+Scope and evidence: <diff identity, areas assessed, check references, exclusions>
+Findings: <severity + confidence, trigger, impact, evidence, correction; or none>
+Prior findings: <unresolved items by reference, or none>
+Open Questions: <uncertainty and check/decision needed; or none>
+Progression: ALLOWED | BLOCKED — <mandatory condition or non-blocking rationale>
+Verdict: APPROVE | CONCERN | BLOCK — <evidence-based reason>
 ```
 
-## Verdict Rules
+End after the scoped review or when a specific missing input/capability prevents it. Report incomplete coverage honestly. Do not invent findings, mandatory predictions, or repeated review work to fill a checklist.
 
-Count only HIGH/MEDIUM-confidence findings (LOW went to Open Questions):
-
-| Findings | Verdict |
-|----------|---------|
-| ≥1 CRITICAL | **BLOCK** — list each blocking finding |
-| 0 CRITICAL, ≥1 WARNING | **CONCERN** — list each concern |
-| Only SUGGESTIONs or 0 findings | **APPROVE** |
-
-## Output Contract
-
-```
-## Critic Review
-
-### Security Perspective
-[findings in Finding Format, or "No issues found"]
-
-### New-Hire Perspective
-[findings in Finding Format, or "Code is clear"]
-
-### Ops Perspective
-[findings in Finding Format, or "Production-ready"]
-
-### Gap Analysis
-- Specification: [gaps or "none"]
-- Tests: [gaps or "none"]
-- Documentation: [gaps or "none"]
-
-### Open Questions
-- file:line — what you suspect + what context would confirm it (or "none")
-
-### Predictions
-1. Most likely failure: [prediction]
-2. Hardest to debug: [prediction]
-3. First to change: [prediction]
-
-### Verdict
-**APPROVE | CONCERN | BLOCK** — [one line citing the Verdict Rules row applied]
-```
-
-Mini example (abridged):
-
-```
-### Ops Perspective
-[WARNING/HIGH] internal/worker/retry.go:41 — retry loop has no backoff cap; downstream outage triggers tight retries
-  Evidence: for-loop retries every 100ms with no max-attempts bound
-  Fix: cap at 5 attempts with exponential backoff
-
-### Verdict
-**CONCERN** — 1 WARNING, 0 CRITICAL
-```
-
-## Done ONLY when
-
-- [ ] Every in-scope file read (or reported `NOT FOUND`).
-- [ ] All 18 probe questions (3 perspectives × 6) answered against the code.
-- [ ] All 3 gap categories examined.
-- [ ] Exactly 3 predictions written.
-- [ ] Verdict computed from the Verdict Rules table.
-
-Any box unchecked → complete it before emitting the report; do not output a Verdict on a partial pass.
-
-## Recap — non-negotiables
-
-- Last reviewer: cross-cutting concerns only; never repeat prior reviewers' findings.
-- Evidence Gate: cite only `file:line` read this session; `NOT FOUND: <path>` for missing files; 0 findings is a valid result.
-- Findings carry CRITICAL/WARNING/SUGGESTION + confidence; APPROVE/CONCERN/BLOCK is the Verdict line only.
-- No Verdict until 3 perspectives + 3 gap categories + exactly 3 predictions are complete.
+Keep requested/configured routing separate from runtime evidence. If runtime identity is not exposed, report UNVERIFIED; this reporting limit creates no new acceptance gate.
