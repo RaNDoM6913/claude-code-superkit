@@ -2,6 +2,18 @@
 
 Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readable ledger contains 579 tracked and untracked repository surfaces. Current baseline evidence is `pass-with-environment-resolution`; see `baseline.json` and `evidence/W00A/baseline/` for exact exits and outputs.
 
+## Current GPT roadmap to 1.5.3
+
+The [2026-10-09 roadmap](../../../superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md)
+is the current owner-requested plan and progress tracker. Its primary scope is
+55 GPT agent roles (52 in `packages/codex`, plus 3 optional GAN roles); 9 workflows
+and 21 supporting skills are tracked separately for compatibility. Six roles
+have authoring/static/integration acceptance, and zero have recorded target-model
+behavioral acceptance. Two workflow callers have partial compatibility changes,
+which are not counted as completed workflow migrations. These counts do not mark
+the original migration gates below complete. Version 1.5.3 is the planned release
+after the scoped work, mandatory acceptance, and documentation updates.
+
 ## Artifact accounting
 
 Ledger, baseline, README, and checked-in evidence are inventory surfaces. Files absent from the immutable baseline commit have `baselineSha256: null`. Generated artifacts do not embed hashes of their own current contents, avoiding circular hashes while keeping their paths owned and reconciled. Ignored temporary files and `.git` are excluded by Git's own tracked/untracked enumeration; no source directory is blanket-excluded.
