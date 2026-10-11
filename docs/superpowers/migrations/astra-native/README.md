@@ -7,9 +7,9 @@ Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readabl
 The [2026-10-09 roadmap](../../../superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md)
 is the current owner-requested plan and progress tracker. Its primary scope is
 55 GPT agent roles (52 in `packages/codex`, plus 3 optional GAN roles); 9 workflows
-and 21 supporting skills are tracked separately for compatibility. Twenty roles
+and 21 supporting skills are tracked separately for compatibility. 23 agent roles
 have authoring/static/integration acceptance, and zero have recorded target-model
-behavioral acceptance. Two workflow callers have partial compatibility changes,
+behavioral acceptance. Three workflow callers have partial compatibility changes,
 which are not counted as completed workflow migrations. These counts do not mark
 the original migration gates below complete. Version 1.5.3 is the planned release
 after the scoped work, mandatory acceptance, and documentation updates.
@@ -19,10 +19,15 @@ adds minimal-change-engineer, codebase-onboarding-engineer, scaffold-endpoint, a
 ai-slop-cleaner at the source/static/integration level. G01 remains pending;
 source progress does not qualify later behavioral waves or release readiness.
 
-The current [ten-role request](evidence/GPT-ten-roles-2026-10-11/acceptance.md)
+The previous [ten-role request](evidence/GPT-ten-roles-2026-10-11/acceptance.md)
 was completed as 4 + 3 + 3 source packets. P1 review, P2 API/diagnosis, and P3
 tests/health roles are accepted, advancing the source count to 20/55 (35 remaining).
 Behavioral acceptance is still separate and pending; the ten-role boundary is closed.
+
+The [next ten-role request](evidence/GPT-next-ten-roles-2026-10-11/acceptance.md)
+is authorized here in Codex as 3 + 3 + 4 packets. B1 is accepted (23/55 source);
+B2 backend/data and B3 delivery/language roles remain authorized next. The earlier
+seven-role OrchKit prompt was prepared only and is not counted as executed work.
 
 ## Artifact accounting
 

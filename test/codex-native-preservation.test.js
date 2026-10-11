@@ -37,6 +37,10 @@ const nativeSkills = [
   'test-generator',
   'e2e-test-generator',
   'health-checker',
+  'dependency-checker',
+  'security-scanner',
+  'audit-infra',
+  'audit-orchestrator',
 ];
 
 function tempRepository(t) {

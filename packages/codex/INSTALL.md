@@ -81,7 +81,7 @@ Track the project's non-secret `AGENTS.md` and `.codex/config.toml` so collabora
 
 ### 36 Agent Skills (auto-dispatched by orchestrators)
 
-These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists the protected role sources and partially adapted dev/review callers; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
+These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists the protected role sources and partially adapted workflow callers; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers

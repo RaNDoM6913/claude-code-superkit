@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT dependency/security/infra packet (2026-10-11):** Astra-authored dependency-checker, security-scanner, and audit-infra improvements distinguish inspected impact from outdated versions, scanner candidates, and unavailable evidence. Narrow audit-orchestrator authority/coverage aggregation preserves mandatory gaps. The three agents and partial caller join native protection; behavioral acceptance remains pending.
+
 - **GPT test/health packet (2026-10-11):** Astra-authored test-generator, e2e-test-generator, and health-checker guidance separates requirement-based test oracles, mocked UI contracts, backend-integrated observations, and actual command outcomes. Scoped test/health caller gates retain unavailable checks and production-fix authority. Native conversion protection includes the final three roles in the ten-role request; behavioral acceptance remains separate.
 
 - **GPT API/diagnosis packet (2026-10-11):** Astra-authored api-contract-sync, tree-generator, and debug-observer updates define complete scoped comparisons, truthful tree coverage and authorized output locations, and bounded diagnostic observations without unsafe credential/query examples. Their sources join native conversion protection; source acceptance remains separate from behavioral validation.

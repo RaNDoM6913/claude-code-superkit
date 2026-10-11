@@ -2,6 +2,7 @@
 name: audit-orchestrator
 description: Run comprehensive parallel audit — dispatches specialized agents by scope (frontend, backend, infra, security)
 user-invocable: true
+tokens: 1466
 ---
 
 # Audit Orchestrator
@@ -22,7 +23,7 @@ Based on scope, use `spawn_agent` to launch the appropriate audit agents **in pa
 | `security` | security-scanner |
 | `all` | audit-frontend + audit-backend + audit-infra + security-scanner (up to 4 agents in parallel) |
 
-Only dispatch agents that exist in the project's skills directory. Skip unavailable agents with a note.
+Only dispatch agents that exist in the project's skills directory. Record unavailable agents and their uncovered scope; missing mandatory coverage blocks acceptance. Optional unavailable coverage may remain explicitly nonblocking. Do not mark unavailable expertise N/A merely because it cannot run.
 
 ## Execution Steps
 
@@ -40,7 +41,7 @@ Only dispatch agents that exist in the project's skills directory. Skip unavaila
 
 4. **Collect results** from all agents using `wait_agent` / `wait`
 
-5. **Merge and deduplicate** — if the same file:line flagged by multiple agents, keep highest severity
+5. **Merge and deduplicate** by root cause and impact, preserving distinct issues on the same line, role-specific severity/confidence, prior unresolved findings, and evidence gaps. Do not inflate severity or turn missing evidence into a demonstrated defect.
 
 6. **Output unified report**
 
@@ -48,10 +49,21 @@ Only dispatch agents that exist in the project's skills directory. Skip unavaila
 
 For each agent, send this prompt:
 ```
-Run ALL checks from your checklist against the project codebase.
-Scope: {scope}
-Report every check as PASS/WARN/FAIL with evidence.
-End with summary counts and action items for FAILs.
+Review the applicable checks in your assigned scope using your skill's evidence rules.
+Scope: {scope, exact revision/diff/base, components/environments, exclusions}
+Criteria: {mandatory versus optional checks and required acceptance}
+Authority: review only; no fixes, installs/upgrades, exploit probes, credential tests,
+external scans, service/infrastructure changes or external writes. Use only existing
+task-authorized checks; redact secrets/private data at collection before output.
+Evidence: {recorded checks/results bound to unchanged code, inputs and environment}
+Return native findings and severity/confidence, coverage COMPLETE/PARTIAL/UNAVAILABLE,
+and per-check PASS/WARN/FAIL/UNKNOWN/N/A where supported, with evidence and N/A reasons.
+Retain mandatory unknowns and prior unresolved findings. Zero findings is valid.
+Report Progression ALLOWED/BLOCKED against the assigned criteria. Include required
+unknowns as action items alongside defects; do not repeat unavailable checks indefinitely.
+Disclose independent versus inline execution, requested/configured model/effort and
+separate runtime-observed identity with evidence or UNVERIFIED. Unknown identity alone
+does not introduce an acceptance gate.
 ```
 
 ## Output Format
@@ -77,18 +89,20 @@ Agents: {list of dispatched agents}
 [results from agent]
 
 ### Grand Summary
-| Agent | PASS | WARN | FAIL |
-|-------|------|------|------|
-| frontend | X | Y | Z |
-| backend | X | Y | Z |
-| infra | X | Y | Z |
-| security | X | Y | Z |
-| **Total** | **X** | **Y** | **Z** |
+| Agent | PASS | WARN | FAIL | UNKNOWN | N/A | Coverage | Progression |
+|-------|------|------|------|---------|-----|----------|-------------|
+| frontend | X | Y | Z | U | N | ... | ... |
+| backend | X | Y | Z | U | N | ... | ... |
+| infra | X | Y | Z | U | N | ... | ... |
+| security | X | Y | Z | U | N | ... | ... |
 
-### Critical Action Items (FAILs only)
-1. [agent] file:line — description
+### Required Action Items
+1. [agent] file:line or evidence reference — supported defect or mandatory evidence gap
 2. ...
+Overall progression: ALLOWED | BLOCKED — mandatory criteria and unresolved conditions
 ```
+
+Preserve each role's native findings: security-scanner uses CRITICAL/WARNING/SUGGESTION plus HIGH/MEDIUM/LOW confidence; audit-infra supplies per-check status and finding severity/confidence. Status counts are coverage evidence, not severity counts or a completion percentage. Do not mechanically convert CRITICAL to FAIL without the applicable criterion, or drop a required WARNING because its name differs. If a role supplies only findings, derive status only from its actual coverage/evidence; absent evidence remains UNKNOWN. PASS requires complete assigned coverage, fulfilled mandatory conditions and no unresolved material issue. Optional concerns may remain WARN; any required unknown, unavailable review or pending mandatory acceptance makes overall progression BLOCKED even with zero FAILs. A scoped clean audit does not establish universal OWASP coverage or authorize remediation, deployment or release.
 
 ## Notes
 - All agents run in **parallel** — audit completes much faster than sequential
