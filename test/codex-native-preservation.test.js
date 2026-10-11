@@ -31,6 +31,9 @@ const nativeSkills = [
   'silent-failure-hunter',
   'docs-reviewer',
   'comment-rot-analyzer',
+  'api-contract-sync',
+  'tree-generator',
+  'debug-observer',
 ];
 
 function tempRepository(t) {

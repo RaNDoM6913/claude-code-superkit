@@ -7,7 +7,7 @@ Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readabl
 The [2026-10-09 roadmap](../../../superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md)
 is the current owner-requested plan and progress tracker. Its primary scope is
 55 GPT agent roles (52 in `packages/codex`, plus 3 optional GAN roles); 9 workflows
-and 21 supporting skills are tracked separately for compatibility. Fourteen roles
+and 21 supporting skills are tracked separately for compatibility. Seventeen roles
 have authoring/static/integration acceptance, and zero have recorded target-model
 behavioral acceptance. Two workflow callers have partial compatibility changes,
 which are not counted as completed workflow migrations. These counts do not mark
@@ -20,8 +20,8 @@ ai-slop-cleaner at the source/static/integration level. G01 remains pending;
 source progress does not qualify later behavioral waves or release readiness.
 
 The current [ten-role request](evidence/GPT-ten-roles-2026-10-11/acceptance.md)
-is executed as 4 + 3 + 3 source packets. P1 review roles are accepted, advancing
-the source count to 14/55; P2 API/diagnosis and P3 tests/health remain in this
+is executed as 4 + 3 + 3 source packets. P1 review and P2 API/diagnosis roles are
+accepted, advancing the source count to 17/55; P3 tests/health remains in this
 authorized request. Behavioral acceptance is still separate and pending.
 
 ## Artifact accounting

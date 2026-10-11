@@ -12,7 +12,7 @@ authorized by these source changes. Version 1.5.3 remains a future release gate.
 | Packet | Owned role prompts | Source acceptance | Cumulative source count |
 |---|---|---|---:|
 | P1 — review | code-reviewer, silent-failure-hunter, docs-reviewer, comment-rot-analyzer | Accepted by independent Sol review and Astra | 14/55 |
-| P2 — API and diagnosis | api-contract-sync, tree-generator, debug-observer | Pending | — |
+| P2 — API and diagnosis | api-contract-sync, tree-generator, debug-observer | Accepted by independent Sol review and Astra | 17/55 |
 | P3 — tests and health | test-generator, e2e-test-generator, health-checker | Pending | — |
 
 Each primary source is `packages/codex/skills/<name>/SKILL.md`.
@@ -81,7 +81,28 @@ sampling; truthful tree depth/exclusions and authorized destinations; safe,
 bounded, read-only diagnostic observations with private data redacted and no
 invented root cause.
 
-Verification, review dispositions, and Astra acceptance: pending.
+Verification: full `npm test` passed 275/275 with no failures/skips (exit 0),
+recorded in `/tmp/superkit-ten-roles-2026-10-11/p2-npm-test.log`. Focused assets
+passed 9/9, native preservation 2/2, three role metadata/normalized-stock checks
+passed, and counts including remote About plus whitespace checks passed.
+`sol_oct11_review_p2` reviewed the complete packet and found one over-restrictive
+diagnostic rule: a blanket `.env` ban prevented an authorized non-secret setting
+check. Astra allowed specifically identified non-secret values to be checked with
+local filtering/redaction before model-visible output, preserving prohibitions on
+raw dumps, credential discovery/exposure, and source/eval. Schema/code/contract
+evidence is required; a key name alone is insufficient. Existing authorization is
+honored without a new approval ritual. Focused metadata/stock validation and
+asset tests 9/9 passed after this correction. The same independent reviewer
+checked only that sensitive boundary and confirmed ADDRESSED, no remaining issue.
+Astra inspected the actual full-suite summary and explicitly accepted P2 source/
+static/integration. No broader suite rerun was needed for the narrow prompt fix.
+
+Integration base: `be59e86`. Native protection expands 16→19 entries; the
+existing byte-preservation test failed on api-contract-sync before the manifest
+change and passed both tests after it. The actual manifest is used, and the live
+converter is not run against repository assets. Caller audit distinguishes active
+Codex API-review usage from tree/debug references in Claude-only command sources;
+those historical sources do not impose Codex caller contracts or new routing.
 
 ## P3 — tests and health
 

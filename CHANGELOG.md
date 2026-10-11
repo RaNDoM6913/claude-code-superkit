@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT API/diagnosis packet (2026-10-11):** Astra-authored api-contract-sync, tree-generator, and debug-observer updates define complete scoped comparisons, truthful tree coverage and authorized output locations, and bounded diagnostic observations without unsafe credential/query examples. Their sources join native conversion protection; source acceptance remains separate from behavioral validation.
+
 - **GPT review packet (2026-10-11):** Astra-authored code-reviewer, silent-failure-hunter, docs-reviewer, and comment-rot-analyzer instructions preserve specialist checks while requiring scoped evidence, honest incomplete coverage, and read-only review authority. Dev review/documentation gates now distinguish missing evidence from a clean result. Native preservation includes these four sources; behavioral acceptance remains pending.
 
 - **GPT delivery role packet:** Astra-authored updates to minimal-change-engineer, codebase-onboarding-engineer, scaffold-endpoint, and ai-slop-cleaner. Scoped review/edit authority, observed repository patterns, complete endpoint contracts, and evidence-backed behavior-preserving cleanup replace line-count rules, fixed onboarding timers, forced layers, and automatic deletion heuristics. Native conversion protection now covers ten agent roles plus two callers; behavioral acceptance and G01 remain pending.
