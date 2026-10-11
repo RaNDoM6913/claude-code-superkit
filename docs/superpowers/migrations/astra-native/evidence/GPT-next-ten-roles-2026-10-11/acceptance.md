@@ -8,7 +8,7 @@ OrchKit prompt was not executed and contributes zero accepted roles.
 |---|---|---|---|
 | B1 | dependency-checker, security-scanner, audit-infra | Accepted by independent Sol and Astra | 23/55 |
 | B2 | audit-backend, database-reviewer, migration-reviewer | Accepted by independent Sol and Astra | 26/55 |
-| B3 | pre-deploy-validator, ts-reviewer, py-reviewer, rs-reviewer | Pending | — |
+| B3 | pre-deploy-validator, ts-reviewer, py-reviewer, rs-reviewer | Accepted by independent Sol and Astra | 30/55 |
 
 All role sources are `packages/codex/skills/<name>/SKILL.md`. Astra authors every
 prompt and semantic correction; Sol handles integration and independent review.
@@ -78,15 +78,36 @@ source/static/integration. No semantic correction followed review. ASI is now
 
 ## B3 — delivery and language reviewers
 
-Pending. Goals: task-specific readiness and TypeScript/Python/Rust review that
-preserves domain depth, real failure evidence, applicable project conventions,
-safe authority, and honest verification limits.
+Astra authored all four sources. Pre-deploy retains nine domains and READY/NOT
+READY, with actual configured commands, per-component evidence and mandatory
+UNVERIFIED/SKIPPED gates; validation does not authorize deployment. TypeScript
+retains type/runtime, async, React, state/library, framework and UI expertise.
+Python retains typing, async/cancellation, resources, transactions and actual
+FastAPI/Pydantic/Django/Flask/SQLAlchemy contracts. Rust retains ownership, panic
+containment, async/concurrency, toolchain/features, unsafe invariants and FFI.
+External-symbol VERIFIED/ASSUMED contracts remain, with source-first inspection
+and explicit import/build execution authority. No caller rewrite was needed.
+
+Native protection expands 29→33 entries (30 roles + 3 partial callers). Existing
+mirror-invariants passed 79/79, log `/tmp/superkit-b3-astra-mirror.log`; no mirror
+assertion or Claude source was changed. Integrated `npm test` exited0 with
+275/275 passing, zero failures/skips; log
+`/tmp/superkit-wave30-2026-10-11/b3-npm-test.log`. Count/version/remote About,
+16-phase consistency, stale-reference and whitespace checks passed. Integration
+native preservation passed 2/2; original metadata and normalized stock validation
+passed 4/4 each. Independent `sol_b3_review` reviewed the complete old/new scope
+and actual callers: APPROVE, no findings or open questions. `astra_b3` recomputed
+all four source hashes, inspected the integrated evidence and explicitly accepted
+B3 source/static/integration. No semantic correction followed review. Local
+reports: `/tmp/superkit-wave30-2026-10-11/b3-{astra,integration,review}.md`.
 
 ## Boundaries and progress
 
 Starting acceptance: source 20/55, behavioral 0/55, workflows 0/9 (two partial),
-support 0/21. On full source acceptance the target is 30/55, 25 roles remaining;
+support 0/21. All ten B1–B3 roles are now source/static/integration accepted: 30/55, 25 roles remaining;
 behavioral counts change only with separately authorized evidence. The catalog
 remains 55 agent roles, 9 workflows, 21 support skills. Stop after these ten.
-Preserve the unrelated ZIP and all existing baseline/evidence. Follow the
+B1 checkpoint: `4ed2449`; B2: `8a70646`; B3 commit/push is the final coordinator action.
+The authorized ten-role request is complete at source acceptance; no later packet
+is started. Preserve the unrelated ZIP and all existing baseline/evidence. Follow the
 500,000-context-token clean-session handoff agreement during this request.

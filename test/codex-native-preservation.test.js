@@ -44,6 +44,10 @@ const nativeSkills = [
   'audit-backend',
   'database-reviewer',
   'migration-reviewer',
+  'pre-deploy-validator',
+  'ts-reviewer',
+  'py-reviewer',
+  'rs-reviewer',
 ];
 
 function tempRepository(t) {

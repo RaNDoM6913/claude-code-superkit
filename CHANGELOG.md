@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT delivery/language packet (2026-10-11):** Astra-authored pre-deploy-validator and TypeScript/Python/Rust reviewers assess configured readiness criteria and real language/framework contracts. Checks retain scoped authority, external-symbol evidence, honest incomplete coverage and native conversion protection; source acceptance remains separate from live behavior.
+
 - **GPT backend/data packet (2026-10-11):** Astra-authored audit-backend, database-reviewer, and migration-reviewer guidance ties findings to actual data flow, database/framework versions, workload and rollout contracts. Read-only authority, explicit coverage gaps and evidence-based recovery assessment replace universal schema/rollback rules. Native preservation includes all three sources; behavioral acceptance remains pending.
 
 - **GPT dependency/security/infra packet (2026-10-11):** Astra-authored dependency-checker, security-scanner, and audit-infra improvements distinguish inspected impact from outdated versions, scanner candidates, and unavailable evidence. Narrow audit-orchestrator authority/coverage aggregation preserves mandatory gaps. The three agents and partial caller join native protection; behavioral acceptance remains pending.
