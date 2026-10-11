@@ -34,6 +34,9 @@ const nativeSkills = [
   'api-contract-sync',
   'tree-generator',
   'debug-observer',
+  'test-generator',
+  'e2e-test-generator',
+  'health-checker',
 ];
 
 function tempRepository(t) {

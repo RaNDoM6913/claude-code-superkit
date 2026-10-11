@@ -1,6 +1,8 @@
 # Ten GPT roles — bounded source checkpoints, 2026-10-11
 
 Initial base: `0702b22`; branch: `codex/astra-native-hardening`.
+Final source result: all ten requested roles accepted, ASI 20/55 (35 remaining).
+Behavioral acceptance remains 0/55.
 The owner requested ten additional agents after the accepted 10/55 source
 checkpoint. Work is divided into 4 + 3 + 3 roles, with separate source acceptance
 for each packet. No live evaluation, G01 closure, later behavioral promotion,
@@ -13,7 +15,7 @@ authorized by these source changes. Version 1.5.3 remains a future release gate.
 |---|---|---|---:|
 | P1 — review | code-reviewer, silent-failure-hunter, docs-reviewer, comment-rot-analyzer | Accepted by independent Sol review and Astra | 14/55 |
 | P2 — API and diagnosis | api-contract-sync, tree-generator, debug-observer | Accepted by independent Sol review and Astra | 17/55 |
-| P3 — tests and health | test-generator, e2e-test-generator, health-checker | Pending | — |
+| P3 — tests and health | test-generator, e2e-test-generator, health-checker | Accepted by independent Sol review and Astra | 20/55 |
 
 Each primary source is `packages/codex/skills/<name>/SKILL.md`.
 Necessary caller edits preserve verdict compatibility without counting as another
@@ -111,7 +113,27 @@ mocked UI tests distinguished from backend-integrated observations; actual comma
 exit/results preserved; unavailable checks and unexecuted integration tests do not
 make the project healthy.
 
-Verification, review dispositions, and Astra acceptance: pending.
+Integration base: `2959dc7`. Protection expands 19→22 entries. The actual converter
+test failed on test-generator before the manifest edit, then passed both existing
+preservation/preflight tests after it. No live converter was run. Active Codex
+callers are dev-orchestrator Phase9/10 for health-checker/test-generator; e2e-test-
+generator remains available through its own task selection, with no new routing.
+
+Verification: full `npm test` passed 275/275, zero failures/skips (exit 0), log
+`/tmp/superkit-ten-roles-2026-10-11/p3-npm-test.log`. Focused assets passed 9/9,
+native preservation 2/2, and metadata/normalized stock validation 4/4 including
+the narrow dev-orchestrator caller changes. Counts with remote About and diff
+checks passed. Normalized copies omit only unsupported repository-established
+metadata keys; originals retain them.
+
+`sol_oct11_review_p3` independently reviewed the entire eight-file packet, found
+no actionable findings, and accepted source/static/integration. It confirmed
+meaningful test oracles, real/mocked/mixed E2E provenance, all nine scoped health
+domains, original command evidence, required/optional gate semantics, and the
+22-entry preservation contract. No suite rerun was needed. Astra inspected the
+actual final full-suite summary and independent review and explicitly accepted P3
+and the completed ten-role request at source/static/integration level. No further
+prompt correction was required after the accepted stable diff.
 
 ## Remaining gates
 
@@ -121,5 +143,5 @@ support completion is 0/21. G01, W00B, full migration acceptance, and release re
 pending. The package catalog remains 55 agent roles, 9 workflows, and 21 support
 skills; source-count progress is not an overall completion percentage.
 
-Stop after these ten source roles. Any unavailable mandatory dependency is a
+All ten source roles are complete; this request stops here. Any unavailable mandatory dependency is a
 bounded blocker, not permission to add an infrastructure queue or another role.

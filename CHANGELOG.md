@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT test/health packet (2026-10-11):** Astra-authored test-generator, e2e-test-generator, and health-checker guidance separates requirement-based test oracles, mocked UI contracts, backend-integrated observations, and actual command outcomes. Scoped test/health caller gates retain unavailable checks and production-fix authority. Native conversion protection includes the final three roles in the ten-role request; behavioral acceptance remains separate.
+
 - **GPT API/diagnosis packet (2026-10-11):** Astra-authored api-contract-sync, tree-generator, and debug-observer updates define complete scoped comparisons, truthful tree coverage and authorized output locations, and bounded diagnostic observations without unsafe credential/query examples. Their sources join native conversion protection; source acceptance remains separate from behavioral validation.
 
 - **GPT review packet (2026-10-11):** Astra-authored code-reviewer, silent-failure-hunter, docs-reviewer, and comment-rot-analyzer instructions preserve specialist checks while requiring scoped evidence, honest incomplete coverage, and read-only review authority. Dev review/documentation gates now distinguish missing evidence from a clean result. Native preservation includes these four sources; behavioral acceptance remains pending.

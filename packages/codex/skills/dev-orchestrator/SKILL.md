@@ -2,7 +2,7 @@
 name: dev-orchestrator
 description: Coordinate development across planning, implementation, verification, and review gates when a task needs multiple dependent steps or consequential decisions.
 user-invocable: true
-tokens: 4361
+tokens: 4876
 ---
 
 # Development Orchestrator
@@ -174,18 +174,18 @@ Assess implementation against the Sprint Contract following the **evaluator** sk
 
 ## Phase 9 -- Verify
 
-Follow the **health-checker** skill if present; otherwise run compilation checks directly:
-- Go: `go vet ./...`
-- TypeScript: `npx tsc --noEmit`
-- Python: `mypy` / `pyright` / `python -m py_compile`
-- Rust: `cargo check`
+Follow the **health-checker** skill if present with the selected components, relevant compilation/build/static checks, and any other mandatory verification explicitly required by the task/project. Declare that scope; do not automatically run its entire nine-domain dashboard or let optional checks redefine this phase. Otherwise discover the project's actual configured commands and available tools, inspect effects, and run those same selected checks directly. Keep build/compilation separate from static analysis (for example, `go vet` alone is not a build); do not use a launcher that installs missing tools.
 
-**Done when:** compilation/static checks pass with zero errors.
+Keep this verification pass read-only apart from authorized disposable build/test outputs. Preserve original command exits, failed/timeout/unavailable states, full appropriately redacted evidence, and actual test skips; a shortened log or formatter exit is not the check result. Reuse recorded checks only for unchanged relevant code, inputs, and environment. Corrections belong to the coordinator or authorized implementer, not the health report.
+
+**Done when:** all declared mandatory Phase 9 checks pass with sufficient evidence and no blocking result remains; if using health-checker, Progression must be ALLOWED. Optional warnings/unknowns remain explicit and do not block by themselves. An unavailable, skipped, or unverified mandatory check leaves this phase incomplete; report its dependency instead of endlessly retrying it.
 
 ## Phase 10 -- Test
 
-Generate tests for new/changed backend code following the **test-generator** skill: happy path, validation errors, not-found/conflict, boundary values, edge cases -- matching project test patterns. Then run the project's test command and fix failures.
-**Done when:** the test suite runs green (paste the actual final summary line).
+Generate or update tests for the new/changed backend behavior in scope following the **test-generator** skill and existing runner/conventions. Select meaningful happy/failure/boundary/state cases from requirements or observed defects; no mandatory case quota or implementation-mirroring assertions. The generator owns scoped test/fixture edits and authorized focused execution; the coordinator owns required suite verification and assigns production fixes only within existing implementation authority. Do not weaken tests to obtain green results.
+
+Record actual commands, exits, passed/failed/skipped cases, and missing runtime evidence. A valid red regression test may complete a test artifact but does not pass this development gate. Reuse unchanged, properly bound focused or suite evidence instead of repeating it by ritual; run the required project suite for the final relevant state.
+**Done when:** required tests actually ran and passed, required coverage is satisfied, and no mandatory skipped/unverified result remains (include the actual final summary line and command). If a required check or authorized correction is unavailable, report the bounded blocker; do not treat a failed, unrun, or all-skipped suite as green.
 
 ## Phase 11 -- Verify Goals
 
