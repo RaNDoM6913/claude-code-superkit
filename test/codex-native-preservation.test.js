@@ -41,6 +41,9 @@ const nativeSkills = [
   'security-scanner',
   'audit-infra',
   'audit-orchestrator',
+  'audit-backend',
+  'database-reviewer',
+  'migration-reviewer',
 ];
 
 function tempRepository(t) {

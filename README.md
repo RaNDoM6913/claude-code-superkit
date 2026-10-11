@@ -326,7 +326,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects their sources and partially adapted orchestrator callers from Claude-agent conversion. The [roadmap](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) records each accepted packet and separate source/behavioral counts. Configuration, source ownership, and repository checks do not establish live model quality or availability.
+`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects their sources and partially adapted orchestrator callers from Claude-agent conversion. Backend and data review instructions assess findings against the actual framework, database and rollout contracts. The [roadmap](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) records each accepted packet and separate source/behavioral counts. Configuration, source ownership, and repository checks do not establish live model quality or availability.
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

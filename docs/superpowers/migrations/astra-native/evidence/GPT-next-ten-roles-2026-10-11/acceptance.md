@@ -7,7 +7,7 @@ OrchKit prompt was not executed and contributes zero accepted roles.
 | Packet | Agent roles | State | Source count |
 |---|---|---|---|
 | B1 | dependency-checker, security-scanner, audit-infra | Accepted by independent Sol and Astra | 23/55 |
-| B2 | audit-backend, database-reviewer, migration-reviewer | Pending | — |
+| B2 | audit-backend, database-reviewer, migration-reviewer | Accepted by independent Sol and Astra | 26/55 |
 | B3 | pre-deploy-validator, ts-reviewer, py-reviewer, rs-reviewer | Pending | — |
 
 All role sources are `packages/codex/skills/<name>/SKILL.md`. Astra authors every
@@ -52,9 +52,29 @@ source/static/integration. No semantic correction followed the reviewed diff.
 
 ## B2 — backend and data
 
-Pending. Goals: evidence-backed backend/SQL/schema/transaction/locking/rollback
-assessment with actual framework and database semantics; no external mutations,
-unsafe diagnostics, invented findings, or unsupported migration-safety claims.
+Astra authored all three sources: twelve backend domains; ten PostgreSQL review
+domains including plans/indexes, transactions and authority; ten migration domains
+covering drift, data transformations, locks, partial failure, backfills and recovery.
+Findings require inspected paths and contracts; missing evidence stays separate.
+Database/runner/version/workload and actual recovery policy replace universal
+index/type/down/idempotency rules. Diagnostics have explicit scope, authority and
+redaction requirements; no migrations or live database operations were performed.
+
+Existing audit/dev/review consumers retain native findings, coverage and mandatory
+unknowns; no caller rewrite was necessary. SQL-only migration dispatch remains a
+known caller scope limit, with relevant-context/PARTIAL handling in the role.
+C03 migration execution/scaffolding workflows remain separately pending.
+Native protection expands 26→29 entries, including these three agents. Existing
+preservation checks passed 2/2 before and after registration; no converter ran
+against repository assets. Integrated `npm test`: exit0, 275/275, zero failures or
+skips; log `/tmp/superkit-wave30-2026-10-11/b2-npm-test.log`. Count/version/remote
+About and whitespace checks passed. Original metadata and normalized stock checks
+passed 3/3 each. Independent `sol_b2_review` reviewed the complete changed scope
+and actual callers: APPROVE, no material findings. `astra_b2` verified unchanged
+source hashes and actual integrated evidence and explicitly accepted B2
+source/static/integration. No semantic correction followed review. ASI is now
+26/55; BEH remains 0/55. Local author/integration/review reports are
+`/tmp/superkit-wave30-2026-10-11/b2-{astra,integration,review}.md`.
 
 ## B3 — delivery and language reviewers
 
