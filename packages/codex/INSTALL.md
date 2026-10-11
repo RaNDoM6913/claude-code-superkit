@@ -81,7 +81,7 @@ Track the project's non-secret `AGENTS.md` and `.codex/config.toml` so collabora
 
 ### 36 Agent Skills (auto-dispatched by orchestrators)
 
-These include converted core/extras roles and native GPT roles. The Astra-authored decision/acceptance group is `architect`, `plan-checker`, `evaluator`, `goal-verifier`, `critic`, and `reality-checker`. The delivery group is `minimal-change-engineer`, `codebase-onboarding-engineer`, `scaffold-endpoint`, and `ai-slop-cleaner`. `native-skills.txt` protects these ten roles and the dev/review callers (12 entries) from conversion overwrites. This is source ownership, not proof of behavioral acceptance. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
+These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists the protected role sources and partially adapted dev/review callers; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers

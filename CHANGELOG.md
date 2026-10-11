@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT review packet (2026-10-11):** Astra-authored code-reviewer, silent-failure-hunter, docs-reviewer, and comment-rot-analyzer instructions preserve specialist checks while requiring scoped evidence, honest incomplete coverage, and read-only review authority. Dev review/documentation gates now distinguish missing evidence from a clean result. Native preservation includes these four sources; behavioral acceptance remains pending.
+
 - **GPT delivery role packet:** Astra-authored updates to minimal-change-engineer, codebase-onboarding-engineer, scaffold-endpoint, and ai-slop-cleaner. Scoped review/edit authority, observed repository patterns, complete endpoint contracts, and evidence-backed behavior-preserving cleanup replace line-count rules, fixed onboarding timers, forced layers, and automatic deletion heuristics. Native conversion protection now covers ten agent roles plus two callers; behavioral acceptance and G01 remain pending.
 
 - **GPT role core:** Astra-authored revisions to architect, plan-checker, evaluator, goal-verifier, critic, and reality-checker; aligned dev/review callers and Codex instructions. Replaced arbitrary count gates and forced predictions with requirement-specific evidence, explicit unknowns, bounded correction, and honest partial outcomes. Astra authors GPT prompts and behavioral rules; Sol handles technical integration and checks.

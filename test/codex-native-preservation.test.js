@@ -27,6 +27,10 @@ const nativeSkills = [
   'codebase-onboarding-engineer',
   'scaffold-endpoint',
   'ai-slop-cleaner',
+  'code-reviewer',
+  'silent-failure-hunter',
+  'docs-reviewer',
+  'comment-rot-analyzer',
 ];
 
 function tempRepository(t) {

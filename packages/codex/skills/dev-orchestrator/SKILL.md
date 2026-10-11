@@ -2,7 +2,7 @@
 name: dev-orchestrator
 description: Coordinate development across planning, implementation, verification, and review gates when a task needs multiple dependent steps or consequential decisions.
 user-invocable: true
-tokens: 4029
+tokens: 4361
 ---
 
 # Development Orchestrator
@@ -214,14 +214,15 @@ Then perform matching reviews with available skills and authorized delegation; i
 | OpenAPI/GraphQL spec changed | **api-contract-sync** |
 | Any changed code | **silent-failure-hunter**, **comment-rot-analyzer** |
 
-For each skill, review the changed-file list against the task description, applying that skill's two-stage discipline (discover, then triage by Severity + Confidence).
+For each skill, review the selected diff/base and changed-file list against the task description, applying that skill's two-stage discipline (discover, then triage by Severity + Confidence). Keep reviewer passes read-only; assign corrections separately within existing implementation authority. Preserve each report's coverage, evidence, and unresolved prior findings.
 
 Triage findings -- route, don't drop:
 - CRITICAL or WARNING at HIGH/MEDIUM confidence -> fix before proceeding.
 - LOW confidence / ambiguous -> carry into the **Open Questions** section of the Phase 15 report.
 - A clean review (0 findings) is a valid result -- do not pad it.
+- For silent-failure-hunter and comment-rot-analyzer, incomplete required coverage or a mandatory UNVERIFIED condition blocks progression without becoming a defect. Optional uncertainty may remain explicitly non-blocking; an Open Questions entry does not waive required evidence.
 
-**Done when:** all CRITICAL/WARNING findings fixed or explicitly deferred with reason.
+**Done when:** all CRITICAL/WARNING findings fixed or explicitly deferred with reason within the task's acceptance rules, and no mandatory review evidence/coverage remains unresolved. If the required check cannot be completed, report the dependency and stop this phase instead of retrying indefinitely.
 
 ## Phase 13 -- Critic (Complex only)
 
@@ -233,11 +234,11 @@ Perform a final quality gate following the **critic** skill over the changed sco
 
 ## Phase 14 -- Document
 
-Verify documentation completeness for the changed files following the **docs-reviewer** skill. Also update directly:
+Verify documentation completeness and accuracy for the selected changes following the **docs-reviewer** skill and the project's actual documentation map. The reviewer reports evidence and proposed corrections read-only; the coordinator or assigned implementer performs these updates within already-authorized scope:
 1. **API spec** (OpenAPI/GraphQL) if endpoints changed.
 2. **Architecture docs** if system behavior changed.
 3. **README** if setup, commands, or structure changed.
-**Done when:** the docs-reviewer pass reports no MISSING items for this change.
+**Done when:** applicable mandatory documentation has been reviewed, required updates verified, and no unresolved mandatory MISSING, STALE, BROKEN, DRIFT, or UNVERIFIED items remain. Preserve justified N/A and optional suggestions; no MISSING findings alone is not acceptance. Recheck affected claims after corrections, retaining prior unresolved items. If a required source/check is unavailable, report incomplete and the next owner/action; do not silently advance or repeat an unavailable check indefinitely.
 
 ## Phase 15 -- Report
 
