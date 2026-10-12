@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT UI review packet (2026-10-12):** Astra-authored ui-reviewer, visual-reviewer, design-system-reviewer, and audit-frontend instructions preserve UI, accessibility, responsive and frontend depth while separating source evidence, rendered observations and interaction checks. Actual design contracts, scoped authority, honest coverage and native protection remain separate from live behavioral acceptance.
+
 - **GPT Go modernization/operations packet (2026-10-12):** Astra-authored go-modernizer, go-performance-reviewer, and go-observability-reviewer instructions assess version-compatible changes, measured performance and operational telemetry against project contracts. Scoped evidence, safe diagnostics and native ownership remain separate from behavioral qualification.
 
 - **GPT Go correctness packet (2026-10-12):** Astra-authored go-reviewer, go-error-reviewer, and go-concurrency-reviewer guidance ties Go, error and concurrency findings to actual toolchain/module contracts, control flow and ownership. Read-only authority, external-symbol evidence, honest coverage and native conversion protection remain separate from live behavioral acceptance.

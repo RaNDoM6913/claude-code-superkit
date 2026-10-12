@@ -1,6 +1,6 @@
 # GPT-native Superkit → 1.5.3: единый план реализации
 
-> **For agentic workers:** использовать принятый цикл Astra authoring → Sol integration/review → Astra acceptance по `docs/WORKING_AGREEMENT.md`. Новый запрос 2026-10-12 разрешил следующие десять SOURCE-ролей A10 + A11 + A12 (3 + 3 + 4), цель ASI40/55. B1–B3 завершены и не повторяются. Live evaluations и релиз исключены; после A12 остановиться.
+> **For agentic workers:** использовать принятый цикл Astra authoring → Sol integration/review → Astra acceptance по `docs/WORKING_AGREEMENT.md`. Запрос 2026-10-12 на десять SOURCE-ролей A10 + A11 + A12 (3 + 3 + 4) выполнен: ASI40/55. B1–B3 завершены и не повторяются. Live evaluations и релиз исключены; после checkpoint A12 остановиться, новый пакет не начинать.
 
 **Goal:** улучшить все 55 существующих GPT-ролей с авторством Astra, проверить связанные workflows/support и подтвердить поведение и совместимость, затем подготовить и после разрешения выпустить `v1.5.3` с согласованной документацией и GitHub.
 **Architecture:** Astra пишет/перерабатывает каждый prompt и поведенческое правило; Sol интегрирует, собирает доказательства и выполняет независимое review. Один канонический roadmap содержит каталог, зависимости и счётчики; исходные evidence сохраняются.
@@ -13,7 +13,7 @@
 
 | Объект | Всего | Принято сейчас | Осталось |
 |---|---:|---:|---:|
-| GPT agent roles: authoring/static/integration | 55 | 36 | 19 |
+| GPT agent roles: authoring/static/integration | 55 | 40 | 15 |
 | GPT agent roles: behavioral acceptance | 55 | 0 | 55 |
 | Workflow commands: полная приёмка | 9 | 0 | 9; у 3 есть только caller compatibility |
 | Knowledge/support skills: полная приёмка | 21 | 0 | 21 |
@@ -96,7 +96,7 @@
 | A09 | `ts-reviewer`, `py-reviewer`, `rs-reviewer` | Сохранить hooks/types/async/ownership/unsafe expertise; корректно определить версии и не навязывать чужие conventions | C03 | ASI 3/3 (B3); BEH 0/3 pending |
 | A10 | `go-reviewer`, `go-error-reviewer`, `go-concurrency-reviewer` | Доказанные error/context/goroutine/race contracts, без ложных универсальных правил; Go references сохраняются | A09, K04 | ASI 3/3 (2026-10-12); BEH 0/3 pending |
 | A11 | `go-modernizer`, `go-performance-reviewer`, `go-observability-reviewer` | Версионная совместимость, измеренные performance claims, observability без утечек; modernize только в scope | A10, K05 | ASI 3/3 (2026-10-12); BEH 0/3 pending |
-| A12 | `ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend` | Core UI/a11y/responsive/token review и actual screenshot evidence; static CSS не выдаётся за visual acceptance | A11 | PENDING |
+| A12 | `ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend` | Core UI/a11y/responsive/token review и actual screenshot evidence; static CSS не выдаётся за visual acceptance | A11 | ASI 4/4 (2026-10-12); BEH 0/4 pending |
 | A13 | `frontend-ui-reviewer`, `frontend-ui-typography-reviewer`, `frontend-ui-color-reviewer` | Сохранить alias/umbrella dispatch; typography/color оцениваются на rendered UI и доступности | A12, K07 | PENDING |
 | A14 | `frontend-ui-motion-reviewer`, `frontend-ui-interaction-reviewer`, `frontend-ui-design-critic` | Input/focus/error/loading/reduced-motion сценарии; critique привязан к цели и наблюдению | A13 | PENDING |
 | A15 | `presentation-reviewer`, `r3f-scene-reviewer`, `ui-design-reviewer`, `frontend-perf-reviewer` | Scroll/R3F lifecycle/color/disposal и UI; rendering/performance подтверждены инструментом, отсутствующий GPU/browser — gap | A14, K06 | PENDING |
@@ -168,6 +168,6 @@ Owned surfaces: `lib/codex.js`, `lib/installer.js`, `tools/convert-agents-to-cod
 
 Отчёты событийные: после пакета, на blocker, перед gate/release; при длительном выполнении — agreed progress cadence. Это правило дальнейших отчётов в чатах, **не background automation**. Canonical tracker — этот документ; local `next-session.md` содержит только краткий handoff и ссылку, не дублирует весь каталог.
 
-**Текущий checkpoint, 2026-10-12:** A11 принят после отдельного независимого Sol review без findings и final Astra integrated SOURCE acceptance. Добавлены `go-modernizer`, `go-performance-reviewer`, `go-observability-reviewer`; caller/installer rewrites не потребовались. ASI **36/55** (+3; осталось **19**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A11 ASI завершены плюс исторический H00; BEH pending. Native protection39 =36roles+3callers. [Evidence](../migrations/astra-native/evidence/GPT-next-ten-roles-2026-10-12/acceptance.md): npm275/275, native2/2, metadata/stock3/3 каждого, counts/remote/phase/diff pass. A10 опубликован в `4822f5e`; это base A11, новый проверенный commit/push выполняет координатор.
+**Текущий checkpoint, 2026-10-12:** A12 принят после отдельного независимого Sol review без findings и final Astra coherent-four-role integrated SOURCE acceptance. Добавлены `ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend`; caller rewrites не потребовались. ASI **40/55** (+4 A12; +10 A10–A12; осталось **15**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A12 ASI завершены плюс исторический H00; BEH pending. Native protection43 =40roles+3callers. [Evidence](../migrations/astra-native/evidence/GPT-next-ten-roles-2026-10-12/acceptance.md): финальный post-registration npm275/275, native2/2, metadata/stock4/4 каждого, counts/remote/phase/diff pass. A10 опубликован в `4822f5e`, A11 — в `5f5e318`; это base A12, финальный проверенный commit/push выполняет координатор. Go reference availability и существующие ограничения UI/Go specialist routing сохранены в evidence, без полной приёмки workflows.
 
-**Текущий разрешённый следующий шаг:** A12 (`ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend`), отдельная SOURCE-приёмка, затем остановиться на ASI40/55. Каждый prompt пишет Astra, Sol интегрирует и проверяет. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не входят в этот запрос; G01/K01/W00B и behavioral gates остаются открытыми.
+**Граница остановки:** запрос десяти A10–A12 SOURCE-ролей выполнен; после checkpoint остановиться на ASI40/55. A13+ автоматически не начинать. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не выполнялись в этом запросе; G01/K01/W00B и behavioral gates остаются открытыми.

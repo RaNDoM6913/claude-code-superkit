@@ -9,7 +9,7 @@ release. Previous B1–B3 are accepted and not repeated.
 |---|---|---|---|
 | A10 | go-reviewer, go-error-reviewer, go-concurrency-reviewer | Accepted by independent Sol and Astra | 33/55 |
 | A11 | go-modernizer, go-performance-reviewer, go-observability-reviewer | Accepted by independent Sol and Astra | 36/55 |
-| A12 | ui-reviewer, visual-reviewer, design-system-reviewer, audit-frontend | Pending | — |
+| A12 | ui-reviewer, visual-reviewer, design-system-reviewer, audit-frontend | Accepted by independent Sol and Astra | 40/55 |
 
 Source path: `packages/codex/skills/<name>/SKILL.md`. Astra/high authors and
 accepts every changed semantic rule; Sol/medium integrates and Sol/high performs
@@ -88,13 +88,49 @@ ASI36/55, BEH0/55 after this packet.
 
 ## A12 — UI, visual, design-system and frontend audit
 
-Pending. Outcome: retained UI/a11y/responsive/design/system depth, verified visual
-observations separated from static evidence, honest browser/capture limitations,
-and scoped evidence-based frontend audit. Source work is not rendered acceptance.
+Accepted source/static/integration. Two Astra authors
+own UI/design-system and visual/frontend respectively. UI and design-system retain
+semantics, keyboard/focus, forms/state/recovery, responsive layout/layers, real
+token/theme/component API contracts, motion and media. Discovery has an honest
+no-token-system branch without manufacturing noncompliance. Visual preserves eight
+review domains and screenshot comparison/provenance, with numerical Total Score
+only against an approved rubric; otherwise NOT SCORED or UNKNOWN for missing
+required evidence. No caller consumes the old arbitrary90/70 bands. Frontend audit
+retains twelve numbered domains, data/cache/type/resource/configuration depth and
+native audit statuses, findings, coverage and progression.
+
+SOURCE/RENDERED/EXERCISED evidence remains distinct throughout. A screenshot does
+not establish keyboard/assistive-technology behavior; source-only work does not
+establish rendered acceptance. Existing task authority, safe data collection and
+read-only review boundaries remain explicit. No caller rewrite was necessary.
+No UI/browser or live model evaluation was performed.
+
+Native registration expands39→43 entries (40roles+3partial callers). The final
+integrated npm run after registration exited0:275/275, zero failures/skips; log
+`/tmp/superkit-wave40-2026-10-12/a12-npm-test.log`. The earlier source-only run is
+separately labeled pre-registration and does not supply final integration evidence.
+Count/version/remote About, phase/stale-reference and whitespace checks passed.
+Preservation2/2, metadata/hash/tokens4/4 and normalized stock4/4 passed; manifest
+and test list contain43 identical unique entries. Separate `sol_a12_review` read
+the complete old/new scope: ALLOWED, no findings or blocking questions.
+`astra_a12_ui` inspected both author packets, all four final sources, separate
+review, actual post-registration suite and current hashes, then explicitly
+accepted the coherent four-role source/static/integration result. No semantic
+change followed review. Reports: `a12-ui-astra.md`, `a12-visual-astra.md`,
+`a12-integration.md`, `a12-review.md` in `/tmp/superkit-wave40-2026-10-12/`.
+
+Existing automation limits remain: visual-reviewer has no direct audit/dev/review
+dispatch; standalone review maps design-system-reviewer only from TSX despite its
+later Vue/Svelte filter and omits CSS-only triggering; ui-reviewer is dev-mapped,
+not standalone-review-mapped. These are disclosed workflow limitations, not new
+routing or full workflow acceptance. ASI40/55, BEH0/55 after A12.
 
 ## Boundaries and progress
 
-Baseline ASI30/55, BEH0/55, workflows0/9 (3partial), support0/21. Target ASI40/55
-leaves15 roles; BEH stays0/55 without separately authorized live evidence. G01,
-W00B and behavioral/release acceptance remain pending. Stop after these ten.
+Baseline ASI30/55, BEH0/55, workflows0/9 (3partial), support0/21. All ten A10–A12
+roles are accepted at source/static/integration: ASI40/55,15 roles remaining;
+BEH stays0/55. Workflows/support counts are unchanged. A10 checkpoint4822f5e,
+A11 checkpoint5f5e318; A12 commit/push is the final coordinator action. G01,
+W00B and behavioral/release acceptance remain pending. The requested ten-role
+source outcome is complete; stop after the final checkpoint, no next packet.
 Unrelated market-workstation-starter-plan-2026-09-16.zip is preserved/untracked.
