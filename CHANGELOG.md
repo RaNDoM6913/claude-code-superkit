@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT Go correctness packet (2026-10-12):** Astra-authored go-reviewer, go-error-reviewer, and go-concurrency-reviewer guidance ties Go, error and concurrency findings to actual toolchain/module contracts, control flow and ownership. Read-only authority, external-symbol evidence, honest coverage and native conversion protection remain separate from live behavioral acceptance.
+
 - **GPT delivery/language packet (2026-10-11):** Astra-authored pre-deploy-validator and TypeScript/Python/Rust reviewers assess configured readiness criteria and real language/framework contracts. Checks retain scoped authority, external-symbol evidence, honest incomplete coverage and native conversion protection; source acceptance remains separate from live behavior.
 
 - **GPT backend/data packet (2026-10-11):** Astra-authored audit-backend, database-reviewer, and migration-reviewer guidance ties findings to actual data flow, database/framework versions, workload and rollout contracts. Read-only authority, explicit coverage gaps and evidence-based recovery assessment replace universal schema/rollback rules. Native preservation includes all three sources; behavioral acceptance remains pending.
