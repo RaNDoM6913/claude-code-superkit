@@ -8,7 +8,7 @@ release. Previous B1–B3 are accepted and not repeated.
 | Packet | Agent roles | State | Source count |
 |---|---|---|---|
 | A10 | go-reviewer, go-error-reviewer, go-concurrency-reviewer | Accepted by independent Sol and Astra | 33/55 |
-| A11 | go-modernizer, go-performance-reviewer, go-observability-reviewer | Pending | — |
+| A11 | go-modernizer, go-performance-reviewer, go-observability-reviewer | Accepted by independent Sol and Astra | 36/55 |
 | A12 | ui-reviewer, visual-reviewer, design-system-reviewer, audit-frontend | Pending | — |
 
 Source path: `packages/codex/skills/<name>/SKILL.md`. Astra/high authors and
@@ -61,8 +61,30 @@ BEH0/55 after this packet.
 
 ## A11 — Go modernization, performance and observability
 
-Pending. Outcome: version-bound improvements, source versus measured performance,
-and operational/logging/telemetry checks with exact evidence and safe authority.
+Accepted source/static/integration. Modernizer
+preserves migration tables, before/after, effort/risk and ordering with exact
+version and behavior checks. Performance retains benchmarks/profiles, allocations,
+GC, CPU/contention, I/O/pools and cache semantics, separating source proofs from
+measured effects. Observability retains five-signal coverage plus export pipelines,
+lifecycle, privacy/cardinality and operational requirements; unavailable delivery
+is not marked working. All three are self-contained with optional verified Go
+reference context and read-only authority; no live profiling, probing or updates.
+
+Stable integrated npm test exited0:275/275, zero failures/skips; log
+`/tmp/superkit-wave40-2026-10-12/a11-npm-test.log`. Counts/version/remote About and
+whitespace/phase/stale-reference checks passed. Native registration expands36→39
+entries. Preservation2/2 and metadata/hash/tokens plus normalized stock3/3 each
+passed. Stock validation's first temporary harness attempt failed; the corrected
+fail-fast run passed and no repository source was affected. Mirror invariants were
+not rerun because their pinned roles were unchanged and no related risk emerged.
+
+Separate `sol_a11_review` covered the full old/new packet: ALLOWED with no findings
+or blocking questions. `astra_a11` read that separate review and actual integrated
+suite, recomputed unchanged source hashes and explicitly accepted final integrated
+source. No semantic change followed review. Explicit specialist-assignment and
+optional-reference limitations remain; no caller/installer rewrite was needed.
+Reports: `/tmp/superkit-wave40-2026-10-12/a11-{astra,integration,review}.md`.
+ASI36/55, BEH0/55 after this packet.
 
 ## A12 — UI, visual, design-system and frontend audit
 

@@ -51,6 +51,9 @@ const nativeSkills = [
   'go-reviewer',
   'go-error-reviewer',
   'go-concurrency-reviewer',
+  'go-modernizer',
+  'go-performance-reviewer',
+  'go-observability-reviewer',
 ];
 
 function tempRepository(t) {

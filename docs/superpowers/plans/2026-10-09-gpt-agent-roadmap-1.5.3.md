@@ -13,7 +13,7 @@
 
 | Объект | Всего | Принято сейчас | Осталось |
 |---|---:|---:|---:|
-| GPT agent roles: authoring/static/integration | 55 | 33 | 22 |
+| GPT agent roles: authoring/static/integration | 55 | 36 | 19 |
 | GPT agent roles: behavioral acceptance | 55 | 0 | 55 |
 | Workflow commands: полная приёмка | 9 | 0 | 9; у 3 есть только caller compatibility |
 | Knowledge/support skills: полная приёмка | 21 | 0 | 21 |
@@ -95,7 +95,7 @@
 | A08 | `database-reviewer`, `migration-reviewer` | Проверить rollback/data-loss/locks/constraints по реальной схеме; destructive и ambiguous действия требуют gate | A07, K02 | ASI 2/2 (B2); BEH 0/2 pending |
 | A09 | `ts-reviewer`, `py-reviewer`, `rs-reviewer` | Сохранить hooks/types/async/ownership/unsafe expertise; корректно определить версии и не навязывать чужие conventions | C03 | ASI 3/3 (B3); BEH 0/3 pending |
 | A10 | `go-reviewer`, `go-error-reviewer`, `go-concurrency-reviewer` | Доказанные error/context/goroutine/race contracts, без ложных универсальных правил; Go references сохраняются | A09, K04 | ASI 3/3 (2026-10-12); BEH 0/3 pending |
-| A11 | `go-modernizer`, `go-performance-reviewer`, `go-observability-reviewer` | Версионная совместимость, измеренные performance claims, observability без утечек; modernize только в scope | A10, K05 | PENDING |
+| A11 | `go-modernizer`, `go-performance-reviewer`, `go-observability-reviewer` | Версионная совместимость, измеренные performance claims, observability без утечек; modernize только в scope | A10, K05 | ASI 3/3 (2026-10-12); BEH 0/3 pending |
 | A12 | `ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend` | Core UI/a11y/responsive/token review и actual screenshot evidence; static CSS не выдаётся за visual acceptance | A11 | PENDING |
 | A13 | `frontend-ui-reviewer`, `frontend-ui-typography-reviewer`, `frontend-ui-color-reviewer` | Сохранить alias/umbrella dispatch; typography/color оцениваются на rendered UI и доступности | A12, K07 | PENDING |
 | A14 | `frontend-ui-motion-reviewer`, `frontend-ui-interaction-reviewer`, `frontend-ui-design-critic` | Input/focus/error/loading/reduced-motion сценарии; critique привязан к цели и наблюдению | A13 | PENDING |
@@ -168,6 +168,6 @@ Owned surfaces: `lib/codex.js`, `lib/installer.js`, `tools/convert-agents-to-cod
 
 Отчёты событийные: после пакета, на blocker, перед gate/release; при длительном выполнении — agreed progress cadence. Это правило дальнейших отчётов в чатах, **не background automation**. Canonical tracker — этот документ; local `next-session.md` содержит только краткий handoff и ссылку, не дублирует весь каталог.
 
-**Текущий checkpoint, 2026-10-12:** A10 принят после независимого Sol review без findings и final Astra SOURCE acceptance. Добавлены `go-reviewer`, `go-error-reviewer`, `go-concurrency-reviewer`; caller/installer rewrites не потребовались. Go references явно optional/source-kit, три роли самодостаточны; автоматический вызов специалистов не заявлен. ASI **33/55** (+3; осталось **22**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A10 ASI завершены плюс исторический H00; BEH pending. Native protection36 =33roles+3callers. [Evidence](../migrations/astra-native/evidence/GPT-next-ten-roles-2026-10-12/acceptance.md): npm275/275, native2/2, mirror79/79, metadata/stock3/3 каждого, counts/remote/phase/diff pass. Base A10 `d3172c4`; проверенный commit/push выполняет координатор.
+**Текущий checkpoint, 2026-10-12:** A11 принят после отдельного независимого Sol review без findings и final Astra integrated SOURCE acceptance. Добавлены `go-modernizer`, `go-performance-reviewer`, `go-observability-reviewer`; caller/installer rewrites не потребовались. ASI **36/55** (+3; осталось **19**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A11 ASI завершены плюс исторический H00; BEH pending. Native protection39 =36roles+3callers. [Evidence](../migrations/astra-native/evidence/GPT-next-ten-roles-2026-10-12/acceptance.md): npm275/275, native2/2, metadata/stock3/3 каждого, counts/remote/phase/diff pass. A10 опубликован в `4822f5e`; это base A11, новый проверенный commit/push выполняет координатор.
 
-**Текущий разрешённый следующий шаг:** A11 → A12 с отдельной SOURCE-приёмкой каждого, затем остановиться на ASI40/55. Каждый prompt пишет Astra, Sol интегрирует и проверяет. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не входят в этот запрос; G01/K01/W00B и behavioral gates остаются открытыми.
+**Текущий разрешённый следующий шаг:** A12 (`ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend`), отдельная SOURCE-приёмка, затем остановиться на ASI40/55. Каждый prompt пишет Astra, Sol интегрирует и проверяет. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не входят в этот запрос; G01/K01/W00B и behavioral gates остаются открытыми.
