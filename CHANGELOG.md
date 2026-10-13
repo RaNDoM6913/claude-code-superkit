@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT frontend UI umbrella/type/color packet (2026-10-13):** Astra-authored frontend-ui aliases preserve specialist routing, typography and color expertise while grounding findings in actual design and accessibility evidence. Narrow catalog alignment removes legacy file-count/style heuristics; native protection and source acceptance remain separate from live behavior.
+
 - **GPT UI review packet (2026-10-12):** Astra-authored ui-reviewer, visual-reviewer, design-system-reviewer, and audit-frontend instructions preserve UI, accessibility, responsive and frontend depth while separating source evidence, rendered observations and interaction checks. Actual design contracts, scoped authority, honest coverage and native protection remain separate from live behavioral acceptance.
 
 - **GPT Go modernization/operations packet (2026-10-12):** Astra-authored go-modernizer, go-performance-reviewer, and go-observability-reviewer instructions assess version-compatible changes, measured performance and operational telemetry against project contracts. Scoped evidence, safe diagnostics and native ownership remain separate from behavioral qualification.

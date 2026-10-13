@@ -297,9 +297,9 @@ gan-planner, gan-generator, gan-evaluator
 
 | Skill | Category |
 |-------|----------|
-| `frontend-ui-reviewer` | Quality umbrella — auto-dispatches on audit/review/polish/critique when .tsx/.jsx/.ts/.css/.vue active; runs 11-item reflex audit + delegates to specialists |
-| `frontend-ui-typography-reviewer` | Quality — reflex_fonts_to_reject list, modular scale, line-height/length, font-loading hygiene, OpenType, 4-step font-selection procedure |
-| `frontend-ui-color-reviewer` | Quality — OKLCH over HSL, tinted neutrals, palette cohesion, theme-by-use-context decision table, WCAG/APCA contrast, AI-palette reflexes |
+| `frontend-ui-reviewer` | 2D UI umbrella — audience/design contracts, complete domain coverage, bounded specialist routing, evidence-based consolidation; source/rendered/exercised limits |
+| `frontend-ui-typography-reviewer` | Typography — hierarchy, scale, readability, glyphs, font loading/fallback, OpenType and warranted font selection against actual product constraints |
+| `frontend-ui-color-reviewer` | Color — semantic palettes, perceptual spaces/gamut, supported themes and measured contrast against the applicable standard/version; no syntax or palette bans |
 | `frontend-ui-motion-reviewer` | Quality — Emil's 4-question Animation Decision Framework, easing constants, duration table, spring vs duration, reduced-motion. Outputs Before/After/Why markdown table |
 | `frontend-ui-interaction-reviewer` | Quality — buttons (:active, hit target), modals (transform-origin, scroll-lock, focus trap), forms (validation timing, inline errors), focus-visible, loading patterns, UX writing |
 | `frontend-ui-design-critic` | Quality — holistic gestalt critique ("does it feel designed?"), narrative output, reflex audit scaled across whole diff |
@@ -331,9 +331,9 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 | `test-runner` | After feature implementation, bug fix, refactor, or test file edits |
 | `lint-runner` | Before any commit with code changes (not docs-only) |
 | `audit-orchestrator` | When touching infrastructure, CI/CD, or security-sensitive code (use health-only mode for quick check) |
-| `frontend-ui-reviewer` | User asks for audit/review/polish/critique AND active edits are in .tsx/.jsx/.ts/.css/.scss/.html/.vue files · 3+ UI file edits in one task · before commit staging ≥2 UI files. Do NOT activate for .go/.py/.rs backend, 3D/WebGL code, tests |
-| `frontend-ui-typography-reviewer` | font-family / weight / scale token changed · Google Fonts import added · user asks about fonts/type/hierarchy while UI files active |
-| `frontend-ui-color-reviewer` | palette / theme / color-token changed · dark/light mode added · oklch/hsl/rgb/hex added · user asks about palette/theme/contrast/dark mode while UI files active |
+| `frontend-ui-reviewer` | Assigned 2D UI audit/review/polish/critique or meaningful UI contract change under caller workflow, including tokens/assets and consumers. Counts/staging alone do not trigger review; backend and 3D internals are excluded |
+| `frontend-ui-typography-reviewer` | Assigned typography review or meaningful family/weight/scale/spacing/glyph/loading/fallback change; direct typography question or bounded umbrella referral |
+| `frontend-ui-color-reviewer` | Assigned palette/theme/contrast review or meaningful semantic color, gamut, theme or state change; direct color question or bounded umbrella referral |
 | `frontend-ui-motion-reviewer` | transition / @keyframes / animation / useSpring / motion.* added or changed · user asks about motion/animation/easing/duration/spring while UI files active |
 | `frontend-ui-interaction-reviewer` | button / modal / drawer / form / focus / loading / empty / microcopy change · user asks about interactions/polish/accessibility while UI files active |
 | `frontend-ui-design-critic` | user asks for critique / design-review / holistic-review / aesthetic-audit · major new UI surface created · 5+ UI files changed in one task. Do NOT activate for bug fixes or single-component changes |

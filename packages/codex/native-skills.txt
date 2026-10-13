@@ -41,3 +41,6 @@ ui-reviewer
 visual-reviewer
 design-system-reviewer
 audit-frontend
+frontend-ui-reviewer
+frontend-ui-typography-reviewer
+frontend-ui-color-reviewer
