@@ -282,10 +282,10 @@ gan-planner, gan-generator, gan-evaluator
 
 | Skill | Category |
 |-------|----------|
-| `presentation-reviewer` | Quality — scroll-driven presentation sections (GSAP ScrollTrigger, phone frames, 3D textures) |
-| `r3f-scene-reviewer` | Quality — React Three Fiber / Three.js code (color management, GLB, useFrame, disposal) |
-| `ui-design-reviewer` | Quality — anti-slop UI review (typography, color, layout, motion, interactive states) |
-| `frontend-perf-reviewer` | Quality — frontend performance (bundle size, lazy loading, CSS containment, web vitals) |
+| `presentation-reviewer` | Quality — scroll-driven web presentations (GSAP, phone frames, DOM/3D coordination and runtime evidence) |
+| `r3f-scene-reviewer` | Quality — R3F/Three.js scenes (color/output pipeline, GLTF ownership, render loops and GPU evidence) |
+| `ui-design-reviewer` | Quality — product-grounded UI design (typography, color, layout, motion, interactive states and applicable glass) |
+| `frontend-perf-reviewer` | Quality — frontend performance (bundle/media/render/runtime paths, Core Web Vitals and measurement evidence) |
 | `threejs-color-management` | Knowledge — Three.js color pipeline (sRGB vs Linear, toneMapping, texture colorSpace) |
 | `r3f-scroll-driven-3d` | Knowledge — GSAP ScrollTrigger + R3F via Zustand bridge pattern |
 | `gltf-debugging` | Knowledge — runtime GLB/GLTF inspection (UV, materials, texture replacement) |

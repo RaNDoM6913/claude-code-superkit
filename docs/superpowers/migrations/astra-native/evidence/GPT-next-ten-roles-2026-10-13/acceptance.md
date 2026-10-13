@@ -10,7 +10,7 @@ merge or release. Verified checkpoint commit/push remains authorized.
 |---|---|---|---|
 | A13 | frontend-ui-reviewer, frontend-ui-typography-reviewer, frontend-ui-color-reviewer | Accepted by independent Sol and Astra | 43/55 |
 | A14 | frontend-ui-motion-reviewer, frontend-ui-interaction-reviewer, frontend-ui-design-critic | Accepted by independent Sol and Astra | 46/55 |
-| A15 | presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer | Pending | — |
+| A15 | presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer | Accepted by independent Sol and Astra | 50/55 |
 
 Paths: `packages/codex/skills/<name>/SKILL.md`. Keep frontend-ui aliases distinct
 from core UI reviewers. Astra/high owns prompts and necessary narrow catalog
@@ -73,12 +73,39 @@ ASI46/55, BEH0/55 after this packet.
 
 ## A15 — presentation, 3D scene, UI design and performance
 
-Pending. Preserve scroll-driven web presentation sections, GSAP lifecycle and layout, R3F/Three lifecycle,
-color/resources, UI interaction and actual frontend performance evidence. No GPU,
-browser or profiler availability is inferred; source work is not live acceptance.
+Accepted source/static/integration.
+Two Astra authors preserve16 scroll/GSAP/phone/DOM-texture domains,15 R3F color/
+output/GLTF/render-loop/resource domains,16 UI design domains and12 frontend
+performance domains. Fixed frame/timeline/material/UV/disposal/lighting/style/
+lazy-loading recipes become context- and version-bound checks. Native tables and
+summary domains remain, with impact-based findings and explicit unknowns.
+Astra aligned only four existing catalog descriptions; no other routing change.
+SOURCE/RENDERED/GPU/EXERCISED/MEASURED and static/lab/field/hypothesis classes
+remain separate. No browser/GPU/model evaluation or profiling was performed.
+
+Stable integrated npm exited0:275/275,no failures/skips; log
+`/tmp/superkit-wave50-2026-10-13/a15-npm-test.log`. Counts/version/remote About and
+diff checks pass. Registration expands49→53 entries. Focused integration reports
+native2/2, metadata/hash/tokens4/4, normalized stock4/4 and53 identical unique
+manifest/test entries. Optional companion source recipes remain separately
+pending; new native prompts validate actual library semantics and expose conflicts
+instead of inheriting an unconditional recipe. Support acceptance is unchanged.
+Isolated copySkills verification preserved all four exact SKILL.md files and
+confirmed no extra per-skill files are copied; this is not full I01 install acceptance.
+Only catalog lines285–288 changed; counts/version/remote/phase/stale/diff passed.
+Separate `sol_a15_review` inspected complete old/new scope and all16/15/16/12
+domains: APPROVE, zero findings/blocking questions. `astra_a15_ui` read both author
+packets, all four actual sources, separate review, actual full-suite results and
+integration; recomputed frozen hashes/tokens4/4; explicitly accepted the coherent
+four-role SOURCE/static/integration gate. No semantic changes followed review.
+Reports in `/tmp/superkit-wave50-2026-10-13/`: `a15-3d-astra.md`, `a15-ui-astra.md`,
+`a15-integration.md`, `a15-review.md`. ASI50/55, BEH0/55 after A15.
 
 ## Boundaries and progress
 
-Baseline ASI40/55, BEH0/55, workflows0/9 (3partial), support0/21. TargetASI50/55
-leaves5 roles; stop after these ten. G01/K01/W00B/behavioral/release gates remain
+Baseline ASI40/55, BEH0/55, workflows0/9 (3partial), support0/21. All ten A13–A15
+roles are now SOURCE/static/integration accepted: ASI50/55,5 roles remaining;
+BEH0/55, workflows/support unchanged. A13 checkpoint0849236, A14 checkpointcdbf96b;
+A15 commit/push is the final coordinator action. Stop at the completed ten-role
+boundary; do not start A16/A17 automatically. G01/K01/W00B/behavioral/release gates remain
 open. Preserve unrelated market-workstation-starter-plan-2026-09-16.zip.

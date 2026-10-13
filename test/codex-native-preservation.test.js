@@ -64,6 +64,10 @@ const nativeSkills = [
   'frontend-ui-motion-reviewer',
   'frontend-ui-interaction-reviewer',
   'frontend-ui-design-critic',
+  'presentation-reviewer',
+  'r3f-scene-reviewer',
+  'ui-design-reviewer',
+  'frontend-perf-reviewer',
 ];
 
 function tempRepository(t) {
