@@ -300,9 +300,9 @@ gan-planner, gan-generator, gan-evaluator
 | `frontend-ui-reviewer` | 2D UI umbrella — audience/design contracts, complete domain coverage, bounded specialist routing, evidence-based consolidation; source/rendered/exercised limits |
 | `frontend-ui-typography-reviewer` | Typography — hierarchy, scale, readability, glyphs, font loading/fallback, OpenType and warranted font selection against actual product constraints |
 | `frontend-ui-color-reviewer` | Color — semantic palettes, perceptual spaces/gamut, supported themes and measured contrast against the applicable standard/version; no syntax or palette bans |
-| `frontend-ui-motion-reviewer` | Quality — Emil's 4-question Animation Decision Framework, easing constants, duration table, spring vs duration, reduced-motion. Outputs Before/After/Why markdown table |
-| `frontend-ui-interaction-reviewer` | Quality — buttons (:active, hit target), modals (transform-origin, scroll-lock, focus trap), forms (validation timing, inline errors), focus-visible, loading patterns, UX writing |
-| `frontend-ui-design-critic` | Quality — holistic gestalt critique ("does it feel designed?"), narrative output, reflex audit scaled across whole diff |
+| `frontend-ui-motion-reviewer` | Motion — purpose, contextual easing/duration, spring vs tween, interruption/lifecycle, measured performance and reduced motion; Before/After/Why evidence table |
+| `frontend-ui-interaction-reviewer` | Interaction — control semantics, dialogs/drawers, forms, keyboard/focus, loading/error recovery, empty states and microcopy against actual task contracts |
+| `frontend-ui-design-critic` | Holistic design — gestalt, composition/rhythm, hierarchy, coherence and audience/intent; grounded narrative and actionable priority without style bans or reflex scores |
 | `impeccable-craft` | Knowledge (user-invocable) — shape-then-build 4-stage craft flow: Shape → Refine → Implement → Polish |
 
 **Stack-specific reviewers (optional):**
@@ -334,9 +334,9 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 | `frontend-ui-reviewer` | Assigned 2D UI audit/review/polish/critique or meaningful UI contract change under caller workflow, including tokens/assets and consumers. Counts/staging alone do not trigger review; backend and 3D internals are excluded |
 | `frontend-ui-typography-reviewer` | Assigned typography review or meaningful family/weight/scale/spacing/glyph/loading/fallback change; direct typography question or bounded umbrella referral |
 | `frontend-ui-color-reviewer` | Assigned palette/theme/contrast review or meaningful semantic color, gamut, theme or state change; direct color question or bounded umbrella referral |
-| `frontend-ui-motion-reviewer` | transition / @keyframes / animation / useSpring / motion.* added or changed · user asks about motion/animation/easing/duration/spring while UI files active |
-| `frontend-ui-interaction-reviewer` | button / modal / drawer / form / focus / loading / empty / microcopy change · user asks about interactions/polish/accessibility while UI files active |
-| `frontend-ui-design-critic` | user asks for critique / design-review / holistic-review / aesthetic-audit · major new UI surface created · 5+ UI files changed in one task. Do NOT activate for bug fixes or single-component changes |
+| `frontend-ui-motion-reviewer` | Assigned motion review or meaningful animation/transition/spring/interruption/reduced-motion change under caller workflow; direct motion question or bounded umbrella referral |
+| `frontend-ui-interaction-reviewer` | Assigned interaction review or meaningful controls/forms/overlays/focus/feedback/recovery/microcopy change; direct interaction/accessibility/polish question or bounded umbrella referral |
+| `frontend-ui-design-critic` | Explicit holistic critique or meaningful composition/design-direction question under caller workflow, including bounded umbrella referral; file counts alone do not trigger review |
 | `go-samber-do` | Code imports `github.com/samber/do` or `github.com/samber/do/v2` · user asks about Go dependency injection · reviewing service wiring / Provide/Invoke patterns |
 | `go-samber-oops` | Code imports `github.com/samber/oops` · user asks about structured Go errors, error codes, APM context, stack traces in Go |
 | `go-samber-lo` | Code imports `github.com/samber/lo` or `github.com/samber/lo/parallel` · user asks about Go collection utilities, Map/Filter/Reduce helpers |

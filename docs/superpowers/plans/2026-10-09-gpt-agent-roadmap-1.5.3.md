@@ -13,7 +13,7 @@
 
 | Объект | Всего | Принято сейчас | Осталось |
 |---|---:|---:|---:|
-| GPT agent roles: authoring/static/integration | 55 | 43 | 12 |
+| GPT agent roles: authoring/static/integration | 55 | 46 | 9 |
 | GPT agent roles: behavioral acceptance | 55 | 0 | 55 |
 | Workflow commands: полная приёмка | 9 | 0 | 9; у 3 есть только caller compatibility |
 | Knowledge/support skills: полная приёмка | 21 | 0 | 21 |
@@ -100,7 +100,7 @@
 | A11 | `go-modernizer`, `go-performance-reviewer`, `go-observability-reviewer` | Версионная совместимость, измеренные performance claims, observability без утечек; modernize только в scope | A10, K05 | ASI 3/3 (2026-10-12); BEH 0/3 pending |
 | A12 | `ui-reviewer`, `visual-reviewer`, `design-system-reviewer`, `audit-frontend` | Core UI/a11y/responsive/token review и actual screenshot evidence; static CSS не выдаётся за visual acceptance | A11 | ASI 4/4 (2026-10-12); BEH 0/4 pending |
 | A13 | `frontend-ui-reviewer`, `frontend-ui-typography-reviewer`, `frontend-ui-color-reviewer` | Сохранить alias/umbrella dispatch; typography/color оцениваются на rendered UI и доступности | A12, K07 | ASI 3/3 (2026-10-13); BEH 0/3 pending |
-| A14 | `frontend-ui-motion-reviewer`, `frontend-ui-interaction-reviewer`, `frontend-ui-design-critic` | Input/focus/error/loading/reduced-motion сценарии; critique привязан к цели и наблюдению | A13 | PENDING |
+| A14 | `frontend-ui-motion-reviewer`, `frontend-ui-interaction-reviewer`, `frontend-ui-design-critic` | Input/focus/error/loading/reduced-motion сценарии; critique привязан к цели и наблюдению | A13 | ASI 3/3 (2026-10-13); BEH 0/3 pending |
 | A15 | `presentation-reviewer`, `r3f-scene-reviewer`, `ui-design-reviewer`, `frontend-perf-reviewer` | Scroll/R3F lifecycle/color/disposal и UI; rendering/performance подтверждены инструментом, отсутствующий GPU/browser — gap | A14, K06 | PENDING |
 | A16 | `bot-reviewer`, `behavioral-nudge-engine` | Bot permission/state/retry проверены; nudges уместны, не меняют цель и не создают навязчивый workflow | A15, K03 | PENDING |
 | A17 | `gan-planner` → `packages/gan/skills/gan-planner/SKILL.md`; `gan-generator` → `packages/gan/skills/gan-generator/SKILL.md`; `gan-evaluator` → `packages/gan/skills/gan-evaluator/SKILL.md` | Единый plan→implementation→Playwright rubric; независимость, bounded retries, no false success и остановка при отсутствии browser | A16, C01, A05 | PENDING |
@@ -170,6 +170,6 @@ Owned surfaces: `lib/codex.js`, `lib/installer.js`, `tools/convert-agents-to-cod
 
 Отчёты событийные: после пакета, на blocker, перед gate/release; при длительном выполнении — agreed progress cadence. Это правило дальнейших отчётов в чатах, **не background automation**. Canonical tracker — этот документ; local `next-session.md` содержит только краткий handoff и ссылку, не дублирует весь каталог.
 
-**Текущий checkpoint, 2026-10-13:** A13 принят после независимого Sol APPROVE без findings и final Astra integrated SOURCE acceptance. Добавлены frontend-ui umbrella/typography/color; Astra узко согласовала шесть строк каталога. ASI **43/55** (+3; осталось **12**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A13 ASI завершены плюс H00; BEH pending. Native protection46 =43roles+3callers. [Evidence](../migrations/astra-native/evidence/GPT-next-ten-roles-2026-10-13/acceptance.md): npm275/275, native2/2, metadata/stock3/3 каждого, counts/remote/phase/diff pass. Base A13 `a0532dd`; checkpoint commit/push выполняет координатор.
+**Текущий checkpoint, 2026-10-13:** A14 принят после независимого Sol APPROVE без findings и final Astra integrated SOURCE acceptance. Добавлены frontend-ui motion/interaction/design-critic; Astra узко согласовала шесть строк каталога. ASI **46/55** (+3; осталось **9**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A14 ASI завершены плюс H00; BEH pending. Native protection49 =46roles+3callers. [Evidence](../migrations/astra-native/evidence/GPT-next-ten-roles-2026-10-13/acceptance.md): npm275/275, native2/2, metadata/stock3/3 каждого, counts/remote/phase/diff pass. A13 опубликован в `0849236`; это base A14, checkpoint commit/push выполняет координатор.
 
-**Текущий разрешённый следующий шаг:** A14 → A15 с отдельной SOURCE-приёмкой, затем остановиться на ASI50/55. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не входят в запрос; G01/K01/W00B и behavioral gates открыты.
+**Текущий разрешённый следующий шаг:** A15 (`presentation-reviewer`, `r3f-scene-reviewer`, `ui-design-reviewer`, `frontend-perf-reviewer`), SOURCE-приёмка, затем остановиться на ASI50/55. Presentation здесь — scroll-driven web sections. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не входят в запрос; G01/K01/W00B и behavioral gates открыты.

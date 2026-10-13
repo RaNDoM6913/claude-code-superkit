@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT frontend UI motion/interaction/critique packet (2026-10-13):** Astra-authored specialist aliases preserve motion, focus/forms/recovery and whole-design critique while requiring task-specific evidence and truthful rendered/interaction limits. Narrow catalog alignment and native preservation accompany the source changes; live behavioral acceptance remains pending.
+
 - **GPT frontend UI umbrella/type/color packet (2026-10-13):** Astra-authored frontend-ui aliases preserve specialist routing, typography and color expertise while grounding findings in actual design and accessibility evidence. Narrow catalog alignment removes legacy file-count/style heuristics; native protection and source acceptance remain separate from live behavior.
 
 - **GPT UI review packet (2026-10-12):** Astra-authored ui-reviewer, visual-reviewer, design-system-reviewer, and audit-frontend instructions preserve UI, accessibility, responsive and frontend depth while separating source evidence, rendered observations and interaction checks. Actual design contracts, scoped authority, honest coverage and native protection remain separate from live behavioral acceptance.

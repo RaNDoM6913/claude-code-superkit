@@ -9,7 +9,7 @@ merge or release. Verified checkpoint commit/push remains authorized.
 | Packet | Roles | State | Source count |
 |---|---|---|---|
 | A13 | frontend-ui-reviewer, frontend-ui-typography-reviewer, frontend-ui-color-reviewer | Accepted by independent Sol and Astra | 43/55 |
-| A14 | frontend-ui-motion-reviewer, frontend-ui-interaction-reviewer, frontend-ui-design-critic | Pending | — |
+| A14 | frontend-ui-motion-reviewer, frontend-ui-interaction-reviewer, frontend-ui-design-critic | Accepted by independent Sol and Astra | 46/55 |
 | A15 | presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer | Pending | — |
 
 Paths: `packages/codex/skills/<name>/SKILL.md`. Keep frontend-ui aliases distinct
@@ -50,12 +50,30 @@ ASI43/55, BEH0/55 after this packet.
 
 ## A14 — motion, interaction and design critique
 
-Pending. Preserve interaction/focus/forms/states, meaningful motion/reduced
-motion, and whole-design critique tied to task/audience/reference and evidence.
+Accepted source/static/integration.
+Motion retains the four-question framework, optional timing/easing examples,
+spring/tween semantics, interruption/lifecycle/performance/reduced-motion and
+Before/After/Why. Interaction preserves seven groups and end-to-end task/recovery
+logic. Critic preserves gestalt and narrative headings with evidence/impact,
+without style tallies, AI-authorship inference or mandatory novelty. Six exact
+catalog rows are aligned; A13 rows unchanged. SOURCE/RENDERED/EXERCISED remain
+separate; no live UI/model evaluation or consumer execution.
+
+Stable integrated npm275/275 exit0, no failures/skips; log
+`/tmp/superkit-wave50-2026-10-13/a14-npm-test.log`. Native2/2, metadata/hash/tokens
+3/3, normalized stock3/3, manifest/test49identicalunique passed. Counts/version/
+remote About/phase/stale/diff checks pass. A13 umbrella and impeccable-craft role
+calls remain compatible; broader legacy support flow remains separately pending.
+Separate `sol_a14_review` covered the complete old/new packet and six catalog rows:
+APPROVE with zero findings. `astra_a14` read that review and actual npm results,
+rechecked frozen source/catalog hashes and exact row boundary, and accepted final
+integrated source. No semantic correction followed review. Local reports:
+`/tmp/superkit-wave50-2026-10-13/a14-{astra,integration,review}.md`.
+ASI46/55, BEH0/55 after this packet.
 
 ## A15 — presentation, 3D scene, UI design and performance
 
-Pending. Preserve slide/presentation hierarchy and layout, R3F/Three lifecycle,
+Pending. Preserve scroll-driven web presentation sections, GSAP lifecycle and layout, R3F/Three lifecycle,
 color/resources, UI interaction and actual frontend performance evidence. No GPU,
 browser or profiler availability is inferred; source work is not live acceptance.
 
