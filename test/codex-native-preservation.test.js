@@ -68,6 +68,8 @@ const nativeSkills = [
   'r3f-scene-reviewer',
   'ui-design-reviewer',
   'frontend-perf-reviewer',
+  'bot-reviewer',
+  'behavioral-nudge-engine',
 ];
 
 function tempRepository(t) {

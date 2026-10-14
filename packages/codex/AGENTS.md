@@ -269,7 +269,7 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `migrate` | Apply or rollback database migrations |
 | `benchmark` | Run Go benchmarks with benchstat comparison |
 
-**Agent skills (auto-dispatched by orchestrators):**
+**Agent skills (available for task-specific use or existing orchestrator dispatch):**
 ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, audit-infra, behavioral-nudge-engine, bot-reviewer, code-reviewer, codebase-onboarding-engineer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, design-system-reviewer, docs-reviewer, e2e-test-generator, evaluator, goal-verifier, health-checker, migration-reviewer, minimal-change-engineer, plan-checker, pre-deploy-validator, project-architecture, reality-checker, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, ui-reviewer, visual-reviewer, writing-agents, writing-commands
 
 **Production skills (auto-activated by description matching):**

@@ -79,9 +79,9 @@ Track the project's non-secret `AGENTS.md` and `.codex/config.toml` so collabora
 | `migrate` | Apply or rollback database migrations |
 | `benchmark` | Run Go benchmarks with benchstat comparison |
 
-### 36 Agent Skills (auto-dispatched by orchestrators)
+### 36 Agent Skills (available roles)
 
-These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists the protected role sources and partially adapted workflow callers; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Dispatch depends on the task, user authorization, and available runtime tools. **v1.4.0 added 4 specialist roles:**
+These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists the protected role sources and partially adapted workflow callers; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers
@@ -189,7 +189,7 @@ cp -r claude-code-superkit/packages/codex/skills/rs-reviewer .codex/skills/
 ### Total: 82 skills
 
 - 9 command skills (user-invocable, including benchmark)
-- 36 agent + knowledge skills (auto-dispatched) — incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
+- 36 agent + knowledge skills (task-specific use or existing caller dispatch) — incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
 - 10 frontend 3D skills (optional, for R3F/Three.js/GSAP projects)
 - 7 frontend UI skills (optional, for 2D UI / landing-page / dashboard projects)
 - 9 stack-specific reviewer skills (optional, per language)

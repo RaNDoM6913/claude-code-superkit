@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT bot/nudge packet (2026-10-14):** Astra-authored bot-reviewer and behavioral-nudge-engine instructions use platform-specific delivery/state/security contracts and evidence-backed product nudge plans. User stop/snooze preferences and design-versus-execution authority remain explicit; native source preservation does not establish live bot or behavioral acceptance.
+
 - **GPT frontend 3D/design/performance packet (2026-10-13):** Astra-authored presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, and frontend-perf-reviewer retain scroll/GSAP, texture/scene ownership, UI and performance depth with version-specific contracts and separate source/rendered/measured evidence. Narrow catalog alignment and native protection do not establish live GPU/UI/model acceptance.
 
 - **GPT frontend UI motion/interaction/critique packet (2026-10-13):** Astra-authored specialist aliases preserve motion, focus/forms/recovery and whole-design critique while requiring task-specific evidence and truthful rendered/interaction limits. Narrow catalog alignment and native preservation accompany the source changes; live behavioral acceptance remains pending.
