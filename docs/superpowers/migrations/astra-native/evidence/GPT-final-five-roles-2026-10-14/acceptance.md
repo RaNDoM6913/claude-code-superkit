@@ -9,7 +9,7 @@ Claude rewrite, runtime configuration or new evaluation infrastructure.
 | Packet | Roles | State | Source count |
 |---|---|---|---|
 | A16 | bot-reviewer, behavioral-nudge-engine | Accepted by independent Sol and Astra | 52/55 |
-| A17 | gan-planner, gan-generator, gan-evaluator | Pending | — |
+| A17 | gan-planner, gan-generator, gan-evaluator | Accepted by independent Sol and Astra | 55/55 |
 
 A16 paths: `packages/codex/skills/<role>/SKILL.md`.
 A17 paths: `packages/gan/skills/<role>/SKILL.md`; optional GAN stays optional.
@@ -44,14 +44,50 @@ ASI52/55, BEH0/55 after A16.
 
 ## A17 — optional GAN workflow roles
 
-Pending. Preserve plan→implementation→independent evaluation contracts, actual
-rubric/evidence provenance, bounded correction, honest unavailable capability and
-no false PASS. Source work must not imply a live GAN evaluation was performed.
-Inspect optional installation, native ownership and caller compatibility.
+Accepted source/static/integration.
+Planner→implementation+Playwright→independent evaluation preserves scenario and
+requirement IDs, one authoritative bound rubric section, actual row arithmetic,
+critical rules and meaningful oracles. Missing rubric/runtime/independence cannot
+produce PASS; confirmed defects and incomplete coverage are reported separately.
+Generator retains implementation authority within the accepted task, evaluator
+cannot rewrite source/tests/criteria, and retry counters persist across handoffs.
+No obsolete blanket claim about Codex subagent availability remains.
+
+Codex-specific README clarifies explicit rubric delivery, optional manual setup,
+actual skill invocation and source/behavior limits. Root detected unconditional
+copy overwrites in the first draft; Astra added guards preserving existing files
+and dangling symlinks before the independent review. Claude agents and shared
+rubrics remain unchanged; no live GAN/Playwright/model evaluation was run.
+
+The Codex-native manifest remains55 entries (52roles+3callers). GAN files are
+outside the actual core-only converter's input/output ownership. The existing
+preservation test now includes actual optionalGAN bytes and successful operation
+without GAN; focused test total is3. Final stable npm exited0:276/276, no failures
+or skips; log `/tmp/superkit-wave55-2026-10-14/a17-npm-test.log`. Counts/version/
+remote About/phase/stale/diff checks passed. Focused preservation3/3, canonical
+metadata/hash/tokens3/3 and normalized stock3/3 passed. Isolated manual-copy recipe
+copied3skills+2rubrics exactly, then preserved4 customized files and1 dangling
+symlink on repeat; actual HOME was neither reassigned nor used. Bounded writer
+search found no other GAN-source generator under bin/lib/tools/package scripts;
+protection claims remain limited to the tested converter, not arbitrary future tools.
+
+Separate `sol_a17_review` covered complete source/interface/docs/test scope:
+APPROVE with zero findings. Verdict precedence was checked with concrete cases:
+complete20/21 rubric evidence plus missing independence can retain an established
+NEEDS-ATTENTION band with INCOMPLETE gate; unknown rows/critical rules cannot
+establish that band and yield BLOCKED absent a decisive defect; confirmed critical
+failure retains NEEDS-REMEDIATION alongside INCOMPLETE evidence. No incomplete gate
+can PASS. `astra_a17` read the actual independent review, integration, full-suite
+log and current source bindings, and accepted all3 integrated source roles without
+further edits. Local reports: `/tmp/superkit-wave55-2026-10-14/a17-{astra,integration,review}.md`.
+ASI55/55, BEH0/55 after A17.
 
 ## Boundaries and progress
 
-Baseline ASI50/55, BEH0/55, workflows0/9 (3partial), support0/21. Target ASI55/55
-closes role source/static/integration only. G01/K01/W00B/behavioral/workflow/support/
-release gates remain open. Stop after these five. Preserve unrelated untracked
+Baseline ASI50/55, BEH0/55, workflows0/9 (3partial), support0/21. All final five
+roles are accepted: ASI55/55, BEH0/55. Workflow/support counts stay unchanged.
+A16 checkpoint55161a9; A17 commit/push is the final coordinator action.
+This closes role source/static/integration only. G01/K01/W00B/behavioral/workflow/support/
+release gates remain open. Stop after the completed final-five checkpoint; do not
+automatically resume behavioral evaluations or broader migration work. Preserve unrelated untracked
 market-workstation-starter-plan-2026-09-16.zip and all prior evidence.

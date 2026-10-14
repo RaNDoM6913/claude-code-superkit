@@ -6,7 +6,7 @@ Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI
 
 For work on Superkit itself, read [docs/WORKING_AGREEMENT.md](docs/WORKING_AGREEMENT.md) once per session. It defines the owner-approved scope, parallel implementation, risk-based review, verification, and token-economy rules. Preserve mandatory project checks and current task authorization boundaries.
 
-GPT backend/data/delivery/language reviews use project-specific schema, query, toolchain, Go lifecycle/performance/telemetry and rollout evidence; Core UI, six frontend-ui aliases and frontend-3d reviewers retain distinct scopes; UI source, rendered and interaction evidence remain distinct; Bot and nudge source acceptance does not authorize messaging or scheduling; source acceptance does not qualify live behavior. For current GPT-role source/behavioral acceptance counts and the selected packet, use the [canonical migration roadmap](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md).
+GPT backend/data/delivery/language reviews use project-specific schema, query, toolchain, Go lifecycle/performance/telemetry and rollout evidence; Core UI, six frontend-ui aliases and frontend-3d reviewers retain distinct scopes; UI source, rendered and interaction evidence remain distinct; Optional GAN sources live separately in packages/gan/skills and are not ordinary installer entries. Bot and nudge source acceptance does not authorize messaging or scheduling; source acceptance does not qualify live behavior. For current GPT-role source/behavioral acceptance counts and the selected packet, use the [canonical migration roadmap](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md).
 
 ## Project Structure
 

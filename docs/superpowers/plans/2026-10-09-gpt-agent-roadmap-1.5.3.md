@@ -1,6 +1,6 @@
 # GPT-native Superkit → 1.5.3: единый план реализации
 
-> **For agentic workers:** запрос 2026-10-14 разрешил последние пять SOURCE-ролей A16 + A17 (2 + 3), цель ASI55/55. Сохранить Astra authoring → Sol integration/review → Astra acceptance. A13–A15 завершены и не повторяются. Live evaluations и релиз исключены; после A17 остановиться, ASI55 не означает BEH или release readiness.
+> **For agentic workers:** запрос 2026-10-14 на последние пять SOURCE-ролей A16 + A17 (2 + 3) выполнен: ASI55/55. Сохранить Astra authoring → Sol integration/review → Astra acceptance. A13–A15 завершены и не повторяются. После checkpoint A17 остановиться. ASI55 не означает BEH или release readiness; live evaluations и релиз не выполнялись.
 
 **Goal:** улучшить все 55 существующих GPT-ролей с авторством Astra, проверить связанные workflows/support и подтвердить поведение и совместимость, затем подготовить и после разрешения выпустить `v1.5.3` с согласованной документацией и GitHub.
 **Architecture:** Astra пишет/перерабатывает каждый prompt и поведенческое правило; Sol интегрирует, собирает доказательства и выполняет независимое review. Один канонический roadmap содержит каталог, зависимости и счётчики; исходные evidence сохраняются.
@@ -13,7 +13,7 @@
 
 | Объект | Всего | Принято сейчас | Осталось |
 |---|---:|---:|---:|
-| GPT agent roles: authoring/static/integration | 55 | 52 | 3 |
+| GPT agent roles: authoring/static/integration | 55 | 55 | 0 |
 | GPT agent roles: behavioral acceptance | 55 | 0 | 55 |
 | Workflow commands: полная приёмка | 9 | 0 | 9; у 3 есть только caller compatibility |
 | Knowledge/support skills: полная приёмка | 21 | 0 | 21 |
@@ -105,7 +105,7 @@
 | A14 | `frontend-ui-motion-reviewer`, `frontend-ui-interaction-reviewer`, `frontend-ui-design-critic` | Input/focus/error/loading/reduced-motion сценарии; critique привязан к цели и наблюдению | A13 | ASI 3/3 (2026-10-13); BEH 0/3 pending |
 | A15 | `presentation-reviewer`, `r3f-scene-reviewer`, `ui-design-reviewer`, `frontend-perf-reviewer` | Scroll/R3F lifecycle/color/disposal и UI; rendering/performance подтверждены инструментом, отсутствующий GPU/browser — gap | A14, K06 | ASI 4/4 (2026-10-13); BEH 0/4 pending |
 | A16 | `bot-reviewer`, `behavioral-nudge-engine` | Bot permission/state/retry проверены; nudges уместны, не меняют цель и не создают навязчивый workflow | A15, K03 | ASI 2/2 (2026-10-14); BEH 0/2 pending |
-| A17 | `gan-planner` → `packages/gan/skills/gan-planner/SKILL.md`; `gan-generator` → `packages/gan/skills/gan-generator/SKILL.md`; `gan-evaluator` → `packages/gan/skills/gan-evaluator/SKILL.md` | Единый plan→implementation→Playwright rubric; независимость, bounded retries, no false success и остановка при отсутствии browser | A16, C01, A05 | PENDING |
+| A17 | `gan-planner` → `packages/gan/skills/gan-planner/SKILL.md`; `gan-generator` → `packages/gan/skills/gan-generator/SKILL.md`; `gan-evaluator` → `packages/gan/skills/gan-evaluator/SKILL.md` | Единый plan→implementation→Playwright rubric; независимость, bounded retries, no false success и остановка при отсутствии browser | A16, C01, A05 | ASI 3/3 (2026-10-14); BEH 0/3 pending |
 
 ## 6. Реестр workflow commands — 9, три пакета
 
@@ -172,6 +172,6 @@ Owned surfaces: `lib/codex.js`, `lib/installer.js`, `tools/convert-agents-to-cod
 
 Отчёты событийные: после пакета, на blocker, перед gate/release; при длительном выполнении — agreed progress cadence. Это правило дальнейших отчётов в чатах, **не background automation**. Canonical tracker — этот документ; local `next-session.md` содержит только краткий handoff и ссылку, не дублирует весь каталог.
 
-**Текущий checkpoint, 2026-10-14:** A16 принят после независимого Sol APPROVE без findings и final Astra integrated SOURCE acceptance. Добавлены `bot-reviewer`, `behavioral-nudge-engine`; узко исправлено описание доступности/dispatch в каталоге и INSTALL. ASI **52/55** (+2; осталось **3**), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. A01–A16 ASI завершены плюс H00; BEH pending. Codex native protection55 =52roles+3callers, optionalGAN3 ещё отдельно pending. [Evidence](../migrations/astra-native/evidence/GPT-final-five-roles-2026-10-14/acceptance.md): npm275/275, native2/2, metadata/stock2/2, bounded copySkills2/2, counts/remote/phase/diff pass. Base A16 `cf5dfeb`; checkpoint commit/push выполняет координатор.
+**Текущий checkpoint, 2026-10-14:** A17 принят после независимого Sol APPROVE без findings и final Astra coherent-three-role SOURCE/static/integration acceptance. Optional `gan-planner`, `gan-generator`, `gan-evaluator` согласованы; Codex README уточняет критерии, независимость, блокеры и сохраняющую пользовательские файлы ручную установку. ASI **55/55** (+3 A17; +5 A16–A17; осталось **0** исходников ролей), BEH **0/55**, workflows **0/9** (3 partial callers), support **0/21**. H00 и A01–A17 ASI завершены; BEH pending. Основной native manifest55 =52roles+3callers; optionalGAN3 находятся вне core-converter и проверены отдельно без ложного manifest58. [Evidence](../migrations/astra-native/evidence/GPT-final-five-roles-2026-10-14/acceptance.md): финальный npm276/276, preservation3/3, metadata/stock3/3, изолированная копия3skills+2rubrics и сохранение customized/symlink targets, counts/remote/phase/diff pass. A16 опубликован в `55161a9`; это base A17, финальный checkpoint commit/push выполняет координатор. Никакой live GAN/model/UI, full workflow/support/install или production приёмки не заявлено.
 
-**Текущий разрешённый следующий шаг:** A17 optional GAN planner/generator/evaluator в `packages/gan/skills`; SOURCE-приёмка, затем остановиться на ASI55/55. Проверить actual converter/install ownership, не добавлять отсутствующие Codex пути в основной manifest. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge/release не входят в запрос; G01/K01/W00B и behavioral/workflow/support gates открыты.
+**Граница остановки:** последние пять SOURCE-ролей и весь каталог55 на уровне ASI завершены. После checkpoint остановиться; не запускать следующую очередь автоматически. Live evaluations, runtime/config changes, Claude migration, новая eval-инфраструктура, merge и release не выполнялись. Следующие обязательства остаются открытыми: G01/K01/W00B, BEH, workflow/support, I01/D01 и release gates; их выполнение требует соответствующего отдельного scope/authority.

@@ -2,6 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   copyFileSync,
+  existsSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -14,6 +15,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const ganSkills = ['gan-evaluator', 'gan-generator', 'gan-planner'];
 const nativeSkills = [
   'architect',
   'plan-checker',
@@ -105,9 +107,26 @@ function runConverter(repository) {
   });
 }
 
-test('converter preserves every declared native skill byte-for-byte and still converts other agents', (t) => {
+function copyGanSkills(repository) {
+  const contents = new Map();
+
+  for (const name of ganSkills) {
+    const source = join(root, `packages/gan/skills/${name}/SKILL.md`);
+    const destination = join(repository, `packages/gan/skills/${name}/SKILL.md`);
+    const content = readFileSync(source);
+    contents.set(name, content);
+    mkdirSync(dirname(destination), { recursive: true });
+    writeFileSync(destination, content);
+  }
+
+  return contents;
+}
+
+test('converter preserves every declared native skill and converts other agents when optional GAN is absent', (t) => {
   const repository = tempRepository(t);
   const nativeContents = new Map();
+
+  assert.equal(existsSync(join(repository, 'packages/gan')), false);
 
   for (const [index, name] of nativeSkills.entries()) {
     const content = Buffer.from(`native-${name}-${index}\n\u0000binary-safe\n`, 'utf8');
@@ -137,6 +156,37 @@ test('converter preserves every declared native skill byte-for-byte and still co
   assert.match(converted, /^name: ordinary-reviewer$/m);
   assert.match(converted, /Use the `file reads` tool\./);
   assert.doesNotMatch(converted, /model: opus|allowed-tools:/);
+});
+
+test('converter leaves optional GAN skill sources byte-for-byte unchanged and outside ordinary Codex output', (t) => {
+  const repository = tempRepository(t);
+  const ganContents = copyGanSkills(repository);
+
+  for (const name of nativeSkills) {
+    mkdirSync(join(repository, `packages/codex/skills/${name}`), { recursive: true });
+    writeFileSync(
+      join(repository, `packages/codex/skills/${name}/SKILL.md`),
+      `native-${name}\n`,
+    );
+  }
+  writeAgent(repository, 'ordinary-reviewer', 'Use the `Read` tool.');
+
+  const result = runConverter(repository);
+  assert.equal(result.status, 0, `${result.stdout}\n${result.stderr}`);
+  assert.match(result.stdout, /Converted: ordinary-reviewer\.md/);
+
+  for (const [name, expected] of ganContents) {
+    assert.deepEqual(
+      readFileSync(join(repository, `packages/gan/skills/${name}/SKILL.md`)),
+      expected,
+      `${name} must remain owned by the optional GAN package`,
+    );
+    assert.equal(
+      existsSync(join(repository, `packages/codex/skills/${name}/SKILL.md`)),
+      false,
+      `${name} must not be registered as ordinary converter output`,
+    );
+  }
 });
 
 test('converter fails before conversion when a declared native skill is missing', (t) => {
