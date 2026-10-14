@@ -12,6 +12,8 @@ GPT backend/data/delivery/language reviews use project-specific schema, query, t
 
 Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Its source acceptance remains separate from live behavior and full support/workflow acceptance.
 
+Codex authoring guides preserve role-specific verdicts and scoped review/workflow authority, require evidence-backed findings and truthful verification coverage, and use conditional project examples.
+
 ```
 packages/
   core/                     # Generic components (any project)

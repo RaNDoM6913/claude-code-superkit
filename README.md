@@ -332,6 +332,8 @@ See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
 Codex architecture references distinguish unconfigured templates from source-backed project facts. Output guidance measures completeness against the authorized change and supports scoped patches, read-only reports, and explicit implementation or verification gaps.
 
+Codex reviewer/workflow authoring guides preserve the selected role's verdict and authority contract, tie checks to actual project evidence, and distinguish unavailable verification from passing checks. Examples illustrate applicable conditions rather than universal project requirements.
+
 </details>
 
 ### ⚡ Superpowers plugin

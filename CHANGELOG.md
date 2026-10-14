@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT authoring guides (2026-10-14):** Astra-authored writing-agents and writing-commands align reusable reviewer/workflow instructions with scoped authority, applicable project contracts, evidence-backed findings, explicit coverage and truthful verification. Contextual Docker/test examples replace blanket checklist rules; authoring/source acceptance remains separate from behavioral qualification.
+
 - **GPT architecture/output support (2026-10-14):** Astra-authored project-architecture and output-enforcement distinguish unconfigured architecture from source-backed facts and bind completeness to the authorized change. Scoped patches, read-only reports, legitimate TODOs, and explicit incomplete/verification gaps are supported; source checks do not establish live behavior or full K01 acceptance.
 
 - **GPT optional GAN role packet (2026-10-14):** Astra-authored gan-planner, gan-generator, and gan-evaluator align scenario/rubric handoffs, bounded implementation and independent evidence-based verdicts. Missing mandatory rubric or runtime evidence remains explicit; optional manual distribution and source preservation are separate from live GAN/model acceptance.
