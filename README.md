@@ -330,6 +330,8 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 
+Codex architecture references distinguish unconfigured templates from source-backed project facts. Output guidance measures completeness against the authorized change and supports scoped patches, read-only reports, and explicit implementation or verification gaps.
+
 </details>
 
 ### ⚡ Superpowers plugin

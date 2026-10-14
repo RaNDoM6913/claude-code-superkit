@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT architecture/output support (2026-10-14):** Astra-authored project-architecture and output-enforcement distinguish unconfigured architecture from source-backed facts and bind completeness to the authorized change. Scoped patches, read-only reports, legitimate TODOs, and explicit incomplete/verification gaps are supported; source checks do not establish live behavior or full K01 acceptance.
+
 - **GPT optional GAN role packet (2026-10-14):** Astra-authored gan-planner, gan-generator, and gan-evaluator align scenario/rubric handoffs, bounded implementation and independent evidence-based verdicts. Missing mandatory rubric or runtime evidence remains explicit; optional manual distribution and source preservation are separate from live GAN/model acceptance.
 
 - **GPT bot/nudge packet (2026-10-14):** Astra-authored bot-reviewer and behavioral-nudge-engine instructions use platform-specific delivery/state/security contracts and evidence-backed product nudge plans. User stop/snooze preferences and design-versus-execution authority remain explicit; native source preservation does not establish live bot or behavioral acceptance.

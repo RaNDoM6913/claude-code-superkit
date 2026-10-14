@@ -1,69 +1,71 @@
 ---
 name: output-enforcement
-description: Anti-laziness enforcement — bans placeholder patterns (// ..., // TODO, // rest of code), enforces complete code generation, handles token-limit splits cleanly. Activate for every code generation task.
+description: Use when generating or modifying code, reviewing a proposed patch, or reporting implementation completion, especially when omitted work, placeholders, verification gaps, or output limits may affect the deliverable.
 user-invocable: false
+tokens: 920
 ---
 
-# Full Output Enforcement
+# Scope-Bound Completeness
 
-Never produce incomplete code. Every response must contain complete, runnable code.
+Complete the authorized deliverable and report its actual state. Completeness is
+judged against the requested result and applicable acceptance criteria, not the
+number of files printed or the presence of particular comment strings.
 
-## Banned Patterns
+## Before Writing
 
-These MUST NEVER appear in generated code:
+1. Identify the requested outcome, allowed scope, delivery form, and required
+   verification. Reuse an accepted plan; resolve only ambiguities that materially
+   affect the result.
+2. Inspect the affected code and local contracts before changing them. Identify
+   required callers, imports, types, configuration, and tests within the change's
+   dependency path. Preserve unrelated files, behavior, and existing user edits.
+3. Choose a suitable artifact. A scoped patch may be complete in its existing
+   project context. A requested standalone program must include its required
+   pieces and setup. A read-only review, explanation, or plan may be prose and
+   does not authorize implementation.
 
-```
-// ...
-// rest of code
-// rest of the implementation
-// implement here
-// TODO: implement
-// TODO
-// existing code...
-// previous code remains
-// ... (other methods)
-// similar to above
-/* ... */
-# ... rest
-# TODO
-```
+## Implement the Required Change
 
-## Execution Protocol
+- Supply all logic needed for the authorized result, including its required error
+  paths and integration. Do not replace required behavior with empty bodies,
+  canned success, dummy data, or comments promising later implementation.
+- Use focused edits and preserve surrounding code. A patch need not reproduce
+  unchanged file contents. A full replacement file must retain all required
+  content; omission markers must not stand in for code that the replacement needs.
+- Assess TODOs, comments, ellipses, stubs, and fixtures by their role. Legitimate
+  syntax, explanatory comments, existing deferred work, and explicitly requested
+  scaffolds or examples are allowed. Label illustrative or intentionally partial
+  output clearly; do not pass it off as the requested working implementation.
+- Do not fix unrelated TODOs or expand the task merely to make a file appear
+  finished. If a newly discovered dependency exceeds authorization, report the
+  concrete gap and its effect on completion.
 
-### Before Writing Code
+## Verify and Report
 
-1. **Scope:** Count files and functions to generate
-2. **Build:** Write every file completely — no shortcuts
-3. **Cross-check:** Verify every import resolves, every type exists, every function is defined
+Inspect the resulting diff for scope, accidental omissions, and unintended
+changes. Check affected imports, types, calls, and interfaces against the project
+and its toolchain. Run the applicable focused checks and mandatory acceptance
+gates; inspect their results. Reading code does not establish a passing build,
+test, runtime, or deployment result.
 
-### During Writing
+In the delivery report, state what was produced or changed, the checks actually
+performed and their outcomes, and remaining work or uncertainty. For read-only
+work, report the inspected scope and evidence limits. Match claims to evidence:
+implemented, checked, and accepted are distinct states.
 
-- Write complete file from first line to last
-- If a file is too long for one response, write to a clean breakpoint (complete function/class)
-- Mark pause point: `[PAUSED — 3 of 7 files complete. Continuing with AuthService.ts]`
+If required behavior or a required acceptance gate remains unresolved, mark the
+overall deliverable **INCOMPLETE**, name the missing work or verification and its
+blocker, and give the next concrete step. Implementation may be finished while
+verification is still pending; say both. Never infer success from an unrun check
+or conceal a failed check with a completion claim.
 
-### Quick Check (Run Before Every Response)
+## Output and Context Limits
 
-1. Search for banned patterns in your response
-2. Verify every `import` has a matching `export`
-3. Verify every type reference has a definition
-4. Verify no function calls reference undefined functions
-
-## Token Limit Handling
-
-If approaching token limit mid-file:
-
-1. Finish the current function/class completely
-2. Add pause marker with progress tracking
-3. In next response, continue from the marker — don't repeat completed code
-
-**Format:**
-```
-[PAUSED — AuthController.ts: 4 of 6 methods complete]
-[Completed: login, logout, refresh, validate]
-[Remaining: resetPassword, changeEmail]
-```
-
-## The Rule
-
-**Incomplete code is worse than no code.** A placeholder `// TODO` becomes invisible tech debt. A complete implementation can be reviewed, tested, and shipped.
+Use available file-editing tools for substantial changes and return concise file
+references or a patch in the requested format. If a real limit prevents finishing,
+stop at a coherent boundary when feasible and record **INCOMPLETE** with the exact
+file or unit reached, saved changes, remaining work, and verification status. If
+an artifact is partial or unusable, identify it explicitly. Resume from that
+checkpoint when continuation is available, checking current state before editing;
+do not overwrite intervening work, repeat completed edits, or claim continuation
+has happened before it does.

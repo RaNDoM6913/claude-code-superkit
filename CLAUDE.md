@@ -10,6 +10,8 @@ GPT backend/data/delivery/language reviews use project-specific schema, query, t
 
 ## Project Structure
 
+Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Its source acceptance remains separate from live behavior and full support/workflow acceptance.
+
 ```
 packages/
   core/                     # Generic components (any project)

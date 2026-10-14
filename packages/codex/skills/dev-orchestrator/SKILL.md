@@ -1,6 +1,6 @@
 ---
 name: dev-orchestrator
-description: Coordinate development across planning, implementation, verification, and review gates when a task needs multiple dependent steps or consequential decisions.
+description: Coordinate development through 16 phases (0-15) across planning, implementation, verification, and review gates when a task needs multiple dependent steps or consequential decisions.
 user-invocable: true
 tokens: 4876
 ---
