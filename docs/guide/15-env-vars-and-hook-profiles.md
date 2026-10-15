@@ -33,7 +33,8 @@ env:
   CLAUDE_HOOK_PROFILE: fast
 ```
 
-The profile is shown in the statusline (`packages/core/helpers/statusline.cjs`). If nothing is set, it reads `standard`.
+The hook helper (`packages/core/hooks/lib/profile.sh`) defaults to `standard`
+when the variable is unset. The current statusline does not display the profile.
 
 ---
 
@@ -208,5 +209,5 @@ export CLAUDE_DISABLE_SUBAGENT_VALIDATE=1
   grep -rn "CLAUDE_DISABLE" packages/ | grep -v tests/
   ```
 - Wire-up lives in `packages/core/settings.json` (core + stack hooks) and each self-contained package's `settings.json`.
-- Profile default (`standard`) is set by `packages/core/helpers/statusline.cjs` when none is exported — the statusline shows the active profile next to the model name.
+- The shared hook helper (`packages/core/hooks/lib/profile.sh`) defaults to `standard` when no profile is exported; the current statusline does not show a profile badge.
 - Internal `CLAUDE_HOOK_PID` and `CLAUDE_PROJECT_DIR` are set by Claude Code itself; if they're missing, check you're launching via the harness and not piping into a hook manually.

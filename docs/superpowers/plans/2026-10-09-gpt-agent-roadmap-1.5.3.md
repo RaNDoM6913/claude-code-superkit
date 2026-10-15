@@ -1,6 +1,6 @@
 # Codex-only Superkit delivery plan — 1.5.3 candidate
 
-**Status:** Active scope from the owner's 2026-10-15 direction. Standalone installation/update and bounded workflow/support/native-hook implementation accepted; trusted hook activation and final release candidate remain open.
+**Status:** Active scope from the owner's 2026-10-15 direction. Standalone installation/update, bounded workflow/support/hooks and a POSIX native activation smoke are accepted. A reviewed local candidate is prepared; version selection and publication remain owner decisions.
 **Outcome:** A standalone, automated Codex-only install and distributable artifact in this repository, with preserved user customizations and accurate documentation.
 **Routing:** The coordinator owns scope, integration and acceptance. Under the owner's latest 2026-10-15 direction, delegate useful independent work to GPT-6.1 Sol; this supersedes the earlier contributor Astra/Sol split for continuation. Preserve accepted Astra-authored sources and shipped consumer model defaults. Claude prompt work remains separate.
 **Agreement:** [Contributor working agreement](../../WORKING_AGREEMENT.md).
@@ -30,7 +30,9 @@ Installation evidence: [2026-10-15 installation packet](../migrations/astra-nati
 - [x] Keep truthful evidence, authority checks, failure handling and escalation in shipped prompts. Missing verification remains explicit; destructive actions and external writes retain their authorization boundaries.
 - [x] Confirm that the documented Codex-only workflow can use its installed roles/support without requiring a Claude installation. Scope any runtime smoke to the actual tools exercised; model evaluations require separate authorization.
 
-Compatibility evidence: [2026-10-15 workflow/hooks packet](../migrations/astra-native/evidence/GPT-codex-workflows-hooks-2026-10-15.md). Nine workflows and all 21 support skills inspected; 13 necessary source corrections, 17 support sources unchanged. Two native command handlers are installed with preserved user configuration. Checks cover source/package discovery, native rule parsing and direct installed handlers; native lifecycle firing remains UNVERIFIED behind project/hook trust. This scoped acceptance does not claim live workflow/model quality or full Claude hook parity.
+Compatibility evidence: [2026-10-15 workflow/hooks packet](../migrations/astra-native/evidence/GPT-codex-workflows-hooks-2026-10-15.md). Nine workflows and all 21 support skills inspected; 13 necessary source corrections, 17 support sources unchanged. Two native command handlers are installed with preserved user configuration. Checks cover source/package discovery, native rule parsing and direct installed handlers; native lifecycle firing was subsequently observed in the separately trusted disposable fixture below; other projects still require their own project/hook trust. This scoped acceptance does not claim live workflow/model quality or full Claude hook parity.
+
+Native activation and candidate evidence: [2026-10-15 reviewed local candidate](../migrations/astra-native/evidence/GPT-codex-native-activation-candidate-2026-10-15.md). PreToolUse denial and Stop continuation/completion were observed in actual Codex; one partial timed-out probe is preserved alongside the successful bounded successor. This does not qualify other runtimes or model behavior.
 
 ## 3. Focused verification and acceptance
 
@@ -42,10 +44,11 @@ Compatibility evidence: [2026-10-15 workflow/hooks packet](../migrations/astra-n
 
 ## 4. Documentation and release candidate
 
-- [ ] Align README, contributor docs, Codex install/usage guides, affected catalogs and changelog with the actual delivered interface, counts and supported capabilities; distinguish Astra source authorship from historical Claude work.
-- [ ] Inspect all changes since the previous release, package contents and the existing distribution workflow. Do not silently include unfinished Claude work or research dependencies.
-- [ ] Verify current release/tag availability before selecting 1.5.3; synchronize version files and candidate release notes only with the accepted final scope. Do not skip a version if it is already taken.
-- [ ] Present the concrete candidate commit, artifact, verification and remaining limitations. Merge, tag, release publication and any new distribution channel require the owner's separate approval.
+- [x] Align README, contributor docs, Codex install/usage guides, affected catalogs and changelog with the actual delivered interface, counts and supported capabilities; distinguish Astra source authorship from historical Claude work.
+- [x] Inspect all changes since the previous release, package contents and the existing distribution workflow. Do not silently include unfinished Claude work or research dependencies.
+- [x] Check current release/tag availability: v1.5.3 was not observed on 2026-10-15; recheck at any future release decision. No version selected.
+- [ ] Owner-authorized release only: choose the available next version, synchronize version files/release notes, scope external GitHub About authorship, then perform only separately approved push/merge/tag/publication actions. Version remains 1.5.2 for this local candidate.
+- [x] Present the concrete candidate commit, artifact, verification and remaining limitations. Merge, tag, release publication and any new distribution channel require the owner's separate approval.
 
 ## Completion and continuation
 

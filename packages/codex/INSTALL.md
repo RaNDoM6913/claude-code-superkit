@@ -172,8 +172,8 @@ These include converted core/extras roles and native GPT roles with Astra-author
 | `comment-rot-analyzer` | Quality |
 | `security-scanner` | Security — OWASP top-10 + 18 generic checks |
 | `silent-failure-hunter` | Quality |
-| `audit-frontend` | Audit — frontend code quality (15 checks) |
-| `audit-backend` | Audit — backend code quality (15 checks) |
+| `audit-frontend` | Audit — 12 frontend checks against assigned product, data and toolchain contracts; evidence gaps explicit |
+| `audit-backend` | Audit — 12 backend domains against assigned API, data-access and operational contracts; evidence gaps explicit |
 | `audit-infra` | Audit — infrastructure security (12 checks) |
 | `migration-reviewer` | Quality — SQL migration review |
 | `test-generator` | Productivity — generate tests |
@@ -190,13 +190,13 @@ These include converted core/extras roles and native GPT roles with Astra-author
 | `design-system-reviewer` | Quality — design system compliance |
 | `database-reviewer` | Quality — PostgreSQL specialist |
 | `architect` | Quality — system design advisor |
-| `plan-checker` | Quality — 8-dimension plan validation |
+| `plan-checker` | Quality — requirement coverage, repository facts, dependencies, authority and feasible verification; PASS / REVISE / BLOCK |
 | `goal-verifier` | Quality — 4-level goal substantiation, 3-state verdict (PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION) |
 | `evaluator` | Quality — calibrated QA scoring against Sprint Contract |
 | `project-architecture` | Knowledge — project architecture reference |
 | `ai-slop-cleaner` | Quality — detect and fix AI-generated code patterns |
 | `critic` | Quality — multi-perspective final quality gate |
-| `visual-reviewer` | Quality — UI consistency scoring, design system compliance |
+| `visual-reviewer` | Quality — visual/design-system review with separate source, rendered and interaction evidence; scoring only with an approved rubric |
 | `tree-generator` | Productivity — generate project tree files |
 | `writing-agents` | Knowledge — how to write agents |
 | `writing-commands` | Knowledge — how to write command orchestrators |

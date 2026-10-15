@@ -1,17 +1,33 @@
-# Astra-native migration ledger
+# Astra-native migration ledger — historical research inventory
+
+**INACTIVE / HISTORICAL:** the original migration waves and checkpoint counts
+below are preserved as history, not an execution queue. The owner's 2026-10-15
+[Codex-only delivery plan](../../plans/2026-10-09-gpt-agent-roadmap-1.5.3.md)
+governs current product work. Accepted role sources reached 55/55 at the
+[final role checkpoint](evidence/GPT-final-five-roles-2026-10-14/acceptance.md).
+Current standalone/update and bounded workflow/support/hook evidence is in the
+[installation packet](evidence/GPT-codex-installation-2026-10-15.md) and
+[compatibility packet](evidence/GPT-codex-workflows-hooks-2026-10-15.md).
+The current manifest protects 65 native sources. A bounded POSIX native hook
+smoke is recorded in the [activation and candidate packet](evidence/GPT-codex-native-activation-candidate-2026-10-15.md); it does not qualify every workflow or runtime. Do not resume W00B, G01/G02, provider/collector or old B2/B3 queues
+from this page; those research programs are outside current product scope and
+are not claimed complete. Version selection/publication follows the active plan
+and current owner authorization, not this historical planned-version snapshot.
 
 Baseline commit: `e0314ad46442729578bfd43f409e52b6843282fc`. The machine-readable ledger contains 579 tracked and untracked repository surfaces. Current baseline evidence is `pass-with-environment-resolution`; see `baseline.json` and `evidence/W00A/baseline/` for exact exits and outputs.
 
-## Current GPT roadmap to 1.5.3
+## Historical GPT roadmap snapshot — inactive
 
-The [2026-10-09 roadmap](../../../superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md)
-is the current owner-requested plan and progress tracker. Its primary scope is
+The [archived 2026-10-09 research roadmap](../../plans/2026-10-09-gpt-agent-roadmap-1.5.3-ARCHIVED-research.md)
+was the owner-requested plan and progress tracker at this checkpoint. It has since
+been superseded by the product scope linked above. The historical snapshot's
+primary scope was
 55 GPT agent roles (52 in `packages/codex`, plus 3 optional GAN roles); 9 workflows
 and 21 supporting skills are tracked separately for compatibility. 23 agent roles
 have authoring/static/integration acceptance, and zero have recorded target-model
 behavioral acceptance. Three workflow callers have partial compatibility changes,
 which are not counted as completed workflow migrations. These counts do not mark
-the original migration gates below complete. Version 1.5.3 is the planned release
+the original migration gates below complete. Version 1.5.3 was the planned release
 after the scoped work, mandatory acceptance, and documentation updates.
 
 The previous [four-role delivery checkpoint](evidence/GPT-role-implementation/acceptance.md)
@@ -24,16 +40,17 @@ was completed as 4 + 3 + 3 source packets. P1 review, P2 API/diagnosis, and P3
 tests/health roles are accepted, advancing the source count to 20/55 (35 remaining).
 Behavioral acceptance is still separate and pending; the ten-role boundary is closed.
 
-The [next ten-role request](evidence/GPT-next-ten-roles-2026-10-11/acceptance.md)
-is authorized here in Codex as 3 + 3 + 4 packets. B1 is accepted (23/55 source);
-B2 backend/data and B3 delivery/language roles remain authorized next. The earlier
+The [then-next ten-role request](evidence/GPT-next-ten-roles-2026-10-11/acceptance.md)
+was authorized here in Codex as 3 + 3 + 4 packets. At that snapshot B1 was accepted
+(23/55 source), with B2 backend/data and B3 delivery/language next. This historical
+queue is superseded; use the accepted final role evidence above. The earlier
 seven-role OrchKit prompt was prepared only and is not counted as executed work.
 
 ## Artifact accounting
 
 Ledger, baseline, README, and checked-in evidence are inventory surfaces. Files absent from the immutable baseline commit have `baselineSha256: null`. Generated artifacts do not embed hashes of their own current contents, avoiding circular hashes while keeping their paths owned and reconciled. Ignored temporary files and `.git` are excluded by Git's own tracked/untracked enumeration; no source directory is blanket-excluded.
 
-## Migration tasks
+## Historical migration tasks — inactive status snapshot
 
 | Wave | Scope | Status | Evidence / report |
 |---|---|---|---|
@@ -70,7 +87,7 @@ Ledger, baseline, README, and checked-in evidence are inventory surfaces. Files 
 | W10A | Final documentation and migration handoff | pending | — |
 | W10B | Conditional merge and next release | pending | — |
 
-## Open items
+## Historical open items — inactive
 
 - The owner resumed direct GPT-layer work on 2026-10-09. The first package updates six decision/acceptance roles with Astra-authored prompts, bounded Sol technical integration, and an independent Sol review. See [the role-core checkpoint](evidence/GPT-role-core/acceptance.md). This is a source/integration checkpoint, not completion of the pending migration waves above.
 
