@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **GPT plan-checker offline collector (2026-10-15):** added a bounded one-case process/JSONL collector with separate invocation and deterministic-oracle provenance, immutable raw artifacts and input/tree verification. Native launch is disabled by default; fixture transport/oracle results do not establish worker-command causality, read scope, observed runtime or G01 qualification.
+
 - **GPT plan-checker case/oracle (2026-10-14):** added a role-specific unresolved owner-decision case and a strict normalized native-output oracle with collector-bound verification and read-only checks. Deterministic candidate tests do not select policy; source/oracle acceptance remains separate from G01 live qualification.
 
 - **GPT authoring guides (2026-10-14):** Astra-authored writing-agents and writing-commands align reusable reviewer/workflow instructions with scoped authority, applicable project contracts, evidence-backed findings, explicit coverage and truthful verification. Contextual Docker/test examples replace blanket checklist rules; authoring/source acceptance remains separate from behavioral qualification.
