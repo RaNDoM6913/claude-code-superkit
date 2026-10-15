@@ -41,7 +41,7 @@ controls installed assets; no new distribution service/package is introduced.
 | Core hooks `tests/run-all.sh` | 15 suites PASS |
 | Frontend UI hook scripts | animation 13/13, banned-fonts 9/9, color 12/12 PASS |
 | Integrity with remote About check | PASS; version 1.5.2, agents 56, commands 16, hooks 42, skills 22, rules 19; Codex 82 |
-| Phase/stale references and whitespace | 16-phase references consistent; no stale 8-phase hits; `git diff --check` PASS |
+| Phase/stale references and whitespace | 16-phase references consistent; no obsolete phase references; `git diff --check` PASS |
 | Real unpacked local npm archive | 82 skills installed; source/installed bytes equal; no Claude tree; repeat idempotent |
 | Actual v1.5.2 old CLI install, then candidate `--codex-only` | 58 pristine skills updated and backed up; 1 edited reviewer retained; custom config/AGENTS retained; Claude tree unchanged; second run idempotent |
 | Actual local CLI discovery | `codex-cli 0.162.0-alpha.17.2`, read-only `codex debug prompt-input`, all 82 expected project skills present |

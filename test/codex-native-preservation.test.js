@@ -72,6 +72,16 @@ const nativeSkills = [
   'frontend-perf-reviewer',
   'bot-reviewer',
   'behavioral-nudge-engine',
+  'test-runner',
+  'lint-runner',
+  'commit-helper',
+  'new-migration',
+  'migrate',
+  'benchmark',
+  'impeccable-craft',
+  'html-to-3d-texture',
+  'go-benchmark',
+  'postgresql-optimization',
 ];
 
 function tempRepository(t) {

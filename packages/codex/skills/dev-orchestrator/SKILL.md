@@ -2,7 +2,7 @@
 name: dev-orchestrator
 description: Coordinate development through 16 phases (0-15) across planning, implementation, verification, and review gates when a task needs multiple dependent steps or consequential decisions.
 user-invocable: true
-tokens: 4876
+tokens: 5197
 ---
 
 # Development Orchestrator
@@ -12,6 +12,10 @@ Run the development cycle for the user's request as 16 numbered phases (0-15). R
 ## Task
 
 Parse the user's request to determine scope and parameters.
+
+## Codex Runtime and Skill Resolution
+
+Read the applicable `AGENTS.md` instructions and discover the current runtime's file, command, planning, and delegation capabilities before using them. Resolve each named role to an existing `SKILL.md` from the session's skill catalog or the project's `.agents/skills/<name>/SKILL.md` / `.codex/skills/<name>/SKILL.md`; these may be aliases of the same installation. Read that role directly and give delegated workers its resolved path, scoped task, authority, and evidence. A role name is not a registered agent type. Do not invoke a global skill loader or recursively restart this orchestrator to reach a role. The standalone install does not require a `.claude` tree, plugins, or documentation templates. Missing required expertise or tools remain explicit blockers; suitable inline passes are self-review, not independent acceptance.
 
 ## Hard Rules
 
@@ -105,7 +109,7 @@ Present to the user: "Here's the pseudocode for [core logic]. Does this match yo
 
 ## Phase 4 -- Plan
 
-Produce a checklist plan organized by component -- include only relevant sections. Use `update_plan` to track progress.
+Produce a checklist plan organized by component -- include only relevant sections. Use a discovered planning tool when available; otherwise maintain the checklist in the conversation or the project's existing plan file.
 
 ```
 ## Implementation Plan
@@ -155,7 +159,7 @@ Validate the Phase 4 plan plus Phase 5 contract following the **plan-checker** s
 
 Execute the plan in dependency order; for each step, read the reference pattern first, then implement.
 
-1. **Migration** -- next number in the project's migration directory; up + down files; parameterized DDL, `IF NOT EXISTS`, appropriate types.
+1. **Migration** -- follow the detected tool's actual format and ordering, existing database dialect, and project rollback policy. Use the installed **new-migration** skill for scaffolding when relevant. Creating files does not authorize database execution; use **migrate** only with verified target, action, and authority. Conditional DDL is not a guarantee against data loss, and not every tool supports paired up/down files or a lossless reverse.
 2. **Data layer** -- follow the project's existing data-access patterns (Go: pgx/sqlx/gorm, nil-safe repos, `fmt.Errorf("Context.Method: %w", err)`; Python: SQLAlchemy/Django ORM; TypeScript: Prisma/TypeORM/Drizzle).
 3. **Business logic** -- constructor DI via interfaces; Go: `context.Context` first param, domain errors; Python: type hints, async where applicable; TypeScript: strict types.
 4. **Transport** -- follow existing handler patterns (chi, gin, echo, express, FastAPI, etc.); input validation at the boundary; errors mapped to proper status codes.

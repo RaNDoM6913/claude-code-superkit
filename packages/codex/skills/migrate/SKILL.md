@@ -1,83 +1,60 @@
 ---
 name: migrate
-description: Apply or rollback database migrations — auto-detects migration tool
+description: Inspect, apply, or roll back database migrations with a verified tool, target, and authorized action
 user-invocable: true
+tokens: 1252
 ---
 
 # Database Migrations
 
-Apply or rollback database migrations with auto-detection of the migration tool.
+Inspect or execute the project's configured migration workflow. Read applicable `AGENTS.md` instructions and discover the runtime's command tools before use.
 
-## Target
+## Target and Authority
 
-Parse the user's request to determine the action. Accepted formats: `up`, `down`, `down N`, `status`.
+Parse the user's request as intent: `up`, `down`, `down N`, or `status`. With no action, prepare a status inspection; never default to applying changes. Before any connection, resolve the exact component, database/environment, migration directory and configuration using non-secret evidence. Do not print credentials, connection URLs, environment dumps or private records. If the target or authorized access is unclear, stop before contacting it and ask for the missing information.
+
+Before mutation, verify existing user authority covers that target, direction, migration set and destructive effects. A known database URL is not permission to modify it. Present the concrete pending/rollback set and its data impact; retain an already authorized bounded action without repeatedly asking. For destructive or shared/production operations, verify the project's required backup/recovery and approval conditions. Missing authority or recovery evidence blocks execution, not local inspection. Do not start infrastructure or change connection configuration implicitly.
 
 ## Step 1 — Detect Migration Tool
 
-Scan the project for migration tool markers:
+Inspect actual configuration, dependencies, installed version, command help and existing migrations. Markers only select candidates. Inspect wrapper/Make targets for side effects before preferring them. Use installed binaries or existing package-manager scripts; never install a missing tool implicitly.
 
-| Marker | Tool | Apply Command | Rollback Command |
-|--------|------|--------------|-----------------|
-| `Makefile` with `migrate-up` | Make | `make migrate-up` | `make migrate-down` |
-| `Makefile` with `migrate` | Make | `make migrate` | `make migrate-rollback` |
-| `golang-migrate` or numbered `.sql` pairs | golang-migrate | `migrate -path <dir> -database $DB up` | `migrate ... down 1` |
-| `dbmate` in deps or PATH | dbmate | `dbmate up` | `dbmate down` |
-| `alembic.ini` or `alembic/` | Alembic | `alembic upgrade head` | `alembic downgrade -1` |
-| `prisma/` + `package.json` | Prisma | `npx prisma migrate deploy` | `npx prisma migrate reset` |
-| `db/migrate/` + `Rakefile` | Rails | `rails db:migrate` | `rails db:rollback` |
-| `drizzle.config.ts` | Drizzle | `npx drizzle-kit push` | (manual) |
-| `knexfile.js` / `knexfile.ts` | Knex | `npx knex migrate:latest` | `npx knex migrate:rollback` |
+| Tool | Apply path to verify | Rollback semantics to verify |
+|------|----------------------|------------------------------|
+| golang-migrate | Configured migration path/database, `up` | Explicit `down N`; bare `down` may revert all migrations |
+| dbmate | Configured `migrate` or project wrapper; `up` may also create the database | Installed `rollback` / `down` alias reverts the latest migration; confirm each selected step |
+| Alembic | Configured upgrade revision, commonly `head` | Explicit revision or relative count; account for multiple heads |
+| Prisma | Installed version's migration deployment command | No generic down command; `migrate reset` is a destructive reset, not rollback |
+| Rails | Configured `db:migrate` | `db:rollback STEP=N` with the selected migration set |
+| Drizzle | Configured generated-migration apply command | Project-specific rollback/recovery; `push` directly changes schema and is not an interchangeable migration apply |
+| Knex | Configured `migrate:latest` | `migrate:rollback` reverts a batch, not necessarily one migration; use verified single-migration down or exact project procedure |
 
-If a `Makefile` target exists for migrations, prefer it — it may include environment setup.
+Do not substitute reset, schema push, force-version, resolve, rollback-all, or a sequence of undo/redo commands for an unsupported requested action.
 
-## Step 2 — Execute Command
+## Step 2 — Inspect and Execute
 
-Based on the user's request:
+### status / empty request
 
-### up (default if no argument)
-Apply all pending migrations:
-```bash
-<detected_apply_command>
-```
+After target and read access are established, use the installed tool's supported status/version/history operation. Verify whether it connects or creates metadata before use; select a non-mutating operation or report the limitation. Local migration files alone do not establish the database's applied version.
 
-### down
-Rollback the last migration:
-```bash
-<detected_rollback_command>
-```
+### up
 
-### down N (e.g., "down 3")
-Rollback N migrations:
-- **golang-migrate**: `migrate ... down N`
-- **Alembic**: `alembic downgrade -N`
-- **Rails**: `rails db:rollback STEP=N`
-- **Knex**: `npx knex migrate:rollback --all` (then migrate to target, or rollback N times in loop)
+Inspect pending migrations and apply only the authorized set to the verified target with the configured command. Stop on drift, dirty/failed migration state, unexpected reset prompts or changed target; do not repair or force progress automatically.
 
-### status
-Show migration status:
-- **golang-migrate**: `migrate ... version`
-- **Alembic**: `alembic current` + `alembic history`
-- **Prisma**: `npx prisma migrate status`
-- **Rails**: `rails db:migrate:status`
-- **dbmate**: `dbmate status`
+### down / down N
 
-## Step 3 — Report
+Interpret `down` as one migration only when the tool supports that meaning. Require N to be a positive integer and resolve the exact reverse migration set/target revision before execution. Do not translate N into batch count or `--all`. If the tool cannot express the requested bounded rollback safely, report the unsupported operation and the project's required alternative.
 
-Report the result:
-```
-## Migration Result
+For each command, pass validated arguments safely and keep credentials out of displayed command text. Preserve the original exit code and appropriately redacted evidence. After failure or timeout, inspect status within authorized read access before any retry; partial application is possible. Never retry an irreversible action blindly.
 
-- Tool: [detected tool]
-- Action: [up/down/status]
-- Command: `[exact command run]`
-- Result: [success/failure details]
-- Current version: [if available]
-```
+## Step 3 — Verify and Report
 
-## Notes
+After execution, read back migration state on the same verified target with an authorized status operation. A zero command exit without state verification is not confirmed application. Report:
 
-- Migrations require a running database — ensure Docker/infrastructure is up first
-- `down` is destructive — it may drop tables or columns. Double-check before running.
-- For `down N`, confirm with the user if N > 1 (safety measure)
-- If the project uses environment variables for DB connection, ensure they are loaded
-- Migration format: check existing files for the naming convention before creating new ones
+- Tool/version, component and redacted target identity.
+- Requested action and exact migration identifiers/revision range.
+- Command with secrets omitted, exit/status and safe evidence references.
+- Before/after state, actual result: APPLIED / ROLLED-BACK / STATUS-ONLY / FAILED / UNVERIFIED / BLOCKED.
+- Any partial application, unresolved drift, recovery dependency or next authorized action.
+
+Do not claim a backup exists, a rollback restored lost data, or the live application is healthy without corresponding evidence.

@@ -105,8 +105,9 @@ prefix_rule(
 the most restrictive decision wins: `forbidden` > `prompt` > `allow`.
 Simple shell commands may be split for checking; complex shell syntax may be
 checked as the whole shell invocation. Do not infer complete shell or SQL
-inspection from prefix rules. Validate custom rules with the installed Codex
-`execpolicy check` command before relying on them.
+inspection from prefix rules. Validate custom rules with `codex execpolicy check`
+before relying on them; check `codex execpolicy check --help` for the installed
+runtime's supported options.
 
 Adapted from VKirill/codex-starter-kit (MIT). See `packages/codex/rules/default.rules`
 for the complete ruleset.
@@ -238,22 +239,55 @@ agreement; they do not alter the model conventions of shipped Claude assets.
   success because a retry budget is exhausted.
 
 ### Planning
-- Use `update_plan` for tracking progress
+- Use the runtime's plan tool when available; otherwise keep a concise plan in
+  the conversation or an authorized project note.
 
 ### Skills
-- Skills auto-activate based on description matching
-- Invoke skills by describing the task that matches the skill description
+- Discover installed skills through `/skills` or `$`; explicitly select a skill
+  such as `$review-orchestrator`, or describe the matching task. Description-based
+  selection depends on the active runtime and is not guaranteed activation.
+- Resolve and read the selected installed `SKILL.md` before executing it. Missing
+  roles, executables, browser/service access or delegation remain explicit gaps.
 - Orchestrator skills use available, authorized delegation or disclosed inline
   execution as described above.
 
 ### Local Tool Mapping
-- Search files with `rg` / `rg --files`
-- Run shell checks with `exec_command`
-- Edit files with `apply_patch` unless using a mechanical formatter or bulk rewrite
+- Discover the active runtime's tools; names differ between CLI and desktop/API.
+- When available, search with `rg` / `rg --files`, run shell checks with
+  `exec_command`, and edit with `apply_patch` or an appropriate file tool.
+
+### Native Hook Checks
+
+The installer supplies `.codex/hooks/superkit.mjs` and a merge template at
+`.codex/superkit-hooks.json`. It creates `.codex/hooks.json` only when absent,
+the project config is absent or exactly stock, and hook assets have no conflict.
+Existing hook definitions/configuration are preserved; inspect and merge the
+template manually when needed. Installation grants no project or hook trust:
+review the definition and script, then use `/hooks` in a supporting runtime.
+
+- `PreToolUse` rejects recognized static destructive Git commands. It never
+  returns a permission allow; opaque shell syntax is unassessed, not safe.
+- `Stop` first enumerates Git config keys only. If any `filter.*.clean` or
+  `filter.*.process` is configured, including unused/global Git LFS drivers, it
+  skips both diffs and reports UNVERIFIED to avoid executing conversion programs.
+  It captures no filter values and changes no Git config. Otherwise it runs
+  read-only tracked/staged `git diff --check` checks and can request one
+  continuation. It does not establish tests/builds passed or verify untracked
+  file behavior. It runs no project scripts and reads no transcripts/services.
+- These two handlers in one script do not reproduce Claude's formatting,
+  documentation, migration, profile or session-continuity hooks. The wiring uses
+  a POSIX shell/Git root; Windows and cloud execution are unqualified.
+- Hook-definition trust is not complete attestation of the referenced script:
+  review managed script updates separately. Discovery, trust, handler execution
+  and observed native hook firing are separate evidence.
+
+See [official hook/trust documentation](https://learn.chatgpt.com/docs/hooks).
 
 ### Available Skills
 
-Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` with its description and instructions.
+The installer stores skills in `.codex/skills/<name>/SKILL.md` and exposes relative
+links at `.agents/skills/<name>` for discovery. Manual user skills may live in
+`~/.agents/skills/`. Each selected skill's instructions govern its execution.
 
 **Command skills (user-invocable):**
 
@@ -265,17 +299,17 @@ Skills are located in `.codex/skills/` directories. Each skill has a `SKILL.md` 
 | `test-runner` | Auto-detect and run project tests (Go, TS, Python, Rust) |
 | `lint-runner` | Auto-detect and run project linters with optional --fix |
 | `commit-helper` | Conventional commit: analyze changes, detect secrets, create commit |
-| `new-migration` | Scaffold migration file pair (up + down) with auto-numbering |
-| `migrate` | Apply or rollback database migrations |
-| `benchmark` | Run Go benchmarks with benchstat comparison |
+| `new-migration` | Discover the project's migration tool/dialect and scaffold its native format without applying it |
+| `migrate` | Inspect status by default; apply or roll back an explicitly authorized, bounded migration set |
+| `benchmark` | Run available Go benchmarks; compare an isolated baseline with installed tools |
 
 **Agent skills (available for task-specific use or existing orchestrator dispatch):**
 ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, audit-infra, behavioral-nudge-engine, bot-reviewer, code-reviewer, codebase-onboarding-engineer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, design-system-reviewer, docs-reviewer, e2e-test-generator, evaluator, goal-verifier, health-checker, migration-reviewer, minimal-change-engineer, plan-checker, pre-deploy-validator, project-architecture, reality-checker, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, ui-reviewer, visual-reviewer, writing-agents, writing-commands
 
-**Production skills (auto-activated by description matching):**
+**Production skills (eligible for description-based selection):**
 telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns
 
-**GAN harness skills (auto-activated; optional package, requires Playwright):**
+**GAN harness skills (separate optional package, requires Playwright):**
 gan-planner, gan-generator, gan-evaluator
 
 **Frontend 3D skills (optional, for R3F/Three.js/GSAP projects):**
@@ -310,7 +344,7 @@ go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer
 
 **Go semantic navigation via gopls MCP (optional, opt-in):** if a gopls MCP server is registered (Codex: `[mcp_servers]` in config.toml; Claude Code: `claude mcp add gopls -- gopls mcp`), prefer its `go_symbol_references` / `go_diagnostics` / `go_package_api` tools over grep for build-resolved Go questions (references, interface satisfaction, blast radius). Never assume it is wired — with no server registered, fall back to grep + `go doc`.
 
-**Go knowledge skills (optional, auto-activated by description matching):**
+**Go knowledge skills (optional, eligible for description-based selection):**
 
 | Skill | Category |
 |-------|----------|
@@ -322,7 +356,10 @@ go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer
 
 ### Auto-Activation Rules
 
-Codex MUST auto-invoke skills when these conditions are met (without the user explicitly asking):
+When a listed task is in scope and the skill is installed/discoverable, select
+the relevant skill below. These are routing instructions, not a runtime
+auto-activation guarantee. Preserve the user's narrower scope, existing caller
+gates and each skill's authority; selection grants no additional permissions.
 
 | Skill | Auto-trigger when |
 |-------|-------------------|
@@ -330,7 +367,7 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 | `review-orchestrator` | Requested code review, consequential behavior/contract changes, or a required project review gate |
 | `test-runner` | After feature implementation, bug fix, refactor, or test file edits |
 | `lint-runner` | Before any commit with code changes (not docs-only) |
-| `audit-orchestrator` | When touching infrastructure, CI/CD, or security-sensitive code (use health-only mode for quick check) |
+| `audit-orchestrator` | Requested cross-domain audit or required infrastructure/CI/security audit gate; declare scope and unavailable domains |
 | `frontend-ui-reviewer` | Assigned 2D UI audit/review/polish/critique or meaningful UI contract change under caller workflow, including tokens/assets and consumers. Counts/staging alone do not trigger review; backend and 3D internals are excluded |
 | `frontend-ui-typography-reviewer` | Assigned typography review or meaningful family/weight/scale/spacing/glyph/loading/fallback change; direct typography question or bounded umbrella referral |
 | `frontend-ui-color-reviewer` | Assigned palette/theme/contrast review or meaningful semantic color, gamut, theme or state change; direct color question or bounded umbrella referral |
@@ -343,12 +380,12 @@ Codex MUST auto-invoke skills when these conditions are met (without the user ex
 | `go-grpc-patterns` | Code imports `google.golang.org/grpc` · `.proto` file in scope · user asks about gRPC services, interceptors, status codes, streaming |
 | `go-benchmark` | File matches `*_test.go` containing `func Benchmark*` · user asks about Go benchmarks, benchstat, performance measurement methodology |
 
-**Skip auto-activation when:**
-- Already inside `dev-orchestrator` (it includes review + test)
-- User explicitly says "just do X" / "quick fix"
-- Docs-only or config-only changes
-- A narrow low-risk change can use focused checks; file or line count alone never
-  waives a mandatory review or safety gate.
+**Avoid duplicate or irrelevant selection:**
+- Reuse the relevant pass already owned by `dev-orchestrator` or another caller.
+- Honor explicit bounded requests and use focused checks for narrow low-risk work.
+- Skip unrelated skills for docs/config changes; consequential config changes
+  still require the applicable checks. File counts, "quick fix" wording and
+  description matching never waive a mandatory review or safety gate.
 
 ## Active Plans
 

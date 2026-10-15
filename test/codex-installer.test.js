@@ -18,6 +18,9 @@ function codexPackage(t) {
   const packagesDir = temporaryDirectory(t, 'superkit-codex-package-');
   const codexDir = join(packagesDir, 'codex');
   mkdirSync(join(codexDir, 'rules'), { recursive: true });
+  mkdirSync(join(codexDir, 'hooks'), { recursive: true });
+  writeFileSync(join(codexDir, 'hooks/superkit.mjs'), '// Original hook\n');
+  writeFileSync(join(codexDir, 'hooks.json'), JSON.stringify({ hooks: { Stop: [] } }));
   mkdirSync(join(codexDir, 'skills', 'reviewer'), { recursive: true });
   writeFileSync(join(codexDir, 'skills', 'reviewer', 'SKILL.md'), '# Original reviewer\n');
   writeFileSync(join(codexDir, 'legacy-baseline.json'), JSON.stringify({ version: '1.5.2', sourceCommit: 'cbb0565f4d4868fe77f4bd7e8fdd46dada3e52ab', skills: {} }));
@@ -164,7 +167,7 @@ describe('independent Codex updates', () => {
     assert.equal(readFileSync(join(dir, skillPath), 'utf8'), '# Original reviewer\n');
   });
 
-  for (const path of ['.codex', '.codex/skills', '.codex/skills/reviewer', '.codex/skills/reviewer/SKILL.md', '.codex/config.toml', '.codex/rules', 'AGENTS.md', manifestPath, '.codex/.superkit-backups']) {
+  for (const path of ['.codex', '.codex/skills', '.codex/skills/reviewer', '.codex/skills/reviewer/SKILL.md', '.codex/config.toml', '.codex/rules', 'AGENTS.md', manifestPath, '.codex/.superkit-backups', '.codex/hooks', '.codex/hooks/superkit.mjs', '.codex/hooks.json', '.codex/superkit-hooks.json']) {
     it(`refuses a symlink at ${path} before writing install assets`, t => {
       const dir = temporaryDirectory(t, 'codex-link-');
       const outside = temporaryDirectory(t, 'codex-outside-');
@@ -295,6 +298,96 @@ describe('interrupted writes and incomplete release baselines', () => {
     for (const record of [{ skills: {} }, { version: '1.5.2', sourceCommit: '../unknown', skills: {} }]) {
       writeFileSync(baseline, JSON.stringify(record));
       assert.throws(() => installQuiet(dir, pkg), /baseline/);
+      assert.deepEqual(readdirSync(dir), []);
+    }
+  });
+});
+
+describe('native Codex hook installation and preservation', () => {
+  it('creates hook assets/config on fresh install without granting trust', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-install-');
+    const pkg = codexPackage(t);
+    const messages = installQuiet(dir, pkg);
+    assert.equal(readFileSync(join(dir, '.codex/hooks/superkit.mjs'), 'utf8'), '// Original hook\n');
+    assert.deepEqual(JSON.parse(readFileSync(join(dir, '.codex/hooks.json'), 'utf8')), { hooks: { Stop: [] } });
+    assert.ok(existsSync(join(dir, '.codex/superkit-hooks.json')));
+    assert.ok(messages.some(line => /\/hooks.*trust|trust.*\/hooks/.test(line)));
+    assert.deepEqual(readdirSync(join(dir, '.codex')).sort(), ['.superkit-manifest.json', 'config.toml', 'hooks', 'hooks.json', 'rules', 'skills', 'superkit-hooks.json'].sort());
+  });
+
+  it('preserves consumer hooks and inline config and supplies a separate merge template', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-custom-');
+    const pkg = codexPackage(t);
+    const config = 'model="mine"\n[[hooks.Stop]]\n';
+    const hooks = '{"hooks":{"SessionStart":[]}}\n';
+    put(dir, '.codex/config.toml', config);
+    put(dir, '.codex/hooks.json', hooks);
+    for (let i = 0; i < 2; i++) installQuiet(dir, pkg);
+    assert.equal(readFileSync(join(dir, '.codex/config.toml'), 'utf8'), config);
+    assert.equal(readFileSync(join(dir, '.codex/hooks.json'), 'utf8'), hooks);
+    assert.deepEqual(JSON.parse(readFileSync(join(dir, '.codex/superkit-hooks.json'), 'utf8')), { hooks: { Stop: [] } });
+    rmSync(join(dir, '.codex/hooks.json'));
+    installQuiet(dir, pkg);
+    assert.ok(!existsSync(join(dir, '.codex/hooks.json')), 'Do not auto-add another source next to unknown inline hooks');
+  });
+
+  it('updates pristine hook assets with backup while preserving the active hook definition', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-update-');
+    const pkg = codexPackage(t);
+    installQuiet(dir, pkg);
+    const hookConfig = readFileSync(join(dir, '.codex/hooks.json'), 'utf8');
+    put(pkg, 'codex/hooks/superkit.mjs', '// New hook\n');
+    put(pkg, 'codex/hooks.json', '{"hooks":{"PreToolUse":[]}}');
+    installQuiet(dir, pkg);
+    assert.equal(readFileSync(join(dir, '.codex/hooks/superkit.mjs'), 'utf8'), '// New hook\n');
+    assert.equal(readFileSync(join(dir, '.codex/hooks.json'), 'utf8'), hookConfig);
+    const backups = readdirSync(join(dir, '.codex/.superkit-backups'));
+    assert.equal(readFileSync(join(dir, '.codex/.superkit-backups', backups[0], 'hooks/superkit.mjs'), 'utf8'), '// Original hook\n');
+    assert.deepEqual(JSON.parse(readFileSync(join(dir, '.codex/superkit-hooks.json'), 'utf8')), { hooks: { PreToolUse: [] } });
+  });
+
+  it('preserves unknown/edited hook assets and does not newly activate them', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-conflict-');
+    const pkg = codexPackage(t);
+    put(dir, '.codex/hooks/superkit.mjs', '// My hook\n');
+    const messages = installQuiet(dir, pkg);
+    assert.equal(readFileSync(join(dir, '.codex/hooks/superkit.mjs'), 'utf8'), '// My hook\n');
+    assert.ok(!existsSync(join(dir, '.codex/hooks.json')));
+    assert.ok(messages.some(line => /CONFLICT.*hooks\/superkit.mjs/.test(line)));
+    installQuiet(dir, pkg);
+    assert.equal(readFileSync(join(dir, '.codex/hooks/superkit.mjs'), 'utf8'), '// My hook\n');
+  });
+
+  it('upgrades a skills-only schema-1 manifest and rejects unsafe asset keys', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-schema-');
+    const pkg = codexPackage(t);
+    put(dir, manifestPath, JSON.stringify({ schemaVersion: 1, skills: {} }));
+    installQuiet(dir, pkg);
+    const state = JSON.parse(readFileSync(join(dir, manifestPath), 'utf8'));
+    assert.equal(state.assets['hooks/superkit.mjs'], hash('// Original hook\n'));
+    state.assets['../escape'] = hash('bad');
+    put(dir, manifestPath, JSON.stringify(state));
+    assert.throws(() => installQuiet(dir, pkg), /manifest/);
+  });
+
+  it('rejects missing hook package assets before target writes', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-missing-');
+    const pkg = codexPackage(t);
+    rmSync(join(pkg, 'codex/hooks/superkit.mjs'));
+    assert.throws(() => installQuiet(dir, pkg), /superkit.mjs/);
+    assert.deepEqual(readdirSync(dir), []);
+  });
+
+  it('rejects malformed packaged command hooks before target writes', t => {
+    const dir = temporaryDirectory(t, 'codex-hooks-invalid-');
+    const pkg = codexPackage(t);
+    for (const definition of [
+      { hooks: { Stop: 'invalid' } },
+      { hooks: { Stop: [{ hooks: [{ type: 'command', command: '' }] }] } },
+      { hooks: { Stop: [{ hooks: [{ type: 'prompt', prompt: 'not a command hook' }] }] } }
+    ]) {
+      put(pkg, 'codex/hooks.json', JSON.stringify(definition));
+      assert.throws(() => installQuiet(dir, pkg), /Invalid packaged hooks.json/);
       assert.deepEqual(readdirSync(dir), []);
     }
   });

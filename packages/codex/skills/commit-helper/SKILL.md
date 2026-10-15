@@ -2,11 +2,14 @@
 name: commit-helper
 description: Conventional commit helper — analyze changes, detect secrets, create well-formatted commit
 user-invocable: true
+tokens: 1174
 ---
 
 # Conventional Commit Helper
 
 Create a well-formatted commit following conventional commit conventions.
+
+Parse the user's request for commit scope and message. A request to create a commit authorizes that scoped local commit; a request only to draft a message does not. Read applicable `AGENTS.md` instructions, discover available command tools, and honor required project checks. This workflow does not authorize pushing, amending, bypassing hooks or changing Git configuration.
 
 ## Steps
 
@@ -21,7 +24,7 @@ git log --oneline -5
 
 ### 2. Stage Files (if needed)
 
-If there are unstaged changes, stage relevant files. **Never** stage:
+Inspect the actual staged and unstaged diffs, not only their statistics. Identify the selected files/hunks and any pre-existing staged changes. Stage only authorized scope with explicit paths/hunks; never use `git add .` or `git add -A` by default. If unrelated changes are already staged, preserve the index and resolve commit scope before committing; do not silently include or unstage someone else's work. Re-read the final staged diff before commit. **Never** stage:
 - `.env` files (secrets)
 - `credentials.json`, `*.key`, `*.pem`, `*.p12`
 - `*.sqlite`, `*.db` (database files)
@@ -82,16 +85,11 @@ Scan staged files for potential secrets:
 - Bot tokens: `[0-9]+:[A-Za-z0-9_-]{35}` (Telegram format)
 - AWS keys: `AKIA[A-Z0-9]{16}`
 
-If found, **WARN** and list the suspicious patterns. Ask for confirmation before committing.
+If found, report only file/line and secret type, never the value or matching source line. Exclude/remediate actual secrets within authority before committing; an ambiguous candidate needs resolution, not a blanket permission to commit credentials. A heuristic scan is not proof that the tree is secret-free.
 
 ### 5. Create Commit
 
-```bash
-git commit -m "$(cat <<'EOF'
-type(scope): description
-EOF
-)"
-```
+Run required checks for the staged change, retaining their actual results. Verify the staged scope still matches the reviewed diff. Write the exact message to a temporary file outside the repository using a safe file-writing tool, then pass that path to `git commit --file <message-file>`. Treat message text as data, not shell syntax. Use normal hooks; if a hook fails, report its result and make only authorized corrections before a deliberate retry. Do not retry automatically with `--no-verify`.
 
 ### 6. Verify
 
@@ -100,6 +98,4 @@ git log --oneline -1
 git status
 ```
 
-Report the created commit hash and remaining unstaged changes (if any).
-
-Parse the user's request to determine scope and parameters.
+Verify the commit command succeeded and inspect the new commit's actual diff/file list against the selected scope; a pre-existing `HEAD` is not proof of a new commit. Report the created hash, checks, and remaining staged/unstaged/untracked changes without exposing secrets.

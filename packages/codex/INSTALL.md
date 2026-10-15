@@ -34,6 +34,15 @@ merge any desired changes yourself. Default coordinator configuration is
 **gpt-6-astra / high**, with **gpt-5.6-sol / medium** subagent fallback;
 configuration is not proof of model availability or behavioral quality.
 
+It also installs two native hook handlers in `.codex/hooks/superkit.mjs` and
+the merge template `.codex/superkit-hooks.json`. A new `.codex/hooks.json` is
+created only when absent, the project config is absent or exactly the shipped
+config, and neither managed hook asset conflicts. Existing hook definitions and
+arbitrary config are preserved; review and merge the template manually when
+needed. The installer never grants project trust or hook trust. Review both
+the definition and script, then use `/hooks` in a supporting Codex runtime.
+See [native hook setup and limits](#native-hooks-and-trust).
+
 ### Re-run the same command to update
 
 Refresh your Superkit checkout to the desired reviewed version, then run
@@ -44,24 +53,28 @@ hook is installed for Codex.
 | --- | --- |
 | No `.codex` | Fresh install; preserve any existing root instructions/discovery entries. |
 | Existing, unrecognized skills | Merge: add missing skills, preserve/report differing existing skills. |
-| Recorded Superkit skill hashes | Upgrade: update only files still matching their recorded installed hash. |
+| Recorded Superkit hashes | Upgrade skills and hook assets only when still matching their recorded installed hash. |
 | Stock v1.5.2 installation without a manifest | Recognize pristine skills using the bundled SHA-256 baseline, then upgrade safely. |
-| Custom skill differs from both baseline and incoming content | `CONFLICT`: retain local bytes and report the upstream source for manual comparison. |
-| Existing skill exactly matches incoming content | Adopt it as managed without rewriting it. |
+| Custom skill or hook asset differs from its baseline and incoming content | `CONFLICT`: retain local bytes and report the upstream source for manual comparison. |
+| Existing managed-path file exactly matches incoming content | Adopt it as managed without rewriting it. |
 
 The installer maintains `.codex/.superkit-manifest.json` (schema 1, installed
-skill hashes). Preserve this file with the installed skills. The legacy baseline
+`skills` hashes and an optional `assets` map for the hook script/template).
+Older schema-1 manifests without `assets` remain valid. Active `hooks.json` is
+preserved configuration, not a managed update asset. Preserve the manifest with
+the installed files. The legacy baseline
 in `packages/codex/legacy-baseline.json` is pinned to v1.5.2 commit
 `cbb0565f4d4868fe77f4bd7e8fdd46dada3e52ab`; it requires no network access.
 Other unknown versions are merged conservatively. Missing shipped skills are
 recreated; removed upstream roles and unrelated/support files are not deleted.
 To disable a skill, use Codex's skill configuration rather than deleting its file.
 
-Before replacing pristine skills, the installer writes their old bytes and the
+Before replacing pristine skills or hook assets, the installer writes old bytes and the
 previous manifest (if present) into a new, unique directory under
 `.codex/.superkit-backups/`, printing its absolute path. Existing backups are never
 deleted or reused. For rollback, stop installers, inspect the printed backup, and
-restore the selected `skills/<name>/SKILL.md` files under `.codex/skills/`; restore
+restore selected `skills/<name>/SKILL.md`, `hooks/superkit.mjs` and/or
+`superkit-hooks.json` files to their corresponding paths under `.codex/`; restore
 the backed-up manifest as well for a full rollback of that update. New files from
 that run remain until you explicitly remove them. A legacy first upgrade has no
 old manifest; restored legacy bytes will be preserved as conflicts on subsequent
@@ -108,7 +121,7 @@ project:
 node /path/to/extracted/package/bin/cli.js --codex-only
 ```
 
-The archive includes the installer, skill sources, templates, and legacy baseline.
+The archive includes the installer, skill sources, hook script/template, and legacy baseline.
 Its version remains 1.5.2 until a separately approved release; a local candidate
 archive is not the published v1.5.2 release. npm publication remains deferred.
 
@@ -140,13 +153,13 @@ create `.agents/skills/` before copying and preserve any existing same-name fold
 | `test-runner` | Auto-detect project test runner and execute tests |
 | `lint-runner` | Auto-detect linters, run with optional --fix mode |
 | `commit-helper` | Conventional commit with secret detection |
-| `new-migration` | Scaffold migration file pair with auto-numbering |
-| `migrate` | Apply or rollback database migrations |
-| `benchmark` | Run Go benchmarks with benchstat comparison |
+| `new-migration` | Discover the migration tool/dialect and scaffold its native format without applying it |
+| `migrate` | Inspect status by default; apply or roll back an explicitly authorized, bounded set |
+| `benchmark` | Run available Go benchmarks; compare an isolated baseline with installed tools |
 
 ### 36 Agent Skills (available roles)
 
-These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists the protected role sources and partially adapted workflow callers; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
+These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists protected native roles, adapted workflows and support sources; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers
@@ -226,7 +239,7 @@ preservation and backup checks. Prefer the automated route for managed updates.
 - 5 Go knowledge skills (optional, samber-do/oops/lo, grpc-patterns, benchmark-methodology)
 - 6 TGApp / production skills (telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns)
 
-Plus 1 Codex approval rules file (`packages/codex/rules/default.rules`) + 3 GAN agents (optional, requires Playwright).
+Plus 1 Codex approval rules file (`packages/codex/rules/default.rules`), 2 hook handlers in 1 script, and 3 GAN agents (separate optional package, requires Playwright).
 
 ## Model Configuration
 
@@ -249,27 +262,62 @@ Skills are instructions used by the agent that loads them; skill frontmatter doe
 
 These settings were checked against Codex CLI `0.162.0-alpha.17.2` and the [official configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference). They declare routing; they do not prove a live task ran on that model. Model behavioral acceptance remains pending. The owner-required Astra authorship rule for Superkit contributors is documented in [WORKING_AGREEMENT.md](../../docs/WORKING_AGREEMENT.md).
 
-## Claude hook behaviors not installed by this route
+## Native hooks and trust
 
-This installation does not reproduce the following Claude hook behaviors. Native
-Codex hook mapping and broader workflow compatibility remain a separate product
-package; this table describes the installer, not all runtime capabilities:
+Codex supports lifecycle hooks in `hooks.json` beside active config layers;
+project-local hooks also require project trust. See the [official hooks and
+trust documentation](https://learn.chatgpt.com/docs/hooks) and
+[configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference).
+Superkit ships this bounded mapping:
 
-| Feature | Claude Code | Codex | Workaround |
-|---------|-------------|-------|------------|
-| **Hooks** | Pre/PostToolUse, Stop, UserPromptSubmit | Not installed | Inline checks in AGENTS.md rules |
-| **Session continuity** | SessionStart hook restores context | Not installed | Rely on AGENTS.md for context |
-| **Stop verification** | Auto-verifies compile + docs before end | Not installed | Manually run lint/test skills |
-| **Format-on-edit** | Auto-formats after file edits | Not installed | Run lint-runner with --fix |
-| **Doc-check-on-commit** | Warns when committing without docs | Not installed | Documentation rule in AGENTS.md |
-| **Migration safety hook** | Auto-validates migration naming | Not installed | migration-reviewer skill checks post-hoc |
-| **Bundle import check** | Warns on missing package.json deps | Not installed | dependency-checker skill |
-| **Hook profiles** | fast/standard/strict profiles | Not installed | Single configuration via AGENTS.md |
+| Handler | Check | Limit |
+| --- | --- | --- |
+| `PreToolUse` (`Bash`) | Rejects recognized static destructive Git commands | Never returns permission allow; opaque shell syntax is unassessed. It is not a complete shell parser/security boundary. |
+| `Stop` | Filter-free repositories: read-only tracked/staged `git diff --check`; at most one continuation | Any configured clean/process filter skips both diffs with UNVERIFIED. Does not prove tests/builds passed or check untracked file behavior. |
+
+Git diff checks can execute clean/process conversion programs. Before either
+diff, Stop enumerates config keys only and conservatively skips both checks when
+any `filter.*.clean` or `filter.*.process` is configured, including unused drivers
+and global Git LFS configuration. No filter values are captured or Git config
+changed. This availability limit remains UNVERIFIED, never a whitespace pass;
+run the applicable verification explicitly under its own task authority.
+
+The handlers run no project scripts, read no transcripts and contact no external
+services. Wiring resolves the Git root through a POSIX shell; Windows and cloud
+runtime execution are unqualified. Keep task authority, approvals and real
+verification gates in force even when a hook returns no block.
+
+After installation, inspect `.codex/hooks.json` or manually merge
+`.codex/superkit-hooks.json` into your existing hook configuration. Other active
+sources can also contribute hooks; avoid duplicate registrations. Review the
+referenced `.codex/hooks/superkit.mjs`, trust the project when appropriate and
+use `/hooks` to review the exact definition. The installer writes no trust
+settings and never bypasses trust. An existing active hook definition is preserved
+on updates. Definition-hash trust does not fully attest the referenced script:
+review managed script changes separately, including backup/conflict reports.
+
+A copied definition is not proof of trust, handler execution or native event
+firing. Check each separately in the intended runtime. Direct script fixtures
+qualify handler behavior only; file installation/discovery checks do not establish
+native firing, consumer workflow execution or model quality.
+
+### Claude behaviors without a shipped Codex mapping
+
+| Feature | Claude Code | Codex route |
+| --- | --- | --- |
+| Session continuity | SessionStart restore / pre-compact save | Not mapped; maintain authorized project notes. |
+| Full Stop verification | Compilation/documentation checks | Not mapped; run applicable test/lint/docs gates. |
+| Format/typecheck-on-edit | Language-specific PostToolUse checks | Not mapped; use editor checks or authorized lint-runner fixes. |
+| Doc-check-on-commit | Documentation commit gate | Not mapped; follow AGENTS.md and docs-reviewer. |
+| Migration validation | Migration naming/safety hooks | Not mapped; use applicable migration skills and task authority. |
+| Bundle import check | Dependency warning | Not mapped; use dependency-checker. |
+| Hook profiles | fast/standard/strict | Not mapped; review the two native handler definitions directly. |
 
 ## Verification
 
 Inspect `.codex/skills/`, `.agents/skills/`, root `AGENTS.md` and the installed
-config/rules. In Codex, use `/skills` or `$` to verify discovery. The installer
+config/rules and managed hook script/template. In Codex, use `/skills` or `$`
+to verify discovery and `/hooks` to inspect hook review/trust status. The installer
 reports conflicts explicitly; a successful run does not imply every upstream
 change replaced a local customization.
 

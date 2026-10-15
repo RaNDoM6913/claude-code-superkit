@@ -2,11 +2,19 @@
 name: html-to-3d-texture
 description: Capture HTML/React components as PNG textures for 3D models — html2canvas, CanvasTexture, capture pipeline, resolution settings. Use when you need to display web UI on a 3D surface.
 user-invocable: false
+tokens: 1063
 ---
 
 # HTML to 3D Texture Pipeline
 
 Capture React components as PNG images for use as textures on 3D model screens.
+
+The snippets below are implementation examples, not installed capture tools.
+Inspect the project's dependencies, capture route/selector and output directory
+before adapting them. Playwright and its browser, html2canvas and sharp are not
+supplied by this skill. Use available authorized tooling; missing prerequisites
+leave capture UNVERIFIED. Dependency installation, service startup and browser
+access follow the task's existing authority, not the presence of these examples.
 
 ## Architecture
 

@@ -2,6 +2,7 @@
 name: go-benchmark
 description: Go benchmarking methodology knowledge — testing.B API, benchstat comparison, sub-benchmarks, profile capture (-cpuprofile/-memprofile/-trace), reading output, dead-code elimination trap. Activate when Go code contains `func Benchmark*`, uses `testing.B`, or user asks about Go benchmarks, benchstat, or performance measurement methodology.
 user-invocable: false
+tokens: 1612
 ---
 
 # Go Benchmark Methodology
@@ -101,7 +102,11 @@ go test -bench=. ./pkg/cache/...
 
 ## benchstat Workflow
 
-Install: `go install golang.org/x/perf/cmd/benchstat@latest`.
+Use the project's available `benchstat` version and record it with the results.
+Codex skill installation does not install this executable. If it is missing,
+report comparison as UNAVAILABLE; install a project-compatible version only
+within existing setup authority. Sample output below is illustrative, not a
+measured result for the current project.
 
 ```bash
 go test -run ^$ -bench=BenchmarkProcess -benchmem -count=10 > old.txt

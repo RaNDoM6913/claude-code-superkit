@@ -1,102 +1,59 @@
 ---
 name: new-migration
-description: Scaffold a new database migration file pair (up + down) with auto-detection of migration tool and numbering
+description: Scaffold database migration files using the project's detected tool, dialect, and ordering conventions
 user-invocable: true
+tokens: 1190
 ---
 
 # New Migration
 
-Create a new database migration file pair following the project's conventions.
+Create migration files following the project's actual conventions. Scaffolding authorizes file creation within the requested scope; it does not authorize applying migrations, resetting a database, starting services, or installing tools.
 
 ## Context from User
 
-Parse the user's request to determine the migration description and any specific SQL requirements.
+Parse the user's request for the description and SQL/schema requirements. Read applicable `AGENTS.md` instructions and discover available file/command tools. Resolve the intended component and migration directory before writing. Preserve existing migrations and unrelated schema edits.
 
 ## Step 1 — Detect Migration System
 
-Scan the project for migration directories and tools:
+Inspect configured dependencies, scripts, migration configuration and representative existing migrations. Directory names are hints, not sufficient proof of the tool or format:
 
-| Marker | Tool | Directory Pattern | Naming Pattern |
-|--------|------|-------------------|----------------|
-| `backend/migrations/*.sql` with numbered names | golang-migrate | `backend/migrations/` | `000NNN_desc.{up,down}.sql` |
-| `migrations/*.sql` with numbered names | golang-migrate | `migrations/` | `000NNN_desc.{up,down}.sql` |
-| `db/migrations/*.sql` | golang-migrate / dbmate | `db/migrations/` | `NNNNNN_desc.{up,down}.sql` |
-| `db/migrate/*.rb` | Rails | `db/migrate/` | `YYYYMMDDHHMMSS_desc.rb` |
-| `alembic/versions/*.py` | Alembic | `alembic/versions/` | `rev_desc.py` |
-| `prisma/migrations/` | Prisma | `prisma/migrations/` | `YYYYMMDDHHMMSS_desc/` |
-| `drizzle/` + `drizzle.config.ts` | Drizzle | `drizzle/` | `NNNN_desc.sql` |
+| Evidence | Tool | Typical format |
+|----------|------|----------------|
+| Configured migrate command and `.up.sql` / `.down.sql` pairs | golang-migrate | Sequential or timestamped file pair |
+| dbmate configuration and `-- migrate:up` / `-- migrate:down` sections | dbmate | One timestamped SQL file with both sections |
+| `db/migrate/*.rb` and Rails configuration | Rails | Timestamped Ruby migration |
+| `alembic.ini` and revision scripts | Alembic | Python revision linked to `down_revision` |
+| Prisma dependency/schema and migration history | Prisma | Tool-generated migration directory and metadata |
+| Drizzle config and migration journal | Drizzle | Tool-generated SQL plus journal/snapshot metadata |
 
-## Step 2 — Find Next Number
+Confirm the database dialect and installed tool version. Use local installed binaries or existing package-manager scripts; do not let a launcher download a missing tool. If multiple migration systems exist, select the one owning the requested schema or clarify.
 
-```bash
-# List existing migrations, find the latest number
-ls <migrations_dir>/ | sort | tail -2
-```
+## Step 2 — Choose the Identifier
 
-Increment the number by 1, keeping the project's zero-padding format.
+For a sequential SQL-pair convention, parse existing identifiers numerically, retain padding, and select the next unused number. For timestamps use the project's format and check collisions. For revision graphs or metadata-managed tools, use the verified generator and its supported ordering; do not impose a numeric sequence or invent a revision parent. Check branch heads where relevant. Never overwrite an existing identifier/file.
 
 ## Step 3 — Convert Description to Filename
 
-Convert the user's description to `snake_case` for the filename:
+Use the project's naming convention, commonly `snake_case`:
 - "add user preferences" -> `add_user_preferences`
 - "Create events table" -> `create_events_table`
 
+Treat the description as data. Validate the resulting basename and keep paths inside the selected migration directory; do not interpolate raw request text into shell commands.
+
 ## Step 4 — Create Migration Files
 
-Create the migration pair in the detected directory:
+For golang-migrate, create the configured up/down pair. For dbmate, create one file with the existing `-- migrate:up` and `-- migrate:down` section format. Follow the actual dialect for types, constraints, indexes and transaction handling. For a scaffold-only request, mark incomplete SQL explicitly; for requested implementation, provide the actual SQL and disclose any irreversible/data-loss steps.
 
-### For SQL migrations (golang-migrate, dbmate):
-
-**Up migration** (`000NNN_description.up.sql`):
-```sql
--- 000NNN_description.up.sql
--- Description: [user's description]
-
--- TODO: Add your migration SQL here
-
--- Conventions:
---   IF NOT EXISTS / IF EXISTS for safety
---   TIMESTAMPTZ for timestamps (not TIMESTAMP)
---   BIGSERIAL or UUID for primary keys
---   JSONB for flexible metadata
---   created_at TIMESTAMPTZ NOT NULL DEFAULT now() on new tables
---   ON DELETE CASCADE or SET NULL for foreign keys
---   CREATE INDEX for frequently queried columns
-```
-
-**Down migration** (`000NNN_description.down.sql`):
-```sql
--- 000NNN_description.down.sql
--- Rollback: [reverse of up migration]
-
--- TODO: Add exact reverse of up migration
-```
-
-### For Alembic (Python):
-Use `alembic revision --autogenerate -m "description"` if autogenerate is configured, otherwise create manually.
-
-### For Prisma:
-Edit `prisma/schema.prisma` then run `npx prisma migrate dev --name description`.
+For framework tools, inspect the generator's behavior before running it. Prefer a supported file-only generator. Alembic autogeneration may connect to a database and its generated diff requires review. Prisma `migrate dev` applies migrations; even `--create-only` can require a shadow database and prompt for reset. Do not use these as an implicit file-only action. If generation needs database access or writes, require a verified disposable target and existing authority for those exact effects; otherwise report the dependency and prepare only safe file edits. Do not fake tool-managed metadata to claim a completed scaffold.
 
 ## Step 5 — Report
 
-```
-Created migration files:
-- <path_to_up_migration>
-- <path_to_down_migration>
-
-Next step: Edit the migration files with your SQL, then run:
-  <apply_command>
-```
+Report the tool/version, dialect, created/changed paths, generation command and exit (if used), identifier/parent, scaffold versus implemented status, and validation actually performed. Show the next apply command only as a proposed command with an unresolved target/authority clearly marked; do not execute it here. Read the installed `migrate` skill directly when application is separately requested.
 
 ## Migration Conventions
 
-- Use `IF NOT EXISTS` / `IF EXISTS` where appropriate
-- Include `CREATE INDEX` for frequently queried columns
-- Use `TIMESTAMPTZ` for timestamps (not `TIMESTAMP`)
-- Use `BIGSERIAL` or `UUID` for primary keys (match existing table conventions)
-- Use `JSONB` for flexible metadata columns
-- Add `created_at TIMESTAMPTZ NOT NULL DEFAULT now()` on new tables
-- Foreign keys with `ON DELETE CASCADE` or `SET NULL` as appropriate
-- Down migration must be the exact reverse of up
-- Never use destructive operations (DROP COLUMN, DROP TABLE) without `IF EXISTS`
+- Follow existing schema types and referential actions; do not impose PostgreSQL-only types or cascading deletes on every database.
+- Conditional DDL (`IF EXISTS` / `IF NOT EXISTS`) does not make destructive changes safe or verify schema equivalence.
+- Review generated SQL, locks, transaction boundaries and data impact before application.
+- Write a valid reverse only where the tool/project supports one. Dropped data cannot be recreated by a schema-only down migration; state irreversible effects and the required recovery plan honestly.
+- Files created or statically reviewed are not proof of a successful database migration.

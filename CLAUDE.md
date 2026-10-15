@@ -12,7 +12,7 @@ GPT backend/data/delivery/language reviews use project-specific schema, query, t
 
 Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Source review does not claim empirically measured model quality.
 
-Codex authoring guides preserve role-specific verdicts and scoped review/workflow authority, require evidence-backed findings and truthful verification coverage, and use conditional project examples.
+Codex authoring guides preserve role-specific verdicts and scoped review/workflow authority, require evidence-backed findings and truthful verification coverage, and use conditional project examples. Native workflow/support sources resolve installed tools and dependencies, preserve migration/commit authority and retain unavailable evidence. The native hook mapping rejects recognized static destructive Git and checks tracked/staged whitespace at Stop in filter-free repositories; configured clean/process filters, including unused/global Git LFS, skip both diffs with UNVERIFIED after a keys-only config check. It grants no permission/trust and does not prove tests/builds or native firing. Hook assets use pristine updates/backups; existing active hooks/config stay preserved. Review definition and script updates separately through the documented trust flow. POSIX wiring is not qualified for Windows/cloud.
 
 ```
 packages/
@@ -66,6 +66,8 @@ packages/
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
     skills/                 # 82 skills; native roles and protected callers listed in native-skills.txt
+    hooks/                  # superkit.mjs: 2 native handlers; review/trust required
+    hooks.json              # Source for active wiring or superkit-hooks.json manual merge template
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
     config.toml             # gpt-6-astra/high coordinator; gpt-5.6-sol/medium worker fallback
     AGENTS.md               # Template (incl. new "Approval Rules" section)
@@ -110,13 +112,13 @@ VERSION                     # current release version (keep in sync with package
 | Agents | 31 | 9 | 4 | 6 | 3 | 3 | 28 | — |
 | Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 82 |
 | Commands | 15 | — | 1 | — | — | — | 17 | 9 |
-| Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | — |
+| Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | 2 handlers / 1 script |
 | Hooks internal | 2 | — | — | — | — | — | — | — |
 | Helpers | 1 | — | — | — | — | — | — | — |
 | Rules shipped | 7 | 2 | 3 | 7 | — | — | 6 | 1 file |
 | Rules internal | 1 | — | — | — | — | — | — | — |
 
-**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself.
+**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself. Codex separately installs 82 skills and 2 native hook handlers in 1 script; these are not added to the Claude totals.
 
 ## Conventions
 
@@ -156,7 +158,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 
 ### CRITICAL: Never forget Codex!
 - Codex AGENTS.md and INSTALL.md MUST stay in sync with core changes
-- New rules → add equivalent section to AGENTS.md (Codex has no rules files)
+- New rules → map project guidance to AGENTS.md or applicable execution-policy rules; these have distinct scopes
 - New commands → check if Codex skill exists, update INSTALL.md counts
 - GitHub description (`gh repo edit`) → update on EVERY count change
 

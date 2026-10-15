@@ -1,8 +1,8 @@
 # Codex-only Superkit delivery plan — 1.5.3 candidate
 
-**Status:** Active scope from the owner's 2026-10-15 direction. Standalone installation/update implemented; compatibility and final release candidate remain open.
+**Status:** Active scope from the owner's 2026-10-15 direction. Standalone installation/update and bounded workflow/support/native-hook implementation accepted; trusted hook activation and final release candidate remain open.
 **Outcome:** A standalone, automated Codex-only install and distributable artifact in this repository, with preserved user customizations and accurate documentation.
-**Routing:** Astra owns all useful prompt refinement and semantic decisions; Sol provides technical integration/review. Claude prompt work is separate.
+**Routing:** The coordinator owns scope, integration and acceptance. Under the owner's latest 2026-10-15 direction, delegate useful independent work to GPT-6.1 Sol; this supersedes the earlier contributor Astra/Sol split for continuation. Preserve accepted Astra-authored sources and shipped consumer model defaults. Claude prompt work remains separate.
 **Agreement:** [Contributor working agreement](../../WORKING_AGREEMENT.md).
 
 ## Accepted source and scope
@@ -25,10 +25,12 @@ Installation evidence: [2026-10-15 installation packet](../migrations/astra-nati
 
 ## 2. Shipped workflow and support compatibility
 
-- [ ] Check applicable workflow/support invocation, tool names, routing, outputs and references against actual Codex capabilities and installed paths; Astra fixes only confirmed semantic gaps.
-- [ ] Verify current supported Codex hook/rule mechanisms before claiming support or parity. Map applicable behavior through supported mechanisms and document limitations; do not build a runtime emulation framework.
-- [ ] Keep truthful evidence, authority checks, failure handling and escalation in shipped prompts. Missing verification remains explicit; destructive actions and external writes retain their authorization boundaries.
-- [ ] Confirm that the documented Codex-only workflow can use its installed roles/support without requiring a Claude installation. Scope any runtime smoke to the actual tools exercised; model evaluations require separate authorization.
+- [x] Check applicable workflow/support invocation, tool names, routing, outputs and references against actual Codex capabilities and installed paths; Astra fixes only confirmed semantic gaps.
+- [x] Verify current supported Codex hook/rule mechanisms before claiming support or parity. Map applicable behavior through supported mechanisms and document limitations; do not build a runtime emulation framework.
+- [x] Keep truthful evidence, authority checks, failure handling and escalation in shipped prompts. Missing verification remains explicit; destructive actions and external writes retain their authorization boundaries.
+- [x] Confirm that the documented Codex-only workflow can use its installed roles/support without requiring a Claude installation. Scope any runtime smoke to the actual tools exercised; model evaluations require separate authorization.
+
+Compatibility evidence: [2026-10-15 workflow/hooks packet](../migrations/astra-native/evidence/GPT-codex-workflows-hooks-2026-10-15.md). Nine workflows and all 21 support skills inspected; 13 necessary source corrections, 17 support sources unchanged. Two native command handlers are installed with preserved user configuration. Checks cover source/package discovery, native rule parsing and direct installed handlers; native lifecycle firing remains UNVERIFIED behind project/hook trust. This scoped acceptance does not claim live workflow/model quality or full Claude hook parity.
 
 ## 3. Focused verification and acceptance
 
