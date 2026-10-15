@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Standalone Codex installation and safe updates (2026-10-15):** new noninteractive `--codex-only` skips Claude prerequisites, plugins, files, scaffolding and validation. Existing `--codex` stays additive. Codex updates now use their own installed skill hashes and a pinned v1.5.2 baseline, back up pristine replacements, and preserve/report custom files. Existing config, rules, AGENTS and unrelated files remain unchanged. Relative `.agents/skills` discovery links expose retained `.codex/skills` storage while preserving consumer discovery entries. Added real-directory install/update, conflict, symlink, invalid-state and combined-mode regressions; local archive install and prior-release upgrade verified separately. No version bump or publication.
+
 - **Codex-only scope cleanup (2026-10-15):** removed the internal evaluation/oracle/collector and migration-inventory research code and its tests. Preserved the Astra-authored roles, skills, product checks and historical evidence; the active plan now covers standalone installation, preservation/update, applicable compatibility and release preparation.
 
 - **GPT authoring guides (2026-10-14):** Astra-authored writing-agents and writing-commands align reusable reviewer/workflow instructions with scoped authority, applicable project contracts, evidence-backed findings, explicit coverage and truthful verification. Contextual Docker/test examples replace blanket checklist rules; authoring/source acceptance remains separate from behavioral qualification.

@@ -69,7 +69,8 @@ packages/
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
     config.toml             # gpt-6-astra/high coordinator; gpt-5.6-sol/medium worker fallback
     AGENTS.md               # Template (incl. new "Approval Rules" section)
-    INSTALL.md              # Guide
+    INSTALL.md              # Standalone/update/artifact guide
+    legacy-baseline.json    # Pinned v1.5.2 skill hashes for safe pre-manifest upgrades
   showcase/                 # Production example (28 agents, 17 commands, 13 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
@@ -82,7 +83,7 @@ lib/
   settings-builder.js       # JSON assembly (replaces jq)
   superpowers.js            # Plugin installation
   docs-scaffold.js          # Doc templates + tree
-  codex.js                  # Codex CLI support
+  codex.js                  # Standalone/additive Codex installer, independent safe updates
   validator.js              # Post-install validation
   utils.js                  # Colors, file helpers, git
 test/

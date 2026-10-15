@@ -19,6 +19,7 @@ function parseArgs(argv) {
     profile: null,
     plugins: null,
     codex: null,
+    codexOnly: false,
     noDocs: false,
     noSuperpowers: false
   };
@@ -34,6 +35,10 @@ function parseArgs(argv) {
     }
     if (arg === '--defaults') {
       opts.defaults = true;
+      continue;
+    }
+    if (arg === '--codex-only') {
+      opts.codexOnly = true;
       continue;
     }
     if (arg === '--codex') {
@@ -80,6 +85,11 @@ function parseArgs(argv) {
     process.exit(1);
   }
 
+  if (opts.codexOnly && (opts.codex || opts.stacks || opts.extras || opts.profile || opts.plugins)) {
+    console.error('--codex-only cannot be combined with --codex, --stacks, --extras, --profile or --plugins.');
+    process.exit(1);
+  }
+
   return opts;
 }
 
@@ -97,7 +107,8 @@ Options:
   --profile=standard      Hook profile: fast, standard, strict
   --extras=bot,design     Select extras (comma-separated)
   --plugins=playwright    Optional plugins (comma-separated)
-  --codex                 Also install for Codex CLI
+  --codex                 Also install for Codex CLI (Claude + Codex)
+  --codex-only            Install/update only Codex assets; no prompts or Claude setup
   --no-docs               Skip documentation scaffolding
   --no-superpowers        Skip superpowers plugin installation
   --help, -h              Show this help
@@ -106,10 +117,12 @@ Options:
 Examples:
   bash setup.sh                                # Interactive
   bash setup.sh --defaults                     # All defaults
+  bash /path/to/superkit/setup.sh --codex-only  # Codex only, from your project
   bash setup.sh --stacks=go,ts --codex         # Go + TypeScript + Codex
 
 Run from your project root (must be a git repository).
-Requires: Node.js 18+, git. Recommended: claude CLI.
+Requires: Node.js 18+, git. Use codex CLI for --codex-only; otherwise claude CLI.
+Codex re-runs update pristine managed skills with backups; custom files are preserved.
 `);
 }
 

@@ -25,7 +25,7 @@
   },
   "scripts": {
     "test": "node --test test/*.test.js",
-    "test:smoke": "node test/smoke.test.js"
+    "test:smoke": "node --test test/smoke.test.js test/codex-only.test.js"
   },
   "keywords": [
     "claude-code",

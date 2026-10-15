@@ -27,7 +27,7 @@ superkit works with both Claude Code and OpenAI Codex CLI. This chapter explains
 
 ## What's Claude Code Only
 
-These features have no Codex equivalent:
+The current installer does not reproduce these Claude hook behaviors for Codex; native hook mapping remains a separate product package:
 
 - **Hooks** — format-on-edit, typecheck-on-edit, git safety blocks, migration validation. Use editor plugins instead.
 - **Hook profiles** — fast/standard/strict. Not applicable.
@@ -36,32 +36,30 @@ These features have no Codex equivalent:
 
 ## Installation
 
-### Via setup.sh
+### Automated standalone installation
 
-When running `setup.sh`, answer "y" to "Also install for Codex CLI?":
+From your target project's Git directory:
 
-```
-Also install for Codex CLI? [y/N] y
-Copied 82 Codex skills → .codex/skills/
-Created AGENTS.md template
-Copied shipped Codex config template → .codex/config.toml
+```bash
+bash /path/to/claude-code-superkit/setup.sh --codex-only
 ```
 
-The installer copies skills into the current project. Existing project
-instructions, Codex config, and approval rules are preserved and reported as
-skipped; a manual symlink setup is a separate option below.
+This installs 82 Codex skills without Claude prerequisites, plugins or writes.
+Skills are stored under `.codex/skills` and exposed through relative links under
+`.agents/skills`. Re-run the same command after refreshing the Superkit checkout:
+pristine managed skills (including recognized stock v1.5.2 files) are backed up
+and updated; custom or unknown content is preserved and reported. Existing
+AGENTS, config, approval rules and discovery entries are never replaced.
+The standard `--codex` option still installs Claude + Codex.
+
+See the [installation/update contract](../../packages/codex/INSTALL.md) for
+conflicts, recovery, filesystem restrictions and local package artifacts.
 
 ### Manual
 
-```bash
-# Symlink all superkit skills to Codex discovery path
-mkdir -p ~/.agents/skills
-ln -s /path/to/claude-code-superkit/packages/codex/skills ~/.agents/skills/superkit
-
-# Copy templates
-cp /path/to/claude-code-superkit/packages/codex/AGENTS.md ./AGENTS.md
-cp /path/to/claude-code-superkit/packages/codex/config.toml .codex/config.toml
-```
+For selective setup, copy or link chosen skill folders into project
+`.agents/skills/`. Merge existing configuration/instructions manually. Linked
+manual skills follow the source checkout and have no installer-managed backups.
 
 ## config.toml
 
@@ -114,10 +112,8 @@ The review-orchestrator skill's description ("Use when reviewing code changes...
 
 ## Skill Discovery
 
-Codex scans `~/.agents/skills/` at startup. After installation, verify:
-
-```bash
-codex --ask-for-approval never "List all superkit skills you can see"
-```
-
-You should see 82 skills: 9 command skills + 36 agent skills + 9 stack skills + 10 frontend-3d skills + 7 frontend-ui skills + 5 Go knowledge skills (samber-do/oops/lo, grpc-patterns, benchmark) + 6 TGApp skills.
+Codex scans project `.agents/skills/` and user `~/.agents/skills/`. After
+installation, open `/skills` or type `$` in Codex to inspect available skills.
+Restart if changes do not appear and resolve any installer discovery conflicts.
+The packaged catalog contains 82 skills; discovery does not establish live
+workflow behavior. See [official discovery documentation](https://learn.chatgpt.com/docs/build-skills).

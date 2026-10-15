@@ -89,7 +89,7 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). Codex role source hardening is complete; standalone installation, update preservation and applicable workflow compatibility remain delivery work.
+**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). Codex role source hardening and standalone installation with safe skill updates are implemented; broader workflow compatibility and release preparation remain delivery work.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -184,7 +184,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-Or run `bash setup.sh --codex` from a cloned superkit repo to install both Claude Code and Codex CLI support in one go. Defaults: **gpt-6-astra / high** coordinator and **gpt-5.6-sol / medium** subagents.
+From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6-astra / high** coordinator and **gpt-5.6-sol / medium** subagents.
 
 ### Which command do I use?
 
@@ -326,9 +326,9 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects their sources and partially adapted orchestrator callers from Claude-agent conversion. Backend, data, delivery and language review instructions assess findings against actual framework, database, toolchain and rollout contracts, including Go error/concurrency ownership, modernization, performance and observability. UI reviewers distinguish source analysis, rendered observations and interaction evidence. Core UI, frontend-ui aliases and frontend-3d reviewers remain distinct, including scroll/scene lifecycle and measured frontend performance. Bot review and product-nudge design retain platform, user-preference and action-authority boundaries. The three GAN roles remain a separate optional package with explicit plan, implementation and evaluation handoffs. The [Codex-only delivery plan](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks standalone installation, preservation, compatibility and release preparation. Configuration, source ownership, and repository checks do not establish live model quality or availability.
+`bash /path/to/claude-code-superkit/setup.sh --codex-only` (run from your target project) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Skills remain in `.codex/skills` with discovery links in `.agents/skills`. Re-runs update pristine managed skills with backups; customized skills, existing config/rules/instructions and discovery entries are preserved and conflicts reported. Stock v1.5.2 skills are recognized offline; `--codex` remains additive. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects their sources and partially adapted orchestrator callers from Claude-agent conversion. Backend, data, delivery and language review instructions assess findings against actual framework, database, toolchain and rollout contracts, including Go error/concurrency ownership, modernization, performance and observability. UI reviewers distinguish source analysis, rendered observations and interaction evidence. Core UI, frontend-ui aliases and frontend-3d reviewers remain distinct, including scroll/scene lifecycle and measured frontend performance. Bot review and product-nudge design retain platform, user-preference and action-authority boundaries. The three GAN roles remain a separate optional package with explicit plan, implementation and evaluation handoffs. The [Codex-only delivery plan](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks standalone installation, preservation, compatibility and release preparation. Configuration, source ownership, and repository checks do not establish live model quality or availability.
 
-See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
+See [Codex Installation Guide](packages/codex/INSTALL.md) for safe updates, backups, local package artifacts and manual setup.
 
 Codex architecture references distinguish unconfigured templates from source-backed project facts. Output guidance measures completeness against the authorized change and supports scoped patches, read-only reports, and explicit implementation or verification gaps.
 
