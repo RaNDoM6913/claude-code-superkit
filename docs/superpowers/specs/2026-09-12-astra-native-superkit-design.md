@@ -1,3 +1,5 @@
+> **SUPERSEDED / HISTORICAL — 2026-10-15.** The owner-authorized [Codex-only delivery plan](../plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) defines current product scope and acceptance. This document preserves the earlier research/migration design; its queues and universal behavioral gates are inactive for product delivery. Their removal from scope does not mean they passed. Existing baseline and evidence remain preserved.
+
 # Astra-Native Superkit Hardening — Design Spec
 
 **Date:** 2026-09-12  

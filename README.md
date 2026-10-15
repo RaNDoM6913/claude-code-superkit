@@ -60,7 +60,7 @@ Your feature is attacked against binary rubrics before it ships (Playwright requ
 
 ## 🧬 Hardened by a Stronger Model
 
-The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The current native GPT role core is authored separately by Astra; its behavioral acceptance remains pending. The Claude-layer countermeasures include:
+The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The Claude-layer countermeasures include:
 
 | Opus failure mode | Countermeasure baked into every file |
 |-------------------|--------------------------------------|
@@ -89,7 +89,7 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). Native GPT role packages are under development; behavioral migration acceptance remains pending.
+**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). Codex role source hardening is complete; standalone installation, update preservation and applicable workflow compatibility remain delivery work.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -326,7 +326,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 | Session continuity | Yes (hooks) | — |
 | Subagent dispatch | Agent tool | spawn_agent |
 
-`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects their sources and partially adapted orchestrator callers from Claude-agent conversion. Backend, data, delivery and language review instructions assess findings against actual framework, database, toolchain and rollout contracts, including Go error/concurrency ownership, modernization, performance and observability. UI reviewers distinguish source analysis, rendered observations and interaction evidence. Core UI, frontend-ui aliases and frontend-3d reviewers remain distinct, including scroll/scene lifecycle and measured frontend performance. Bot review and product-nudge design retain platform, user-preference and action-authority boundaries. The three GAN roles remain a separate optional package with explicit plan, implementation and evaluation handoffs. The [roadmap](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) records each accepted packet and separate source/behavioral counts. Configuration, source ownership, and repository checks do not establish live model quality or availability.
+`bash setup.sh --codex` (from cloned repo) installs 82 skills + `default.rules` and creates AGENTS.md + config.toml with Astra/Sol defaults. Existing project config is preserved. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects their sources and partially adapted orchestrator callers from Claude-agent conversion. Backend, data, delivery and language review instructions assess findings against actual framework, database, toolchain and rollout contracts, including Go error/concurrency ownership, modernization, performance and observability. UI reviewers distinguish source analysis, rendered observations and interaction evidence. Core UI, frontend-ui aliases and frontend-3d reviewers remain distinct, including scroll/scene lifecycle and measured frontend performance. Bot review and product-nudge design retain platform, user-preference and action-authority boundaries. The three GAN roles remain a separate optional package with explicit plan, implementation and evaluation handoffs. The [Codex-only delivery plan](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks standalone installation, preservation, compatibility and release preparation. Configuration, source ownership, and repository checks do not establish live model quality or availability.
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for manual setup.
 

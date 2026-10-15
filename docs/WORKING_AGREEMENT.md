@@ -89,28 +89,33 @@ skill ceremony; preserve explicit task constraints and mandatory project gates.
 
 ## Project application
 
-For the approved Astra-native migration, Astra/root coordinates architecture,
-shared contracts, integration and acceptance; independent Sol workers own bounded
-implementation packages. Use at most three workers alongside the coordinator
-when slots permit. Terra/Luna production eligibility is still unproven. These
-worker choices do not override the shipped Claude asset model conventions.
-Other tasks follow their explicitly approved runtime/model routing.
+The owner's current product objective is a standalone Codex-only automated install
+and artifact in this repository, using the accepted Astra role/support sources.
+Follow the [active delivery plan](superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md).
+Review shipped workflow/support compatibility and fix concrete gaps; preserve user
+customizations, native ownership, truthful evidence and real product safety checks.
+Claude prompt refinement is separate work; preserve its existing installation path.
 
-For GPT-layer prompts and behavioral rules, Astra authors or reworks the
-instructions; every changed prompt receives Astra participation. Sol performs
-bounded implementation, integration, evidence collection, and checks, and may
-review prompt changes, but does not autonomously rewrite their behavior. This
-contributor rule is separate from model defaults shipped to kit consumers.
+Astra owns all GPT/Codex prompt refinement and semantic decisions. Sol provides
+bounded technical integration and independent review; it does not autonomously
+rewrite prompt behavior. The coordinator owns shared contracts, integration and
+acceptance. Use 2–3 independent workers when useful, with clean context and disjoint
+ownership. These contributor choices do not change shipped consumer model defaults
+or establish empirical model quality or cheaper-model eligibility.
 
-Keep the migration's authorization boundaries: stable checkpoint commit/push on
-codex/astra-native-hardening is authorized; merge/release require their existing
-approval and acceptance gates. Live model evaluations remain restricted by the
-current task instructions. Read the latest task direction and migration
-`next-session.md` checkpoint on resumption. The owner's current priority is
-concrete GPT-role prompt improvement with Astra participation; do not
-automatically resume the older W00B tooling queue. W00B and behavioral acceptance
-remain incomplete, and prompt authoring does not waive their mandatory gates or
-authorize live evaluations, merge, or release.
+Under the owner's 2026-10-15 scope change, universal behavioral qualification,
+W00B, G01/G02, provider attestation and collector queues are outside the product
+release scope. Preserve their historical baseline and evidence; do not mark that
+research completed or passed, or automatically resume it from old checkpoints.
+The historical BEH0/55 counter is not a product completion percentage. Live model
+evaluations retain their separate authorization requirement.
+
+Stable verified checkpoint commit/push on `codex/astra-native-hardening` remains
+subject to the current task's authorization and stopping boundary; never force-push
+or bypass hooks. Merge, tag and publication require separate owner approval and
+the active product acceptance gates. Prepare a concrete reviewable release candidate
+before requesting publication approval. Report actual capabilities and evidence
+limits rather than treating source acceptance as final delivery.
 
 For the owner's Codex sessions, preserve the established 500,000-token context
 handoff agreement. Use current-session telemetry with its timestamp, never summed
