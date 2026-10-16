@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="184" height="28" viewBox="0 0 184 28" role="img" aria-label="56 agents running on Opus 4.8">
+  <title>56 agents running on Opus 4.8</title>
+  <rect width="96" height="28" fill="#1e293b"/>
+  <rect x="96" width="88" height="28" fill="#8A2BE2"/>
+  <g fill="#ffffff" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" letter-spacing="0.8">
+    <text x="48" y="18">56 AGENTS</text>
+    <text x="140" y="18">OPUS 4.8</text>
+  </g>
+</svg>

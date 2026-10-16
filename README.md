@@ -4,11 +4,11 @@
 
 <div align="center">
 
-[![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
-[![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
-![Agents](https://img.shields.io/badge/56_agents-Opus_4.8-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
-![Claude prompts hardened by](https://img.shields.io/badge/Claude_prompts_hardened_by-Claude_Fable_5-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
-![Codex](https://img.shields.io/badge/Codex-Astra%20%2B%20Sol-00A67E?style=for-the-badge&logo=openai&logoColor=white)
+[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
+[![MIT license](docs/assets/badge-license.svg)](LICENSE)
+![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg)
+![Claude prompts hardened by Claude Fable 5](docs/assets/badge-claude-hardening.svg)
+![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
 
 [🚀 Quick Start](#-installation) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 

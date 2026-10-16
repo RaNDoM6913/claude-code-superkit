@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **README presentation:** refreshed badges in the OrchKit style with the existing accent colors, live GitHub stars and the Codex label **GPT-6 ASTRA ULTRA**.
+
 ## [1.5.3] — 2026-10-16
 
 **Standalone Codex installation, safe updates and native hooks.** The shared release artifact retains the Claude layer and optional GAN package; `--codex-only` selects only Codex assets. Accepted Astra-authored GPT role sources and compatible workflows ship alongside two bounded native handlers. Normal project/hook trust remains required; source and fixture evidence do not qualify every workflow, model or deployment.
