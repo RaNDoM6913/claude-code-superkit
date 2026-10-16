@@ -1,6 +1,6 @@
 # Codex-only Superkit delivery plan — 1.5.3
 
-**Status:** v1.5.3 published on GitHub on 2026-10-16 after explicit owner authorization; npm registry delivery awaits publisher confirmation and independent verification. See the [release delivery record](../../releases/1.5.3.md).
+**Status:** v1.5.3 published on GitHub and npm on 2026-10-16 after explicit owner authorization; both downloaded artifacts and a fresh-cache registry install are verified. Release delivery is complete. See the [release delivery record](../../releases/1.5.3.md).
 **Outcome:** A standalone, automated Codex-only install and distributable artifact in this repository, with preserved user customizations and accurate documentation.
 **Routing:** The coordinator owns scope, integration and acceptance. Under the owner's latest 2026-10-15 direction, delegate useful independent work to GPT-6.1 Sol; this supersedes the earlier contributor Astra/Sol split for continuation. Preserve accepted Astra-authored sources and shipped consumer model defaults. Claude prompt work remains separate.
 **Agreement:** [Contributor working agreement](../../WORKING_AGREEMENT.md).
@@ -48,11 +48,11 @@ Native activation and candidate evidence: [2026-10-15 reviewed local candidate](
 - [x] Inspect all changes since the previous release, package contents and the existing distribution workflow. Do not silently include unfinished Claude work or research dependencies.
 - [x] Check current release/tag availability: v1.5.3 was not observed on 2026-10-15; recheck at any future release decision. No version selected.
 - [x] Owner-authorized release: selected 1.5.3, synchronized versions/notes/docs, corrected GitHub About, merged PR #1 and published the annotated tag plus verified GitHub release assets.
-- [ ] Complete npm registry delivery; verify registry metadata, archive integrity and an actual registry-sourced installation. Local/archive installation is not registry-publication proof.
+- [x] Complete npm registry delivery: version `1.5.3` and the `latest` tag verified; the registry tarball matches the GitHub artifact byte-for-byte, and a fresh-cache registry install reports `1.5.3`, 82 skills and no `.claude`.
 - [x] Present the concrete candidate commit, artifact, verification and remaining limitations. Merge, tag, release publication and any new distribution channel require the owner's separate approval.
 
 ## Completion and continuation
 
 Product readiness means the standalone install, safe update behavior, applicable compatibility, required checks and candidate documentation above are accepted. It does not require finishing the archived research program.
 
-Continue from the next unchecked product item only within current task authorization. The installation milestone does not close the later compatibility/release scope. Keep work on `codex/astra-native-hardening`, preserve unrelated changes, and never force-push or bypass hooks. Follow the 500,000-token context/handoff policy in the working agreement. Report accepted capabilities, mandatory remaining work, evidence limits and Git state without an invented percentage.
+The authorized 1.5.3 delivery is complete. Continue only with a new concrete owner request; do not reopen historical research or repeat accepted gates as an automatic queue. Keep work on `codex/astra-native-hardening`, preserve unrelated changes, and never force-push or bypass hooks. Follow the 500,000-token context/handoff policy in the working agreement. Report accepted capabilities, mandatory remaining work, evidence limits and Git state without an invented percentage.

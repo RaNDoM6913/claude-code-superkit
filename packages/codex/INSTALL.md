@@ -126,8 +126,8 @@ The archive includes the installer, skill sources, hook script/template, and leg
 The archive version is 1.5.3. Re-run the extracted installer to update an existing
 project under the same preservation and backup policy. GitHub release archives
 and the tagged checkout are usable independently of npm registry availability.
-Check `npm view claude-code-superkit@1.5.3 version`; when it returns `1.5.3`, the
-equivalent command from your target project is
+Version 1.5.3 is also [published on npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.3).
+The equivalent command from your target Git project is
 `npx claude-code-superkit@1.5.3 --codex-only`.
 
 ### Use and manual installations

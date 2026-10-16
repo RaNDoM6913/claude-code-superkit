@@ -167,7 +167,7 @@ claude
 /review --full
 ```
 
-> **Distribution:** use the tagged checkout or [v1.5.3 release archives](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3). Check registry availability with `npm view claude-code-superkit@1.5.3 version`; when it returns `1.5.3`, you can also use `npx claude-code-superkit@1.5.3` (add `--codex-only` for standalone Codex).
+> **Distribution:** v1.5.3 is available on [npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.3) and as [GitHub release archives](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3). From your target Git project, run `npx claude-code-superkit@1.5.3 --codex-only` for standalone Codex, or omit `--codex-only` for the Claude installer.
 
 **`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
 - `CLAUDE.md` — populated with your tech stack, commands, conventions
