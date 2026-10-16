@@ -1,24 +1,25 @@
-# ⚡ claude-code-superkit
+<p align="center">
+  <img src="docs/assets/superkit-header.png" alt="Superkit — agents for Claude Code and GPT agents for Codex" width="960">
+</p>
 
-> **The quality-first kit for Claude Code & Codex** — all 56 Claude agents run on Opus (now 4.8, 1M context), with prompts hardened for that executor by **Claude Fable 5**. The Codex layer has separate GPT instructions and Astra/Sol configuration.
+<p align="center">
+  <strong>Agents, commands, hooks, skills and rules for Claude Code.</strong><br>
+  Native GPT workflows and standalone installation for Codex.
+</p>
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
-[![MIT license](docs/assets/badge-license.svg)](LICENSE)
-![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg)
-![Claude prompts hardened by Claude Fable 5](docs/assets/badge-claude-hardening.svg)
-![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
+[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
-[🚀 Quick Start](#-installation) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
+![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg) ![Claude prompts hardened by Claude Fable 5](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
+
+[🚀 Quick Start](#-installation) · [🔄 Workflow](#-how-dev-works) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
 </div>
 
 ---
 
 Battle-tested in a production app with 68+ endpoints and 50 database migrations. Features double-verification code review, 4-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration.
-
-**Why all-Opus?** On a flat-rate Claude Code subscription, downgrading agents to Sonnet/Haiku only degrades quality without saving money — even cost-optimizing kits disable model downgrade on flat-rate plans. Superkit pins every agent to the `opus` alias, so it rode straight to Opus 4.8 with zero config churn.
 
 <table>
 <tr>
@@ -58,21 +59,6 @@ Your feature is attacked against binary rubrics before it ships (Playwright requ
 
 ---
 
-## 🧬 Hardened by a Stronger Model
-
-The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The Claude-layer countermeasures include:
-
-| Opus failure mode | Countermeasure baked into every file |
-|-------------------|--------------------------------------|
-| Lost-in-the-middle | Hard Rules at the top + Recap at the bottom |
-| Premature "done" | Done-gates — generators verify artifacts on disk and run what they generate |
-| Invented APIs / files | Evidence Gates (findings only with `file:line` actually read; `NOT FOUND` over invention) + a real-API honesty pass |
-| Vague judgment calls | Decision tables with explicit defaults |
-| Vocabulary drift | One canonical severity / confidence / verdict enum set |
-| Fractional numbering | Linear phases / steps everywhere |
-
-Contracts instead of vibes — Opus executes best when every judgment call is a decision table and every output has an exact contract.
-
 ## 🔄 How `/dev` Works
 
 <p align="center">
@@ -88,6 +74,28 @@ The full path has **16 phases, numbered 0–15**, starting with **Read Docs** an
 4. goal-verifier checks the result against the original goal before code review
 5. Scope-selected reviewers run in parallel; complex tasks also pass the critic gate
 6. Updates documentation and reports outcomes, verification evidence and remaining work
+
+<details>
+<summary><strong>Claude prompt hardening</strong> — methodology and safeguards</summary>
+
+### Claude prompt hardening
+
+The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The Claude-layer countermeasures include:
+
+| Opus failure mode | Countermeasure baked into every file |
+|-------------------|--------------------------------------|
+| Lost-in-the-middle | Hard Rules at the top + Recap at the bottom |
+| Premature "done" | Done-gates — generators verify artifacts on disk and run what they generate |
+| Invented APIs / files | Evidence Gates (findings only with `file:line` actually read; `NOT FOUND` over invention) + a real-API honesty pass |
+| Vague judgment calls | Decision tables with explicit defaults |
+| Vocabulary drift | One canonical severity / confidence / verdict enum set |
+| Fractional numbering | Linear phases / steps everywhere |
+
+Contracts instead of vibes — Opus executes best when every judgment call is a decision table and every output has an exact contract.
+
+All Claude agents use the `opus` alias. Historical Claude Fable 5 hardening applies to the Claude layer; GPT role sources and Codex configuration are maintained separately.
+
+</details>
 
 ## 📦 What's Inside
 

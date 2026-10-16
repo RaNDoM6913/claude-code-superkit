@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Superkit header and README layout:** published the selected logo/header artwork, grouped the styled badges into clear rows, added direct workflow navigation and moved Claude hardening history into an expandable section so the full `/dev` cycle is easier to find.
+
 - **Codex worker default:** updated the current source template and installer guidance to **gpt-6.1-sol / medium**, retaining **gpt-6-astra / high** as coordinator. Existing consumer configs and published v1.5.3 artifacts retain their defaults.
 
 - **README presentation:** refreshed badges in the OrchKit style with the existing accent colors, live GitHub stars and the Codex label **GPT-6 ASTRA ULTRA**.
