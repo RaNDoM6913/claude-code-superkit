@@ -48,7 +48,7 @@ Key design decisions:
 - **Conditional GAN loop (Phase 8)**: evaluator checks contract → if FAIL, iterate (max 2-3 passes) → if scores plateau, escalate to architect.
 - **Dependency order in Phase 7**: migrations before repos, repos before services, services before handlers.
 - **Solution Ladder in Phase 7**: before writing any new code, Claude walks the ladder from the coding-style rule and stops at the first rung that holds — not needed (YAGNI) → reuse in codebase → stdlib → native platform feature → installed dependency, with a new dependency the last resort.
-- **Agents in Phases 10, 12, and 14 run independently**: test-generator, reviewer agents, and docs-reviewer can be dispatched in parallel.
+- **Ordered phases, parallel reviewers**: Phase 10 tests precede Phase 11 goal verification and Phase 12 review. Reviewers within Phase 12 may run in parallel, selected by the changed scope. Phase 14 documentation follows review and any required critic gate.
 - **Gate between phases**: if Phase 9 (verify) fails, Claude fixes errors before Phase 10 (test).
 - **Critic as independent evaluator**: Phase 13 evaluates from security, new-hire, and ops perspectives — different from domain-specific reviewers in Phase 12.
 

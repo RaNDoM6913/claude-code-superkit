@@ -76,16 +76,18 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 ## 🔄 How `/dev` Works
 
 <p align="center">
-  <img src="docs/dev-flow.svg" alt="/dev — 16-phase development orchestrator: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
+  <img src="docs/assets/dev-flow.png" alt="/dev — 16-phase development orchestrator, phases 0–15: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
 </p>
 
+The full path has **16 phases, numbered 0–15**, starting with **Read Docs** and ending with **Report**. Required phases depend on task complexity; see the [phase sequence and skip rules](docs/guide/08-orchestration.md#the-dev-pipeline-16-phases).
+
 **Example:** `/dev add rate limiting to login`
-1. Loads CLAUDE.md + architecture docs (Phase 0)
-2. Plans + validates the plan (plan-checker gate)
-3. Implements behind a sprint contract
-4. Reviewers fan out (security-scanner, ts-reviewer) in parallel
-5. goal-verifier checks the change against the original goal
-6. Commits only when verification passes with fresh evidence
+1. Reads project context and relevant architecture docs, then assesses the task
+2. Plans the change, defines its sprint contract and validates the plan
+3. Implements, evaluates, verifies and tests the change
+4. goal-verifier checks the result against the original goal before code review
+5. Scope-selected reviewers run in parallel; complex tasks also pass the critic gate
+6. Updates documentation and reports outcomes, verification evidence and remaining work
 
 ## 📦 What's Inside
 

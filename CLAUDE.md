@@ -97,8 +97,9 @@ docs/
   guide/                    # 13 chapters
   examples/                 # 3 examples
   INSTALL-CLAUDE-CODE.md    # Detailed install guide
-  dev-flow.svg              # Hand-authored /dev flow diagram used in README
-  dev-flow-variants/        # 4 alternative SVG layouts (timeline, radial, waterfall, node graph)
+  assets/dev-flow.png       # Approved /dev diagram used in README; all 16 phases (0–15)
+  dev-flow.svg              # Historical hand-authored /dev diagram; see gallery caveats
+  dev-flow-variants/        # Historical SVG concepts (timeline, radial, waterfall, node graph)
 README.md
 CHANGELOG.md
 TROUBLESHOOTING.md
@@ -213,8 +214,9 @@ The `superkit-integrity.md` rule (alwaysApply) and `superkit-counts-verify.sh` h
 | `packages/frontend-3d/README.md` | Frontend 3D package — agents, hooks, skills, rules, commands for GSAP/Three.js/R3F |
 | `packages/core/helpers/statusline.cjs` | Claude Code status bar — monorepo-aware stack detector; ctx heat bar + real 5h/W rate-limit bars from the CLI payload; model+effort+⟁ULTRA; `CLAUDE_STATUSLINE_THEME=light` for light terminals |
 | `packages/core/hooks/superkit-update.sh` | SessionStart auto-updater — pristine-check vs released tags, preserves+reports customized consumer files, self-bootstraps, skips INTERNAL-FILES |
-| `docs/dev-flow.svg` | Hand-authored `/dev` 16-phase flow diagram embedded in main `README.md` |
-| `docs/dev-flow-variants/` | Alternative layouts (timeline / radial / waterfall / node graph) with gallery `README.md` |
+| `docs/assets/dev-flow.png` | Approved `/dev` diagram embedded in main `README.md`, showing all 16 phases (0–15) |
+| `docs/dev-flow.svg` | Historical diagram retained with the limitations documented in the gallery |
+| `docs/dev-flow-variants/` | Historical layout concepts (timeline / radial / waterfall / node graph) with gallery notes |
 
 <!-- code-review-graph MCP tools -->
 ## MCP Tools: code-review-graph

@@ -67,7 +67,7 @@ VERSION MUST equal package.json version, and CHANGELOG.md MUST contain that vers
 
 `packages/core/commands/dev.md` frontmatter declares the /dev phase count (currently "16 phases (0–15)"). The SAME count must appear in:
 
-- `README.md` — Key Commands `/dev` row AND the `docs/dev-flow.svg` embed's `alt` text ("/dev — 16-phase development orchestrator…"). If the count ever changes, regenerate the SVG labels and `docs/dev-flow-variants/` too.
+- `README.md` — Key Commands `/dev` row AND the `docs/assets/dev-flow.png` embed's `alt` text ("/dev — 16-phase development orchestrator…"). If the count ever changes, update the active diagram and its documentation; keep explicitly historical concepts labelled as such.
 - `CLAUDE.md` — Key Files table, dev.md row
 - `docs/guide/01-getting-started.md` — command table
 - `docs/guide/08-orchestration.md` — "The /dev Pipeline: N Phases" header

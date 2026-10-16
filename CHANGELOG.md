@@ -5,6 +5,7 @@ All notable changes to claude-code-superkit are documented here.
 ## [Unreleased]
 
 - **README presentation:** refreshed badges in the OrchKit style with the existing accent colors, live GitHub stars and the Codex label **GPT-6 ASTRA ULTRA**.
+- **Complete `/dev` diagram:** published the selected three-column design with all 16 phases (0–15), including Read Docs, scope-selected reviewers and the final Report. Corrected the README example and orchestration guide to keep goal verification before review and parallel work within the review phase; retained older artwork as clearly marked historical concepts.
 
 ## [1.5.3] — 2026-10-16
 
