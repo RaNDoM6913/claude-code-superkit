@@ -1,7 +1,7 @@
 {
   "name": "claude-code-superkit",
-  "version": "1.5.2",
-  "description": "Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI. All agents on Opus.",
+  "version": "1.5.3",
+  "description": "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 82 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra.",
   "type": "module",
   "bin": {
     "claude-code-superkit": "./bin/cli.js",

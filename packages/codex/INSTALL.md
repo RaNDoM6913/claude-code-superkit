@@ -104,11 +104,12 @@ portion is fresh, merged, or overwritten. `--codex-only` rejects `--codex`,
 `--stacks`, `--extras`, `--profile`, and `--plugins` together. `--defaults`,
 `--no-docs`, and `--no-superpowers` are accepted but unnecessary in standalone mode.
 
-### Local package artifact (no publication required)
+### v1.5.3 release artifact
 
-The existing npm artifact includes both installers; the selector controls what
-is installed into the target. No separate service or distribution channel is
-required. From the Superkit checkout:
+The v1.5.3 package archive includes both installers, the Claude layer and optional
+GAN sources; `--codex-only` selects only Codex assets for your project. Use the
+package archive attached to the [v1.5.3 GitHub release](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3),
+or create the same package format from a reviewed v1.5.3 checkout:
 
 ```bash
 npm pack --ignore-scripts --pack-destination /path/to/artifacts
@@ -122,8 +123,12 @@ node /path/to/extracted/package/bin/cli.js --codex-only
 ```
 
 The archive includes the installer, skill sources, hook script/template, and legacy baseline.
-Its version remains 1.5.2 until a separately approved release; a local candidate
-archive is not the published v1.5.2 release. npm publication remains deferred.
+The archive version is 1.5.3. Re-run the extracted installer to update an existing
+project under the same preservation and backup policy. GitHub release archives
+and the tagged checkout are usable independently of npm registry availability.
+Check `npm view claude-code-superkit@1.5.3 version`; when it returns `1.5.3`, the
+equivalent command from your target project is
+`npx claude-code-superkit@1.5.3 --codex-only`.
 
 ### Use and manual installations
 
@@ -300,6 +305,14 @@ A copied definition is not proof of trust, handler execution or native event
 firing. Check each separately in the intended runtime. Direct script fixtures
 qualify handler behavior only; file installation/discovery checks do not establish
 native firing, consumer workflow execution or model quality.
+
+For this release, actual Codex CLI `0.162.0-alpha.17.2` in a disposable POSIX/macOS
+fixture observed native PreToolUse blocking a hard reset and Stop progressing from
+blocked to completed, followed by a completed turn. Normal folder trust and
+individual definition review were used. The [activation record](../../docs/superpowers/migrations/astra-native/evidence/GPT-codex-native-activation-candidate-2026-10-15.md)
+preserves the partial first attempt and completed successor. This evidence does
+not activate hooks in your project or qualify Windows/cloud, every workflow,
+arbitrary shell syntax or model quality.
 
 ### Claude behaviors without a shipped Codex mapping
 

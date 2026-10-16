@@ -7,7 +7,7 @@
 [![Stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers)
 [![License](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](LICENSE)
 ![Agents](https://img.shields.io/badge/56_agents-Opus_4.8-8A2BE2?style=for-the-badge&logo=anthropic&logoColor=white)
-![Hardened by](https://img.shields.io/badge/prompts_hardened_by-Claude_Fable_5-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
+![Claude prompts hardened by](https://img.shields.io/badge/Claude_prompts_hardened_by-Claude_Fable_5-FF6B35?style=for-the-badge&logo=anthropic&logoColor=white)
 ![Codex](https://img.shields.io/badge/Codex-Astra%20%2B%20Sol-00A67E?style=for-the-badge&logo=openai&logoColor=white)
 
 [🚀 Quick Start](#-installation) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
@@ -89,7 +89,7 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). Codex role source hardening, standalone installation with safe updates, workflow compatibility fixes and two bounded native hook handlers are implemented; release acceptance remains delivery work.
+**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). v1.5.3 ships standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -118,15 +118,17 @@ Contracts instead of vibes — Opus executes best when every judgment call is a 
 
 ## 🆕 What's New
 
-**v1.5.2 — the auto-sync integrity release: your customizations survive updates now** (see [CHANGELOG](CHANGELOG.md)):
+**v1.5.3 — standalone Codex installation, safe updates and native hooks** (see [CHANGELOG](CHANGELOG.md)):
 
-- 🛡️ **`superkit-update` no longer overwrites your customized files.** A file is replaced only when its content matches a released tag's blob (your install baseline + the last 5 tags); anything you edited is **preserved and reported** at SessionStart — `N synced · M preserved (locally customized) · K skipped (internal)` — instead of silently reverted. A self-bootstrap step means the fixed updater applies itself *before* its first sync, and coverage now includes `stack-rules/`, the Go `references/`, and `hooks/lib/`.
-- 🔒 **Repo-only files can't leak into your project anymore** — one shared `INTERNAL-FILES` manifest feeds the installer, the counts gate and the updater, with a **per-category fallback** so even a corrupted manifest can't ship `superkit-integrity.md` into consumers (proven failing-first, 31-case fixture suite).
-- ✂️ **The two commit gates stop blocking their own advice**: `dev-required-on-commit` no longer penalizes `memory/`/`.claude/`-only commits (exempt check now runs FIRST) and override tags count only when they *open* a message line — prose mentioning `[no-dev:…]` is not an override; `block-dangerous-git` strips `-m`/`--message`/heredoc payloads before matching, so a commit message *describing* `--no-verify` or a force-push no longer trips the guard (chained real commands still block — 38-case matrix).
-- 📄 **The ADR template actually installs now** (project-root `docs-templates/adr-template.md`, idempotent, never overwrites) — `/dev`'s Phase 2 nudge no longer dangles and degrades silently if you delete it.
-- 📊 **Statusline, rebuilt visual language** — the ctx readout is a colour heat bar (`ctx ██████░░░░ 62%`), joined by **real 5-hour/weekly rate-limit bars** read from Claude Code's own `rate_limits` payload (the same numbers `/usage` shows — no estimated denominators) with time-to-reset; plus the **current model**, an intensity-coloured **effort** (`⚙xhigh`), and a `⟁ULTRA` badge while ultracode is on, alongside the git branch in readable bright white (`CLAUDE_STATUSLINE_THEME=light` for light terminals). All fail-open — older CLIs just show fewer segments.
+- 📦 **Install Codex independently:** `--codex-only` installs 82 skills and their discovery links without Claude prerequisites, plugins or files. `--codex` retains the combined installer. Both routes share one release artifact.
+- 🛡️ **Keep your customizations:** Codex updates recognize recorded hashes and the stock v1.5.2 baseline, back up pristine replacements and preserve/report edited skills, config, instructions, discovery entries and active hooks.
+- 🪝 **Two native Codex handlers:** PreToolUse rejects covered static destructive Git commands; Stop checks tracked/staged whitespace with one continuation. Normal project and hook trust is required. Configured Git clean/process filters produce `UNVERIFIED` instead of running conversion programs. Actual native blocking and Stop completion were exercised in a disposable POSIX/macOS fixture; Windows/cloud remain unqualified.
+- 🧠 **Astra-authored GPT sources across specialist roles:** planning/review gates, delivery, tests, security, backend/data, Go and other languages, UI/3D, bot/nudge, architecture and authoring guidance use scoped authority and evidence-backed outcomes. All nine workflows resolve installed tools and preserve missing verification evidence. Source acceptance does not establish live model quality.
+- 🎭 **Optional GAN sources:** planner/generator/evaluator share bounded scenario/rubric handoffs and independent verdicts; manual opt-in and Playwright remain required. No live GAN qualification is claimed.
+- 📊 **Claude statusline and updater:** fixes current context payload parsing and fallback; trims the layout to version, branch, model/effort, context and real usage meters; removes the stale task segment. Pristine statusline copies now update safely while customized copies survive.
+- ✅ **Verification:** 133 product tests, 13 smoke checks, 56 hook cases, 15 core-hook suites and three frontend UI hook suites; archive installs, v1.5.2 upgrades, converter preservation, native rules and skill discovery checked at their stated evidence levels. Historical evaluation/oracle/collector research is outside this release scope.
 
-Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.5.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.1) · [v1.5.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.0) · [v1.4.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.2) · [v1.4.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.1) · [v1.4.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.4.0)
+Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.5.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.2) · [v1.5.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.1) · [v1.5.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.0)
 
 ## 🚀 Installation
 
@@ -165,7 +167,7 @@ claude
 /review --full
 ```
 
-> **npm note:** registry publish is deferred — install via `git clone` for now. When `claude-code-superkit` is published, `npx claude-code-superkit` will become the one-liner alternative.
+> **Distribution:** use the tagged checkout or [v1.5.3 release archives](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3). Check registry availability with `npm view claude-code-superkit@1.5.3 version`; when it returns `1.5.3`, you can also use `npx claude-code-superkit@1.5.3` (add `--codex-only` for standalone Codex).
 
 **`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
 - `CLAUDE.md` — populated with your tech stack, commands, conventions
