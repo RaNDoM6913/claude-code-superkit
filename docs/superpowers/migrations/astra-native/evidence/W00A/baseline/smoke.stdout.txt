@@ -1,0 +1,23 @@
+
+> claude-code-superkit@1.5.2 test:smoke
+> node test/smoke.test.js
+
+▶ smoke test: --defaults install
+  ✔ installs with --defaults without errors (90.585ms)
+  ✔ creates .claude/ directory (0.083667ms)
+  ✔ creates agents (0.055708ms)
+  ✔ creates valid settings.json (0.122916ms)
+  ✔ creates CLAUDE.md (0.049167ms)
+  ✔ creates hooks directory (0.044625ms)
+  ✔ creates .superkit-meta (0.050458ms)
+  ✔ installs docs-templates/adr-template.md at project root (0.057667ms)
+  ✔ does not overwrite an existing adr-template.md on re-install (61.230292ms)
+✔ smoke test: --defaults install (196.555875ms)
+ℹ tests 9
+ℹ suites 1
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 199.578541

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bash",
+    "packages/core/hooks/tests/dev-required-on-commit_test.sh"
+  ],
+  "exitCode": 0,
+  "durationSeconds": 1.18,
+  "execution": "approved access for isolated test-dev-required-PID state files",
+  "stdoutPath": "dev-required-elevated.stdout.txt",
+  "stderrPath": "dev-required-elevated.stderr.txt"
+}

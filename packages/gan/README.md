@@ -61,11 +61,42 @@ mkdir -p .claude/rubrics && cp packages/gan/rubrics/*.md .claude/rubrics/
 npx playwright install
 ```
 
-For Codex CLI, copy the skill mirrors into your skills dir instead:
+For Codex, install the three Codex-native skills separately. The standard kit
+installer does not install this optional package or its rubric resources. From
+your target project, set `SUPERKIT_SOURCE` to the checkout you are copying from.
+Inspect existing destination files first and preserve customized copies.
 
 ```bash
-cp -r packages/gan/skills/* ~/.agents/skills/
+SUPERKIT_SOURCE=/absolute/path/to/claude-code-superkit
+for role in gan-planner gan-generator gan-evaluator; do
+  mkdir -p "$HOME/.agents/skills/$role"
+  gan_target="$HOME/.agents/skills/$role/SKILL.md"
+  if [ -e "$gan_target" ] || [ -L "$gan_target" ]; then
+    printf 'Preserved existing %s; compare manually before updating.\n' "$gan_target"
+  else
+    cp "$SUPERKIT_SOURCE/packages/gan/skills/$role/SKILL.md" "$gan_target"
+  fi
+done
+
+# Separate, explicit rubric copy; Claude Code is not a prerequisite.
+mkdir -p .gan/rubrics
+for rubric in ui-quality functionality; do
+  gan_target=".gan/rubrics/$rubric.md"
+  if [ -e "$gan_target" ] || [ -L "$gan_target" ]; then
+    printf 'Preserved existing %s; compare manually before updating.\n' "$gan_target"
+  else
+    cp "$SUPERKIT_SOURCE/packages/gan/rubrics/$rubric.md" "$gan_target"
+  fi
+done
 ```
+
+Alternatively, supply accessible rubric paths without copying them. Pass those
+exact paths to the planner, generator and evaluator; the plan binds the actual
+contents and approved applicability. Copying only SKILL.md never supplies the
+rubrics. Missing required rubric/environment evidence leaves the corresponding
+Codex gate incomplete or BLOCKED. The commands above copy local files only;
+installing Playwright/browser dependencies or starting an application requires
+the task's actual setup authority.
 
 ## Structure
 
@@ -75,7 +106,7 @@ packages/gan/
 │   ├── gan-planner.md
 │   ├── gan-generator.md
 │   └── gan-evaluator.md
-├── skills/                    # Codex CLI mirrors
+├── skills/                    # Codex-native skills
 │   ├── gan-planner/SKILL.md
 │   ├── gan-generator/SKILL.md
 │   └── gan-evaluator/SKILL.md
@@ -109,7 +140,48 @@ After generator hand-off:
 Evaluate the implementation against the plan's rubric.
 ```
 
-In Codex CLI: the same flow, just using `skill gan-planner` / `gan-generator` / `gan-evaluator`.
+In Codex, request the named installed role in the task and provide its inputs:
+“Use gan-planner for this feature with these rubric paths”, then “Use
+gan-generator with this approved plan”, then “Use gan-evaluator with the plan
+and generator hand-off.” Follow the current host's supported skill-selection
+mechanism; `skill gan-planner` is not a universal shell/CLI command. These roles
+retain `user-invocable: false` and may be selected by the agent for the task.
+
+### Codex contract
+
+The Codex-native SKILL.md instructions govern Codex execution; the Claude agent
+files and shared rubric recipes retain their own contracts. Codex binds the
+approved plan, stable requirement/scenario IDs, rubric row IDs, N/A rationale,
+extras, critical requirements and content version/hash before implementation.
+The original selected rubric rows and any approved project adaptations stay
+visible. Historical style recipes are not blanket font/framework bans, and
+“ship it” in a rubric does not authorize shipping, merge or release.
+
+The generator implements application code plus Playwright tests. Its green run
+is not independent acceptance. Use available, authorized independent execution
+for the evaluator; an inline fallback must say INLINE SELF-REVIEW and cannot
+satisfy mandatory independence. Requested routing and observed runtime identity
+are separate; no invented model/agent identity or obsolete claim that Codex has
+no subagents.
+
+The evaluator runs required existing checks when authorized and reports actual
+scenario coverage, rendered/interaction evidence and rubric results. It cannot
+edit implementation, tests or criteria to obtain PASS. Missing required rubric,
+runtime or independence evidence blocks acceptance; zero, skipped, truncated or
+error-only results cannot establish PASS. Confirmed defects remain reportable
+alongside an incomplete gate. Verdicts are PASS, NEEDS-ATTENTION,
+NEEDS-REMEDIATION or BLOCKED, with Gate status COMPLETE or INCOMPLETE; an incomplete
+gate never yields PASS. Scores do not waive critical failures. Fixture, local
+functional and production evidence remain distinct.
+
+Codex handoffs preserve `# GAN Plan`, one `## Rubric`, `## Generator hand-off`
+and `EVALUATION REPORT`. Looping is manual unless explicitly authorized: at most
+3 corrective generator/evaluator cycles and 3 fix attempts per failing test, or
+the stricter task limit. Keep counters across handoffs/re-plans; stop earlier on
+user steering or unchanged unavailable evidence. Tool availability does not
+authorize dependency/browser installation, app startup, private captures,
+network side effects or production changes. Reuse authority already granted;
+do not ask again for ordinary implementation/checks inside that scope.
 
 ## Loop control
 
@@ -152,7 +224,7 @@ The rubrics include explicit anti-slop criteria the evaluator enforces:
 
 Adapted from `affaan-m/everything-claude-code` GAN pattern. Original
 reports +2.25 quality score gain. Our adaptation differs:
-- Codex SKILL.md mirrors for Codex CLI users
+- Codex-native SKILL.md roles for Codex users
 - Explicit rubric files (ui-quality.md, functionality.md) instead of
   agent-internal scoring
 - Optional, manual install (Playwright dependency is heavy)

@@ -1,0 +1,30 @@
+{
+  "description": "Superkit Codex guards: explicit destructive Git commands and tracked diff hygiene. Review/trust through /hooks; never auto-trusted by the installer.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/superkit.mjs\" pre-tool",
+            "timeout": 10,
+            "statusMessage": "Superkit Git safety check"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$(git rev-parse --show-toplevel)/.codex/hooks/superkit.mjs\" stop",
+            "timeout": 15,
+            "statusMessage": "Superkit tracked diff hygiene"
+          }
+        ]
+      }
+    ]
+  }
+}

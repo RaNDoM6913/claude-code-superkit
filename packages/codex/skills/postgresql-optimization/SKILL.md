@@ -2,6 +2,7 @@
 name: postgresql-optimization
 description: PostgreSQL optimization — query tuning, indexing strategies, EXPLAIN analysis, configuration, maintenance, and monitoring. Use when slow queries, missing indexes, vacuum lag, or performance bottlenecks are suspected
 user-invocable: false
+tokens: 1618
 ---
 
 # PostgreSQL Optimization
@@ -19,7 +20,7 @@ Workflow for diagnosing and fixing PostgreSQL performance — query tuning, inde
 
 ## Do not use this skill when
 
-- You need schema design guidance (use `postgresql` or general DB skill)
+- You need schema design guidance (select a relevant DB skill from the runtime's available catalog; this installation does not supply a skill named `postgresql`)
 - The bottleneck is at the application layer, not the database
 - You need a DB-agnostic optimization guide
 

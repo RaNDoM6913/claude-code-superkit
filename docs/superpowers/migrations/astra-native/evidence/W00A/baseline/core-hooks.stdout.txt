@@ -1,0 +1,367 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ doc-check-on-commit_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+doc-check-on-commit_test.sh — regression suite
+
+  ✓ code-only commit (migration, no docs) → BLOCK (exit=2)
+  ✓ code + plan file → BLOCK (plan does not satisfy) (exit=2)
+  ✓ code + memory/*.md → BLOCK (memory does not satisfy) (exit=2)
+  ✓ code + CHANGELOG → BLOCK (CHANGELOG does not satisfy) (exit=2)
+  ✓ code + matching arch doc + CLAUDE.md → ALLOW (exit=0)
+  ✓ new */jobs/**/*.go → BLOCK (backend-layers + tree) (exit=2)
+  ✓ modified */middleware/*.go → BLOCK (backend-layers) (exit=2)
+
+Results: 7 passed, 0 failed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ dev-required-on-commit_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+dev-required-on-commit_test.sh — regression suite
+
+  ✓ A: 0 edits + code staged → ALLOW (exit=0)
+  ✓ B: 3 edits + code + no /dev → BLOCK (exit=2)
+  ✓ C: 3 edits + [quick: …] rationale → ALLOW (exit=0)
+    (state reset verified)
+  ✓ D: 3 edits + /dev marker → ALLOW (exit=0)
+  ✓ E: 5 edits + docs-only → ALLOW (exempt) (exit=0)
+  ✓ F: [no-dev: …] rationale → ALLOW (exit=0)
+  ✓ G: bare [quick] (no rationale) → BLOCK (exit=2)
+  ✓ H: [quick: tiny] under 15 chars → BLOCK (exit=2)
+  ✓ I: bare [hotfix] (no ticket) → BLOCK (exit=2)
+  ✓ J: [hotfix: #42 …] ticket → ALLOW (exit=0)
+  ✓ K: [hotfix: no-ticket: …] explicit justification → ALLOW (exit=0)
+  ✓ L: memory-only + prose tag mention → ALLOW (exempt) (exit=0)
+  ✓ M: memory-only + no tag → ALLOW (exempt) (exit=0)
+  ✓ N: .claude-only → ALLOW (exempt) (exit=0)
+  ✗ O: code + penalty + real leading tag → BLOCK (penalty) — expected 2, got 0
+  ✓ P: code + valid leading tag, no penalty → ALLOW (exit=0)
+  ✗ P-state: expected allow-override cycle in cycle log
+  ✓ Q: code + mid-sentence tag mention → BLOCK (not an override) (exit=2)
+
+Results: 16 passed, 2 failed
+Failures:
+  - O: code + penalty + real leading tag → BLOCK (penalty) (expected=2 actual=0)
+  - P-state: no allow-override cycle appended
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ dev-required-wip-on-main_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: [wip] on main blocked
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ json-path_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+json-path_test.sh — verify all 5 hooks read .tool_input.* correctly
+
+  ✓ doc-check-on-commit blocks missing docs (exit=2)
+  ✓ superkit-counts-verify exits 0 outside superkit repo (exit=0)
+  ✓ config-protection warns on .eslintrc (exit=0)
+  ✓ security-patterns flags eval()
+  ✓ loop-guard first call → allow (exit=0)
+  ✓ loop-guard wrote fingerprint (       1 entries)
+
+Results: 6 passed, 0 failed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ profile-helper_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: loop-guard disabled
+PASS: audit-trail not disabled
+PASS: fast skips loop-guard
+PASS: fast keeps block-dangerous-git
+PASS: default keeps loop-guard
+ALL PROFILE-HELPER TESTS PASSED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ session-key-helper_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: session-key helper
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ edit-streak-check_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: edits 1-4 silent
+PASS: 5th edit warns
+PASS: Bash resets streak
+PASS: post-reset silent
+PASS: opt-out silences
+PASS: fast profile skips
+PASS: cross-call accumulation via SESSION_ID (count=5)
+
+ALL EDIT-STREAK TESTS PASSED (7/7)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ audit-trail-chain_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: per-session hash chains (.last-hash-sessA, .last-hash-sessB)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ warn-visibility_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: escaped-quote message round-trips as valid JSON
+PASS: hookEventName == PreToolUse
+PASS: backslash + plain text round-trips
+PASS: gateguard advisory surfaces additionalContext on stdout
+
+ALL WARN-VISIBILITY TESTS PASSED (4/4)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ nudge-throttle_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: first identical advisory emitted
+PASS: second identical advisory suppressed within window
+PASS: distinct advisory not suppressed by unrelated one
+PASS: CLAUDE_NUDGE_WINDOW_MIN=0 disables throttling
+PASS: edit-streak first advisory emitted (edit 5)
+PASS: edit-streak repeat advisory suppressed within window
+
+ALL NUDGE-THROTTLE TESTS PASSED (6/6)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ counts-verify_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PASS: verifier passes on the current correct repo
+PASS: verifier blocks on skewed README count
+PASS: verifier green again after restore
+PASS: local commit does not invoke gh (network gated off)
+PASS: --check-remote invokes gh
+
+ALL COUNTS-VERIFY TESTS PASSED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ block-dangerous-git_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── MUST PASS (exit 0) — safe ops, incl. the recommended --force-with-lease escape hatch
+PASS: exit 0 (want 0)  |  git push --force-with-lease
+PASS: exit 0 (want 0)  |  git push --force-with-lease=main
+PASS: exit 0 (want 0)  |  git push --force-if-includes --force-with-lease
+PASS: exit 0 (want 0)  |  git push origin main
+PASS: exit 0 (want 0)  |  git checkout main
+PASS: exit 0 (want 0)  |  git checkout -b feature
+PASS: exit 0 (want 0)  |  git checkout feature-branch
+PASS: exit 0 (want 0)  |  git switch main
+PASS: exit 0 (want 0)  |  git switch -c new-branch
+PASS: exit 0 (want 0)  |  git clean -n
+PASS: exit 0 (want 0)  |  git restore --source=HEAD~1 file.go
+PASS: exit 0 (want 0)  |  git status
+
+── MUST BLOCK (exit 2) — force push (bare / -f / +refspec) + working-tree discard
+PASS: exit 2 (want 2)  |  git push --force
+PASS: exit 2 (want 2)  |  git push -f origin main
+PASS: exit 2 (want 2)  |  git push origin +main
+PASS: exit 2 (want 2)  |  git push origin +refs/heads/main:refs/heads/main
+PASS: exit 2 (want 2)  |  git checkout .
+PASS: exit 2 (want 2)  |  git checkout -- src/foo.go
+PASS: exit 2 (want 2)  |  git checkout -f
+PASS: exit 2 (want 2)  |  git clean -fd
+PASS: exit 2 (want 2)  |  git clean -fdx
+PASS: exit 2 (want 2)  |  git switch --discard-changes
+PASS: exit 2 (want 2)  |  git switch -C main
+
+── PRE-EXISTING blocks (exit 2) — prove no regression
+PASS: exit 2 (want 2)  |  git commit --no-verify
+PASS: exit 2 (want 2)  |  git reset --hard HEAD~1
+PASS: exit 2 (want 2)  |  git branch -D feature
+
+── D4: commit MESSAGE must NOT self-trip the guards (exit 0) — needs JSON encoding
+PASS: exit 0 (want 0)  |  message names --no-verify (explaining the ban)
+PASS: exit 0 (want 0)  |  message names git push --force
+PASS: exit 0 (want 0)  |  heredoc body (-F -) mentions --no-verify AND git push --force
+PASS: exit 0 (want 0)  |  --message= prose naming --force
+PASS: exit 0 (want 0)  |  message stripped; chained --force-with-lease stays allowed
+PASS: exit 0 (want 0)  |  ADVERSARIAL: "; git push --force" is TEXT inside the quotes
+PASS: exit 0 (want 0)  |  ADVERSARIAL: heredoc body names reset --hard & branch -D
+
+── D4: guard must NOT weaken (exit 2) — danger OUTSIDE the message still blocks
+PASS: exit 2 (want 2)  |  chained: git push --force after a stripped message
+PASS: exit 2 (want 2)  |  real --no-verify flag outside the -m message
+PASS: exit 2 (want 2)  |  ADVERSARIAL: message stripped; chained git reset --hard blocks
+PASS: exit 2 (want 2)  |  ADVERSARIAL: unquoted -m value; chained git push --force blocks
+PASS: exit 2 (want 2)  |  ADVERSARIAL: chained second commit with real --no-verify blocks
+
+ALL BLOCK-DANGEROUS-GIT TESTS PASSED (38/38)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ mirror-invariants_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── GROUP 1: Evidence-Gate mirror pairs (both sides carry all 3 pins)
+PASS: G1 claude — [go doc] present in packages/stack-agents/go/go-reviewer.md
+PASS: G1 codex  — [go doc] present in packages/codex/skills/go-reviewer/SKILL.md
+PASS: G1 claude — [from memory] present in packages/stack-agents/go/go-reviewer.md
+PASS: G1 codex  — [from memory] present in packages/codex/skills/go-reviewer/SKILL.md
+PASS: G1 claude — [ASSUMED] present in packages/stack-agents/go/go-reviewer.md
+PASS: G1 codex  — [ASSUMED] present in packages/codex/skills/go-reviewer/SKILL.md
+PASS: G1 claude — [go doc] present in packages/stack-agents/go/go-error-reviewer.md
+PASS: G1 codex  — [go doc] present in packages/codex/skills/go-error-reviewer/SKILL.md
+PASS: G1 claude — [from memory] present in packages/stack-agents/go/go-error-reviewer.md
+PASS: G1 codex  — [from memory] present in packages/codex/skills/go-error-reviewer/SKILL.md
+PASS: G1 claude — [ASSUMED] present in packages/stack-agents/go/go-error-reviewer.md
+PASS: G1 codex  — [ASSUMED] present in packages/codex/skills/go-error-reviewer/SKILL.md
+PASS: G1 claude — [go doc] present in packages/stack-agents/go/go-concurrency-reviewer.md
+PASS: G1 codex  — [go doc] present in packages/codex/skills/go-concurrency-reviewer/SKILL.md
+PASS: G1 claude — [from memory] present in packages/stack-agents/go/go-concurrency-reviewer.md
+PASS: G1 codex  — [from memory] present in packages/codex/skills/go-concurrency-reviewer/SKILL.md
+PASS: G1 claude — [ASSUMED] present in packages/stack-agents/go/go-concurrency-reviewer.md
+PASS: G1 codex  — [ASSUMED] present in packages/codex/skills/go-concurrency-reviewer/SKILL.md
+PASS: G1 claude — [node_modules] present in packages/stack-agents/typescript/ts-reviewer.md
+PASS: G1 codex  — [node_modules] present in packages/codex/skills/ts-reviewer/SKILL.md
+PASS: G1 claude — [from memory] present in packages/stack-agents/typescript/ts-reviewer.md
+PASS: G1 codex  — [from memory] present in packages/codex/skills/ts-reviewer/SKILL.md
+PASS: G1 claude — [ASSUMED] present in packages/stack-agents/typescript/ts-reviewer.md
+PASS: G1 codex  — [ASSUMED] present in packages/codex/skills/ts-reviewer/SKILL.md
+PASS: G1 claude — [inspect.signature] present in packages/stack-agents/python/py-reviewer.md
+PASS: G1 codex  — [inspect.signature] present in packages/codex/skills/py-reviewer/SKILL.md
+PASS: G1 claude — [from memory] present in packages/stack-agents/python/py-reviewer.md
+PASS: G1 codex  — [from memory] present in packages/codex/skills/py-reviewer/SKILL.md
+PASS: G1 claude — [ASSUMED] present in packages/stack-agents/python/py-reviewer.md
+PASS: G1 codex  — [ASSUMED] present in packages/codex/skills/py-reviewer/SKILL.md
+PASS: G1 claude — [cargo] present in packages/stack-agents/rust/rs-reviewer.md
+PASS: G1 codex  — [cargo] present in packages/codex/skills/rs-reviewer/SKILL.md
+PASS: G1 claude — [from memory] present in packages/stack-agents/rust/rs-reviewer.md
+PASS: G1 codex  — [from memory] present in packages/codex/skills/rs-reviewer/SKILL.md
+PASS: G1 claude — [ASSUMED] present in packages/stack-agents/rust/rs-reviewer.md
+PASS: G1 codex  — [ASSUMED] present in packages/codex/skills/rs-reviewer/SKILL.md
+
+── GROUP 2: severity enum (CRITICAL/WARNING/SUGGESTION) in all 12 reviewers
+PASS: G2 — [CRITICAL] present in packages/stack-agents/go/go-reviewer.md
+PASS: G2 — [WARNING] present in packages/stack-agents/go/go-reviewer.md
+PASS: G2 — [SUGGESTION] present in packages/stack-agents/go/go-reviewer.md
+PASS: G2 — [CRITICAL] present in packages/codex/skills/go-reviewer/SKILL.md
+PASS: G2 — [WARNING] present in packages/codex/skills/go-reviewer/SKILL.md
+PASS: G2 — [SUGGESTION] present in packages/codex/skills/go-reviewer/SKILL.md
+PASS: G2 — [CRITICAL] present in packages/stack-agents/go/go-error-reviewer.md
+PASS: G2 — [WARNING] present in packages/stack-agents/go/go-error-reviewer.md
+PASS: G2 — [SUGGESTION] present in packages/stack-agents/go/go-error-reviewer.md
+PASS: G2 — [CRITICAL] present in packages/codex/skills/go-error-reviewer/SKILL.md
+PASS: G2 — [WARNING] present in packages/codex/skills/go-error-reviewer/SKILL.md
+PASS: G2 — [SUGGESTION] present in packages/codex/skills/go-error-reviewer/SKILL.md
+PASS: G2 — [CRITICAL] present in packages/stack-agents/go/go-concurrency-reviewer.md
+PASS: G2 — [WARNING] present in packages/stack-agents/go/go-concurrency-reviewer.md
+PASS: G2 — [SUGGESTION] present in packages/stack-agents/go/go-concurrency-reviewer.md
+PASS: G2 — [CRITICAL] present in packages/codex/skills/go-concurrency-reviewer/SKILL.md
+PASS: G2 — [WARNING] present in packages/codex/skills/go-concurrency-reviewer/SKILL.md
+PASS: G2 — [SUGGESTION] present in packages/codex/skills/go-concurrency-reviewer/SKILL.md
+PASS: G2 — [CRITICAL] present in packages/stack-agents/typescript/ts-reviewer.md
+PASS: G2 — [WARNING] present in packages/stack-agents/typescript/ts-reviewer.md
+PASS: G2 — [SUGGESTION] present in packages/stack-agents/typescript/ts-reviewer.md
+PASS: G2 — [CRITICAL] present in packages/codex/skills/ts-reviewer/SKILL.md
+PASS: G2 — [WARNING] present in packages/codex/skills/ts-reviewer/SKILL.md
+PASS: G2 — [SUGGESTION] present in packages/codex/skills/ts-reviewer/SKILL.md
+PASS: G2 — [CRITICAL] present in packages/stack-agents/python/py-reviewer.md
+PASS: G2 — [WARNING] present in packages/stack-agents/python/py-reviewer.md
+PASS: G2 — [SUGGESTION] present in packages/stack-agents/python/py-reviewer.md
+PASS: G2 — [CRITICAL] present in packages/codex/skills/py-reviewer/SKILL.md
+PASS: G2 — [WARNING] present in packages/codex/skills/py-reviewer/SKILL.md
+PASS: G2 — [SUGGESTION] present in packages/codex/skills/py-reviewer/SKILL.md
+PASS: G2 — [CRITICAL] present in packages/stack-agents/rust/rs-reviewer.md
+PASS: G2 — [WARNING] present in packages/stack-agents/rust/rs-reviewer.md
+PASS: G2 — [SUGGESTION] present in packages/stack-agents/rust/rs-reviewer.md
+PASS: G2 — [CRITICAL] present in packages/codex/skills/rs-reviewer/SKILL.md
+PASS: G2 — [WARNING] present in packages/codex/skills/rs-reviewer/SKILL.md
+PASS: G2 — [SUGGESTION] present in packages/codex/skills/rs-reviewer/SKILL.md
+
+── GROUP 3: Solution Ladder clause mirrored Claude ↔ Codex
+PASS: G3 — [Solution Ladder] present in packages/core/rules/coding-style.md
+PASS: G3 — [Minimal never means fragile] present in packages/core/rules/coding-style.md
+PASS: G3 — [YAGNI] present in packages/core/rules/coding-style.md
+PASS: G3 — [Solution Ladder] present in packages/codex/AGENTS.md
+PASS: G3 — [Minimal never means fragile] present in packages/codex/AGENTS.md
+PASS: G3 — [YAGNI] present in packages/codex/AGENTS.md
+
+── GROUP 4: Go reference count reconciles with CLAUDE.md structure note
+PASS: G4 — CLAUDE.md reconciles: '# 34 Go knowledge documents' (=34 *.md in packages/stack-agents/go/references)
+
+ALL MIRROR-INVARIANTS TESTS PASSED (79/79)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ internal-manifest_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── (a): manifest exists with exactly the 3 expected entries
+PASS: (a) manifest has exactly 3 entries
+PASS: (a) manifest lists 'hooks/superkit-counts-verify.sh'
+PASS: (a) manifest lists 'hooks/verify-hooks.sh'
+PASS: (a) manifest lists 'rules/superkit-integrity.md'
+
+── (b): each entry resolves to an existing file under packages/core/
+PASS: (b) packages/core/hooks/superkit-counts-verify.sh exists
+PASS: (b) packages/core/hooks/verify-hooks.sh exists
+PASS: (b) packages/core/rules/superkit-integrity.md exists
+
+── (c): installer.js and superkit-counts-verify.sh reference INTERNAL-FILES
+PASS: (c) lib/installer.js references INTERNAL-FILES
+PASS: (c) packages/core/hooks/superkit-counts-verify.sh references INTERNAL-FILES
+
+── (d): 'verify-hooks.sh' / 'superkit-integrity.md' appear only on FALLBACK lines
+PASS: (d) lib/installer.js: 'verify-hooks.sh' only on FALLBACK line(s)
+PASS: (d) lib/installer.js: 'superkit-integrity.md' only on FALLBACK line(s)
+PASS: (d) packages/core/hooks/superkit-counts-verify.sh: 'verify-hooks.sh' only on FALLBACK line(s)
+PASS: (d) packages/core/hooks/superkit-counts-verify.sh: 'superkit-integrity.md' only on FALLBACK line(s)
+
+ALL INTERNAL-MANIFEST TESTS PASSED (13/13)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▶ superkit-update_test.sh
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+── main run: meta baseline v0.0.2 → source 0.0.3
+   [out] superkit-update: 11 synced · 1 preserved (locally customized) · 3 skipped (internal) · 0.0.2 → 0.0.3
+   [out]   preserved: <tmp>/consumer/.claude/rules/custom.md
+   [out]   review with: git -C <tmp>/kit show v0.0.2:packages/<srcpath> | diff - <consumerpath>
+PASS: (a) pristine@v0.0.2 → overwritten to new (P3)
+PASS: (c) stale matching older tag v0.0.1 → overwritten (S3)
+PASS: (b) customized (no tag match) → preserved byte-identical
+PASS: (b) customized file named in the report
+PASS: (d) internal file planted in consumer → NOT overwritten
+PASS: (d) internal verify-hooks.sh absent → never newly copied
+PASS: (d) internal superkit-integrity.md absent → never newly copied
+PASS: (e) absent core agent → created
+PASS: (e) absent reference doc → created
+PASS: (e) absent hooks/lib file → created
+PASS: (e) absent stack-rule → created
+PASS: (e) absent stack-hook → created
+PASS: (e) absent skill file → created
+PASS: (e) absent ADR template → created at project root
+PASS: (i) absent statusline → created at .claude/scripts/
+PASS: bootstrap: installed updater replaced by source copy before sync
+PASS: report: compact summary line with 3 internal skipped
+PASS: meta version bumped 0.0.2 → 0.0.3
+
+── (f) run: meta baseline v0.0.9 MISSING → source 0.0.3
+   [out] superkit-update: 11 synced · 1 preserved (locally customized) · 3 skipped (internal) · 0.0.9 → 0.0.3
+   [out]   preserved: <tmp>/consumer_f/.claude/rules/custom.md
+   [out]   review with: git -C <tmp>/kit show v0.0.9:packages/<srcpath> | diff - <consumerpath>
+PASS: (f) missing baseline: customized file preserved (fail-safe)
+PASS: (f) preserved file reported
+PASS: (f) missing baseline: file matching walked tag v0.0.1 still synced
+
+── (g) run: pre-existing ADR template stays untouched & unreported
+   [out] superkit-update: 10 synced · 1 preserved (locally customized) · 3 skipped (internal) · 0.0.2 → 0.0.3
+   [out]   preserved: <tmp>/consumer_g/.claude/rules/custom.md
+   [out]   review with: git -C <tmp>/kit show v0.0.2:packages/<srcpath> | diff - <consumerpath>
+PASS: (g) pre-existing ADR template → left untouched
+PASS: (g) ADR template NOT reported (doc template — silence is correct)
+
+── (i-fork) run: a forked statusline is preserved, not clobbered
+   [out] superkit-update: 10 synced · 2 preserved (locally customized) · 3 skipped (internal) · 0.0.2 → 0.0.3
+   [out]   preserved: <tmp>/consumer_i/.claude/rules/custom.md
+   [out]   preserved: <tmp>/consumer_i/.claude/scripts/statusline.cjs
+   [out]   review with: git -C <tmp>/kit show v0.0.2:packages/<srcpath> | diff - <consumerpath>
+PASS: (i-fork) forked statusline → preserved byte-identical
+PASS: (i-fork) forked statusline named in the preserved report
+
+── (h) manifest fallback variants
+PASS: (h1) hooks-only manifest: superkit-integrity.md still NOT copied (rules fallback)
+PASS: (h1) hooks-only manifest: hooks still skipped (from manifest)
+PASS: (h1) empty category warned on stderr
+PASS: (h2) rules-only manifest: verify-hooks.sh still NOT copied (hooks fallback)
+PASS: (h2) rules-only manifest: rules still skipped (from manifest)
+PASS: (h3) all-commented manifest: both categories fall back, nothing leaked
+PASS: (h4) missing manifest: both categories fall back, nothing leaked
+PASS: (h4) missing manifest stays silent
+PASS: (h5) complete manifest: 3 internal skipped, no fallback needed
+
+ALL SUPERKIT-UPDATE TESTS PASSED (34/34)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Summary: 14 suites passed, 1 failed
+Failed suites:
+  - dev-required-on-commit_test.sh

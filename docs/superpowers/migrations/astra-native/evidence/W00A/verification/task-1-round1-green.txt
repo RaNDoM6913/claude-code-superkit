@@ -1,0 +1,32 @@
+✔ an unowned nested surface fails inventory gate (0.70275ms)
+✔ deleted source is not silently forgotten (0.074208ms)
+✔ collectSurfaces includes tracked hidden files and untracked source files (48.09325ms)
+✔ reconcileLedger reports invalid ownership instead of guessing it closed (0.139042ms)
+✔ retired and deferred rows require explicit disposition evidence (0.102583ms)
+✔ a mirror must exist in the current inventory even if another row names it (0.070542ms)
+✔ classification recognizes stack reviewers and stack hook programs (0.107333ms)
+✔ collectSurfaces omits a tracked file deleted from the working tree for stale reconciliation (39.88575ms)
+✔ collectSurfaces hashes a symlink itself without reading its external target (37.49325ms)
+✔ collectSurfaces measures instruction files but not ordinary documentation (37.911125ms)
+✔ reconcileLedger rejects an invented migration wave (0.083833ms)
+✔ nonhistorical preserved and verified rows require existing evidence surfaces (0.092833ms)
+✔ capture refuses to overwrite initialized artifacts without mutating any file (0.780708ms)
+✔ baseline evidence is incomplete when the required summary is empty (2.413791ms)
+✔ baseline evidence is incomplete when a referenced output file is missing (2.971958ms)
+✔ baseline evidence fails when the core failure has no successful focused rerun (8.076583ms)
+✔ baseline evidence fails for an unrelated command failure even when a rerun exists (2.18075ms)
+✔ baseline evidence accepts only the exact documented environment resolution (2.166625ms)
+✔ approved responsibility paths have explicit first-touch waves (0.211333ms)
+✔ explicit mirrors cover command aliases and keep the UI reviewer sources distinct (0.059292ms)
+✔ GAN skills are Codex-native counterparts of GAN agents (0.025875ms)
+✔ stale claim scan includes explicit TOML and JavaScript text surfaces but skips binaries (0.993333ms)
+✔ collector and stale scan never read through symlinks to external text (38.8475ms)
+✔ CLI reports a usage error when an option flag has no value (27.069792ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 291.769625

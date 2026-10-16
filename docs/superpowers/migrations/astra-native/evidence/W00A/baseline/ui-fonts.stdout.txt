@@ -1,0 +1,13 @@
+── ui-banned-fonts-check.sh tests ──
+  ✓ A) Inter in font-family on .css
+  ✓ B) DM Sans in Tailwind font- utility on .tsx
+  ✓ C) Playfair Display via Google Fonts import
+  ✓ D) Space Grotesk in CSS font-family
+  ✓ E) Non-UI file (.go) silent
+  ✓ F) JS variable named inter — not a font-family — silent
+  ✓ G) Acceptable font (Söhne) silent
+  ✓ H) Opt-out via CLAUDE_DISABLE_UI_FONT_CHECK
+  ✓ I) Code-block path (syntax-highlighter) silent
+
+── Results ──
+  Pass: 9  Fail: 0

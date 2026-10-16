@@ -1,85 +1,44 @@
 ---
 name: scaffold-endpoint
-description: Scaffold a new API endpoint by reading existing project patterns — no hardcoded architecture
+description: Implement or scaffold a requested API endpoint using verified local architecture and an explicit request, response, error, and authorization contract. Use for endpoint work, not an unrelated framework rewrite.
 user-invocable: false
+tokens: 1453
 ---
 
-# Scaffold New Endpoint
+# Scaffold Endpoint
 
-Create a new API endpoint by learning from the project's existing patterns. This agent does NOT assume any specific framework — it discovers the architecture from the codebase.
+Deliver the endpoint the user requested using the project's actual patterns. An endpoint implementation includes required wiring and business behavior; an explicitly requested scaffold may leave named gaps but is not a working endpoint. A design or review request remains read-only.
 
-## Phase 1 — Discover Project Patterns
+## Context and contract
 
-### Step 1: Identify the Stack
-Detect the backend framework and architecture:
-- **Go**: check `go.mod` for chi, gin, echo, fiber, mux, etc.
-- **Node.js**: check `package.json` for express, fastify, nestjs, koa, hono, etc.
-- **Python**: check `requirements.txt`/`pyproject.toml` for flask, fastapi, django, etc.
-- **Rust**: check `Cargo.toml` for actix-web, axum, rocket, etc.
+Read the task, applicable project instructions, relevant architecture/API documentation, manifests, and the closest existing endpoint. Discover the stack from evidence: for example, Go `go.mod`, Node `package.json`, Python requirements/`pyproject.toml`, or Rust `Cargo.toml`. Distinguish declared dependencies from verified installed/runtime versions; do not invent framework capabilities or API versions.
 
-### Step 2: Find the Architecture
-Locate key architectural files:
-1. **Route registration** — where are routes/endpoints registered?
-   - Grep: `Route|router|app\.get|app\.post|@app\.|urlpatterns|r\.Get|r\.Post`
-2. **Handlers/Controllers** — where do request handlers live?
-   - Look for directory patterns: `handlers/`, `controllers/`, `transport/`, `api/`, `routes/`
-3. **Services/Business logic** — where does business logic live?
-   - Look for: `services/`, `usecases/`, `domain/`, `business/`
-4. **Data access/Repositories** — where does DB access live?
-   - Look for: `repo/`, `repositories/`, `dal/`, `models/`, `db/`
-5. **DTOs/Schemas** — where are request/response types defined?
-   - Look for: `dto/`, `schemas/`, `types/`, `models/`
+Locate the actual route registration, handlers, schemas/DTOs, middleware, domain logic, data access, tests, and API documentation. Follow the reference endpoint through its wiring and dependencies rather than copying an isolated handler. Document relevant working-tree changes and preserve others' edits.
 
-### Step 3: Read a Reference Endpoint
-Find the **closest existing endpoint** to the requested one:
-1. Grep for similar domain terms in handler files
-2. Read the reference handler, service, and repo files
-3. Note exact patterns: constructor style, error handling, middleware, response format
+Establish the method/path, path/query/body shape, validation, response shape/statuses, error cases, authn/authz and resource ownership, business effect, and persistence needs. Use explicit task requirements and verified project conventions; ask a focused question when an unresolved contract changes behavior or access. Do not guess privileged access, destructive semantics, or user-visible business rules.
 
-## Phase 2 — Scaffold by Analogy
+## Implement within authority
 
-Generate each layer by following the reference pattern exactly:
+Use only the layers the actual architecture and task require. A direct route handler can be sufficient; handler/service/repository interfaces or dependency injection are not mandatory. Follow suitable constructor, context/cancellation, validation, response, and error-mapping conventions. Preserve established external contracts unless the requested change explicitly includes their revision.
 
-### 1. Handler/Controller (Transport Layer)
-Create in the same directory as existing handlers. Follow the reference for:
-- Constructor/DI pattern
-- Request parsing
-- Response formatting
-- Error mapping (domain errors -> HTTP status codes)
-- Auth/middleware annotations
+- Parse and validate the required inputs and map domain failures into the agreed response contract. Place domain logic where the project expects it, with real implementations for the requested behavior.
+- Wire the route into the correct group and middleware chain, including applicable authentication, authorization/ownership, and rate limits. Verify that the new route is reachable through the actual application registration.
+- Implement needed persistence using the verified query/ORM conventions, parameterized inputs, appropriate transaction boundaries, null/not-found handling, and error propagation. A close precedent is evidence of style, not permission to copy an auth bypass, injection flaw, or other known unsafe behavior. Report an unsafe dependency relevant to this endpoint and modify it only within the already authorized scope. Before editing shared code, resolve any genuinely missing scope or authority decision; do not request approval again for work already authorized. Report unrelated defects separately.
+- Add or update request/response schemas and the project's actual API spec/documentation location when required. Do not assume a universal documentation filename.
+- If schema changes are needed, inspect the project's migration tooling and rollout/recovery convention. Author only the authorized change; do not manufacture down migrations when the project does not support them or data cannot be safely restored. A destructive or ambiguous schema change needs a resolved scope/authority decision before authoring the dependent change. Applying migrations to shared/external systems, deploying, publishing, or other external writes requires task authorization distinct from creating local code.
 
-### 2. Service (Business Logic)
-Create in the same directory structure as existing services. Follow the reference for:
-- Constructor with interface-based dependencies
-- Context propagation
-- Domain error types
-- Validation logic placement
+Do not leave placeholder business logic, SQL, or validation and then report a completed endpoint. If the user requested only scaffolding, keep stubs explicitly identifiable and list the missing implementation and verification. If a prerequisite is unavailable, finish independent authorized work and report the exact dependency; the skill name does not grant further actions.
 
-### 3. Repository/Data Access (if needed)
-Create in the same directory as existing repos. Follow the reference for:
-- Query style (raw SQL, ORM, query builder)
-- Error wrapping
-- Nil/null safety patterns
+## Verify the endpoint
 
-### 4. Route Registration
-Add the new endpoint to the route registration file. Follow the reference for:
-- Route grouping
-- Middleware chain (auth, rate limiting, etc.)
-- Path parameter naming
+Use project-compatible checks to cover the applicable request/response/error contract: valid requests, invalid input, authentication/authorization and ownership denial, and relevant persistence/failure behavior. Check route wiring and business/data flow as well as isolated handler behavior. Tests must avoid unintended external side effects; do not provision or mutate shared services without authorization.
 
-### 5. Migration (if new table/column needed)
-- Find the migration directory and naming convention
-- Create both up and down migrations
-- Follow existing migration style
+Run relevant type/build/lint checks and mandatory project gates. Reuse evidence only when its command, result, relevant code, inputs, and environment are recorded and unchanged; repeat for a relevant change or concrete uncertainty. Distinguish mocked/local tests from real integration observations. If persistence or route reachability remains unverified, say so rather than treating compilation as end-to-end proof.
 
-### 6. Types/DTOs (if needed)
-- Create request/response types following existing DTO patterns
-- Add to the API spec (OpenAPI/Swagger) if one exists
+Stop when the requested implementation or scaffold scope is satisfied with appropriately bounded evidence, or a named contract, authorization, or capability gap prevents completion. Do not expand into framework reorganization or an unrelated security audit.
 
 ## Output
 
-After scaffolding, list all created/modified files and note:
-- Which reference endpoint was used as the template
-- Any decisions made (naming, error codes, etc.)
-- What needs manual completion (business logic, SQL queries, validation rules)
+Report the outcome and mode (implemented / scaffold-only / advisory / incomplete), method/path and agreed contract, reference endpoint and evidence paths, changed files and decisions, checks with actual results, and unimplemented/unverified parts with the next action. A scaffold-only result must state that endpoint behavior is incomplete.
 
+State independent worker versus inline/self-review execution. Follow explicit routing; report requested or labeled configured model/effort separately from observed runtime model/effort and evidence. Use UNSPECIFIED for an absent request/default and UNVERIFIED for unavailable runtime evidence. Lack of runtime identity is a reporting limitation, not a new delivery gate.

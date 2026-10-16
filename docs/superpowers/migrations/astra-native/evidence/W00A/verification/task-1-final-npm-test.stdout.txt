@@ -1,0 +1,81 @@
+
+> claude-code-superkit@1.5.2 test
+> node --test test/*.test.js
+
+▶ Codex package assets
+  ✔ uses current Codex model and reasoning effort names (1.215792ms)
+  ✔ does not advertise legacy Codex model or reasoning names in active Codex docs (1.289083ms)
+  ✔ keeps the Codex skill authoring guide Codex-native (0.394417ms)
+  ✔ normalizes future Claude agent conversions for Codex (0.203292ms)
+  ✔ does not leave unambiguous Claude-only markers in Codex skills (10.652459ms)
+  ✔ requires explicit user-invocable metadata on every Codex skill (2.634667ms)
+  ✔ prefers AGENTS.md whenever Codex skills ask for project context (1.59475ms)
+  ✔ does not point Codex documentation review at Claude-only storage paths (0.12575ms)
+  ✔ uses Codex workflow names instead of legacy slash-command pipeline names (2.215083ms)
+✔ Codex package assets (21.056792ms)
+✔ an unowned nested surface fails inventory gate (0.972666ms)
+✔ deleted source is not silently forgotten (0.081709ms)
+✔ collectSurfaces includes tracked hidden files and untracked source files (39.7385ms)
+✔ reconcileLedger reports invalid ownership instead of guessing it closed (0.12075ms)
+✔ retired and deferred rows require explicit disposition evidence (0.093542ms)
+✔ a mirror must exist in the current inventory even if another row names it (0.060625ms)
+✔ classification recognizes stack reviewers and stack hook programs (0.114208ms)
+✔ collectSurfaces omits a tracked file deleted from the working tree for stale reconciliation (33.757542ms)
+✔ collectSurfaces hashes a symlink itself without reading its external target (34.33775ms)
+✔ collectSurfaces measures instruction files but not ordinary documentation (34.923959ms)
+✔ reconcileLedger rejects an invented migration wave (0.085959ms)
+✔ nonhistorical preserved and verified rows require existing evidence surfaces (0.098875ms)
+✔ capture refuses to overwrite initialized artifacts without mutating any file (0.81ms)
+✔ baseline evidence is incomplete when the required summary is empty (2.55275ms)
+✔ baseline evidence is incomplete when a referenced output file is missing (2.896333ms)
+✔ baseline evidence fails when the core failure has no successful focused rerun (8.623125ms)
+✔ baseline evidence fails for an unrelated command failure even when a rerun exists (2.430667ms)
+✔ baseline evidence accepts only the exact documented environment resolution (2.529708ms)
+✔ baseline evidence rejects another suite in the final failed-suite footer (2.602834ms)
+✔ baseline evidence rejects a core failure with no failed-suite footer (2.61725ms)
+✔ baseline evidence rejects a permission denial outside the dev-required state fixture (2.487042ms)
+✔ approved responsibility paths have explicit first-touch waves (0.256125ms)
+✔ explicit mirrors cover command aliases and keep the UI reviewer sources distinct (0.068167ms)
+✔ GAN skills are Codex-native counterparts of GAN agents (0.033417ms)
+✔ stale claim scan includes explicit TOML and JavaScript text surfaces but skips binaries (1.41475ms)
+✔ collector and stale scan never read through symlinks to external text (36.076625ms)
+✔ CLI reports a usage error when an option flag has no value (26.996375ms)
+▶ buildSettings
+  ✔ returns base settings with no stacks or plugins (2.1415ms)
+  ✔ adds stack hooks to PostToolUse (0.17575ms)
+  ✔ adds optional plugins (0.119208ms)
+  ✔ does not mutate original object (0.170875ms)
+  ✔ dedupes hook files that appear multiple times (0.069042ms)
+  ✔ does not re-add a hook already present in the base settings (0.078ms)
+✔ buildSettings (3.444083ms)
+▶ smoke test: --defaults install
+  ✔ installs with --defaults without errors (89.157625ms)
+  ✔ creates .claude/ directory (0.080125ms)
+  ✔ creates agents (0.053042ms)
+  ✔ creates valid settings.json (0.120375ms)
+  ✔ creates CLAUDE.md (0.04675ms)
+  ✔ creates hooks directory (0.043458ms)
+  ✔ creates .superkit-meta (0.053541ms)
+  ✔ installs docs-templates/adr-template.md at project root (0.314541ms)
+  ✔ does not overwrite an existing adr-template.md on re-install (65.307416ms)
+✔ smoke test: --defaults install (198.877541ms)
+▶ countFiles
+  ✔ counts .md files in a directory (0.84075ms)
+  ✔ returns 0 for empty directory (0.423375ms)
+  ✔ returns 0 for non-existent directory (0.054583ms)
+✔ countFiles (2.233333ms)
+▶ copyFile
+  ✔ copies file in fresh mode (0.569916ms)
+  ✔ skips existing file in merge mode (0.358125ms)
+✔ copyFile (1.003959ms)
+▶ isInsideGitRepo
+  ✔ returns true in a git repo (11.292541ms)
+✔ isInsideGitRepo (11.37925ms)
+ℹ tests 57
+ℹ suites 6
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 289.938542

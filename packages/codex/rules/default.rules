@@ -4,12 +4,13 @@
 #   prefix_rule(pattern=[...], decision="allow|forbidden|prompt", justification="...", match=[...])
 #
 # Decisions:
-#   allow      — Codex executes silently
-#   prompt     — Codex asks user before executing
-#   forbidden  — Codex refuses to execute
+#   allow      — permits at the execution-rule layer
+#   prompt     — requires approval, subject to the active approval policy
+#   forbidden  — forbids the matching command
+# Rules apply outside the sandbox; they do not grant task authority.
 #
 # Pattern matching is a prefix tuple match against the command argv.
-# More-specific patterns take precedence over more-general ones.
+# Most restrictive matching decision wins: forbidden > prompt > allow.
 #
 # Philosophy: maximize developer flow for safe commands; require approval
 # for state-changing operations; forbid destructive system calls.
@@ -37,7 +38,7 @@ prefix_rule(
 )
 
 prefix_rule(
-    pattern = ["dd", "if="],
+    pattern = ["dd"],
     decision = "forbidden",
     justification = "Raw disk writes can destroy data. Use a safer file-level tool.",
     match = ["dd if=/dev/zero of=/dev/sda", "dd if=image.iso of=/dev/disk2"],
@@ -424,13 +425,10 @@ prefix_rule(pattern=["printf"], decision="allow")
 prefix_rule(pattern=["http"], decision="allow")
 
 # NOTE on curl | bash:
-# Codex CLI passes individual argv arrays to the rule engine; shell pipes
-# are not visible as argv tokens. A `curl URL | bash` is observed as two
-# separate executions: argv=["curl", "URL"] then argv=["bash"]. We cannot
-# match the pipe semantically from this layer.
-# Therefore: curl and wget land at decision="prompt" so the user sees
-# the URL before any fetch. Real defense against curl|bash is at the
-# shell/sandbox layer, not here.
+# Simple compound shell commands may be split into individual commands for
+# checking; complex shell syntax may be checked as the whole invocation.
+# These prefix rules request approval for curl/wget and inline bash/sh. They
+# do not provide a blanket prohibition of download-and-execute pipelines.
 prefix_rule(
     pattern = ["curl"],
     decision = "prompt",

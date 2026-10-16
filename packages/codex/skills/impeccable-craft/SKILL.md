@@ -2,6 +2,7 @@
 name: impeccable-craft
 description: "Opt-in shape-then-build flow for creating UI from scratch with maximum intentionality. 4-stage cycle: shape → refine → implement → polish. Invoke only when explicitly asked for \"craft a UI\" or \"impeccable approach\"."
 user-invocable: true
+tokens: 1301
 ---
 
 # Impeccable Craft
@@ -13,12 +14,12 @@ user-invocable: true
 
 **When NOT to invoke:**
 - For code review (use `frontend-ui-reviewer` and specialists)
-- For polish / audit / critique (use specialists — they auto-activate)
+- For polish / audit / critique (select the relevant installed specialist)
 - For bug fixes
 
 ## Stage 1 — Shape (before any code)
 
-1. **Gather brand context**: read `AGENTS.md` or `CLAUDE.md`, check available project memory. If context thin, ask ONE question: "In one sentence, what should this interface feel like?"
+1. **Gather brand context**: read applicable `AGENTS.md` and available project design notes or memory; `CLAUDE.md` is optional if present. If context thin, ask ONE question: "In one sentence, what should this interface feel like?"
 
 2. **Articulate the aesthetic direction in 3 concrete words.** Not "modern" or "elegant". Concrete: "warm, mechanical, opinionated" / "calm, clinical, careful" / "fast, dense, unimpressed" / "expensive, quiet, precise".
 
@@ -28,7 +29,7 @@ user-invocable: true
 
 5. **Draft the core palette** (per color-and-contrast practices): brand hue → tinted neutrals (chroma 0.005–0.02) → accent scale (chroma peaks middle, reduced at extremes) → status colors as separate mini-palettes.
 
-6. **Draft the type system**: run the font-selection procedure (4 steps), reject reflex-list fonts (Inter / DM Sans / Fraunces / etc.), pair display + body.
+6. **Draft the type system**: use the font-selection guidance in the installed `frontend-ui-typography-reviewer` skill. Compare candidates against the brief, glyph coverage, font rights and loading constraints; retain suitable approved choices. The separate Claude typography rules and font lists are not installed by Codex setup.
 
 **Output of Stage 1** — a written brief the user confirms:
 - Audience + use context
@@ -50,7 +51,7 @@ user-invocable: true
 
 Production code with attention to:
 
-1. **Motion decisions**. For each interactive element, run the Animation Decision Framework (should it animate? purpose? easing? duration?). Use custom cubic-bezier constants, apply the duration table.
+1. **Motion decisions**. For each interactive element, use the Animation Decision Framework in the installed `frontend-ui-motion-reviewer` skill (should it animate? purpose? easing? duration?). Its curves and duration table are contextual options; preserve suitable project tokens. Do not assume separate motion rule files exist.
 2. **Interaction polish**. Every button gets `:active`. Every focus uses `:focus-visible` with custom ring. Every modal/drawer has scroll-lock and focus trap. Forms validate on blur/submit, not focus.
 3. **Spacing rhythm**. Vary spacing deliberately — tight for related, generous for transitional, major breaks at section boundaries. Don't `p-4` everything.
 4. **Prefers-reduced-motion** blanket rule required.
@@ -58,6 +59,12 @@ Production code with attention to:
 ## Stage 4 — Polish
 
 After first implementation, run through specialist reviews:
+
+Locate these skills through the runtime's available skill catalog. Use only
+advertised review/delegation tools within task authority; a skill name is not a
+callable tool or proof that review ran. If a specialist cannot run independently,
+label an inline review honestly and report any unmet required independent gate.
+Missing skills remain a coverage gap; do not silently install replacements.
 
 1. `frontend-ui-typography-reviewer` on the type system
 2. `frontend-ui-color-reviewer` on the palette
@@ -77,7 +84,10 @@ At end of Stage 4, one-paragraph summary:
 - What was iterated on after reviews
 - What was deliberately NOT done (and why)
 
-Save Stage 1 brief to auto-memory as `project_brand_context.md` so future sessions start with context.
+When saving project documentation is authorized, preserve the Stage 1 brief in
+the project's established design-notes location. Codex setup does not provide a
+Claude auto-memory directory. If no authorized persistence location exists,
+return the brief in the handoff and say it was not saved for future sessions.
 
 ## Hard Rules
 

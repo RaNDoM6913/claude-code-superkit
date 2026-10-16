@@ -1,8 +1,18 @@
 # claude-code-superkit
 
-Production-tested agents, commands, hooks & skills for Claude Code and Codex CLI. All agents on Opus.
+Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 82 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra.
+
+## Contributor Working Agreement
+
+For work on Superkit itself, read [docs/WORKING_AGREEMENT.md](docs/WORKING_AGREEMENT.md) once per session. It defines the owner-approved scope, parallel implementation, risk-based review, verification, and token-economy rules. Preserve mandatory project checks and current task authorization boundaries.
+
+GPT backend/data/delivery/language reviews use project-specific schema, query, toolchain, Go lifecycle/performance/telemetry and rollout evidence; Core UI, six frontend-ui aliases and frontend-3d reviewers retain distinct scopes; UI source, rendered and interaction evidence remain distinct; Optional GAN sources live separately in packages/gan/skills and are not ordinary installer entries. Bot and nudge source acceptance does not authorize messaging or scheduling; source acceptance does not qualify live behavior. For current Codex-only delivery scope and remaining installation/compatibility work, use the [active delivery plan](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md).
 
 ## Project Structure
+
+Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Source review does not claim empirically measured model quality.
+
+Codex authoring guides preserve role-specific verdicts and scoped review/workflow authority, require evidence-backed findings and truthful verification coverage, and use conditional project examples. Native workflow/support sources resolve installed tools and dependencies, preserve migration/commit authority and retain unavailable evidence. The native hook mapping rejects recognized static destructive Git and checks tracked/staged whitespace at Stop in filter-free repositories; configured clean/process filters, including unused/global Git LFS, skip both diffs with UNVERIFIED after a keys-only config check. It grants no permission/trust and does not prove tests/builds or native firing. Hook assets use pristine updates/backups; existing active hooks/config stay preserved. Review definition and script updates separately through the documented trust flow. POSIX wiring is not qualified for Windows/cloud.
 
 ```
 packages/
@@ -55,11 +65,14 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 82 skills (added: 3 cross-CLI roles, 6 TGApp skills, behavioral-nudge, 3 GAN, silent-failure-hunter expansion)
+    skills/                 # 82 skills; native roles and protected callers listed in native-skills.txt
+    hooks/                  # superkit.mjs: 2 native handlers; review/trust required
+    hooks.json              # Source for active wiring or superkit-hooks.json manual merge template
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
-    config.toml             # gpt-5.5, xhigh
+    config.toml             # gpt-6-astra/high coordinator; gpt-5.6-sol/medium worker fallback
     AGENTS.md               # Template (incl. new "Approval Rules" section)
-    INSTALL.md              # Guide
+    INSTALL.md              # Standalone/update/artifact guide
+    legacy-baseline.json    # Pinned v1.5.2 skill hashes for safe pre-manifest upgrades
   showcase/                 # Production example (28 agents, 17 commands, 13 hooks, 11 skills, 6 rules)
     .claude/                # Full .claude/ setup from real social app
 
@@ -72,7 +85,7 @@ lib/
   settings-builder.js       # JSON assembly (replaces jq)
   superpowers.js            # Plugin installation
   docs-scaffold.js          # Doc templates + tree
-  codex.js                  # Codex CLI support
+  codex.js                  # Standalone/additive Codex installer, independent safe updates
   validator.js              # Post-install validation
   utils.js                  # Colors, file helpers, git
 test/
@@ -99,19 +112,19 @@ VERSION                     # current release version (keep in sync with package
 | Agents | 31 | 9 | 4 | 6 | 3 | 3 | 28 | — |
 | Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 82 |
 | Commands | 15 | — | 1 | — | — | — | 17 | 9 |
-| Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | — |
+| Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | 2 handlers / 1 script |
 | Hooks internal | 2 | — | — | — | — | — | — | — |
 | Helpers | 1 | — | — | — | — | — | — | — |
 | Rules shipped | 7 | 2 | 3 | 7 | — | — | 6 | 1 file |
 | Rules internal | 1 | — | — | — | — | — | — | — |
 
-**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself.
+**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself. Codex separately installs 82 skills and 2 native hook handlers in 1 script; these are not added to the Claude totals.
 
 ## Conventions
 
 - **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.8, 1M context**) — kit automatically picks up new Opus versions without code changes.
 - **Effort**: Opus 4.8 defaults to `high`; deep specialist agents (reality-checker, security-scanner, critic/architecture reviews, gan-evaluator) are run at `xhigh`/`max`. See the per-role guidance in the user CLAUDE.md template (`packages/core/CLAUDE.md`).
-- **Codex model**: `gpt-5.5` with `model_reasoning_effort = "xhigh"`
+- **Codex model**: `gpt-6-astra` with `model_reasoning_effort = "high"`; subagent fallback `gpt-5.6-sol` / `medium`. Contributor routing and GPT prompt authorship follow `docs/WORKING_AGREEMENT.md`.
 - **Agent format**: YAML frontmatter (name, description, model, allowed-tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)
 - **Output format**: Severity (CRITICAL/WARNING/SUGGESTION) + Confidence (HIGH/MEDIUM/LOW)
@@ -127,7 +140,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
 2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
 3. **CLAUDE.md** (this file) — counts table, structure section
-4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (N), commands (N), hooks (N), skills (N), and rules (N) for Claude Code and Codex CLI. All agents on Opus 4.8 — every prompt hardened by Claude Fable 5." — THIS IS MANDATORY AND MUST NOT BE SKIPPED
+4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 82 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra." Keep Claude component counts separate from Codex skills/handlers and scope historical Fable authorship to the Claude layer. — THIS IS MANDATORY AND MUST NOT BE SKIPPED
 5. **GitHub Release** — `gh release edit` if release already exists for this version
 
 ### Tier 2 — Update when relevant:
@@ -145,7 +158,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 
 ### CRITICAL: Never forget Codex!
 - Codex AGENTS.md and INSTALL.md MUST stay in sync with core changes
-- New rules → add equivalent section to AGENTS.md (Codex has no rules files)
+- New rules → map project guidance to AGENTS.md or applicable execution-policy rules; these have distinct scopes
 - New commands → check if Codex skill exists, update INSTALL.md counts
 - GitHub description (`gh repo edit`) → update on EVERY count change
 

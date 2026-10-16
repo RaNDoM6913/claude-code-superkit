@@ -1,0 +1,116 @@
+✔ an unowned nested surface fails inventory gate (1.032583ms)
+✔ deleted source is not silently forgotten (0.078708ms)
+✔ collectSurfaces includes tracked hidden files and untracked source files (47.106542ms)
+✔ reconcileLedger reports invalid ownership instead of guessing it closed (0.112125ms)
+✔ retired and deferred rows require explicit disposition evidence (0.086417ms)
+✔ a mirror must exist in the current inventory even if another row names it (0.05375ms)
+✔ classification recognizes stack reviewers and stack hook programs (0.103959ms)
+✔ collectSurfaces omits a tracked file deleted from the working tree for stale reconciliation (37.302833ms)
+✔ collectSurfaces hashes a symlink itself without reading its external target (37.123583ms)
+✔ collectSurfaces measures instruction files but not ordinary documentation (37.167083ms)
+✔ reconcileLedger rejects an invented migration wave (0.081417ms)
+✔ nonhistorical preserved and verified rows require existing evidence surfaces (0.090167ms)
+✖ capture refuses to overwrite initialized artifacts without mutating any file (4083.297041ms)
+✔ baseline evidence is incomplete when the required summary is empty (2.423583ms)
+✔ baseline evidence fails when the core failure has no successful focused rerun (7.489ms)
+✔ baseline evidence fails for an unrelated command failure even when a rerun exists (2.266584ms)
+✔ baseline evidence accepts only the exact documented environment resolution (2.371833ms)
+✔ approved responsibility paths have explicit first-touch waves (0.062959ms)
+✔ explicit mirrors cover command aliases and keep the UI reviewer sources distinct (0.055708ms)
+✔ GAN skills are Codex-native counterparts of GAN agents (0.025833ms)
+✖ stale claim scan includes explicit TOML and JavaScript text surfaces but skips binaries (1.723333ms)
+✖ collector and stale scan never read through symlinks to external text (41.072417ms)
+✖ CLI reports a usage error when an option flag has no value (29.122ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 19
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4382.854291
+
+✖ failing tests:
+
+test at test/migration-inventory.test.js:219:1
+✖ capture refuses to overwrite initialized artifacts without mutating any file (4083.297041ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:228:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /already initialized/i,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:307:1
+✖ stale claim scan includes explicit TOML and JavaScript text surfaces but skips binaries (1.723333ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+
+  + []
+  - [
+  -   'packages/codex/config.toml',
+  -   'lib/codex.js'
+  - ]
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:320:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 'packages/codex/config.toml', 'lib/codex.js' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:326:1
+✖ collector and stale scan never read through symlinks to external text (41.072417ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:336:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /outside repository root/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at test/migration-inventory.test.js:348:1
+✖ CLI reports a usage error when an option flag has no value (29.122ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+  1 !== 2
+
+      at TestContext.<anonymous> (file://<repo>/test/migration-inventory.test.js:350:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,25 @@
+file://<repo>/test/migration-inventory.test.js:17
+  loadSuiteEvidence,
+  ^^^^^^^^^^^^^^^^^
+SyntaxError: The requested module '../tools/superkit-inventory.mjs' does not provide an export named 'loadSuiteEvidence'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:335:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:439:5)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v26.4.0
+✖ test/migration-inventory.test.js (34.4485ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 39.396916
+
+✖ failing tests:
+
+test at test/migration-inventory.test.js:1:1
+✖ test/migration-inventory.test.js (34.4485ms)
+  'test failed'

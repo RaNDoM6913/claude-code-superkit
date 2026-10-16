@@ -20,11 +20,33 @@ REPO_ROOT="$(dirname "$SCRIPT_DIR")"
 
 AGENTS_DIR="$REPO_ROOT/packages/core/agents"
 SKILLS_DIR="$REPO_ROOT/packages/codex/skills"
+NATIVE_SKILLS_MANIFEST="$REPO_ROOT/packages/codex/native-skills.txt"
 
 if [ ! -d "$AGENTS_DIR" ]; then
   echo "ERROR: Agents directory not found: $AGENTS_DIR"
   exit 1
 fi
+
+if [ ! -f "$NATIVE_SKILLS_MANIFEST" ]; then
+  echo "ERROR: Native Codex skills manifest not found: $NATIVE_SKILLS_MANIFEST" >&2
+  exit 1
+fi
+
+native_skill_names="|"
+protected=0
+while IFS= read -r native_name || [ -n "$native_name" ]; do
+  case "$native_name" in
+    ""|\#*) continue ;;
+  esac
+
+  native_skill="$SKILLS_DIR/$native_name/SKILL.md"
+  if [ ! -f "$native_skill" ]; then
+    echo "ERROR: Declared native Codex skill '$native_name' is missing: $native_skill" >&2
+    exit 1
+  fi
+  native_skill_names="${native_skill_names}${native_name}|"
+  protected=$((protected + 1))
+done < "$NATIVE_SKILLS_MANIFEST"
 
 normalize_body_for_codex() {
   local body="$1"
@@ -104,6 +126,14 @@ for agent_file in "$AGENTS_DIR"/*.md; do
     name="${filename%.md}"
   fi
 
+  case "$native_skill_names" in
+    *"|$name|"*)
+      echo "  Preserved native: skills/$name/SKILL.md"
+      skipped=$((skipped + 1))
+      continue
+      ;;
+  esac
+
   # If no description found, use a generic one
   if [ -z "$description" ]; then
     description="Agent skill converted from $filename"
@@ -132,4 +162,4 @@ SKILLEOF
 done
 
 echo ""
-echo "Done. Converted $converted agent(s) to Codex skills in $SKILLS_DIR"
+echo "Done. Converted $converted agent(s); protected $protected native skill(s) and skipped $skipped matching agent conversion(s) in $SKILLS_DIR"
