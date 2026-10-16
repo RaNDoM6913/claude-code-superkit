@@ -1,6 +1,6 @@
-# Codex-only Superkit delivery plan — 1.5.3 candidate
+# Codex-only Superkit delivery plan — 1.5.3
 
-**Status:** Active scope from the owner's 2026-10-15 direction. Standalone installation/update, bounded workflow/support/hooks and a POSIX native activation smoke are accepted. A reviewed local candidate is prepared; version selection and publication remain owner decisions.
+**Status:** v1.5.3 published on GitHub on 2026-10-16 after explicit owner authorization; npm registry delivery awaits publisher confirmation and independent verification. See the [release delivery record](../../releases/1.5.3.md).
 **Outcome:** A standalone, automated Codex-only install and distributable artifact in this repository, with preserved user customizations and accurate documentation.
 **Routing:** The coordinator owns scope, integration and acceptance. Under the owner's latest 2026-10-15 direction, delegate useful independent work to GPT-6.1 Sol; this supersedes the earlier contributor Astra/Sol split for continuation. Preserve accepted Astra-authored sources and shipped consumer model defaults. Claude prompt work remains separate.
 **Agreement:** [Contributor working agreement](../../WORKING_AGREEMENT.md).
@@ -47,7 +47,8 @@ Native activation and candidate evidence: [2026-10-15 reviewed local candidate](
 - [x] Align README, contributor docs, Codex install/usage guides, affected catalogs and changelog with the actual delivered interface, counts and supported capabilities; distinguish Astra source authorship from historical Claude work.
 - [x] Inspect all changes since the previous release, package contents and the existing distribution workflow. Do not silently include unfinished Claude work or research dependencies.
 - [x] Check current release/tag availability: v1.5.3 was not observed on 2026-10-15; recheck at any future release decision. No version selected.
-- [ ] Owner-authorized release only: choose the available next version, synchronize version files/release notes, scope external GitHub About authorship, then perform only separately approved push/merge/tag/publication actions. Version remains 1.5.2 for this local candidate.
+- [x] Owner-authorized release: selected 1.5.3, synchronized versions/notes/docs, corrected GitHub About, merged PR #1 and published the annotated tag plus verified GitHub release assets.
+- [ ] Complete npm registry delivery; verify registry metadata, archive integrity and an actual registry-sourced installation. Local/archive installation is not registry-publication proof.
 - [x] Present the concrete candidate commit, artifact, verification and remaining limitations. Merge, tag, release publication and any new distribution channel require the owner's separate approval.
 
 ## Completion and continuation
