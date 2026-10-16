@@ -69,7 +69,7 @@ packages/
     hooks/                  # superkit.mjs: 2 native handlers; review/trust required
     hooks.json              # Source for active wiring or superkit-hooks.json manual merge template
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
-    config.toml             # gpt-6-astra/high coordinator; gpt-5.6-sol/medium worker fallback
+    config.toml             # gpt-6-astra/high coordinator; gpt-6.1-sol/medium worker fallback
     AGENTS.md               # Template (incl. new "Approval Rules" section)
     INSTALL.md              # Standalone/update/artifact guide
     legacy-baseline.json    # Pinned v1.5.2 skill hashes for safe pre-manifest upgrades
@@ -125,7 +125,7 @@ VERSION                     # current release version (keep in sync with package
 
 - **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.8, 1M context**) — kit automatically picks up new Opus versions without code changes.
 - **Effort**: Opus 4.8 defaults to `high`; deep specialist agents (reality-checker, security-scanner, critic/architecture reviews, gan-evaluator) are run at `xhigh`/`max`. See the per-role guidance in the user CLAUDE.md template (`packages/core/CLAUDE.md`).
-- **Codex model**: `gpt-6-astra` with `model_reasoning_effort = "high"`; subagent fallback `gpt-5.6-sol` / `medium`. Contributor routing and GPT prompt authorship follow `docs/WORKING_AGREEMENT.md`.
+- **Codex model**: `gpt-6-astra` with `model_reasoning_effort = "high"`; subagent fallback `gpt-6.1-sol` / `medium`. Contributor routing and GPT prompt authorship follow `docs/WORKING_AGREEMENT.md`.
 - **Agent format**: YAML frontmatter (name, description, model, allowed-tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)
 - **Output format**: Severity (CRITICAL/WARNING/SUGGESTION) + Confidence (HIGH/MEDIUM/LOW)

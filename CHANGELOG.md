@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex worker default:** updated the current source template and installer guidance to **gpt-6.1-sol / medium**, retaining **gpt-6-astra / high** as coordinator. Existing consumer configs and published v1.5.3 artifacts retain their defaults.
+
 - **README presentation:** refreshed badges in the OrchKit style with the existing accent colors, live GitHub stars and the Codex label **GPT-6 ASTRA ULTRA**.
 - **Complete `/dev` diagram:** published the selected three-column design with all 16 phases (0–15), including Read Docs, scope-selected reviewers and the final Report. Corrected the README example and orchestration guide to keep goal verification before review and parallel work within the review phase; retained older artwork as clearly marked historical concepts.
 

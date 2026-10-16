@@ -30,8 +30,8 @@ not silently treated as a complete installation.
 It creates root `AGENTS.md`, `.codex/config.toml`, and
 `.codex/rules/default.rules` only when absent. Existing copies are **always
 preserved**, including prior stock templates. Review new template defaults and
-merge any desired changes yourself. Default coordinator configuration is
-**gpt-6-astra / high**, with **gpt-5.6-sol / medium** subagent fallback;
+merge any desired changes yourself. Current source coordinator configuration is
+**gpt-6-astra / high**, with **gpt-6.1-sol / medium** subagent fallback;
 configuration is not proof of model availability or behavioral quality.
 
 It also installs two native hook handlers in `.codex/hooks/superkit.mjs` and
@@ -129,6 +129,8 @@ and the tagged checkout are usable independently of npm registry availability.
 Version 1.5.3 is also [published on npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.3).
 The equivalent command from your target Git project is
 `npx claude-code-superkit@1.5.3 --codex-only`.
+Published v1.5.3 artifacts retain **gpt-5.6-sol / medium** as the subagent default;
+the **gpt-6.1-sol / medium** source default above applies to the updated checkout.
 
 ### Use and manual installations
 
@@ -259,7 +261,7 @@ web_search = "live"
 multi_agent = true
 
 [agents]
-default_subagent_model = "gpt-5.6-sol"
+default_subagent_model = "gpt-6.1-sol"
 default_subagent_reasoning_effort = "medium"
 ```
 

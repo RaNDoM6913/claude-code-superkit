@@ -30,7 +30,7 @@ describe('Codex package assets', () => {
     assert.match(config, /^model = "gpt-6-astra"$/m);
     assert.match(config, /^model_reasoning_effort = "high"$/m);
     assert.match(config, /^web_search = "live"$/m);
-    assert.match(config, /^default_subagent_model = "gpt-5\.6-sol"$/m);
+    assert.match(config, /^default_subagent_model = "gpt-6\.1-sol"$/m);
     assert.match(config, /^default_subagent_reasoning_effort = "medium"$/m);
     assert.doesNotMatch(config, /^web_search = true$/m);
     assert.doesNotMatch(config, /extra_high|gpt-5\.4/);

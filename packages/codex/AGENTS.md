@@ -197,7 +197,7 @@ Do NOT rely on a single layer — update docs proactively with every code change
 ## Model Configuration
 
 The shipped `.codex/config.toml` selects **gpt-6-astra / high** for the coordinator
-and **gpt-5.6-sol / medium** as the subagent fallback. Configuration is a default,
+and **gpt-6.1-sol / medium** as the subagent fallback. Configuration is a default,
 not evidence of which model executed a task or of independent review. Honor the
 user's explicit routing and verify available models/efforts before dispatch.
 

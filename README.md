@@ -91,7 +91,7 @@ The full path has **16 phases, numbered 0–15**, starting with **Read Docs** an
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (GPT-6 Astra coordinator, GPT-5.6 Sol workers). v1.5.3 ships standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
+**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (current source defaults: GPT-6 Astra coordinator, GPT-6.1 Sol workers). v1.5.3 ships standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -188,7 +188,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6-astra / high** coordinator and **gpt-5.6-sol / medium** subagents.
+From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Current source defaults: **gpt-6-astra / high** coordinator and **gpt-6.1-sol / medium** subagents. Published v1.5.3 artifacts retain the **gpt-5.6-sol / medium** subagent default; this source update does not change existing consumer configs.
 
 ### Which command do I use?
 
@@ -321,7 +321,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
-| Model | Opus (per agent) | **gpt-6-astra / high** coordinator; **gpt-5.6-sol / medium** subagent default |
+| Model (current source) | Opus (per agent) | **gpt-6-astra / high** coordinator; **gpt-6.1-sol / medium** subagent default |
 | Agents / Skills | 56 agents | 82 skills in `packages/codex/skills/` (9 commands + 36 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 82) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
 | Hooks | 42 shipped (26 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + 2 internal + Stop | 2 native handlers in 1 script: destructive-Git check + tracked/staged whitespace Stop check; review/trust required |
