@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Header attribution preview:** selected layout B with two larger pills for Claude Opus 5.5 and GPT-6 Astra · Ultra, labelled Prompt & agent refinement. This accompanies the in-progress Opus branch and does not claim that all agents have been reworked or change their execution models.
+
 - **security-scanner reworked for Opus 5.5:** 36 numbered checks (new CHECK-32..36: command/code/deserialization injection, path traversal, tokens/sessions/CSRF, weak crypto and disabled TLS, CI/CD pipeline injection), FULL and DIFF scope modes, honest coverage (DONE / PARTIAL / UNVERIFIED / N/A), secrets located as `file:line` and masked, auditor exit codes verified against docs (govulncheck JSON mode exits 0; cargo audit exit 2 = scan error), re-scan of prior findings. Ideas adopted from the Codex role; output headings and the Risk Summary line unchanged for `audit.md`/`review.md`.
 
 - **Codex worker default:** updated the current source template and installer guidance to **gpt-6.1-sol / medium**, retaining **gpt-6-astra / high** as coordinator. Existing consumer configs and published v1.5.3 artifacts retain their defaults.
