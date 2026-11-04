@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
   "repository": "RaNDoM6913/claude-code-superkit",
-  "checked_on": "2026-11-03",
+  "checked_on": "2026-11-04",
   "checked_on_timezone": "Europe/Minsk",
   "daily_data_timezone": "UTC",
   "refresh_mode": "manual_on_user_request",
   "automatic_collection_configured": false,
   "npm": {
     "package": "claude-code-superkit",
-    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-01/claude-code-superkit",
+    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-02/claude-code-superkit",
     "latest_available_day_source": "https://api.npmjs.org/downloads/point/last-day/claude-code-superkit",
     "first_publication_date": "2026-10-16",
     "coverage_start": "2026-10-16",
-    "data_through": "2026-11-01",
-    "total_downloads": 355,
+    "data_through": "2026-11-02",
+    "total_downloads": 358,
     "unobserved_ranges": [],
     "daily_downloads": {
       "2026-10-16": 275,
@@ -32,21 +32,22 @@
       "2026-10-29": 0,
       "2026-10-30": 5,
       "2026-10-31": 2,
-      "2026-11-01": 7
+      "2026-11-01": 7,
+      "2026-11-02": 3
     }
   },
   "git": {
     "source": "https://api.github.com/repos/RaNDoM6913/claude-code-superkit/traffic/clones",
     "coverage_start": "2026-10-19",
-    "data_through": "2026-11-01",
+    "data_through": "2026-11-02",
     "history_before_coverage_start": "unavailable",
-    "total_recorded_clones": 88,
+    "total_recorded_clones": 92,
     "unobserved_ranges": [],
     "last_api_window": {
-      "start": "2026-10-19",
-      "end": "2026-11-01",
-      "total_clones": 88,
-      "unique_cloners": 37
+      "start": "2026-10-20",
+      "end": "2026-11-02",
+      "total_clones": 85,
+      "unique_cloners": 36
     },
     "daily_clones": {
       "2026-10-19": 7,
@@ -62,7 +63,8 @@
       "2026-10-29": 4,
       "2026-10-30": 1,
       "2026-10-31": 0,
-      "2026-11-01": 19
+      "2026-11-01": 19,
+      "2026-11-02": 4
     }
   },
   "release_archives": {
@@ -95,6 +97,23 @@
       "git_total": 88,
       "npm_data_through": "2026-11-01",
       "git_data_through": "2026-11-01"
+    },
+    {
+      "checked_on": "2026-11-04",
+      "kind": "incremental",
+      "previous_npm_total": 355,
+      "npm_total": 358,
+      "previous_git_total": 88,
+      "git_total": 92,
+      "npm_data_through": "2026-11-02",
+      "git_data_through": "2026-11-02",
+      "new_dates": [
+        "2026-11-02"
+      ],
+      "npm_added": 3,
+      "git_added": 4,
+      "corrections_to_saved_days": [],
+      "notes": "2026-11-03 not saved: npm still reported 0 for 11-03 and 11-04 (likely source lag)."
     }
   ]
 }
