@@ -1,4 +1,6 @@
-# ⚡ claude-code-superkit
+<p align="center">
+  <img src="docs/assets/superkit-header.png" alt="Superkit — agents for Claude Code and GPT agents for Codex; prompt and agent refinement with Claude Opus 5.5 and GPT-6 Astra" width="960">
+</p>
 
 > **The quality-first kit for Claude Code & Codex** — all 56 Claude agents run on Opus (now 4.8, 1M context), with prompts hardened for that executor by **Claude Fable 5**. The Codex layer has separate GPT instructions and Astra/Sol configuration.
 
