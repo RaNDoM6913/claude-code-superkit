@@ -97,6 +97,7 @@ docs/
   guide/                    # 13 chapters
   examples/                 # 3 examples
   INSTALL-CLAUDE-CODE.md    # Detailed install guide
+  assets/superkit-header.png # Approved Superkit README header
   assets/dev-flow.png       # Approved /dev diagram used in README; all 16 phases (0–15)
   dev-flow.svg              # Historical hand-authored /dev diagram; see gallery caveats
   dev-flow-variants/        # Historical SVG concepts (timeline, radial, waterfall, node graph)

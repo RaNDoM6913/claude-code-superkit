@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="218" height="28" viewBox="0 0 218 28" role="img" aria-label="npm downloads: 358 from publication through 2026-11-02, checked 2026-11-04">
+  <title>358 npm package downloads from first publication on 2026-10-16 through 2026-11-02; manual snapshot checked 2026-11-04. Not successful installations or unique users.</title>
+  <rect width="164" height="28" fill="#1e293b"/>
+  <rect x="164" width="54" height="28" fill="#007EC6"/>
+  <g fill="#ffffff" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" letter-spacing="0.8">
+    <text x="82" y="18">NPM DOWNLOADS</text>
+    <text x="191" y="18">358</text>
+  </g>
+</svg>
