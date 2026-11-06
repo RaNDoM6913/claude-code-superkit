@@ -9,12 +9,12 @@
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads: 358 from publication through 2026-11-02, checked 2026-11-04](docs/assets/badge-npm-downloads.svg)](https://api.npmjs.org/downloads/point/2026-10-16:2026-11-02/claude-code-superkit) [![GitHub clones: 92 for 2026-10-19 through 2026-11-02, snapshot 2026-11-04](docs/assets/badge-clones.svg)](https://github.com/RaNDoM6913/claude-code-superkit/graphs/traffic) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads: 365 from publication through 2026-11-05, checked 2026-11-06](docs/assets/badge-npm-downloads.svg)](https://api.npmjs.org/downloads/point/2026-10-16:2026-11-05/claude-code-superkit) [![GitHub clones: 168 for 2026-10-19 through 2026-11-05, snapshot 2026-11-06](docs/assets/badge-clones.svg)](https://github.com/RaNDoM6913/claude-code-superkit/graphs/traffic) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
 <details>
 <summary>About these counters</summary>
 
-Manually updated snapshot checked on **2026-11-04**, with data through **2026-11-02**. npm records **358 package downloads** since first publication on 2026-10-16. GitHub records **92 clones** for 2026-10-19 through 2026-11-02; earlier clone history is unavailable. GitHub exposes a rolling 14-day window, so a cumulative clone count requires saving daily counts and counting each date once.
+Manually updated snapshot checked on **2026-11-06**, with data through **2026-11-05**. npm records **365 package downloads** since first publication on 2026-10-16. GitHub records **168 clones** for 2026-10-19 through 2026-11-05; earlier clone history is unavailable. GitHub exposes a rolling 14-day window, so a cumulative clone count requires saving daily counts and counting each date once.
 
 Attached GitHub release ZIP/TGZ archives have **2 downloads**, excluding checksums; these are separate from the npm counter. Downloads and clones can include repeats and automation and do not count successful installations or unique users. The [counter ledger and update procedure](docs/DOWNLOAD_STATS.md) preserve daily history for future updates.
 
