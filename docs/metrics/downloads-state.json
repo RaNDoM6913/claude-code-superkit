@@ -73,6 +73,24 @@
       "2026-11-04": 36,
       "2026-11-05": 26,
       "2026-11-06": 57
+    },
+    "unique_cloners": {
+      "total": 104,
+      "method": "unique cloners of the first saved API window plus the sum of daily unique cloners for each later UTC date; people active on several periods are counted once per period, so this is an upper bound on distinct people",
+      "base_period": {
+        "start": "2026-10-19",
+        "end": "2026-11-01",
+        "unique_cloners": 37,
+        "source": "last_api_window of commit e0b51f4"
+      },
+      "daily_unique_cloners": {
+        "2026-11-02": 4,
+        "2026-11-03": 10,
+        "2026-11-04": 17,
+        "2026-11-05": 11,
+        "2026-11-06": 25
+      },
+      "unobserved_daily_uniques": "Dates before 2026-11-02 were saved only as one window aggregate; daily uniques for them are unavailable."
     }
   },
   "release_archives": {
@@ -160,7 +178,7 @@
       "npm_added": 14,
       "git_added": 57,
       "corrections_to_saved_days": [],
-      "notes": "Saved days 2026-10-30..2026-11-05 re-checked against both sources, no changes. npm reports 0 for 2026-11-07 and 11-08 (source lag, not saved); Git window ends 2026-11-06. Release archives re-read: still 2 downloads."
+      "notes": "Saved days 2026-10-30..2026-11-05 re-checked against both sources, no changes. npm reports 0 for 2026-11-07 and 11-08 (source lag, not saved); Git window ends 2026-11-06. Release archives re-read: still 2 downloads. Unique cloners added retroactively (base window 37 + daily 11-02..11-06 = 104); from the next update save daily uniques with daily_clones."
     }
   ]
 }

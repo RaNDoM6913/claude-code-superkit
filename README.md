@@ -9,16 +9,7 @@
 
 <div align="center">
 
-[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads: 379 from publication through 2026-11-06, checked 2026-11-08](docs/assets/badge-npm-downloads.svg)](https://api.npmjs.org/downloads/point/2026-10-16:2026-11-06/claude-code-superkit) [![GitHub clones: 225 for 2026-10-19 through 2026-11-06, snapshot 2026-11-08](docs/assets/badge-clones.svg)](https://github.com/RaNDoM6913/claude-code-superkit/graphs/traffic) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
-
-<details>
-<summary>About these counters</summary>
-
-Manually updated snapshot checked on **2026-11-08**, with data through **2026-11-06**. npm records **379 package downloads** since first publication on 2026-10-16. GitHub records **225 clones** for 2026-10-19 through 2026-11-06; earlier clone history is unavailable. GitHub exposes a rolling 14-day window, so a cumulative clone count requires saving daily counts and counting each date once.
-
-Attached GitHub release ZIP/TGZ archives have **2 downloads**, excluding checksums; these are separate from the npm counter. Downloads and clones can include repeats and automation and do not count successful installations or unique users. The [counter ledger and update procedure](docs/DOWNLOAD_STATS.md) preserve daily history for future updates.
-
-</details>
+[![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads 379, GitHub clones 225, unique cloners 104; data through 2026-11-06](docs/assets/badge-downloads.svg)](docs/DOWNLOAD_STATS.md) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
 ![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg) ![Claude prompts hardened by Claude Fable 5](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
 
