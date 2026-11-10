@@ -10,6 +10,8 @@ GPT backend/data/delivery/language reviews use project-specific schema, query, t
 
 ## Project Structure
 
+The [G1 Codex comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) tracks focused comment, silent-failure, and Go-modernizer refinements, local claim verification and native caller compatibility. Keep its source acceptance separate from live model qualification and preserve the historical migration ledger.
+
 Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Source review does not claim empirically measured model quality.
 
 Codex authoring guides preserve role-specific verdicts and scoped review/workflow authority, require evidence-backed findings and truthful verification coverage, and use conditional project examples. Native workflow/support sources resolve installed tools and dependencies, preserve migration/commit authority and retain unavailable evidence. The native hook mapping rejects recognized static destructive Git and checks tracked/staged whitespace at Stop in filter-free repositories; configured clean/process filters, including unused/global Git LFS, skip both diffs with UNVERIFIED after a keys-only config check. It grants no permission/trust and does not prove tests/builds or native firing. Hook assets use pristine updates/backups; existing active hooks/config stay preserved. Review definition and script updates separately through the documented trust flow. POSIX wiring is not qualified for Windows/cloud.

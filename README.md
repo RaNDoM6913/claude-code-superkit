@@ -353,6 +353,8 @@ The installer grants no project/hook trust. A new active `.codex/hooks.json` is 
 
 The Git check never grants permission, opaque commands remain unassessed, and Stop does not prove tests/builds or untracked behavior. Handlers run no project scripts, read no transcripts and contact no external services. POSIX shell/Git-root wiring is unqualified for Windows/cloud; native firing needs separate runtime evidence.
 
+The [G1 Codex role comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) records focused updates for consequential false comment guarantees, silent-failure runtime traps, and optional Go analyzer diagnostics. Existing native report contracts and review authority remain in place; local runtime probes and source checks do not establish model quality. Counts and published artifacts are unchanged.
+
 Stop enumerates Git config keys only and skips both diffs with UNVERIFIED if any clean/process filter is configured, including unused/global Git LFS drivers, to avoid running conversion programs. It captures no filter values or changes Git config; filter-free repositories retain the whitespace check and one continuation.
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for safe updates, backups, hook/trust limits, local package artifacts and manual setup.

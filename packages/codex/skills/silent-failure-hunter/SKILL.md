@@ -2,7 +2,7 @@
 name: silent-failure-hunter
 description: Review selected error paths for swallowed failures, misleading success, and unsafe recovery. Distinguish intentional fallback from lost propagation or observability using actual caller contracts.
 user-invocable: false
-tokens: 3502
+tokens: 3993
 ---
 
 # Silent Failure Hunter
@@ -38,6 +38,15 @@ Record verified findings, relevant open questions, and prior unresolved findings
 | D — log-and-forget | Log then continue, acknowledge, commit, or mark success | Whether the follow-on state lies about the failed operation. Logging does not make a failed payment successful. |
 | E — catch-all/type erasure | Broad exception handling, generic errors, dropped causes, Go string matching, collapsed HTTP statuses | Whether distinctions needed for recovery/operator diagnosis survive at the correct boundary. A generic public error can be intentional and privacy-preserving. |
 | F — diagnostic suppression | TS `@ts-ignore`/`@ts-expect-error`, Python `type: ignore`, Go `nolint`, ESLint disables | The applicable tool/version/rule, reason, and real error concealed. A suppression is not itself a runtime silent failure; do not remove directives or invent defects because a comment is missing. |
+
+### Runtime traps to verify
+
+These are candidate mechanisms, not automatic findings. Confirm decisive behavior against the selected runtime/library source or an authorized isolated probe that loads no project code and contacts no service. Record the version and result; if that premise remains UNVERIFIED, keep the dependent suspicion in Open Questions rather than assigning MEDIUM to an unestablished failure.
+
+- **Returned status versus thrown failure:** Python `subprocess.run` defaults to returning a nonzero child status unless `check=True`; Node `spawnSync` exposes the child's status rather than throwing solely because it is nonzero. Fetch and Requests can return HTTP error responses normally; inspect status handling, Requests' `raise_for_status`, hooks, and wrappers. Check the actual client's contract before generalizing to another HTTP library, process launcher, or command. A launch failure differs from a child exiting unsuccessfully.
+- **Async results left unread:** JavaScript `forEach(async ...)` does not await callback promises; a surrounding synchronous `try/catch` does not observe their rejections. `Promise.allSettled` records ordinary input rejections in result entries, so ignoring entries can hide required failures. It is not an unconditional never-rejects guarantee: input iteration itself can fail. Trace the actual supervisor and caller completion contract.
+- **Cleanup replacing failure:** a `return` executed in JavaScript or Python `finally` can replace a pending exception. Check the resulting caller-visible outcome, not just the original handler or log.
+- **Shell status masking:** in Bash, a function used as an `if` condition or a non-final `&&`/`||` operand can run with `errexit` ignored inside it. `local x=$(command)` can report the declaration's success while losing the substitution's failure status. Confirm shell/version and surrounding control flow; neither `set -e` nor an error-looking command proves propagation.
 
 ### TypeScript / JavaScript
 

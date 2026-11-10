@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex role comparison, G1:** Astra-authored refinements to `comment-rot-analyzer`, `silent-failure-hunter`, and `go-modernizer` selectively incorporate the Claude rework: evidence-backed CRITICAL false safety/contract claims, locally checked runtime error traps, and an optional installed Go fix-analyzer diagnostic path with explicit execution and no-edit boundaries. Native report/coverage contracts, source ownership, component counts, and historical baselines remain intact. The [G1 evidence record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) separates source/local validation from unperformed model-quality evaluation; no published artifact is changed.
+
 - **Superkit header and README layout:** published the selected logo/header artwork, grouped the styled badges into clear rows, added direct workflow navigation and moved Claude hardening history into an expandable section so the full `/dev` cycle is easier to find.
 
 - **Codex worker default:** updated the current source template and installer guidance to **gpt-6.1-sol / medium**, retaining **gpt-6-astra / high** as coordinator. Existing consumer configs and published v1.5.3 artifacts retain their defaults.
