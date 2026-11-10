@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex comparison, G6 — tests and implementation support:** refine `e2e-test-generator` to establish the intended page and state before absence/hidden assertions, and refine `scaffold-endpoint` to detect unintended file/route collisions and keep explicitly requested scaffold-only stubs fail-closed. Unit-test generation, API sync, debugging and documentation review remain unchanged after comparison; caller contracts and evidence boundaries are retained.
+
 - **Codex comparison, G5 — planning/acceptance:** refine `architect` to distinguish implementation, design, requirement and unresolved-evidence causes before proposing redesign; refine `evaluator` to verify that a passing test actually exercises and asserts its assigned criterion. Plan-checker, critic, goal-verifier and reality-checker remain unchanged; native verdicts, escalation ownership and evidence limits are preserved.
 
 - **Codex comparison, G4 — security/audit/readiness:** refine security automation trust-path review, backend concurrency/abuse checks, frontend untrusted rendering/navigation and compiler-check limits, and dependency manifest/lock-result coverage. Infrastructure, health and pre-deploy reviewers remain unchanged. After the owner explicitly authorized creating its missing counterpart, add native `red-blue-auditor` with read-only Red / Blue / Auditor phases, preserve it through conversion, and update the source catalog from 82 to 83 skills. No automatic caller or published artifact is changed.

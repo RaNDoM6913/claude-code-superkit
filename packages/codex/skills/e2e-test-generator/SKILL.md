@@ -2,7 +2,7 @@
 name: e2e-test-generator
 description: Create and execute scoped browser workflow tests with explicit real-backend or mocked-UI provenance, stable assertions, isolated data, and honest runtime/visual evidence using the project's existing runner.
 user-invocable: false
-tokens: 2479
+tokens: 2580
 ---
 
 # E2E Test Generator
@@ -43,7 +43,11 @@ Control randomness and time where the app/test framework supports it without fal
 
 ### Wait for observed conditions
 
-Use locator assertions and meaningful application readiness conditions. Avoid arbitrary sleeps as a substitute for synchronization; a timeout should bound an expected event, not decide success. When observing a response, register the waiter before triggering the action and match the actual endpoint/method. Illustrative Playwright shape, adapted to the verified application contract:
+Use locator assertions and meaningful application readiness conditions. Avoid arbitrary sleeps as a substitute for synchronization; a timeout should bound an expected event, not decide success. When observing a response, register the waiter before triggering the action and match the actual endpoint/method.
+
+Before asserting that content is absent or hidden, establish the intended page and state through a relevant positive anchor or equivalent observed prerequisite. A wrong locator, failed navigation or unloaded page must not satisfy the assertion vacuously. Choose evidence that distinguishes the intended absence from those failures; do not add unrelated screenshots or assertions just to fill a checklist.
+
+Illustrative Playwright shape, adapted to the verified application contract:
 
 ```typescript
 const responsePromise = page.waitForResponse(response =>

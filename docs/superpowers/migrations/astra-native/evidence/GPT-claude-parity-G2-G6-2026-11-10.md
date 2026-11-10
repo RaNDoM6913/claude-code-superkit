@@ -1,6 +1,6 @@
 # Codex / Claude role comparison — G2–G6
 
-Date: 2026-11-10. Current checkpoint: G5 — ACCEPTED — independent PASS; Astra source accepted.
+Date: 2026-11-10. Current checkpoint: G6 — ACCEPTED — independent PASS; Astra source accepted.
 
 ## Authorized outcome and evidence boundaries
 
@@ -64,7 +64,7 @@ No compaction was reported.
 | G3 | Go concurrency/error/performance/observability; database and migration | ACCEPTED — independent PASS; Astra source accepted |
 | G4 | security, backend/frontend/infra audits, dependencies, health, pre-deploy, red-blue | ACCEPTED — independent PASS; Astra source accepted |
 | G5 | architect, plan-checker, critic, evaluator, goal-verifier, reality-checker | ACCEPTED — independent PASS; Astra source accepted |
-| G6 | test/E2E generation, endpoint scaffolding, API sync, debug, docs review | Not started |
+| G6 | test/E2E generation, endpoint scaffolding, API sync, debug, docs review | ACCEPTED — independent PASS; Astra source accepted |
 
 <!-- G2-start -->
 ## G2 — ACCEPTED — independent PASS; Astra source accepted
@@ -602,6 +602,158 @@ Acceptance: ACCEPTED — independent PASS; Astra source accepted. The final Git 
 Independent review covered all six roles and the selected documentation. Its narrow evidence wording finding was corrected: design/consequential acceptance routes to architect/Astra, requirements to the contract owner. The actual caller and frozen role sources were unchanged; no suite repetition was required.
 
 <!-- G5-end -->
+
+<!-- G6-start -->
+## G6 — ACCEPTED — independent PASS; Astra source accepted
+
+Author record: `/private/tmp/superkit-g6-20261110-astra.md`.
+Local facts: `/private/tmp/superkit-g6-20261110-local-facts.md`.
+
+### test-generator — KEEP
+
+Native already rejects mirrored implementation/constants, demands plausible failure, branch reach and awaited assertions; covers source mutation-check substance without a quota.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Independent oracle and meaningful actual assertions | Native already rejects mirrored implementation/constants, demands plausible failure, branch reach and awaited assertions; covers source mutation-check substance without a quota. |
+| KEEP | Scoped tests/fixtures authority and execution effects | Native preserves owner work, separates production/config/dependency authority, inspects setup and forbids automatic installs/services/external mutations. |
+| KEEP | Runner-specific isolation, mocks, state/time/concurrency | All relevant source mechanisms are present and version/fixture scoped; mocks do not prove real integration. |
+| KEEP | Actual collected/executed/pass/fail/skip and red regression delivery | Native already prevents empty/all-skipped green claims, keeps genuine failures and separates valid red test output from broader suite acceptance. |
+| REJECT | Hook-checked Generated N line, case quotas and automatic rerun | Claude-only report hook does not bind native output; mandatory repeated runs are not needed without flake uncertainty. |
+| REJECT | Every failure outside new tests is pre-existing; differing reruns always test bugs | New fixtures or production work can expose/intoduce failures elsewhere; classify actual cause rather than force provenance. |
+
+### e2e-test-generator — CHANGED
+
+Native demands stable locators and meaningful readiness but does not name the vacuous negative-assertion failure: wrong locator or unloaded/wrong page can satisfy hidden/count-zero.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Absence assertions need the intended page/state established | Add a bounded state/positive-anchor check where necessary, without forcing one UI assertion style or additional screenshots. |
+| KEEP | Real integration versus mocked UI versus mixed provenance | Native already labels boundaries, requires relevant durable/server effect and rejects mocks as backend/auth proof; stronger than the Claude mock-everything restriction. |
+| KEEP | Mock hit/request shape, waiter ordering and runtime/visual evidence | Native already covers real contract fixtures, actual consumption, unexpected calls, event ordering, exact result, accepted/proposed baselines and limits. |
+| KEEP | Runner effects, auth/private artifacts and authorized instrumentation | Native inspects config/setup, respects existing authority and protects browser state without new provision/install permissions. |
+| REJECT | Mandatory all-API mocks, Page Object per page, banned CSS/branches and hook line | These narrow task scope/output and can prevent required real integration or suitable established conventions. |
+| REJECT | New Playwright API/flag/version catalog and automatic reruns | Specific service-worker/routing/screenshot defaults require selected installed version; current native behavior/effect gates are sufficient without new unverified recipes. |
+
+### scaffold-endpoint — CHANGED
+
+Native distinguishes scaffold from implementation and lists stubs, but does not explicitly forbid scaffold stubs returning successful business results or allowing guarded actions.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Scaffold-only incomplete paths fail closed instead of fake success | Use existing project not-implemented/failure contract for unresolved required business/validation/auth paths; do not invent success data or access rules. |
+| TAKE | Existing route/target collision check aligned with intended add versus change | Prevent accidental duplicate/shadowing/overwrite while retaining authorized modification of existing endpoints; no universal stop on intentional changes. |
+| KEEP | Full implementation versus scaffold versus advisory scope | Native already prevents compile-only endpoint completion and preserves task-specific behavior, public contracts and real wiring/data-flow checks. |
+| KEEP | Reference safety, layers, migration and external authority | Native avoids copying unsafe precedents, universal layer templates/down migrations and inferring execution/deploy authority from authored files. |
+| REJECT | Always additive wiring-only, forbid existing edits, default-copy access and no tests | Would contradict authorized implementation mode or copy an inappropriate security contract; native actual task/authority remains controlling. |
+| REJECT | Fixed tool recipes, newest-majority reference, assumed unrelated failures pre-existing | Version/setup/generator effects and failure provenance must be verified; no convenient compileall/cargo/npx fallback or arbitrary pattern count. |
+
+### api-contract-sync — KEEP
+
+Native already covers changed shared schemas/middleware/consumers, composed registration, conditional/generated/proxy versions and consumer impact; method/path alone cannot pass.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Complete scoped bidirectional spec/implementation and affected consumer comparison | Native already covers changed shared schemas/middleware/consumers, composed registration, conditional/generated/proxy versions and consumer impact; method/path alone cannot pass. |
+| KEEP | Serializer/validation/auth/version-specific semantics | Native covers absent/null/default/coercion/content/error/envelopes/security and real schema version without importing unverified keyword/API catalog. |
+| KEEP | IN_SYNC/DRIFT/UNVERIFIED and generated source ownership | Native preserves unknowns, complete coverage, prior drift and regeneration owner without executing or hand-editing generated files. |
+| REJECT | Default whole-API audit, NO_SPEC_FOUND enum and universal remote/read command bans | Caller scope and applicable authority determine work; native N/A/missing-required-evidence semantics and inspected safe capabilities are sufficient. |
+| REJECT | Additional OpenAPI/protobuf/serializer catalog and automatic severe mismatch categories | Selected versions/protocols and actual consequence require validation; no new tool/library claims needed for this admitted scope. |
+
+### debug-observer — KEEP
+
+Native already separates confirmed root cause, hypothesis and undetermined, competing explanations and insufficient evidence; deployment/time proximity cannot establish cause.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Discriminating hypotheses, causal timeline and static versus observed paths | Native already separates confirmed root cause, hypothesis and undetermined, competing explanations and insufficient evidence; deployment/time proximity cannot establish cause. |
+| KEEP | Bounded logs/process/database/cache access and secret handling | Native stronger inspected authority, actual env selection, query/scan limits, identifier binding, redaction-before-collection and no writes prevent broad diagnostic sweeps. |
+| KEEP | Actual local configuration and incident evidence freshness | Native carefully permits already-authorized nonsecret settings safely and reuses observations only with time validity; source .env key-only/local-only blanket would drop authorized work. |
+| REJECT | Fixed hypothesis/fix counts and architect fourth-attempt rule | Native already stops bounded unproductive investigation; actual design/authority/evidence owner decides escalation, not an imported numeric gate. |
+| REJECT | Automatic local test/GET/compose query authority and fixed sampling commands | Installed/local tooling is not safe by label; native target/effect/credential gates preserve existing authorization without blanket forbidden or granted access. |
+| REJECT | New Redis/Docker/tool recipe and Claude report | Native already corrects COUNT/page/snapshot and binding semantics and preserves actual Diagnostic contract; no new runtime claims needed. |
+
+### docs-reviewer — KEEP
+
+Native already maps changed behavior and actual documentation rules, verifies changed/unchanged claims at intended version and preserves historical/generated/template purpose.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Freshness, accuracy and required-document coverage | Native already maps changed behavior and actual documentation rules, verifies changed/unchanged claims at intended version and preserves historical/generated/template purpose. |
+| KEEP | Counts, source/installed inventories and command/link truthfulness | Native distinguishes actual inclusion rule/version and configuration from runtime; unavailable auth/network or unrun command does not prove broken content. |
+| KEEP | STALE/BROKEN/DRIFT/MISSING versus UNVERIFIED and mandatory gate | Native already preserves exact caller labels, correct new-but-false claims, missing-required-content evidence and all mandatory unknowns, stronger than MISSING-only gate. |
+| REJECT | Default-branch/history fallback, mandatory trees and report row/count form | Caller owns scope and actual doc map; no inferred branch or universal documentation topology is needed. |
+| REJECT | All labels severity WARNING/MISSING-only progression and new Git command catalog | Native issue type is separate from mandatory/user impact; no semantic regression or locally unverified Git edge claims should be imported. |
+
+### Caller/support compatibility
+
+- dev-orchestrator Phase10 retains test-generator test/fixture ownership and meaningful executed assertions; Phase14 retains all mandatory documentation issue/unknown gates.
+- api-contract-sync retains IN_SYNC/DRIFT/UNVERIFIED and actual comparison coverage; pre-deploy API evidence and review conditional dispatch remain unchanged.
+- e2e-test-generator is explicitly assigned, not invented default dispatch; real/mock/mixed provenance and baseline/instrumentation authority remain intact.
+- scaffold-endpoint retains implemented/scaffold-only/advisory/incomplete modes; new collision check must allow intentional authorized edits, and fail-closed scaffolds never replace requested complete implementation.
+- debug-observer remains bounded observation with proposed fixes; no imported fixed-attempt architect dispatch.
+
+### Local claim evidence
+
+- Author independently read all6complete native/pinned source pairs; Sol pretriage used as candidate map only.
+- Pinned source2cba85502706c673209499690b01c248b136f0de; existing caller/support contracts reused/read with unchanged binding.
+- No new runtime/library/flag claims; no version-specific Playwright/router assertions or recipes transferred.
+- Changed-role exact tokens, all role fences/non-invocable metadata and four KEEP byte comparisons passed; no generated injector run.
+- Scoped git diff --check exit0; complete final2file diff inspected.
+- KEEP api-contract-sync retains pre-existing declared2632 tokens versus computed2631; byte-identical, no unrelated metadata edit.
+
+### UNVERIFIED / NOT RUN
+
+- No new API/flag/version guarantee selected. Negative-assertion proof and scaffold failure/collision checks are contract/evidence principles, not a tested browser/router behavior claim.
+- No live model, browser, server, database, integration or production execution.
+- Pre-existing KEEP api-contract-sync one-token metadata difference retained; only changed-role metadata exactness is claimed.
+
+### Integration verification
+
+Base: `442d952f998f2ac4e6efb5ae509d0263988b9728`. Verification result: **PASS**.
+
+| Role | Disposition | Body chars | Growth | tokens | SHA256 |
+|---|---|---:|---:|---:|---|
+| test-generator | KEEP | 9494 → 9494 | 0.0% | 2374 | `3a861e2ac599e5ebe1ea5d6b8f6d69d356d4cdfc5b4fef3f3a3d2aeaa92a86e5` |
+| e2e-test-generator | CHANGED | 9913 → 10320 | 4.11% | 2580 | `d1116904536b8d35644458676c9e1d653fdf25e7ad73c6454dc3876f994a6fb3` |
+| scaffold-endpoint | CHANGED | 5810 → 6726 | 15.77% | 1682 | `20a9a9daa6d670f67fb964d0c5c52ba01fa1c7d6f83bc066a55142a9d9b585b7` |
+| api-contract-sync | KEEP | 10525 → 10525 | 0.0% | 2632 | `f213fe78a1cc2924211cd24e89f7d7851f63fb376018b969d4657e54437baf63` |
+| debug-observer | KEEP | 12398 → 12398 | 0.0% | 3100 | `3bf8ea7d85211627dc70a2052af122c5f0d1d771b69516e2b9b50f92d4612a7f` |
+| docs-reviewer | KEEP | 8702 → 8702 | 0.0% | 2176 | `bcdeeaee3ed3b3a08fa2f2345ba294dbe79fd6353bae3018bff66e53c68cba57` |
+
+| Check | Exit | Evidence |
+|---|---:|---|
+| npm-test | 0 | ℹ tests 133; ℹ pass 133; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0; ℹ todo 0 |
+| codex-tests | 0 | ℹ tests 112; ℹ pass 112; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0; ℹ todo 0 |
+| counts | 0 | See /private/tmp/superkit-g6-20261110-counts.log |
+| whitespace | 0 | See /private/tmp/superkit-g6-20261110-whitespace.log |
+| github-about | 0 | See /private/tmp/superkit-g6-20261110-github-about.log |
+
+All 442 protected snapshot files unchanged; phase/stale-reference checks PASS; version 1.5.3. Full per-command logs and hashes: `/private/tmp/superkit-g6-20261110-verification.json`. The 112-test Codex run is a subset of the 133-test full suite, not additional unique tests.
+
+Acceptance: ACCEPTED — independent PASS; Astra source accepted. The final Git commit identity and branch-return observation are reported after execution; this record supplies the bounded source/local evidence.
+Independent review covered all six roles and selected documentation. A narrow CHANGELOG summary mismatch was corrected to describe the actual absence-assertion and fail-closed-scaffold additions; affected wording was re-read with source hashes unchanged.
+
+<!-- G6-end -->
+
+## Completed continuation scope
+
+All 31 G2–G6 roles received complete paired-source/caller triage (the initially
+absent red-blue counterpart was then created under the owner's explicit scope
+change). Fourteen existing role sources changed, one native role was created,
+and sixteen sufficient native roles remained byte-identical. Every group passed
+independent source review and the mandatory full/Codex/count/phase/About/
+whitespace checks on its frozen role hashes. At this source-acceptance checkpoint G2–G5 are signed and committed; the G6
+commit and checkout return are the remaining coordinator actions. Their exact
+Git identities and observed result are reported after execution.
+
+Current source: 83 skills and 66 protected native entries. Legacy baseline,
+previous evidence, Claude packages and owner WIP remain preserved. GitHub About
+is the sole remote metadata update, explicitly distinguishing development83 from
+published82. No source push, release/tag, package publication or merge was done.
+Source/local checks do not establish live model quality, other runtime versions,
+real transport/TLS or production behavior. Requested model routing remains
+separate from independent runtime-identity evidence.
 
 ## Later comparison
 
