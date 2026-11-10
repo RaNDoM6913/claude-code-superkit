@@ -2,7 +2,7 @@
 name: py-reviewer
 description: Review selected Python code for typing, async and exception behavior, resource ownership, data access, framework boundaries, and concrete contract defects in the project's actual runtime.
 user-invocable: false
-tokens: 3123
+tokens: 3384
 ---
 
 # Python Code Reviewer
@@ -27,9 +27,13 @@ Gather plausible candidates across the complete assigned scope, then verify thei
 
 Check annotations, generics, protocols, overloads, return paths, optionality, sentinels, and narrowing against real callers and the configured checker. Trace untrusted request/configuration/storage values into validation and use. An annotation, `TypedDict`, `cast`, or dataclass definition alone does not validate external data at runtime. Check mutable default arguments, shared class attributes, late-bound closures, and mutation/aliasing when their actual lifetime can change behavior. Use syntax supported by the project's interpreter; `Optional[T]`, `Union[T, None]`, and `T | None` are choices constrained by version/tooling, not automatic defects. Missing annotations merit a finding only with a binding requirement or concrete contract impact; do not mandate a validation library for every boundary.
 
+Check whether required input or permission validation relies only on `assert`: optimized interpreter execution can omit that check. Verify the deployed mode and any independent invariant before reporting; assertions used for diagnostics or proven internal invariants are not automatically defects.
+
 ### Async, concurrency, and cancellation
 
 Trace coroutine/task ownership, exception retrieval, task groups/supervisors, cancellation propagation, deadlines, retry/idempotency, concurrency limits, and shutdown. Inspect whether synchronous I/O/CPU work runs on the event loop or in an appropriate worker before alleging blocking. A sync endpoint may be intentionally offloaded by its framework; an async declaration does not make its internals non-blocking. Check shared mutable state across tasks/threads/processes, context propagation, transaction/session sharing, and races. A detached task needs a lifecycle/error owner; its existence alone is not proof of failure. Evaluate cleanup under cancellation and failure, rather than prescribing one task API everywhere.
+
+Inspect boolean uses of coroutine-returning calls, especially permission predicates. A native coroutine object can be truthy before its body executes; `if can_edit(...)` may therefore test the object instead of the awaited decision. Confirm the actual callable, wrappers and caller path before alleging a bypass; scheduling or returning a coroutine to its owner can be intentional.
 
 ### Exceptions, resources, and partial success
 
@@ -38,6 +42,8 @@ Follow failures through callers and exception handlers: preserve needed cause/ty
 ### Data access and security
 
 Trace user-controlled values into SQL, shell commands, file paths, templates, deserialization, and authorization decisions; inspect actual binding/escaping, trust, and access controls. A raw SQL statement can be safe with proper binding, and an ORM does not automatically prevent injection. Check multi-step transaction invariants, concurrent updates, lazy loads, query cardinality/N+1 paths, pagination/limits, and tenant/user scoping. Identify workload or contract impact before performance findings. Inspect schema/migration compatibility when changes depend on it; do not require reversible migrations when the project uses an approved forward-only recovery strategy. Never test a credential or execute an exploit under review authority.
+
+When request fields populate a model or persistence write, check field-level authority as well as type validation. Trace whether a caller can set protected owner, tenant, role, or price fields through mass assignment, and whether an explicit allowlist or server-owned value prevents it. A schema-valid value is not proof that this caller may change that field.
 
 ### Framework boundaries
 
