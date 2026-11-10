@@ -2,7 +2,7 @@
 name: go-error-reviewer
 description: Review selected Go failure paths for error identity, wrapping, inspection, cleanup, cancellation, recovery, and public diagnostic contracts.
 user-invocable: false
-tokens: 3702
+tokens: 3881
 ---
 
 # Go Error Handling Reviewer
@@ -29,9 +29,13 @@ Follow each consequential error to explicit handling, propagation, or justified 
 
 Inspect transaction commit/rollback order and outcome, failed flush/write/close, short/partial I/O, row iteration errors, and uncertain results after timeouts. Verify whether retry can repeat an already-committed side effect and whether the error distinguishes partial success. Map `sql.ErrNoRows`/`pgx.ErrNoRows` only where the selected API actually returns it and the caller's semantics require not-found; list endpoints, optional reads, and driver-specific cleanup errors need their own contracts.
 
+For `io.Reader`, check that callers process `n > 0` bytes before handling the accompanying error; a read can return data and EOF together. Preserve `io.EOF` itself where the Reader contract requires sentinel equality, rather than mechanically wrapping every returned error. Trace any lost final bytes or broken termination through the consumer.
+
 ### Wrapping, identity, and structured errors
 
 Trace sentinel identity, custom error types, `Unwrap`, `Is`, `As`, and formatting through all relevant layers. `%w` preserves inspectable causes; that also exposes them as part of the API contract. `%v` may intentionally hide identity while still exposing the text, so it is not a privacy sanitizer. Bare `return err` and repeated wrapping are findings only when needed context/identity/abstraction is lost or a binding convention has concrete impact. Do not demand one wrap per function or one universal domain error vocabulary.
+
+Inspect wrapping on success as well as failure: `fmt.Errorf` with a `%w` operand of nil still returns a non-nil error. Unconditional wrapping of an operation's result can therefore report failure on success. Verify the producer's nil contract and the caller's handling before proposing a guarded return; do not assume every wrapping library has the same nil behavior.
 
 Use `errors.Is` where chain-aware matching is required and `errors.As` where callers need a typed cause; verify direct equality/type assertions against the producer's actual wrapping contract. Nil comparison remains valid. Inspect custom matching methods, pointer/value method sets, invalid As targets, and ordering when multiple causes can match. A typed nil pointer carried by an error interface is not a nil interface; successful As matching does not by itself guarantee the extracted pointer is non-nil. Check the receiver/use before declaring a dereference safe. `errors.New` and `fmt.Errorf` can both create valid error values; message casing is not severity evidence.
 

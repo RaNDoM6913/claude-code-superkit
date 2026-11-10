@@ -355,7 +355,7 @@ The Git check never grants permission, opaque commands remain unassessed, and St
 
 The [G1 Codex role comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) records focused updates for consequential false comment guarantees, silent-failure runtime traps, and optional Go analyzer diagnostics. Existing native report contracts and review authority remain in place; local runtime probes and source checks do not establish model quality. Counts and published artifacts are unchanged.
 
-The [continued Codex comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers G2's general and language reviewers, preserving sufficient native roles unchanged and recording selective refinements, local evidence limits and caller compatibility. This source work does not change published artifacts or component counts.
+The [continued Codex comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers G2–G3's general/language, Go-specialist and data/migration reviewers, preserving sufficient native roles unchanged and recording selective refinements, local evidence limits and caller compatibility. This source work does not change published artifacts or component counts.
 
 Stop enumerates Git config keys only and skips both diffs with UNVERIFIED if any clean/process filter is configured, including unused/global Git LFS drivers, to avoid running conversion programs. It captures no filter values or changes Git config; filter-free repositories retain the whitespace check and one continuation.
 

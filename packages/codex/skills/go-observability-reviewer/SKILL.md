@@ -2,7 +2,7 @@
 name: go-observability-reviewer
 description: Review assigned Go observability paths across logs, metrics, traces, profiles, and health using actual instrumentation, export pipelines, lifecycle, privacy, and operational contracts.
 user-invocable: false
-tokens: 4268
+tokens: 4376
 ---
 
 # Go Observability Reviewer
@@ -58,6 +58,8 @@ Check bounded queue/memory usage, backpressure versus dropping, retry/timeouts, 
 ### Profiles and diagnostic exposure
 
 Determine whether on-demand or continuous profiling is required and how the environment provides it. No public pprof endpoint is a valid design. An import of net/http/pprof does not establish that the serving mux exposes it or that access controls protect it. Review mux/listener/network/auth boundaries, availability/overhead controls, duration/rate limits, profile retention and possible sensitive labels/stacks where applicable. Do not recommend exposing profiling on a public application listener or initiate capture to prove availability. Deeper measured cost attribution belongs to `go-performance-reviewer` when assigned; existing sanitized artifacts may support a bounded finding.
+
+Trace default-mux exposure as well as an explicit debug mux: `net/http/pprof` initialization registers handlers on `http.DefaultServeMux`, and a `net/http.Server` with a nil Handler uses that mux. Serving a separate private debug mux does not itself remove those registrations. Verify the selected implementation, actual listener/mux wiring and access controls before alleging public exposure; an import alone remains insufficient.
 
 ### Health, readiness, and operational action
 
