@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex comparison, G5 — planning/acceptance:** refine `architect` to distinguish implementation, design, requirement and unresolved-evidence causes before proposing redesign; refine `evaluator` to verify that a passing test actually exercises and asserts its assigned criterion. Plan-checker, critic, goal-verifier and reality-checker remain unchanged; native verdicts, escalation ownership and evidence limits are preserved.
+
 - **Codex comparison, G4 — security/audit/readiness:** refine security automation trust-path review, backend concurrency/abuse checks, frontend untrusted rendering/navigation and compiler-check limits, and dependency manifest/lock-result coverage. Infrastructure, health and pre-deploy reviewers remain unchanged. After the owner explicitly authorized creating its missing counterpart, add native `red-blue-auditor` with read-only Red / Blue / Auditor phases, preserve it through conversion, and update the source catalog from 82 to 83 skills. No automatic caller or published artifact is changed.
 
 - **Codex comparison, G3 — Go specialists and data:** refine `go-error-reviewer` for nil wrapping and partial-read/EOF contracts and `go-observability-reviewer` for profiling-handler registrations reachable through a default HTTP mux. Local installed Go source supports the added mechanisms; actual application impact remains evidence-bound. Concurrency, performance, database and migration reviewers remain unchanged after full comparison. Native caller contracts and protected references stay intact.

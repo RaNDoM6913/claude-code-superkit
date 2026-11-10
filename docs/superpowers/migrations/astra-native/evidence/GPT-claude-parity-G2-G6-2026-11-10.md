@@ -1,6 +1,6 @@
 # Codex / Claude role comparison — G2–G6
 
-Date: 2026-11-10. Current checkpoint: G4 — ACCEPTED — independent PASS; Astra source accepted.
+Date: 2026-11-10. Current checkpoint: G5 — ACCEPTED — independent PASS; Astra source accepted.
 
 ## Authorized outcome and evidence boundaries
 
@@ -63,7 +63,7 @@ No compaction was reported.
 | G2 | code-reviewer, go-reviewer, ts-reviewer, py-reviewer, rs-reviewer | ACCEPTED — independent PASS; Astra source accepted |
 | G3 | Go concurrency/error/performance/observability; database and migration | ACCEPTED — independent PASS; Astra source accepted |
 | G4 | security, backend/frontend/infra audits, dependencies, health, pre-deploy, red-blue | ACCEPTED — independent PASS; Astra source accepted |
-| G5 | architect, plan-checker, critic, evaluator, goal-verifier, reality-checker | Not started |
+| G5 | architect, plan-checker, critic, evaluator, goal-verifier, reality-checker | ACCEPTED — independent PASS; Astra source accepted |
 | G6 | test/E2E generation, endpoint scaffolding, API sync, debug, docs review | Not started |
 
 <!-- G2-start -->
@@ -477,6 +477,131 @@ Acceptance: ACCEPTED — independent PASS; Astra source accepted. The final Git 
 Independent review covered all eight roles and integration paths. Its single documentation finding (obsolete security domain count in INSTALL.md) was corrected and re-read; no semantic source change or suite repetition was required.
 
 <!-- G4-end -->
+
+<!-- G5-start -->
+## G5 — ACCEPTED — independent PASS; Astra source accepted
+
+Author record: `/private/tmp/superkit-g5-20261110-astra.md`.
+Local facts: `/private/tmp/superkit-g5-20261110-local-facts.md`.
+
+### architect — CHANGED
+
+Native evaluates options but does not explicitly distinguish DESIGN versus IMPLEMENTATION versus REQUIREMENT versus unresolved cause before recommending redesign.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Failed-approach root-cause distinction | dev-orchestrator ESCALATE consumes architecture reconsideration after failed work; a local implementation failure should not automatically invalidate an adequate design. Native debug-observer does not directly dispatch architect. |
+| KEEP | Minimal adequate design and conditional alternatives | Native already requires actual outcome, constraints, current-flow evidence, viable options only, smallest adequate approach and rollback/acceptance verification. |
+| KEEP | Consequential Astra ownership and native Architecture Review report | Native explicitly preserves required Astra acceptance and separates COMPLETE design evidence from built/validated implementation; current consumer needs no new severity report. |
+| REJECT | Fixed >=1 alternative, ONE-WAY taxonomy and ADR mandate | The Claude file itself conflicts between no alternatives quota and done-only baseline+alternative; source/API changes need actual reversibility analysis, not a universal category or new mandatory ADR. |
+| REJECT | Claude numerical confidence, default scopes, severity/report replacement | Would replace native evidence status and recommendation contract without a demonstrated need. |
+
+### plan-checker — KEEP
+
+Native covers requirement omissions, unrequested scope, concrete tasks, planned-created paths, current symbols, dependency order, migration/recovery, tests/docs and consequential assumptions.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Requirement→planned work→observable check and feasibility | Native covers requirement omissions, unrequested scope, concrete tasks, planned-created paths, current symbols, dependency order, migration/recovery, tests/docs and consequential assumptions. |
+| KEEP | PASS/REVISE/BLOCK and unresolved mandatory evidence | Native already separates local correction from unavailable decision/authority/capability and does not let optional warnings determine verdict. |
+| KEEP | Recheck affected assumptions and prior unresolved issues | Native preserves valid evidence and bounds correction loops; forced full repeated validation is unnecessary. |
+| REJECT | Mandatory eight-row report, Pn/Cn numbering, automatic latest-file conventions | Caller-native report already has requirement coverage and next-action fields; fixed formatting and unused migration-number rules are not universal contracts. |
+| REJECT | Automatic USER blocker approval flow and numeric confidence | Native task authority and consequential Astra acceptance must remain controlling; an external assumption is not itself an instruction to ask the user again. |
+
+### critic — KEEP
+
+Native already scales to consequences, traces actual controls and findings, marks coverage, and avoids inventing infrastructure or architecture requirements.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Cross-cutting security/maintainer/operations and gap review | Native already scales to consequences, traces actual controls and findings, marks coverage, and avoids inventing infrastructure or architecture requirements. |
+| KEEP | Prior findings, verified evidence and native verdict/progression | Unresolved blockers survive by reference; mandatory unknown/acceptance prevents APPROVE; CONCERN explicitly states whether progression is blocked. |
+| KEEP | Optional labeled predictions and evidence-driven severity | Native already rejects hypothesis-as-defect and arbitrary severity/probability. |
+| REJECT | Mandatory three predictions and automatic CRITICAL for any unmet task requirement | Adds quota/inflation; native separates unmet acceptance from supported severe defects. |
+| REJECT | USER/FIX resolver and compulsory raw operational IDs/report replacement | Owner/task authority and existing Progression/Astra gates control decisions; diagnostic data must remain policy-safe and native report intact. |
+
+### evaluator — CHANGED
+
+Native separates behavior from build and missing evidence, but does not explicitly require checking that a green test actually invokes/asserts the criterion rather than being skipped/filtered or passing a different path.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Passing-test evidence must exercise and assert the required behavior | Concrete false acceptance mechanism from the Claude rework; preserve criterion-specific evidence and no new test quota. |
+| KEEP | Every criterion, explicit PASS/FAIL/UNVERIFIED/N/A and evidence scoring | Native already prevents missing evidence from becoming zero/failure/pass and protects MUST applicability and thresholds. |
+| KEEP | Bounded local correction versus cause-specific escalation | Native routes design, contract, authorization, tool and external capability issues appropriately and retry exhaustion cannot lower acceptance. |
+| REJECT | Invent missing defaults and score unavailable execution as partial | Native requires usable criteria and explicitly leaves missing evidence unscored; contract owner decides absent thresholds rather than implicit7/MUST. |
+| REJECT | Mandatory every-criterion rerun and localhost/state-change command authority | Native scoped reuse is stronger; a Test Method or local host is not authorization for mutations/services. Preserve caller-owned inspected checks. |
+| REJECT | Claude report/resolver/numerical-confidence replacement | Existing Overall and Recommendation fields match dev-orchestrator and separate defect from evidence without new enums. |
+
+### goal-verifier — KEEP
+
+Native already traces real entry/config/dependencies/provider/results and distinguishes static, fixture/local and live observation with goal-required levels.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Goal-backward EXISTS/SUBSTANTIVE/WIRED/DATA-FLOW | Native already traces real entry/config/dependencies/provider/results and distinguishes static, fixture/local and live observation with goal-required levels. |
+| KEEP | Unknown versus observed contradiction and inapplicability | Native prevents missing access/evidence from becoming failure or remediation, protects mandatory capability from N/A and requires actual goal contract. |
+| KEEP | Native NEEDS-ATTENTION/NEEDS-REMEDIATION route and evidence provenance | Bounded fixes/evidence gaps versus fundamental mismatch already match caller phases; implementer summary is explicitly insufficient. |
+| REJECT | Mandatory symbol ladder, resolver taxonomy, automatic propagation of unknown levels | Could overconstrain independently verifiable facts or documentation goals; native task-specific applicability and evidence sufficiency are stronger. |
+| REJECT | Forced full rerun, default scopes, Claude icons/report/numeric confidence | No demonstrated gap warrants replacing native report or unchanged-evidence reuse. |
+
+### reality-checker — KEEP
+
+Native already separates contradictions from missing verification, limits readiness to agreed environment/scope and forbids production requirements on prototypes.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Claim-specific VERIFIED/FAILED/UNVERIFIED/N/A and actual readiness bar | Native already separates contradictions from missing verification, limits readiness to agreed environment/scope and forbids production requirements on prototypes. |
+| KEEP | Behavior/test/live API/UI and risk-specific evidence | Native already requires relevant execution/coverage and provenance, distinguishes fixture/local/staging/production, rejects summary/hedge/percentage as proof and redacts data. |
+| KEEP | READY/NEEDS WORK/BLOCKED and required acceptance | Native preserves actual capability/authorization blockers, bounded correction and no implied publication permission. |
+| REJECT | Universal async real-queue/migration up-and-down/live recipe | Verification must follow promised scope and task authority; no broad state-changing execution grant or paired-down rule. |
+| REJECT | Forced repeat-all checks, score-based confidence and Claude report | Native bound-evidence reuse and qualitative identity/confidence reporting are sufficient; no new mandatory format. |
+
+### Caller/support compatibility
+
+- dev-orchestrator consumes exact architect recommendation, plan-checker PASS/REVISE/BLOCK, evaluator PROCEED/ITERATE/ESCALATE, goal-verifier PASS/NEEDS-ATTENTION/NEEDS-REMEDIATION and critic APPROVE/CONCERN/BLOCK; all unchanged.
+- dev-orchestrator Phase 8 routes design or consequential acceptance to architect/Astra and requirement decisions to the contract owner. Native debug-observer does not directly dispatch architect; no new integration is claimed.
+- reality-checker remains requested-readiness role, not invented direct default dispatch. Existing Astra/consequential acceptance and mandatory unknowns remain.
+
+### Local claim evidence
+
+- Author independently read all6complete native/pinned pairs; Sol pretriage reused as candidate map, not blind authorship.
+- Pinned source2cba85502706c673209499690b01c248b136f0de; caller contracts read/reused with prior unchanged binding.
+- No new runtime/library/flag claim. Bounded source self-review preserves all native caller gate enums, criteria and acceptance ownership.
+- Changed-role exact tokens, all role fences/non-invocable metadata and four KEEP byte comparisons passed.
+- Independent review corrected support-evidence wording only: Phase 8 sends design/consequential acceptance to architect/Astra and requirements to contract owner. Source hashes unchanged; no new test run needed for this report correction.
+
+### UNVERIFIED / NOT RUN
+
+- No new tool/library assertions, tests or live-model evaluation. Source semantics and consumer compatibility only.
+
+### Integration verification
+
+Base: `6ef57939070f9767584d3686ecd532434579e15d`. Verification result: **PASS**.
+
+| Role | Disposition | Body chars | Growth | tokens | SHA256 |
+|---|---|---:|---:|---:|---|
+| architect | CHANGED | 3780 → 4239 | 12.14% | 1060 | `48be309d72f3ae28a5dfcb58abeb315181755a5c575e28916bbef7f97fc7df3e` |
+| plan-checker | KEEP | 4041 → 4041 | 0.0% | 1010 | `78d90f29cdefbfc1d8d474879b322b0936625250c15d335e50720532199aa99e` |
+| critic | KEEP | 4374 → 4374 | 0.0% | 1094 | `76626f2d473c0327d485667e955fe76cbee153ff6f1da3abf1dd6360fb2f9560` |
+| evaluator | CHANGED | 4886 → 5361 | 9.72% | 1340 | `56cb111cc3ce3ad9dc18ad7c42d6377d770be08ae92fcfe588300148fac89224` |
+| goal-verifier | KEEP | 3982 → 3982 | 0.0% | 996 | `3857f07f96d34b55eef6187196479075f04e354b55a75dd6095bc04ce4a59b1b` |
+| reality-checker | KEEP | 4661 → 4661 | 0.0% | 1165 | `76d2ab209e8dc788dac99a7607a20d37a0ad2984ab4c5ee809eebc25b0e8c26e` |
+
+| Check | Exit | Evidence |
+|---|---:|---|
+| npm-test | 0 | ℹ tests 133; ℹ pass 133; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0; ℹ todo 0 |
+| codex-tests | 0 | ℹ tests 112; ℹ pass 112; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0; ℹ todo 0 |
+| counts | 0 | See /private/tmp/superkit-g5-20261110-counts.log |
+| whitespace | 0 | See /private/tmp/superkit-g5-20261110-whitespace.log |
+| github-about | 0 | See /private/tmp/superkit-g5-20261110-github-about.log |
+
+All 436 protected snapshot files unchanged; phase/stale-reference checks PASS; version 1.5.3. Full per-command logs and hashes: `/private/tmp/superkit-g5-20261110-verification.json`. The 112-test Codex run is a subset of the 133-test full suite, not additional unique tests.
+
+Acceptance: ACCEPTED — independent PASS; Astra source accepted. The final Git commit identity and branch-return observation are reported after execution; this record supplies the bounded source/local evidence.
+Independent review covered all six roles and the selected documentation. Its narrow evidence wording finding was corrected: design/consequential acceptance routes to architect/Astra, requirements to the contract owner. The actual caller and frozen role sources were unchanged; no suite repetition was required.
+
+<!-- G5-end -->
 
 ## Later comparison
 

@@ -2,7 +2,7 @@
 name: architect
 description: Assess architecture choices, feasibility, and trade-offs for structural changes, integrations, or consequential design decisions. Use before implementation or when an approach needs reconsideration.
 user-invocable: false
-tokens: 945
+tokens: 1060
 ---
 
 # Architect
@@ -22,6 +22,7 @@ Follow explicit task model/effort routing. Sol may gather evidence and compare b
 ## Assessment
 
 - Restate the outcome and hard constraints. Trace relevant existing data/control flow and invariants the change must preserve.
+- When reconsidering a failed approach, distinguish an implementation defect, a design that cannot satisfy the requirement, a conflicting requirement, and an unresolved cause using the supplied failure evidence. Preserve an adequate design when a bounded implementation correction suffices; otherwise name the design/contract decision or smallest check that would distinguish the remaining causes. Repeated failure alone is not proof that redesign is needed.
 - Compare viable alternatives when a real choice exists, including extending the existing design where appropriate. Do not manufacture alternatives to meet a quota.
 - Evaluate trade-offs that affect this task: correctness, compatibility, operational cost, failure recovery, migration, testability, and complexity. Support performance claims with measurements or label them estimates.
 - Recommend the smallest adequate approach. Explain its boundaries, dependencies, migration/recovery path, and how acceptance criteria will be verified. Name unresolved assumptions that could change the decision.
