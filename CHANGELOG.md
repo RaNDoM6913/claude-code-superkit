@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex comparison, G4 — security/audit/readiness:** refine security automation trust-path review, backend concurrency/abuse checks, frontend untrusted rendering/navigation and compiler-check limits, and dependency manifest/lock-result coverage. Infrastructure, health and pre-deploy reviewers remain unchanged. After the owner explicitly authorized creating its missing counterpart, add native `red-blue-auditor` with read-only Red / Blue / Auditor phases, preserve it through conversion, and update the source catalog from 82 to 83 skills. No automatic caller or published artifact is changed.
+
 - **Codex comparison, G3 — Go specialists and data:** refine `go-error-reviewer` for nil wrapping and partial-read/EOF contracts and `go-observability-reviewer` for profiling-handler registrations reachable through a default HTTP mux. Local installed Go source supports the added mechanisms; actual application impact remains evidence-bound. Concurrency, performance, database and migration reviewers remain unchanged after full comparison. Native caller contracts and protected references stay intact.
 
 - **Codex comparison, G2 — general/language review:** selectively refine `code-reviewer`, `ts-reviewer`, `py-reviewer` and `rs-reviewer` for required-behavior/test protection, compiler coverage and write effects, concrete Python failure mechanisms, and untrusted-input/diagnostic-data review. `go-reviewer` remains unchanged after comparison. Native contracts and counts remain intact; [continued evidence](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) records triage, local verification and source acceptance limits.

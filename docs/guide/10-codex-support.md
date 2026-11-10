@@ -51,7 +51,7 @@ From your target project's Git directory:
 bash /path/to/claude-code-superkit/setup.sh --codex-only
 ```
 
-This installs 82 Codex skills without Claude prerequisites, plugins or writes.
+This installs 83 Codex skills without Claude prerequisites, plugins or writes.
 Skills are stored under `.codex/skills` and exposed through relative links under
 `.agents/skills`. Re-run the same command after refreshing the Superkit checkout:
 pristine managed skills (including recognized stock v1.5.2 files) and hook assets
@@ -153,5 +153,5 @@ and test/lint/benchmark utilities use available project tools.
 Codex scans project `.agents/skills/` and user `~/.agents/skills/`. After
 installation, open `/skills` or type `$` in Codex to inspect available skills.
 Restart if changes do not appear and resolve any installer discovery conflicts.
-The packaged catalog contains 82 skills; discovery does not establish live
+The packaged catalog contains 83 skills; discovery does not establish live
 workflow behavior. See [official discovery documentation](https://learn.chatgpt.com/docs/build-skills).

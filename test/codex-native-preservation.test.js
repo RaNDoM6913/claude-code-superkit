@@ -41,6 +41,7 @@ const nativeSkills = [
   'health-checker',
   'dependency-checker',
   'security-scanner',
+  'red-blue-auditor',
   'audit-infra',
   'audit-orchestrator',
   'audit-backend',

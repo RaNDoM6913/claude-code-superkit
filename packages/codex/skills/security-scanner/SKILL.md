@@ -2,7 +2,7 @@
 name: security-scanner
 description: Review selected code and configuration for evidence-backed security vulnerabilities across relevant trust boundaries. Trace candidates to practical impact and report coverage gaps without treating regex matches or a generic checklist as proof.
 user-invocable: false
-tokens: 3087
+tokens: 3299
 ---
 
 # Security Scanner
@@ -64,6 +64,8 @@ Apply these to actual scope; retain domain-level coverage and justified N/A rath
 17. **Files and uploads.** Check traversal, archive extraction, filename handling, content/size validation, storage/serving permissions, signed URL scope/expiry and executable content. MIME declarations alone are untrusted. Assess EXIF/location privacy where required; signed URLs or metadata stripping are not universal substitutes for authorization.
 
 18. **Account enumeration and side channels.** Assess response content, status/timing and recovery against actual privacy/abuse requirements. Use appropriate constant-time primitives for secret comparisons where relevant. Generic login text alone does not prove resistance; public account names may intentionally be discoverable.
+
+19. **CI and agent automation trust.** Where assigned configuration executes commands or grants tools, trace who can alter its inputs, scripts, dependencies and permissions. Check untrusted event text entering shell commands, untrusted changes running with privileged tokens, artifact promotion across trust levels, and runner isolation. For hooks, tool-server launchers and loaded agent instructions, establish the actual runtime's approval, blocking and data-access contracts before alleging a bypass; another product's flags or exit codes are not evidence. Inspect whether untrusted content can change executable configuration, widen authority or cause secret-bearing output. Broad permissions, a prompt phrase or an unpinned tool alone do not establish the complete attack path. Review these paths statically without launching hooks or servers.
 
 ## Evidence, findings, and status
 

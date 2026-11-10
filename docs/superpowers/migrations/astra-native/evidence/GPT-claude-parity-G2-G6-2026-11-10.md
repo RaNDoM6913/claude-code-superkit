@@ -1,6 +1,6 @@
 # Codex / Claude role comparison — G2–G6
 
-Date: 2026-11-10. Current checkpoint: G3 — ACCEPTED — independent PASS; Astra source accepted.
+Date: 2026-11-10. Current checkpoint: G4 — ACCEPTED — independent PASS; Astra source accepted.
 
 ## Authorized outcome and evidence boundaries
 
@@ -8,7 +8,7 @@ The owner's continuation instruction authorizes G2–G6 in one continuous run,
 superseding the previous stop after each group. Keep one verified signed commit
 per group, then return the shared checkout to `claude/opus-5-5-agents`. G1 is
 already accepted in `c34b3136d9a81b6fb8e4d43c32193734576cc832` and is not repeated.
-The work covers the remaining 31 roles of the supplied 34-role list.
+The work covers the remaining 31 roles of the supplied 34-role list. The later owner instruction to create missing counterparts authorizes the G4 red-blue addition and its necessary registry/count updates.
 
 Working branch: `codex/astra-native-hardening`. Read-only Claude comparison
 snapshot: `2cba85502706c673209499690b01c248b136f0de`, using `git show` without
@@ -33,17 +33,22 @@ protected-source preservation and independent source review. Existing coverage,
 verdict, confidence and authority contracts remain binding. Source/structural
 tests do not establish model quality.
 
-Claude packages, `native-skills.txt`, `legacy-baseline.json`, the inactive
+Claude packages, `legacy-baseline.json`, the inactive
 historical ledger, all previous evidence and owner WIP are preserved. The
 initial continuation snapshot contains 417 files, including accepted G1;
 accepted group sources are added to that local preservation inventory as work
 continues. This is the sole current G2–G6 checkpoint/evidence record; historical
-research status is not promoted. Counters and version remain unchanged.
+research status is not promoted. G2–G3 kept counters unchanged. During G4 the owner explicitly authorized creating the absent `red-blue-auditor`; this supersedes the fixed-count and unchanged-manifest constraints only for that new native source and its registration. Current source count becomes 83, native registry 66; version and immutable legacy baseline stay unchanged.
 
-No release, tag, push, publication, merge, branch/worktree cleanup or change to
+No release, tag, push, package/release publication, merge, branch/worktree cleanup or change to
 `/Users/ivan/dev/superkit-opus55` is included. Owner WIP remains excluded from
 every explicit-path commit: root `AGENTS.md`, `docs/npm/`, `docs/research/`, and
 `market-workstation-starter-plan-2026-09-16.zip`.
+
+G4 also updates the GitHub About count required by `CLAUDE.md`: 83 skills in
+development source, explicitly retaining 82 for published v1.5.3. This metadata
+write was read back; no source push or release publication occurred. Exact
+readback: `/private/tmp/superkit-g4-20261110-github-description-updated.json`.
 
 Local detailed records use `/private/tmp/superkit-g<N>-20261110-*`; each group
 below records the durable decisions, source identity and results. Context
@@ -57,7 +62,7 @@ No compaction was reported.
 |---|---|---|
 | G2 | code-reviewer, go-reviewer, ts-reviewer, py-reviewer, rs-reviewer | ACCEPTED — independent PASS; Astra source accepted |
 | G3 | Go concurrency/error/performance/observability; database and migration | ACCEPTED — independent PASS; Astra source accepted |
-| G4 | security, backend/frontend/infra audits, dependencies, health, pre-deploy, red-blue | Not started |
+| G4 | security, backend/frontend/infra audits, dependencies, health, pre-deploy, red-blue | ACCEPTED — independent PASS; Astra source accepted |
 | G5 | architect, plan-checker, critic, evaluator, goal-verifier, reality-checker | Not started |
 | G6 | test/E2E generation, endpoint scaffolding, API sync, debug, docs review | Not started |
 
@@ -310,6 +315,168 @@ All 422 protected snapshot files unchanged; phase/stale-reference checks PASS; v
 
 Acceptance: ACCEPTED — independent PASS; Astra source accepted. The final Git commit identity and branch-return observation are reported after execution; this record supplies the bounded source/local evidence.
 <!-- G3-end -->
+
+<!-- G4-start -->
+## G4 — ACCEPTED — independent PASS; Astra source accepted
+
+Author record: `/private/tmp/superkit-g4-20261110-astra.md`.
+Local facts: `/private/tmp/superkit-g4-20261110-local-facts.md`.
+
+### security-scanner — CHANGED
+
+Explicit CI and agent-automation trust paths without importing Claude runtime keys, flags or policy.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Untrusted CI input and privileged execution | Native supply-chain domain covers artifacts but not explicit event/script/runner privilege flows. |
+| TAKE | Agent hooks/tools/prompts as executable trust boundaries | Inspect actual runtime/configuration and actor-to-action path; no Claude exit or permission contract imported. |
+| KEEP | Existing18 security domains, evidence and secrets | Native already covers application source-to-sink, runtime contracts, redaction and mandatory unknowns. |
+| REJECT | Claude36-check report and fixed numerical coverage | Preserve native domains/report and assigned scope; no metadata/tooling migration. |
+| REJECT | Secret prefix mask and scanner command/exit recipes | Native collection redaction is stronger; no unsafe partial secrets or unverified tool flags. |
+| REJECT | Automatic critical per pattern/accepted-risk suppression | Evidence and impact decide; policy exceptions do not erase unresolved actual conditions. |
+
+### audit-backend — CHANGED
+
+Add concrete concurrency and abuse-rate checks within existing domain numbering.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Shared-state and read-modify-write interleavings | Native transaction/error domains do not explicitly name cross-request/task state races. |
+| TAKE | Abuse-prone operation rate controls | Extend existing resource domain to bounded rate/cost plus actual gateway controls; absence of per-handler limiter is not a defect. |
+| KEEP | Route/caller/auth/data/validation coverage | Native already uses actual controls, bounds, privacy and reachability rather than literal markers. |
+| REJECT | Renumbered Claude12 checks and PASS/WARN-only unknowns | Preserve native12 domains and explicit UNKNOWN/N/A plus mandatory gates. |
+| REJECT | Automatic public-route list and fixed severity | Actual contract controls authorization and outcome; route names alone are insufficient. |
+| REJECT | First5 sites, marker/test quotas and dropped coverage | Native full assigned coverage and consequence-based findings remain. |
+
+### audit-frontend — CHANGED
+
+Add untrusted render/navigation paths and compiler coverage/write-effects caveat while preserving12checks.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | HTML/template and navigation trust boundaries | Explicitly trace untrusted rendering/redirect destinations and installed controls; no blanket same-origin or raw-sink rule. |
+| TAKE | Compiler coverage and noEmit metadata effects | Reuse G2 installed TypeScript source/API evidence; conditional selected-tool/configuration verification, no exact safe flag recipe. |
+| KEEP | State/cache/lifecycle/accessibility/configuration and source-vs-runtime | Native already covers most rework and keeps rendered/interactive evidence separate. |
+| REJECT | Mandatory sampling and fixed hit limits | No sample can certify full assigned scope; native explicit partial coverage is retained. |
+| REJECT | Framework/style/dependency blanket WARNs | Intentional defaults, native forms, inline keys, public keys and library choices require concrete consequences. |
+| REJECT | Claude report/status/number remapping | Keep native12check identities, UNKNOWN/N/A and mandatory acceptance. |
+
+### audit-infra — KEEP
+
+Native already covers concrete infrastructure rework with stronger evidence and authority guards.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Secrets/container/network/CI/recovery/observability | All substantive source families are represented with actual composition and operational evidence. |
+| KEEP | Scanner provenance and uncertainty | Original exits, effects, authoritative advisories and UNKNOWN are already explicit. |
+| REJECT | Blind exclusion of docs/tests or untracked env policy | Native scoped safe redaction and contextual secret classification avoid blind spots. |
+| REJECT | Unconditional outdated/nonroot/CORS/backup WARNs | Native binds findings to actual policy, exposure and live-state uncertainty. |
+| REJECT | Claude statuses, missing mandatory check demotion and exact commands | No caller-contract replacement or unverified runtime recipe needed. |
+
+### dependency-checker — CHANGED
+
+Make manifest/lock agreement and expected-package result coverage explicit without adding command recipes.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Manifest/lock drift | Compare required graph with selected resolution; existing non-mutating check only, no resolving project to manufacture evidence. |
+| TAKE | Omitted results are not freshness proof | Check expected roots/packages and successful data availability; missing entries stay unresolved even with zero exit. |
+| KEEP | Affected versus reachable and registry/privacy authority | Native already separates upstream/project severity and captures side effects, private inventories and exact versions. |
+| REJECT | Tool-specific exit/flag/registry recipes without new qualification | No blanket CLI recipes or unconditional current-command-only citation rule. |
+| REJECT | Fixed patches/minors/majors ordering and automatic severity | Native smallest verified remediation, target compatibility and policy take precedence. |
+| REJECT | New report/NONEVALUATED labels and scope rules | Preserve native report, coverage and Progression. |
+
+### health-checker — KEEP
+
+Native already improves source command truth, component scope and required missing-evidence handling.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Actual configured checks and command exits | Native distinguishes compilation, static analysis, testing, source and deployment evidence. |
+| KEEP | Bounded effects, reusable evidence and explicit mandatory gaps | Already stronger than forced9checks or command reruns. |
+| REJECT | Always all9, TODO-count health and recent-doc heuristic | Caller scope and actual health contracts determine checks. |
+| REJECT | go vet as compilation and default250KB | Native separates evidence and requires actual artifact budget. |
+| REJECT | Claude status/command recipe replacement | No substantive gap; preserve native dashboard/gates. |
+
+### pre-deploy-validator — KEEP
+
+Native already preserves9checks and blocks any mandatory unknown, beyond Claude zero-FAIL rule.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| KEEP | Release scope and all required evidence | Native nine-domain matrix and READY condition already cover source intent. |
+| KEEP | Command/script/secret/side-effect safety | Native protects scanner outputs and setup hooks without unsafe raw reads. |
+| REJECT | Only1/3/4 missing evidence blocks; WARN never blocks | Native mandatory criteria must not be weakened. |
+| REJECT | Default command/budget/down-file conventions | Actual release configuration and recovery strategy win. |
+| REJECT | Claude current-run-only evidence/report changes | Native bound reuse and report remain sufficient. |
+
+### red-blue-auditor — CREATED
+
+Create lean native static Red/Blue/Auditor role for agent-runtime config; no inherited Codex report exists.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Actor→input→control→impact and linked attack chains | Preserve meaningful adversarial review without running exploit paths. |
+| TAKE | Blue control validation and defense matrix | Test cited protections against each static trigger; effective control, actual gap and unknown remain distinct. |
+| TAKE | Auditor reconciliation and honest coverage | Deduplicate root causes/chains, retain source/runtime limits, required unknowns and prior findings. |
+| TAKE | Native read-only/report/authority contract | New role follows neighboring native reviewers; owner explicitly authorized creating the missing counterpart. |
+| REJECT | Claude runtime exit/permission/launcher claims | Selected runtime version and actual load/approval rules must be verified; no borrowed product semantics. |
+| REJECT | Raw scanner recipe, partial secret prefix and numeric RiskScore | No unverified flags/exits, unsafe evidence mask or unsupported scoring; optional scanner only after effects/output inspection. |
+
+### Caller/support compatibility
+
+- audit-orchestrator preserves native domain statuses/counts and mandatory unknowns; no12check renumbering or missing-evidence demotion.
+- dev/review orchestrators reuse source-review and health/predeploy contracts; role report names, severity/confidence/Progression unchanged.
+- Security/dependency/infra roles already support bound report reuse; no new scanner or external action authority.
+- red-blue is a newly authorized native role with no existing caller envelope; align native reports. Coordinator owns manifest/catalog and preservation tests; no automatic runtime invocation.
+
+### Local claim evidence
+
+- Full seven existing native/Claude pairs read; predeploy native reused from full G3 read and pinned counterpart read.
+- Red-blue pinned actual extras/agent.md read; native/catalog/manifest absence and converter core-only mapping checked read-only.
+- No new flags/exits/library assertions beyond already checked G2 noEmit/solution-root behavior; other additions are source-to-control review criteria.
+- Audit-orchestrator read fully; native role status/count separation and mandatory UNKNOWN handling compatible. Existing report templates unchanged.
+- G2 TypeScript5.9.2 source/API evidence reused for noEmit metadata and empty-root coverage only; no standalone tsc or new checker invocation.
+- All changed/created role token declarations and fences validated; three KEEP files byte-identical. Scoped tracked whitespace check exit0; new-file no-index whitespace check emitted no errors and exit1 for differing files.
+- New red-blue body10024chars/2506approx tokens versus pinned Claude body~20000chars; growth N/A because no native baseline. It carries Red actor/control/path analysis, Blue matrix and Auditor reconciliation without imported runtime claims/scanner recipe/numeric score.
+
+### UNVERIFIED / NOT RUN
+
+- New red-blue source creation does not establish installed availability or runtime behavior; coordinator owns manifest/catalog/preservation-test and83-count integration.
+- No new scanner/runtime/server/network/provider/live-model test. TypeScript fact scope remains installed-library API, not a target-project CLI.
+
+### Integration verification
+
+Base: `94a77e70ac9a4ff0a6b79b570abd8c69de2d7e8f`. Verification result: **PASS**.
+
+| Role | Disposition | Body chars | Growth | tokens | SHA256 |
+|---|---|---:|---:|---:|---|
+| security-scanner | CHANGED | 12346 → 13196 | 6.88% | 3299 | `176b775cf6905ab5ad94c6ec31a0858fa9d80e449aef665f1b636e326b29aa5f` |
+| audit-backend | CHANGED | 10799 → 11475 | 6.26% | 2869 | `ab7fe4dd41c2e2525948caf15da9e19ad8e9b7150155d65ccc36ce00e2c318b4` |
+| audit-frontend | CHANGED | 13770 → 14564 | 5.77% | 3641 | `86e3f85bc73e21d533056b4efba55fe080b7204e43fa7048b88b79cb94886e01` |
+| audit-infra | KEEP | 11555 → 11555 | 0.0% | 2889 | `c746bf7174a5d02cd5fcd0aeb9885aa3f410439d5e2291fbfd10bb1f90cd2e96` |
+| dependency-checker | CHANGED | 8421 → 9204 | 9.3% | 2301 | `daacb16ae381157e268de760b4116bf5eeb3953a9a7b09634084f69d196f4cfc` |
+| health-checker | KEEP | 11646 → 11646 | 0.0% | 2912 | `06266ad042896fd56d325a3e79838b0fdbacda593085b72508af881533020a08` |
+| pre-deploy-validator | KEEP | 12373 → 12373 | 0.0% | 3093 | `6c4947d36e20acf020d52804323cfe8213b4a1ae271ba705e186d2cfa8e353f3` |
+| red-blue-auditor | CREATED | 0 → 10024 | N/A new role | 2506 | `b0f2b6a96b264518da7528aacea13368eb49e597a24835185406ecd1cfebba02` |
+
+| Check | Exit | Evidence |
+|---|---:|---|
+| npm-test | 0 | ℹ tests 133; ℹ pass 133; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0; ℹ todo 0 |
+| codex-tests | 0 | ℹ tests 112; ℹ pass 112; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0; ℹ todo 0 |
+| counts | 0 | See /private/tmp/superkit-g4-20261110-counts.log |
+| whitespace | 0 | See /private/tmp/superkit-g4-20261110-whitespace.log |
+| github-about | 0 | See /private/tmp/superkit-g4-20261110-github-about.log |
+
+All 428 protected snapshot files unchanged; phase/stale-reference checks PASS; version 1.5.3. Full per-command logs and hashes: `/private/tmp/superkit-g4-20261110-verification.json`. The 112-test Codex run is a subset of the 133-test full suite, not additional unique tests.
+
+
+Authorized preservation exception: one native registry entry for the newly requested red-blue-auditor; exact before/after hashes and owner authorization are in the verification JSON. Immutable baselines and prior evidence remain unchanged. Native preservation regression failed before registration and passed after registration (existing converter fixture; 1 fail became 3/3 pass). Current source catalog: 83 skills, native registry: 66.
+
+Acceptance: ACCEPTED — independent PASS; Astra source accepted. The final Git commit identity and branch-return observation are reported after execution; this record supplies the bounded source/local evidence.
+Independent review covered all eight roles and integration paths. Its single documentation finding (obsolete security domain count in INSTALL.md) was corrected and re-read; no semantic source change or suite repetition was required.
+
+<!-- G4-end -->
 
 ## Later comparison
 
