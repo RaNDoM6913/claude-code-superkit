@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
   "repository": "RaNDoM6913/claude-code-superkit",
-  "checked_on": "2026-11-10",
+  "checked_on": "2026-11-14",
   "checked_on_timezone": "Europe/Minsk",
   "daily_data_timezone": "UTC",
   "refresh_mode": "manual_on_user_request",
   "automatic_collection_configured": false,
   "npm": {
     "package": "claude-code-superkit",
-    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-09/claude-code-superkit",
+    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-12/claude-code-superkit",
     "latest_available_day_source": "https://api.npmjs.org/downloads/point/last-day/claude-code-superkit",
     "first_publication_date": "2026-10-16",
     "coverage_start": "2026-10-16",
-    "data_through": "2026-11-09",
-    "total_downloads": 408,
+    "data_through": "2026-11-12",
+    "total_downloads": 434,
     "unobserved_ranges": [],
     "daily_downloads": {
       "2026-10-16": 275,
@@ -40,21 +40,24 @@
       "2026-11-06": 14,
       "2026-11-07": 10,
       "2026-11-08": 8,
-      "2026-11-09": 7
+      "2026-11-09": 7,
+      "2026-11-10": 11,
+      "2026-11-11": 13,
+      "2026-11-12": 2
     }
   },
   "git": {
     "source": "https://api.github.com/repos/RaNDoM6913/claude-code-superkit/traffic/clones",
     "coverage_start": "2026-10-19",
-    "data_through": "2026-11-09",
+    "data_through": "2026-11-12",
     "history_before_coverage_start": "unavailable",
-    "total_recorded_clones": 381,
+    "total_recorded_clones": 469,
     "unobserved_ranges": [],
     "last_api_window": {
-      "start": "2026-10-27",
-      "end": "2026-11-09",
-      "total_clones": 331,
-      "unique_cloners": 135
+      "start": "2026-10-30",
+      "end": "2026-11-12",
+      "total_clones": 401,
+      "unique_cloners": 172
     },
     "daily_clones": {
       "2026-10-19": 7,
@@ -78,10 +81,13 @@
       "2026-11-06": 57,
       "2026-11-07": 48,
       "2026-11-08": 75,
-      "2026-11-09": 33
+      "2026-11-09": 33,
+      "2026-11-10": 23,
+      "2026-11-11": 45,
+      "2026-11-12": 20
     },
     "unique_cloners": {
-      "total": 175,
+      "total": 224,
       "method": "unique cloners of the first saved API window plus the sum of daily unique cloners for each later UTC date; people active on several periods are counted once per period, so this is an upper bound on distinct people",
       "base_period": {
         "start": "2026-10-19",
@@ -97,7 +103,10 @@
         "2026-11-06": 25,
         "2026-11-07": 24,
         "2026-11-08": 34,
-        "2026-11-09": 13
+        "2026-11-09": 13,
+        "2026-11-10": 14,
+        "2026-11-11": 22,
+        "2026-11-12": 13
       },
       "unobserved_daily_uniques": "Dates before 2026-11-02 were saved only as one window aggregate; daily uniques for them are unavailable."
     }
@@ -207,6 +216,25 @@
       "git_added": 156,
       "corrections_to_saved_days": [{"date": "2026-10-21", "was": 0, "now": 4, "source": "npm range API now returns 4"}],
       "notes": "Saved days 2026-10-30..2026-11-06 re-checked against both sources, no changes. Full npm history re-compared: only 2026-10-21 changed (0 -> 4, source revision), corrected; total 404 -> 408 = 25 new days + 4 correction. New days 11-07..11-09 saved from both sources. Release archives re-read: still 2 downloads (zip+tgz). Unique cloners: daily uniques 11-07..11-09 (24, 34, 13) added; unique total 104 -> 175 (base 37 + 138). Git API window 10-27..11-09 (331 clones, 135 uniques). No gaps."
+    },
+    {
+      "checked_on": "2026-11-14",
+      "kind": "incremental",
+      "previous_npm_total": 408,
+      "npm_total": 434,
+      "previous_git_total": 381,
+      "git_total": 469,
+      "npm_data_through": "2026-11-12",
+      "git_data_through": "2026-11-12",
+      "new_dates": [
+        "2026-11-10",
+        "2026-11-11",
+        "2026-11-12"
+      ],
+      "npm_added": 26,
+      "git_added": 88,
+      "corrections_to_saved_days": [],
+      "notes": "Full npm history 2026-10-16..2026-11-12 re-compared with all 25 saved days (2026-10-16..2026-11-09): no differences. New npm days 2026-11-10 (11), 11-11 (13), 11-12 (2) saved; 11-12 is a complete UTC day, value taken as reported by the API. Git clones API window 2026-10-30..2026-11-12 (top-level 401 clones, 172 uniques): saved days 10-30..11-09 re-checked, no count or unique differences; new days 11-10 (23 clones, 14 uniques), 11-11 (45, 22), 11-12 (20, 13) saved. Today's UTC day 11-13 not included. Unobserved ranges: none. Release archives re-read: zip and tgz still 1 each, total 2 (SHA256SUMS excluded). Unique cloners: base 37 + daily 138 (11-02..11-09) + daily 49 (11-10..11-12) = 224."
     }
   ]
 }

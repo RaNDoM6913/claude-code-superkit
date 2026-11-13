@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="330" height="28" viewBox="0 0 330 28" role="img" aria-label="npm downloads 408, GitHub clones 381, unique cloners 175, data through 2026-11-09, checked 2026-11-10">
-  <title>npm downloads: 408 since first publication on 2026-10-16. GitHub clones: 381 for 2026-10-19 through 2026-11-09. Unique cloners: 175, summed per period (first window plus daily uniques), so repeat visitors across periods count more than once. Manual snapshot checked 2026-11-10; data through 2026-11-09. Not successful installations. Details: docs/DOWNLOAD_STATS.md.</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="330" height="28" viewBox="0 0 330 28" role="img" aria-label="npm downloads 434, GitHub clones 469, unique cloners 224, data through 2026-11-12, checked 2026-11-14">
+  <title>npm downloads: 434 since first publication on 2026-10-16. GitHub clones: 469 for 2026-10-19 through 2026-11-12. Unique cloners: 224, summed per period (first window plus daily uniques), so repeat visitors across periods count more than once. Manual snapshot checked 2026-11-14; data through 2026-11-12. Not successful installations. Details: docs/DOWNLOAD_STATS.md.</title>
   <rect width="190" height="28" fill="#1e293b"/>
   <rect x="190" width="140" height="28" fill="#007EC6"/>
   <g fill="#ffffff" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" letter-spacing="0.8">
     <text x="95" y="18">NPM • CLONES • UNIQUE</text>
-    <text x="260" y="18">408 • 381 • 175</text>
+    <text x="260" y="18">434 • 469 • 224</text>
   </g>
 </svg>
