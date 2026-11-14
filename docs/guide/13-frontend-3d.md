@@ -72,16 +72,19 @@ Runs 15 checks across 4 categories:
 
 ### ui-design-reviewer
 
-**When to activate:** Reviewing frontend components for design quality. Catches AI-generated "slop" patterns.
+**When to activate:** Reviewing the UI layer of a page that composes UI with a 3D scene (DOM overlay or HUD over a canvas, text in 3D, scroll-driven 3D sections). Pure 2D UI goes to `ui-reviewer` (core, or the frontend-ui umbrella when installed).
 
-Runs 16 checks across 6 categories:
+Read-only review in 7 areas, source evidence only (it cannot render WebGL; screenshots count only when you supply them). There is no score:
 
-- **Typography (3)** -- font choice (no generic Inter/Roboto), headline tracking, body text width
-- **Color (3)** -- single accent color, saturation limits, no default purple-to-blue gradient
-- **Layout (3)** -- anti-center bias, Grid over Flex, `min-h-[100dvh]` not `h-screen`
-- **Motion (3)** -- spring physics for interactions, staggered reveals, animated state transitions
-- **Interactive States (2)** -- loading/empty/error states, active feedback on tap
-- **Glassmorphism (2)** -- glass border + inner shadow, tinted shadows
+- **Composition and viewport** -- which layer gets the pointer over the canvas, canvas host height, `100vh`/`h-screen` vs `dvh`, safe-area insets
+- **Legibility and contrast** -- computed only for static, resolvable pairs; text over the moving canvas goes to Open Questions
+- **Input parity** -- keyboard and assistive-technology path for actions on 3D objects, hover-only information, wheel/touch capture
+- **Accessible alternatives** -- an equivalent for informative canvas content
+- **Reduced motion** -- a gate wired to the scene's loops (`useFrame`, GSAP, `autoRotate`, `<Float>`), not just a CSS block
+- **Loading, failure, fallback** -- blank Suspense fallbacks, essential content inside the scene's Suspense subtree, no-WebGL path
+- **Aesthetics rule** -- lines of `frontend-aesthetics-3d.md` (installed), SUGGESTION at most
+
+Scene internals, ScrollTrigger mechanics and performance are routed to `r3f-scene-reviewer`, `presentation-reviewer` and `frontend-perf-reviewer`.
 
 ### frontend-perf-reviewer
 

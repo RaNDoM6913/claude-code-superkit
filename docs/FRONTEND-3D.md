@@ -82,32 +82,25 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 ### ui-design-reviewer
 
-**Description:** Anti-slop UI review -- typography, color calibration, layout diversity, motion quality, interactive states.
+**Description:** Read-only design review of the UI layer of 3D/WebGL pages -- overlay/HUD over a Three.js/R3F canvas, scroll-driven 3D sections, text in 3D.
 
-**Allowed tools:** Read, Grep, Glob
+**Allowed tools:** Read, Grep, Glob, Bash
 
-**Activate when:** Reviewing frontend components for design quality.
+**Activate when:** Reviewing frontend components for design quality on a page that composes UI with a 3D scene. Pure 2D UI goes to `ui-reviewer` (core, or the frontend-ui umbrella when installed).
 
-**Checklist (16 checks):**
+**Areas (7, no score; source evidence only, screenshots only when supplied):**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | Distinctive font choice (no Inter/Roboto) | WARNING | Typography |
-| 2 | Headline `tracking-tighter`/`tracking-tight` | WARNING | Typography |
-| 3 | Body text `max-w-[65ch]` | INFO | Typography |
-| 4 | Max 1 accent color | WARNING | Color |
-| 5 | Accent saturation < 80% | WARNING | Color |
-| 6 | No purple-to-blue gradient default | CRITICAL | Color |
-| 7 | Anti-center bias | WARNING | Layout |
-| 8 | CSS Grid over flex math | INFO | Layout |
-| 9 | `min-h-[100dvh]` not `h-screen` | CRITICAL | Layout |
-| 10 | Spring/ease-out for interactions | WARNING | Motion |
-| 11 | Staggered reveals on lists/grids | INFO | Motion |
-| 12 | No instant state transitions | WARNING | Motion |
-| 13 | Loading/empty/error states | CRITICAL | Interactive States |
-| 14 | `:active` feedback on buttons | WARNING | Interactive States |
-| 15 | Glass border + inner shadow | INFO | Glassmorphism |
-| 16 | Tinted shadows (not pure black) | INFO | Glassmorphism |
+| # | Area | What it checks |
+|---|------|----------------|
+| 1 | Composition and viewport | pointer layering over the canvas, canvas host height, `100vh`/`h-screen`, safe-area insets |
+| 2 | Legibility and contrast | contrast computed only for static, resolvable pairs; text over the canvas is an Open Question |
+| 3 | Input parity | keyboard / assistive path for actions on 3D objects, hover-only information, wheel and touch capture |
+| 4 | Accessible alternatives | an equivalent for informative canvas content |
+| 5 | Reduced motion | a gate wired to scene loops, not just a CSS block |
+| 6 | Loading, failure, fallback | blank Suspense fallbacks, essential content inside the scene subtree, no-WebGL path |
+| 7 | Aesthetics rule | `frontend-aesthetics-3d.md` lines (installed), SUGGESTION at most |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a blocked essential task or missing essential content, proven from code); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. Scene internals, ScrollTrigger and performance are routed to `r3f-scene-reviewer`, `presentation-reviewer` and `frontend-perf-reviewer`.
 
 ---
 
@@ -457,7 +450,7 @@ Install via `npx skills add`:
 | GSAP timeline compression (animations in first 10% of scroll) | ~2h | gsap-pattern-check hook catches missing `tl.set({}, {}, 1.0)` immediately | 0 |
 | UV mapping mismatch (stretched/flipped texture on model) | ~2h | gltf-debugging skill (traverse, inspect UVs, safe replacement) | <30min |
 | Tailwind v3/v4 syntax mix (styles don't apply) | ~1h | tailwind-version-guard hook detects version mismatch on edit | 0 |
-| AI-generated generic UI ("slop" patterns) | ongoing | ui-design-reviewer agent (16 checks) + frontend-aesthetics-3d rule | caught in review |
+| UI over a 3D scene unreadable, unreachable or missing on load failure | ongoing | ui-design-reviewer agent (7 areas) + frontend-aesthetics-3d rule | caught in review |
 | Heavy imports bloating bundle | varies | bundle-size-warn hook warns on moment/lodash/THREE/MUI/antd | caught on edit |
 | GSAP animations leak on unmount | ~1h debug | gsap-pattern-check hook warns on missing `gsap.context()` | 0 |
 | 3D scene looks flat/lifeless | ~1h tweaking | product-3d-lighting skill (studio presets, common mistakes) | <15min |
