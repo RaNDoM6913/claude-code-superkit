@@ -21,32 +21,25 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 ### presentation-reviewer
 
-**Description:** Review scroll-driven presentation sections using GSAP ScrollTrigger, phone frame components, and 3D textures.
+**Description:** Read-only review of scroll-driven presentation sections built on GSAP ScrollTrigger, with device-frame mockups and scroll-switched layers or 3D textures.
 
-**Allowed tools:** Read, Grep, Glob
+**Allowed tools:** Read, Grep, Glob, Bash (git inspection, `rg`, arithmetic only)
 
 **Activate when:** Editing scroll-driven presentation sections.
 
-**Checklist (16 checks):**
+**Review areas (7), source evidence only -- it cannot scroll or play a timeline:**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | `gsap.context()` cleanup | CRITICAL | GSAP ScrollTrigger |
-| 2 | Timeline extension `tl.set({}, {}, 1.0)` | CRITICAL | GSAP ScrollTrigger |
-| 3 | `invalidateOnRefresh: true` | WARNING | GSAP ScrollTrigger |
-| 4 | `scrub` is a number (not boolean) | WARNING | GSAP ScrollTrigger |
-| 5 | Phase object (P.xxx) for positions | WARNING | GSAP ScrollTrigger |
-| 6 | Screen dimensions SCREEN_W=440, SCREEN_H=956 | CRITICAL | Phone Frame |
-| 7 | Content scale formula | WARNING | Phone Frame |
-| 8 | `useViewportScale()` hook | INFO | Phone Frame |
-| 9 | Phase boundaries reach 1.0 | CRITICAL | Combined Section |
-| 10 | No phase overlap | WARNING | Combined Section |
-| 11 | Screen layers use opacity switching | INFO | Combined Section |
-| 12 | `meshBasicMaterial` for screen textures | CRITICAL | 3D / Texture |
-| 13 | `colorSpace = THREE.SRGBColorSpace` | CRITICAL | 3D / Texture |
-| 14 | `toneMapped: false` on screen materials | WARNING | 3D / Texture |
-| 15 | Dual ScrollTrigger entrance pattern | INFO | General |
-| 16 | No `justify-center` on tall content | WARNING | General |
+| # | Area | What it checks |
+|---|------|----------------|
+| 1 | Timeline extent | Total length vs the 0-1 phase plan (computed), `tl.set({}, {}, 1.0)` padding, overlapping tweens, `immediateRender` overwrites |
+| 2 | Scrub and snap | `scrub` value per `gsap-conventions.md`, snap points vs phase rests, raw vs smoothed progress consumers |
+| 3 | Refresh and pinning | `invalidateOnRefresh`, late layout without `ScrollTrigger.refresh()`, scroll distance, pin spacing |
+| 4 | Lifecycle and duplicates | `gsap.context()` / `useGSAP` teardown, stacked triggers, `killAll()`, stray `markers` |
+| 5 | Breakpoints and reduced motion | `gsap.matchMedia()`, a reduced-motion gate that actually stops GSAP |
+| 6 | SSR and mobile | Unguarded `window`/`document` on server-rendered routes, touch behavior (needs verification) |
+| 7 | Device frame and layers | Consistent project dimensions, hidden-but-focusable layers, layer/texture switches inside their phase |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for hidden essential content or a route that fails to render, proven from code); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. GSAP defaults are read from the installed `node_modules/gsap`. Materials, color space and tone mapping go to `r3f-scene-reviewer`, overlay UI to `ui-design-reviewer`, performance to `frontend-perf-reviewer`.
 
 ---
 

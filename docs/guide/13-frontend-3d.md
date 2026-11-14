@@ -49,15 +49,19 @@ The package includes 4 review agents. All use `model: opus`.
 
 ### presentation-reviewer
 
-**When to activate:** Editing scroll-driven presentation sections with GSAP ScrollTrigger, phone frame components, or 3D textures.
+**When to activate:** Editing scroll-driven presentation sections built on GSAP ScrollTrigger (with or without a device-frame mockup or 3D textures).
 
-Runs 16 checks across 5 categories:
+Read-only review in 7 areas, source evidence only (it cannot scroll or play a timeline; GSAP defaults are read from the installed package):
 
-- **GSAP ScrollTrigger (5)** -- `gsap.context()` cleanup, timeline extension (`tl.set`), `invalidateOnRefresh`, `scrub` as number, phase object usage
-- **Phone Frame (3)** -- screen dimension constants, content scaling formula, viewport scale hook
-- **Combined Section (3)** -- phase boundaries reaching 1.0, no overlap between phases, screen layer switching
-- **3D / Texture (3)** -- `meshBasicMaterial` for screens, sRGB colorSpace, `toneMapped: false`
-- **General (2)** -- dual ScrollTrigger entrance pattern, layout overflow prevention
+- **Timeline extent** -- computed total length vs the 0-1 phase plan, `tl.set` padding, overlapping tweens
+- **Scrub and snap** -- `scrub` value, snap points vs phase rests
+- **Refresh and pinning** -- `invalidateOnRefresh`, late layout changes, scroll distance, pin spacing
+- **Lifecycle and duplicates** -- `gsap.context()` / `useGSAP` teardown, stacked or globally killed triggers
+- **Breakpoints and reduced motion** -- `gsap.matchMedia()`, a gate that actually stops GSAP
+- **SSR and mobile** -- unguarded browser globals on server-rendered routes
+- **Device frame and layers** -- consistent dimensions, hidden-but-focusable layers, layer/texture switch timing
+
+Materials, color space and tone mapping are routed to `r3f-scene-reviewer`, overlay UI to `ui-design-reviewer`, performance to `frontend-perf-reviewer`.
 
 ### r3f-scene-reviewer
 
@@ -300,7 +304,7 @@ You're creating a landing page where a 3D phone model rotates and changes screen
 - **Rules:** gsap-conventions (enforces `tl.set`, `scrub` numbers, context cleanup), threejs-conventions (enforces meshBasicMaterial, colorSpace, UV settings), frontend-aesthetics-3d (anti-center bias, spring physics, staggered reveals)
 - **Skills:** r3f-scroll-driven-3d (GSAP-Zustand-R3F bridge pattern), product-3d-lighting (studio lighting setup), html-to-3d-texture (capture pipeline for screen textures)
 - **Hooks:** gsap-pattern-check (catches anti-patterns on every edit), r3f-color-check (ensures correct color management), bundle-size-warn (warns on heavy imports)
-- **Agents:** presentation-reviewer (full 16-check review), r3f-scene-reviewer (15-check 3D review)
+- **Agents:** presentation-reviewer (seven-area scroll-mechanics review), r3f-scene-reviewer (15-check 3D review)
 
 ### Debugging 3D color issues
 
