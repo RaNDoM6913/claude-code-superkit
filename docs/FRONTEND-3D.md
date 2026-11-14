@@ -47,29 +47,31 @@ Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for hidden essential 
 
 **Description:** Review React Three Fiber and Three.js code -- color management, tone mapping, texture pipeline, GLB handling, useFrame performance, disposal patterns.
 
-**Allowed tools:** Read, Grep, Glob
+**Allowed tools:** Read, Grep, Glob, Bash (git inspection, `rg`, arithmetic only)
 
 **Activate when:** Editing files importing `@react-three/fiber`, `@react-three/drei`, or `three`.
 
-**Checklist (15 checks):**
+**Checklist (15 checks), source evidence only -- it cannot render WebGL:**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | UI texture `colorSpace = SRGBColorSpace` | CRITICAL | Color Management |
-| 2 | Screen mesh uses `meshBasicMaterial` | CRITICAL | Color Management |
-| 3 | `toneMapped={false}` on UI materials | CRITICAL | Color Management |
-| 4 | Canvas `toneMapping` setting | WARNING | Color Management |
-| 5 | No allocations in `useFrame` | WARNING | Performance |
-| 6 | Zustand `getState()` in `useFrame` | WARNING | Performance |
-| 7 | `dpr={[1, 2]}` standard | INFO | Performance |
-| 8 | `dispose={null}` on reusable groups | INFO | Performance |
-| 9 | `useGLTF.preload()` at module level | WARNING | GLB / GLTF |
-| 10 | UV preservation on texture replacement | CRITICAL | GLB / GLTF |
-| 11 | Glass mesh `visible={false}` for screens | WARNING | GLB / GLTF |
-| 12 | GLTF type casting | INFO | GLB / GLTF |
-| 13 | `<Suspense>` wraps lazy 3D components | WARNING | R3F Patterns |
-| 14 | `<Environment>` intensity 0.15-0.25 for dark | INFO | R3F Patterns |
-| 15 | Product lighting setup | INFO | R3F Patterns |
+| # | Check | Category | What it checks |
+|---|-------|----------|----------------|
+| 1 | Texture color space | Color Management | sRGB for color maps, linear/none for data maps; what R3F tags automatically vs imperative assignment; removed `encoding` API |
+| 2 | Screen material | Color Management | UI shown through a lit material's `map` |
+| 3 | `toneMapped` | Color Management | Screen materials under a tone-mapping renderer; no exemption under a composer output pass |
+| 4 | Renderer output | Color Management | Canvas `flat` / `linear` / `legacy` / `gl` props, double or missing encode, named tone-mapping constants |
+| 5 | `useFrame` hot path | Performance | GPU resources or math objects created per frame, hooks called inside the callback |
+| 6 | Store reads | Performance | Hook subscriptions to per-frame values, stale `getState()` reads |
+| 7 | DPR and frameloop | Performance | DPR cap, `frameloop="demand"` without `invalidate()`, render priority with nothing rendering, instancing |
+| 8 | Disposal | Performance | Imperative resources without cleanup, `dispose={null}` over one-off resources, cached GLTF ownership |
+| 9 | Loading | GLB / GLTF | Draco / meshopt / KTX2 decoders vs the asset's extensions, CDN decoder vs CSP, one scene mounted twice, preload |
+| 10 | Texture replacement | GLB / GLTF | `flipY` and UV settings on swapped textures, `needsUpdate`, shared materials |
+| 11 | Glass and transparency | GLB / GLTF | `opacity` without `transparent` |
+| 12 | Structure | GLB / GLTF | `nodes.X` names vs the asset's nodes after loader sanitizing |
+| 13 | Suspense and errors | R3F Patterns | Error boundary between a loader and the React root, R3F store hooks outside `<Canvas>` |
+| 14 | Environment | R3F Patterns | Runtime-fetched HDRI presets vs CSP/offline constraints |
+| 15 | Lighting | R3F Patterns | Lit materials with no light or environment, unused `MeshPhysicalMaterial` |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a blank canvas, a throwing load or render, or the React root unmounting, proven from code); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. Three.js, R3F and drei behavior is read from the installed `node_modules`; when installed source shows a rule's premise does not apply, the finding drops to SUGGESTION. Overlay UI, reduced-motion gates and loading UI go to `ui-design-reviewer`, ScrollTrigger to `presentation-reviewer`, bundle, measured FPS and memory to `frontend-perf-reviewer`.
 
 ---
 

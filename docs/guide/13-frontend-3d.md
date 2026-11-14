@@ -67,12 +67,14 @@ Materials, color space and tone mapping are routed to `r3f-scene-reviewer`, over
 
 **When to activate:** Editing files that import `@react-three/fiber`, `@react-three/drei`, or `three`.
 
-Runs 15 checks across 4 categories:
+Read-only review, 15 checks across 4 categories, source evidence only (it cannot render WebGL; Three.js, R3F and drei behavior is read from the installed packages):
 
-- **Color Management (4)** -- UI texture colorSpace, screen material type, toneMapped prop, Canvas toneMapping
-- **Performance (4)** -- no allocations in useFrame, Zustand `getState()` in useFrame, DPR settings, disposal patterns
-- **GLB / GLTF (4)** -- preload at module level, UV preservation on texture replacement, glass mesh handling, type casting
-- **R3F Patterns (3)** -- Suspense wrapping, Environment intensity, lighting setup
+- **Color Management (4)** -- texture color space, screen material, `toneMapped`, renderer output (tone mapping and output color space)
+- **Performance (4)** -- `useFrame` hot path, store reads, DPR and frameloop, disposal
+- **GLB / GLTF (4)** -- loading and decoders, texture replacement (`flipY`, UV settings), glass and transparency, node structure
+- **R3F Patterns (3)** -- Suspense and error boundaries, Environment presets, lighting
+
+Overlay UI, reduced-motion gates and loading UI are routed to `ui-design-reviewer`, ScrollTrigger to `presentation-reviewer`, bundle, measured FPS and memory to `frontend-perf-reviewer`.
 
 ### ui-design-reviewer
 
