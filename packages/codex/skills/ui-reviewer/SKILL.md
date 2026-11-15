@@ -2,7 +2,7 @@
 name: ui-reviewer
 description: Review selected UI components and user flows for interaction, accessibility, responsive layout, visual hierarchy, state, and design contract defects using source and explicitly identified rendered evidence.
 user-invocable: false
-tokens: 3418
+tokens: 3560
 ---
 
 # UI/UX Reviewer
@@ -35,6 +35,8 @@ Missing browser/accessibility tooling does not make those domains PASS or N/A. R
 ### Semantics, content, and accessible information
 
 Check native element semantics, landmarks, heading relationships, lists/tables, labels, accessible names and descriptions, image alternatives, decorative content, status announcements, and error associations. Navigation and actions must expose appropriate behavior; a custom control may be correct if its full semantics and interaction are implemented. Inspect library wrappers before alleging missing behavior. Check duplicated IDs, misleading or conflicting ARIA, hidden/inert content, accessible state, reading order, and visual versus programmatic information. Do not infer an accessibility failure solely from a heading-level gap, the absence of `aria-label` where another name exists, or a non-native element without reading its complete contract.
+
+Where localization is supported, trace visible strings and accessible text through the actual translation mechanism, including alternatives, labels, placeholders and errors. Check sentence composition, plural/context handling and date/number/currency formatting against supported locales and project conventions. Inspect locale resources and consumers before alleging untranslated content; a literal or composed string alone is not proof of failure. Keep source-established localization defects separate from unobserved wrapping, pronunciation or rendered fallback.
 
 Determine the actual target standard/version/level and platform before citing a conformance rule. Verify applicable normative criteria and exceptions from available authoritative documentation when a finding depends on them. For contrast, identify foreground/background after opacity/compositing and the relevant text/control/state, measurement method, and criterion; visual estimation is a lead, not a ratio. Do not apply one contrast or target-size threshold universally. Missing decisive measurements belong in Open Questions. Static checks or a few successful tests do not establish whole-interface accessibility conformance.
 

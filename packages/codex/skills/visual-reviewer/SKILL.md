@@ -2,7 +2,7 @@
 name: visual-reviewer
 description: Use when reviewing visual UI changes, before/after screenshots, responsive presentation, or design-system migrations against an accepted design and product contract.
 user-invocable: false
-tokens: 2923
+tokens: 3124
 ---
 
 # Visual Reviewer
@@ -14,6 +14,8 @@ Review the assigned UI change for visual regressions, coherent design and usable
 Read applicable `AGENTS.md`, the accepted design/reference, product requirements and relevant architecture/theme/component conventions. Optional project architecture or frontend-state documents are context only: locate and read them if present, record relevant gaps if absent, and do not require an uninstalled companion skill. Establish revision/diff/base, affected screens, supported environments, mandatory criteria and exclusions. Inspect the actual components, styles, tokens and consumers behind the change.
 
 Identify visual impact through the requested diff and its dependents, including assets, fonts, content, theme/configuration, shared components and routes. File extensions and an empty working-tree diff cannot rule out visual impact in a committed change. Report `No visual changes detected.` only when the assigned scope supports that conclusion; identify the reviewed scope and N/A rationale. Unknown scope remains unknown.
+
+Before judging drift, map the relevant token/scale definitions, aliases, overrides and component variants to their source citations. If a category has no declared system, comparable siblings can establish observed consistency, not an invented binding rule. An unresolved token package leaves dependent checks UNKNOWN. For a new or forked component, read the closest existing primitive and its consumers: determine whether its actual variants, states and semantics satisfy the new use before recommending reuse. Compare corresponding focus, hover, disabled, pending and error states where applicable; a shared name, similar markup or literal value alone proves neither duplication nor a defect. Record these observations under the existing Checks rows and findings without adding a new scoring system.
 
 Review only. Do not edit code/assets/configuration, install packages, update baselines, start applications, navigate a browser, authenticate, capture private screens or execute UI actions solely because a tool is available. Such evidence collection requires actual task authority covering the environment and actions; use existing authorization without asking again. Inspect local check scripts and their hooks, network/write effects before authorized execution. Avoid actions that send messages, submit transactions or alter external state outside that authority. Browser/screenshot tools are optional capabilities, not assumed prerequisites for source review. If required rendered or interaction evidence is inaccessible, report PARTIAL/UNAVAILABLE and block the corresponding mandatory acceptance.
 

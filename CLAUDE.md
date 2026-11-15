@@ -12,7 +12,9 @@ GPT backend/data/delivery/language reviews use project-specific schema, query, t
 
 The [G1 Codex comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) tracks focused comment, silent-failure, and Go-modernizer refinements, local claim verification and native caller compatibility. Keep its source acceptance separate from live model qualification and preserve the historical migration ledger.
 
-The [continued comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers all G2–G6 roles, including review, audit, readiness, planning, acceptance, testing and implementation support, including explicit KEEP decisions, local claim evidence and preserved caller contracts. It is the current continuation checkpoint; earlier evidence remains historical and unchanged.
+The [continued comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers all G2–G6 roles, including review, audit, readiness, planning, acceptance, testing and implementation support, including explicit KEEP decisions, local claim evidence and preserved caller contracts. It is the prior continuation checkpoint; earlier evidence remains historical and unchanged.
+
+The [G7–G9 comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) covers G7 UI role refinements and explicit KEEP decisions against the newer Claude snapshot. Preserve native caller formats, evidence levels and source ownership.
 
 Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Source review does not claim empirically measured model quality.
 
