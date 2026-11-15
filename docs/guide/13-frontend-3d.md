@@ -94,14 +94,16 @@ Scene internals, ScrollTrigger mechanics and performance are routed to `r3f-scen
 
 ### frontend-perf-reviewer
 
-**When to activate:** Reviewing frontend code for performance issues.
+**When to activate:** Reviewing frontend code for performance.
 
-Runs 12 checks across 4 categories:
+Read-only review, 12 checks across 4 categories, source evidence only (it does not build, run or measure; sizes and timings appear only from a report you supply; package and bundler behavior is read from the installed packages):
 
-- **Bundle Size (3)** -- code splitting, tree shaking, heavy import detection
-- **Images & Media (3)** -- lazy loading, blur placeholders, modern formats (WebP/AVIF)
-- **CSS & Rendering (3)** -- CSS containment, `will-change` only on animated elements, no layout thrashing
-- **Runtime Performance (3)** -- LCP optimization, CLS prevention, INP optimization
+- **Bundle Size (3)** -- code splitting, tree shaking, heavy imports
+- **Images & Media (3)** -- lazy loading, placeholders, format
+- **CSS & Rendering (3)** -- CSS containment, `will-change` and animated properties, layout thrashing
+- **Runtime -- Core Web Vitals risks (3)** -- LCP, CLS, INP and main-thread work
+
+`useFrame` work, disposal, DPR, frameloop, GLB and textures are routed to `r3f-scene-reviewer`, ScrollTrigger to `presentation-reviewer`, fallback UI and reduced motion to `ui-design-reviewer`, measured bundle size to `health-checker`.
 
 ## Hooks
 

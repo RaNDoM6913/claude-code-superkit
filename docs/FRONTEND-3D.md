@@ -101,28 +101,30 @@ Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a blocked essenti
 
 ### frontend-perf-reviewer
 
-**Description:** Frontend performance review -- bundle size, lazy loading, CSS containment, web vitals, image optimization.
+**Description:** Read-only frontend performance review -- what changed code loads, when, and its main-thread work: bundle composition, media, CSS rendering cost, Core Web Vitals risks.
 
-**Allowed tools:** Read, Grep, Glob, Bash
+**Allowed tools:** Read, Grep, Glob, Bash (git inspection, `rg`, `ls`/`test`, `wc -c` only)
 
 **Activate when:** Reviewing frontend code for performance.
 
-**Checklist (12 checks):**
+**Checklist (12 checks), source evidence only -- it does not build, run or measure:**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | Routes use dynamic `import()` | CRITICAL | Bundle Size |
-| 2 | Named imports for tree shaking | WARNING | Bundle Size |
-| 3 | Heavy libraries code-split | WARNING | Bundle Size |
-| 4 | Below-fold images lazy loaded | WARNING | Images & Media |
-| 5 | Blur/skeleton placeholders | INFO | Images & Media |
-| 6 | WebP/AVIF format | INFO | Images & Media |
-| 7 | CSS `contain` on complex components | INFO | CSS & Rendering |
-| 8 | `will-change` only on animated elements | WARNING | CSS & Rendering |
-| 9 | No read-then-write DOM loop | CRITICAL | CSS & Rendering |
-| 10 | LCP element loads fast | CRITICAL | Runtime Performance |
-| 11 | Images/embeds have width/height | WARNING | Runtime Performance |
-| 12 | Event handlers < 200ms | WARNING | Runtime Performance |
+| # | Check | Category | What it checks |
+|---|-------|----------|----------------|
+| 1 | Code splitting | Bundle Size | Features newly reachable statically from the client entry, ineffective dynamic imports, `lazy()` without an error boundary |
+| 2 | Tree shaking | Bundle Size | Namespace imports and barrels judged against the installed package's entry and `sideEffects` |
+| 3 | Heavy imports | Bundle Size | Root imports of libraries that ship per-method or sub-path entries, in eager modules |
+| 4 | Lazy loading | Images & Media | Offscreen media without `loading="lazy"` or a lazy-default component |
+| 5 | Placeholders | Images & Media | Large first-view media region blank while loading (optional) |
+| 6 | Format | Images & Media | Photographic raster without `srcset`/`<picture>`, animated GIF (repo evidence only) |
+| 7 | CSS containment | CSS & Rendering | `contain` / `content-visibility` opportunities and misuse |
+| 8 | will-change and animated properties | CSS & Rendering | Permanent `will-change`, layout properties written per scroll tick or frame |
+| 9 | Layout thrashing | CSS & Rendering | Layout reads after writes in a loop or high-frequency handler |
+| 10 | LCP | Runtime -- Core Web Vitals risks | Lazy or late-shown first-view candidate, blocking scripts, `font-display` |
+| 11 | CLS | Runtime -- Core Web Vitals risks | Media and embeds without reserved space, content inserted above content |
+| 12 | INP and main-thread work | Runtime -- Core Web Vitals risks | Unbounded work in handlers, listeners without cleanup, update loops |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a page that fails to render, crashes or never settles, proven from code -- never for a pattern, size or metric alone); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. Bytes, milliseconds and fps appear only from a build report, trace or profile you supply; from source it names the mechanism and the metric at risk. Package and bundler behavior is read from the installed `node_modules`; `bundle-size-warn` hook warnings are leads, not evidence. `useFrame` work, disposal, DPR, frameloop, GLB and textures go to `r3f-scene-reviewer`, ScrollTrigger to `presentation-reviewer`, fallback UI and reduced motion to `ui-design-reviewer`, measured bundle size to `health-checker`.
 
 ---
 
