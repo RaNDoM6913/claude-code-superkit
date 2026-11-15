@@ -1,6 +1,6 @@
 # Codex / Claude role comparison — G7–G9
 
-Date: 2026-11-15. Current checkpoint: G8 — ACCEPTED — independent PASS; Astra source accepted.
+Date: 2026-11-15. Current checkpoint: G9 — ACCEPTED — independent PASS; Astra source accepted.
 
 ## Scope and acceptance
 
@@ -54,7 +54,7 @@ tokens at `2026-11-15T15:35:11.625Z`; no compaction was reported.
 |---|---|---|
 | G7 | core UI/visual plus six frontend UI roles | ACCEPTED — independent PASS; Astra source accepted |
 | G8 | presentation, R3F scene, UI design, frontend performance | ACCEPTED — independent PASS; Astra source accepted |
-| G9 | optional native GAN planner | Not started |
+| G9 | optional native GAN planner | ACCEPTED — independent PASS; Astra source accepted |
 
 <!-- G7-start -->
 ## G7 — ACCEPTED — independent PASS; Astra source accepted
@@ -299,6 +299,91 @@ Protected snapshot: 493 files unchanged. Phase/stale checks: PASS; source catalo
 
 Acceptance state: ACCEPTED — independent PASS; Astra source accepted. Git commit identity and final checkout return are observed after execution.
 <!-- G8-end -->
+
+<!-- G9-start -->
+## G9 — ACCEPTED — independent PASS; Astra source accepted
+
+Author decisions and exact source acceptance: `/private/tmp/superkit-g9-20261115-decisions.json`; author report: `/private/tmp/superkit-g9-20261115-astra.md`. Independent review: `/private/tmp/superkit-g9-20261115-review.md`.
+
+### gan-planner — CHANGED
+
+Add explicit acceptance traceability and revision lifecycle while preserving optional native GAN contracts.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Bidirectional requirements and evidence mapping | Native provides A/S fields but no explicit check that every requirement has an oracle and every scenario/criterion traces back; closes untested requirements and invented acceptance. |
+| TAKE | Cited project facts versus identified assumptions | Native asks inspected facts generally; make actual source locations, requirement sources and assumption IDs explicit to prevent invented helpers/routes/numbers. |
+| TAKE | Stable revision and retirement lifecycle | Native identifies plan revision and budget but lacks explicit supersedes/reason, stable retired IDs and unchanged-input identity; preserve accepted failures and prevent a new revision from laundering criteria. |
+| KEEP | Existing four slots, rubric binding and READY/BLOCKED meaning | Native already preserves transient persistence N/A, real backend integration for stateful paths, unknown rubric rows and mandatory input gates. |
+| KEEP | Caller authority, optional harness and loop ceiling | Generator/evaluator already bind plan revision and immutable criteria and carry attempt counters; no automatic loop or extra permission. |
+| REJECT | Hardwired backend or always-persist template, both-rubrics fallback and remembered counts | These weaken native applicability and exact approved rubric contract; real current row counts are not universal. |
+| REJECT | npx command, mandatory milliseconds and anti-slop keyword bans | Tool behavior is unverified without project configuration and wait bounds do not measure performance; style or keywords alone are not failures. |
+
+### Caller/support compatibility
+
+- Native generator consumes unchanged Plan ID/revision/binding, selected rubric and A/S IDs.
+- Native evaluator verifies all scenarios and requirement-derived oracles and returns evidenced plan defects; it cannot rewrite contract.
+- Both callers preserve attempts across agents, renamed tests and replanning; planner lifecycle must not reset counters.
+- All emitted handoff headings and four scenario headings preserved; field placeholders now expose provenance, retired-ID history outside active criteria and carried counters.
+- READY/BLOCKED and final dispatch/stop/release limits unchanged.
+- Initial S1-S4 headings are illustrative; replacement journeys retain slot role with new unused IDs, preventing retired-ID reuse.
+
+### Local factual support
+
+- Pinned Claude source: 2cf6f27f02d9a56a49c0bbb47fed8c349ad7634b:packages/gan/agents/gan-planner.md.
+- Read both native GAN callers and current two bundled rubrics. No tool/API/exit claim is planned.
+- packages/gan/rubrics/ui-quality.md has 21 unique numbered rubric rows (independently inspected); unchanged SHA256 3e22fea761e85a2580c10fcee723585db1e84d1f1cf25f8b52ea5a3a0543d1e5
+- packages/gan/rubrics/functionality.md has 15 unique numbered rubric rows (independently inspected); unchanged SHA256 34739c3d2d0d0f3d161b6bd64c7bd74f240529355e9b25057b8894e0d4ac7fa6
+- Unchanged native caller packages/gan/skills/gan-generator/SKILL.md SHA256 4418e118e5e761d57a439746561e4c598060e6063db3f1f9e0c10a8c2dbc41e5: existing Plan ID/revision/binding, active criterion/scenario IDs and loop budgets are the preserved handoff contract, not observed model execution.
+- Unchanged native caller packages/gan/skills/gan-evaluator/SKILL.md SHA256 4b85ab529800630901f70dc730e4a586dc20a961d41289316157f000550dd51b: existing Plan ID/revision/binding, active criterion/scenario IDs and loop budgets are the preserved handoff contract, not observed model execution.
+
+### UNVERIFIED / NOT RUN
+
+- No generated application, GAN scenario execution, browser session or live-model evaluation.
+
+### Integrated verification
+
+Base `af7f7a9ca4cfac2457521dbf16775a73e5ce3ee1`; result **PASS**.
+
+| Role | Disposition | Body chars | Growth | tokens | SHA256 |
+|---|---|---:|---:|---:|---|
+| gan-planner | CHANGED | 9982 → 12430 | 24.52% | 3108 | `7e9a2ad76819563fdaab2386dedb78b4d53403a81c81ccc8b03cc7603680e7ca` |
+
+| Check | Exit | Result / log |
+|---|---:|---|
+| npm-test | 0 | ℹ tests 133; ℹ pass 133; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0 |
+| codex-tests | 0 | ℹ tests 112; ℹ pass 112; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0 |
+| counts | 0 | /private/tmp/superkit-g9-20261115-counts.log |
+| whitespace | 0 | /private/tmp/superkit-g9-20261115-whitespace.log |
+| github-about | 0 | /private/tmp/superkit-g9-20261115-github-about.log |
+
+Protected snapshot: 497 files unchanged. Phase/stale checks: PASS; source catalog83, optional GAN3, version1.5.3. Exact commands/log hashes: `/private/tmp/superkit-g9-20261115-verification.json`. Codex tests are a subset of the full suite, not additional unique tests.
+
+Acceptance state: ACCEPTED — independent PASS; Astra source accepted. Git commit identity and final checkout return are observed after execution.
+<!-- G9-end -->
+
+## Completed source scope
+
+All 13 assigned roles were compared against the pinned Claude snapshot and
+actual native caller/support contracts: seven source files changed and six
+frontend UI roles remained byte-identical. Independent review is COMPLETE for
+all three groups; no unresolved source finding remains. Each frozen group
+passed the full 133-test suite and separate 112-test Codex subset, plus the
+required counts/version/phase/About/whitespace checks.
+
+Verification limits remain explicit: exact-version local cache source evidence
+is not consumer runtime or rendered behavior. Browser interactions, GAN scenario
+execution and model-quality evaluation were not run. The first G7 reviewer
+metadata calculation stripped outer whitespace; it was corrected to the
+repository's exact body-boundary formula, with no source edit or product test
+failure. Final exact token metadata passed. G8 report/stop sections and native
+domain counts remain unchanged. G9 retains the planner headings, four scenario
+slots, one rubric and the existing generator/evaluator/authority contracts.
+
+At this source-acceptance checkpoint G7 and G8 are signed and committed; G9's
+commit and the final branch return are the remaining coordinator actions.
+Their exact Git identities and observed result are reported after execution.
+No remote metadata update, source push, release or merge is part of this task.
 
 ## Stopping boundary
 

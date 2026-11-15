@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex comparison, G9 — optional GAN planner:** bind requirements and assumptions to acceptance/scenario IDs, verification oracles and evidence; preserve stable IDs, explicit superseded/retired revision history and consumed retry budgets during re-planning. Only the native planner changes; the existing generator, evaluator, rubric files and handoff headings remain compatible and unchanged. No GAN execution or model-quality qualification is claimed.
+
 - **Codex comparison, G8 — frontend/3D:** refine presentation callback/state restoration across reverse scroll and jumps; correlate R3F asset extensions, decoder configuration and texture assignment paths; add paired DOM/canvas input, state, fallback and evidence checks; trace eager/deferred import reachability, failed lazy loads and self-sustaining effect updates. All four native reviewer reports and domain counts remain intact. Exact-version local source supports conditional mechanisms, not rendered UI, measured performance or downstream runtime acceptance.
 
 - **Codex comparison, G7 — UI roles:** refine core `ui-reviewer` for localized visible/accessibility text and supported-locale formatting, and `visual-reviewer` for source-backed token maps and component variant/state comparisons. Six frontend UI roles remain byte-identical after comparison. Existing report, coverage and evidence contracts are retained; no rendered UI or model-quality qualification is inferred.

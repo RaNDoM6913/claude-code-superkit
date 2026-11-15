@@ -2,7 +2,7 @@
 name: gan-planner
 description: Use before implementing an interactive UI feature in the optional GAN harness when user journeys, failure states, and Playwright acceptance need an explicit plan and rubric.
 user-invocable: false
-tokens: 2496
+tokens: 3108
 ---
 
 # GAN Planner
@@ -27,6 +27,16 @@ Follow the task's explicit model/effort routing or label the configured default.
 4. Identify a meaningful oracle: expected results derived from the requirement, not the generated implementation. A stateful happy path must exercise the real project backend in the authorized test environment and verify persistence after reload; a mocked successful response cannot establish integration or durability. Deliberate injected failures/external-service fixtures must be labeled, bounded and accompanied by the real success-path check. Define isolated test data and allowed cleanup without private data disclosure.
 5. Name exact implementation and Playwright spec paths, per-scenario test names, existing helpers and configured command/cwd/target/projects. Check whether dependencies, browser binaries, credentials and an authorized environment exist. Do not prescribe an unverified `npx` command that may download packages. Missing prerequisites remain a named incomplete gate; no speculative test execution or fabricated screenshots.
 
+Cite project facts at inspected source locations, including routes, helpers, configured paths and limits. Separate task requirements from inferred choices; give consequential assumptions stable question IDs and identify their dependent A/S IDs. A source not found stays NOT FOUND, and a routine proposed default stays ASSUMED rather than becoming a project fact. Do not design unrelated implementation detail to fill a missing requirement.
+
+Before declaring READY, reconcile the traceability in both directions: every in-scope requirement has an acceptance A ID and a meaningful scenario or other verification method; every criterion and scenario traces to an accepted requirement or necessary approved harness check. For each A ID name its source, verifying S IDs or check, expected oracle and required evidence. A test name or a generic "tests pass" criterion does not cover a missing user outcome. Keep unresolved mandatory links BLOCKED while preserving useful independent planning.
+
+## Revise without replacing the contract
+
+For a re-plan, read the preceding bound plan and the evaluation or user change that prompted it. Keep the same Plan ID for the continuing objective. A substantive contract change gets a new revision and binding, with the superseded revision, exact change and reason recorded; unchanged inputs and contract retain the existing revision. Keep A/S IDs for continuing criteria and scenarios. Mark removed IDs retired with the revision and reason in Out of scope as revision history, never active acceptance, scenario slots or rubric N/A. Never reuse them for a different requirement or journey.
+
+Change acceptance only for an authorized requirement change or an evidenced plan defect, citing the controlling request or evaluation evidence. A failed implementation is not itself a plan defect or permission to weaken criteria, remove failed rows or reduce the denominator. Preserve unresolved failures, the prior plan/rubric bindings and consumed loop/per-test attempts in the handoff. An unresolved change to mandatory acceptance remains BLOCKED for the contract owner; replanning neither resets the budget nor authorizes implementation or dispatch.
+
 ## Bind the acceptance rubric
 
 Use the exact task-supplied rubric path(s). If none is supplied, inspect the kit's `packages/gan/rubrics/ui-quality.md` and `functionality.md` when available, or a documented project copy such as `.gan/rubrics/`; `.claude/rubrics/` is an optional legacy location, not a prerequisite. Report the actual resolved paths. Skills are installed separately from rubric files. Never assume a rubric was copied with SKILL.md or manufacture totals from memory when it is unreadable.
@@ -41,11 +51,11 @@ Retain a scoped anti-slop checklist: accidental placeholders, abandoned TODO/com
 
 ## Output contract
 
-Preserve these handoff headings and IDs across later stages. Fill them with inspected facts, labeled assumptions and blockers; a partial plan may be returned honestly.
+Preserve headings and active IDs. S1–S4 are initial examples; replacement journeys use unused IDs in the same slots. Cite inspected facts and label assumptions and blockers.
 
 ```markdown
 # GAN Plan: <feature>
-Plan ID / revision: <stable ID and binding>
+Plan ID / revision: <stable ID and binding; superseded revision/change/reason when revised>
 Plan status: READY | BLOCKED — <reason>
 Execution: <planning only; later evaluator INDEPENDENT or INLINE SELF-REVIEW>
 Requested model/effort: <route/configured default/UNSPECIFIED>
@@ -55,8 +65,9 @@ Observed model/effort: <runtime evidence or UNVERIFIED>
 <user-visible result and source>
 ## Out of scope
 <boundaries>
+<revision history: retired A/S IDs with revision and reason, outside active acceptance/scenarios>
 ## Assumptions
-<routine assumptions; unresolved decisions and dependent work>
+<question IDs, routine assumptions; unresolved decisions and dependent A/S IDs>
 ## Scenarios
 ### Scenario S1 (happy path): <name>
 - Requirements: <A IDs>
@@ -75,7 +86,7 @@ Observed model/effort: <runtime evidence or UNVERIFIED>
 ## Anti-slop checklist (for evaluator)
 <requirement-linked checks and evidence; optional suggestions distinguished>
 ## Acceptance criteria (must all be true)
-<A IDs; mandatory scenarios/rubric/evidence/independence; source of each>
+<A IDs; source, verifying S IDs/check, oracle and required evidence; mandatory rubric/independence>
 ## Files to be modified
 <owned implementation paths and purpose>
 ## Test files to be added
@@ -85,7 +96,7 @@ Observed model/effort: <runtime evidence or UNVERIFIED>
 <source / fixture / functional / production evidence boundaries>
 ## Blockers and hand-off
 <missing input/environment/authority; next owner/action; authorized independent work>
-<retry budget: at most 3 corrective generator/evaluator cycles, or stricter task limit>
+<retry budget: at most 3 corrective generator/evaluator cycles, or stricter task limit; consumed/remaining cycles and per-test attempts carried from prior handoff>
 ```
 
 READY means the plan and required inputs are usable, not that implementation passed. Return BLOCKED for an unresolved mandatory input while preserving useful confirmed work. Send the plan to the generator only within existing dispatch authority; do not autonomously launch a loop. Stop on user steering, unchanged unavailable evidence, or retry exhaustion; re-planning cannot reset the ceiling. A later PASS is acceptance evidence only, never permission to ship, merge or release.

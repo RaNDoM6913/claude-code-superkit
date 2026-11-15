@@ -357,7 +357,7 @@ The [G1 Codex role comparison](docs/superpowers/migrations/astra-native/evidence
 
 The [continued Codex comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers all G2–G6 roles, including review, audit, readiness, planning, acceptance, testing and implementation support, preserving sufficient native roles unchanged and recording selective refinements, local evidence limits and caller compatibility. The owner-authorized new `red-blue-auditor` brings the current source catalog to 83 skills; published artifacts remain unchanged.
 
-The [next comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) covers G7–G8 UI and frontend/3D roles: focused source-backed refinements with sufficient native roles kept unchanged. Evidence remains source-scoped; catalog counts and published artifacts are unchanged.
+The [next comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) covers G7–G9 UI, frontend/3D and optional GAN planning roles: focused source-backed refinements with sufficient native roles kept unchanged. Evidence remains source-scoped; catalog counts and published artifacts are unchanged.
 
 Stop enumerates Git config keys only and skips both diffs with UNVERIFIED if any clean/process filter is configured, including unused/global Git LFS drivers, to avoid running conversion programs. It captures no filter values or changes Git config; filter-free repositories retain the whitespace check and one continuation.
 
