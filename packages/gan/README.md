@@ -2,9 +2,8 @@
 
 Three-agent loop for **adversarial verification** of UI / interactive features.
 
-Inspired by the GAN (Generator-Adversarial-Network) pattern from
-[affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code)
-(Anthropic Hackathon Winner).
+Inspired by the GAN (Generative Adversarial Network) pattern from
+[affaan-m/everything-claude-code](https://github.com/affaan-m/everything-claude-code).
 
 ## What it does
 
@@ -16,15 +15,17 @@ verification.
 ```
 gan-planner → gan-generator → gan-evaluator
    ↑                              │
-   └─ (NEEDS-ATTENTION / NEEDS-REMEDIATION) ─┘
+   └─ NEEDS-REMEDIATION (re-plan) ───────────┘
 ```
+
+NEEDS-ATTENTION goes back to `gan-generator` with the failure list.
 
 - **gan-planner** writes a plan with falsifiable scenarios (happy + empty
   + error + auth) and a rubric.
 - **gan-generator** implements the code AND the Playwright tests against
   the plan.
 - **gan-evaluator** runs Playwright, checks anti-slop, scores against
-  the rubric. Adversarial — defaults to NEEDS-REMEDIATION. (A blocked
+  the rubric. Adversarial — never returns PASS without a green Playwright run it executed itself; any critical failure forces NEEDS-REMEDIATION. (A blocked
   run — environment broken, can't even execute — is surfaced separately
   as BLOCKED.)
 
@@ -41,7 +42,7 @@ without progress (→ human escalation).
 
 ## When NOT to use
 
-- Pure backend / library work without a UI surface (use `reality-checker` instead)
+- Library or internal work with no behavior Playwright can exercise (use `reality-checker` instead). API-only features can be scored with `functionality.md`, but the scenario template is UI-shaped
 - Refactors with no behavior change
 - Bug fixes covered by a single failing test
 
@@ -189,6 +190,7 @@ The loop is human-driven by default — you decide when to re-dispatch.
 
 For autopilot:
 - Run gan-planner → save plan
+- If the plan says `Status: BLOCKED`, answer its `[BLOCKING]` questions and re-run gan-planner — do not dispatch the generator
 - Run gan-generator → save hand-off
 - Run gan-evaluator → if NEEDS-ATTENTION or NEEDS-REMEDIATION, re-run generator with the failure list as input
 - Repeat up to 3 times; if no progress → escalate
@@ -206,7 +208,7 @@ The rubrics include explicit anti-slop criteria the evaluator enforces:
 
 ## Cost / time
 
-- A typical GAN loop takes 3-8× the time of a single-agent implementation
+- A GAN loop runs three agents plus Playwright per iteration, up to 3 iterations — noticeably more time and tokens than a single-agent implementation (not measured for this kit)
 - Use it when correctness + polish are worth that cost (production features)
 - Don't use it for quick fixes or experiments
 
@@ -222,8 +224,7 @@ The rubrics include explicit anti-slop criteria the evaluator enforces:
 
 ## Source
 
-Adapted from `affaan-m/everything-claude-code` GAN pattern. Original
-reports +2.25 quality score gain. Our adaptation differs:
+Adapted from `affaan-m/everything-claude-code` GAN pattern. Our adaptation differs:
 - Codex-native SKILL.md roles for Codex users
 - Explicit rubric files (ui-quality.md, functionality.md) instead of
   agent-internal scoring
