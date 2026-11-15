@@ -21,32 +21,25 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 ### presentation-reviewer
 
-**Description:** Review scroll-driven presentation sections using GSAP ScrollTrigger, phone frame components, and 3D textures.
+**Description:** Read-only review of scroll-driven presentation sections built on GSAP ScrollTrigger, with device-frame mockups and scroll-switched layers or 3D textures.
 
-**Allowed tools:** Read, Grep, Glob
+**Allowed tools:** Read, Grep, Glob, Bash (git inspection, `rg`, arithmetic only)
 
 **Activate when:** Editing scroll-driven presentation sections.
 
-**Checklist (16 checks):**
+**Review areas (7), source evidence only -- it cannot scroll or play a timeline:**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | `gsap.context()` cleanup | CRITICAL | GSAP ScrollTrigger |
-| 2 | Timeline extension `tl.set({}, {}, 1.0)` | CRITICAL | GSAP ScrollTrigger |
-| 3 | `invalidateOnRefresh: true` | WARNING | GSAP ScrollTrigger |
-| 4 | `scrub` is a number (not boolean) | WARNING | GSAP ScrollTrigger |
-| 5 | Phase object (P.xxx) for positions | WARNING | GSAP ScrollTrigger |
-| 6 | Screen dimensions SCREEN_W=440, SCREEN_H=956 | CRITICAL | Phone Frame |
-| 7 | Content scale formula | WARNING | Phone Frame |
-| 8 | `useViewportScale()` hook | INFO | Phone Frame |
-| 9 | Phase boundaries reach 1.0 | CRITICAL | Combined Section |
-| 10 | No phase overlap | WARNING | Combined Section |
-| 11 | Screen layers use opacity switching | INFO | Combined Section |
-| 12 | `meshBasicMaterial` for screen textures | CRITICAL | 3D / Texture |
-| 13 | `colorSpace = THREE.SRGBColorSpace` | CRITICAL | 3D / Texture |
-| 14 | `toneMapped: false` on screen materials | WARNING | 3D / Texture |
-| 15 | Dual ScrollTrigger entrance pattern | INFO | General |
-| 16 | No `justify-center` on tall content | WARNING | General |
+| # | Area | What it checks |
+|---|------|----------------|
+| 1 | Timeline extent | Total length vs the 0-1 phase plan (computed), `tl.set({}, {}, 1.0)` padding, overlapping tweens, `immediateRender` overwrites |
+| 2 | Scrub and snap | `scrub` value per `gsap-conventions.md`, snap points vs phase rests, raw vs smoothed progress consumers |
+| 3 | Refresh and pinning | `invalidateOnRefresh`, late layout without `ScrollTrigger.refresh()`, scroll distance, pin spacing |
+| 4 | Lifecycle and duplicates | `gsap.context()` / `useGSAP` teardown, stacked triggers, `killAll()`, stray `markers` |
+| 5 | Breakpoints and reduced motion | `gsap.matchMedia()`, a reduced-motion gate that actually stops GSAP |
+| 6 | SSR and mobile | Unguarded `window`/`document` on server-rendered routes, touch behavior (needs verification) |
+| 7 | Device frame and layers | Consistent project dimensions, hidden-but-focusable layers, layer/texture switches inside their phase |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for hidden essential content or a route that fails to render, proven from code); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. GSAP defaults are read from the installed `node_modules/gsap`. Materials, color space and tone mapping go to `r3f-scene-reviewer`, overlay UI to `ui-design-reviewer`, performance to `frontend-perf-reviewer`.
 
 ---
 
@@ -54,87 +47,84 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 
 **Description:** Review React Three Fiber and Three.js code -- color management, tone mapping, texture pipeline, GLB handling, useFrame performance, disposal patterns.
 
-**Allowed tools:** Read, Grep, Glob
+**Allowed tools:** Read, Grep, Glob, Bash (git inspection, `rg`, arithmetic only)
 
 **Activate when:** Editing files importing `@react-three/fiber`, `@react-three/drei`, or `three`.
 
-**Checklist (15 checks):**
+**Checklist (15 checks), source evidence only -- it cannot render WebGL:**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | UI texture `colorSpace = SRGBColorSpace` | CRITICAL | Color Management |
-| 2 | Screen mesh uses `meshBasicMaterial` | CRITICAL | Color Management |
-| 3 | `toneMapped={false}` on UI materials | CRITICAL | Color Management |
-| 4 | Canvas `toneMapping` setting | WARNING | Color Management |
-| 5 | No allocations in `useFrame` | WARNING | Performance |
-| 6 | Zustand `getState()` in `useFrame` | WARNING | Performance |
-| 7 | `dpr={[1, 2]}` standard | INFO | Performance |
-| 8 | `dispose={null}` on reusable groups | INFO | Performance |
-| 9 | `useGLTF.preload()` at module level | WARNING | GLB / GLTF |
-| 10 | UV preservation on texture replacement | CRITICAL | GLB / GLTF |
-| 11 | Glass mesh `visible={false}` for screens | WARNING | GLB / GLTF |
-| 12 | GLTF type casting | INFO | GLB / GLTF |
-| 13 | `<Suspense>` wraps lazy 3D components | WARNING | R3F Patterns |
-| 14 | `<Environment>` intensity 0.15-0.25 for dark | INFO | R3F Patterns |
-| 15 | Product lighting setup | INFO | R3F Patterns |
+| # | Check | Category | What it checks |
+|---|-------|----------|----------------|
+| 1 | Texture color space | Color Management | sRGB for color maps, linear/none for data maps; what R3F tags automatically vs imperative assignment; removed `encoding` API |
+| 2 | Screen material | Color Management | UI shown through a lit material's `map` |
+| 3 | `toneMapped` | Color Management | Screen materials under a tone-mapping renderer; no exemption under a composer output pass |
+| 4 | Renderer output | Color Management | Canvas `flat` / `linear` / `legacy` / `gl` props, double or missing encode, named tone-mapping constants |
+| 5 | `useFrame` hot path | Performance | GPU resources or math objects created per frame, hooks called inside the callback |
+| 6 | Store reads | Performance | Hook subscriptions to per-frame values, stale `getState()` reads |
+| 7 | DPR and frameloop | Performance | DPR cap, `frameloop="demand"` without `invalidate()`, render priority with nothing rendering, instancing |
+| 8 | Disposal | Performance | Imperative resources without cleanup, `dispose={null}` over one-off resources, cached GLTF ownership |
+| 9 | Loading | GLB / GLTF | Draco / meshopt / KTX2 decoders vs the asset's extensions, CDN decoder vs CSP, one scene mounted twice, preload |
+| 10 | Texture replacement | GLB / GLTF | `flipY` and UV settings on swapped textures, `needsUpdate`, shared materials |
+| 11 | Glass and transparency | GLB / GLTF | `opacity` without `transparent` |
+| 12 | Structure | GLB / GLTF | `nodes.X` names vs the asset's nodes after loader sanitizing |
+| 13 | Suspense and errors | R3F Patterns | Error boundary between a loader and the React root, R3F store hooks outside `<Canvas>` |
+| 14 | Environment | R3F Patterns | Runtime-fetched HDRI presets vs CSP/offline constraints |
+| 15 | Lighting | R3F Patterns | Lit materials with no light or environment, unused `MeshPhysicalMaterial` |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a blank canvas, a throwing load or render, or the React root unmounting, proven from code); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. Three.js, R3F and drei behavior is read from the installed `node_modules`; when installed source shows a rule's premise does not apply, the finding drops to SUGGESTION. Overlay UI, reduced-motion gates and loading UI go to `ui-design-reviewer`, ScrollTrigger to `presentation-reviewer`, bundle, measured FPS and memory to `frontend-perf-reviewer`.
 
 ---
 
 ### ui-design-reviewer
 
-**Description:** Anti-slop UI review -- typography, color calibration, layout diversity, motion quality, interactive states.
+**Description:** Read-only design review of the UI layer of 3D/WebGL pages -- overlay/HUD over a Three.js/R3F canvas, scroll-driven 3D sections, text in 3D.
 
-**Allowed tools:** Read, Grep, Glob
+**Allowed tools:** Read, Grep, Glob, Bash
 
-**Activate when:** Reviewing frontend components for design quality.
+**Activate when:** Reviewing frontend components for design quality on a page that composes UI with a 3D scene. Pure 2D UI goes to `ui-reviewer` (core, or the frontend-ui umbrella when installed).
 
-**Checklist (16 checks):**
+**Areas (7, no score; source evidence only, screenshots only when supplied):**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | Distinctive font choice (no Inter/Roboto) | WARNING | Typography |
-| 2 | Headline `tracking-tighter`/`tracking-tight` | WARNING | Typography |
-| 3 | Body text `max-w-[65ch]` | INFO | Typography |
-| 4 | Max 1 accent color | WARNING | Color |
-| 5 | Accent saturation < 80% | WARNING | Color |
-| 6 | No purple-to-blue gradient default | CRITICAL | Color |
-| 7 | Anti-center bias | WARNING | Layout |
-| 8 | CSS Grid over flex math | INFO | Layout |
-| 9 | `min-h-[100dvh]` not `h-screen` | CRITICAL | Layout |
-| 10 | Spring/ease-out for interactions | WARNING | Motion |
-| 11 | Staggered reveals on lists/grids | INFO | Motion |
-| 12 | No instant state transitions | WARNING | Motion |
-| 13 | Loading/empty/error states | CRITICAL | Interactive States |
-| 14 | `:active` feedback on buttons | WARNING | Interactive States |
-| 15 | Glass border + inner shadow | INFO | Glassmorphism |
-| 16 | Tinted shadows (not pure black) | INFO | Glassmorphism |
+| # | Area | What it checks |
+|---|------|----------------|
+| 1 | Composition and viewport | pointer layering over the canvas, canvas host height, `100vh`/`h-screen`, safe-area insets |
+| 2 | Legibility and contrast | contrast computed only for static, resolvable pairs; text over the canvas is an Open Question |
+| 3 | Input parity | keyboard / assistive path for actions on 3D objects, hover-only information, wheel and touch capture |
+| 4 | Accessible alternatives | an equivalent for informative canvas content |
+| 5 | Reduced motion | a gate wired to scene loops, not just a CSS block |
+| 6 | Loading, failure, fallback | blank Suspense fallbacks, essential content inside the scene subtree, no-WebGL path |
+| 7 | Aesthetics rule | `frontend-aesthetics-3d.md` lines (installed), SUGGESTION at most |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a blocked essential task or missing essential content, proven from code); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. Scene internals, ScrollTrigger and performance are routed to `r3f-scene-reviewer`, `presentation-reviewer` and `frontend-perf-reviewer`.
 
 ---
 
 ### frontend-perf-reviewer
 
-**Description:** Frontend performance review -- bundle size, lazy loading, CSS containment, web vitals, image optimization.
+**Description:** Read-only frontend performance review -- what changed code loads, when, and its main-thread work: bundle composition, media, CSS rendering cost, Core Web Vitals risks.
 
-**Allowed tools:** Read, Grep, Glob, Bash
+**Allowed tools:** Read, Grep, Glob, Bash (git inspection, `rg`, `ls`/`test`, `wc -c` only)
 
 **Activate when:** Reviewing frontend code for performance.
 
-**Checklist (12 checks):**
+**Checklist (12 checks), source evidence only -- it does not build, run or measure:**
 
-| # | Check | Severity | Category |
-|---|-------|----------|----------|
-| 1 | Routes use dynamic `import()` | CRITICAL | Bundle Size |
-| 2 | Named imports for tree shaking | WARNING | Bundle Size |
-| 3 | Heavy libraries code-split | WARNING | Bundle Size |
-| 4 | Below-fold images lazy loaded | WARNING | Images & Media |
-| 5 | Blur/skeleton placeholders | INFO | Images & Media |
-| 6 | WebP/AVIF format | INFO | Images & Media |
-| 7 | CSS `contain` on complex components | INFO | CSS & Rendering |
-| 8 | `will-change` only on animated elements | WARNING | CSS & Rendering |
-| 9 | No read-then-write DOM loop | CRITICAL | CSS & Rendering |
-| 10 | LCP element loads fast | CRITICAL | Runtime Performance |
-| 11 | Images/embeds have width/height | WARNING | Runtime Performance |
-| 12 | Event handlers < 200ms | WARNING | Runtime Performance |
+| # | Check | Category | What it checks |
+|---|-------|----------|----------------|
+| 1 | Code splitting | Bundle Size | Features newly reachable statically from the client entry, ineffective dynamic imports, `lazy()` without an error boundary |
+| 2 | Tree shaking | Bundle Size | Namespace imports and barrels judged against the installed package's entry and `sideEffects` |
+| 3 | Heavy imports | Bundle Size | Root imports of libraries that ship per-method or sub-path entries, in eager modules |
+| 4 | Lazy loading | Images & Media | Offscreen media without `loading="lazy"` or a lazy-default component |
+| 5 | Placeholders | Images & Media | Large first-view media region blank while loading (optional) |
+| 6 | Format | Images & Media | Photographic raster without `srcset`/`<picture>`, animated GIF (repo evidence only) |
+| 7 | CSS containment | CSS & Rendering | `contain` / `content-visibility` opportunities and misuse |
+| 8 | will-change and animated properties | CSS & Rendering | Permanent `will-change`, layout properties written per scroll tick or frame |
+| 9 | Layout thrashing | CSS & Rendering | Layout reads after writes in a loop or high-frequency handler |
+| 10 | LCP | Runtime -- Core Web Vitals risks | Lazy or late-shown first-view candidate, blocking scripts, `font-display` |
+| 11 | CLS | Runtime -- Core Web Vitals risks | Media and embeds without reserved space, content inserted above content |
+| 12 | INP and main-thread work | Runtime -- Core Web Vitals risks | Unbounded work in handlers, listeners without cleanup, update loops |
+
+Severity is CRITICAL / WARNING / SUGGESTION (CRITICAL only for a page that fails to render, crashes or never settles, proven from code -- never for a pattern, size or metric alone); confidence is HIGH / MEDIUM / LOW with LOW going to Open Questions. Bytes, milliseconds and fps appear only from a build report, trace or profile you supply; from source it names the mechanism and the metric at risk. Package and bundler behavior is read from the installed `node_modules`; `bundle-size-warn` hook warnings are leads, not evidence. `useFrame` work, disposal, DPR, frameloop, GLB and textures go to `r3f-scene-reviewer`, ScrollTrigger to `presentation-reviewer`, fallback UI and reduced motion to `ui-design-reviewer`, measured bundle size to `health-checker`.
 
 ---
 
@@ -457,7 +447,7 @@ Install via `npx skills add`:
 | GSAP timeline compression (animations in first 10% of scroll) | ~2h | gsap-pattern-check hook catches missing `tl.set({}, {}, 1.0)` immediately | 0 |
 | UV mapping mismatch (stretched/flipped texture on model) | ~2h | gltf-debugging skill (traverse, inspect UVs, safe replacement) | <30min |
 | Tailwind v3/v4 syntax mix (styles don't apply) | ~1h | tailwind-version-guard hook detects version mismatch on edit | 0 |
-| AI-generated generic UI ("slop" patterns) | ongoing | ui-design-reviewer agent (16 checks) + frontend-aesthetics-3d rule | caught in review |
+| UI over a 3D scene unreadable, unreachable or missing on load failure | ongoing | ui-design-reviewer agent (7 areas) + frontend-aesthetics-3d rule | caught in review |
 | Heavy imports bloating bundle | varies | bundle-size-warn hook warns on moment/lodash/THREE/MUI/antd | caught on edit |
 | GSAP animations leak on unmount | ~1h debug | gsap-pattern-check hook warns on missing `gsap.context()` | 0 |
 | 3D scene looks flat/lifeless | ~1h tweaking | product-3d-lighting skill (studio presets, common mistakes) | <15min |

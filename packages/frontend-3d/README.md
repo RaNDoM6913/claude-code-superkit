@@ -59,4 +59,4 @@ Install via `npx skills add`:
 | GSAP timeline compression | ~2h | gsap-pattern-check hook catches immediately |
 | UV mapping mismatch | ~2h | gltf-debugging skill |
 | Tailwind v3/v4 syntax mix | ~1h | tailwind-version-guard hook |
-| AI-generated generic UI | ongoing | ui-design-reviewer agent + frontend-aesthetics-3d rule |
+| UI over a 3D scene unreadable, unreachable or missing on load failure | ongoing | ui-design-reviewer agent + frontend-aesthetics-3d rule |

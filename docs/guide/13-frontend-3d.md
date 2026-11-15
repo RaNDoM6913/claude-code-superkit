@@ -49,50 +49,61 @@ The package includes 4 review agents. All use `model: opus`.
 
 ### presentation-reviewer
 
-**When to activate:** Editing scroll-driven presentation sections with GSAP ScrollTrigger, phone frame components, or 3D textures.
+**When to activate:** Editing scroll-driven presentation sections built on GSAP ScrollTrigger (with or without a device-frame mockup or 3D textures).
 
-Runs 16 checks across 5 categories:
+Read-only review in 7 areas, source evidence only (it cannot scroll or play a timeline; GSAP defaults are read from the installed package):
 
-- **GSAP ScrollTrigger (5)** -- `gsap.context()` cleanup, timeline extension (`tl.set`), `invalidateOnRefresh`, `scrub` as number, phase object usage
-- **Phone Frame (3)** -- screen dimension constants, content scaling formula, viewport scale hook
-- **Combined Section (3)** -- phase boundaries reaching 1.0, no overlap between phases, screen layer switching
-- **3D / Texture (3)** -- `meshBasicMaterial` for screens, sRGB colorSpace, `toneMapped: false`
-- **General (2)** -- dual ScrollTrigger entrance pattern, layout overflow prevention
+- **Timeline extent** -- computed total length vs the 0-1 phase plan, `tl.set` padding, overlapping tweens
+- **Scrub and snap** -- `scrub` value, snap points vs phase rests
+- **Refresh and pinning** -- `invalidateOnRefresh`, late layout changes, scroll distance, pin spacing
+- **Lifecycle and duplicates** -- `gsap.context()` / `useGSAP` teardown, stacked or globally killed triggers
+- **Breakpoints and reduced motion** -- `gsap.matchMedia()`, a gate that actually stops GSAP
+- **SSR and mobile** -- unguarded browser globals on server-rendered routes
+- **Device frame and layers** -- consistent dimensions, hidden-but-focusable layers, layer/texture switch timing
+
+Materials, color space and tone mapping are routed to `r3f-scene-reviewer`, overlay UI to `ui-design-reviewer`, performance to `frontend-perf-reviewer`.
 
 ### r3f-scene-reviewer
 
 **When to activate:** Editing files that import `@react-three/fiber`, `@react-three/drei`, or `three`.
 
-Runs 15 checks across 4 categories:
+Read-only review, 15 checks across 4 categories, source evidence only (it cannot render WebGL; Three.js, R3F and drei behavior is read from the installed packages):
 
-- **Color Management (4)** -- UI texture colorSpace, screen material type, toneMapped prop, Canvas toneMapping
-- **Performance (4)** -- no allocations in useFrame, Zustand `getState()` in useFrame, DPR settings, disposal patterns
-- **GLB / GLTF (4)** -- preload at module level, UV preservation on texture replacement, glass mesh handling, type casting
-- **R3F Patterns (3)** -- Suspense wrapping, Environment intensity, lighting setup
+- **Color Management (4)** -- texture color space, screen material, `toneMapped`, renderer output (tone mapping and output color space)
+- **Performance (4)** -- `useFrame` hot path, store reads, DPR and frameloop, disposal
+- **GLB / GLTF (4)** -- loading and decoders, texture replacement (`flipY`, UV settings), glass and transparency, node structure
+- **R3F Patterns (3)** -- Suspense and error boundaries, Environment presets, lighting
+
+Overlay UI, reduced-motion gates and loading UI are routed to `ui-design-reviewer`, ScrollTrigger to `presentation-reviewer`, bundle, measured FPS and memory to `frontend-perf-reviewer`.
 
 ### ui-design-reviewer
 
-**When to activate:** Reviewing frontend components for design quality. Catches AI-generated "slop" patterns.
+**When to activate:** Reviewing the UI layer of a page that composes UI with a 3D scene (DOM overlay or HUD over a canvas, text in 3D, scroll-driven 3D sections). Pure 2D UI goes to `ui-reviewer` (core, or the frontend-ui umbrella when installed).
 
-Runs 16 checks across 6 categories:
+Read-only review in 7 areas, source evidence only (it cannot render WebGL; screenshots count only when you supply them). There is no score:
 
-- **Typography (3)** -- font choice (no generic Inter/Roboto), headline tracking, body text width
-- **Color (3)** -- single accent color, saturation limits, no default purple-to-blue gradient
-- **Layout (3)** -- anti-center bias, Grid over Flex, `min-h-[100dvh]` not `h-screen`
-- **Motion (3)** -- spring physics for interactions, staggered reveals, animated state transitions
-- **Interactive States (2)** -- loading/empty/error states, active feedback on tap
-- **Glassmorphism (2)** -- glass border + inner shadow, tinted shadows
+- **Composition and viewport** -- which layer gets the pointer over the canvas, canvas host height, `100vh`/`h-screen` vs `dvh`, safe-area insets
+- **Legibility and contrast** -- computed only for static, resolvable pairs; text over the moving canvas goes to Open Questions
+- **Input parity** -- keyboard and assistive-technology path for actions on 3D objects, hover-only information, wheel/touch capture
+- **Accessible alternatives** -- an equivalent for informative canvas content
+- **Reduced motion** -- a gate wired to the scene's loops (`useFrame`, GSAP, `autoRotate`, `<Float>`), not just a CSS block
+- **Loading, failure, fallback** -- blank Suspense fallbacks, essential content inside the scene's Suspense subtree, no-WebGL path
+- **Aesthetics rule** -- lines of `frontend-aesthetics-3d.md` (installed), SUGGESTION at most
+
+Scene internals, ScrollTrigger mechanics and performance are routed to `r3f-scene-reviewer`, `presentation-reviewer` and `frontend-perf-reviewer`.
 
 ### frontend-perf-reviewer
 
-**When to activate:** Reviewing frontend code for performance issues.
+**When to activate:** Reviewing frontend code for performance.
 
-Runs 12 checks across 4 categories:
+Read-only review, 12 checks across 4 categories, source evidence only (it does not build, run or measure; sizes and timings appear only from a report you supply; package and bundler behavior is read from the installed packages):
 
-- **Bundle Size (3)** -- code splitting, tree shaking, heavy import detection
-- **Images & Media (3)** -- lazy loading, blur placeholders, modern formats (WebP/AVIF)
-- **CSS & Rendering (3)** -- CSS containment, `will-change` only on animated elements, no layout thrashing
-- **Runtime Performance (3)** -- LCP optimization, CLS prevention, INP optimization
+- **Bundle Size (3)** -- code splitting, tree shaking, heavy imports
+- **Images & Media (3)** -- lazy loading, placeholders, format
+- **CSS & Rendering (3)** -- CSS containment, `will-change` and animated properties, layout thrashing
+- **Runtime -- Core Web Vitals risks (3)** -- LCP, CLS, INP and main-thread work
+
+`useFrame` work, disposal, DPR, frameloop, GLB and textures are routed to `r3f-scene-reviewer`, ScrollTrigger to `presentation-reviewer`, fallback UI and reduced motion to `ui-design-reviewer`, measured bundle size to `health-checker`.
 
 ## Hooks
 
@@ -297,7 +308,7 @@ You're creating a landing page where a 3D phone model rotates and changes screen
 - **Rules:** gsap-conventions (enforces `tl.set`, `scrub` numbers, context cleanup), threejs-conventions (enforces meshBasicMaterial, colorSpace, UV settings), frontend-aesthetics-3d (anti-center bias, spring physics, staggered reveals)
 - **Skills:** r3f-scroll-driven-3d (GSAP-Zustand-R3F bridge pattern), product-3d-lighting (studio lighting setup), html-to-3d-texture (capture pipeline for screen textures)
 - **Hooks:** gsap-pattern-check (catches anti-patterns on every edit), r3f-color-check (ensures correct color management), bundle-size-warn (warns on heavy imports)
-- **Agents:** presentation-reviewer (full 16-check review), r3f-scene-reviewer (15-check 3D review)
+- **Agents:** presentation-reviewer (seven-area scroll-mechanics review), r3f-scene-reviewer (15-check 3D review)
 
 ### Debugging 3D color issues
 
