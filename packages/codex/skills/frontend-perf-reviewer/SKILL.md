@@ -2,7 +2,7 @@
 name: frontend-perf-reviewer
 description: Use when reviewing frontend bundle, media, rendering or runtime performance, Core Web Vitals claims, or performance regressions in assigned frontend paths.
 user-invocable: false
-tokens: 3686
+tokens: 3946
 ---
 
 # Frontend Performance Reviewer
@@ -42,7 +42,11 @@ For #2 use the selected bundler's documentation and configuration. [Webpack tree
 
 Follow startup and navigation across data requests, assets, rendering and hydration. Check duplicated client/server work, serial request waterfalls, blocking third-party scripts, hydration mismatches, repeated fetching and cache invalidation/freshness. Delivery compression and cache policy require actual server/CDN/service-worker evidence; source imports cannot establish transfer bytes or cache hits. Long-lived caches need correct keys, freshness, capacity and eviction. More preloads, longer caching or an extra cache can increase contention, stale data or retention.
 
+For a deferred feature, trace all relevant importer paths back to the real client entry, including another eager path to the same module. Establish source reachability separately from emitted chunk placement and transferred bytes; the latter need matching bundler behavior and build/delivery evidence. Follow rejected dynamic imports or lazy loaders through the effective framework/ancestor error boundary, fallback and retry or navigation recovery. A loading fallback alone does not prove a rejected load is handled, and a local missing boundary does not prove a page-wide failure when an ancestor owns recovery.
+
 For #9/#12 trace large DOM/list work, state/subscription fan-out, expensive calculations, render loops and effects. In React, repeated renders, inline functions or missing memoization are not defects by themselves. Establish the relevant work, ownership and workload; memoization/virtualization have invalidation, memory, accessibility and interaction tradeoffs. Distinguish a framework render from a browser paint and a commit from a measured user delay.
+
+When an effect writes a value that controls its own rerun, follow the dependency identity, guards, convergence and cleanup across subsequent executions. Confirm a reachable self-sustaining update cycle rather than reporting every effect setter as a loop. Its precise failure mode depends on the installed framework and effect path; do not invent an error message, iteration limit or measured delay from the pattern alone.
 
 Trace timers, animation frames, observers, listeners, workers, subscriptions, requests and retained data across route changes, repeated mount/unmount, cancellation, retries and background tabs. Identify a concrete lifecycle/resource-bound path before calling it a leak. Check admission, bounded queues and payload/collection sizes where work can grow. Scheduling, chunking, debouncing, workers or idle callbacks are options with ordering, cancellation, availability, serialization and responsiveness costs; no one is a universal fix. Deferring work does not remove its total cost, and delaying required feedback can make interaction worse.
 

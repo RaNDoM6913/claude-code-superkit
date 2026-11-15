@@ -1,6 +1,6 @@
 # Codex / Claude role comparison — G7–G9
 
-Date: 2026-11-15. Current checkpoint: G7 — ACCEPTED — independent PASS; Astra source accepted.
+Date: 2026-11-15. Current checkpoint: G8 — ACCEPTED — independent PASS; Astra source accepted.
 
 ## Scope and acceptance
 
@@ -53,7 +53,7 @@ tokens at `2026-11-15T15:35:11.625Z`; no compaction was reported.
 | Group | Scope | State |
 |---|---|---|
 | G7 | core UI/visual plus six frontend UI roles | ACCEPTED — independent PASS; Astra source accepted |
-| G8 | presentation, R3F scene, UI design, frontend performance | Not started |
+| G8 | presentation, R3F scene, UI design, frontend performance | ACCEPTED — independent PASS; Astra source accepted |
 | G9 | optional native GAN planner | Not started |
 
 <!-- G7-start -->
@@ -194,6 +194,111 @@ Protected snapshot: 414 files unchanged. Phase/stale checks: PASS; source catalo
 
 Acceptance state: ACCEPTED — independent PASS; Astra source accepted. Git commit identity and final checkout return are observed after execution.
 <!-- G7-end -->
+
+<!-- G8-start -->
+## G8 — ACCEPTED — independent PASS; Astra source accepted
+
+Author decisions and exact source acceptance: `/private/tmp/superkit-g8-20261115-decisions.json`; author report: `/private/tmp/superkit-g8-20261115-astra.md`. Independent review: `/private/tmp/superkit-g8-20261115-review.md`.
+
+### presentation-reviewer — CHANGED
+
+Add explicit callback-driven layer/state restoration across reverse scroll, jumps and rebuilt timelines.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Direction-aware callback state | Native covers reverse/large jumps generally, but does not explicitly trace one-way callbacks writing discrete state; pinned source identifies a concrete stale-layer failure. |
+| KEEP | 16 native domains and installed-version lifecycle checks | Dependency updates, async ownership, cleanup, normalized extent and refresh are already explicit; no repeat expansion needed. |
+| REJECT | Hardwired GSAP defaults, seven-area replacement and rule-premise severity | Version-specific facts are inspection leads; native rows, impact severity and task authority remain binding. |
+| REJECT | Opacity/pointer compound claim | Pointer-event suppression does not establish keyboard exclusion; native already treats those independently. |
+
+### r3f-scene-reviewer — CHANGED
+
+Explicitly correlate asset extension requirements/decoders and actual texture assignment path.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Required versus optional asset extensions and loader path | Native generic loader/decoder guidance can miss required extension/configuration mismatch and fallback branches; trace selected metadata to actual decoder and failure owner. |
+| TAKE | Declarative versus imperative texture assignment | Pinned source exposes materially different handling in a specific version; require inspection of both routes rather than universal tagging claims. |
+| KEEP | 15 checks, GPU/source distinction, shared ownership and errors | Native protects all existing caller fields and handles disposal/caching/load boundaries without default recipes. |
+| REJECT | Binary rg as complete asset parser, fixed CDN/default claims and automatic severity | These can misstate asset coverage, version behavior or impact; absent metadata/source remains UNKNOWN. |
+
+### ui-design-reviewer — CHANGED
+
+Add bounded paired DOM/canvas review mapped to existing16 rows.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Input ownership and equivalent task state | Native generic interaction checks do not explicitly connect overlay/portal hit-testing to canvas control state and keyboard alternatives. |
+| TAKE | Informative versus decorative canvas and real alternatives | An accessible label alone may not carry required task information; inspect information and supported actions with the scene unavailable. |
+| TAKE | Motion and load-failure paths preserve essential DOM | Native states cover general loading/motion but not scene gates across WebGL failure, context loss and canvas-specific motion. |
+| KEEP | Existing scope and16-check/report contract | Do not replace broad assigned UI design scope with a strict 3D-only rejection or7-row output. |
+| REJECT | Universal null fallback, viewport-unit or contrast defaults | Actual content/criteria/state determine defects; no new mandatory tool or fallback standard. |
+
+### frontend-perf-reviewer — CHANGED
+
+Make competing eager imports, failed deferred loads and self-invalidating effects explicit.
+
+| Decision | Candidate | Reason |
+|---|---|---|
+| TAKE | Static reachability alongside dynamic import | Native warns dynamic import alone is insufficient but lacks explicit second eager path; inspect actual entry reachability without claiming emitted chunks. |
+| TAKE | Deferred chunk rejection and recovery ownership | Trace lazy/framework loading boundary, error path and usable recovery; no blanket React-root-unmount or severity claim. |
+| TAKE | Effect writes into its own dependencies | Native general effect/render-loop coverage benefits from an explicit self-invalidating update trigger with guards/convergence checked. |
+| KEEP | 12 domains, static/lab/field separation and workload evidence | No new metrics, budgets, caller labels or authority. |
+| REJECT | Fixed Vite/React consequences and measured-bundle routing replacement | Actual installed versions and bound build evidence control conclusions; preserve native broader measurement assignment. |
+
+### Caller/support compatibility
+
+- Preserve presentation16, R3F15 per-file, UI-design16 and perf12 checks with native report and progression semantics.
+- Native AGENTS catalog and actual authorized assigned scopes remain valid.
+- r3f-scroll-driven-3d and threejs-color-management contain recipes, not authority to override inspected project versions or review findings; no support file edits.
+
+### Local factual support
+
+- Exact cached source facts supplied by independent reviewer at /private/tmp/superkit-g7-g9-20261115-facts/source; proposed wording is version-conditional.
+- Native report/stop sections are byte-identical to G7 HEAD, and domain row counts remain16/15/16/12.
+- New guidance requires actual installed-version inspection; it adds no hardcoded version/default/CLI/exit claim.
+- Durable exact-version anchors below were read from pre-existing local cache archives, with package/package.json identity and archive SHA-512 verified. They were not installed or executed for this task. Downstream project versions remain to be resolved.
+- GSAP 3.14.2 src/gsap-core.js:1530,2659: Timeline.call and delayedCall callback paths; reverse/jump behavior still depends on suppression, boundaries and the application state owner.
+- R3F 8.18.0 dist/events-776716bd.esm.js:750–757: conditional JSX texture assignment branch. This is not a universal texture/default guarantee; compare the actual imperative/declarative path.
+- Drei 9.122.0 core/Gltf.js:8–27 and web/Html.js:123–159,164–191,230–247: configured loaders, portal/event/occlusion branches; no browser/accessibility behavior was exercised.
+- Three-stdlib 2.36.1 loaders/GLTFLoader.js:186–196,724–740,831–850,998–1006: extension and decoder handling. Application asset requirements and fallback remain independently verified inputs.
+- Vite 6.4.1 dist/node/chunks/dep-D4NMHUTW.js:7883–7894: mixed static/dynamic import condition. Source reachability does not establish emitted placement or measured transfer bytes.
+- React 18.3.1 cjs/react.development.js:1354–1408 and React DOM 18.3.1 cjs/react-dom.development.js:18724–18735,27329–27339: lazy rejection and distinct update/error paths. Effective framework/ancestor boundaries determine the application consequence.
+- gsap@3.14.2 archive integrity: sha512-P8/mMxVLU7o4+55+1TCnQrPmgjPKnwkzkXOK1asnR9Jg2lna4tEY5qBJjMmAaOBDDZWtlRjBXjLa0w53G/uBLA==
+- @react-three/fiber@8.18.0 archive integrity: sha512-FYZZqD0UUHUswKz3LQl2Z7H24AhD14XGTsIRw3SJaXUxyfVMi+1yiZGmqTcPt/CkPpdU7rrxqcyQ1zJE5DjvIQ==
+- @react-three/drei@9.122.0 archive integrity: sha512-SEO/F/rBCTjlLez7WAlpys+iGe9hty4rNgjZvgkQeXFSiwqD4Hbk/wNHMAbdd8vprO2Aj81mihv4dF5bC7D0CA==
+- three-stdlib@2.36.1 archive integrity: sha512-XyGQrFmNQ5O/IoKm556ftwKsBg11TIb301MB5dWNicziQBEs2g3gtOYIf7pFiLa0zI2gUwhtCjv9fmjnxKZ1Cg==
+- vite@6.4.1 archive integrity: sha512-+Oxm7q9hDoLMyJOYfUYBuHQo+dkAloi33apOPP56pzj+vsdJDzr+j1NISE5pyaAuKL4A3UD34qd0lx5+kfKp2g==
+- react@18.3.1 archive integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
+- react-dom@18.3.1 archive integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==
+
+### UNVERIFIED / NOT RUN
+
+- No new browser/GPU/live-model/profiler evidence or project installation is claimed.
+
+### Integrated verification
+
+Base `b51db2b7292cbd064fb884623285acf0f173290f`; result **PASS**.
+
+| Role | Disposition | Body chars | Growth | tokens | SHA256 |
+|---|---|---:|---:|---:|---|
+| presentation-reviewer | CHANGED | 13274 → 13624 | 2.64% | 3406 | `a274b7c94aa366cb223ded7eb56c3fe62cac8c2c5c1fd7f580b034206c12b8fd` |
+| r3f-scene-reviewer | CHANGED | 14706 → 15465 | 5.16% | 3866 | `8100ec6e09ae362a99d4dd0c9606de90e7405887825775ab9d6c3d4228da96db` |
+| ui-design-reviewer | CHANGED | 11915 → 13872 | 16.42% | 3468 | `197499e7e778e5fbf4bef2a91238d34900538c5c7446a49acd73ad51c9f72349` |
+| frontend-perf-reviewer | CHANGED | 14745 → 15783 | 7.04% | 3946 | `cc1777b027db67dfde2b62fdb9d9c8429308cfbae6153d955bafb8fa7e09bbd9` |
+
+| Check | Exit | Result / log |
+|---|---:|---|
+| npm-test | 0 | ℹ tests 133; ℹ pass 133; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0 |
+| codex-tests | 0 | ℹ tests 112; ℹ pass 112; ℹ fail 0; ℹ cancelled 0; ℹ skipped 0 |
+| counts | 0 | /private/tmp/superkit-g8-20261115-counts.log |
+| whitespace | 0 | /private/tmp/superkit-g8-20261115-whitespace.log |
+| github-about | 0 | /private/tmp/superkit-g8-20261115-github-about.log |
+
+Protected snapshot: 493 files unchanged. Phase/stale checks: PASS; source catalog83, optional GAN3, version1.5.3. Exact commands/log hashes: `/private/tmp/superkit-g8-20261115-verification.json`. Codex tests are a subset of the full suite, not additional unique tests.
+
+Acceptance state: ACCEPTED — independent PASS; Astra source accepted. Git commit identity and final checkout return are observed after execution.
+<!-- G8-end -->
 
 ## Stopping boundary
 
