@@ -73,7 +73,7 @@ For restructuring code without changing behavior.
 For dependency updates and vulnerability fixes.
 
 1. **Assess** — dispatch **dependency-checker** for a full audit. Done when: dependency-checker has returned its audit.
-2. **Upgrade** — apply updates in safe order (patches first, then minors, then majors). Done when: the planned updates are applied in that order.
+2. **Upgrade** — apply the audit's Update Plan in its order (security fixes, then patches, minors, majors one at a time). Done when: the planned updates are applied in that order.
 3. **Fix-breaking** — resolve any breaking changes from major updates. Done when: no unresolved breaking-change compile or test errors remain.
 4. **Verify** — compilation clean, tests pass, no regressions (dispatch **health-checker**). Done when: health-checker's `Compilation` and `Tests` lines are both OK.
 

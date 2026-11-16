@@ -70,7 +70,7 @@ find . -type f -path '*migrations*' -name '*.up.*' -not -path '*/node_modules/*'
 - Python: `python -m pip list --outdated` via the project virtualenv only. Rust: `cargo outdated`.
 
 ### 7. Security Quick Scan
-- npm: `npm audit --omit=dev --json`, read `metadata.vulnerabilities`; an `error` object (e.g. `ENOLOCK`) → not evaluated. Project locked by pnpm/yarn/bun (no `package-lock.json`): use that manager's own audit and outdated commands if installed; never recommend creating a `package-lock.json` there.
+- npm: `npm audit --omit=dev --json`, read `metadata.vulnerabilities`; an `error` object (e.g. `ENOLOCK`), or `npm config get offline` = `true` (audit then prints zeros without asking the registry) → not evaluated. Project locked by pnpm/yarn/bun (no `package-lock.json`): use that manager's own audit and outdated commands if installed; never recommend creating a `package-lock.json` there.
 - `govulncheck ./...`, `pip-audit` (project environment), `cargo audit` (only when `Cargo.lock` exists: without one it runs `cargo update` and creates it).
 Count by the scanner's own severity; none given → `unrated`, never assigned.
 

@@ -143,7 +143,7 @@ If the caller supplied a `dependency-checker` report for the same revision, reus
 
 | Ecosystem | Command (read-only mode) | Exit when vulnerabilities found |
 |-----------|--------------------------|--------------------------------|
-| npm / pnpm / yarn | `npm audit --omit=dev` · `pnpm audit --prod` · `yarn npm audit --all --recursive --environment production` (Yarn ≥2; without `--all --recursive` only the active workspace's direct dependencies are audited) / `yarn audit` (Yarn 1) | non-zero |
+| npm / pnpm / yarn | `npm audit --omit=dev` · `pnpm audit --prod` (pnpm ≥11) · `yarn npm audit --all --recursive --environment production` (Yarn ≥4; without `--all --recursive` only the active workspace's direct dependencies are audited) (pnpm ≤10 and Yarn ≤3 call audit endpoints npm retired 2026-07-15: HTTP 410 → UNVERIFIED) | non-zero |
 | Go (per `go.mod`) | `govulncheck ./...` | 3 (text mode; JSON mode exits 0) |
 | Python | `pip-audit -r requirements.txt --no-deps --disable-pip` (needs fully pinned requirements) | 1 |
 | Rust (per `Cargo.lock`) | `cargo audit` | 1 (2 = scan error) |
