@@ -55,9 +55,9 @@ The `docs-reviewer` agent finds stale documentation by comparing `git diff` agai
 
 - **Stale content** — code changed but the corresponding doc was not updated
 - **Tree staleness** — files added or removed but `docs/trees/` not regenerated
-- **Coverage gaps** — entire subsystems with no architecture doc at all
+- **Coverage gaps** — a doc or section that a project rule requires for the change is absent (`MISSING`); areas no rule requires are suggestions only
 
-Run it manually via `/review` (it is part of the review pipeline) or invoke it directly:
+`/dev` dispatches it in Phase 14 (Document); `/review` does not. To run it on its own, invoke it directly:
 
 ```
 Use the docs-reviewer agent to verify documentation is up to date
@@ -83,4 +83,4 @@ This means documentation never drifts. The rule ensures Claude updates docs proa
 - **Fill only what you know.** Leave template sections empty rather than writing speculative docs. Claude will fill them as features land.
 - **Add detail as the project grows.** A 10-line architecture doc is better than no architecture doc. It gives Claude enough context to ask the right questions.
 - **Let trees auto-generate.** Do not manually maintain `docs/trees/` — that is what the tree-generator agent is for.
-- **Review docs in PRs.** If a PR changes behavior but not docs, the docs-reviewer agent will flag it during `/review`.
+- **Review docs in PRs.** `/review` does not dispatch docs-reviewer; run the agent directly on the PR's range, or rely on the `/dev` Document phase.

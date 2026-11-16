@@ -27,7 +27,7 @@ Use it to build the **doc map** — which doc owns which code area; which files 
 
 ## Scope
 
-First match wins; record it in `Scope`. **Caller gave a range, PR, file list, working-tree diff or named docs** → that (bare file names → read their diff). **Nothing given** → branch diff vs the default branch (`git symbolic-ref --quiet --short refs/remotes/origin/HEAD`, else local `main`/`master`) plus uncommitted work, stated as an assumption. **Empty range or no default branch** → working tree; **clean tree** → last commit.
+First match wins; record it in `Scope`. **Caller gave a range, PR, file list, working-tree diff or named docs** → that (bare file names → `git diff HEAD -- <files>`; untracked ones are added files, read whole; empty → the range below, limited to them). **Nothing given** → branch diff vs the default branch (`git symbolic-ref --quiet --short refs/remotes/origin/HEAD`, else local `main`/`master`) plus uncommitted work, stated as an assumption. **Empty range or no default branch** → working tree; **clean tree** → last commit.
 
 Rename- and merge-aware (`git log --name-only` misses merge contents and a rename's old path); for `R<score> old new`, search docs for both paths:
 ```
@@ -43,14 +43,14 @@ git log -1 --format=%H -- <doc>           # named docs; then git diff --name-sta
 
 1. **Map** each changed code file to docs, in order: the requirement list; docs mentioning its path, basename, or a changed exported name, route, config key or command; then the layer's usual home (API spec, schema doc, README configuration, deploy doc, `docs/trees/`). Search literally: `git grep --untracked -nF -e '<text>'` (tracked + untracked, not ignored), or Grep with regex metacharacters escaped — a bare `.` matches any character.
 2. **Needs an update?** No: pure refactor, tests only, formatting, a fix restoring documented behavior. Yes: changed endpoints or payload shapes, behavior, schema, config keys or defaults, dependencies, structure. A project rule overrides both.
-3. **Compare** the code hunk (`git diff <range> -- <path>`) with the doc section describing it. Doc unchanged → judge its claim against the new behavior; doc changed → its new claims go through Part 2. Edits only to files the project's rule rejects (the kit's documentation rule: plans, `CHANGELOG.md`) do not satisfy a required doc.
-4. **Trees** (`docs/trees/` present) — added, deleted or renamed paths (`--diff-filter=ADR`) within the tree file's depth (header `Depth n`, else 3; path components below the root named on the tree's first line), outside its ignore list and not hidden (dot-prefixed): a listed path gone or a new path absent → STALE on the tree file; Fix: regenerate with `tree-generator`.
+3. **Compare** the code hunk (`git diff <range> -- <path>`) with the doc section describing it. Doc unchanged → judge its claim against the new behavior; doc changed → its new claims go through Part 2. Edits only to files the project's rule rejects (the kit's documentation rule: `docs/superpowers/` plans, specs and research, `memory/`, `CHANGELOG.md`, `HISTORY.md`) do not satisfy a required doc.
+4. **Trees** (`docs/trees/` present) — cut each added, deleted or renamed path (`--diff-filter=ADR`, plus untracked files) to the tree file's depth (header `Depth n`, else 3; path components below the root named on the tree's first line) — a deeper file can still add or empty a listed directory. Skip a cut path with a hidden (dot-prefixed) component or one the generators ignore (`node_modules`, `__pycache__`, `vendor`, `dist`, `build`, `*.pyc`). Listed but gone (`test -e` fails) or present but not listed → STALE on the tree file; Fix: regenerate with `tree-generator`. `tree-project.md` beside `tree-monorepo.md` is the installer's superseded scaffold, which `tree-generator` never rewrites: a Suggestion to delete it, never STALE.
 
 ### Part 2 — Accuracy (doc claims → code)
 
 Docs mapped in Part 1, changed or named; a whole-repo audit only on request. Check each verifiable claim in the relevant sections at the doc's target version (`git show <tag>:<path>` for a versioned doc):
 
-1. **Paths and links** — resolve a relative Markdown link from the doc's directory, a code-span path from the repo root; try both with `test -e` (`test -f` fails on directories) before BROKEN. Ignored (`git check-ignore -v <path>` exits 0), build/generator output or an optional component → not BROKEN. Anchor slugs differ by renderer: a near-match heading is an Open Question. External URLs → UNVERIFIED.
+1. **Paths and links** — resolve a relative Markdown link from the doc's directory, a code-span path from the repo root; try both with `test -e` (`test -f` fails on directories) before BROKEN. Ignored (`git check-ignore -q <path>` exits 0; with `-v` a `!` re-include also exits 0), build/generator output or an optional component → not BROKEN. Anchor slugs differ by renderer: a near-match heading is an Open Question. External URLs → UNVERIFIED.
 2. **Symbols, config keys, env vars, flags, defaults, dependencies** — find the code or manifest that defines or reads them (lockfile for resolved versions); a mention in a comment or another doc is not one.
 3. **Commands** — inspect the script, Makefile target, package script or CLI flag definition; never execute. Target present but not run → UNVERIFIED.
 4. **Counts and inventories** — state the inclusion rule and source, matching the doc's definition and version. Shipped, installed, generated and optional inventories differ; endpoints are method+path registrations or spec operations, not handlers; migrations follow the project's tool (an up/down pair is one). In `git ls-files -co --exclude-standard -- '<dir>/*.sql'` (tracked + untracked) the `*` crosses `/`; `':(glob)<dir>/*.sql'` stays one level; at a ref, `git ls-tree --name-only <ref> -- <dir>/`.
@@ -113,7 +113,7 @@ ASSUMED: <scope fallback, doc target version; else "none">
 NOT FOUND / SKIPPED / UNVERIFIED: <unlocatable inputs; skipped docs + reason; commands not run; URLs not fetched; else "none">
 ```
 
-"clean" requires zero findings and Coverage full; otherwise `0 findings (coverage partial)`. A caller may treat MISSING as passed only when it reads `0` with nothing appended.
+"clean" requires zero findings and Coverage full; otherwise `0 findings (coverage partial)`. Commands not run and URLs not fetched are UNVERIFIED by rule and do not make Coverage partial. A caller may treat MISSING as passed only when it reads `0` with nothing appended.
 
 Example:
 
@@ -134,12 +134,12 @@ Example:
 ### Findings
 [STALE/HIGH] README.md:52 — documents DB_URL; config now reads DATABASE_URL
   Doc claims: "Set DB_URL to your Postgres connection string."
-  Code shows: src/config.ts:14 reads DATABASE_URL (renamed in this diff); git grep -nF DB_URL -- src → no match
+  Code shows: src/config.ts:14 reads DATABASE_URL (renamed in this diff); git grep --untracked -nF -e DB_URL -- src → no match
   Fix: "Set DATABASE_URL to your Postgres connection string."
 
 [MISSING/HIGH] docs/api-reference.md — no entry for POST /invoices/:id/void
   Required by: CLAUDE.md:41 "Route changes update docs/api-reference.md"
-  Searched: docs/** for "/void" and "invoices/:id" → no match
+  Searched: docs/**, README.md for "/void" and "invoices/:id" → no match; no OpenAPI file
   Fix: add the endpoint (200 and 409 responses) from src/api/routes.ts:58
 
 ### Suggestions

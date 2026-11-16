@@ -35,7 +35,7 @@ Phase 12: Review        Dispatch reviewer agents in parallel based on changed fi
                         |
 Phase 13: Critic        [Complex only] Final quality gate: security, new-hire, ops perspectives
                         |
-Phase 14: Document      Dispatch docs-reviewer or update docs manually
+Phase 14: Document      Update docs; dispatch docs-reviewer (read-only gate: no MISSING)
                         |
 Phase 15: Report        Summary table + metrics: files, tests, review, contract score, agent dispatches
 ```

@@ -241,7 +241,7 @@ Dispatch **docs-reviewer** to verify documentation completeness for the changed 
 1. **API spec** (OpenAPI/GraphQL) if endpoints changed.
 2. **Architecture docs** if system behavior changed.
 3. **README** if setup, commands, or structure changed.
-**Done when:** docs-reviewer reports no MISSING items for this change.
+**Done when:** docs-reviewer's `**MISSING:**` line reads `0` with nothing appended (`0 — unconfirmed: …` is not a pass: supply what it names and re-dispatch).
 
 ## Phase 15 — Report
 
