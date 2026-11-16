@@ -19,7 +19,7 @@ If you are building a scroll-driven 3D product showcase, see Chapter 13 (Fronten
 
 The package ships **6 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every component is designed around auto-dispatch — you almost never call these agents by name.
 
-**The agents** form an umbrella + specialists pattern. `ui-reviewer` is the top-level umbrella that scans your diff, runs a reflex audit against the AI-slop list, and dispatches specialists in parallel: `ui-typography-reviewer` for font-family or type-scale changes, `ui-color-reviewer` for palette work, `ui-motion-reviewer` for transitions and animations, `ui-interaction-reviewer` for buttons, modals, drawers, and forms, and `ui-design-critic` for gestalt-level critique ("does this feel designed, or does it feel generated?"). Each specialist has its own dispatch rules — you can also invoke them directly by asking about their domain, and the umbrella steps aside.
+**The agents** form an umbrella + specialists pattern. `ui-reviewer` is the top-level umbrella that scans your diff, runs a reflex audit against the AI-slop list, and returns a routing table naming the specialists the caller should dispatch: `ui-typography-reviewer` for font-family or type-scale changes, `ui-color-reviewer` for palette work, `ui-motion-reviewer` for transitions and animations, `ui-interaction-reviewer` for buttons, modals, drawers, and forms, and `ui-design-critic` for gestalt-level critique ("does this feel designed, or does it feel generated?"). Each specialist has its own dispatch rules — you can also invoke them directly by asking about their domain, and the umbrella steps aside.
 
 **The rules** use `applyWhenPaths` scoping so they auto-load only when you are editing UI files. `frontend-design-aesthetics` is the principles umbrella; `typography-guidelines`, `color-and-contrast`, `spatial-and-layout`, `motion-and-animation`, and `interaction-polish` are deep specialist rules; `ui-anti-patterns` is the rejection list (reflex fonts, banned colors, banned layouts). When you edit a `.tsx` file, Claude silently receives the four or five rules relevant to your change — no manual prompting required.
 
@@ -100,7 +100,7 @@ As soon as the `Edit` tool completes, three things happen in sequence.
 
 **Second**, because the file path matches `applyWhenPaths` globs, the `typography-guidelines`, `color-and-contrast`, and `ui-anti-patterns` rules are now loaded in Claude's context. Claude sees both the stderr warnings and the rule text simultaneously.
 
-**Third**, if you ask "review this" or "polish this," the `ui-reviewer` umbrella auto-dispatches. It runs its reflex audit, sees the font + color hits, and dispatches `ui-typography-reviewer` and `ui-color-reviewer` in parallel. They return findings in the standard format:
+**Third**, if you ask "review this" or "polish this," the `ui-reviewer` umbrella auto-dispatches. It runs its reflex audit, sees the font + color hits, reports them itself (each a WARNING; three or more become one CRITICAL "AI-reflex aesthetic" finding) and routes `ui-typography-reviewer` and `ui-color-reviewer` in its `### Specialist routing` table; the main session dispatches them. Findings read `[SEVERITY/CONFIDENCE] file:line — description` with `Evidence:` / `Rule:` / `Fix:` lines:
 
 ```
 [WARNING/HIGH] src/components/PricingCard.tsx:5 — Inter is the rendered family and is on the reflex list
@@ -126,9 +126,9 @@ shift instead of a hue shift:
   background: linear-gradient(135deg, oklch(0.55 0.15 265), oklch(0.40 0.10 265));
 ```
 
-Every finding carries a **severity** (`CRITICAL` / `WARNING` / `SUGGESTION`) and a **confidence** (`HIGH` / `MEDIUM` / `LOW`). Severity tells you how much this hurts the UI; confidence tells you how certain the reviewer is that it is wrong. A `[WARNING · LOW]` finding is a judgment call you can dismiss; a `[CRITICAL · HIGH]` finding is almost always shipping broken UX.
+Every finding carries a **severity** (`CRITICAL` / `WARNING` / `SUGGESTION`) and a **confidence** (`HIGH` / `MEDIUM` / `LOW`). Severity tells you how much this hurts the UI; confidence tells you how certain the reviewer is that it is wrong. A LOW-confidence observation is never a finding — it goes to Open Questions; a `[CRITICAL/HIGH]` finding is almost always shipping broken UX.
 
-The review ends with a one-paragraph summary counting findings by severity and a top-line assessment like "This diff is shipping the AI reflex aesthetic — two CRITICAL findings block the commit."
+The review ends with a `**Verdict:**` line counting findings by severity (for example "3 findings (1 CRITICAL, 2 WARNING)"); under `/dev`, a CRITICAL must be fixed before the phase passes.
 
 ## How auto-dispatch picks the right specialist
 
@@ -136,15 +136,15 @@ You never say "call `ui-color-reviewer`." You say "review this" or edit a file. 
 
 **The entry point is almost always `ui-reviewer`.** It dispatches when the user asks for `audit`, `review`, `polish`, or `critique` AND active edits are in `.tsx/.jsx/.ts/.css/.scss/.html/.vue` files, or when 3+ frontend file edits have completed in a single task. On backend files (`.go`, `.py`, `.rs`) it explicitly opts out — no double-review with the wrong specialist.
 
-Inside `ui-reviewer`, Phase 1 is "scope the diff." It reads `git diff --name-only` and groups files by concern: typography-touching (anything with `font-family`, `font-weight`, type-scale tokens), color-touching (palette files, new `oklch`/`hsl`/`#hex` values, `bg-*`/`text-*` Tailwind classes), motion-touching (anything importing `motion/react` or touching `transition`/`animation`), interaction-touching (buttons, modals, drawers, forms), layout-touching (grid, flex, spacing tokens).
+Inside `ui-reviewer`, Phase 1 scopes the diff (`git diff HEAD`) and Phase 2 greps the changed hunks for per-concern signals: typography-touching (anything with `font-family`, `font-weight`, type-scale tokens), color-touching (palette files, new `oklch`/`hsl`/`#hex` values, `bg-*`/`text-*` Tailwind classes), motion-touching (anything importing `motion/react` or touching `transition`/`animation`), interaction-touching (buttons, modals, drawers, forms), layout-touching (grid, flex, spacing tokens).
 
-**If a concern has 2+ files or a large single-file change,** `ui-reviewer` dispatches the specialist in parallel. If you changed `font-family` in `Hero.tsx` and added a new type-scale step in `tokens.css`, that's the typography specialist. If you introduced a new `--brand-primary` token and swapped six `bg-slate-*` classes, that's the color specialist. Multiple specialists fire simultaneously (all `Agent` calls in one message) — they don't wait on each other.
+**If a concern is non-trivial,** `ui-reviewer` marks the specialist `route` with a `file:line → question` hand-off; it does not dispatch — the caller does. If you changed `font-family` in `Hero.tsx` and added a new type-scale step in `tokens.css`, that's the typography specialist. If you introduced a new `--brand-primary` token and swapped six `bg-slate-*` classes, that's the color specialist. The caller dispatches all routed specialists in one message — they don't wait on each other.
 
 **You can also invoke specialists directly.** If you say "check my palette for contrast issues," `ui-color-reviewer` fires without the umbrella running first. Same for "critique these fonts" (typography) or "do my modal transitions feel right" (motion). The specialist's own dispatch rules handle the routing.
 
-**`ui-design-critic` is the odd one out.** It is not a technical reviewer — it is a gestalt-level critic that asks "does this feel designed, or does it feel generated?" Invoke it when you want subjective pushback, not code-level findings. The umbrella dispatches it when you ask for "critique" or "holistic review" specifically.
+**`ui-design-critic` is the odd one out.** It is not a technical reviewer — it is a gestalt-level critic that asks "does this feel designed, or does it feel generated?" Invoke it when you want subjective pushback, not code-level findings. The umbrella routes it when you ask for "critique" or "holistic review", or for a new page or 5+ UI files.
 
-One more nuance: the umbrella **skips** dispatching specialists when a concern is trivial (one line touched, no tokens added). It notes "no specialist needed — single typography edit doesn't warrant deep review" in its output and proceeds. This keeps review cost proportional to the change.
+One more nuance: the umbrella marks a concern `covered inline` when it is trivial (one changed line, no token, theme, global stylesheet or shared component) and checks that line itself. This keeps review cost proportional to the change.
 
 ## The `impeccable-craft` flow — when to opt in
 

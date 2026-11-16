@@ -216,7 +216,7 @@ Then dispatch reviewer agents **in parallel** — every row whose pattern matche
 | API contract changed (OpenAPI/Swagger, GraphQL schema, `.proto`) | **api-contract-sync** |
 | Any changed code | **silent-failure-hunter**, **comment-rot-analyzer** |
 
-Pass each agent the changed-file list and task description. Each runs its own two-stage discipline (discover, then triage by Severity + Confidence).
+Pass each agent the changed-file list and task description. Each runs its own two-stage discipline (discover, then triage by Severity + Confidence). If **ui-reviewer** returns a `### Specialist routing` table (frontend-ui umbrella), dispatch every row whose Status is `route` in parallel — prompt: that row's hand-off plus the task description — and triage those reports with the rest; list `not found locally` rows as unreviewed scopes in the Phase 15 Open Questions.
 
 Go path, opt-in: if a gopls MCP server is registered, Go edits use `go_symbol_references` (blast radius) before touching a definition and `go_diagnostics` after — never assume the server is wired.
 
