@@ -6,7 +6,7 @@ Self-contained package for **2D frontend UI design & polish**. Sibling to `front
 
 1. **Auto-dispatch, not slash-commands.** Agents fire automatically based on file patterns and user intent ("audit", "review", "polish", "critique"). You don't call `/impeccable audit` — Claude figures out the right specialist from context.
 2. **Auto-loaded knowledge.** Rules scope to UI file paths via `applyWhenPaths` — when you edit `.tsx`, Claude receives typography / color / motion guidelines automatically.
-3. **Per-project tailoring from existing docs.** Agents read your `CLAUDE.md` and `docs/architecture/*` in Phase 0 to infer brand / audience / tone. Auto-memory fills gaps over time. One targeted question asked mid-task only when genuinely ambiguous — no upfront questionnaires.
+3. **Per-project tailoring from existing docs.** Agents read your `CLAUDE.md` and `docs/architecture/*` in Phase 0 and take brand / audience / tone only from documented statements. Anything else is a stated assumption plus an Open Question — the agents never ask mid-task.
 4. **Reject AI monoculture.** Explicit lists of banned fonts (Inter, DM Sans, Fraunces, Plus Jakarta Sans…), banned colors (pure black/white, cyan-on-dark, purple-to-blue gradients), and banned layouts (nested cards, identical card grids, centered everything).
 
 ## What's inside

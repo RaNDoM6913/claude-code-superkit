@@ -103,19 +103,10 @@ As soon as the `Edit` tool completes, three things happen in sequence.
 **Third**, if you ask "review this" or "polish this," the `ui-reviewer` umbrella auto-dispatches. It runs its reflex audit, sees the font + color hits, and dispatches `ui-typography-reviewer` and `ui-color-reviewer` in parallel. They return findings in the standard format:
 
 ```
-[CRITICAL · HIGH] Using Inter — reflex-list font
-src/components/PricingCard.tsx:5
-
-`font-family: Inter` is in .claude/rules/ui-anti-patterns.md
-reflex_fonts_to_reject list.
-
-This is a training-data default; every AI-generated UI reaches for it.
-Projects lose visual differentiation.
-
-Suggested change:
-Run the font-selection procedure in typography-guidelines.md. Based on
-your CLAUDE.md brand-voice ("calm, clinical, careful"), start with
-Söhne, Unica77, or Neue Haas Grotesk as display.
+[WARNING/HIGH] src/components/PricingCard.tsx:5 — Inter is the rendered family and is on the reflex list
+  Evidence: `font-family: Inter` leads the stack; no font decision documented in CLAUDE.md
+  Rule: .claude/rules/ui-anti-patterns.md — "The reflex_fonts_to_reject list"
+  Fix: run the 4-step font-selection procedure in typography-guidelines.md against the documented brief ("calm, clinical, careful") — proposed, not applied
 ```
 
 ```
@@ -184,7 +175,7 @@ The hooks are advisory and will sometimes warn on patterns that are correct in y
 export CLAUDE_DISABLE_UI_FONT_CHECK=1
 ```
 
-Then document the decision in `CLAUDE.md` ("Fraunces is an intentional choice per the font-selection procedure run on 2026-02") so the reviewers see the rationale and downgrade findings to SUGGESTION instead of WARNING.
+Then document the decision in `CLAUDE.md` ("Fraunces is an intentional choice per the font-selection procedure run on 2026-02") so the reviewers treat it as a documented decision: it outranks the package rules and the font is no longer a finding.
 
 Better alternative: keep the hook on but customize the banned list. Edit `.claude/scripts/hooks/ui-banned-fonts-check.sh` and remove `Fraunces` from the `BANNED_PATTERNS` array for this project only. The hook still catches Inter / DM Sans / the other 15 defaults.
 
