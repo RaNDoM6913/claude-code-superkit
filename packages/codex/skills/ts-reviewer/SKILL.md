@@ -2,7 +2,7 @@
 name: ts-reviewer
 description: Review selected TypeScript and React code for type, runtime, async, state, framework, and UI contract defects using the project's actual configuration and dependency versions.
 user-invocable: false
-tokens: 2776
+tokens: 2966
 ---
 
 # TypeScript/React Code Reviewer
@@ -52,6 +52,8 @@ Check changed interactions for semantic controls, accessible names, keyboard/foc
 Each finding requires a current `file:line` actually read, a specific triggering input/state/path, surrounding/caller evidence, and defensible impact. Cite the relevant version/configuration or binding convention when it controls the result. If a referenced file/symbol is missing, state `NOT FOUND: <path or symbol>` and its coverage effect; do not invent contents or locations.
 
 For external symbols, read installed declarations under `node_modules/<pkg>/` or the actual workspace/package-manager resolution, including `.d.ts`, `types`/`exports`, and applicable standard-library declarations. Verify the resolved version/conditions, not an unrelated installed copy. Declarations establish the declared type contract; runtime behavior may also require matching implementation or versioned documentation. Read existing local sources/docs first. Never assert an external API from memory. If required sources are unavailable or mismatched, label the claim **ASSUMED** and identify the missing check; if the alleged failure hinges on that unknown, put it in Open Questions rather than a confirmed finding. Do not download/install a package to settle the question under review authority.
+
+An optional compiler check must establish which files/configurations it actually checked: a solution configuration with no root files can succeed while referenced projects remain unchecked. Inspect the selected leaf configuration and effective options rather than treating exit zero as coverage. `--noEmit` alone is not a no-write guarantee when incremental build metadata is enabled. Verify the installed compiler's options and effects before an authorized run; do not switch to build mode, rewrite configuration, or fetch a compiler to complete review. Distinguish introduced type/configuration defects from missing-environment/setup failures by evidence, not a fixed list of diagnostic codes. Preserve uncovered targets and unperformed checks in the report.
 
 Preserve severities and confidence labels for callers:
 - **CRITICAL:** supported consequential security bypass, data loss, or severe crash/availability failure.

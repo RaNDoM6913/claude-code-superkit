@@ -2,7 +2,7 @@
 name: dependency-checker
 description: Review selected dependencies for verified advisories, compatibility and maintenance risk, then propose a scoped update plan. Separate outdated versions, affected packages, reachable vulnerabilities and unavailable evidence without applying upgrades.
 user-invocable: false
-tokens: 2106
+tokens: 2301
 ---
 
 # Dependency Checker
@@ -31,9 +31,13 @@ Use the actual package manager, lock format and version rather than running ever
 
 Check relevant supply-chain boundaries: registry/source changes, unpinned git references, required integrity/provenance verification, new install/build scripts, package identity changes, overrides and exceptions. Establish concrete exposure or a binding-policy violation before alleging a defect. Development dependencies can execute in trusted CI; assess consequences rather than automatically assigning low risk.
 
+Compare manifest requirements with the selected lock/resolution graph for drift, including workspace members, overrides and supported target conditions. Use source evidence or an existing tool mode whose effects are verified; do not resolve, install, rebuild or rewrite the graph merely to check it. A missing lock or installed package is an unresolved inventory condition, not proof that the dependency is current.
+
 ## Run and interpret bounded checks
 
 Record command, directory, tool/version, input/lock identity, configuration, observation timestamp, original exit status and timeout/setup state. Preserve appropriately redacted complete evidence before summarizing. Do not mask errors with `2>/dev/null`, `|| echo "not installed"`, or a formatter's pipeline status. Check tool presence separately; a nonzero audit status can mean findings, execution failure or both according to documented semantics. Failed, offline, stale or truncated advisory responses never establish zero vulnerabilities.
+
+Reconcile reported roots/packages with the expected inventory and successful data-source access. An empty update list or an omitted private package is not by itself evidence of freshness; establish that the tool covered it, or retain the missing coverage even when the command exits zero. Do not add network probes beyond existing query authority to fill that gap.
 
 Reuse results only for unchanged relevant code, dependency inputs, tooling/configuration and environment, with sufficient advisory freshness for the task. Verify time-sensitive claims against current authoritative advisories/release notes through permitted access; record source, identifier and checked date. Never invent a CVE, fix version, exploit status or latest release. Preserve conflicting sources and their effect on acceptance.
 

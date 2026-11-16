@@ -16,7 +16,7 @@ documentation. It works from a subdirectory and targets the Git repository root.
 The Codex executable is optional for file setup; install it separately to use the
 skills. Existing `.claude` files do not influence Codex install/update decisions.
 
-The installer supplies 82 skills at `.codex/skills/<name>/SKILL.md` and relative
+The installer supplies 83 skills at `.codex/skills/<name>/SKILL.md` and relative
 links at `.agents/skills/<name>` for current Codex discovery. The retained storage
 path keeps older installations and references compatible. Codex documents
 repository discovery under `.agents/skills` and supports linked skill folders:
@@ -147,7 +147,7 @@ this installer never writes to `~/.codex` or `~/.agents`.
 
 ## What Gets Installed
 
-Automated installation includes all 82 skills below. For manual selection only,
+Automated installation includes all 83 skills below. For manual selection only,
 create `.agents/skills/` before copying and preserve any existing same-name folders.
 
 ### 9 Command Skills (user-invocable)
@@ -164,7 +164,7 @@ create `.agents/skills/` before copying and preserve any existing same-name fold
 | `migrate` | Inspect status by default; apply or roll back an explicitly authorized, bounded set |
 | `benchmark` | Run available Go benchmarks; compare an isolated baseline with installed tools |
 
-### 36 Agent Skills (available roles)
+### 37 Agent Skills (available roles)
 
 These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists protected native roles, adapted workflows and support sources; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
 
@@ -177,7 +177,8 @@ These include converted core/extras roles and native GPT roles with Astra-author
 |-------|----------|
 | `code-reviewer` | Quality — generic code review |
 | `comment-rot-analyzer` | Quality |
-| `security-scanner` | Security — OWASP top-10 + 18 generic checks |
+| `security-scanner` | Security — evidence-backed application and CI/agent trust-path review |
+| `red-blue-auditor` | Security — read-only Red / Blue / Auditor cross-check; explicit task selection, no new automatic caller |
 | `silent-failure-hunter` | Quality |
 | `audit-frontend` | Audit — 12 frontend checks against assigned product, data and toolchain contracts; evidence gaps explicit |
 | `audit-backend` | Audit — 12 backend domains against assigned API, data-access and operational contracts; evidence gaps explicit |
@@ -236,10 +237,10 @@ Confirm its destination under `.agents/skills/` is absent before copying or link
 If it exists, compare and merge manually; copying over it bypasses all installer
 preservation and backup checks. Prefer the automated route for managed updates.
 
-### Total: 82 skills
+### Total: 83 skills
 
 - 9 command skills (user-invocable, including benchmark)
-- 36 agent + knowledge skills (task-specific use or existing caller dispatch) — incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
+- 37 agent + knowledge skills (task-specific use or existing caller dispatch) — incl. v1.4.0: minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
 - 10 frontend 3D skills (optional, for R3F/Three.js/GSAP projects)
 - 7 frontend UI skills (optional, for 2D UI / landing-page / dashboard projects)
 - 9 stack-specific reviewer skills (optional, per language)

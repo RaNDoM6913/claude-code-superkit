@@ -285,6 +285,10 @@ See [official hook/trust documentation](https://learn.chatgpt.com/docs/hooks).
 
 ### Available Skills
 
+The current source catalog contains 83 skills. `red-blue-auditor` supports an
+explicitly selected read-only Red / Blue / Auditor review; no new automatic
+orchestrator dispatch is added.
+
 The installer stores skills in `.codex/skills/<name>/SKILL.md` and exposes relative
 links at `.agents/skills/<name>` for discovery. Manual user skills may live in
 `~/.agents/skills/`. Each selected skill's instructions govern its execution.
@@ -304,7 +308,7 @@ links at `.agents/skills/<name>` for discovery. Manual user skills may live in
 | `benchmark` | Run available Go benchmarks; compare an isolated baseline with installed tools |
 
 **Agent skills (available for task-specific use or existing orchestrator dispatch):**
-ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, audit-infra, behavioral-nudge-engine, bot-reviewer, code-reviewer, codebase-onboarding-engineer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, design-system-reviewer, docs-reviewer, e2e-test-generator, evaluator, goal-verifier, health-checker, migration-reviewer, minimal-change-engineer, plan-checker, pre-deploy-validator, project-architecture, reality-checker, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, ui-reviewer, visual-reviewer, writing-agents, writing-commands
+ai-slop-cleaner, api-contract-sync, architect, audit-backend, audit-frontend, audit-infra, behavioral-nudge-engine, bot-reviewer, code-reviewer, codebase-onboarding-engineer, comment-rot-analyzer, critic, database-reviewer, debug-observer, dependency-checker, design-system-reviewer, docs-reviewer, e2e-test-generator, evaluator, goal-verifier, health-checker, migration-reviewer, minimal-change-engineer, plan-checker, pre-deploy-validator, project-architecture, reality-checker, red-blue-auditor, scaffold-endpoint, security-scanner, silent-failure-hunter, test-generator, tree-generator, ui-reviewer, visual-reviewer, writing-agents, writing-commands
 
 **Production skills (eligible for description-based selection):**
 telegram-bot-builder, nextjs-supabase-auth, drizzle-orm-expert, ru-text, postgresql-optimization, redis-patterns

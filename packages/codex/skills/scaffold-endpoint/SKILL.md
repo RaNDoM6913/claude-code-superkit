@@ -2,7 +2,7 @@
 name: scaffold-endpoint
 description: Implement or scaffold a requested API endpoint using verified local architecture and an explicit request, response, error, and authorization contract. Use for endpoint work, not an unrelated framework rewrite.
 user-invocable: false
-tokens: 1453
+tokens: 1682
 ---
 
 # Scaffold Endpoint
@@ -14,6 +14,8 @@ Deliver the endpoint the user requested using the project's actual patterns. An 
 Read the task, applicable project instructions, relevant architecture/API documentation, manifests, and the closest existing endpoint. Discover the stack from evidence: for example, Go `go.mod`, Node `package.json`, Python requirements/`pyproject.toml`, or Rust `Cargo.toml`. Distinguish declared dependencies from verified installed/runtime versions; do not invent framework capabilities or API versions.
 
 Locate the actual route registration, handlers, schemas/DTOs, middleware, domain logic, data access, tests, and API documentation. Follow the reference endpoint through its wiring and dependencies rather than copying an isolated handler. Document relevant working-tree changes and preserve others' edits.
+
+Before creating files or registering a route, establish whether the task adds a new endpoint or changes an existing one. Inspect target paths and the composed method/path/group identity for existing definitions. Resolve unintended overwrite, duplicate or shadowing conflicts against the actual router contract before writing; an explicitly authorized modification of that endpoint is not itself a collision blocker.
 
 Establish the method/path, path/query/body shape, validation, response shape/statuses, error cases, authn/authz and resource ownership, business effect, and persistence needs. Use explicit task requirements and verified project conventions; ask a focused question when an unresolved contract changes behavior or access. Do not guess privileged access, destructive semantics, or user-visible business rules.
 
@@ -28,6 +30,8 @@ Use only the layers the actual architecture and task require. A direct route han
 - If schema changes are needed, inspect the project's migration tooling and rollout/recovery convention. Author only the authorized change; do not manufacture down migrations when the project does not support them or data cannot be safely restored. A destructive or ambiguous schema change needs a resolved scope/authority decision before authoring the dependent change. Applying migrations to shared/external systems, deploying, publishing, or other external writes requires task authorization distinct from creating local code.
 
 Do not leave placeholder business logic, SQL, or validation and then report a completed endpoint. If the user requested only scaffolding, keep stubs explicitly identifiable and list the missing implementation and verification. If a prerequisite is unavailable, finish independent authorized work and report the exact dependency; the skill name does not grant further actions.
+
+Scaffold-only gaps in required business, validation or access logic must fail closed through the project's established not-implemented/failure contract and prevent the guarded side effect. Do not return fabricated data, success or invented access rules to make the plumbing look complete. If no safe placeholder contract is established, leave the affected behavior unavailable and report that gap. This allowance for explicit scaffolds does not excuse stubs in a requested complete implementation.
 
 ## Verify the endpoint
 

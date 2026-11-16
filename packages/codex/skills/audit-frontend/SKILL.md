@@ -2,7 +2,7 @@
 name: audit-frontend
 description: Use when auditing frontend source, data and state handling, type safety, resource use, accessibility, design conventions, or production configuration.
 user-invocable: false
-tokens: 3443
+tokens: 3641
 ---
 
 # Frontend Audit
@@ -29,6 +29,8 @@ Before reading or capturing sensitive material, select structural/sanitized evid
 
 5. **JavaScript/TypeScript correctness and strict compliance.** Use the actual workspace scripts, local installed compiler/checker and effective configuration, including project references, aliases and framework-generated types. Inspect dynamic JS boundaries, nullability, coercion, async/error paths and suppressions/`any` where they affect callers; intentional interop is not inherently a defect. A strict flag or zero grep hits does not establish correctness. When authorized, run the relevant existing check once per distinct project/configuration, retain its original exit and redacted diagnostics, and reuse for Check 6. Do not use an `npx` fallback that may install tools. Missing dependencies, generated types, unsupported config, timeouts and unrun checks remain UNKNOWN/setup gaps; distinguish them from established code errors. Pure-JS projects still need applicable source/toolchain review, not an automatic PASS.
 
+   Establish the files each invocation actually checks: an empty solution-root configuration can succeed without checking its referenced projects. Verify selected leaf configurations and effective options. `--noEmit` alone does not guarantee absence of incremental metadata writes; inspect the installed compiler's effects rather than assuming a universal no-write flag recipe or switching to build mode.
+
 6. **Dead and broken imports.** Reuse Check 5 output where applicable; inspect module resolution, package exports, aliases, generated modules, case sensitivity, runtime targets and actual consumers. `Cannot find module` may reflect setup or resolution configuration rather than a deleted file. Establish a real import/runtime/build failure before FAIL. Unused code needs contextual reachability analysis, including route discovery, side effects, public exports and dynamic imports; no direct text reference is not proof of dead code. Do not run a second unchanged compiler check merely to filter its output.
 
 7. **Design token and UI contract compliance.** Compare palette, spacing, typography, layering, responsiveness, themes and motion/reduced-motion with actual tokens, component variants and accepted design. Hex colors, pixel values, utility classes or a missing token system are not automatic violations. Confirm a binding convention or specific visual/maintenance consequence. Source findings do not claim rendered comparison, contrast, responsive or interactive acceptance; identify required visual evidence that is missing and refer it to the appropriate review owner without silently expanding this audit.
@@ -42,6 +44,8 @@ Before reading or capturing sensitive material, select structural/sanitized evid
 11. **Error boundaries and recovery.** Trace framework/version-specific route, render and async error handling, including inherited boundaries, data loaders, event handlers, rejected requests and SSR/hydration where relevant. Presence of an ErrorBoundary symbol does not cover every failure; its absence does not prove lack of framework recovery. Check loading/empty/error/retry states, reset behavior, cancellation and user-visible false success against the product contract. Report the concrete uncaught/lost failure and impact; do not impose React APIs on other stacks.
 
 12. **Dev-only code guards, configuration and secrets.** Follow debug/QA tools, toggles, build-time replacement, runtime configuration, lazy loading, source maps and environment flags into the shipped bundle and reachable routes. Lazy loading alone is neither exclusion nor authorization. Validate actual production guards, public/private variable conventions, server-only imports, browser storage and credential propagation. Confirm a secret or privileged capability crosses the intended client boundary; public keys/configuration are not automatically secret. Check effective build/deploy configuration and required environment contracts without reading out real values. A disabled UI does not prove backend authority is enforced.
+
+   Trace untrusted content into raw HTML/template sinks and user-influenced navigation or redirect targets. Check source trust, context-appropriate escaping/sanitization and intended destination policy using the installed framework's actual controls. Neither a raw-sink name nor an external URL alone proves XSS or an unsafe redirect; establish the bypass and user/security consequence.
 
 ## Evidence and classification
 

@@ -1,6 +1,6 @@
 # claude-code-superkit
 
-Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 82 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra.
+Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra.
 
 ## Contributor Working Agreement
 
@@ -9,6 +9,12 @@ For work on Superkit itself, read [docs/WORKING_AGREEMENT.md](docs/WORKING_AGREE
 GPT backend/data/delivery/language reviews use project-specific schema, query, toolchain, Go lifecycle/performance/telemetry and rollout evidence; Core UI, six frontend-ui aliases and frontend-3d reviewers retain distinct scopes; UI source, rendered and interaction evidence remain distinct; Optional GAN sources live separately in packages/gan/skills and are not ordinary installer entries. Bot and nudge source acceptance does not authorize messaging or scheduling; source acceptance does not qualify live behavior. For current Codex-only delivery scope and remaining installation/compatibility work, use the [active delivery plan](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md).
 
 ## Project Structure
+
+The [G1 Codex comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) tracks focused comment, silent-failure, and Go-modernizer refinements, local claim verification and native caller compatibility. Keep its source acceptance separate from live model qualification and preserve the historical migration ledger.
+
+The [continued comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers all G2–G6 roles, including review, audit, readiness, planning, acceptance, testing and implementation support, including explicit KEEP decisions, local claim evidence and preserved caller contracts. It is the prior continuation checkpoint; earlier evidence remains historical and unchanged.
+
+The [G7–G9 comparison record](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) covers G7–G9 UI, frontend/3D and optional GAN planning refinements and explicit KEEP decisions against the newer Claude snapshot. Preserve native caller formats, evidence levels and source ownership.
 
 Codex architecture/output support distinguishes unconfigured references from observed project facts and measures completeness within the authorized change. Source review does not claim empirically measured model quality.
 
@@ -65,7 +71,7 @@ packages/
     red-blue-auditor.md
     skillsmp-search/        # SkillsMP API search (requires API key)
   codex/                    # Codex CLI support
-    skills/                 # 82 skills; native roles and protected callers listed in native-skills.txt
+    skills/                 # 83 skills; native roles and protected callers listed in native-skills.txt
     hooks/                  # superkit.mjs: 2 native handlers; review/trust required
     hooks.json              # Source for active wiring or superkit-hooks.json manual merge template
     rules/                  # NEW v1.4.0 — default.rules DSL (Codex approval policy)
@@ -112,7 +118,7 @@ VERSION                     # current release version (keep in sync with package
 | Component | Core | Stack | Frontend-3D | Frontend-UI | GAN | Extras | Showcase | Codex |
 |-----------|------|-------|-------------|-------------|-----|--------|----------|-------|
 | Agents | 31 | 9 | 4 | 6 | 3 | 3 | 28 | — |
-| Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 82 |
+| Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 83 |
 | Commands | 15 | — | 1 | — | — | — | 17 | 9 |
 | Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | 2 handlers / 1 script |
 | Hooks internal | 2 | — | — | — | — | — | — | — |
@@ -120,7 +126,7 @@ VERSION                     # current release version (keep in sync with package
 | Rules shipped | 7 | 2 | 3 | 7 | — | — | 6 | 1 file |
 | Rules internal | 1 | — | — | — | — | — | — | — |
 
-**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself. Codex separately installs 82 skills and 2 native hook handlers in 1 script; these are not added to the Claude totals.
+**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself. Codex separately installs 83 skills and 2 native hook handlers in 1 script; these are not added to the Claude totals.
 
 ## Conventions
 
@@ -142,7 +148,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
 2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
 3. **CLAUDE.md** (this file) — counts table, structure section
-4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 82 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra." Keep Claude component counts separate from Codex skills/handlers and scope historical Fable authorship to the Claude layer. — THIS IS MANDATORY AND MUST NOT BE SKIPPED
+4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra." Keep Claude component counts separate from Codex skills/handlers and scope historical Fable authorship to the Claude layer. — THIS IS MANDATORY AND MUST NOT BE SKIPPED
 5. **GitHub Release** — `gh release edit` if release already exists for this version
 
 ### Tier 2 — Update when relevant:

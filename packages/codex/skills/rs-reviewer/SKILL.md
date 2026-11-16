@@ -2,7 +2,7 @@
 name: rs-reviewer
 description: Review selected Rust code for ownership, errors, concurrency, async lifecycle, unsafe and FFI contracts, and runtime/API defects using the project's actual toolchain, features, and dependencies.
 user-invocable: false
-tokens: 3179
+tokens: 3306
 ---
 
 # Rust Code Reviewer
@@ -46,6 +46,8 @@ For FFI, verify the selected ABI, foreign contract, Rust/toolchain behavior, pan
 ### Framework, serialization, and dependencies
 
 For the detected web/runtime framework (for example axum, actix-web, rocket, or warp), inspect actual extractor/validation behavior, authorization/middleware order, shared state lifetime, request isolation, status/error conversion, and body/connection limits. Apply installed-version APIs rather than prescribing one state/error pattern. Trace serialization/deserialization, unknown variants/fields, defaults, and numeric/platform boundaries against consumers and persisted data. A wildcard match may preserve forward compatibility or discard important states; establish which contract applies.
+
+Trace untrusted values into SQL construction, shell commands, and filesystem paths, checking actual parameter binding, argument interpretation, path containment and caller authority. Rust's type/memory checks do not establish these application-level controls. Inspect debug formatting and error/log consumers for sensitive-field exposure; a formatting derive or sink API name alone is not a leak or injection finding. Cite the reachable source-to-sink path and missing control, with private values redacted.
 
 Check feature/target combinations, optional dependencies, public re-exports, and minimum supported version where the change affects them. A duplicate-functionality dependency is not automatically wrong; cite a binding requirement, measured cost, or compatibility/maintenance consequence. `cargo check`, build, clippy, and tests cover different contracts. A host-only green check cannot certify an unavailable target, unsafe soundness, or all feature combinations.
 

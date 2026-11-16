@@ -2,7 +2,7 @@
 name: ui-design-reviewer
 description: Use when reviewing frontend design quality across typography, color, layout, motion, interactive states and applicable glass treatments in the frontend-3d package.
 user-invocable: false
-tokens: 2979
+tokens: 3468
 ---
 
 # UI Design Reviewer
@@ -43,6 +43,14 @@ Keep one row per numbered check and account for all assigned surfaces. Names pre
 For #9, [CSS viewport unit definitions](https://www.w3.org/TR/css-values-4/#viewport-relative-lengths) distinguish small, large and dynamic viewports; dynamic units can resize with browser UI. Choose against the required behavior and supported browsers, not a class-name ban. For accessibility findings verify the applicable standard/version/level and exception; design preferences cannot establish conformance. Contrast, semantics, focus and motion claims need their corresponding evidence, not a token or media-query name.
 
 Glass checks may be N/A when the assigned design has no relevant treatment, with that basis stated. Missing a rendered glass reference or browser evidence is UNKNOWN for the relevant criterion, not N/A. Source may establish the declared effects or a reachable logic defect; visual acceptance requires inspected rendered evidence under the relevant backgrounds and states.
+
+## When DOM and canvas share a surface
+
+Apply this cross-check only to assigned mixed surfaces; retain the sixteen rows and record the evidence under their relevant checks. Read the canvas host, overlay/portal styles, controls, shared state, motion gates and loading/error boundaries together. Trace stacking, clipping, pointer-event ownership, wheel/touch capture and keyboard focus separately: a visually clear overlay may still block scene input, while pointer pass-through does not establish keyboard access.
+
+For an essential action on a 3D object, trace the supported keyboard/assistive-technology alternative to the same task state and outcome; a similarly named DOM control is insufficient if it updates another state. Distinguish decorative canvas content from required information or controls. Check that the accessible alternative communicates the actual information and available actions; a generic canvas label alone may not do so. Legibility over changing scene pixels needs evidence from relevant poses, backgrounds and states; one capture or a CSS foreground color cannot establish contrast throughout the sequence.
+
+Trace reduced-motion preferences to the actual scene/timeline controls, including preference changes; a CSS media-query string alone does not establish that an independent scene loop stops. Inspect loading, failed asset/chunk requests, unavailable WebGL and supported context-loss recovery for continued access to essential content and actions. Determine what the nearest real fallback preserves before alleging a missing boundary or requiring a particular loader UI. Source establishes these paths only where their implementation and versioned library behavior are known; rendered acceptance needs the relevant inspected captures, while keyboard and failure-recovery acceptance needs exercised evidence. Route scene-internal or measured-cost questions to the caller's appropriate specialist without expanding this review.
 
 ## Evidence and findings
 

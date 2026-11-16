@@ -2,7 +2,7 @@
 name: comment-rot-analyzer
 description: Review comments, docstrings, TODOs, and code references for verified contradictions with surrounding behavior. Preserve meaningful rationale and operational annotations.
 user-invocable: false
-tokens: 1586
+tokens: 1745
 ---
 
 # Comment Rot Analyzer
@@ -25,6 +25,8 @@ Compare the comment to the whole relevant path: branches, early returns, caller 
 
 Check public API docstrings for parameters, defaults, nullable/optional returns, thrown/returned errors, and current request/response behavior. Distinguish normative intent from description: if a comment states a required invariant and the code violates it, report the mismatch and route the likely code defect; do not recommend rewriting the comment to legitimize broken behavior.
 
+Check safety claims such as concurrent use, caller-held locks, upstream authorization/validation, constant-time handling, and absence of private-data logging against the relevant path. Establish who relies on the claim and what that reliance permits; a security-related phrase alone does not establish severity.
+
 ### TODO / FIXME / HACK / XXX
 
 Determine what work or constraint the note describes and whether evidence shows it was resolved, superseded, or references the wrong code. A six-month-old TODO can remain accurate and useful; age alone is neither a finding nor a deletion reason. A closed ticket also does not prove the code satisfies the TODO. Verify ticket state/content only with permitted access when material; otherwise mark it unverified if the review depends on it.
@@ -42,6 +44,7 @@ Commented-out code may be obsolete, but establish its purpose before recommendin
 ## Findings and uncertainty
 
 Use the existing severities:
+- **CRITICAL:** a verified false safety, security, or contract guarantee with evidenced reliance and a consequential security, data-loss, or severe availability impact. Cite the public contract or caller relying on it and the resulting unsafe action; without that evidence, assess WARNING or retain an Open Question.
 - **WARNING:** a verified contradiction that can mislead implementation, operation, or API use; state the concrete condition and consequence.
 - **SUGGESTION:** a supported, optional clarification or removal of demonstrably obsolete text, without a material defect.
 
@@ -59,7 +62,7 @@ Execution: INDEPENDENT | INLINE SELF-REVIEW
 Requested model/effort: <explicit route or labeled configured default; UNSPECIFIED if absent>
 Observed model/effort: <values + runtime evidence, or UNVERIFIED>
 
-[WARNING|SUGGESTION / HIGH|MEDIUM] file:line — <verified issue>
+[CRITICAL|WARNING|SUGGESTION / HIGH|MEDIUM] file:line — <verified issue>
   Comment: <assertion, with private data redacted>
   Reality: <surrounding code/contract evidence and triggering condition>
   Impact: <how this misleads a reader or consumer>

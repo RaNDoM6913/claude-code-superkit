@@ -2,7 +2,7 @@
 name: audit-backend
 description: Review backend SQL safety, error handling, API contracts, authorization, sensitive-data exposure and incomplete behavior with concrete source and caller evidence.
 user-invocable: false
-tokens: 2700
+tokens: 2869
 ---
 
 # Backend Audit
@@ -27,7 +27,11 @@ Redact at collection: inspect structural context and locations without printing 
 
 3. **Result bounds and resource use.** Assess selectors, exports, streams, batch loops and pagination against table cardinality, request-controlled sizes and effective limits/deadlines. Distinguish bounded aggregates, small reference sets and streaming exports from materializing unbounded data. Check stable ordering and continuation semantics, not just LIMIT presence. Unknown size/load is an evidence gap, not proof of production degradation.
 
+   Include operation rate as well as result size for abuse-prone authentication/recovery, messaging and paid-service paths. Trace effective application/gateway limits and the cost or guessing opportunity an attacker controls; absent per-handler limiter code alone proves neither unlimited access nor a defect.
+
 4. **Error handling and recovery.** Follow errors through return paths, framework handlers, transactions, cleanup, retries and client responses. Check failure visibility, wrong success responses, partially committed state and retry safety. Empty catches, ignored results and log-only handlers need surrounding semantics: expected absence, cancellation, best-effort cleanup or a deliberate fallback may be valid. Report the lost failure and practical consequence rather than prescribing wrapping at every layer.
+
+   Check shared mutable state and read-modify-write/check-then-act decisions across requests, tasks and workers. Establish the conflicting accesses or interleaving and whether a single owner, synchronization, database atomicity or a checked constraint protects the invariant. A primitive's presence or an async declaration alone does not prove concurrency safety.
 
 5. **Logging and debug behavior.** Trace emitted fields, redaction, log access/retention and deployed configuration. A debug print is a finding when it leaks data, materially disrupts operations or violates a binding logging contract. Logger choice and print counts are not findings. Do not reproduce sensitive output to demonstrate a leak; cite its source and redaction boundary.
 

@@ -2,7 +2,7 @@
 name: evaluator
 description: Evaluate implementation behavior against explicit acceptance criteria or a Sprint Contract, separating demonstrated failure from missing evidence. Return PROCEED, ITERATE, or ESCALATE.
 user-invocable: false
-tokens: 1222
+tokens: 1340
 ---
 
 # Evaluator
@@ -27,6 +27,8 @@ Assess every criterion. Record one of:
 Use numeric scores only when the contract requires them. Apply its anchors; for the dev-orchestrator default 0–10 scale, 7 means stated behavior is demonstrated, 5–6 means partial behavior with concrete gaps, 1–4 means substantial observed failure, and 0 means demonstrated absence. Higher scores require relevant evidence beyond the threshold, not unrelated features. UNVERIFIED and N/A have score N/A. A passing build alone does not prove application behavior or production readiness.
 
 Evidence may be code, command output, a state query, or a relevant captured artifact. Include precise references and actual command/results, with secrets redacted. Reuse results only when bound to unchanged relevant code, inputs, and environment; rerun for relevant changes or concrete uncertainty. A failed assertion may show a defect; a missing tool or environmental failure shows a verification gap unless it itself violates the contract.
+
+Before using a passing test as behavioral evidence, read its relevant setup and assertions: confirm the selected run executed the intended path and would fail if the criterion were violated. Skipped or filtered-out cases, a different exercised path, an unawaited assertion, or a mock replacing the required effect cannot establish that behavior. Record what the test actually proves; retain the remaining criterion as UNVERIFIED unless other sufficient evidence settles it.
 
 ## Gate decisions
 
