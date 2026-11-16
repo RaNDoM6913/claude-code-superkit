@@ -63,7 +63,7 @@ Title / Description (first 500 chars)
 | `*.ts` | **ts-reviewer** |
 | `*.py` | **py-reviewer**, **security-scanner** |
 | `*.rs` | **rs-reviewer** |
-| `**/bot*/**/*.go` or `**/bot*/**/*.py` | **bot-reviewer** |
+| `**/bot*/**` code files (`*.go`, `*.py`, `*.ts`, `*.js`, `*.rs`) | **bot-reviewer** |
 | `*.yaml` / `*.yml` (OpenAPI/GraphQL) | **api-contract-sync** |
 | Any changed code files | **silent-failure-hunter**, **comment-rot-analyzer** |
 | Any changed code files, IF an implementation plan exists in `docs/superpowers/plans/` | **goal-verifier** (verdict track — Hard Rule 4) |
