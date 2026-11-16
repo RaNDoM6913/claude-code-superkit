@@ -191,7 +191,7 @@ The loop is human-driven by default — you decide when to re-dispatch.
 For autopilot:
 - Run gan-planner → save plan
 - If the plan says `Status: BLOCKED`, answer its `[BLOCKING]` questions and re-run gan-planner — do not dispatch the generator
-- Run gan-generator → save hand-off
+- Run gan-generator with the READY plan → save hand-off. `Needs re-plan:` other than `none` → re-run gan-planner with the hand-off; `Local test result: NOT RUN` → fix the environment first
 - Run gan-evaluator → if NEEDS-ATTENTION or NEEDS-REMEDIATION, re-run generator with the failure list as input
 - Repeat up to 3 times; if no progress → escalate
 
