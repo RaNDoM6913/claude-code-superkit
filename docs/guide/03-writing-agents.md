@@ -222,7 +222,7 @@ If a referenced file cannot be found: output `NOT FOUND: <path>` -- never invent
 - file:line -- suspicion + what would confirm it (or "none")
 
 ### Summary
-<N> CRITICAL, <N> WARNING, <N> SUGGESTION -- one-line verdict
+<"clean" | "N findings (<count> <SEVERITY>, …)" -- non-zero severities only> -- one-line verdict
 ```
 
 Mini example:
@@ -237,7 +237,7 @@ Mini example:
 - deploy/Dockerfile:3 -- pinned digest may be stale; confirm the base-image update policy
 
 ### Summary
-1 CRITICAL, 0 WARNING, 0 SUGGESTION -- fix root user before merge.
+1 finding (1 CRITICAL) -- fix root user before merge.
 ```
 
 ## Recap -- non-negotiables

@@ -30,7 +30,7 @@ Use it to learn the layering, DI pattern and framework, error-wrap convention (e
 | Caller gave you | Review |
 |---|---|
 | Diff hunks (`/review`) | Changed lines plus what judging them needs: enclosing function, callers, interfaces, route registration. Truncated hunks → read the rest with `git diff <base>...HEAD -- <file>` or the file. |
-| Changed-file list + task (`/dev`) | Hunks from `git diff HEAD -- <files>`; untracked new files (`git status --porcelain`) read whole. Empty diff → review the files whole, noted under Coverage. |
+| Changed-file list + task (`/dev`) | Hunks from `git diff HEAD -- <files>`; untracked new files (`git status --porcelain -uall`) read whole. Empty diff → review the files whole, noted under Coverage. |
 | Packages or area (audit slice) | Those packages whole, against the checklist groups the caller assigned (default: all). |
 | Nothing usable | `git diff HEAD`; if empty, `git show HEAD`. Name the choice in the scope line. |
 
