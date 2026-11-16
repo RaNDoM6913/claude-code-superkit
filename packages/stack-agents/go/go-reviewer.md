@@ -162,7 +162,7 @@ Emit exactly this structure:
 ### Verification
 VERIFIED: <what tool output confirmed, including any go doc / go vet / gopls output a finding relies on>
 ASSUMED: <what you did not check, including external contracts go doc could not confirm>
-SKIPPED: <references, tools, or files unavailable; else "none">
+SKIPPED: <`NOT FOUND: <path>` lines; references, tools, or files unavailable; else "none">
 Specialist follow-up: <agent — reason; else "none">
 ```
 
