@@ -18,7 +18,7 @@ exploits and logic flaws, while the static scanner catches cheap mistakes
 bash packages/extras/red-blue-auditor/scan.sh
 
 # Limit scope
-bash packages/extras/red-blue-auditor/scan.sh --path .claude/
+bash packages/extras/red-blue-auditor/scan.sh --path=.claude/
 
 # Fail the build if anything CRITICAL is found
 bash packages/extras/red-blue-auditor/scan.sh --exit-on-critical
@@ -83,7 +83,7 @@ security:
 
 ```bash
 #!/bin/bash
-bash packages/extras/red-blue-auditor/scan.sh --exit-on-critical --path .
+bash packages/extras/red-blue-auditor/scan.sh --exit-on-critical --path=.
 ```
 
 ## Adding custom patterns
@@ -114,4 +114,4 @@ EOF
 ## Also in this package
 
 - `agent.md` — the original 3-phase Red/Blue/Auditor prompt, now enhanced with
-  a Phase 4 that invokes `scan.sh` as part of the LLM workflow.
+  a Phase 3 that runs `scan.sh` (integrity-checked, output masked) before the Phase 4 Auditor synthesis.

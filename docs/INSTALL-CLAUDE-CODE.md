@@ -34,7 +34,7 @@ bash setup.sh
 2. **Installs superpowers plugin** — auto-clones from GitHub if missing
 3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup + replace), or abort
 4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust, Frontend 3D, Frontend UI (multi-select)
-5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer (red-blue-auditor is flag-only via `--extras=`)
+5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer (red-blue-auditor is not copied by the installer; copy it manually, see below)
 6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
@@ -88,7 +88,7 @@ cp $SUPERKIT/packages/stack-hooks/typescript/*.sh .claude/scripts/hooks/
 # Extras (optional)
 # cp $SUPERKIT/packages/extras/bot-reviewer.md .claude/agents/
 # cp $SUPERKIT/packages/extras/design-system-reviewer.md .claude/agents/
-# cp $SUPERKIT/packages/extras/red-blue-auditor.md .claude/agents/
+# cp $SUPERKIT/packages/extras/red-blue-auditor/agent.md .claude/agents/red-blue-auditor.md
 
 # Make hooks executable
 chmod +x .claude/scripts/hooks/*.sh

@@ -74,7 +74,7 @@ Set `fail-on-findings: "true"` to block PRs with high/critical issues. Use `"fal
 
 ## Red Team / Blue Team Pattern
 
-For deeper analysis, use the `red-blue-auditor` agent (in `packages/extras/`). It runs a 3-phase adversarial audit:
+For deeper analysis, use the `red-blue-auditor` agent (in `packages/extras/`). It is a static, read-only audit (nothing is run or probed) of agent-runtime config from three perspectives, plus the bundled `scan.sh` pattern scan when present:
 
 1. **Red Team** — thinks like an attacker, explores injection vectors, identifies attack chains
 2. **Blue Team** — evaluates existing defenses, identifies gaps, recommends hardening
