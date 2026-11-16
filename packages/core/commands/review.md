@@ -66,7 +66,7 @@ Title / Description (first 500 chars)
 | `*.py` | **py-reviewer**, **security-scanner** |
 | `*.rs` | **rs-reviewer** |
 | `**/bot*/**` code files (`*.go`, `*.py`, `*.ts`, `*.js`, `*.rs`) | **bot-reviewer** |
-| `*.yaml` / `*.yml` (OpenAPI/GraphQL) | **api-contract-sync** |
+| API contract files: OpenAPI/Swagger `*.yaml` / `*.yml` / `*.json`, `*.graphql` / `*.graphqls` / `*.gql`, `*.proto` (not CI or other config YAML/JSON) | **api-contract-sync** |
 | Any changed code files | **silent-failure-hunter**, **comment-rot-analyzer** |
 | Any changed code files, IF an implementation plan exists in `docs/superpowers/plans/` | **goal-verifier** (verdict track — Hard Rule 4) |
 

@@ -213,7 +213,7 @@ Then dispatch reviewer agents **in parallel** — every row whose pattern matche
 | `*.rs` | **rs-reviewer** |
 | Bot code | **bot-reviewer** |
 | UI components | **design-system-reviewer**, **ui-reviewer** |
-| OpenAPI/GraphQL spec changed | **api-contract-sync** |
+| API contract changed (OpenAPI/Swagger, GraphQL schema, `.proto`) | **api-contract-sync** |
 | Any changed code | **silent-failure-hunter**, **comment-rot-analyzer** |
 
 Pass each agent the changed-file list and task description. Each runs its own two-stage discipline (discover, then triage by Severity + Confidence).
