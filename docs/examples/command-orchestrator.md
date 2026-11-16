@@ -68,15 +68,15 @@ Dispatch the **pre-deploy-validator** agent to run comprehensive checks:
 
 ```
 Run all pre-deployment checks:
-1. TypeScript compilation (all frontends)
-2. Go vet (backend)
-3. Linting (all components)
-4. Tests (backend unit tests)
-5. Frontend builds (verify bundles compile)
-6. Migration consistency (up/down pairs)
-7. OpenAPI spec sync
-8. Debug artifact scan (console.log, fmt.Print)
-9. Environment config completeness
+1. Compilation (go vet, TypeScript typecheck)
+2. Linting (all components)
+3. Tests
+4. Build/Bundle
+5. Migrations (up/down pairs)
+6. API spec sync
+7. Debug artifacts (console.log, fmt.Print)
+8. Env config completeness
+9. Secrets
 
 Report results as a checklist. FAIL blocks deployment.
 ```
@@ -89,7 +89,7 @@ If the pre-deploy-validator reports any **FAIL**:
 - Do NOT proceed to Phase 2 unless all checks pass or --force is used
 
 If `--skip-tests` flag is set:
-- Skip check #4 (tests) but run everything else
+- Skip check #3 (Tests) but run everything else
 - Add a WARNING to the final report: "Tests were skipped"
 ```
 
@@ -296,7 +296,7 @@ Parse arguments:
 
 Dispatch the **pre-deploy-validator** agent:
 
-> Run all pre-deployment checks. Report each as PASS/FAIL.
+> Run all 9 pre-deploy checks. Report each as PASS/FAIL/WARN/N/A.
 > FAIL on any critical issue blocks deployment.
 
 Gate: if any FAIL, stop and report. Do not proceed.
