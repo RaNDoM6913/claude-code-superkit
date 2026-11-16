@@ -107,7 +107,7 @@ All agent dispatches in the superkit are foreground (blocking). The command need
 | Security scanning | security-scanner agent | -- |
 | Hook safety | block-dangerous-git, typecheck-on-edit | -- |
 | TDD workflow | -- | tdd skill |
-| Debugging process | debug-observer agent | debugging skill |
+| Debugging process | debug-observer agent (read-only diagnosis) | systematic-debugging skill |
 | Brainstorming | -- | brainstorm skill |
 | Git worktrees | -- | using-git-worktrees skill |
 | Session verification | Stop hook | verification skill |

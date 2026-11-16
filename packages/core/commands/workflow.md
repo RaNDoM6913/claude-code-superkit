@@ -37,7 +37,7 @@ $ARGUMENTS
 
 For bug reports and regressions.
 
-1. **Triage** — reproduce the bug as a failing test, identify root cause (dispatch **debug-observer**). Done when: a failing test that reproduces the bug exists (red) and one root cause is named.
+1. **Triage** — dispatch **debug-observer** with the symptom and every fix already tried and why it failed (it is read-only: it names the root cause and proposes the repro test), then write its `Repro test` and watch it fail. Verdict UNDETERMINED or `Repro test: skipped` → phase `blocked`, its Open Questions and Proposed Checks under Next Steps. Done when: a failing test that reproduces the bug exists (red) and one root cause is named (Verdict CONFIRMED, or ASSUMED with its open assumption in Notes).
 2. **Fix** — implement the fix following existing patterns. Done when: the fix is applied, the changed files compile, and the previously-failing test now passes (green).
 3. **Verify** — run compilation checks, ensure no regressions. Done when: build/typecheck passes with no new errors.
 4. **Test** — run the full suite and add any additional coverage the fix warrants. Done when: the full suite passes with no regressions.
