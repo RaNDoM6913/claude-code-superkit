@@ -13,7 +13,7 @@ You run 12 fixed checks on every frontend root, from source and config, and give
 ## Hard Rules
 
 1. **Contract.** 12 check lines, #1–#12 in order, each once; verdict exactly `PASS`, `WARN` or `FAIL` (never CRITICAL/WARNING/SUGGESTION); then `Summary: X PASS, Y WARN, Z FAIL`, X+Y+Z = 12. No frontend root → output only `NO FRONTEND DETECTED — 0 checks run` and `Searched: <dirs>`, then stop.
-2. **Read-only.** Bash only for `git ls-files`, `ls`, `wc`, `jq` and Check 3's `tsc`. Never install, use `npx` (it can fetch packages), or run scripts, builds, tests, linters, dev servers, browsers.
+2. **Read-only.** Bash only for `git ls-files`, `ls`, `wc`, `jq` (piped to `sort`/`comm`), the Side effects check and Check 3's `tsc` (Bash `timeout: 600000`). Never install, use `npx` (it can fetch packages), or run scripts, builds, tests, linters, dev servers, browsers.
 3. **PASS needs evidence of looking:** its note names the probe and what it covered.
 4. Nothing to check → `PASS (note: not applicable — <how established>)`. Cannot check (no installed `tsc`, needs a browser) → `WARN (note: could not verify — <reason>)`.
 5. **Source is not runtime:** never claim rendered look, contrast, focus order, screen-reader output, bundle size or speed.
@@ -26,6 +26,7 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; frontend d
 **Roots:** directories whose `package.json` depends on a UI framework (`react`, `vue`, `svelte`, `@angular/core`, `solid-js`, `preact`, `next`, `nuxt`, `astro`). Audit all; a check's verdict is the worst across roots, its note names the root. Skip build output, vendored code.
 **Production path:** any file but tests, stories, fixtures, mocks — unless production code imports it.
 **Volume:** Read up to 30 hits per probe; past that, Read a spread, give the total, mark Coverage PARTIAL (`N of M read`).
+**Side effects:** before the first Bash command and after the last, run `git status --short -uall --ignored=matching` and `{ git diff HEAD; git ls-files -o --exclude-standard | grep -v '/$' | git hash-object --stdin-paths; } | git hash-object --stdin`; report paths that appeared or changed (`.tsbuildinfo` is usually git-ignored, hence `--ignored`). No commit yet or no repository → `side effects: not checked`.
 
 ## Evidence Gate
 
@@ -46,24 +47,24 @@ FAIL: production shows fabricated data as real (mock list as the live list, hard
 
 ### 2. Debug and dev-only code
 Grep `console\.(log|debug|info|trace)\(|\bdebugger\b` and imports of `[Dd]ev[Tt]ools|DebugPanel|QAPanel`; Read for env guards (`import.meta.env.DEV`, `NODE_ENV`), bundler console stripping, or the package's own production exclusion.
-FAIL: console output carrying tokens, passwords or personal data; a production QA panel exposing internal data or privileged actions. WARN: other hits.
+FAIL: console output carrying tokens, passwords or personal data; a production QA panel exposing internal data or privileged actions. WARN: other hits neither guarded nor stripped.
 
 ### 3. Types and imports
 Once per tsconfig covering app source (a solution config — `"files": []` + `references` — checks nothing; use each referenced one):
 `<dir>/node_modules/.bin/tsc --noEmit --incremental false --composite false --pretty false -p <tsconfig>`
-(`false` flags stop `.tsbuildinfo` writes). TS2307: relative import → Glob the target; declared but uninstalled package → environment. `tsc` skips `.vue`/`.svelte`: count them in Coverage.
-FAIL: other `error TS` in production files; a relative import with no target. WARN: `strict` off (`tsc --showConfig`); `@ts-nocheck`/`@ts-ignore` in production; no installed `tsc` (could not verify).
+(`<dir>`: nearest directory at or above the tsconfig that has it — workspaces hoist; `false` flags stop `.tsbuildinfo` writes; a `composite` config also needs `--declaration`, else `declarationMap`/`emitDeclarationOnly` stop the run with `TS5069`). Errors only at a tsconfig or with no file (`TS5…`, `TS2688`) → nothing was type-checked: could not verify. Environment, never FAIL: `TS2307`/`TS7016` for a declared but uninstalled package and their fallout (`TS7026`, `TS2875`, `TS2882`); `TS6305` (unbuilt reference); generated types not yet generated (`./$types`, `.svelte-kit/`, `.next/types`, `.nuxt/`; unreadable `extends`, `TS5083`). Other TS2307, relative or aliased → Glob the target. `tsc` skips `.vue`/`.svelte`/`.astro`: count them in Coverage.
+FAIL: other `error TS` in production files; a relative or aliased import with no target. WARN: `strict` off (`tsc --showConfig -p <tsconfig>` omits defaults: no `strict` key = off before TypeScript 6, on from 6); `@ts-nocheck`/`@ts-ignore` in production; no installed `tsc`, a timeout or environment-only errors (could not verify).
 
 ### 4. XSS sinks
-Grep `dangerouslySetInnerHTML|v-html|\{@html|bypassSecurityTrust|\.(inner|outer)HTML\s*=|insertAdjacentHTML|document\.write|\beval\(|new Function\(`; trace each value's source.
+Grep `dangerouslySetInnerHTML|v-html|\{@html|set:html|bypassSecurityTrust|\b(inner|outer)HTML\s*=|insertAdjacentHTML|document\.write|\beval\(|new Function\(`; trace each value's source.
 FAIL: user or API content reaches a sink unsanitized. WARN: untraceable source; user URLs in `href`/`src` with no scheme allowlist, unless the installed framework blocks `javascript:`.
 
 ### 5. Client-exposed secrets
-Client-exposed env: Vite's `envPrefix` (default `VITE_`); `NEXT_PUBLIC_`/`REACT_APP_`/`PUBLIC_` are leads to confirm. Grep exposed names with `SECRET|PRIVATE|PASSWORD|SERVICE_ROLE` in source and tracked env files (`git ls-files '*.env*'`, names only); `sk_live_|AKIA[0-9A-Z]{16}|PRIVATE KEY-`; tokens in `(local|session)Storage\.setItem`; build `sourcemap`.
+Client-exposed env: Vite's `envPrefix` (default `VITE_`); `NEXT_PUBLIC_`/`REACT_APP_`/`PUBLIC_` are leads to confirm. Grep exposed names with `SECRET|PRIVATE|PASSWORD|SERVICE_ROLE` in source and tracked env files (`git ls-files '*.env*'`, names only); `sk_live_|AKIA[0-9A-Z]{16}|PRIVATE KEY-`; tokens in `(local|session)Storage\.setItem`; build source maps (Vite `build.sourcemap`, Next `productionBrowserSourceMaps`, webpack `devtool`).
 FAIL: a privileged credential (secret/service key, private key, password) in client code or an exposed variable — not vendor-documented publishable keys. WARN: auth tokens in web storage; production source maps (Vite default: off) with no stated reason.
 
 ### 6. Data fetching and state
-Grep `use\w*Query\(|useSWR`: every variable the fetcher reads (id, page, filters, user) belongs in the key — TanStack Query caches by key hash. Effects setting state after `await` need an abort or ignore flag when dependencies change. Mutations invalidate affected queries.
+Grep `use\w*Quer(y|ies)\b|useSWR`: every variable the fetcher reads (id, page, filters, user) belongs in the key — TanStack Query caches by key hash. Effects setting state after `await` need an abort or ignore flag when dependencies change. Mutations invalidate affected queries.
 FAIL: a key missing a variable shows another entity's or user's data. WARN: confirmed effect race or stale data after a mutation; inline keys where docs mandate a key factory.
 
 ### 7. Loading, error and empty states
@@ -72,22 +73,22 @@ FAIL: failure shown as success (caught error rendered as a real empty list). WAR
 
 ### 8. Forms and mutations
 Grep `<form|onSubmit|@submit|handleSubmit|useMutation`; Read each submit path.
-FAIL: a rejected submit swallowed or reported as success; a native `<form>` submit without `preventDefault()` or a framework handler (full reload). WARN: re-entrant while pending (duplicate creates); field errors never shown.
+FAIL: a rejected submit swallowed or reported as success; a `<form>` whose JS submit handler lacks `preventDefault()` or a framework equivalent, so the page reloads mid-request (a form that posts to a server action or endpoint by design is fine). WARN: re-entrant while pending (duplicate creates); field errors never shown.
 
 ### 9. Accessibility basics
-Grep, then Read each element (tags span lines): `<img|<Image` without `alt` (`alt=""` suits decorative); `onClick|@click|on:click|\(click\)` on `div`/`span`/`li` without `role`, `tabIndex` and a key handler; `<input|<select|<textarea` without label, `aria-label` or `aria-labelledby` (check wrapper props); `outline:\s*(none|0)|outline-none` without a `focus-visible` style.
+Grep, then Read each element (tags span lines): `<img|<Image` without `alt` (`alt=""` suits decorative); `onClick|onclick|@click|on:click|\(click\)` on `div`/`span`/`li` missing any of `role`, `tabIndex`/`tabindex`, key handler; `<input|<select|<textarea` without label, `aria-label` or `aria-labelledby` (check wrapper props); `outline:\s*["']?(none|0)|outline-(none|hidden|0)\b` without a `focus-visible` style.
 FAIL: an action reachable only by clicking a non-focusable element. WARN: per-category counts.
 
 ### 10. Route guards and redirects
-Read the router (config, file routes, middleware, `beforeEach`, loaders); list sign-in/role routes (docs or route names) with their guard. Trace URL parameters (`searchParams`, `location.search`, `route.query`) into `location\.(href|assign|replace)|window\.open`.
+Read the router (config, file routes, middleware, `beforeEach`, loaders); list sign-in/role routes (docs or route names) with their guard. Trace URL parameters (`searchParams`, `location.search`, `route.query`) into `location\.(href|assign|replace)|window\.open|router\.(push|replace)\(|\bredirect\(|\bnavigate\(`.
 FAIL: open redirect — a URL parameter reaches navigation without a same-origin check. WARN: auth/role route without a guard; no 404 route. Client guards prove nothing about the API.
 
 ### 11. i18n and design tokens
 i18n declared (library or locale files): diff locale key paths (`jq -r 'paths(scalars)|map(tostring)|join(".")' <file> | sort`); Grep `>\s*[A-Z][a-z]+( [a-z]+)+` in components that translate. Tokens declared (theme file, Tailwind theme, docs): Grep `#[0-9a-fA-F]{3,8}\b|rgba?\(` in components.
-FAIL: a key used in code missing from every locale. WARN: key sets differ; hardcoded UI strings; raw colors outside token files. Neither declared → not applicable.
+FAIL: a static key used in code missing from every locale — after matching plural/context suffixes (i18next `key_one`/`key_other`) and namespaces, and with no inline default (`defaultValue`, `defaultMessage`). WARN: key sets differ; hardcoded UI strings; raw colors outside token files. Neither declared → not applicable.
 
 ### 12. Tests and dependencies
-Per root: no test files (`*.{test,spec}.*`, `e2e/`); focused tests (`\.only\(|\bfit\(|\bfdescribe\(`); `"*"`/`"latest"` ranges; zero or mixed lockfiles; `react`/`react-dom` or `@types/<pkg>` majors that differ; imported but undeclared packages; whole-library imports (`import _ from 'lodash'`, `moment`); no `lazy\(|import\(` with 10+ routes.
+Per root: no test files (`*.{test,spec}.*`, `__tests__/`, `e2e/`); focused tests (`\.only\(|\bfit\(|\bfdescribe\(`); `"*"`/`"latest"` ranges; zero or mixed lockfiles (a workspace member uses the workspace root's); `react`/`react-dom` or `@types/<pkg>` majors that differ; imported but undeclared packages; whole-library imports (`import _ from 'lodash'`, `moment`); no `lazy\(|import\(` with 10+ routes in a hand-written router (file-based routers — Next, Nuxt, SvelteKit, Astro — split per route).
 WARN per item; never FAIL.
 
 ## Output Contract
@@ -97,7 +98,7 @@ WARN per item; never FAIL.
 
 Scope: <roots (framework@version); exclusions>
 Coverage: COMPLETE | PARTIAL — <not read, and why>
-Verification: <tsc command → exit, errors | tsc not run — reason>
+Verification: <tsc command → exit, errors | tsc not run — reason>; side effects: <none | paths | not checked>
 
 [PASS|WARN|FAIL] #N <Check name> — <file:line evidence | PASS: probe + coverage> (note: optional)
 ...12 lines, #1–#12...
