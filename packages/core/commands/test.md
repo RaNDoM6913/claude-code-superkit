@@ -27,7 +27,7 @@ Scan the project root and subdirectories for stack markers:
 | `go.mod` | `go test ./... -count=1` | Go |
 | `package.json` + vitest config | `npx vitest run` | Vitest |
 | `package.json` + jest config | `npx jest` | Jest |
-| `package.json` + playwright config | `npx playwright test` | Playwright (e2e) |
+| `package.json` + playwright config | `npx --no -- playwright test` | Playwright (e2e) |
 | `cypress.config.{js,ts}` | `npx cypress run` | Cypress (e2e) |
 | `pyproject.toml` / `pytest.ini` / `conftest.py` | `pytest` | Python (pytest) |
 | `pyproject.toml` with `[tool.unittest]` | `python -m unittest discover` | Python (unittest) |
@@ -65,7 +65,7 @@ If the project is a monorepo, `cd` into the frontend directory first (detect by 
 
 ### e2e
 Run end-to-end tests:
-- **Playwright**: `npx playwright test`
+- **Playwright**: `npx --no -- playwright test`
 - **Cypress**: `npx cypress run`
 - **pytest + selenium**: `pytest tests/e2e/`
 
