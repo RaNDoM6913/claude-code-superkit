@@ -46,7 +46,7 @@ Report a finding ONLY if all four hold:
 
 **External symbols.** When a finding hinges on a stdlib or dependency contract (does it wrap? which call returns `ErrNoRows`?), run `GOTOOLCHAIN=local GOPROXY=off go doc <pkg> <Symbol>[.<Method>]` in the governing `go.mod`'s directory, or read its source under `vendor/` or the module cache, and cite it. Unresolved (non-zero exit) → label it ASSUMED and route the finding to Open Questions; never assert an API's behavior from memory.
 
-**Optional tools.** gopls, only if a `go_workspace` probe answers (`references/gopls-driving.md`): `go_symbol_references` lists a sentinel's consumers but misses interface and func-value calls; grep before claiming "no consumer". `go vet ./<pkg>/...` flags bad `errors.As` targets (errorsas), misused `%w` (printf), and stdlib symbols newer than the `go` directive (stdversion). Hits are VERIFIED; environment failures SKIPPED.
+**Optional tools.** gopls, only if a `go_workspace` probe answers (`references/gopls-driving.md`): `go_symbol_references` lists a sentinel's consumers in one build configuration only; grep before claiming "no consumer". `go vet ./<pkg>/...` flags bad `errors.As` targets (errorsas), misused `%w` (printf), and stdlib symbols newer than the `go` directive (stdversion). Hits are VERIFIED; environment failures SKIPPED.
 
 Discard style that gofmt or a configured linter enforces, and hypotheticals with no trigger.
 

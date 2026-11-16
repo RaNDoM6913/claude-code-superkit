@@ -45,7 +45,7 @@ Report a finding ONLY if all four hold:
 
 **External symbols.** A finding resting on a stdlib or dependency contract needs `GOTOOLCHAIN=local GOPROXY=off go doc <pkg> <Symbol>[.<Method>]` run in the governing `go.mod`'s directory, or the source under `vendor/` or the module cache, cited. `go doc` exits non-zero when it cannot resolve: label the contract ASSUMED and move the finding to Open Questions — never assert external behavior from memory.
 
-**Tools (optional).** gopls only after `go_workspace` answers; its references miss interface and func-value calls, so grep too. `go vet ./<pkg>/...` (same prefix): `copylocks`, `lostcancel`, `loopclosure`, `waitgroup` hits are VERIFIED; vet has no race, leak, or deadlock analyzer. Caller-supplied `-race` output covers only the paths its tests ran. Environment failure → SKIPPED.
+**Tools (optional).** gopls only after `go_workspace` answers; its references cover one build configuration and miss calls made through a func value, so grep too. `go vet ./<pkg>/...` (same prefix): `copylocks`, `lostcancel`, `loopclosure`, `waitgroup` hits are VERIFIED; vet has no race, leak, or deadlock analyzer. Caller-supplied `-race` output covers only the paths its tests ran. Environment failure → SKIPPED.
 
 ## Severity & Confidence
 

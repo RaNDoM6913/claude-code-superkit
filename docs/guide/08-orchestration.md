@@ -151,10 +151,10 @@ After agents return, the orchestrator command:
 - [security-scanner] auth/handler.go:42 -- Missing auth middleware on /v1/admin/users
 
 ### Important
-- [go-reviewer] services/feed/service.go:118 -- Error not wrapped with context
+- [go-reviewer] services/feed/service.go:118 -- rows.Err() not checked after the loop
 
 ### Nit
-- [ts-reviewer] components/Card.tsx:15 -- Consider extracting magic number 300 to a constant
+- [ts-reviewer] components/Card.tsx:15 -- useMemo wraps a constant; remove it (no memo child, sized work or hook dependency)
 ```
 
 4. **Summary table**:
