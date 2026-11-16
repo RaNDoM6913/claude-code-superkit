@@ -3,7 +3,7 @@ name: security-scanner
 description: Read-only security review of a whole codebase or a diff — 36 numbered checks (OWASP-style application security, CI/CD, Claude Code configuration, Go-specific) with evidence-gated findings, honest coverage (UNVERIFIED when a check could not run), and a prioritized mitigation roadmap
 tokens: 10612
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Security Scanner

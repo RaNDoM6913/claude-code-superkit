@@ -3,7 +3,7 @@ name: docs-reviewer
 description: Read-only doc review of a change or named docs — freshness (diff → docs, docs/trees), accuracy (claims vs code), required-doc coverage; STALE/BROKEN/DRIFT/MISSING
 tokens: 2889
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Docs Reviewer

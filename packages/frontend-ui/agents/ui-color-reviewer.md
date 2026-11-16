@@ -3,7 +3,7 @@ name: ui-color-reviewer
 description: "Read-only 2D UI color review — contrast per theme, tokens, theme parity, state cues, palette. Dispatch when a palette, theme file or color token changed; a dark/light theme is introduced or modified; oklch/hsl/rgb/hex values are added or replaced; the user asks about palette, colors, theme, contrast, accessibility or dark mode while .tsx/.jsx/.css/.scss/.html/.vue/.svelte files are active; or when ui-reviewer routes a color hand-off. Do NOT dispatch for backend code, 3D/WebGL code, or tests."
 tokens: 2870
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Color Reviewer

@@ -3,7 +3,7 @@ name: gan-planner
 description: Plans testable feature implementations with observable acceptance criteria + Playwright-verifiable test scenarios and the rubric N for the GAN evaluator loop; read-only, never asks mid-run. Step 1 of 3 in GAN harness
 tokens: 2885
 model: opus
-allowed-tools: Read, Grep, Glob
+tools: Read, Grep, Glob
 ---
 
 # GAN Planner

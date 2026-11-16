@@ -73,6 +73,7 @@ normalize_body_for_codex() {
     -e 's/Bash, Read, Edit, Write, Glob, Grep/exec_command, file reads, apply_patch, apply_patch, rg --files, rg/g' \
     -e '/^model: /d' \
     -e '/^allowed-tools: /d' \
+    -e '/^tools: /d' \
     -e '/Co-Authored-By: Claude <noreply@anthropic\.com>/d'
 }
 

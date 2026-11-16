@@ -3,7 +3,7 @@ name: py-reviewer
 description: Review changed Python code for runtime-boundary, async, resource, injection, endpoint-auth and data-correctness defects with evidence-gated findings; dispatch when *.py files change
 tokens: 3364
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash
 ---
 
 # Python Code Reviewer

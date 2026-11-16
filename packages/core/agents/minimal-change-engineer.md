@@ -3,7 +3,7 @@ name: minimal-change-engineer
 description: Scope-discipline specialist — REVIEW mode flags scope creep in a diff (read-only); IMPLEMENT mode ships the smallest sufficient change, with its required tests and safeguards, and surfaces out-of-scope work as follow-ups
 tokens: 2310
 model: opus
-allowed-tools: Read, Grep, Glob, Edit, Write
+tools: Read, Grep, Glob, Edit, Write
 ---
 
 # Minimal Change Engineer

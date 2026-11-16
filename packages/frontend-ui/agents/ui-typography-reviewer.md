@@ -3,7 +3,7 @@ name: ui-typography-reviewer
 description: "Read-only typography review of 2D UI source — fonts, loading, scale, readability, scripts. Dispatch when a font-family, font-weight, line-height, letter-spacing or type-scale token changed; when a Google Fonts, next/font, @fontsource or @font-face import was added or changed; when the user asks about fonts, type, typography, hierarchy, or readability while .tsx/.jsx/.css/.scss/.html/.vue/.svelte files are active; or when ui-reviewer routes a typography hand-off. Do NOT dispatch for backend code, 3D/WebGL code, or tests/configs without typography tokens."
 tokens: 2788
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Typography Reviewer

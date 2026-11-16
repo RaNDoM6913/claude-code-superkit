@@ -3,7 +3,7 @@ name: api-contract-sync
 description: Read-only check that an API contract (OpenAPI, GraphQL, protobuf) matches backend routes/handlers and in-repo clients — params, bodies, nullability, errors, auth, pagination; IN_SYNC/DRIFT/UNVERIFIED
 tokens: 2951
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # API Contract Sync

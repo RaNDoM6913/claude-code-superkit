@@ -3,7 +3,7 @@ name: go-observability-reviewer
 description: Read-only Go observability review of a diff or audit slice, all signals or one — silent failures, secrets in telemetry, label cardinality, trace propagation, pprof exposure, probe semantics
 tokens: 3854
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash
 ---
 
 # Go Observability Reviewer

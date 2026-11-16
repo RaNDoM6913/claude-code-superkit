@@ -3,7 +3,7 @@ name: architect
 description: Read-only design advisor — reads real code and docs, compares the viable approaches (blast radius, failure modes, reversibility), recommends one minimal design; reviews failing designs on /dev ESCALATE
 tokens: 2797
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Architect

@@ -3,7 +3,7 @@ name: ai-slop-cleaner
 description: Clean AI-generated code anti-patterns — redundant comments, one-use abstractions, over-engineering, template slop — via behavior-preserving edits verified by compile/lint and tests; review-only on request; ambiguous cases left as BORDERLINE
 tokens: 2734
 model: opus
-allowed-tools: Read, Grep, Glob, Edit, Bash
+tools: Read, Grep, Glob, Edit, Bash
 ---
 
 # AI Slop Cleaner

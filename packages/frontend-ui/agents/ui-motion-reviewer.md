@@ -3,7 +3,7 @@ name: ui-motion-reviewer
 description: "Read-only motion review of 2D UI source; one Before/After/Why table. Dispatch when a transition, @keyframes, animation, useSpring, AnimatePresence, or motion.*/m.* block was added or modified; when a new cubic-bezier or named easing token was introduced; when the user asks about animation, motion, transitions, easing, duration, or springs while UI files are active; or when ui-reviewer routes a motion hand-off. Do NOT dispatch for backend code, tests, or 3D/WebGL code (R3F and GSAP scroll-scrub belong to frontend-3d)."
 tokens: 2924
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Motion Reviewer

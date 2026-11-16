@@ -3,7 +3,7 @@ name: ui-interaction-reviewer
 description: "Read-only 2D UI interaction review — controls, focus, overlays, forms, feedback, microcopy. Dispatch when a button / modal / drawer / dialog / sheet / popover / dropdown / tooltip / form / input / select / toast / tab / menu component changed; focus states or keyboard interaction changed; loading / empty / error UI changed; microcopy changed (labels, error messages, empty-state text); the user asks about interactions, polish, buttons, modals, forms or accessibility while UI files are active; or when ui-reviewer routes an interaction hand-off. Do NOT dispatch for backend code, 3D/WebGL code, or tests."
 tokens: 3021
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Interaction Reviewer

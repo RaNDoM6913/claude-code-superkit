@@ -3,7 +3,7 @@ name: goal-verifier
 description: Goal-backward verification (/dev Phase 11, /review verdict track) — climbs each stated goal through EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW on cited evidence; verdict PASS/NEEDS-ATTENTION/NEEDS-REMEDIATION
 tokens: 2112
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Goal Verifier

@@ -3,7 +3,7 @@ name: gan-evaluator
 description: Adversarial step 3 of 3 in GAN harness — runs the plan's Playwright spec itself, checks scope, anti-slop and every acceptance criterion, scores X / N from the plan's rubric and returns PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION (or BLOCKED) with evidence for every fail; never edits code
 tokens: 3504
 model: opus
-allowed-tools: Read, Bash, Grep, Glob
+tools: Read, Bash, Grep, Glob
 ---
 
 # GAN Evaluator

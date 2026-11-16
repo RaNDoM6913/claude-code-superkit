@@ -3,7 +3,7 @@ name: frontend-perf-reviewer
 description: Frontend performance review — bundle size, lazy loading, CSS containment, Core Web Vitals. Activate when reviewing frontend code for performance.
 tokens: 3219
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Frontend Performance Reviewer

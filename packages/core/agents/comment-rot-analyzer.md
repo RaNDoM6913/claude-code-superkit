@@ -3,7 +3,7 @@ name: comment-rot-analyzer
 description: Read-only review of comments, docstrings, README snippets and TODOs a change made false — signatures, defaults, units, errors, side effects, safety claims, dead references; proposes corrected text
 tokens: 2590
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Comment Rot Analyzer

@@ -3,7 +3,7 @@ name: scaffold-endpoint
 description: Scaffolds a new API endpoint from a healthy reference endpoint's layers, auth and wiring — additive only, unspecified behavior stubbed fail-closed, compile-checked, never claimed working
 tokens: 3047
 model: opus
-allowed-tools: Read, Grep, Glob, Edit, Write, Bash
+tools: Read, Grep, Glob, Edit, Write, Bash
 ---
 
 # Scaffold Endpoint

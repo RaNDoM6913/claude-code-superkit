@@ -3,7 +3,7 @@ name: gan-generator
 description: Implements a READY gan-planner plan — production code plus one Playwright test per scenario, inside the plan's file list — runs the spec and hands an honest result to gan-evaluator. Step 2 of 3 in GAN harness
 tokens: 2969
 model: opus
-allowed-tools: Read, Edit, Write, Bash, Grep, Glob
+tools: Read, Edit, Write, Bash, Grep, Glob
 ---
 
 # GAN Generator

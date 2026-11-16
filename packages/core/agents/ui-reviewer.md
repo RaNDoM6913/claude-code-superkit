@@ -3,7 +3,7 @@ name: ui-reviewer
 description: Read-only generic UI review — semantics, keyboard/focus, loading/empty/error and form states, layout, contrast computed from tokens, motion, i18n, media; source evidence never passed off as rendered
 tokens: 3481
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Reviewer

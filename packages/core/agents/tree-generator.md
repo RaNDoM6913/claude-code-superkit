@@ -3,7 +3,7 @@ name: tree-generator
 description: Generate project directory tree documentation — auto-detect components, filter noise, write annotated markdown trees into docs/trees/ (overview depth 3, per-component depth 4) without overwriting hand-written docs
 tokens: 2027
 model: opus
-allowed-tools: Bash, Read, Glob, Write
+tools: Bash, Read, Glob, Write
 ---
 
 # Tree Generator

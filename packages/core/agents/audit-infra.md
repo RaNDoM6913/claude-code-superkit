@@ -3,7 +3,7 @@ name: audit-infra
 description: Infrastructure audit for /audit — 12 fixed read-only checks (secrets, Docker, dependency CVEs, CORS, webhooks, migrations, CI/CD, backups, monitoring), each PASS/WARN/FAIL with redacted evidence
 tokens: 3488
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Infrastructure Audit

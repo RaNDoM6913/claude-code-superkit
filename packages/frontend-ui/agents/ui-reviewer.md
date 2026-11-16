@@ -3,7 +3,7 @@ name: ui-reviewer
 description: 'Frontend UI review umbrella for 2D DOM UI (React/Vue/Svelte, Tailwind/CSS/CSS-in-JS) — reflex audit, a11y semantics, state coverage, responsive layout; emits a specialist routing block for the caller and merges specialist reports it is given. Dispatch automatically when: user asks for "audit", "review", "polish", or "critique" AND active edits are in .tsx/.jsx/.ts/.css/.scss/.html/.vue/.svelte files; 3+ frontend file edits have been completed in one task; before a commit that stages 2+ .tsx/.jsx/.css files. Do NOT dispatch for: backend code (.go, .py, .rs, .java, .rb, .cs, .kt); 3D / WebGL / Three.js / React Three Fiber code (frontend-3d: ui-design-reviewer / r3f-scene-reviewer); test files (*.test.*, *.spec.*); non-token config files (.json, .yaml, .toml) unless they are design-token configs (tailwind.config.*, tokens.*, theme.*).'
 tokens: 3747
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Reviewer (umbrella)

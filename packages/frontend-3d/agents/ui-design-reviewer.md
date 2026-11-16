@@ -3,7 +3,7 @@ name: ui-design-reviewer
 description: "Read-only design review of the UI layer of 3D/WebGL pages — overlay/HUD over a Three.js/R3F canvas, scroll-driven 3D sections, text in 3D: layering, legibility, input parity, alternatives, reduced motion, loading/fallback, frontend-aesthetics-3d lines. Activate when reviewing frontend components for design quality on a page that composes UI with a 3D scene; pure 2D UI → ui-reviewer (core or frontend-ui)."
 tokens: 2825
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Design Reviewer (3D UI layer)

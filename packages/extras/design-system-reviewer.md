@@ -3,7 +3,7 @@ name: design-system-reviewer
 description: Read-only review of UI components against the project's own design system — discovers the tokens first, then checks colors, spacing, typography, z-index, motion, themes and component consistency, reporting only evidence-backed deviations
 tokens: 2669
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Design System Reviewer

@@ -3,7 +3,7 @@ name: pre-deploy-validator
 description: Read-only 9-point pre-deploy gate — compilation, linting, tests, build/bundle, migrations, API spec, debug artifacts, env config, secrets — PASS/FAIL/WARN/N/A from output seen this session, never a guessed PASS; ends in READY / NOT READY
 tokens: 2260
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Pre-Deploy Validator

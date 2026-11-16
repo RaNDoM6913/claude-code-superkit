@@ -3,7 +3,7 @@ name: go-reviewer
 description: Review changed Go code (a diff or an audit slice) for correctness — layering, errors, SQL and transactions, HTTP/context/resources, nil/slice/concurrency traps, tests — with evidence-gated findings; dispatch when *.go files change
 tokens: 4358
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion, mcp__gopls
+tools: Read, Grep, Glob, Bash, mcp__gopls__go_workspace, mcp__gopls__go_search, mcp__gopls__go_file_context, mcp__gopls__go_package_api, mcp__gopls__go_symbol_references, mcp__gopls__go_diagnostics
 ---
 
 # Go Code Reviewer

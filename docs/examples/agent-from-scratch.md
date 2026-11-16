@@ -22,7 +22,7 @@ Create `.claude/agents/dockerfile-reviewer.md`:
 name: dockerfile-reviewer
 description: Review Dockerfiles for security, performance, and best practices
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 ```
 
@@ -33,7 +33,7 @@ allowed-tools: Read, Grep, Glob, Bash
 | `name` | `dockerfile-reviewer` | Used for dispatch matching when calling the agent |
 | `description` | One-line summary | Shown in agent listings, used by orchestrators to decide when to dispatch |
 | `model` | `opus` | Maximum reasoning depth for all tasks |
-| `allowed-tools` | `Read, Grep, Glob, Bash` | Minimal toolset. Review agents don't need `Edit` or `Write` |
+| `tools` | `Read, Grep, Glob, Bash` | Minimal toolset. Review agents don't need `Edit` or `Write` |
 
 ## Step 2: Write the Checklist
 
@@ -258,7 +258,7 @@ from unpinned versions, and (3) an unnecessarily large image (~1.2GB vs
 
 ## Key Takeaways
 
-1. **Frontmatter is minimal** -- name, description, model, allowed-tools
+1. **Frontmatter is minimal** -- name, description, model, tools
 2. **Hard Rules ride at the top** -- the non-negotiables, where a weaker model can't lose them
 3. **Checklist items need grep patterns** -- concrete, not vague
 4. **2-phase review** -- quick scan first, then deep analysis

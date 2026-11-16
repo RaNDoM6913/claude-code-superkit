@@ -3,7 +3,7 @@ name: test-generator
 description: Writes and runs tests for new or changed code in the project's framework — assertions that fail when the logic is wrong; failing tests become code findings, never weakened
 tokens: 3239
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, Edit, Write
+tools: Read, Grep, Glob, Bash, Edit, Write
 ---
 
 # Test Generator

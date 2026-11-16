@@ -3,7 +3,7 @@ name: code-reviewer
 description: Generic code review of a diff, PR or files — contracts, error handling, injection, auth, null/boundary cases, conventions, tests; for files no stack-specific reviewer covers
 tokens: 2894
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Code Reviewer

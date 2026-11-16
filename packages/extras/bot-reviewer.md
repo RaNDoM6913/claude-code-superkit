@@ -3,7 +3,7 @@ name: bot-reviewer
 description: Read-only review of chat bot code (Telegram, Discord, Slack) for callback safety, state machines, acknowledgments, webhook authenticity, rate limits and production robustness, against the detected platform's documented limits
 tokens: 3438
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Chat Bot Code Reviewer

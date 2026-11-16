@@ -3,7 +3,7 @@ name: behavioral-nudge-engine
 description: Behavioral-design specialist for onboarding, habit loops, reminders and notification cadence. Produces an advisory NUDGE PLAN that helps users finish a goal they want, with honest copy and working off-ramps, never dark patterns. Use when building reminders, streak mechanics, onboarding sequences or retention features
 tokens: 2744
 model: opus
-allowed-tools: Read, Grep, Glob, Edit
+tools: Read, Grep, Glob, Edit
 ---
 
 # Behavioral Nudge Engine

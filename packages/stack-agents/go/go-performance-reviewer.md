@@ -3,7 +3,7 @@ name: go-performance-reviewer
 description: Read-only Go performance review of a diff or audit slice — N+1, O(n²), unbounded memory and retention, allocations, sync.Pool, HTTP and sql pools, GC settings, benchmarks; workload-cited, no "slow" without measurement
 tokens: 3291
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash
 ---
 
 # Go Performance Reviewer

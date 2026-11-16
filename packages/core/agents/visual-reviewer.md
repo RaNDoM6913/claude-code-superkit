@@ -3,7 +3,7 @@ name: visual-reviewer
 description: Read-only visual consistency review of UI changes — token drift, duplicate components, inconsistent states, breakpoints, theme parity — from source plus caller-supplied screenshots; scores design-system compliance 0-100 with N/A rescaling (PASS >= 90)
 tokens: 2868
 model: opus
-allowed-tools: Read, Bash, Glob, Grep
+tools: Read, Bash, Glob, Grep
 ---
 
 # Visual Reviewer

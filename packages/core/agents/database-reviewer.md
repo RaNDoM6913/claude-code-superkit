@@ -3,7 +3,7 @@ name: database-reviewer
 description: Read-only, engine-aware review of schema design, constraints, indexes vs query shape, and data-access code — injection, tenant predicates, N+1, unbounded reads, transactions; never touches a live database
 tokens: 3189
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Database Reviewer

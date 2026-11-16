@@ -3,7 +3,7 @@ name: go-error-reviewer
 description: Deep review of Go error handling in a diff or audit slice — discarded errors, %w chains, errors.Is/As, typed nils, Close/Flush, cancellation, panic/recover, logging once, status mapping
 tokens: 3696
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion, mcp__gopls
+tools: Read, Grep, Glob, Bash, mcp__gopls__go_workspace, mcp__gopls__go_search, mcp__gopls__go_file_context, mcp__gopls__go_package_api, mcp__gopls__go_symbol_references, mcp__gopls__go_diagnostics
 ---
 
 # Go Error Handling Reviewer

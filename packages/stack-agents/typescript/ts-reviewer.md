@@ -3,7 +3,7 @@ name: ts-reviewer
 description: Review changed TypeScript/TSX code for runtime-boundary, async, React, server-state, server/client and injection defects, with evidence-gated findings; dispatch when *.ts/*.tsx files change
 tokens: 2884
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash
 ---
 
 # TypeScript/React Code Reviewer

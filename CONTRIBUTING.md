@@ -10,7 +10,7 @@
 ## Adding a New Core Agent
 
 1. Follow the format in any existing agent (`packages/core/agents/*.md`)
-2. Required sections: frontmatter (name, description, model, allowed-tools), Phase 1 Checklist, Phase 2 Deep Analysis, Output Format
+2. Required sections: frontmatter (name, description, model, tools), Phase 1 Checklist, Phase 2 Deep Analysis, Output Format
 3. Place in `packages/core/agents/` (universal) or `packages/extras/` (specialized)
 4. Test by running the agent against a real codebase
 
@@ -27,7 +27,7 @@
 name: agent-name
 description: One-line description
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Agent Name

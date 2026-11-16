@@ -3,7 +3,7 @@ name: health-checker
 description: Project health dashboard — runs 9 checks (compilation, tests, TODOs, API spec, migrations, deps, security, docs, bundle) per component; OK/WARN/FAIL/N/A per check and a HEALTHY / NEEDS ATTENTION / UNHEALTHY verdict
 tokens: 2590
 model: opus
-allowed-tools: Bash, Glob, Grep, Read
+tools: Bash, Glob, Grep, Read
 ---
 
 # Project Health Checker

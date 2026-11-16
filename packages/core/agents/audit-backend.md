@@ -3,7 +3,7 @@ name: audit-backend
 description: Backend audit for /audit — 12 fixed PASS/WARN/FAIL checks (injection, data access, auth, validation, rate limits, errors, sensitive data, config, concurrency, stubs/tests) with file:line evidence
 tokens: 2409
 model: opus
-allowed-tools: Read, Grep, Glob
+tools: Read, Grep, Glob
 ---
 
 # Backend Audit

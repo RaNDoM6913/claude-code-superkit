@@ -3,7 +3,7 @@ name: audit-frontend
 description: Frontend audit for /audit — 12 PASS/WARN/FAIL checks (prototype data, debug code, types, XSS, client secrets, fetching, error states, forms, a11y, routes, i18n, tests/deps)
 tokens: 2408
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Frontend Audit

@@ -3,7 +3,7 @@ name: ui-design-critic
 description: "Holistic design critique of 2D UI, NOT a code reviewer — judges whether a surface feels designed or reads as AI-template output; complements the specialists (typography / color / motion / interaction). Dispatch when the user asks for a critique, design review, holistic review, aesthetic audit, impression, or 'does this feel designed'; when a major new UI surface was built (new page, new major component system, new landing section); when 5+ UI files changed in one task; or when ui-reviewer routes a design-critique hand-off. Do NOT dispatch for bug fixes, single-component changes, or tiny polish passes (use the specialists), for backend / 3D / test code, or when the user wants a technical audit (dispatch ui-reviewer or a specialist instead)."
 tokens: 2733
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # UI Design Critic

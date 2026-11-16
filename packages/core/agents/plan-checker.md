@@ -3,7 +3,7 @@ name: plan-checker
 description: Validates an implementation plan and its Sprint Contract before execution — requirement traceability, contract testability, codebase facts, missing steps, order, risk, scope, conventions; verdict PASS/REVISE/BLOCK
 tokens: 2260
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Plan Checker

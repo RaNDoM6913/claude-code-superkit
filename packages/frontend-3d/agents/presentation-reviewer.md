@@ -3,7 +3,7 @@ name: presentation-reviewer
 description: "Review scroll-driven presentation sections using GSAP ScrollTrigger, device-frame mockups, and scroll-switched layers or 3D textures (read-only) — phase math, scrub, pinning, cleanup, reduced motion, SSR, frame layers; scene, overlay, performance routed. Activate when editing scroll-driven presentation sections."
 tokens: 2903
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Presentation Section Reviewer

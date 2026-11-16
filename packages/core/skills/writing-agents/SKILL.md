@@ -30,12 +30,12 @@ Meta-skill: the standard every kit agent follows. Agents are `.md` files in `.cl
 name: agent-name
 description: One line — what it reviews/creates AND when to dispatch it
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 ```
 
 - `description` — single line; dispatch matches on it, so include the trigger condition (e.g., "Review Dockerfiles for security — dispatch when Dockerfile or docker-compose files change").
-- `allowed-tools` — minimal set. Reviewers: `Read, Grep, Glob, Bash`. Generators add `Edit, Write`.
+- `tools` — enforced allowlist, minimal set (never `AskUserQuestion`; MCP as `mcp__<server>__<tool>`). Reviewers: `Read, Grep, Glob, Bash`. Generators add `Edit, Write`.
 - `tokens: N` — transparency signal, not a budget. Do not hand-count; regenerate with `node bin/inject-tokens.js` after editing.
 
 ## Body Skeleton (every agent, this order)
@@ -61,7 +61,7 @@ Use it to: [one line — what this agent extracts]. Violations of DOCUMENTED con
 ## Authoring Workflow
 
 1. Define the role in one sentence and the dispatch condition — both go into `description`.
-2. Write frontmatter: `model: opus`, minimal `allowed-tools`.
+2. Write frontmatter: `model: opus`, minimal `tools`.
 3. Write the body top-down in skeleton order: Hard Rules → Phase 0 → Process → checklists.
 4. Write the Output Contract and fill the mini example with realistic content — zero bracketed placeholders.
 5. Add the Evidence Gate (reviewer) or Done-gate (generator), then the Recap.
@@ -136,7 +136,7 @@ Every section filled — this is the template to copy, not a sketch:
 name: dockerfile-reviewer
 description: Review Dockerfiles for security and image hygiene — dispatch when Dockerfile or docker-compose files change
 model: opus
-allowed-tools: Read, Grep, Glob
+tools: Read, Grep, Glob
 ---
 
 # Dockerfile Reviewer

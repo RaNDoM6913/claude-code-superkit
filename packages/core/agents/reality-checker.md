@@ -3,7 +3,7 @@ name: reality-checker
 description: Skeptical check of "done / ready / fixed" claims — re-verifies each by running or reading, keeps VERIFIED, FAILED and UNVERIFIED apart; verdict READY/NEEDS WORK/BLOCKED
 tokens: 2665
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Reality Checker

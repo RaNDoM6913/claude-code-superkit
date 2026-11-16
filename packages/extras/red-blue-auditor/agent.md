@@ -2,7 +2,7 @@
 name: red-blue-auditor
 description: Read-only, static Red/Blue/Auditor security audit of Claude Code and Codex agent-runtime config (settings, hooks, MCP, prompts, CLAUDE.md/AGENTS.md) plus bundled scan.sh — evidence-gated findings, attack chains, defense matrix, risk score
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 tokens: 5000
 ---
 

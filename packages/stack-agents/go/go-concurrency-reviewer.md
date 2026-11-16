@@ -3,7 +3,7 @@ name: go-concurrency-reviewer
 description: Deep Go concurrency review of a diff or audit slice — goroutine exit, channels, data races, locks, sync primitives, context, errgroup, timers — version-aware; dispatch when go-reviewer names it or concurrent Go code changes
 tokens: 3585
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion, mcp__gopls
+tools: Read, Grep, Glob, Bash, mcp__gopls__go_workspace, mcp__gopls__go_search, mcp__gopls__go_file_context, mcp__gopls__go_package_api, mcp__gopls__go_symbol_references, mcp__gopls__go_diagnostics
 ---
 
 # Go Concurrency Reviewer

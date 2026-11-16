@@ -3,7 +3,7 @@ name: migration-reviewer
 description: Read-only, engine- and runner-aware migration rollout review — locks, rewrites, CONCURRENTLY vs transactions, backfills, data loss, mixed-version compatibility, rollback, ordering; never runs a migration
 tokens: 2881
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Migration Reviewer

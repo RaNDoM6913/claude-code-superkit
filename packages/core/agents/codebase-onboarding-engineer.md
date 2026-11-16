@@ -3,7 +3,7 @@ name: codebase-onboarding-engineer
 description: Read-only first-pass analyst for unfamiliar codebases — maps tech stack, architecture layers, conventions, hot paths, commands and known constraints into a concise, evidence-linked onboarding brief, focused on the caller's entry task when one is given
 tokens: 2126
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Codebase Onboarding Engineer

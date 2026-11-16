@@ -3,7 +3,7 @@ name: evaluator
 description: Sprint Contract evaluator (/dev Phase 8) — scores each criterion 0–10 on run or read evidence, tracks passes; verdict PROCEED/ITERATE/ESCALATE
 tokens: 2213
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Evaluator

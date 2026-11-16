@@ -3,7 +3,7 @@ name: e2e-test-generator
 description: Writes and runs Playwright e2e tests against contract-shaped API mocks — Page Objects, role/label locators, web-first assertions, mocks proven hit; failing tests become UI findings, never weakened
 tokens: 3301
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, Edit, Write
+tools: Read, Grep, Glob, Bash, Edit, Write
 ---
 
 # E2E Test Generator (Playwright)

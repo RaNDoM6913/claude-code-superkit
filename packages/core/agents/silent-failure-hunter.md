@@ -3,7 +3,7 @@ name: silent-failure-hunter
 description: Cross-language hunt for failures that vanish — swallowed errors, empty catch, fallback-to-default masking, `|| true`, unawaited or fire-and-forget async, retries that hide, false success, lost cancellation — graded by consequence
 tokens: 2811
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Silent Failure Hunter

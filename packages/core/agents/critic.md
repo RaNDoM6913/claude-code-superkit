@@ -3,7 +3,7 @@ name: critic
 description: Final cross-cutting gate (/dev Phase 13) — security, new-hire and ops review beyond Phase 12; verdict APPROVE/CONCERN/BLOCK
 tokens: 2303
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 
 # Critic

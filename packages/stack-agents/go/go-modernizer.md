@@ -3,7 +3,7 @@ name: go-modernizer
 description: Read-only Go modernization review — idioms gated on the module's real language version and toolchain, behavior-preserving vs behavior-changing migrations, modern code above the go line; proposes, never applies
 tokens: 3022
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash
 ---
 
 # Go Modernizer

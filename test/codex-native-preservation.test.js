@@ -107,7 +107,7 @@ function tempRepository(t) {
 function writeAgent(repository, name, body) {
   writeFileSync(
     join(repository, `packages/core/agents/${name}.md`),
-    `---\nname: ${name}\ndescription: Claude Code agent ${name}\nmodel: opus\nallowed-tools: Read\n---\n${body}\n`,
+    `---\nname: ${name}\ndescription: Claude Code agent ${name}\nmodel: opus\ntools: Read\n---\n${body}\n`,
   );
 }
 
@@ -166,7 +166,7 @@ test('converter preserves every declared native skill and converts other agents 
   );
   assert.match(converted, /^name: ordinary-reviewer$/m);
   assert.match(converted, /Use the `file reads` tool\./);
-  assert.doesNotMatch(converted, /model: opus|allowed-tools:/);
+  assert.doesNotMatch(converted, /model: opus|allowed-tools:|^tools:/m);
 });
 
 test('converter leaves optional GAN skill sources byte-for-byte unchanged and outside ordinary Codex output', (t) => {

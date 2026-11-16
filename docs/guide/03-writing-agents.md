@@ -11,7 +11,7 @@ Agent files are Markdown with YAML frontmatter. Place them in `.claude/agents/`.
 name: agent-name
 description: One-line description (used for dispatch matching)
 model: opus
-allowed-tools: Read, Grep, Glob, Bash
+tools: Read, Grep, Glob, Bash
 ---
 ```
 
@@ -22,7 +22,7 @@ allowed-tools: Read, Grep, Glob, Bash
 | `name` | kebab-case identifier | Matches the filename without `.md` |
 | `description` | One line | Commands use this to decide which agent to dispatch |
 | `model` | `opus` | `opus` for every agent -- the kit is opus-only; never sonnet or haiku. |
-| `allowed-tools` | Comma-separated | Review agents: `Read, Grep, Glob, Bash`. Generator agents add: `Edit, Write`. |
+| `tools` | Comma-separated, enforced allowlist | Review agents: `Read, Grep, Glob, Bash`. Generator agents add: `Edit, Write`. |
 
 ## The Body Skeleton
 
@@ -169,7 +169,7 @@ Create `.claude/agents/dockerfile-reviewer.md`:
 name: dockerfile-reviewer
 description: Review Dockerfiles for security, image size, and best practices -- dispatch when Dockerfile or docker-compose files change
 model: opus
-allowed-tools: Read, Grep, Glob
+tools: Read, Grep, Glob
 ---
 
 # Dockerfile Reviewer

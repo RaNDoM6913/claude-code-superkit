@@ -3,7 +3,7 @@ name: debug-observer
 description: Read-only bug diagnosis from evidence — reproduce or say why not, falsifiable hypotheses, root cause vs symptom; local logs, DB/cache state, code trace, git history; proposes fix, repro test, owner
 tokens: 4047
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Debug Observer

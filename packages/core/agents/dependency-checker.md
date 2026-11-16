@@ -3,7 +3,7 @@ name: dependency-checker
 description: Read-only dependency audit — advisories (npm audit, govulncheck, pip-audit, cargo audit, osv-scanner), lockfile drift, freshness; reachability-honest severities, NOT EVALUATED instead of false clean, update plan proposed, never applied
 tokens: 2956
 model: opus
-allowed-tools: Bash, Read, Grep, Glob
+tools: Bash, Read, Grep, Glob
 ---
 
 # Dependency Checker

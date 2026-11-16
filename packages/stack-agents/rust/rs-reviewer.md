@@ -3,7 +3,7 @@ name: rs-reviewer
 description: Review changed Rust code for panic paths, error handling, unsafe/FFI soundness, async, lock and cancellation hazards, and untrusted-input sinks, with evidence-gated findings; dispatch when *.rs files change
 tokens: 3422
 model: opus
-allowed-tools: Read, Grep, Glob, Bash, AskUserQuestion
+tools: Read, Grep, Glob, Bash
 ---
 
 # Rust Code Reviewer
