@@ -185,7 +185,7 @@ Go `go vet ./...` · TypeScript `npx --no -- tsc --noEmit` · Python `mypy`/`pyr
 
 ## Phase 10 — Test
 
-Dispatch **test-generator** if available — otherwise write the tests yourself — for new/changed backend code: happy path, validation errors, not-found/conflict, boundary values, edge cases — following project test patterns. Then run the project's test command yourself and fix failures.
+Dispatch **test-generator** if available — otherwise write the tests yourself — with the changed backend files plus the task and its Sprint Contract or Phase 4 checklist (the source of its expected values): happy path, validation errors, not-found/conflict, boundary values, edge cases — following project test patterns. Then run the project's test command yourself and fix failures: a failing test it reports under Code Findings is fixed in the code, never by weakening the test; Unresolved Test Bugs are fixed in the test.
 **Done when:** the test suite runs green (paste the actual final summary line).
 
 ## Phase 11 — Verify Goals
