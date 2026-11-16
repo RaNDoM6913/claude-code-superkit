@@ -23,7 +23,7 @@ The package ships **6 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every comp
 
 **The rules** use `applyWhenPaths` scoping so they auto-load only when you are editing UI files. `frontend-design-aesthetics` is the principles umbrella; `typography-guidelines`, `color-and-contrast`, `spatial-and-layout`, `motion-and-animation`, and `interaction-polish` are deep specialist rules; `ui-anti-patterns` is the rejection list (reflex fonts, banned colors, banned layouts). When you edit a `.tsx` file, Claude silently receives the four or five rules relevant to your change — no manual prompting required.
 
-**The hooks** run on `PostToolUse` and are advisory-only (never block). `ui-banned-fonts-check` flags reflex-list fonts the moment you write `font-family: Inter`. `ui-color-check` catches pure `#000`/`#fff`, purple-to-blue gradients, gradient text, and cyan-on-black. `ui-animation-easing-check` catches `ease-in` on entrance animations, `transition: all`, and `scale(0)` entrances. Every hook has a `CLAUDE_DISABLE_*` opt-out environment variable for when you know better than the hook does.
+**The hooks** run on `PostToolUse` and are advisory-only (never block). `ui-banned-fonts-check` flags reflex-list fonts the moment you write `font-family: Inter`. `ui-color-check` catches pure `#000`/`#fff`, purple-to-blue gradients, gradient text, and cyan-on-black. `ui-animation-easing-check` catches every `ease-in` (not `ease-in-out`) in a CSS `transition`/`animation` declaration, `transition: all`, and `scale(0)` entrances. Every hook has a `CLAUDE_DISABLE_*` opt-out environment variable for when you know better than the hook does.
 
 **The skill** is `impeccable-craft` — a user-invoked, opt-in shape-then-build flow for creating a UI from scratch. It is explicitly not the primary workflow; the auto-dispatch agents cover the 90% case. `impeccable-craft` is for the green-field moment when you want to slow down and commit to an aesthetic direction before writing code.
 
@@ -204,11 +204,11 @@ The third option — rewriting the gradient using tonal shifts within one hue (`
 
 ### "animation easing hook warns but I need ease-in for exit animation"
 
-`ui-animation-easing-check` flags `ease-in` because it is almost always wrong on UI — entrances should be `ease-out` (starts fast, feels responsive). But exits are a legitimate case for `ease-in` (material leaving the viewport should accelerate away). The hook does not distinguish entrance from exit — it flags any `ease-in` that is not `ease-in-out`.
+`ui-animation-easing-check` flags `ease-in` because it is almost always wrong on UI — entrances should be `ease-out` (starts fast, feels responsive). The package rule uses `ease-out` for exits too ("Entries and exits both use `ease-out` in 2D UI"), and `ui-motion-reviewer` reports an `ease-in` exit as a WARNING unless the choice is documented (design doc or an adjacent intent comment). The hook does not distinguish entrance from exit — it flags any `ease-in` that is not `ease-in-out`.
 
 Quiet it one of two ways:
 
-**One-off override in code** — wrap the legitimate `ease-in` in a comment the hook will not read (it only scans CSS values):
+**One-off override in code** — document the deliberate `ease-in` with an adjacent intent comment (the reviewer then reports no finding) and write it as a curve the hook does not match (it only scans `ease-in` inside `transition:`/`animation:` declarations):
 
 ```tsx
 // Intentional: exit animation accelerates away
