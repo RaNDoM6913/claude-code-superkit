@@ -70,7 +70,7 @@ Prompt for audit-frontend / audit-backend / audit-infra:
 Run ALL checks from your checklist against the project codebase.
 Scope: {scope}
 Report every check as PASS/WARN/FAIL with evidence.
-End with summary counts and action items for FAILs.
+Follow your Output Contract exactly, including the `Summary:` line, Action Items and Open Questions.
 ```
 
 Prompt for security-scanner:
@@ -125,7 +125,7 @@ Agents: {dispatched agents} | Skipped: {skipped agents, or "none"}
 {agent's full report verbatim, or "Skipped — no frontend detected / agent unavailable"}
 
 ### Backend (audit-backend) — {PASS|WARN|FAIL|SKIPPED}
-{agent's full report verbatim, or "Skipped — no backend detected / agent unavailable"}
+{agent's full report verbatim; no backend → its `NO BACKEND DETECTED — 0 checks run` and `Searched:` lines verbatim; or "Skipped — agent unavailable"}
 
 ### Infrastructure (audit-infra) — {PASS|WARN|FAIL|SKIPPED}
 {agent's full report verbatim, or "Skipped — agent unavailable"}
