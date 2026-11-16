@@ -84,7 +84,7 @@ For security review and hardening.
 1. **Scan** — dispatch **security-scanner** for a full OWASP + config audit. Done when: security-scanner has returned its findings.
 2. **Triage** — prioritize findings by Severity and exploitability. Done when: every finding carries a Severity (CRITICAL/WARNING/SUGGESTION) and Confidence (HIGH/MEDIUM/LOW).
 3. **Remediate** — fix CRITICAL and WARNING findings (HIGH/MEDIUM confidence); list LOW-confidence items under Next Steps rather than fixing blind. Done when: no CRITICAL and no HIGH/MEDIUM-confidence WARNING remains unresolved (or each is explicitly recorded as accepted).
-4. **Re-scan** — dispatch **security-scanner** again to verify fixes and check for new issues. Done when: the re-scan confirms the remediated findings are gone and introduces no new CRITICAL or WARNING.
+4. **Re-scan** — dispatch **security-scanner** again, passing the remediated findings (check ID + `file:line`) as prior findings, to verify fixes and check for new issues. Done when: the re-scan confirms the remediated findings are gone and introduces no new CRITICAL or WARNING.
 
 ## Output
 

@@ -88,7 +88,7 @@ Report per your Output Contract: [SEVERITY/CONFIDENCE] findings
 For each returned report:
 
 - **12-check auditors** (audit-frontend / audit-backend / audit-infra): verify 12 check lines (#1–#12) plus a `Summary: X PASS, Y WARN, Z FAIL` line where X+Y+Z = 12. If the agent reports a no-target line instead (e.g. `NO BACKEND DETECTED — 0 checks run`), record its section as SKIPPED quoting that exact line. Malformed report (missing check lines, counts that do not sum) → keep what was returned and append `CONTRACT VIOLATION: <what is missing>` to that section; do not fabricate missing lines.
-- **security-scanner**: capture Findings, the `Risk Summary` counts (N CRITICAL, N WARNING, N SUGGESTION), and the Mitigation Roadmap.
+- **security-scanner**: capture Findings, the `Risk Summary` counts (non-zero severities only — an omitted severity is 0, `No findings` is all zero), and the Mitigation Roadmap.
 
 **Done when:** every dispatched agent has a captured report or a SKIPPED note.
 
