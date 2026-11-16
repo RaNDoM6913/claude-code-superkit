@@ -110,20 +110,10 @@ As soon as the `Edit` tool completes, three things happen in sequence.
 ```
 
 ```
-[CRITICAL · HIGH] Purple-to-blue gradient — trademark AI palette
-src/components/PricingCard.tsx:4
-
-`linear-gradient(135deg, #a855f7, #3b82f6)` matches the AI-palette
-reflex pattern documented in color-and-contrast.md and ui-anti-
-patterns.md. This gradient appears on roughly every AI-generated
-marketing page from 2023 onward.
-
-Suggested change:
-Pick a single accent color tied to your brand hue, or use a tonal
-shift instead of a hue shift:
-  background: oklch(0.55 0.15 265);
-  /* or a tonal gradient within one hue: */
-  background: linear-gradient(135deg, oklch(0.55 0.15 265), oklch(0.40 0.10 265));
+[WARNING/MEDIUM] src/components/PricingCard.tsx:4 — purple-to-blue gradient background, the AI-palette reflex
+  Evidence: `linear-gradient(135deg, #a855f7, #3b82f6)`; no color decision documented in CLAUDE.md; needs verification: hue judged from values
+  Rule: .claude/rules/ui-anti-patterns.md — "The AI palette"
+  Fix: one accent at the documented brand hue, or a tonal shift within one hue — proposed, not applied; needs verification: contrast of fix
 ```
 
 Every finding carries a **severity** (`CRITICAL` / `WARNING` / `SUGGESTION`) and a **confidence** (`HIGH` / `MEDIUM` / `LOW`). Severity tells you how much this hurts the UI; confidence tells you how certain the reviewer is that it is wrong. A LOW-confidence observation is never a finding — it goes to Open Questions; a `[CRITICAL/HIGH]` finding is almost always shipping broken UX.
@@ -189,7 +179,7 @@ This is the trademark AI-palette pattern, and the hook is aggressive for good re
 export CLAUDE_DISABLE_UI_COLOR_CHECK=1
 ```
 
-**Option 2 — document the brand context in `CLAUDE.md` and let the reviewer adjudicate.** The hook will still warn, but `ui-color-reviewer` reads your brand context in Phase 0 and downgrades the finding to SUGGESTION when the gradient matches the documented brand. You get the hook's catch on new instances and the reviewer's judgment on existing brand elements.
+**Option 2 — document the brand context in `CLAUDE.md` and let the reviewer adjudicate.** The hook will still warn, but `ui-color-reviewer` reads your brand context in Phase 0 and reports no finding when the gradient is a documented brand decision (contrast is still checked). You get the hook's catch on new instances and the reviewer's judgment on existing brand elements.
 
 The third option — rewriting the gradient using tonal shifts within one hue (`oklch(0.55 0.15 265) → oklch(0.40 0.10 265)`) — is usually the right answer. Pure purple-to-blue rainbow gradients read as AI-default even when they are your brand.
 
