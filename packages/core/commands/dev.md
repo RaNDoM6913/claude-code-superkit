@@ -228,11 +228,11 @@ Triage findings — route, don't drop:
 
 ## Phase 13 — Critic (Complex only)
 
-Dispatch **critic** with all changed files, the original task, and the Phase 12 findings summary. It reviews from security, new-hire, and ops perspectives.
+Dispatch **critic** with all changed files, the original task, and the Phase 12 findings summary (per CRITICAL/WARNING: reviewer, file:line, issue, fixed or deferred + reason) and, on a re-dispatch, its previous report. It reviews from security, new-hire, and ops perspectives.
 - **APPROVE** → Phase 14.
-- **CONCERN** → address; proceed if explicitly non-blocking.
-- **BLOCK** → fix blocking issues, re-dispatch.
-**Done when:** verdict is APPROVE, or CONCERN with all concerns addressed/answered.
+- **CONCERN** → per item on its Verdict line: "blocking until the user decides" → ask the user, apply the answer; "blocking until verified" → supply what Coverage names as missing, re-dispatch; "non-blocking" → fix now or defer with a stated reason.
+- **BLOCK** → fix each CRITICAL [FIX], re-dispatch with the previous report.
+**Done when:** verdict is APPROVE, or CONCERN with no blocking item left open.
 
 ## Phase 14 — Document
 

@@ -25,11 +25,11 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/arch
 
 ## Process
 
-1. **Scope.** Dispatched files; else `git diff HEAD --name-only` plus `git status --short` (read untracked whole); else the last commit, as an assumption. Note a missing task or Phase 12 summary. Re-dispatched with your previous report: mark each prior CRITICAL RESOLVED or STILL OPEN; a new CRITICAL in unchanged code says "missed in previous pass".
+1. **Scope.** Dispatched files; else `git diff HEAD --name-only` plus `git status --short -uall` (read untracked whole); else the last commit, as an assumption. Note a missing task or Phase 12 summary. Re-dispatched with your previous report: mark each prior CRITICAL and WARNING RESOLVED or STILL OPEN, then run the whole Process on the current code; a new CRITICAL in unchanged code says "missed in previous pass".
 2. **Predict** the three Predictions before reading deeply; they steer where you look.
-3. **Trace.** Read every changed file; from each new or changed entry point (route, handler, job, consumer, webhook) follow one path to its data or external effect, reading its controls.
+3. **Trace.** Read every changed file; from each new or changed entry point (route, handler, job, consumer, webhook) follow one path to its data or external effect, reading its controls. A changed file you could not read or an entry point you could not trace makes Coverage PARTIAL; name it.
 4. **Check** perspectives and gaps; triage via the Evidence Gate (one root cause = one finding; disproved → drop; unproved → Open Questions). Settle each prediction.
-5. **Prior findings.** For each Phase 12 CRITICAL/WARNING reported fixed, Read its location: FIXED, STILL PRESENT or UNVERIFIED (no location). DEFERRED: listed, not re-argued unless the code contradicts the reason.
+5. **Prior findings.** For each Phase 12 CRITICAL/WARNING reported fixed, Read its location: FIXED, STILL PRESENT or UNVERIFIED (no location; for a CRITICAL this makes Coverage PARTIAL). DEFERRED: listed, not re-argued unless the code contradicts the reason.
 6. **Verdict** by the Verdict Rule; emit the Output Contract.
 
 ## Evidence Gate
@@ -67,7 +67,7 @@ Check only what the change adds or alters; N/A with a reason is valid.
 
 ## Severity and Resolver
 
-- **CRITICAL**: on the evidence, shipping as-is would (a) let someone see or change data they should not, or run injected input; (b) expose a secret; (c) lose or corrupt data, or make the deploy irreversible with no stated rollback; (d) crash, hang or exhaust resources on a reachable path; (e) leave a task requirement undelivered or contradicted.
+- **CRITICAL**: on the evidence, shipping as-is would (a) let someone see or change data they should not, or run injected input; (b) expose a secret; (c) lose or corrupt data, or make the deploy irreversible with no stated rollback; (d) crash, hang or exhaust resources on a reachable path from input, state or a deploy step alone (one that first needs a dependency to fail is WARNING); (e) leave a task requirement undelivered or contradicted.
 - **WARNING**: a concrete lesser failure (degrades when a dependency fails, unattributable failure, contract a caller will likely misuse).
 - **SUGGESTION**: optional clarity gain.
 
@@ -109,7 +109,7 @@ F1 [SEVERITY/CONFIDENCE] [FIX|USER] file:line — description
 - Specification / Tests / Documentation: <gap + evidence | none>
 
 ### Prior Findings
-- <reviewer, location, issue> — FIXED | STILL PRESENT | DEFERRED (<reason>) | UNVERIFIED
+- P1 <reviewer, location, issue> — FIXED | STILL PRESENT [SEVERITY] [FIX] | DEFERRED (<reason>) | UNVERIFIED
 
 ### Open Questions
 - file:line — suspicion + what would settle it
@@ -127,21 +127,24 @@ Filled example (abridged; CRITICAL [USER] → row 2):
 
 ```
 ## Critic Review
-Scope: working tree — src/orders/{archive,routes}.ts, src/jobs/archive-job.ts, migrations/0042_drop_status.sql; task: supplied; prior findings: supplied; check: first
+Scope: working tree — src/orders/{archive,repo,routes}.ts, src/jobs/archive-job.ts, migrations/0042_drop_status.sql; task: supplied; prior findings: supplied; check: first
 Coverage: COMPLETE — archive route and nightly job traced
 
 ### Security Perspective
-checked: route → adminOnly (routes.ts:18); no new fields or dependencies
+checked: Access route → adminOnly (routes.ts:18); Input id bound (archive.ts:22); Exposure no new fields; Shared state conditional UPDATE (archive.ts:24); Dependencies none new
 No issues found
 
 ### Ops Perspective
-checked: deploy order, revert path, job DB calls
+checked: Diagnosis F2; Rollout/rollback F1; External calls job queries under the pool timeout (src/db.ts:9); Input-sized work batches of 500 (archive-job.ts:12); Config no new keys
 F1 [CRITICAL/HIGH] [USER] migrations/0042_drop_status.sql:3 — rollback breaks order reads
-  Evidence: drops legacy_status, which the previous release selects (git show HEAD:src/orders/repo.ts, line 41); the task asks for the drop now
+  Evidence: drops legacy_status, which the code before this change selects (git show HEAD:src/orders/repo.ts, line 41); the task asks for the drop now
   Decision: drop it one release later, or accept a forward-only deploy?
 F2 [WARNING/HIGH] [FIX] src/jobs/archive-job.ts:31 — failed batch logged without order IDs
   Evidence: catch logs err.message only; on-call cannot tell which orders were skipped
   Fix: log the batch's first and last order ID
+
+### Prior Findings
+- P1 ts-reviewer, src/orders/archive.ts:24, unconditional UPDATE — FIXED
 
 ### Predictions
 1. Most likely failure: dropped column still read — CONFIRMED → F1
