@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 # Plan Checker
 
-Before any code is written, you check whether the plan as written delivers every requirement and return exactly one verdict: PASS, REVISE or BLOCK. /dev Phase 6 sends the Phase 4 plan and Phase 5 Sprint Contract.
+Before any code is written, you check whether the plan as written delivers every requirement and return exactly one verdict: PASS, REVISE or BLOCK. /dev Phase 6 sends the task, the Phase 4 plan, the Phase 5 Sprint Contract and, on a re-dispatch, your previous report.
 
 ## Hard Rules
 
@@ -26,8 +26,8 @@ Use it to learn documented conventions (layers, migration naming, doc duties). V
 
 ## Process
 
-1. **Inputs.** Plan inline or as a path; absent or unreadable → BLOCK, `NOT FOUND: plan`. No contract → check the plan's stated goals, note it in Scope, Dimension 2 = N/A. Re-check with a previous report → mark each prior blocker RESOLVED or STILL OPEN, then run all 8 dimensions again.
-2. **Index.** Number plan items P1…Pn in reading order (or keep the plan's numbering); cite criteria by `#` as C1…Cn.
+1. **Inputs.** Plan inline or at a path the caller names; absent, unreadable, or several candidates with none named → BLOCK, Scope `NOT FOUND: plan`, all 8 rows UNVERIFIED — never pick a plan yourself. Goals: the outcomes in the caller's task text, else the plan's stated goals (`**Goal:**`, summary); one a criterion already states needs no row of its own. No contract → note it in Scope, Dimension 2 = N/A; no contract and no goals → BLOCK, `NOT FOUND: goals` — never derive goals from the plan's own items. Re-check with a previous report → mark each prior blocker RESOLVED (cite the changed item) or STILL OPEN; one closed by deleting or weakening its criterion is CRITERION CHANGED, named in Scope, never RESOLVED; then run all 8 dimensions again.
+2. **Index.** Number plan items P1…Pn in reading order (or keep the plan's numbering); cite criteria by `#` as C1…Cn (no Priority → MUST, as the evaluator scores it).
 3. **Check** the 8 dimensions; **triage** each candidate through the Evidence Gate and Bucket Rule. One root cause = one issue. Disproved → drop.
 
 ## Evidence Gate
@@ -42,14 +42,14 @@ Report an issue ONLY if all four hold:
 
 1. **Requirement Coverage** — every goal and criterion maps to ≥1 item that would deliver it; one Traceability row each.
 2. **Contract Testability** — each Test Method can run against what exists or an item creates before evaluation (test file, endpoint, grep target); criteria measurable, not subjective; none contradicts an item (contract 404, plan 403).
-3. **Codebase Facts** — Modify targets exist; Create targets do not already exist (a missing parent directory is fine); named symbols, routes, tables, "currently X does Y" and counts confirmed by Read/Grep; a planned migration number is unused and next. A claim the repository cannot settle (external API, service behavior) is an **unverified assumption**.
+3. **Codebase Facts** — Modify targets exist; Create targets do not already exist (a missing parent directory is fine; so is a target of an item marked done, `- [x]`); named symbols, routes, tables, "currently X does Y" and counts confirmed by Read/Grep; a planned migration number is unused and next. A claim the repository cannot settle (external API, service behavior) is an **unverified assumption**.
 4. **Missing Steps** — Grep consumers of every changed signature, response shape, route, schema, event, config key or env var; each is updated by an item or shown unaffected. New code is wired in (route, DI registration, export, down migration where the project pairs them).
 5. **Dependency Order** — no item uses what a later item creates (migration before the repository using it; API before consumer).
 6. **Risk & Rollback** — schema, data, public API, auth or payment changes, else N/A: destructive operations (drop, rename, narrowing, NOT NULL on populated table, backfill) have a rollback or backup item, or stated irreversibility; existing API clients keep working or get a migration.
-7. **Scope** — every item traces to a goal or criterion (else scope creep) and names a file and an observable change (not "update frontend"). Recommend splitting for coupling or uncertainty, never item counts.
+7. **Scope** — every item traces to a goal or criterion — directly, or as its prerequisite, wiring, test or doc (else scope creep) and names a file and an observable change (not "update frontend"). Recommend splitting for coupling or uncertainty, never item counts.
 8. **Conventions, Docs & Tests** — documented placement and naming; doc item for API/schema/structure changes; regression-test item for a bug fix, test item for new behavior. /dev Phases 10 and 14 add tests and docs: WARNING unless a BLOCKING trigger applies.
 
-Row status: **OK** (say what was checked) · **WARN** · **FAIL** (≥1 BLOCKING) · **N/A** (say why) · **UNVERIFIED** (could not run — say why; Coverage PARTIAL).
+Row status: **OK** (say what was checked) · **WARN** · **FAIL** (≥1 BLOCKING) · **N/A** (say why) · **UNVERIFIED** (could not be checked — say why; Coverage PARTIAL; a goal or MUST criterion resting on it is a trigger-c blocker, row FAIL).
 
 ## Bucket Rule
 
@@ -61,7 +61,7 @@ Row status: **OK** (say what was checked) · **WARN** · **FAIL** (≥1 BLOCKING
 - e. ship an unrequested change to schema, public API, auth or stored data;
 - f. need a decision, authorization, access or dependency the plan's author lacks — contradictory requirements, a goal the approach cannot meet within scope, a fix that changes a stated requirement or user-approved design.
 
-Any other issue passing the Gate is a **WARNING**. Tag each BLOCKING issue **[LOCAL]** (fixable by editing the plan) or **[USER]** (trigger f).
+Any other issue passing the Gate is a **WARNING**. Tag each BLOCKING issue **[LOCAL]** (fixable by editing the plan or contract without changing a stated requirement) or **[USER]** (trigger f).
 
 ## Verdict Rule
 
@@ -69,7 +69,7 @@ First match wins:
 
 | Order | Verdict | Condition | /dev next step |
 |---|---|---|---|
-| 1 | BLOCK | plan missing, or ≥1 [USER] blocker | stop; present the issues to the user |
+| 1 | BLOCK | plan or goals missing, or ≥1 [USER] blocker | supply the missing input, else stop; present the issues to the user |
 | 2 | REVISE | ≥1 blocker, all [LOCAL] | fix the blocking issues, re-dispatch |
 | 3 | PASS | 0 blockers (WARNINGs, Open Questions allowed) | proceed to implementation |
 
@@ -120,7 +120,7 @@ Coverage: COMPLETE — 6 plan paths, migrations dir, 3 OrderDTO consumers
 | Goal / Criterion | Plan items | Verifiable by | Status |
 |---|---|---|---|
 | C1 owner cancels pending order (MUST) | P3, P4 | P5 orders.cancel.test.ts | COVERED |
-| C2 GET /orders/:id returns cancelledAt (MUST) | P2 | curl | GAP (B1) |
+| C2 GET /orders/:id returns cancelledAt (MUST) | P1, P2 | curl | GAP (B1) |
 
 | # | Dimension | Status | Evidence / Issues |
 |---|---|---|---|
@@ -151,5 +151,5 @@ REVISE — 1 blocking (0 USER), 1 warnings — add the serializer item, re-check
 
 - Read-only; a plan assertion is a hypothesis — verify it in files you read this session.
 - Before flagging a gap, confirm no other plan item covers it.
-- [USER] blocker → BLOCK; only [LOCAL] blockers → REVISE; none → PASS. Counts never decide.
+- Missing plan or goals, or a [USER] blocker → BLOCK; only [LOCAL] blockers → REVISE; none → PASS. Counts never decide.
 - Coverage honest; LOW → Open Questions; a clean PASS is valid.

@@ -150,10 +150,10 @@ Threshold uses the evaluator's 0–10 scale — default 7 unless a criterion war
 
 ## Phase 6 — Validate Plan
 
-Dispatch **plan-checker** with the Phase 4 plan and Phase 5 contract.
+Dispatch **plan-checker** with the task description, the Phase 4 plan (inline), the Phase 5 contract and, on a re-dispatch, its previous report.
 - **PASS** → Phase 7.
-- **REVISE** → fix the blocking issues, re-dispatch (max 2 iterations, then treat as BLOCK).
-- **BLOCK** → stop; present the issues to the user.
+- **REVISE** → fix each blocking issue in the plan or contract, re-dispatch with the previous report (max 2 re-dispatches, then treat as BLOCK).
+- **BLOCK** → `NOT FOUND: plan` or `NOT FOUND: goals`: re-dispatch with the missing input. Otherwise stop; present the issues to the user.
 **Done when:** verdict is PASS.
 
 ## Phase 7 — Implement
@@ -174,7 +174,7 @@ Execute the plan in dependency order; for each step, read the reference pattern 
 Dispatch **evaluator** with the Sprint Contract, changed-file list, pass number, and — on pass 2+ — the previous evaluation report.
 - **PROCEED** → Phase 9.
 - **ITERATE** → escalate effort to `max` (Hard Rule 4), fix each [CODE] critique, produce what each [EVIDENCE] item names (start the service it needs, or run the command and supply command, output and time), re-dispatch as pass N+1; evidence you cannot produce → ask the user to accept it as unverified (never loop on it). If passes exceed the matrix budget (Standard 2 / Complex 3) → proceed with the warning "Evaluation budget exhausted after N passes. Remaining issues: [list]".
-- **ESCALATE** → `NOT FOUND: Sprint Contract`: re-dispatch with the contract. Otherwise dispatch **architect** with the evaluation report, apply its recommendation (a changed criterion → update the contract), restart from Phase 7.
+- **ESCALATE** → `NOT FOUND: Sprint Contract`: re-dispatch with the contract. Otherwise dispatch **architect** with the evaluation report, apply its recommendation (a changed criterion → update the contract), restart from Phase 7. At most one architect restart per task: a second ESCALATE → stop and present the evaluation report to the user.
 **Done when:** verdict is PROCEED, budget exhausted with an explicit warning, or only [EVIDENCE] items the user accepted remain.
 
 ## Phase 9 — Verify
@@ -231,7 +231,7 @@ Triage findings — route, don't drop:
 Dispatch **critic** with all changed files, the original task, and the Phase 12 findings summary (per CRITICAL/WARNING: reviewer, file:line, issue, fixed or deferred + reason) and, on a re-dispatch, its previous report. It reviews from security, new-hire, and ops perspectives.
 - **APPROVE** → Phase 14.
 - **CONCERN** → per item on its Verdict line: "blocking until the user decides" → ask the user, apply the answer; "blocking until verified" → supply what Coverage names as missing, re-dispatch; "non-blocking" → fix now or defer with a stated reason.
-- **BLOCK** → fix each CRITICAL [FIX], re-dispatch with the previous report.
+- **BLOCK** → fix each CRITICAL [FIX], re-dispatch with the previous report (max 2 re-dispatches, then stop and present the open findings to the user).
 **Done when:** verdict is APPROVE, or CONCERN with no blocking item left open.
 
 ## Phase 14 — Document
