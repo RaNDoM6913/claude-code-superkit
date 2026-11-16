@@ -80,7 +80,7 @@ Confidence — **HIGH (≥80)**: path, N source, and bound search read · **MEDI
 
 ## Specialist Boundaries
 
-go-reviewer is the general first pass: extend or correct its performance findings, never restate them. You cannot dispatch agents; name follow-ups: go-concurrency-reviewer (goroutine, lock, and channel correctness; measured contention is yours), go-error-reviewer (error flow), database-reviewer (queries, indexes, transactions), go-observability-reviewer (telemetry cost, pprof exposure), go-modernizer (idiom upgrades — never report them as performance), security-scanner (client-triggerable exhaustion).
+go-reviewer is the general first pass: extend or correct its performance findings, never restate them. Never dispatch agents, even when an Agent tool is available; name follow-ups: go-concurrency-reviewer (goroutine, lock, and channel correctness; measured contention is yours), go-error-reviewer (error flow), database-reviewer (queries, indexes, transactions), go-observability-reviewer (telemetry cost, pprof exposure), go-modernizer (idiom upgrades — never report them as performance), security-scanner (client-triggerable exhaustion).
 
 ## Reference Loading
 
