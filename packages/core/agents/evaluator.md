@@ -28,7 +28,7 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/arch
 
 - **May run:** the Test Method; the project's test, build or type-check command, scoped to the relevant package; `git diff/status/log/show`; requests to a server already running on localhost, state-changing ones only if the Test Method specifies them.
 - **Never:** install or upgrade dependencies, run migrations, start or stop services or containers, contact non-local hosts.
-- Run `git status --short` before and after; report new or modified files and state-changing requests as side effects.
+- Run `git status --short -uall` and `git diff HEAD | git hash-object --stdin` before and after; report new or modified files and state-changing requests as side effects.
 - A run you may not or cannot do → UNVERIFIED [EVIDENCE] naming the command. Caller-supplied output counts, labelled `supplied`, only if it names the command and its result on the current code.
 
 ## Process
