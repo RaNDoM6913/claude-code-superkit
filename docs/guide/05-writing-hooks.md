@@ -122,7 +122,7 @@ if [ -n "$HASH" ] && [ -f "$CACHE_KEY" ] && [ "$(cat "$CACHE_KEY" 2>/dev/null)" 
 fi
 
 # Run the check...
-RESULT=$(npx tsc --noEmit 2>&1)
+RESULT=$(npx --no -- tsc --noEmit 2>&1)
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -eq 0 ]; then

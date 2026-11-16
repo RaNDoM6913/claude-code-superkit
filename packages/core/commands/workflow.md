@@ -66,7 +66,7 @@ For restructuring code without changing behavior.
 2. **Inventory** — list all files/functions affected, map dependencies. Done when: the affected file/function list and dependency map are written.
 3. **Plan** — define the target structure, migration order, rollback strategy. Done when: target structure, leaf-first migration order, and rollback strategy are all stated.
 4. **Migrate** — execute changes in dependency order (leaf files first). Done when: every planned file is migrated leaf-first and compiles.
-5. **Verify** — compilation clean, all tests pass, no behavior changes (dispatch **health-checker**). Done when: build is clean, the full suite passes, and health-checker reports no behavior change.
+5. **Verify** — compilation clean, all tests pass, no behavior changes (dispatch **health-checker**). Done when: health-checker's `Compilation` and `Tests` lines are both OK (no regression the tests detect).
 
 ### `dep-upgrade` — Assess, upgrade, fix-breaking, verify
 
@@ -75,7 +75,7 @@ For dependency updates and vulnerability fixes.
 1. **Assess** — dispatch **dependency-checker** for a full audit. Done when: dependency-checker has returned its audit.
 2. **Upgrade** — apply updates in safe order (patches first, then minors, then majors). Done when: the planned updates are applied in that order.
 3. **Fix-breaking** — resolve any breaking changes from major updates. Done when: no unresolved breaking-change compile or test errors remain.
-4. **Verify** — compilation clean, tests pass, no regressions (dispatch **health-checker**). Done when: build is clean, tests pass, and health-checker reports no regressions.
+4. **Verify** — compilation clean, tests pass, no regressions (dispatch **health-checker**). Done when: health-checker's `Compilation` and `Tests` lines are both OK.
 
 ### `security-audit` — Scan, triage, remediate, re-scan
 

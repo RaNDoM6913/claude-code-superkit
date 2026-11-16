@@ -180,7 +180,7 @@ Dispatch **evaluator** with the Sprint Contract, changed-file list, pass number,
 ## Phase 9 — Verify
 
 Dispatch **health-checker** if available; otherwise run compilation checks directly:
-Go `go vet ./...` · TypeScript `npx tsc --noEmit` · Python `mypy`/`pyright`/`python -m py_compile` · Rust `cargo check`.
+Go `go vet ./...` · TypeScript `npx --no -- tsc --noEmit` · Python `mypy`/`pyright`/`python -m py_compile` · Rust `cargo check`.
 **Done when:** compilation/static checks pass with zero errors.
 
 ## Phase 10 — Test

@@ -40,7 +40,7 @@ Scan the project for stack markers and map each present marker to its commands. 
 | `go.mod` | `gofmt -w .` | `go vet ./...` | Go |
 | `go.mod` + `golangci-lint` in PATH | `gofmt -w .` | `golangci-lint run` | Go (extended) |
 | `package.json` + `.eslintrc*` / `eslint.config.*` | — | `npx eslint .` | ESLint |
-| `package.json` + `tsconfig.json` | — | `npx tsc --noEmit` | TypeScript |
+| `package.json` + `tsconfig.json` | — | `npx --no -- tsc --noEmit` | TypeScript |
 | `package.json` + prettier config (`.prettierrc*`, `prettier.config.*`, or a `prettier` key in `package.json`) | `npx prettier --write .` | `npx prettier --check .` | Prettier |
 | `pyproject.toml` + `[tool.ruff]` | `ruff format .` | `ruff check .` | Python (ruff) |
 | `pyproject.toml` + `[tool.black]` | `black .` | — | Python (black) |
@@ -83,7 +83,7 @@ For each in-scope linter, run format first, then check. Skip any table cell show
   - black: `black .`
   - Rust: `cargo fmt` then `cargo clippy --fix --allow-dirty`
 
-For a TypeScript project, run both ESLint and `npx tsc --noEmit` — ESLint catches style, `tsc` catches types. `tsc --noEmit`, `mypy`, `flake8`, and `go vet` are check-only, so `--fix` leaves them unchanged.
+For a TypeScript project, run both ESLint and `npx --no -- tsc --noEmit` — ESLint catches style, `tsc` catches types. `tsc --noEmit`, `mypy`, `flake8`, and `go vet` are check-only, so `--fix` leaves them unchanged.
 
 If a tool named in the table is not installed (command not found), mark it `unavailable` and continue with the remaining linters.
 

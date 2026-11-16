@@ -215,7 +215,7 @@ From your target project, run `bash /path/to/claude-code-superkit/setup.sh --cod
 |---------|-------------|
 | `/dev <task>` | 16-phase orchestrator: read-docs → understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
 | `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
-| `/audit [--health]` | Parallel audit: up to 4 agents (frontend, backend, infra, security); `--health` = 30-second dashboard |
+| `/audit [--health]` | Parallel audit: up to 4 agents (frontend, backend, infra, security); `--health` = 9-check health dashboard (runs tests and a build) |
 | `/workflow <template>` | Predefined flows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
 | `/superkit-init` | Intelligent setup: scan codebase → generate **filled** docs → configure rules with real paths |
 | `/superkit-evolve` | Detect and fix documentation drift (stale counters, missing docs, outdated trees) |

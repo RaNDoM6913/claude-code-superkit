@@ -80,7 +80,7 @@ simultaneously using parallel Agent tool calls:
 ## Step 4: Verify
 
 1. Dispatch health-checker agent
-2. If health check passes --> dispatch test-generator agent
+2. If the verdict is not UNHEALTHY --> dispatch test-generator agent
 3. If tests pass --> dispatch reviewer agents (parallel)
 ```
 
