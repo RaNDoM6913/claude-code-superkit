@@ -133,9 +133,7 @@ Ask the user whether to seed a `docs/adr/` namespace for architecture decision r
 mkdir -p docs/trees
 ```
 
-Generate with the `tree` command; if `tree` is unavailable, fall back to `find . -maxdepth 2 -type d -not -path '*/node_modules/*' -not -path '*/.git/*'`:
-- If monorepo: `tree-monorepo.md` (depth 2)
-- Per-component: `tree-{component}.md` (depth 3)
+Dispatch the `tree-generator` agent (overview `tree-monorepo.md` at depth 3; per-component `tree-<component>.md` at depth 4). If the agent is unavailable, note it and skip.
 
 ### CLAUDE.md
 
