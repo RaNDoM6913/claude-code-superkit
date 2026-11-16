@@ -29,7 +29,7 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md` (definition
 - **May run:** the project's test, build, type-check or lint (check mode), scoped to the relevant package; a reproduction named in the claim or spec, within the limits below; `git diff/log/show/status`; read-only requests to a server already running on localhost.
 - **Only if the caller asks:** state-changing requests, non-local hosts, migrations on a disposable database, starting services.
 - **Never, even if asked:** install or upgrade anything, deploy, touch a shared or production database.
-- Run `git status --short -uall` and `git diff HEAD | git hash-object --stdin` before and after; report new or modified files and state-changing requests as side effects.
+- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | git hash-object --stdin-paths; } | git hash-object --stdin` before and after; report new or modified files and state-changing requests as side effects (no commit yet or no repository → `side effects: not checked`).
 - A run failing for environment reasons (service down, missing credential, tool absent) or ending without a result (timeout, killed) → UNVERIFIED, error quoted; run suites and builds with Bash `timeout: 600000`. A check you may not run → UNVERIFIED [EVIDENCE] naming the command.
 
 ## Process

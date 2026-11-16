@@ -173,9 +173,9 @@ Execute the plan in dependency order; for each step, read the reference pattern 
 
 Dispatch **evaluator** with the Sprint Contract, changed-file list, pass number, and — on pass 2+ — the previous evaluation report.
 - **PROCEED** → Phase 9.
-- **ITERATE** → escalate effort to `max` (Hard Rule 4), fix the critique, re-dispatch as pass N+1. If passes exceed the matrix budget (Standard 2 / Complex 3) → proceed with the warning "Evaluation budget exhausted after N passes. Remaining issues: [list]". If the score did not improve vs the previous pass → proceed with an escalation note.
-- **ESCALATE** → dispatch **architect** for design review, apply its recommendation, restart from Phase 7.
-**Done when:** verdict is PROCEED, or budget exhausted with an explicit warning.
+- **ITERATE** → escalate effort to `max` (Hard Rule 4), fix each [CODE] critique, produce what each [EVIDENCE] item names (start the service it needs, or run the command and supply command, output and time), re-dispatch as pass N+1; evidence you cannot produce → ask the user to accept it as unverified (never loop on it). If passes exceed the matrix budget (Standard 2 / Complex 3) → proceed with the warning "Evaluation budget exhausted after N passes. Remaining issues: [list]".
+- **ESCALATE** → `NOT FOUND: Sprint Contract`: re-dispatch with the contract. Otherwise dispatch **architect** with the evaluation report, apply its recommendation (a changed criterion → update the contract), restart from Phase 7.
+**Done when:** verdict is PROCEED, budget exhausted with an explicit warning, or only [EVIDENCE] items the user accepted remain.
 
 ## Phase 9 — Verify
 
