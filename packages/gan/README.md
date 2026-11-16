@@ -15,10 +15,10 @@ verification.
 ```
 gan-planner → gan-generator → gan-evaluator
    ↑                              │
-   └─ NEEDS-REMEDIATION (re-plan) ───────────┘
+   └─ NEEDS-REMEDIATION, plan defect (re-plan) ─┘
 ```
 
-NEEDS-ATTENTION goes back to `gan-generator` with the failure list.
+NEEDS-ATTENTION goes back to `gan-generator` with the failure list. So does NEEDS-REMEDIATION when the plan is sound and the defect is in the code or tests; the evaluator's `Next:` line names the owner.
 
 - **gan-planner** writes a plan with falsifiable scenarios (happy + empty
   + error + auth) and a rubric.
@@ -30,8 +30,8 @@ NEEDS-ATTENTION goes back to `gan-generator` with the failure list.
   as BLOCKED.)
 
 If the evaluator rejects, the generator gets specific failures back and
-iterates. Loop closes when verdict = PASS, or escalates after 3 iterations
-without progress (→ human escalation).
+iterates. Loop closes when verdict = PASS, or escalates to a human when the
+verdict is still not PASS after 3 evaluation rounds.
 
 ## When to use
 
@@ -192,8 +192,8 @@ For autopilot:
 - Run gan-planner → save plan
 - If the plan says `Status: BLOCKED`, answer its `[BLOCKING]` questions and re-run gan-planner — do not dispatch the generator
 - Run gan-generator with the READY plan → save hand-off. `Needs re-plan:` other than `none` → re-run gan-planner with the hand-off; `Local test result: NOT RUN` → fix the environment first
-- Run gan-evaluator → if NEEDS-ATTENTION or NEEDS-REMEDIATION, re-run generator with the failure list as input
-- Repeat up to 3 times; if no progress → escalate
+- Run gan-evaluator → follow its `Next:` line: NEEDS-ATTENTION → re-run gan-generator with the failure list; NEEDS-REMEDIATION → gan-planner for a new revision if the cause is a plan defect, otherwise gan-generator with the failure list; BLOCKED → fix the named blocker first
+- At most 3 evaluation rounds per plan; not PASS after round 3 → escalate to a human
 
 ## Anti-slop checks
 
