@@ -18,7 +18,7 @@ Self-contained package for **2D frontend UI design & polish**. Sibling to `front
 | Hooks | 3 | `ui-banned-fonts-check`, `ui-color-check`, `ui-animation-easing-check` |
 | Skills | 1 | `impeccable-craft` (user-invocable, opt-in) |
 
-> **Name precedence:** the core package also ships a (simpler) `ui-reviewer`. On a fresh install with both selected, this package's umbrella copies later and wins — intended, it is the richer superset. In merge mode a pre-existing `ui-reviewer.md` is kept.
+> **Name precedence:** the core package also ships a (simpler) `ui-reviewer`. On a fresh install with both selected, this package's umbrella copies later and wins. It adds the reflex audit and specialist routing but is no superset: contrast, focus, motion, i18n and media go to specialists the caller must dispatch. In merge mode (any existing `.claude/`: the prompt's default and what `--defaults` picks) the core file is copied first and kept even if no `ui-reviewer.md` existed before, so the umbrella is not installed.
 
 ## How agents know when to fire
 
