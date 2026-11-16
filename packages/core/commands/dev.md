@@ -207,6 +207,7 @@ Then dispatch reviewer agents **in parallel** — every row whose pattern matche
 | `*.go` (not migrations, not tests) | **go-reviewer**, **security-scanner** |
 | `*.sql` migrations | **migration-reviewer**, **database-reviewer** |
 | Data-access files (`*_repo.go`, repositories) | **database-reviewer** |
+| ORM schema and query files (`schema.prisma`, Drizzle schema, ORM models, sqlc or other non-migration `*.sql`) | **database-reviewer** |
 | `*.ts`, `*.tsx` | **ts-reviewer** |
 | `*.py` | **py-reviewer**, **security-scanner** |
 | `*.rs` | **rs-reviewer** |

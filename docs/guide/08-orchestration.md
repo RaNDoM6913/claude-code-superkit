@@ -75,6 +75,7 @@ Each file extension/path maps to one or more reviewer agents:
 |---------|-------------------|
 | `*.go` (not tests, not migrations) | go-reviewer, security-scanner |
 | `*.sql` in migrations/ | migration-reviewer, database-reviewer |
+| Data-access files (`*_repo.go`, repositories) | database-reviewer |
 | `*.tsx` | ts-reviewer, design-system-reviewer |
 | `*.vue`, `*.svelte` | design-system-reviewer |
 | `*.ts` | ts-reviewer |

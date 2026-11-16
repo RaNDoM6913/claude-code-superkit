@@ -59,6 +59,7 @@ Title / Description (first 500 chars)
 | `*.go` (excluding `*_test.go`, migrations) | **go-reviewer**, **security-scanner** |
 | `migrations/*.sql` or `db/migrate/*.sql` | **migration-reviewer**, **database-reviewer** |
 | Data-access files (`*_repo.go`, repositories) | **database-reviewer** |
+| ORM schema and query files (`schema.prisma`, Drizzle schema, ORM models, sqlc or other non-migration `*.sql`) | **database-reviewer** |
 | `*.tsx` | **ts-reviewer**, **design-system-reviewer** |
 | `*.vue`, `*.svelte` | **design-system-reviewer** |
 | `*.ts` | **ts-reviewer** |
