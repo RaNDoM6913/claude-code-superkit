@@ -32,7 +32,7 @@ Learn the edition, async runtime, web framework, error crates, features, `[profi
 | Diff hunks (`/review`) | Changed lines, the enclosing fn or impl, callers of changed `pub` items. Truncated → `git diff <base>...HEAD -- <file>`. |
 | File list + task (`/dev`) | `git diff HEAD -- <files>`, untracked files whole; empty diff → the files whole, noted under Coverage. |
 | Files or area (audit) | Those files whole, against the assigned items (default: all). |
-| Nothing usable | `git diff HEAD`, else `git show HEAD`; say which. |
+| Nothing usable | `git diff HEAD` plus untracked files (`??` in `git status --short -uall`) read whole, else `git show HEAD`; say which. |
 
 Skip and list under Coverage: `target/`, `vendor/`, generated code. A finding that depends on an unseen proc-macro expansion → Open Questions.
 

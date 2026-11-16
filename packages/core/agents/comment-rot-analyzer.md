@@ -27,7 +27,7 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; lint confi
 
 ## Scope
 
-First match wins: **caller gave hunks, files or a range** → that, reading the diff for bare file names (`git diff <base>...HEAD -- <path>`, or `git diff HEAD -- <path>` for uncommitted work); **nothing given** → `git diff HEAD` plus `git status --short`, untracked files read whole; **clean tree** → `git show HEAD`, stated as an assumption.
+First match wins: **caller gave hunks, files or a range** → that, reading the diff for bare file names (`git diff <base>...HEAD -- <path>`, or `git diff HEAD -- <path>` for uncommitted work); **nothing given** → `git diff HEAD` plus `git status --short -uall`, untracked files read whole; **clean tree** → `git show HEAD`, stated as an assumption.
 
 ## Process
 

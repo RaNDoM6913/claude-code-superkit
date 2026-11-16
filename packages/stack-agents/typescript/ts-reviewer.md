@@ -32,7 +32,7 @@ Use it to learn the runtime (browser, Node, edge) and framework, installed versi
 | Diff hunks (`/review`) | Changed lines plus the enclosing function or component, importers of changed exports, types they use. Truncated → `git diff <base>...HEAD -- <file>`. |
 | File list + task (`/dev`) | `git diff HEAD -- <files>`, untracked files whole; empty diff → the files whole, noted under Coverage. |
 | Files or area (audit) | Those files whole, against the items assigned (default: all). |
-| Nothing usable | `git diff HEAD`, else `git show HEAD`; say which. |
+| Nothing usable | `git diff HEAD` plus untracked files (`??` in `git status --short -uall`) read whole, else `git show HEAD`; say which. |
 
 Skip and list under Coverage: `node_modules/`, build output, generated files (e.g. emitted `.d.ts`).
 

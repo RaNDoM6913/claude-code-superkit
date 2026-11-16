@@ -32,7 +32,7 @@ Use it to learn the interpreter version (`requires-python`; a virtualenv's `pyve
 | Diff hunks (`/review`) | Changed lines plus the enclosing function or class, callers of changed functions, and models they use. Truncated → `git diff <base>...HEAD -- <file>`. |
 | File list + task (`/dev`) | `git diff HEAD -- <files>`, untracked files whole; empty diff → the files whole, noted under Coverage. |
 | Files or area (audit) | Those files whole, against the items assigned (default: all). |
-| Nothing usable | `git diff HEAD`, else `git show HEAD`; say which. |
+| Nothing usable | `git diff HEAD` plus untracked files (`??` in `git status --short -uall`) read whole, else `git show HEAD`; say which. |
 
 Skip and list under Coverage: virtualenvs, `__pycache__/`, build output, generated code (e.g. `*_pb2.py`).
 
