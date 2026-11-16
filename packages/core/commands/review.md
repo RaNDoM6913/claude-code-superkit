@@ -60,6 +60,7 @@ Title / Description (first 500 chars)
 | `migrations/*.sql` or `db/migrate/*.sql` | **migration-reviewer**, **database-reviewer** |
 | Data-access files (`*_repo.go`, repositories) | **database-reviewer** |
 | `*.tsx` | **ts-reviewer**, **design-system-reviewer** |
+| `*.vue`, `*.svelte` | **design-system-reviewer** |
 | `*.ts` | **ts-reviewer** |
 | `*.py` | **py-reviewer**, **security-scanner** |
 | `*.rs` | **rs-reviewer** |
