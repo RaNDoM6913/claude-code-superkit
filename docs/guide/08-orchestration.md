@@ -74,7 +74,7 @@ Each file extension/path maps to one or more reviewer agents:
 | Pattern | Agents dispatched |
 |---------|-------------------|
 | `*.go` (not tests, not migrations) | go-reviewer, security-scanner |
-| `*.sql` in migrations/ | migration-reviewer |
+| `*.sql` in migrations/ | migration-reviewer, database-reviewer |
 | `*.tsx` | ts-reviewer, design-system-reviewer |
 | `*.vue`, `*.svelte` | design-system-reviewer |
 | `*.ts` | ts-reviewer |
