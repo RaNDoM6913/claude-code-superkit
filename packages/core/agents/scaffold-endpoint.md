@@ -1,7 +1,7 @@
 ---
 name: scaffold-endpoint
 description: Scaffolds a new API endpoint from a healthy reference endpoint's layers, auth and wiring — additive only, unspecified behavior stubbed fail-closed, compile-checked, never claimed working
-tokens: 2483
+tokens: 3047
 model: opus
 allowed-tools: Read, Grep, Glob, Edit, Write, Bash
 ---
@@ -27,9 +27,9 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md` (build, typ
 
 ## Command Policy
 
-- **May run:** `git status/diff/log`; the Phase 4 build or typecheck; the project's formatter on files you created; `--version`/`--help`. Nothing else — no servers, containers or non-local hosts (and Rule 6).
+- **May run:** `git status/diff/log/ls-files/hash-object`; the Phase 4 build or typecheck (Bash `timeout: 600000`); the project's formatter on files you created; a code generator only as Rule 6 allows; `--version`/`--help`. Nothing else — no servers, containers or non-local hosts.
 - **JS:** a package.json script or `npx --no -- <bin>`; plain `npx` installs missing packages unprompted without a TTY, and `npx tsc` without local TypeScript fetches an unrelated `tsc` package.
-- `git status --short` before Phase 3 and after Phase 4: files outside your Files table (binaries, build output, `tsbuildinfo`, `__pycache__`) are side effects to report; already-dirty files are noted and left alone.
+- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | git hash-object --stdin-paths; } | git hash-object --stdin` right before and right after each command you run (baseline, build or typecheck, formatter, generator), editing nothing in between (your own writes change the fingerprint); report files a run created or modified outside your Files table (binaries, build output, unignored `tsbuildinfo` or `__pycache__`) as side effects — a formatter changing only files you created is expected; already-dirty files are noted and left alone (no commit yet or no repository → `side effects: not checked`).
 
 ## Process
 
@@ -39,23 +39,24 @@ Done when: method and path are known and every item is GIVEN or MISSING.
 
 ### Phase 2 — Reference
 1. Stack: the manifest plus the router the code actually imports.
-2. Locate route registration and list existing routes; the new method + path must be free (Rule 2).
+2. Locate route registration and list existing routes; the new method + path must be free (Rule 2), compared with parameter names ignored (`/items/{id}` = `/items/{itemID}`). Where it overlaps a parameterized sibling (`/items/export` vs `/items/{id}`), register it where the router's precedence lets it match: first-match routers (FastAPI, Express) need the static route first; Go 1.22+ `ServeMux` panics at startup on patterns it cannot order. No build shows either — unconfirmed → ASSUMED.
 3. Candidates: same resource first, else same kind (read/write, with or without persistence). **Healthy** = its DI style, error mapping, middleware chain and response helper are shared by most endpoints in its group — count them. A lone outlier, a deprecated/legacy file, or an unsafe pattern (no auth in an authed group, string-built SQL, swallowed errors) disqualifies. Tie → newest (`git log -1 --format=%ci -- <file>`).
 4. Read the chain end to end: route → middleware → handler → service → repository → DTO → migration → OpenAPI → DI wiring. Its layers are your layer list; never add one it lacks.
 5. No endpoints: follow `backend-layers.md` verbatim, else BLOCKED (Rule 5).
-Done when: reference chosen with "shared by N of M in <group>" and its chain read in full, or BLOCKED.
+6. Baseline: run the Phase 4 command once before writing anything; keep its exit code and error lines.
+Done when: reference chosen with "shared by N of M in <group>", its chain read in full and the baseline captured, or BLOCKED.
 
 ### Phase 3 — Scaffold
 Copy the reference's exact shape per layer: naming, constructor/DI, context propagation, parsing, error mapping, response helper.
 - **Handler / service / repository** — plumbing written, open behavior stubbed (Rule 4). Queries parameterized in the project's style; tables or columns not given → stub, no invented schema.
-- **Migration** (only for a GIVEN table/column) — the project's tool, naming and next number; up + down when existing migrations are paired, forward-only otherwise (say so). Up is additive (new table, nullable or defaulted column); down reverses exactly that. DROP, RENAME, type changes or data rewrites → never written; Open Question.
+- **Migration** (only for a GIVEN table/column) — the project's tool, naming and next number; up + down when existing migrations are paired, forward-only otherwise (say so). Up is additive (new table, nullable or defaulted column); down reverses exactly that — dropping what up created is its only DROP. An up needing DROP, RENAME, a type change or a data rewrite → never written; Open Question.
 - **DTO / OpenAPI** — only where the project keeps them; a spec entry only if the reference has one. Generated files (`Code generated … DO NOT EDIT`, the project's generated dirs) are never hand-edited: spec-driven codegen → update the spec, list the generate command as a Manual TODO unless Rule 6 allows it.
-Read each file back.
+Read each file back. Project docs the change makes stale (`api-reference.md`, `database-schema.md`, tree files) are not edited while behavior is stubbed: list each under Next.
 Done when: every reference layer is created, modified or N/A with a reason, and every stub is in Manual TODOs.
 
 ### Phase 4 — Verify
-1. Command: the documented build/typecheck; else Go `go build -o /dev/null ./...` (bare `./...` drops a binary for a lone main package) · TS the typecheck script or `npx --no -- tsc --noEmit` · Python the configured type checker, else `python -m compileall -q <src>` · Rust `cargo check`.
-2. Errors in your files → fix and rerun, max 3 cycles, then BUILD FAILED with the output tail verbatim. Errors only in files you did not touch → pre-existing; report, never fix.
+1. Command: the documented build/typecheck; else Go `go build -o /dev/null ./...` (bare `./...` drops a binary for a lone main package) then `go vet ./...` (compiles the `_test.go` callers `go build` skips), both prefixed `GOTOOLCHAIN=local GOPROXY=off` so neither downloads a toolchain or module · TS the typecheck script or `npx --no -- tsc --noEmit` · Python the configured type checker, else syntax-only `python3 -m compileall -q <src>` · Rust `cargo check` (`--locked` when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
+2. Errors in your files, or anywhere but absent from the baseline (callers of a signature your wiring changed) → yours: fix within Rule 1 and rerun, max 3 cycles, then BUILD FAILED with the output tail verbatim; a fix needing an edit Rule 1 forbids → BUILD FAILED naming that caller. Errors already in the baseline → pre-existing; report, never fix. Tool, dependency or toolchain missing, or the run timed out → never install; Result SCAFFOLDED with `Execution: NOT RUN — <command to run>; <blocker, error quoted>`.
 3. Read the registration lines: the new route sits in the reference's group and middleware chain.
 4. Grep your files for `TODO(scaffold)`; every hit is in Manual TODOs and vice versa.
 Done when: output captured, route and middleware confirmed by reading, side effects listed.
@@ -66,14 +67,14 @@ Not a review: an unsafe pattern seen in the chain and not copied is reported onl
 
 ## Output Contract
 
-Every section present, `None` when empty; Reference Concerns lists only non-zero severities. BLOCKED before Phase 3 → Files says `none written`.
+Every section present, `None` when empty; Reference Concerns lists only non-zero severities. BLOCKED before Phase 3 → Files says `none written`, Behavior `NOT VERIFIED — nothing written`, Execution the baseline run or `NOT RUN — blocked`.
 
 ```
 ## Endpoint Scaffold Report
 Result: SCAFFOLDED | BLOCKED | BUILD FAILED — <METHOD /path>
-Behavior: NOT VERIFIED — compiles only; <n> stubs fail closed with <error → status>
+Behavior: NOT VERIFIED — <compiles only | no new errors, baseline already fails | does not compile | not compiled>; <n> stubs fail closed with <error → status>
 Contract: GIVEN <items> · MISSING <items → stubbed | ASSUMED>
-Execution: <command> → exit <code>; <output tail | no output>; side effects: <none | list>
+Execution: <command> → exit <code> (baseline <code>); <output tail | no output>; side effects: <none | list | not checked>
 
 ### Files
 | File | Layer | created / modified (+N lines, wiring only) / N/A — reason |
@@ -97,13 +98,13 @@ Filled example:
 ## Endpoint Scaffold Report
 Result: SCAFFOLDED — POST /api/v1/invoices
 Behavior: NOT VERIFIED — compiles only; 2 stubs fail closed with apperr.ErrNotImplemented → 501
-Contract: GIVEN method, path, body {order_id, amount}, 201 + Invoice, owner of the order only · MISSING amount limits, duplicate rule → stubbed
-Execution: go build -o /dev/null ./... → exit 0; no output; side effects: none
+Contract: GIVEN method, path, body {order_id, amount}, 201 + Invoice, owner of the order only, table invoices (id, order_id, amount, created_at) · MISSING amount limits, duplicate rule → stubbed
+Execution: GOTOOLCHAIN=local GOPROXY=off go build -o /dev/null ./... → exit 0 (baseline 0), then go vet ./... → exit 0 (baseline 0); no output; side effects: none
 
 ### Files
 | internal/{handler,service,repo}/invoice.go | Handler, Service, Repository | created |
 | internal/router/routes.go | Route | modified (+1 line, wiring only) |
-| cmd/api/wire.go | DI | modified (+3 lines, wiring only) |
+| cmd/api/main.go | DI | modified (+3 lines, wiring only) |
 | migrations/000042_create_invoices.{up,down}.sql | Migration | created (down drops invoices only) |
 | — | OpenAPI | N/A — project keeps no spec |
 ### Reference endpoint
@@ -121,7 +122,7 @@ None
 ### Open Questions
 - Second invoice for one order: 409 or return the existing one?
 ### Next
-test-generator once stubs are implemented: 401 anonymous, 403 other user's order, 400 bad body
+Docs before commit: api-reference.md (POST /api/v1/invoices), database-schema.md (invoices) · test-generator once stubs are implemented: 401 anonymous, 403 other user's order, 400 bad body
 ```
 
 ## Recap — non-negotiables
