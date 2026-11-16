@@ -11,7 +11,7 @@ Phase 0: Read Docs      Read architecture docs relevant to task scope
                         |
 Phase 1: Understand     Detect stack, parse task, assess complexity (5 factors), search patterns
                         |
-Phase 2: Architect      [Complex only] Dispatch architect for 2-3 approaches
+Phase 2: Architect      [Complex only] Dispatch architect: compare viable approaches, recommend one
                         |
 Phase 3: Pseudocode     [Complex only] Draft pseudocode for core algorithm before full plan
                         |
@@ -45,7 +45,7 @@ Key design decisions:
 - **Always-on**: `/dev` triggers automatically for all code-changing tasks. Phase 1 complexity assessment (5 factors) determines which phases to skip (simple tasks skip 2, 3, 5, 6, 8, 11, 13; standard tasks skip 2, 3, 13; complex tasks run all).
 - **ADR nudge in Phase 2**: when the chosen architecture has real alternatives and lasting consequences (framework, data model, protocol, security choice), `/dev` appends an Architecture Decision Record from `docs-templates/adr-template.md` recording the rejected options and why — skipped for trivial or easily-reversible choices.
 - **Sprint Contract (Phase 5)**: testable acceptance criteria defined BEFORE coding. Evaluator checks these in Phase 8.
-- **Conditional GAN loop (Phase 8)**: evaluator checks contract → if FAIL, iterate (max 2-3 passes) → if scores plateau, escalate to architect.
+- **Conditional GAN loop (Phase 8)**: evaluator scores the contract → ITERATE: fix and re-evaluate (max 2–3 passes) → ESCALATE (a MUST needs a contract or design decision, or stalls): architect reviews the evaluation report, once per task; a second ESCALATE goes to the user.
 - **Dependency order in Phase 7**: migrations before repos, repos before services, services before handlers.
 - **Solution Ladder in Phase 7**: before writing any new code, Claude walks the ladder from the coding-style rule and stops at the first rung that holds — not needed (YAGNI) → reuse in codebase → stdlib → native platform feature → installed dependency, with a new dependency the last resort.
 - **Ordered phases, parallel reviewers**: Phase 10 tests precede Phase 11 goal verification and Phase 12 review. Reviewers within Phase 12 may run in parallel, selected by the changed scope. Phase 14 documentation follows review and any required critic gate.

@@ -96,9 +96,9 @@ Design the architecture for this task:
 Task: [description]
 Current architecture: [from Phase 0 docs]
 Affected components: [from Phase 1]
-Propose 2-3 approaches with trade-offs.
+Compare the viable approaches with trade-offs; recommend one.
 ```
-Use the recommendation to shape Phase 4. If the chosen approach had real alternatives and lasting consequences (framework/data-model/protocol/security choice), append an ADR to `docs/adr/` from `docs-templates/adr-template.md` recording the rejected alternatives and why — skip for trivial or easily-reversible choices, and if `docs-templates/adr-template.md` is absent, skip silently rather than blocking on a missing template.
+Use the recommendation to shape Phase 4; a `[BLOCKING]` Open Question → ask the user before planning. If the chosen approach had real alternatives and lasting consequences (framework/data-model/protocol/security choice), append an ADR to `docs/adr/` from `docs-templates/adr-template.md` recording the rejected alternatives and why — skip for trivial or easily-reversible choices, and if `docs-templates/adr-template.md` is absent, skip silently rather than blocking on a missing template.
 **Done when:** one approach chosen, with a stated reason.
 
 ## Phase 3 — Pseudocode (Complex only)
@@ -174,7 +174,7 @@ Execute the plan in dependency order; for each step, read the reference pattern 
 Dispatch **evaluator** with the Sprint Contract, changed-file list, pass number, and — on pass 2+ — the previous evaluation report.
 - **PROCEED** → Phase 9.
 - **ITERATE** → escalate effort to `max` (Hard Rule 4), fix each [CODE] critique, produce what each [EVIDENCE] item names (start the service it needs, or run the command and supply command, output and time), re-dispatch as pass N+1; evidence you cannot produce → ask the user to accept it as unverified (never loop on it). If passes exceed the matrix budget (Standard 2 / Complex 3) → proceed with the warning "Evaluation budget exhausted after N passes. Remaining issues: [list]".
-- **ESCALATE** → `NOT FOUND: Sprint Contract`: re-dispatch with the contract. Otherwise dispatch **architect** with the evaluation report, apply its recommendation (a changed criterion → update the contract), restart from Phase 7. At most one architect restart per task: a second ESCALATE → stop and present the evaluation report to the user.
+- **ESCALATE** → `NOT FOUND: Sprint Contract`: re-dispatch with the contract. Otherwise dispatch **architect** (REVIEW) with the evaluation report, the Sprint Contract and the Phase 4 plan; a `[BLOCKING]` Open Question → ask the user first; then apply its recommendation (changed files → update the Phase 4 checklist and re-run Phase 6 on it; "Contract changes" → update the contract), restart from Phase 7. At most one architect restart per task: a second ESCALATE → stop and present the evaluation report to the user.
 **Done when:** verdict is PROCEED, budget exhausted with an explicit warning, or only [EVIDENCE] items the user accepted remain.
 
 ## Phase 9 — Verify
