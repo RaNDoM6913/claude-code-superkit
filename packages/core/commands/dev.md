@@ -190,11 +190,11 @@ Dispatch **test-generator** if available — otherwise write the tests yourself 
 
 ## Phase 11 — Verify Goals
 
-Dispatch **goal-verifier** with the Phase 4 goals and changed files. It checks 4 levels: EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW.
+Dispatch **goal-verifier** with the goals (the task's outcomes plus the Sprint Contract MUST criteria; Phase 4 checklist items are artifacts, not goals), the changed files and, on a re-dispatch, its previous report. It checks 4 levels: EXISTS → SUBSTANTIVE → WIRED → DATA-FLOW.
 - **PASS** → Phase 12.
-- **NEEDS-ATTENTION** → fix the listed gaps in place, re-verify.
-- **NEEDS-REMEDIATION** → critical artifacts missing; return to Phase 7 (or Phase 4 if the plan itself was wrong).
-**Done when:** verdict is PASS.
+- **NEEDS-ATTENTION** → apply each [FIX] in place and supply what each [EVIDENCE] issue names, then re-dispatch; evidence that lives outside the repository → ask the user to accept it as unverified (never loop on it).
+- **NEEDS-REMEDIATION** → return to Phase 7 for [IMPLEMENT] issues, to Phase 4 for [PLAN] issues.
+**Done when:** verdict is PASS, or only [EVIDENCE] issues the user accepted remain.
 
 ## Phase 12 — Review
 

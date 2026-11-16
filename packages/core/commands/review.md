@@ -89,7 +89,7 @@ Review the diff hunks against your checklist. Recent commits show intent — jud
 Report in your standard output format. Every finding MUST include: file, line, severity, confidence, description, evidence, fix.
 ```
 
-Exception — **goal-verifier** (verdict track, Hard Rule 4): instead of the checklist task above, give it ALL hunks plus the implementation plan path from `docs/superpowers/plans/` and request its verdict report.
+Exception — **goal-verifier** (verdict track, Hard Rule 4): instead of the checklist task above, give it ALL hunks plus the path of the plan this change implements (the plan in `docs/superpowers/plans/` whose tasks name the changed files; none matches → do not dispatch it) and request its verdict report.
 
 ## Step 4 — Collect and Triage Findings
 
@@ -142,7 +142,7 @@ Apply verdicts: REJECTED → dropped (counted in validation stats); DOWNGRADE �
 ### Open Questions (LOW confidence — surfaced, not dropped)
 - [agent] file:line — suspicion + what would confirm it
 ### Goal Verification (only if goal-verifier ran)
-Verdict: PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION + its gap list verbatim
+Verdict: PASS / NEEDS-ATTENTION / NEEDS-REMEDIATION + its Scope, Coverage, Issues and Required Fixes verbatim
 ```
 
 3. Summary table:

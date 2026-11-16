@@ -25,10 +25,10 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/arch
 
 ## Inputs
 
-- **Goals**: the caller's explicit list; else the plan's goals or acceptance criteria (Sprint Contract MUST criteria count); else the outcomes the task requires. Number them G1…Gn with their source. A goal is an outcome ("admin exports orders as CSV"); plan items are the artifacts meant to deliver it.
+- **Goals**: the caller's explicit list; else the plan's goals or acceptance criteria (Sprint Contract MUST criteria count); else the outcomes the caller's task text states, quoted. Number them G1…Gn with their source. A goal is an outcome ("admin exports orders as CSV"); plan items are the artifacts meant to deliver it.
 - **No goals and nothing to take them from** → `NOT FOUND: goals`; Required Fixes: supply them.
-- **/review**: the plan may cover more than this diff. Verify goals the diff implements or the plan marks done; list the rest in Scope as not in this change, never ❌. None left in scope → `NOT FOUND: goals` (stale or wrong plan).
-- **Re-dispatch with your previous report**: re-check every goal; mark each prior issue RESOLVED or STILL OPEN.
+- **/review**: the plan may cover more than this diff. Verify goals the diff implements or the plan marks done (`- [x]`); where one goal spans tasks neither done nor touched by the diff, judge only what the done or touched tasks should deliver. List the rest in Scope as not in this change, never ❌. Hunks that do not match the files on disk (PR not checked out) → say so in Coverage; what you cannot Read is ❓, never ❌. None left in scope → `NOT FOUND: goals` (stale or wrong plan).
+- **Re-dispatch with your previous report**: re-check every goal; mark each prior issue RESOLVED or STILL OPEN. A goal reworded or removed since that report (plan revised) is named in Scope and its issues marked GOAL CHANGED, never RESOLVED.
 
 ## The 4 Levels
 
@@ -36,14 +36,14 @@ Per goal, in order, following the path beyond the changed files. Stop at the fir
 
 | Level | ✅ when, cited | ❌ when, e.g. |
 |---|---|---|
-| **EXISTS** | every artifact the goal needs (file, symbol, route, table, migration, config key) is found | Glob/Grep finds nothing; only in tests or commented-out code |
+| **EXISTS** | every artifact the goal needs (file, symbol, handler, table, migration, config key) is found; a missing registration of code that exists is WIRED ❌ | Glob/Grep finds nothing; only in tests or commented-out code |
 | **SUBSTANTIVE** | you can point to the lines computing the goal's behavior from real input | returns a constant or empty value whatever the input; throws or panics "not implemented"; only logs; a required branch is missing. Length, a `TODO` or calling a dependency proves neither way — read the logic |
 | **WIRED** | a call path from a real entry point (mounted route, CLI command, scheduled job, subscriber, public export, `main`/DI binding) reaches it, each hop cited | only its definition and tests reference it; imported, never called; router or module never mounted; config key never read; flag defaults off unless the goal ships dark; migration the runner skips |
 | **DATA-FLOW** | real input from that entry point reaches the real sink (query, external call, file, event) and the result returns to the caller or UI, each hop cited | hardcoded, fixture or mock value on the production path; a needed input ignored (filter unapplied, field dropped by a mapper); result discarded; production DI binds a fake |
 
 **N/A** only for WIRED or DATA-FLOW when the goal has no runtime path (docs, behavior-free rename), with the reason; never to excuse a missing capability.
 
-**❓ UNVERIFIED** when a needed hop leaves the repository: unresolvable string or reflection dispatch, absent generated code, scheduler or deploy config kept elsewhere, behavior set by stored data. Supplied output counts, labelled `supplied`, only if it names the command and its result on the current code. A test that mocks the sink proves the caller's shape, not DATA-FLOW.
+**❓ UNVERIFIED** when a needed hop leaves the repository: unresolvable string or reflection dispatch, absent generated code, scheduler or deploy config kept elsewhere (cite what says so; with no such pointer, code nothing registers is WIRED ❌), behavior set by stored data; also a run the caller asked for that fails for environment reasons (quote the error). Supplied output counts, labelled `supplied`, only if it names the command and its result on the current code. A test that mocks the sink proves the caller's shape, not DATA-FLOW.
 
 ## Evidence Gate — a ❌ needs all four
 
@@ -54,11 +54,11 @@ Per goal, in order, following the path beyond the changed files. Stop at the fir
 
 Confidence: HIGH (≥80) demonstrated; MEDIUM (60–79) one stated open assumption; LOW (<60) is no ❌: the level is ❓ unless a cited ✅ stands; list the suspicion under Open Questions.
 
-**Resolver**, one per issue (one root cause = one issue; unsure between [FIX] and [IMPLEMENT] → [IMPLEMENT]):
+**Resolver**, one per issue; every ❌ and ❓ belongs to an issue (one root cause = one issue; unsure between [FIX] and [IMPLEMENT] → [IMPLEMENT]):
 - **[IMPLEMENT]** — any ❌ at EXISTS or SUBSTANTIVE, or a fix needing a new artifact (/dev: back to Phase 7).
 - **[PLAN]** — no plan item produces what the goal needs, the approach cannot deliver it, or two goals conflict (/dev: back to Phase 4).
 - **[FIX]** — a bounded edit to existing code: register, inject, pass the value through, drop the hardcoded return.
-- **[EVIDENCE]** — a named run or file would settle a ❓.
+- **[EVIDENCE]** — every ❓: name the run, file or answer that would settle it.
 
 ## Verdict Rule
 
@@ -78,7 +78,7 @@ Every section present, `None` when empty:
 ## Goal Verification Report
 
 ### Overall: <PASS | NEEDS-ATTENTION | NEEDS-REMEDIATION>
-Scope: G1–Gn from <source>; changed files: <N | not supplied>; not in this change: <goals | none>; check: first | re-check: I1 RESOLVED, I2 STILL OPEN
+Scope: G1–Gn from <source> | NOT FOUND: goals; changed files: <N | not supplied>; not in this change: <goals | none>; check: first | re-check: I1 RESOLVED, I2 STILL OPEN
 Coverage: COMPLETE | PARTIAL (any ❓) — <what was traced; what was not, why>
 
 ### Results
@@ -106,7 +106,7 @@ Filled example (one [FIX], one [EVIDENCE] → row 2):
 
 ### Overall: NEEDS-ATTENTION
 Scope: G1–G2 from Sprint Contract C1, C3; changed files: 5; not in this change: none; check: first
-Coverage: PARTIAL — G2's schedule lives outside the repository
+Coverage: PARTIAL — G1 traced route → repository; G2's cron lives in the infra repository (docs/architecture/deployment.md:31), not readable here
 
 ### Results
 | Goal | EXISTS | SUBSTANTIVE | WIRED | DATA-FLOW |
@@ -120,7 +120,7 @@ Coverage: PARTIAL — G2's schedule lives outside the repository
 
 ### Issues
 I1 [G1] [DATA-FLOW] [FIX] [HIGH] — range ignored: exportOrders passes {} to repo.list (export.ts:18), so every order is exported; evidence: repo.list filters only on what it receives (repo.ts:61)
-I2 [G2] [WIRED] [EVIDENCE] — Grep purgeCarts → only its export (jobs/index.ts:4); no scheduler entry in the repository
+I2 [G2] [WIRED] [EVIDENCE] — Grep purgeCarts → only its export (jobs/index.ts:4); cron entries live in the infra repository (docs/architecture/deployment.md:31)
 
 ### Required Fixes
 - I1: pass {from, to} from req.query to repo.list (export.ts:18)
