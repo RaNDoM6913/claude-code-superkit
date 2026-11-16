@@ -105,7 +105,7 @@ Options:
   --defaults              Use default settings, no interactive prompts
   --stacks=go,ts,py,rust  Select language stacks (comma-separated)
   --profile=standard      Hook profile: fast, standard, strict
-  --extras=bot,design     Select extras (comma-separated)
+  --extras=bot,design,red-blue-auditor  Select extras (comma-separated)
   --plugins=playwright    Optional plugins (comma-separated)
   --codex                 Also install for Codex CLI (Claude + Codex)
   --codex-only            Install/update only Codex assets; no prompts or Claude setup

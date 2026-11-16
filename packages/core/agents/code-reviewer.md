@@ -147,7 +147,7 @@ Verification: static review only — nothing executed
 - [ ] Scope and Coverage filled; PARTIAL lists what was not reviewed and why.
 - [ ] Spec table emitted (or the skip line); each missing requirement is also a finding.
 - [ ] All 10 checklist items evaluated for every changed file.
-- [ ] Every finding passed the 4-point Evidence Gate; Summary counts match Findings and no zero-count severity is named anywhere in the report (the SubagentStop hook greps it for CRITICAL); Open Questions present, even if "none".
+- [ ] Every finding passed the 4-point Evidence Gate; Summary counts match Findings and no zero-count severity is named anywhere in the report (the SubagentStop hook counts `[CRITICAL/…]` finding tags); Open Questions present, even if "none".
 
 ## Recap — non-negotiables
 

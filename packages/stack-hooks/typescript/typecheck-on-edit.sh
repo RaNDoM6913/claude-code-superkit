@@ -57,9 +57,19 @@ if [ -z "$TS_ROOT" ]; then
   exit 0
 fi
 
+# Only an installed TypeScript: nearest node_modules/.bin/tsc at or above the tsconfig.
+# Never plain `npx tsc` (installs on an edit; the `tsc` package is not TypeScript).
+TSC=""
+SEARCH_DIR="$TS_ROOT"
+while [ "$SEARCH_DIR" != "/" ] && [ "$SEARCH_DIR" != "." ]; do
+  if [ -x "$SEARCH_DIR/node_modules/.bin/tsc" ]; then TSC="$SEARCH_DIR/node_modules/.bin/tsc"; break; fi
+  SEARCH_DIR=$(dirname "$SEARCH_DIR")
+done
+[ -n "$TSC" ] || exit 0
+
 cd "$TS_ROOT" 2>/dev/null || exit 0
 
-RESULT=$(npx tsc --noEmit 2>&1)
+RESULT=$("$TSC" --noEmit 2>&1)
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then

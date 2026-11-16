@@ -40,3 +40,12 @@ Each suite exits 0 when every case passes, non-zero on the first failure.
   branch instead of the pre-fix silent `exit 0`. We assert that the hook
   either matches (does work / blocks) or falls through — never the silent
   "input was empty" path.
+
+**`subagent-stop-validate_test.sh`** — SubagentStop advisories (28 cases)
+- Reviewers warn only on a `[CRITICAL/…]` / `[CRITICAL]` finding tag whose
+  finding block has no explicit acknowledgement (`Status: FIXED`, `Status: DEFERRED`,
+  `Acknowledged:` …); incidental "fixed" / "unresolved" never silence it
+- Security agents warn on the CRITICAL tag only, never on `[WARNING/HIGH]`
+- Test generators: line-2 `Generated <N> test(s) … — Result:` — NOT RUN or a
+  missing Result warns; PASS/FAIL needs an `Execution: … exit <code>` line;
+  `Generated 0 tests` is silent

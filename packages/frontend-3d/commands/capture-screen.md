@@ -17,11 +17,12 @@ Capture a running app screen as a high-resolution PNG in `public/textures/` for 
 3. No capture route found → ASK the user for the route. Never assume `/capture` exists.
 4. Defaults: iPhone 16 Pro Max — viewport 440x956, scale 2x (expected output 880x1912), corner radius R=124 (62pt × 2). Another device → use its Resolution Guide row; non-iPhone corner radius → ask the user or skip rounding, never guess.
 5. Before reporting done, verify the PNG's real dimensions (Step 7); if they differ from expected, report Status: MISMATCH — do not claim OK.
+6. Run Playwright only as `npx --no -- playwright …`; Playwright or Chromium missing → STOP and tell the user, never install.
 
 ## Prerequisites
 
 - Dev server running (Vite, Next.js, etc.)
-- `playwright` installed (`npx playwright install chromium`)
+- `playwright` installed in the project, with Chromium (the user runs `npx --no -- playwright install chromium`; this command never installs)
 - `sharp` installed (only for rounded corners, Step 6)
 
 ## Resolution Guide
@@ -69,7 +70,7 @@ Pick exactly ONE:
 - **1x at exact viewport** (quick preview, any device row):
 
 ```bash
-npx playwright screenshot \
+npx --no -- playwright screenshot \
   --viewport-size "440,956" \
   --wait-for-timeout 3000 \
   "http://localhost:<PORT><ROUTE>" \
@@ -79,7 +80,7 @@ npx playwright screenshot \
 - **@2x via device preset — iPad Pro 11" only** (its Playwright descriptor is 2x DPR: 834x1194 → 1668x2388). iPhone presets are 3x DPR with smaller viewports and do NOT produce the table's @2x sizes:
 
 ```bash
-npx playwright screenshot --device "iPad Pro 11" --wait-for-timeout 3000 \
+npx --no -- playwright screenshot --device "iPad Pro 11" --wait-for-timeout 3000 \
   "http://localhost:<PORT><ROUTE>" public/textures/screen-capture.png
 ```
 

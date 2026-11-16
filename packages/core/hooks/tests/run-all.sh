@@ -19,6 +19,7 @@ SUITES=(
   "mirror-invariants_test.sh"
   "internal-manifest_test.sh"
   "superkit-update_test.sh"
+  "subagent-stop-validate_test.sh"
 )
 
 TOTAL_PASS=0

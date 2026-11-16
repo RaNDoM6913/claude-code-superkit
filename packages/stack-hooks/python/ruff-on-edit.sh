@@ -29,25 +29,31 @@ if [ ! -f "$FILE_PATH" ]; then
   exit 0
 fi
 
-# Check if ruff is available
-if ! command -v ruff &>/dev/null; then
-  # Try via uvx or pipx as fallback
-  if command -v uvx &>/dev/null; then
-    RUFF="uvx ruff"
-  elif command -v pipx &>/dev/null; then
-    RUFF="pipx run ruff"
-  else
-    exit 0  # ruff not available, skip silently
-  fi
-else
+# Use only an already-installed ruff: the nearest project venv (.venv/ or
+# venv/ at or above the file — the project's pinned version), else PATH
+# (which includes an activated venv). Never uvx / pipx run / uv run: they
+# download an unpinned ruff on an edit. Not installed → skip silently.
+RUFF=""
+SEARCH_DIR=$(dirname "$FILE_PATH")
+while [ -z "$RUFF" ] && [ "$SEARCH_DIR" != "/" ] && [ "$SEARCH_DIR" != "." ]; do
+  for VENV in .venv venv; do
+    if [ -x "$SEARCH_DIR/$VENV/bin/ruff" ]; then
+      RUFF="$SEARCH_DIR/$VENV/bin/ruff"
+      break
+    fi
+  done
+  SEARCH_DIR=$(dirname "$SEARCH_DIR")
+done
+if [ -z "$RUFF" ]; then
+  command -v ruff >/dev/null 2>&1 || exit 0
   RUFF="ruff"
 fi
 
 # Run ruff check with auto-fix (safe fixes only)
-$RUFF check --fix --select I "$FILE_PATH" 2>/dev/null
+"$RUFF" check --fix --select I "$FILE_PATH" 2>/dev/null
 
 # Run ruff format
-RESULT=$($RUFF format "$FILE_PATH" 2>&1)
+RESULT=$("$RUFF" format "$FILE_PATH" 2>&1)
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
@@ -56,7 +62,7 @@ if [ $EXIT_CODE -ne 0 ]; then
 fi
 
 # Run ruff check (lint) and report remaining issues
-LINT_RESULT=$($RUFF check "$FILE_PATH" 2>&1)
+LINT_RESULT=$("$RUFF" check "$FILE_PATH" 2>&1)
 LINT_EXIT=$?
 
 if [ $LINT_EXIT -ne 0 ]; then

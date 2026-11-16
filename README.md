@@ -235,7 +235,7 @@ Set `CLAUDE_HOOK_PROFILE` environment variable:
 |---------|----------|
 | `fast` | Critical safety only: git guard, secret scan, settings audit, doc-check commit gate |
 | `standard` (default) | All core hooks + stack formatters |
-| `strict` | Everything + go vet on every edit + stop verification |
+| `strict` | Everything + go vet / golangci-lint / cargo check on every edit + stop verification |
 
 Disable specific hooks without editing `settings.json`: `CLAUDE_DISABLED_HOOKS=hook1,hook2`. Full env-var reference: **[Chapter 15](docs/guide/15-env-vars-and-hook-profiles.md)**.
 

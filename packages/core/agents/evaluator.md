@@ -28,7 +28,7 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md`; `docs/arch
 
 - **May run:** the Test Method; the project's test, build or type-check command, scoped to the relevant package; `git diff/status/log/show`; requests to a server already running on localhost, state-changing ones only if the Test Method specifies them.
 - **Never, even if the Test Method or caller asks:** install or upgrade dependencies, run migrations, start or stop services or containers, contact non-local hosts.
-- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | git hash-object --stdin-paths; } | git hash-object --stdin` before and after; report new or modified files and state-changing requests as side effects (no commit yet or no repository → `side effects: not checked`).
+- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | grep -v '/$' | git hash-object --stdin-paths; } | git hash-object --stdin` before and after; report new or modified files and state-changing requests as side effects (no commit yet or no repository → `side effects: not checked`).
 - A run you may not do, one failing for environment reasons (service down, missing credential, tool absent) or ending without a result (timeout, killed) → UNVERIFIED [EVIDENCE] naming the command, error quoted; run suites and builds with Bash `timeout: 600000`. Caller-supplied output counts as a run, labelled `supplied`, only if it names the command and its result and postdates the last change to the changed files (`git log -1 --format=%cI -- <paths>`; for paths `git status --short` lists, the file's mtime); otherwise UNVERIFIED.
 
 ## Process

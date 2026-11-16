@@ -62,7 +62,7 @@ For exploration and investigation. No code changes — research only.
 
 For restructuring code without changing behavior.
 
-1. **Baseline** — confirm the affected tests exist and pass green before any change; if coverage is thin, write characterization tests first. Done when: the affected suite is green, or characterization tests were added and are green.
+1. **Baseline** — confirm the affected tests exist and pass green before any change; if coverage is thin, dispatch **test-generator** with an explicit characterization request for the code about to move (still unchanged since HEAD — it pins current output inline, bugs included). Done when: the affected suite is green, or the characterization tests were added and are green.
 2. **Inventory** — list all files/functions affected, map dependencies. Done when: the affected file/function list and dependency map are written.
 3. **Plan** — define the target structure, migration order, rollback strategy. Done when: target structure, leaf-first migration order, and rollback strategy are all stated.
 4. **Migrate** — execute changes in dependency order (leaf files first). Done when: every planned file is migrated leaf-first and compiles.

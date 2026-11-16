@@ -13,8 +13,8 @@ Coarse-grained selector that every profile-aware hook reads at the top of its sc
 | Profile    | What runs                                                                                                   | Typical use              |
 |------------|-------------------------------------------------------------------------------------------------------------|--------------------------|
 | `fast`     | Only the critical-safety allowlist: `block-dangerous-git`, `security-patterns`, `audit-settings-source`, `doc-check-on-commit`. Every other profile-aware hook exits early. | CI, scripted runs, quick scratch sessions |
-| `standard` | Everything from `fast` **plus** the full core enforcement suite: audit trail, compact-state injection, plan-completion gate, user-intent detect, subagent-stop validation, loop-guard, migration-safety, evolve-check, dev-edit-counter, dev-required-on-commit, bundle-import-check, stack formatters (go/ts/py/rust), frontend-3d lint hooks. | Day-to-day local development (default) |
-| `strict`   | Everything in `standard` **plus** stricter go toolchain (`go-vet-on-edit`, `golangci-lint-on-edit` run on every edit instead of on commit). | Pre-release, hardening passes, reviewing external contributions |
+| `standard` | Everything from `fast` **plus** the full core enforcement suite: audit trail, compact-state injection, plan-completion gate, user-intent detect, subagent-stop validation, loop-guard, migration-safety, evolve-check, dev-edit-counter, dev-required-on-commit, bundle-import-check, stack formatters and checks (go format/error/context/safety, ts typecheck, py ruff), frontend-3d lint hooks. | Day-to-day local development (default) |
+| `strict`   | Everything in `standard` **plus** whole-package checks on every edit: `go-vet-on-edit`, `golangci-lint-on-edit`, `cargo-check-on-edit` (offline; `--locked` when `Cargo.lock` is tracked). | Pre-release, hardening passes, reviewing external contributions |
 
 ### How to set a profile
 

@@ -4,8 +4,9 @@ Adversarial security audit for Claude Code / Codex repos. Two complementary mode
 
 1. **Agent mode** — `agent.md` is an Opus-powered Red/Blue/Auditor prompt (3-phase
    adversarial analysis: attacker perspective, defender perspective, synthesis).
-2. **SAST mode** — `scan.sh` runs static grep-based pattern matching against every
-   file in the repo. Bearer-inspired, CI-friendly, zero dependencies.
+2. **SAST mode** — `scan.sh` runs static grep-based pattern matching against the
+   repo's text files (scanned extensions, `.env*`, and extensionless scripts such as
+   git hooks). Bearer-inspired, CI-friendly, zero dependencies.
 
 Together they form an AgentShield-style defense-in-depth: the LLM finds multi-step
 exploits and logic flaws, while the static scanner catches cheap mistakes
@@ -17,7 +18,7 @@ exploits and logic flaws, while the static scanner catches cheap mistakes
 # One-shot scan from repo root
 bash packages/extras/red-blue-auditor/scan.sh
 
-# Limit scope
+# Limit scope (a directory or a single file; `--path .claude/` works too)
 bash packages/extras/red-blue-auditor/scan.sh --path=.claude/
 
 # Fail the build if anything CRITICAL is found
@@ -33,10 +34,12 @@ SEVERITY|REGEX|DESCRIPTION
 ```
 
 - `SEVERITY` — `CRITICAL`, `HIGH`, or `MEDIUM`
-- `REGEX` — `grep -E` compatible expression
-- `DESCRIPTION` — short (< 80 chars) human-readable label
+- `REGEX` — `grep -E` compatible expression (no lookahead/lookbehind); it may
+  contain `|`, because a line is split at its first and last `|`
+- `DESCRIPTION` — short (< 80 chars) human-readable label, without `|`
 
-Lines starting with `#` are comments. Blank lines are ignored.
+Lines starting with `#` are comments. Blank lines are ignored. A regex `grep -E`
+rejects is reported as a `pattern error` on stderr and in the summary.
 
 Shipped pattern bundles:
 
@@ -53,9 +56,11 @@ Shipped pattern bundles:
 | Condition | Exit code |
 |-----------|-----------|
 | No findings | `0` |
-| Only HIGH / MEDIUM findings | `1` |
-| Any CRITICAL finding + `--exit-on-critical` | `2` |
+| Any finding (default mode) | `1` |
+| `--exit-on-critical`, no CRITICAL finding (HIGH / MEDIUM still printed) | `0` |
+| `--exit-on-critical`, any CRITICAL finding | `2` |
 | Patterns dir not found | `3` |
+| Unknown argument, or `--path` not found | `4` |
 
 Default (no `--exit-on-critical`) returns `1` for any finding — good for
 information-only runs. `--exit-on-critical` is the canonical CI gate: only block
@@ -105,6 +110,7 @@ EOF
   hardcoded secrets, wildcard permissions, obvious shell injection. It will
   miss data-flow vulnerabilities, logic bugs, and anything that requires
   semantic reasoning.
+- **Prompt prose matches too.** On a stock superkit install, `--exit-on-critical` reports a few critical hits from agent prompts that quote `curl … | sh` as an example (security-scanner, red-blue-auditor); triage them, or exclude `.claude/agents/` with `--path=`.
 - **False positives happen.** A pattern matching `sk-` will also flag example
   docs and test fixtures. Use `--path` to scope scans, or refine patterns.
 - **Complementary, not a replacement.** Run the `agent.md` (LLM) audit for

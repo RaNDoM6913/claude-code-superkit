@@ -1,8 +1,12 @@
 # Testing Patterns
 
-> Reference document for test-generator. Loaded on demand via Read tool.
+> Background for test-generator (writing Go tests) and go-reviewer (reviewing them), loaded on demand. The consuming agent's rules win over this file. Each recipe carries a **test-generator:** tag:
+> **use** — fits its rules as shown · **use if go.mod has it** — only when the module already depends on that library (never add one) · **write, NOT RUN** — written in the project's existing style but needs a service or container the agent never starts, so it is reported NOT RUN · **humans only** — contradicts test-generator's Rules 1, 3–4 or Command Policy; for a person or a refactoring workflow, never the agent.
+> Examples use testify (`require`/`assert`) where shown; without `github.com/stretchr/testify` in go.mod, use `t.Fatalf`/`t.Errorf`.
 
 ## Table-Driven Tests
+
+**test-generator:** use.
 
 The standard Go pattern for testing multiple cases with shared setup.
 
@@ -60,6 +64,8 @@ func TestParseStatus(t *testing.T) {
 
 ## Subtests
 
+**test-generator:** use.
+
 Group related tests and provide isolation. Each subtest can be run independently.
 
 ```go
@@ -101,6 +107,8 @@ func TestUserService(t *testing.T) {
 
 ## t.Parallel
 
+**test-generator:** use (independent fixtures only; `t.Setenv` cannot run in parallel tests).
+
 Marks a subtest for parallel execution. Critical rule: **don't share mutable state between parallel tests.**
 
 ```go
@@ -135,6 +143,8 @@ func TestProcess(t *testing.T) {
 - Use `t.Cleanup` for per-test teardown
 
 ## Fuzzing (Go 1.18+)
+
+**test-generator:** use for the target and its seed corpus, run as an ordinary test: without `-fuzz`, `go test -run '^FuzzParseJSON$'` calls the target with the seed corpus only (`f.Add` values plus files in `testdata/fuzz/FuzzParseJSON/`), deterministically. `-fuzz=` exploration is **humans only**: it is non-deterministic and writes any failing input to `testdata/fuzz/<Name>/`.
 
 Automatically generate inputs to find edge cases and panics.
 
@@ -172,6 +182,8 @@ func FuzzParseJSON(f *testing.F) {
 
 ## goleak Integration
 
+**test-generator:** use if go.mod has it (`go.uber.org/goleak`).
+
 Detect goroutine leaks in tests using go.uber.org/goleak.
 
 ```go
@@ -191,6 +203,8 @@ func TestWorker(t *testing.T) {
 ```
 
 ## synctest (Go 1.24 experimental / Go 1.25+ stable)
+
+**test-generator:** use when the `go` directive is 1.25+; on 1.24 only if the project already sets `GOEXPERIMENT=synctest`.
 
 Deterministic goroutine scheduling for testing concurrent code. Eliminates flaky timing-dependent tests.
 
@@ -223,6 +237,8 @@ func TestDebouncer(t *testing.T) {
 ```
 
 ## httptest
+
+**test-generator:** use; a test server whose router needs a real database or service → write, NOT RUN.
 
 ### Unit Tests — ResponseRecorder
 
@@ -265,6 +281,8 @@ func TestAPIIntegration(t *testing.T) {
 
 ## Build Tags
 
+**test-generator:** use the project's existing tag for integration tests. The `./...` commands below are project/CI invocations; the agent runs its own scoped command, and tagged tests that need a service are reported NOT RUN.
+
 Separate slow integration tests from fast unit tests.
 
 ```go
@@ -300,6 +318,8 @@ go test -tags=integration ./...
 `go test -race -shuffle=on ./...` is the canonical local/CI invocation: `-race` surfaces data races and `-shuffle=on` surfaces hidden inter-test ordering dependencies. Reserve `-race` for correctness/CI runs, not every incremental save — it costs a 2–3× slowdown.
 
 ## testcontainers
+
+**test-generator:** write, NOT RUN — only when the project already uses testcontainers; the agent never starts containers, so it names the `go test -tags=integration …` command for a person or CI to run.
 
 Docker-based dependencies for integration tests.
 
@@ -344,6 +364,8 @@ func setupPostgres(t *testing.T) *pgxpool.Pool {
 
 ## Golden Files
 
+**test-generator:** humans only — its Rule 4 forbids adding a golden or snapshot assertion and running `-update` (a missing golden written by the code under test passes whatever it returns). It may run an existing golden test in verify mode as part of its scoped command.
+
 Compare output against known-good "golden" files. Update with `-update` flag.
 
 ```go
@@ -384,6 +406,8 @@ func TestRender(t *testing.T) {
 
 ## Coverage-Adaptive Refactoring Safety Net
 
+**test-generator:** humans only — the profile run covers the whole module and writes `cover.out` into the working tree; the agent runs only scoped test commands.
+
 Before you refactor (see `refactoring-mechanics.md`), measure the test coverage
 of the *exact code you are about to move* and let that number set your caution.
 Coverage is a floor for safety, not a target — the point is to know whether a
@@ -410,6 +434,8 @@ hide a 0%-covered function you are about to rewrite.
 
 ### Characterization tests (distinct from Golden Files)
 
+**test-generator:** only on an explicit caller request, under its Characterization exception — code unchanged since HEAD, current output as the oracle, expected values inline (never golden files), reported in Scope as `ASSUMED: characterization — <targets>`. Otherwise humans only: the agent's oracle is the spec, never the code.
+
 A **characterization test** pins the code's *current* behavior — bugs and all —
 so a refactor can prove it changed nothing. You are not asserting what the code
 *should* do; you are recording what it *does* today, so any drift fails loudly.
@@ -424,6 +450,8 @@ before a structural change. A `cmp.Diff` against an inline `want` is equally a
 characterization test when its job is to pin legacy behavior.
 
 ### Object seams for untested code
+
+**test-generator:** humans only — a seam is a production-code change; the agent edits test files only.
 
 Legacy code is often untestable because it reaches out to a concrete dependency
 (a `*sql.DB`, a clock, an HTTP client) it constructs itself. Introduce an
@@ -457,6 +485,8 @@ want, in its own commit, guarded by the characterization tests it enables.
 
 ## Test Helpers
 
+**test-generator:** use.
+
 ```go
 // t.Helper marks function as test helper — errors report caller's line
 func createTestUser(t *testing.T, svc *UserService) *User {
@@ -475,9 +505,9 @@ func createTestUser(t *testing.T, svc *UserService) *User {
 }
 ```
 
-## When to Use
+## Review Signals (go-reviewer)
 
-Apply when generating or reviewing tests. Flag violations as:
-- **CRITICAL**: No error path testing, shared mutable state in parallel tests, missing `rows.Close()` in test
-- **WARNING**: Missing subtests for grouped scenarios, no fuzz tests for parsers, integration tests without build tags
-- **SUGGESTION**: Could use table-driven pattern, goleak for goroutine tests, testcontainers for DB tests
+Worth checking when reviewing Go test code. Severity comes from the reviewing agent's own rubric and Evidence Gate, never from this list; test-generator reports defects in the code under test, not these.
+- Error paths untested; shared mutable state in parallel tests; `rows.Close()` missing in a test helper
+- Grouped scenarios without subtests; parsers without fuzz targets; integration tests without a build tag
+- Repetition a table would remove; goroutine tests without goleak (when go.mod has it); storage tested only through mocks (testcontainers, when the project uses it)

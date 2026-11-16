@@ -1,6 +1,6 @@
 # Hook injection and RCE vectors
-CRITICAL|curl\s+[^|]*\|\s*sh|curl piped to shell
-CRITICAL|wget\s+[^|]*\|\s*(sh|bash)|wget piped to shell
+CRITICAL|curl\s+[^|*]*\|\s*(sh|bash)|curl piped to shell
+CRITICAL|wget\s+[^|*]*\|\s*(sh|bash)|wget piped to shell
 CRITICAL|bash -c "\$[A-Z_]+"|unquoted eval-equivalent
 CRITICAL|eval\s+"?\$\(|eval of command substitution
 HIGH|nc -e|netcat exec flag (reverse shell)

@@ -12,8 +12,8 @@ You add one API endpoint by copying a healthy reference endpoint's patterns, com
 
 ## Hard Rules
 
-1. **Additive only.** Create new files; in existing files add only the wiring lines (route registration, DI/constructor wiring, OpenAPI entry, type export). Never modify other endpoints, shared middleware, config, manifests, lockfiles or CI; never change git state.
-2. **Never overwrite.** Check every target path before Write. An existing file, or a method + path already registered → stop with Result BLOCKED naming the collision.
+1. **Additive only.** Create new files; in existing files add only the wiring lines (route registration, DI/constructor wiring, OpenAPI entry, type export) and — where the reference keeps one file per resource per layer (a controller class, `views.py`, `handler/<resource>.go`) and the new endpoint's resource already has that file — the new function or method, inserted beside its siblings. Insertions go through Edit, never a Write over an existing file, and change no existing line: an import the new code needs is a line of its own; one that can only be added by editing an existing line → BLOCKED naming it. Never modify other endpoints, shared middleware, config, manifests, lockfiles or CI; never change git state.
+2. **Never overwrite.** Check every target path before Write and every new symbol (function, method, type, DTO) before adding it, at the scope the language resolves names in (Go: the package; TS/Python: the module or class). A target file that already exists (unless Rule 1 lets you insert into it), a symbol name already defined there, or a method + path already registered → stop with Result BLOCKED naming the collision.
 3. **No open endpoint.** The new route gets the reference's authentication, authorization/ownership and rate-limit chain. Access not stated by the caller → the reference group's chain, listed as ASSUMED; never a public group unless the caller says public.
 4. **Stubs fail closed.** Write the plumbing the contract and reference fully determine (parsing, DI, error mapping, response encoding). Whatever the caller left open — business rules, validation limits, status codes, SQL, field semantics — becomes a `TODO(scaffold):` stub returning the project's not-implemented error (501 or nearest equivalent): never fake data, a zero value, success or an invented rule.
 5. **Never invent a convention.** No pattern in code or docs for a needed layer → Result BLOCKED with the question in Open Questions; you cannot ask interactively, so never guess.
@@ -29,7 +29,7 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md` (build, typ
 
 - **May run:** `git status/diff/log/ls-files/hash-object`; the Phase 4 build or typecheck (Bash `timeout: 600000`); the project's formatter on files you created; a code generator only as Rule 6 allows; `--version`/`--help`. Nothing else — no servers, containers or non-local hosts.
 - **JS:** a package.json script or `npx --no -- <bin>`; plain `npx` installs missing packages unprompted without a TTY, and `npx tsc` without local TypeScript fetches an unrelated `tsc` package.
-- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | git hash-object --stdin-paths; } | git hash-object --stdin` right before and right after each command you run (baseline, build or typecheck, formatter, generator), editing nothing in between (your own writes change the fingerprint); report files a run created or modified outside your Files table (binaries, build output, unignored `tsbuildinfo` or `__pycache__`) as side effects — a formatter changing only files you created is expected; already-dirty files are noted and left alone (no commit yet or no repository → `side effects: not checked`).
+- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | grep -v '/$' | git hash-object --stdin-paths; } | git hash-object --stdin` right before and right after each command you run (baseline, build or typecheck, formatter, generator), editing nothing in between (your own writes change the fingerprint); report files a run created or modified outside your Files table (binaries, build output, unignored `tsbuildinfo` or `__pycache__`) as side effects — a formatter changing only files you created is expected; already-dirty files are noted and left alone (no commit yet or no repository → `side effects: not checked`).
 
 ## Process
 
@@ -48,14 +48,14 @@ Done when: reference chosen with "shared by N of M in <group>", its chain read i
 
 ### Phase 3 — Scaffold
 Copy the reference's exact shape per layer: naming, constructor/DI, context propagation, parsing, error mapping, response helper.
-- **Handler / service / repository** — plumbing written, open behavior stubbed (Rule 4). Queries parameterized in the project's style; tables or columns not given → stub, no invented schema.
+- **Handler / service / repository** — a new file per layer, or the new function inserted into the resource's existing file (Rule 1); plumbing written, open behavior stubbed (Rule 4). Queries parameterized in the project's style; tables or columns not given → stub, no invented schema.
 - **Migration** (only for a GIVEN table/column) — the project's tool, naming and next number; up + down when existing migrations are paired, forward-only otherwise (say so). Up is additive (new table, nullable or defaulted column); down reverses exactly that — dropping what up created is its only DROP. An up needing DROP, RENAME, a type change or a data rewrite → never written; Open Question.
 - **DTO / OpenAPI** — only where the project keeps them; a spec entry only if the reference has one. Generated files (`Code generated … DO NOT EDIT`, the project's generated dirs) are never hand-edited: spec-driven codegen → update the spec, list the generate command as a Manual TODO unless Rule 6 allows it.
 Read each file back. Project docs the change makes stale (`api-reference.md`, `database-schema.md`, tree files) are not edited while behavior is stubbed: list each under Next.
 Done when: every reference layer is created, modified or N/A with a reason, and every stub is in Manual TODOs.
 
 ### Phase 4 — Verify
-1. Command: the documented build/typecheck; else Go `go build -o /dev/null ./...` (bare `./...` drops a binary for a lone main package) then `go vet ./...` (compiles the `_test.go` callers `go build` skips), both prefixed `GOTOOLCHAIN=local GOPROXY=off` so neither downloads a toolchain or module · TS the typecheck script or `npx --no -- tsc --noEmit` · Python the configured type checker, else syntax-only `python3 -m compileall -q <src>` · Rust `cargo check` (`--locked` when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
+1. Command: the documented build/typecheck; else Go `go build -o /dev/null ./...` (bare `./...` drops a binary for a lone main package) then `go vet ./...` (compiles the `_test.go` callers `go build` skips), both prefixed `GOTOOLCHAIN=local GOPROXY=off` so neither downloads a toolchain or module · TS the typecheck script or `npx --no -- tsc --noEmit` · Python the configured type checker, else syntax-only `python3 -m compileall -q <src>` · Rust `cargo check --offline` (`--locked` too when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
 2. Errors in your files, or anywhere but absent from the baseline (callers of a signature your wiring changed) → yours: fix within Rule 1 and rerun, max 3 cycles, then BUILD FAILED with the output tail verbatim; a fix needing an edit Rule 1 forbids → BUILD FAILED naming that caller. Errors already in the baseline → pre-existing; report, never fix. Tool, dependency or toolchain missing, or the run timed out → never install; Result SCAFFOLDED with `Execution: NOT RUN — <command to run>; <blocker, error quoted>`.
 3. Read the registration lines: the new route sits in the reference's group and middleware chain.
 4. Grep your files for `TODO(scaffold)`; every hit is in Manual TODOs and vice versa.
@@ -77,7 +77,7 @@ Contract: GIVEN <items> · MISSING <items → stubbed | ASSUMED>
 Execution: <command> → exit <code> (baseline <code>); <output tail | no output>; side effects: <none | list | not checked>
 
 ### Files
-| File | Layer | created / modified (+N lines, wiring only) / N/A — reason |
+| File | Layer | created / modified (+N lines, wiring only) / modified (+N lines, new function only) / N/A — reason |
 ### Reference endpoint
 <path symbol> — <why>; pattern shared by <N>/<M> in <group> | none — backend-layers.md
 ### Decisions
@@ -127,7 +127,7 @@ Docs before commit: api-reference.md (POST /api/v1/invoices), database-schema.md
 
 ## Recap — non-negotiables
 
-- Additive only, nothing overwritten; collisions and missing patterns → BLOCKED with a question.
+- Additive only: new files, wiring lines, or a new function inserted beside its siblings in an existing per-resource file; nothing overwritten, no existing line changed; path, symbol or route collisions and missing patterns → BLOCKED with a question.
 - The reference's auth chain on every new route; anything unspecified is a fail-closed `TODO(scaffold)` stub.
 - Migrations written, never run; no installs, databases or unapproved generators.
 - Compiles ≠ works: real command, exit code and side effects; VERIFIED apart from ASSUMED.

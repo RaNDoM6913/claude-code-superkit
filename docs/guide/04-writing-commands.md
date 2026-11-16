@@ -96,7 +96,7 @@ Scan the project root and subdirectories:
 | Marker File | Stack | Test Command |
 |-------------|-------|-------------|
 | `go.mod` | Go | `go test ./... -count=1` |
-| `package.json` + `tsconfig.json` | TypeScript | `npx vitest run` or `npx jest` |
+| `package.json` + `tsconfig.json` | TypeScript | `npx --no -- vitest run` or `npx --no -- jest` |
 | `pyproject.toml` | Python | `pytest` |
 | `Cargo.toml` | Rust | `cargo test` |
 | `Makefile` with `test` target | Any | `make test` |
@@ -159,7 +159,7 @@ working-tree state have been read.
 Based on detected stack, run the full test suite (not -short):
 
 - Go: `go test ./... -count=1 -race`
-- TypeScript: `npx vitest run` or `npx jest`
+- TypeScript: `npx --no -- vitest run` or `npx --no -- jest`
 - Python: `pytest --tb=short`
 
 If any test fails, STOP and report failures. Do not proceed to deploy.

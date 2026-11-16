@@ -30,12 +30,13 @@ Read if present, skip silently if absent: `CLAUDE.md` or `AGENTS.md` (e2e comman
 - **May run:** the project's e2e script (`npm run <script> -- <args>`) or `npx --no -- playwright test` on your files, plus `--list`/`--help`/`--version`; `npx --no -- tsc --noEmit`; `git status/diff`. Plain `npx` installs missing packages unprompted without a TTY.
 - **Never:** `playwright install` or any install; `-u`/`--update-snapshots` in a writing mode; `--headed`/`--ui`/`--debug`; starting servers yourself; non-local hosts.
 - **The config gates the run:** a `webServer` for the local frontend is fine; one starting a backend, containers or seed data, a `globalSetup` or setup project that logs in for real or touches a database, or a non-local `baseURL` → NOT RUN naming the blocker.
-- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | git hash-object --stdin-paths; } | git hash-object --stdin` right before and right after each `--list`, test or type-check run, editing nothing in between (your own writes change the fingerprint); report files a run created or modified (snapshot PNGs, auth state, unignored reports) as side effects (no commit yet or no repository → `side effects: not checked`). Gitignored output (`test-results/`, `playwright-report/`) is expected and not checked.
+- Run `git status --short -uall` and `{ git diff HEAD; git ls-files -o --exclude-standard | grep -v '/$' | git hash-object --stdin-paths; } | git hash-object --stdin` right before and right after each `--list`, test or type-check run, editing nothing in between (your own writes change the fingerprint); report files a run created or modified (snapshot PNGs, auth state, unignored reports) as side effects (no commit yet or no repository → `side effects: not checked`). Gitignored output (`test-results/`, `playwright-report/`) is expected and not checked.
 
 ## Process
 
 ### Phase 1 — Setup and Contract
-1. Config: `testDir`/`testMatch`, projects, `baseURL`, `retries`, `webServer`, `globalSetup`, `storageState`, `serviceWorkers`; version.
+1. Runner: declared in the nearest `package.json` or a workspace root above it (`@playwright/test`, or the project's other e2e runner) and installed (`npx --no -- <runner> --version` exits 0)? None declared → write nothing: `Generated 0 tests in 0 files — Result: NOT RUN`, `Execution: NOT RUN — no e2e runner declared`, the missing runner as an Open Question (adding one is the caller's call, Rule 2). Declared but not installed → write the specs; Result NOT RUN with the error quoted.
+   Config: `testDir`/`testMatch`, projects, `baseURL`, `retries`, `webServer`, `globalSetup`, `storageState`, `serviceWorkers`; version.
 2. Conventions from 2–3 existing specs and Page Objects: placement, naming, fixtures, auth, mock helpers.
 3. Targets: the caller's pages or flows, else changed UI files (`git diff HEAD --name-only --diff-filter=d` plus untracked `??` in `git status --short -uall`). Per page: controls and accessible names, each request (method + path), loading/empty/error branches.
 4. Oracles: acceptance criteria; UI copy or i18n for text; mock bodies from OpenAPI, shared types or serializers — none → mock ASSUMED.
@@ -48,11 +49,11 @@ Done when: every reported file exists on disk.
 ### Phase 3 — Run
 1. `--list --reporter=list` your files: collected = new tests × intended projects (+ any setup-project tests); fewer → fix placement or say why.
 2. Run with `--retries=0 --forbid-only --reporter=list` (+ `--update-snapshots=none` if `--help` shows a `none` mode); record exit code and passed, failed, skipped. `--reporter=list` keeps a config `html` reporter from overwriting `playwright-report/` and, on older versions, from serving the report after a failure and never exiting.
-3. Rerun once; a test whose result differs between the two runs is flaky (count these yourself: with `--retries=0` Playwright reports none) = test bug. Exit 0 with a new test skipped or uncollected is not a PASS.
+3. Rerun once; a test whose result differs between the two runs is flaky (count these yourself: with `--retries=0` Playwright reports none) = test bug. Exit 0 with a new test skipped or uncollected is not a PASS. No `none` mode → the first run wrote any missing baseline, so add `--ignore-snapshots` (1.26+) to the rerun or it passes against that baseline: snapshot assertions are judged by the first run alone, and a difference only they explain is not flakiness. Neither flag in `--help` → say in Execution that the rerun's snapshot results are not evidence.
 4. Classify each failure:
    - **Test bug** — wrong locator, unmatched mock, race, bad fixture → fix and rerun, max 3 cycles, then report verbatim.
    - **Code bug** — spec or contract says X, the UI does Y → keep the test; Evidence Gate.
-   - **Environment** — no browsers, server will not start, run timed out or killed → NOT RUN with the error quoted, plus `tsc --noEmit` output for TypeScript; never a test fix or a code finding. Run with Bash `timeout: 600000`.
+   - **Environment** — runner or browsers not installed, server will not start, run timed out or killed → NOT RUN with the error quoted, plus `tsc --noEmit` output for TypeScript; never a test fix or a code finding. Run with Bash `timeout: 600000`.
    Failures in tests you did not write → pre-existing: Open Questions, prefixed `pre-existing:`; they never change Result and you never touch them.
 Done when: final output captured, every failure classified.
 

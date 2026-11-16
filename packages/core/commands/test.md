@@ -14,6 +14,7 @@ Auto-detect the project's test runner, execute the tests for the requested scope
 - Consume the argument exactly as `scope` + optional `--coverage`; when no scope is given, default to `backend`.
 - If the chosen scope has no matching markers (e.g. `backend` on a frontend-only repo), fall back to running all detected suites — never do nothing.
 - Detect commands only from the Step 1–2 tables; do not invent test commands or flags.
+- Run JS runners as `npx --no -- <bin>` exactly as tabled: plain `npx` installs a missing package unprompted when stdin is not a TTY; `--no` refuses instead, and `--` keeps the runner's flags away from npx.
 - When a `Makefile` `test` target exists for the stack, prefer `make test`.
 - For scope `all`, run every detected suite sequentially and report each separately.
 - On failure, show the first 5 failure details for diagnosis — no more.
@@ -25,10 +26,10 @@ Scan the project root and subdirectories for stack markers:
 | Marker | Test Command | Stack |
 |--------|-------------|-------|
 | `go.mod` | `go test ./... -count=1` | Go |
-| `package.json` + vitest config | `npx vitest run` | Vitest |
-| `package.json` + jest config | `npx jest` | Jest |
+| `package.json` + vitest config | `npx --no -- vitest run` | Vitest |
+| `package.json` + jest config | `npx --no -- jest` | Jest |
 | `package.json` + playwright config | `npx --no -- playwright test` | Playwright (e2e) |
-| `cypress.config.{js,ts}` | `npx cypress run` | Cypress (e2e) |
+| `cypress.config.{js,ts}` | `npx --no -- cypress run` | Cypress (e2e) |
 | `pyproject.toml` / `pytest.ini` / `conftest.py` | `pytest` | Python (pytest) |
 | `pyproject.toml` with `[tool.unittest]` | `python -m unittest discover` | Python (unittest) |
 | `tests/e2e/` dir + pytest | `pytest tests/e2e/` | Python E2E (selenium) |
@@ -58,15 +59,15 @@ If the project is a monorepo, `cd` into the backend directory first (detect by `
 
 ### frontend
 Run frontend tests:
-- **Vitest**: `npx vitest run`
-- **Jest**: `npx jest`
+- **Vitest**: `npx --no -- vitest run`
+- **Jest**: `npx --no -- jest`
 
 If the project is a monorepo, `cd` into the frontend directory first (detect by `frontend/`, `web/`, `client/`, or `app/` containing package.json).
 
 ### e2e
 Run end-to-end tests:
 - **Playwright**: `npx --no -- playwright test`
-- **Cypress**: `npx cypress run`
+- **Cypress**: `npx --no -- cypress run`
 - **pytest + selenium**: `pytest tests/e2e/`
 
 ### all
