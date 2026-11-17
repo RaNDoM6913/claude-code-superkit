@@ -104,12 +104,12 @@ portion is fresh, merged, or overwritten. `--codex-only` rejects `--codex`,
 `--stacks`, `--extras`, `--profile`, and `--plugins` together. `--defaults`,
 `--no-docs`, and `--no-superpowers` are accepted but unnecessary in standalone mode.
 
-### v1.5.3 release artifact
+### v1.5.4 release artifact
 
-The v1.5.3 package archive includes both installers, the Claude layer and optional
+The v1.5.4 package archive includes both installers, the Claude layer and optional
 GAN sources; `--codex-only` selects only Codex assets for your project. Use the
-package archive attached to the [v1.5.3 GitHub release](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3),
-or create the same package format from a reviewed v1.5.3 checkout:
+package archive attached to the [v1.5.4 GitHub release](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.4),
+or create the same package format from a reviewed v1.5.4 checkout:
 
 ```bash
 npm pack --ignore-scripts --pack-destination /path/to/artifacts
@@ -123,14 +123,14 @@ node /path/to/extracted/package/bin/cli.js --codex-only
 ```
 
 The archive includes the installer, skill sources, hook script/template, and legacy baseline.
-The archive version is 1.5.3. Re-run the extracted installer to update an existing
+The archive version is 1.5.4. Re-run the extracted installer to update an existing
 project under the same preservation and backup policy. GitHub release archives
 and the tagged checkout are usable independently of npm registry availability.
-Version 1.5.3 is also [published on npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.3).
+Version 1.5.4 is also [published on npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.4).
 The equivalent command from your target Git project is
-`npx claude-code-superkit@1.5.3 --codex-only`.
-Published v1.5.3 artifacts retain **gpt-5.6-sol / medium** as the subagent default;
-the **gpt-6.1-sol / medium** source default above applies to the updated checkout.
+`npx claude-code-superkit@1.5.4 --codex-only`.
+Published v1.5.4 artifacts use the **gpt-6.1-sol / medium** subagent default above
+(v1.5.3 artifacts retained gpt-5.6-sol / medium).
 
 ### Use and manual installations
 
