@@ -11,7 +11,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads 457, GitHub clones 496, unique cloners 240; data through 2026-11-14](docs/assets/badge-downloads.svg)](docs/DOWNLOAD_STATS.md) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
-![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg) ![Claude prompts hardened by Claude Fable 5](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
+![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
 
 [🚀 Quick Start](#-installation) · [🔄 Workflow](#-how-dev-works) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
@@ -76,9 +76,13 @@ The full path has **16 phases, numbered 0–15**, starting with **Read Docs** an
 6. Updates documentation and reports outcomes, verification evidence and remaining work
 
 <details>
-<summary><strong>Claude prompt hardening</strong> — methodology and safeguards</summary>
+<summary><strong>Claude prompt engineering</strong> — methodology and safeguards</summary>
 
-### Claude prompt hardening
+### Opus 5.5 agent rework and Fable second pass
+
+All 56 Claude agents were **written by Opus 5.5 and reviewed by Fable 5.2 at `xhigh` effort**. Each agent got an independent read-only Fable review that checked its rules, output contract and examples against each other and its tool and platform facts against official docs, local `--help` output and throwaway fixtures; Opus applied the findings one agent per commit, with consumer commands and guides fixed in the same pass and anything outside an agent's file logged in the CHANGELOG. An A/B run showed `xhigh` finds about twice as many real defects as `medium`. Typical catches: side-effect checks that missed untracked files, commands that could download toolchains or packages, output lines the SubagentStop hook misread, and factual errors in framework, WCAG and SQL rules. Agents now declare an enforced `tools:` allowlist (Claude Code ignores `allowed-tools:` on subagents).
+
+### Claude prompt hardening (v1.5.0)
 
 The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The Claude-layer countermeasures include:
 
@@ -93,7 +97,7 @@ The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructio
 
 Contracts instead of vibes — Opus executes best when every judgment call is a decision table and every output has an exact contract.
 
-All Claude agents use the `opus` alias. Historical Claude Fable 5 hardening applies to the Claude layer; GPT role sources and Codex configuration are maintained separately.
+All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review, like the earlier Claude Fable 5 hardening, apply to the Claude layer; GPT role sources and Codex configuration are maintained separately.
 
 </details>
 

@@ -1,6 +1,6 @@
 # claude-code-superkit
 
-Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra.
+Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh); GPT role sources authored by Astra.
 
 ## Contributor Working Agreement
 
@@ -148,7 +148,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
 2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
 3. **CLAUDE.md** (this file) — counts table, structure section
-4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude prompts hardened by Claude Fable 5; GPT role sources authored by Astra." Keep Claude component counts separate from Codex skills/handlers and scope historical Fable authorship to the Claude layer. — THIS IS MANDATORY AND MUST NOT BE SKIPPED
+4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh); GPT role sources authored by Astra." Keep Claude component counts separate from Codex skills/handlers and keep the Claude-layer credit as written by Opus 5.5 and reviewed by Fable 5.2 (never "written by Fable"). — THIS IS MANDATORY AND MUST NOT BE SKIPPED
 5. **GitHub Release** — `gh release edit` if release already exists for this version
 
 ### Tier 2 — Update when relevant:
