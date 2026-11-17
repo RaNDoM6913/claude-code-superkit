@@ -4,7 +4,7 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
-- **v1.5.4 delivery record:** `docs/releases/1.5.4.md` binds the published GitHub release, tag and asset hashes to their verification; npm publication is pending the owner's login.
+- **v1.5.4 delivery record:** `docs/releases/1.5.4.md` binds the published GitHub release, tag and asset hashes to their verification; npm 1.5.4 (`latest`) is byte-identical to the GitHub tarball.
 
 ## [1.5.4] — 2026-11-17
 
