@@ -1,9 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="460" height="28" viewBox="0 0 460 28" role="img" aria-label="Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh)">
-  <title>Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh)</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="28" viewBox="0 0 560 28" role="img" aria-label="Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)">
+  <title>Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)</title>
   <rect width="190" height="28" fill="#1e293b"/>
-  <rect x="190" width="270" height="28" fill="#FF6B35"/>
+  <rect x="190" width="370" height="28" fill="#FF6B35"/>
   <g fill="#ffffff" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="10" font-weight="700" letter-spacing="0.8">
     <text x="95" y="18">WRITTEN BY OPUS 5.5</text>
-    <text x="325" y="18">REVIEWED BY FABLE 5.2 (XHIGH)</text>
+    <text x="375" y="18">REVIEWED &amp; CORRECTED BY FABLE 5.2 (XHIGH)</text>
   </g>
 </svg>

@@ -11,7 +11,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads 457, GitHub clones 496, unique cloners 240; data through 2026-11-14](docs/assets/badge-downloads.svg)](docs/DOWNLOAD_STATS.md) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
-![56 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
+![56 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
 
 [🚀 Quick Start](#-installation) · [🔄 Workflow](#-how-dev-works) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
@@ -80,7 +80,7 @@ The full path has **16 phases, numbered 0–15**, starting with **Read Docs** an
 
 ### Opus 5.5 agent rework and Fable second pass
 
-All 56 Claude agents were **written by Opus 5.5 and reviewed by Fable 5.2 at `xhigh` effort**. Each agent got an independent read-only Fable review that checked its rules, output contract and examples against each other and its tool and platform facts against official docs, local `--help` output and throwaway fixtures; Opus applied the findings one agent per commit, with consumer commands and guides fixed in the same pass and anything outside an agent's file logged in the CHANGELOG. An A/B run showed `xhigh` finds about twice as many real defects as `medium`. Typical catches: side-effect checks that missed untracked files, commands that could download toolchains or packages, output lines the SubagentStop hook misread, and factual errors in framework, WCAG and SQL rules. Agents now declare an enforced `tools:` allowlist (Claude Code ignores `allowed-tools:` on subagents).
+All 56 Claude agents were **written by Opus 5.5 and reviewed and corrected by Fable 5.2 at `xhigh` effort**: Fable supplied the exact replacement text for every defect it found, and Opus applied it. Each agent got an independent read-only Fable review that checked its rules, output contract and examples against each other and its tool and platform facts against official docs, local `--help` output and throwaway fixtures; the fixes landed one agent per commit, with consumer commands and guides fixed in the same pass and anything outside an agent's file logged in the CHANGELOG. An A/B run showed `xhigh` finds about twice as many real defects as `medium`. Typical catches: side-effect checks that missed untracked files, commands that could download toolchains or packages, output lines the SubagentStop hook misread, and factual errors in framework, WCAG and SQL rules. Agents now declare an enforced `tools:` allowlist (Claude Code ignores `allowed-tools:` on subagents).
 
 ### Claude prompt hardening (v1.5.0)
 
