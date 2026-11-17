@@ -78,13 +78,13 @@ Current: `TODO: 000001..000NNN`
 
 ## Context Management
 
-Opus 4.8 provides a 1M-token context window, so compaction is rare — do not stop tasks early or abbreviate work due to context concerns. Opus 4.8 also recovers better after compaction, staying on task across long agentic traces. Be persistent and autonomous: complete tasks fully.
+Opus 5.5 provides a 1M-token context window, so compaction is rare — do not stop tasks early or abbreviate work due to context concerns. Opus 5.5 also recovers well after compaction, staying on task across long agentic traces. Be persistent and autonomous: complete tasks fully.
 
 For unusually long sessions that do approach the limit, save progress to `.claude/.task-state.json` before the context refreshes. When compaction happens, always preserve: modified file list, current task description, test commands, and any active plan progress. For normal work, this is not needed.
 
 ## Parallel Execution
 
-Opus 4.8 handles parallel tool calls well — use them aggressively whenever operations are independent. Batch into a single message:
+Opus 5.5 handles parallel tool calls well — use them aggressively whenever operations are independent. Batch into a single message:
 
 - Reading 3+ files → multiple `Read` calls in parallel
 - Searching for different patterns → multiple `Grep` calls in parallel
@@ -96,9 +96,9 @@ Only sequence calls when the result of one informs the inputs of the next (e.g. 
 
 ## Effort
 
-Opus 4.8 exposes an effort dial (default `high` on Claude Code; `xhigh` and `max` for demanding work; adaptive thinking only — no thinking budgets). Match effort to the task:
+Opus 5.5 exposes an effort dial (API default `medium`, Claude Code sets its own session default; `xhigh` and `max` for demanding work; thinking is always on — adaptive only, no thinking budgets). Match effort to the task:
 - **Deep specialists** (reality-checker, security-scanner, architecture/critic reviews, gan-evaluator) → `xhigh` or `max`.
-- **Standard reviews / feature work** → `high` (the default).
+- **Standard reviews / feature work** → `high` (set it explicitly: the API default on Opus 5.5 is `medium`).
 - **Trivial mechanical edits** → default is fine.
 
 Raise effort on retries and failed verification gates rather than re-running at the same level.

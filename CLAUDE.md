@@ -130,8 +130,8 @@ VERSION                     # current release version (keep in sync with package
 
 ## Conventions
 
-- **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 4.8, 1M context**) — kit automatically picks up new Opus versions without code changes.
-- **Effort**: Opus 4.8 defaults to `high`; deep specialist agents (reality-checker, security-scanner, critic/architecture reviews, gan-evaluator) are run at `xhigh`/`max`. See the per-role guidance in the user CLAUDE.md template (`packages/core/CLAUDE.md`).
+- **Model**: ALL agents use `model: opus`. No sonnet. No haiku. The `opus` alias routes to the latest Opus release (currently **Opus 5.5, 1M context**) — kit automatically picks up new Opus versions without code changes.
+- **Effort**: Opus 5.5's API default is `medium` (thinking is always on; Claude Code sets its own session default); deep specialist agents (reality-checker, security-scanner, critic/architecture reviews, gan-evaluator) are run at `xhigh`/`max`. See the per-role guidance in the user CLAUDE.md template (`packages/core/CLAUDE.md`).
 - **Codex model**: `gpt-6-astra` with `model_reasoning_effort = "high"`; subagent fallback `gpt-6.1-sol` / `medium`. Contributor routing and GPT prompt authorship follow `docs/WORKING_AGREEMENT.md`.
 - **Agent format**: YAML frontmatter (name, description, model, tools) + markdown body
 - **Phase 0**: Every agent starts with "Load Project Context" (reads CLAUDE.md + docs/architecture/)

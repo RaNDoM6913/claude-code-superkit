@@ -11,7 +11,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads 457, GitHub clones 496, unique cloners 240; data through 2026-11-14](docs/assets/badge-downloads.svg)](docs/DOWNLOAD_STATS.md) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
-![56 agents running on Opus 4.8](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
+![56 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
 
 [🚀 Quick Start](#-installation) · [🔄 Workflow](#-how-dev-works) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
@@ -103,7 +103,7 @@ All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 4.8) and Codex CLI (current source defaults: GPT-6 Astra coordinator, GPT-6.1 Sol workers). v1.5.3 ships standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
+**One kit, two harnesses** — Claude Code (Opus 5.5) and Codex CLI (current source defaults: GPT-6 Astra coordinator, GPT-6.1 Sol workers). v1.5.3 ships standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|

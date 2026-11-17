@@ -72,7 +72,7 @@ superkit_advise() {
 export -f superkit_advise 2>/dev/null || true
 
 # superkit_should_emit_advisory <message> — per-session dedup/throttle for
-# noisy ADVISORY hooks (Opus 4.8 self-flags, so repeated nudges are noise).
+# noisy ADVISORY hooks (Opus self-flags, so repeated nudges are noise).
 #   returns 0 → emit (first time, or window elapsed)
 #   returns 1 → suppress (identical advisory already emitted within window)
 # Keyed on superkit_session_key + a hash of the message, with a sliding

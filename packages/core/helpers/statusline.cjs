@@ -258,14 +258,14 @@ function getContextBudget(payload, scanned) {
         ?? (typeof process.env.CLAUDE_CONTEXT_TOKENS_MAX === 'string'
             ? parseInt(process.env.CLAUDE_CONTEXT_TOKENS_MAX, 10) || null
             : null)
-        ?? 1000000;  // default: Opus 4.8 1M
+        ?? 1000000;  // default: Opus 1M context
       return renderCtx(used, max);
     }
   }
 
   // Fallback path: no usable native field → measured from the transcript.
   if (scanned && scanned.used != null) {
-    // Model string: the '[1m]' marker rides on model.id (e.g. claude-opus-4-8[1m]);
+    // Model string: the '[1m]' marker rides on model.id (e.g. claude-opus-5-5[1m]);
     // combine id + display_name so either field can carry it.
     const m = payload.model;
     const modelString = typeof m === 'string'

@@ -127,7 +127,7 @@ EOF
   # additionalContext emission — Claude Code can swallow non-blocking
   # PreToolUse stderr, so the JSON channel is what reliably reaches the model.
   #
-  # Per-session throttle (Opus 4.8 self-flags): suppress an identical nudge
+  # Per-session throttle (Opus self-flags): suppress an identical nudge
   # repeated within CLAUDE_NUDGE_WINDOW_MIN (default 10m; 0 disables). This
   # gates the advisory EMISSION only — the strict (exit 2) block above is
   # never throttled.

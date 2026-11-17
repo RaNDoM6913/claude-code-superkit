@@ -42,7 +42,7 @@ case "$TOOL_NAME" in
     echo "$count" > "$STREAK_FILE"
 
     if [ "$count" -ge 5 ]; then
-      # Per-session throttle (Opus 4.8 self-flags). Key on a stable string
+      # Per-session throttle (Opus self-flags). Key on a stable string
       # (NOT the changing $count) so the same nudge isn't repeated every edit
       # within the window. CLAUDE_NUDGE_WINDOW_MIN=0 disables throttling.
       EMIT=1

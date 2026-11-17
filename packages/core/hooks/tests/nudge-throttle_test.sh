@@ -1,7 +1,7 @@
 #!/bin/bash
 # nudge-throttle_test.sh — regression test for advisory throttling (Task 18)
 #
-# Opus 4.8 self-flags, so repeated identical advisories are noise. The
+# Opus self-flags, so repeated identical advisories are noise. The
 # superkit_should_emit_advisory helper suppresses an identical advisory that
 # recurs within CLAUDE_NUDGE_WINDOW_MIN (default 10). This test proves:
 #   1. first identical advisory is emitted, second within the window is suppressed
