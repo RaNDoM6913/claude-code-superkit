@@ -8,12 +8,12 @@
   "automatic_collection_configured": false,
   "npm": {
     "package": "claude-code-superkit",
-    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-16/claude-code-superkit",
+    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-17/claude-code-superkit",
     "latest_available_day_source": "https://api.npmjs.org/downloads/point/last-day/claude-code-superkit",
     "first_publication_date": "2026-10-16",
     "coverage_start": "2026-10-16",
-    "data_through": "2026-11-16",
-    "total_downloads": 487,
+    "data_through": "2026-11-17",
+    "total_downloads": 670,
     "unobserved_ranges": [],
     "daily_downloads": {
       "2026-10-16": 275,
@@ -47,21 +47,22 @@
       "2026-11-13": 12,
       "2026-11-14": 11,
       "2026-11-15": 18,
-      "2026-11-16": 12
+      "2026-11-16": 12,
+      "2026-11-17": 183
     }
   },
   "git": {
     "source": "https://api.github.com/repos/RaNDoM6913/claude-code-superkit/traffic/clones",
     "coverage_start": "2026-10-19",
-    "data_through": "2026-11-16",
+    "data_through": "2026-11-17",
     "history_before_coverage_start": "unavailable",
-    "total_recorded_clones": 948,
+    "total_recorded_clones": 1440,
     "unobserved_ranges": [],
     "last_api_window": {
-      "start": "2026-11-03",
-      "end": "2026-11-16",
-      "total_clones": 856,
-      "unique_cloners": 263
+      "start": "2026-11-04",
+      "end": "2026-11-17",
+      "total_clones": 1334,
+      "unique_cloners": 402
     },
     "daily_clones": {
       "2026-10-19": 7,
@@ -92,10 +93,11 @@
       "2026-11-13": 11,
       "2026-11-14": 16,
       "2026-11-15": 24,
-      "2026-11-16": 428
+      "2026-11-16": 428,
+      "2026-11-17": 492
     },
     "unique_cloners": {
-      "total": 346,
+      "total": 537,
       "method": "unique cloners of the first saved API window plus the sum of daily unique cloners for each later UTC date; people active on several periods are counted once per period, so this is an upper bound on distinct people",
       "base_period": {
         "start": "2026-10-19",
@@ -118,7 +120,8 @@
         "2026-11-13": 6,
         "2026-11-14": 10,
         "2026-11-15": 14,
-        "2026-11-16": 92
+        "2026-11-16": 92,
+        "2026-11-17": 191
       },
       "unobserved_daily_uniques": "Dates before 2026-11-02 were saved only as one window aggregate; daily uniques for them are unavailable."
     }
@@ -126,27 +129,37 @@
   "release_archives": {
     "included_in_badges": false,
     "source": "https://api.github.com/repos/RaNDoM6913/claude-code-superkit/releases?per_page=100",
-    "total_downloads": 14,
+    "total_downloads": 20,
     "assets": [
+      {
+        "tag": "v1.6.0",
+        "name": "claude-code-superkit-1.6.0-source.zip",
+        "downloads": 2
+      },
+      {
+        "tag": "v1.6.0",
+        "name": "claude-code-superkit-1.6.0.tgz",
+        "downloads": 3
+      },
       {
         "tag": "v1.5.4",
         "name": "claude-code-superkit-1.5.4-source.zip",
-        "downloads": 2
+        "downloads": 3
       },
       {
         "tag": "v1.5.4",
         "name": "claude-code-superkit-1.5.4.tgz",
-        "downloads": 3
+        "downloads": 4
       },
       {
         "tag": "v1.5.3",
         "name": "claude-code-superkit-1.5.3-source.zip",
-        "downloads": 3
+        "downloads": 4
       },
       {
         "tag": "v1.5.3",
         "name": "claude-code-superkit-1.5.3.tgz",
-        "downloads": 3
+        "downloads": 4
       }
     ],
     "excludes": [
@@ -300,6 +313,28 @@
       "git_added": 452,
       "corrections_to_saved_days": [],
       "notes": "Full npm history 2026-10-16..2026-11-16 re-compared with all saved days: no differences. New npm days 2026-11-15 (18) and 2026-11-16 (12) saved; 2026-11-16 is the day the last-day endpoint confirms; 2026-11-17 and 2026-11-18 (reported as 0, not yet published/unfinished) not saved. Git clones API window 2026-11-03..2026-11-16 (top-level 856 clones, 263 uniques): saved days 11-03..11-14 re-checked, no count or unique differences; new days 11-15 (24 clones, 14 uniques) and 11-16 (428, 92) saved as reported; no 2026-11-17 entry in the response, not saved. Unobserved ranges: none. Release archives re-read across all releases: v1.5.3 zip 2 to 3, tgz 2 to 3; new v1.5.4 zip 2, tgz 3 (total 4 to 14; SHA256SUMS excluded). Unique cloners: base 37 + daily 309 (11-02..11-16) = 346."
+    },
+    {
+      "checked_on": "2026-11-18",
+      "kind": "incremental",
+      "previous_npm_total": 487,
+      "npm_total": 670,
+      "previous_git_total": 948,
+      "git_total": 1440,
+      "previous_unique_total": 346,
+      "unique_total": 537,
+      "npm_data_through": "2026-11-17",
+      "git_data_through": "2026-11-17",
+      "new_dates": [
+        "2026-11-17"
+      ],
+      "npm_added": 183,
+      "git_added": 492,
+      "unique_added": 191,
+      "corrections_to_saved_days": [],
+      "release_archives_previous": 14,
+      "release_archives_total": 20,
+      "notes": "Full npm history 2026-10-16..2026-11-17 re-compared with saved days; Git clones window 2026-11-04..2026-11-17 (top-level 1334 clones, 402 uniques) re-checked against saved days. New day 2026-11-17: npm 183, clones 492, uniques 191 (v1.5.4 release day). 2026-11-18 not saved (unfinished UTC day). Release archive snapshot replaced (zip/tgz only, SHA256SUMS excluded); it includes maintainer verification downloads."
     }
   ]
 }
