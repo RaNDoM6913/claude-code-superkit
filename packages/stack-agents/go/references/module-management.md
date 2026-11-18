@@ -49,12 +49,14 @@ Go's "major version in path" rule means upgrading to v2 of a library requires up
 ## Pinning vs latest
 
 ```go
-// Pinned (recommended)
+// Direct requirement — imported by the main module
 require github.com/jackc/pgx/v5 v5.5.0
 
-// Range (avoid in production)
+// Indirect requirement — no main-module package imports it; same meaning otherwise
 require github.com/jackc/pgx/v5 v5.5.0 // indirect
 ```
+
+There is no range syntax in `require`: every line is a single **minimum** version, and minimal version selection (MVS) picks the highest minimum across the whole graph — a dependency can raise `v5.5.0` to a newer selected version. `// indirect` records provenance, not looseness. Reproducibility comes from the committed `go.mod` + `go.sum` (the selected graph), not from "exact pins"; check what is actually selected with `go list -m all`.
 
 Always commit `go.sum` — it's the integrity checklist. Without it, builds aren't reproducible.
 
@@ -132,7 +134,7 @@ This writes a `tool` block to `go.mod`:
 ```
 tool (
     golang.org/x/vuln/cmd/govulncheck
-    golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize
+    golang.org/x/tools/go/analysis/passes/modernize/cmd/modernize
 )
 ```
 
@@ -176,7 +178,7 @@ Run in CI; failures are usually CVEs in deps that need an upgrade.
 
 - **Committing `vendor/` without need** — bloats repo; only commit if you need air-gapped builds
 - **Ignoring `go.sum`** — destroys build reproducibility
-- **Range-version requires** (`v1.0.0`) — pins should be exact
+- **Treating `require` versions as exact pins** — they are MVS minimums; verify the selected version with `go list -m <module>` before reasoning about behavior
 - **Stale `go mod tidy`** — run it on every PR
 - **Mixing `replace` and `workspace`** — pick one
 

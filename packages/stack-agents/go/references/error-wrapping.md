@@ -154,23 +154,30 @@ func (e *MultiError) Unwrap() []error {
 | Verb | Chain preserved? | Caller can inspect? | Use when |
 |------|-----------------|--------------------|----|
 | `%w` | Yes | Yes — `errors.Is`/`errors.As` work | Default choice — expose error chain |
-| `%v` | No | No — chain is broken | Intentionally hiding implementation details |
+| `%v` | No | No — chain is broken | Intentionally hiding the error type (message text is kept) |
 
 ```go
 // %w — preserves chain (default choice)
 return fmt.Errorf("UserService.Create: %w", err)
 // Caller can: errors.Is(err, pgx.ErrNoRows) → true
 
-// %v — breaks chain (intentional hiding)
+// %v — breaks chain (hides the error *type*, not its text)
 return fmt.Errorf("external API error: %v", err)
-// Caller cannot inspect the original error
-// Use when: internal implementation detail should not leak
+// Caller cannot inspect the original error with errors.Is/As,
+// but err.Error() is still embedded verbatim — same string as with %w
+// Use when: callers must not couple to an internal error type
 ```
 
 **When to use %v (break chain):**
-- External API errors that should be opaque to callers
+- External API errors whose types should be opaque to callers
 - Implementation details that may change (DB driver errors in a service layer)
-- Security-sensitive errors (don't expose internal error messages to HTTP responses)
+
+**%v is not redaction.** Neither verb removes the cause's message, so forwarding either error's `Error()` to an HTTP response leaks it. For security-sensitive errors, send a fixed public message/code and keep the original error only in internal logs/telemetry:
+
+```go
+slog.ErrorContext(r.Context(), "create user failed", "err", err) // internal only
+http.Error(w, "internal error", http.StatusInternalServerError)  // fixed public text
+```
 
 ## Anti-Patterns
 

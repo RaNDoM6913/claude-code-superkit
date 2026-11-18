@@ -247,8 +247,8 @@ for _, item := range items {
 ```
 
 **Migration recipe:**
-1. Remove `item := item` shadow copies in range loops
-2. This is automatic with Go 1.22+ toolchain
+1. Confirm the governing language version is 1.22+: the `go` directive of the module containing the file, unless a `//go:build go1.N` constraint on that file sets a lower one. The installed toolchain alone is not enough — a `go 1.21` module built with Go 1.26 keeps the old shared-variable semantics
+2. Only then remove `item := item` shadow copies (range and 3-clause `for` loops); in a pre-1.22 module or file, keep them
 
 #### Enhanced ServeMux
 

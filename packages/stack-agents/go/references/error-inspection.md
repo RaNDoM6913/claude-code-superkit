@@ -263,20 +263,20 @@ if errors.As(err, &verr) {
 ### 3. Checking for nil After errors.As
 
 ```go
-// WRONG — errors.As already confirms non-nil
+// WRONG — assumes errors.As == true means verr != nil
 var verr *ValidationError
 if errors.As(err, &verr) {
-    if verr != nil { // redundant — always true here
-        // ...
-    }
+    log.Warn("validation", "field", verr.Field) // panics if the chain holds a typed nil *ValidationError
 }
 
-// CORRECT — verr is guaranteed non-nil inside the if
+// CORRECT — keep the nil guard unless every producer is known never to return a typed nil
 var verr *ValidationError
-if errors.As(err, &verr) {
+if errors.As(err, &verr) && verr != nil {
     log.Warn("validation", "field", verr.Field)
 }
 ```
+
+`errors.As` guarantees a type match and an assignment, not a non-nil pointer: a function that returns `var p *ValidationError; return p` yields a non-nil `error` whose wrapped value is a typed nil, and `As` happily assigns that nil to `verr`. Only drop the guard when the non-nil invariant is proven (the real fix is the producer returning a literal `nil`).
 
 ### 4. Wrong errors.As Target Type
 
@@ -296,9 +296,9 @@ if errors.As(err, &verr) {
 ### 5. Ignoring Multi-Error Branches
 
 ```go
-// WRONG — only checks first error
+// WRONG — errors.Unwrap does not unwrap Join at all
 err := errors.Join(errA, errB, errC)
-if errors.Unwrap(err) == errA { // only gets first
+if errors.Unwrap(err) == errA { // always false: Unwrap returns nil for Unwrap() []error
 
 // CORRECT — errors.Is checks all branches
 if errors.Is(err, errA) { // checks errA, errB, errC

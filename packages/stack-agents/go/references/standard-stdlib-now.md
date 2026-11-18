@@ -6,7 +6,7 @@ Catalog of standard library packages that replace common third-party dependencie
 
 | Was: | Now: |
 |------|------|
-| `github.com/elliotchance/orderedmap` | `slices.SortedFunc` + `maps.Keys` (1.23+) |
+| `github.com/elliotchance/orderedmap` used only to iterate in a sorted order | `slices.Sorted(maps.Keys(m))` / `slices.SortedFunc` (1.23+) — sorted snapshot only; it does **not** preserve insertion order, so keep the dependency (or a map + order slice) when insertion order or the OrderedMap API is the point |
 | `github.com/duo-labs/webauthn/protocol/util` for slice utils | `slices.Contains`, `slices.Index`, `slices.Equal` |
 | Custom `Reverse(s)` | `slices.Reverse` |
 | Manual `Map`/`Filter` loops | `slices.Collect`, `slices.DeleteFunc` |

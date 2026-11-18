@@ -62,13 +62,21 @@ Subscribe to the [go-announce](https://groups.google.com/g/golang-announce) mail
 
 ## go-modernize
 
-The `go fix` tool is being replaced by `go fix -modernize`. Run it periodically:
+There is no `go fix -modernize` flag. Pick the command by the toolchain (`go version`) and run it periodically:
 
 ```bash
-# Go 1.24+ tool directive: pin the version in go.mod, run reproducibly
-go get -tool golang.org/x/tools/gopls/internal/analysis/modernize/cmd/modernize
-go tool modernize -fix ./...
+# Go 1.26+: the modernizers ship inside go fix (list them: go tool fix help)
+go fix -diff ./...   # preview only — prints the patch, changes nothing
+go fix ./...         # REWRITES source files in place
+
+# Go 1.24–1.25: pin the standalone analyzer with a tool directive
+# (the old gopls/internal/analysis/modernize/cmd/modernize path is deprecated)
+go get -tool golang.org/x/tools/go/analysis/passes/modernize/cmd/modernize
+go tool modernize ./...       # report only
+go tool modernize -fix ./...  # REWRITES source files in place
 ```
+
+`go fix ./...` and `-fix` modify the working tree — run them only as a deliberate change, never as part of a read-only review (use `go fix -diff` or the report-only form there). Rewrites are still gated on each module's/file's language version.
 
 Catches:
 - `for i := 0; i < n; i++` → `for i := range n`

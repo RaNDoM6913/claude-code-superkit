@@ -213,6 +213,8 @@ func BenchmarkHash(b *testing.B) {
 
 Alternatives: pass the result to `b.Log` conditionally (`if sink == 0 { b.Log(sink) }`), or call `runtime.KeepAlive(result)`.
 
+Go 1.24+: `for b.Loop() { hash("hello") }` needs neither a sink nor `b.ResetTimer` — Loop keeps arguments/results of calls and assigned variables written *syntactically inside* the loop braces alive, and resets the timer on its first call. This holds only for the exact `for b.Loop()` form; don't mix it with a `b.N` loop.
+
 Symptom: nanoseconds per op that don't match the operation cost. `go test -gcflags="-m"` will show inlining / dead-store eliminations.
 
 ## Reading Benchmark Output
@@ -257,16 +259,16 @@ Before claiming a perf improvement:
 - [ ] Ran on a quiet machine (closed other heavy apps)
 - [ ] Compared with `benchstat`, saw `p < 0.05`
 - [ ] Inspected `B/op` and `allocs/op` — not just `ns/op`
-- [ ] Added a sink or `runtime.KeepAlive` if the result isn't consumed
+- [ ] Added a sink or `runtime.KeepAlive` if the result isn't consumed (`b.N` loops; `for b.Loop()` keeps in-loop values alive — Go 1.24+)
 - [ ] Reproduced on a second machine / CI runner
 
 ## Review Checklist
 
 When reviewing benchmark code, flag:
 
-- **CRITICAL** — Benchmark result never consumed (`sink` missing) → measuring nothing
+- **CRITICAL** — `for i := 0; i < b.N; i++` benchmark whose result is never consumed (`sink` missing) → measuring nothing. Not for `for b.Loop() { ... }` (Go 1.24+): Loop keeps call arguments/results in the loop body alive, so no sink is needed
 - **WARNING** — `-count=1` assumed in CI scripts or PR templates → no statistical rigor
-- **WARNING** — Setup inside the loop body, no `b.ResetTimer`
+- **WARNING** — Setup inside the loop body; or, in a `b.N` loop, expensive setup before it with no `b.ResetTimer` (`b.Loop` resets the timer on its first call — don't demand `ResetTimer` there)
 - **WARNING** — Benchmark without `-benchmem` / no `b.ReportAllocs()` → missing allocation story
 - **SUGGESTION** — No sub-benchmarks (`b.Run`) for a parameter sweep that would surface nonlinear cost
 - **SUGGESTION** — Missing `b.SetBytes` in an I/O / parsing benchmark (throughput easier to reason about)
