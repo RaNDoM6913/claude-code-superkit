@@ -99,7 +99,7 @@ separate evidence levels. See the [complete setup/update contract](../../package
 Codex uses TOML instead of JSON for configuration:
 
 ```toml
-model = "gpt-6-astra"
+model = "gpt-6.2-astra"
 model_reasoning_effort = "high"
 web_search = "live"
 
@@ -111,7 +111,7 @@ default_subagent_model = "gpt-6.1-sol"
 default_subagent_reasoning_effort = "medium"
 ```
 
-Astra coordinates and accepts critical decisions; Sol performs bounded delegated work. Skills themselves do not select a model. Explicit dispatch settings override the subagent defaults, and the runtime must support the requested model and effort. The installer preserves an existing project config. Configuration validation is separate from live behavioral acceptance, which remains pending for the migration.
+Codex agent refresh by GPT-6.2 Astra (xhigh). The template sets the coordinator effort to `high`. Astra coordinates and accepts critical decisions; Sol performs bounded delegated work. Skills themselves do not select a model. Explicit dispatch settings override the subagent defaults, and the runtime must support the requested model and effort. The installer preserves an existing project config. Configuration validation is separate from live behavioral acceptance, which remains pending for the migration.
 
 ## Tool Mapping
 

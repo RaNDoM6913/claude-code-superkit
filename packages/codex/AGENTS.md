@@ -196,7 +196,7 @@ Do NOT rely on a single layer — update docs proactively with every code change
 
 ## Model Configuration
 
-The shipped `.codex/config.toml` selects **gpt-6-astra / high** for the coordinator
+The shipped `.codex/config.toml` selects **gpt-6.2-astra / high** for the coordinator
 and **gpt-6.1-sol / medium** as the subagent fallback. Configuration is a default,
 not evidence of which model executed a task or of independent review. Honor the
 user's explicit routing and verify available models/efforts before dispatch.
@@ -285,7 +285,7 @@ See [official hook/trust documentation](https://learn.chatgpt.com/docs/hooks).
 
 ### Available Skills
 
-The current source catalog contains 83 skills. `red-blue-auditor` supports an
+Codex agent refresh by GPT-6.2 Astra (xhigh). The current source catalog contains 83 skills. `red-blue-auditor` supports an
 explicitly selected read-only Red / Blue / Auditor review; no new automatic
 orchestrator dispatch is added.
 

@@ -1,7 +1,7 @@
 # claude-code-superkit — Codex CLI configuration
 # Place in .codex/config.toml (project) or ~/.codex/config.toml (global)
 
-model = "gpt-6-astra"
+model = "gpt-6.2-astra"
 model_reasoning_effort = "high"
 web_search = "live"
 

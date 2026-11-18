@@ -31,7 +31,7 @@ It creates root `AGENTS.md`, `.codex/config.toml`, and
 `.codex/rules/default.rules` only when absent. Existing copies are **always
 preserved**, including prior stock templates. Review new template defaults and
 merge any desired changes yourself. Current source coordinator configuration is
-**gpt-6-astra / high**, with **gpt-6.1-sol / medium** subagent fallback;
+**gpt-6.2-astra / high**, with **gpt-6.1-sol / medium** subagent fallback;
 configuration is not proof of model availability or behavioral quality.
 
 It also installs two native hook handlers in `.codex/hooks/superkit.mjs` and
@@ -166,7 +166,7 @@ create `.agents/skills/` before copying and preserve any existing same-name fold
 
 ### 37 Agent Skills (available roles)
 
-These include converted core/extras roles and native GPT roles with Astra-authored instructions. `native-skills.txt` lists protected native roles, adapted workflows and support sources; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
+Codex agent refresh by GPT-6.2 Astra (xhigh). This catalog includes core and extras roles. `native-skills.txt` lists protected native roles, adapted workflows and support sources; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers
@@ -254,7 +254,7 @@ Plus 1 Codex approval rules file (`packages/codex/rules/default.rules`), 2 hook 
 The default `config.toml` separates coordinator and subagent models:
 
 ```toml
-model = "gpt-6-astra"
+model = "gpt-6.2-astra"
 model_reasoning_effort = "high"
 web_search = "live"
 

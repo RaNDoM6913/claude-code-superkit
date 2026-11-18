@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/superkit-header.png" alt="Superkit — agents for Claude Code and GPT agents for Codex; written by Claude Opus 5.5, reviewed and corrected by Claude Fable 5.2 (xhigh), GPT role sources by GPT-6 Astra · Ultra" width="960">
+  <img src="docs/assets/superkit-header.png" alt="Superkit — agents for Claude Code and GPT agents for Codex; written by Claude Opus 5.5, reviewed and corrected by Claude Fable 5.2 (xhigh), Codex agent refresh by GPT-6.2 Astra (xhigh)" width="960">
 </p>
 
 <p align="center">
@@ -11,7 +11,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads 487, GitHub clones 948, unique cloners 346; data through 2026-11-16](docs/assets/badge-downloads.svg)](docs/DOWNLOAD_STATS.md) [![MIT license](docs/assets/badge-license.svg)](LICENSE)
 
-![56 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex: GPT-6 ASTRA ULTRA](docs/assets/badge-codex.svg)
+![56 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex agent refresh by GPT-6.2 Astra (xhigh)](docs/assets/badge-codex.svg)
 
 [🚀 Quick Start](#-installation) · [🔄 Workflow](#-how-dev-works) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
@@ -103,7 +103,7 @@ All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review
 
 ## 📦 What's Inside
 
-**One kit, two harnesses** — Claude Code (Opus 5.5) and Codex CLI (current source defaults: GPT-6 Astra coordinator, GPT-6.1 Sol workers). v1.5.3 introduced standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
+**One kit, two harnesses** — Claude Code (Opus 5.5) and Codex CLI (current source defaults: GPT-6.2 Astra coordinator, GPT-6.1 Sol workers). v1.5.3 introduced standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -201,7 +201,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
+From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6.2-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
 
 ### Which command do I use?
 
@@ -334,7 +334,7 @@ superkit works with both **Claude Code** and **OpenAI Codex CLI**:
 
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
-| Model (current source) | Opus (per agent) | **gpt-6-astra / high** coordinator; **gpt-6.1-sol / medium** subagent default |
+| Model (current source) | Opus (per agent) | **gpt-6.2-astra / high** coordinator; **gpt-6.1-sol / medium** subagent default |
 | Agents / Skills | 56 agents | 83 skills in `packages/codex/skills/` (9 commands + 37 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 83) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
 | Hooks | 42 shipped (26 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + 2 internal + Stop | 2 native handlers in 1 script: destructive-Git check + tracked/staged whitespace Stop check; review/trust required |
