@@ -55,7 +55,7 @@ Non-npm tools: confirm flags in the installed `--help`. A findings report is a r
 ## Phase 4 — Freshness
 
 - npm: `npm outdated --json` (exit 1 = something outdated). No `current` = not installed, and uninstalled dev/optional/peer dependencies are left out entirely — without `node_modules` only `dependencies` are covered (compare `latest` with the lock version); the rest is NOT EVALUATED. Registry 403/404 packages are silently omitted: with private packages, unlisted ≠ current.
-- Go: probe `go list -m <unreplaced direct dep>@latest` first — with lookups disabled (`GOPROXY=off`) `go list -m -u` lists no updates, exit 0. Then `go list -m -u -json all`: `Update`, `Indirect`, `Deprecated`, `Retracted`.
+- Go: probe `go list -m <unreplaced direct dep>@latest` first — with proxy lookups disabled (`GOPROXY=off`; `GONOPROXY`/`GOPRIVATE` modules still resolve directly) `go list -m -u` lists no updates, exit 0. Then `go list -m -u -json all`: `Update`, `Indirect`, `Deprecated`, `Retracted`.
 - Python: virtualenv `python -m pip list --outdated --format=json`; an unreachable index gives `[]`, exit 0 — probe `python -m pip index versions <installed pkg>` first.
 - Rust: `RUSTUP_AUTO_INSTALL=0 cargo outdated` if installed, only where `Cargo.lock` exists.
 

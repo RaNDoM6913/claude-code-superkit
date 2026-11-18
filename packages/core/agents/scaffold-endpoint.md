@@ -55,7 +55,7 @@ Read each file back. Project docs the change makes stale (`api-reference.md`, `d
 Done when: every reference layer is created, modified or N/A with a reason, and every stub is in Manual TODOs.
 
 ### Phase 4 — Verify
-1. Command: the documented build/typecheck; else Go `go build -o /dev/null ./...` (bare `./...` drops a binary for a lone main package) then `go vet ./...` (compiles the `_test.go` callers `go build` skips), both prefixed `GOTOOLCHAIN=local GOPROXY=off` so neither downloads a toolchain or module · TS the typecheck script or `npx --no -- tsc --noEmit` · Python the configured type checker, else syntax-only `python3 -m compileall -q <src>` · Rust `cargo check --offline` (`--locked` too when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
+1. Command: the documented build/typecheck; else Go `go build -o /dev/null ./...` (bare `./...` drops a binary for a lone main package) then `go vet ./...` (compiles the `_test.go` callers `go build` skips), both prefixed `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none` so neither switches toolchains nor fetches modules, by proxy or directly (these variables reduce downloads but are no proof of network isolation) · TS the typecheck script or `npx --no -- tsc --noEmit` · Python the configured type checker, else syntax-only `python3 -m compileall -q <src>` · Rust `RUSTUP_AUTO_INSTALL=0 cargo check --offline` (rustup installs no pinned toolchain; `--locked` too when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
 2. Errors in your files, or anywhere but absent from the baseline (callers of a signature your wiring changed) → yours: fix within Rule 1 and rerun, max 3 cycles, then BUILD FAILED with the output tail verbatim; a fix needing an edit Rule 1 forbids → BUILD FAILED naming that caller. Errors already in the baseline → pre-existing; report, never fix. Tool, dependency or toolchain missing, or the run timed out → never install; Result SCAFFOLDED with `Execution: NOT RUN — <command to run>; <blocker, error quoted>`.
 3. Read the registration lines: the new route sits in the reference's group and middleware chain.
 4. Grep your files for `TODO(scaffold)`; every hit is in Manual TODOs and vice versa.
@@ -99,7 +99,7 @@ Filled example:
 Result: SCAFFOLDED — POST /api/v1/invoices
 Behavior: NOT VERIFIED — compiles only; 2 stubs fail closed with apperr.ErrNotImplemented → 501
 Contract: GIVEN method, path, body {order_id, amount}, 201 + Invoice, owner of the order only, table invoices (id, order_id, amount, created_at) · MISSING amount limits, duplicate rule → stubbed
-Execution: GOTOOLCHAIN=local GOPROXY=off go build -o /dev/null ./... → exit 0 (baseline 0), then go vet ./... → exit 0 (baseline 0); no output; side effects: none
+Execution: GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go build -o /dev/null ./... → exit 0 (baseline 0), then go vet ./... → exit 0 (baseline 0); no output; side effects: none
 
 ### Files
 | internal/{handler,service,repo}/invoice.go | Handler, Service, Repository | created |

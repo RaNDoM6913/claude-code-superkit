@@ -39,18 +39,19 @@ out=$(cd "<root>" && <command> 2>&1); rc=$?; printf '%s\n' "$out" | tail -n 30; 
 ```
 Compile, test, build: Bash tool `timeout: 600000` (max), one at a time (shared build dirs). Checks 3, 4, 5, 8 may run in parallel.
 `npm outdated`/`npm audit` exit 1 when they find outdated packages/vulnerabilities: results, not errors. Other tools: a findings report is a result; an error without one → not evaluated.
+No toolchain or dependency downloads (Rule 4): Checks 1–2 run Go and Rust only in the offline forms below. The registry and advisory lookups of Checks 6–7 are networked by design, but still run with `GOTOOLCHAIN=local` / `RUSTUP_AUTO_INSTALL=0`, so no toolchain is switched or installed. These variables reduce downloads but are no proof of network isolation; a missing toolchain or uncached dependency → `not evaluated`, never a fetch.
 
 ### 1. Compilation
-- Go: `go vet ./...`, count `file.go:line:col:` diagnostics.
+- Go: `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go vet ./...`, count `file.go:line:col:` diagnostics.
 - TypeScript (root has `tsconfig.json`; a `typecheck` script wins): `npx --no -- tsc --noEmit`, count `error TS` lines. A solution-style tsconfig (`"files": []` + `references`) checks nothing and exits 0: run `-p <config>` per reference.
 - Python: `mypy`/`pyright` if configured and installed; else syntax-only `python3 -m compileall -q -x '/(\.venv|venv|node_modules)/' .`
-- Rust: `cargo check` (add `--locked` when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
+- Rust: `RUSTUP_AUTO_INSTALL=0 cargo check --offline` (add `--locked` when `Cargo.lock` is tracked: without it cargo may rewrite the lockfile).
 Non-zero exit with diagnostics → N errors; without → not evaluated.
 
 ### 2. Tests
-- Go: `go test ./... -count=1 -short` prints no test totals: count package lines (`ok <pkg>` vs `FAIL <pkg>`; bare `FAIL`, `--- FAIL:` and `[no test files]` lines excluded), labelled `pkgs`.
+- Go: `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go test ./... -count=1 -short` prints no test totals: count package lines (`ok <pkg>` vs `FAIL <pkg>`; bare `FAIL`, `--- FAIL:` and `[no test files]` lines excluded), labelled `pkgs`.
 - Node: `CI=true npm test`. No `test` script, or the `npm init` placeholder (`Error: no test specified`, exit 1) = no tests.
-- Python: `pytest --tb=no -q` (project virtualenv's interpreter if any). Rust: `cargo test` (same `--locked` rule).
+- Python: `pytest --tb=no -q` (project virtualenv's interpreter if any). Rust: `RUSTUP_AUTO_INSTALL=0 cargo test --offline` (same `--locked` rule).
 Counts: the runner's own summary.
 
 ### 3. TODO Inventory

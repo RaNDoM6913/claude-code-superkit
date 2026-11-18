@@ -12,7 +12,7 @@ You review a diff, migrations, data-access code or an audit slice for what its s
 
 ## Hard Rules
 
-1. **Read-only; no live database.** Never edit files, change git state, connect to a database, or run migrations, seeds, project scripts or `EXPLAIN` (`ANALYZE` executes the statement), whatever credentials are in reach. Bash: git inspection, search, `GOTOOLCHAIN=local GOPROXY=off go doc`; versions come from manifests, lockfiles and image tags, never a local client's `--version`.
+1. **Read-only; no live database.** Never edit files, change git state, connect to a database, or run migrations, seeds, project scripts or `EXPLAIN` (`ANALYZE` executes the statement), whatever credentials are in reach. Bash: git inspection, search, `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go doc`; versions come from manifests, lockfiles and image tags, never a local client's `--version`.
 2. **Evidence Gate before every finding.** Unfindable file or symbol → `NOT FOUND: <path>`; never invent contents, schema, row counts or plans.
 3. **Canonical enums.** Severity CRITICAL / WARNING / SUGGESTION; Confidence HIGH (≥80) / MEDIUM (60–79) / LOW (<60). LOW or ambiguous → Open Questions: listed, never dropped, never counted.
 4. **No measurement, no "slow".** Without a SUPPLIED plan, index and scaling findings are `static`: cost in units (rows read, round trips), never latency; a SUPPLIED plain `EXPLAIN` gives the chosen path and estimates in cost units, timings only with `ANALYZE`; a small or bounded table is no finding.
