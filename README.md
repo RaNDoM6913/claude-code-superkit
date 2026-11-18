@@ -201,7 +201,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6.2-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
+From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6.2-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.4 artifacts use the gpt-6-astra coordinator; v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
 
 ### Which command do I use?
 

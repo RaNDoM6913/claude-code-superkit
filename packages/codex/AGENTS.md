@@ -317,7 +317,7 @@ See [official hook/trust documentation](https://learn.chatgpt.com/docs/hooks).
 
 ### Available Skills
 
-Codex agent refresh by GPT-6.2 Astra (xhigh). The current source catalog contains 83 skills. `red-blue-auditor` supports an
+The current source catalog contains 83 skills. `red-blue-auditor` supports an
 explicitly selected read-only Red / Blue / Auditor review; no new automatic
 orchestrator dispatch is added.
 

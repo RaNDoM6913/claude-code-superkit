@@ -130,7 +130,8 @@ Version 1.5.4 is also [published on npm](https://www.npmjs.com/package/claude-co
 The equivalent command from your target Git project is
 `npx claude-code-superkit@1.5.4 --codex-only`.
 Published v1.5.4 artifacts use the **gpt-6.1-sol / medium** subagent default above
-(v1.5.3 artifacts retained gpt-5.6-sol / medium).
+with the earlier **gpt-6-astra / high** coordinator; `gpt-6.2-astra` ships with the
+next release (v1.5.3 artifacts retained gpt-5.6-sol / medium).
 
 ### Use and manual installations
 
@@ -182,7 +183,7 @@ overview, 4 for components). A missing role leaves that step uncovered.
 
 ### 37 Agent Skills (available roles)
 
-Codex agent refresh by GPT-6.2 Astra (xhigh). This catalog includes core and extras roles. `native-skills.txt` lists protected native roles, adapted workflows and support sources; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
+This catalog includes core and extras roles. `native-skills.txt` lists protected native roles, adapted workflows and support sources; the converter preserves them and rejects missing declared native assets before writing. The [roadmap](../../docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks accepted role packets separately from target-model behavioral acceptance. Source ownership is not proof of model quality. Use depends on the task, user authorization, and available runtime tools; automatic dispatch applies only where an existing caller selects the role. `behavioral-nudge-engine` is available for product nudge-design tasks and has no automatic Codex orchestrator caller. **v1.4.0 added 4 specialist roles:**
 
 - `minimal-change-engineer` — surgical implementation, refuses scope creep
 - `reality-checker` — checks readiness claims against applicable evidence and reports external blockers
