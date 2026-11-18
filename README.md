@@ -355,6 +355,8 @@ The [continued Codex comparison](docs/superpowers/migrations/astra-native/eviden
 
 The [next comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) covers G7–G9 UI, frontend/3D and optional GAN planning roles: focused source-backed refinements with sufficient native roles kept unchanged. Evidence remains source-scoped; catalog counts and published artifacts are unchanged.
 
+The [G10 comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G10-2026-11-18.md) records which v1.5.4 changes carry into the native Codex roles and command skills. The [Claude crosscheck](docs/superpowers/migrations/astra-native/evidence/claude-crosscheck-2026-11-18.md) gives the evidence and proposed corrections for the Claude package.
+
 Stop enumerates Git config keys only and skips both diffs with UNVERIFIED if any clean/process filter is configured, including unused/global Git LFS drivers, to avoid running conversion programs. It captures no filter values or changes Git config; filter-free repositories retain the whitespace check and one continuation.
 
 See [Codex Installation Guide](packages/codex/INSTALL.md) for safe updates, backups, hook/trust limits, local package artifacts and manual setup.
