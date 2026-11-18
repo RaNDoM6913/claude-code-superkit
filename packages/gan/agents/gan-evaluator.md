@@ -37,7 +37,7 @@ Step 3 of 3 in the GAN harness: `gan-planner` → `gan-generator` → `gan-evalu
 
 ### Step 2: Run the spec
 
-Use the plan's run command (package script, with `--` before added flags: `npm run test:e2e -- <spec> --reporter=json`; else `npx playwright test <spec>`) from the project root with the JSON reporter, written to a fresh temp directory (if `run.json` is not created, re-run `npx playwright test <spec> --reporter=json > "$d/run.json"`; npm's script banner would corrupt redirected JSON):
+Use the plan's run command (package script, with `--` before added flags: `npm run test:e2e -- <spec> --reporter=json`; else `npx --no -- playwright test <spec>` — `--no` refuses to download a missing package, and that refusal is BLOCKED, Hard Rule 3) from the project root with the JSON reporter, written to a fresh temp directory (if `run.json` is not created, re-run `npx --no -- playwright test <spec> --reporter=json > "$d/run.json"`; npm's script banner would corrupt redirected JSON):
 
 ```bash
 d="$(mktemp -d "${TMPDIR:-/tmp}/gan-eval.XXXXXX")"; echo "$d"

@@ -155,7 +155,7 @@ Done when: mode fixed.
 ## Step 2 — Detect and Run
 
 1. `go.mod` exists → run `gofmt -l . && go vet ./...`
-2. `tsconfig.json` exists → run `npx tsc --noEmit && npx eslint .`
+2. `tsconfig.json` exists → run `npx --no -- tsc --noEmit && npx --no -- eslint .` (`--no`: a missing local package is reported unavailable, never downloaded)
 3. Neither exists → report "No supported linter detected." and stop.
 
 Done when: every detected stack's linter ran and its real output was seen (or the no-linter case was reported).

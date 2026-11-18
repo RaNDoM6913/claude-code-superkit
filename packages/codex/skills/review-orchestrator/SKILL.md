@@ -27,7 +27,7 @@ Bind the file list, statistics, contents, and line references to one review targ
 - `--full`: review tracked files at a declared snapshot. State whether current working changes are included.
 - Empty: review the last committed change, `HEAD~1..HEAD`, consistently for names, statistics and hunks; exclude unstaged/staged changes unless requested. If no parent exists, review the initial commit against the empty tree or ask for the intended target.
 
-Collect relevant commit messages from that target as intent evidence. For a requested working-tree review, identify staged, unstaged and selected untracked scope separately. Missing access or unavailable diff content means incomplete coverage, not a fallback to unrelated local changes.
+Collect relevant commit messages from that target as intent evidence. For a requested working-tree review, identify staged, unstaged and selected untracked scope separately; otherwise name excluded working-tree and untracked changes in the context. Missing access or unavailable diff content means incomplete coverage, not a fallback to unrelated local changes. A ref, PR or base that does not resolve stops the review as incomplete with the failing command; never substitute an empty or guessed base, whose empty diff would read as clean. A file list and hunks that disagree for the same target are also incomplete; an empty target is reported as no changes, not as a clean review.
 
 Build a `REVIEW_CONTEXT` block:
 ```
@@ -123,6 +123,8 @@ Report findings in your standard format, plus coverage (COMPLETE/PARTIAL/UNAVAIL
 - **security-scanner**: all hunks in the assigned security review
 - **bot-reviewer**: bot-related file hunks only
 - **design-system-reviewer**: relevant UI component hunks, including TSX, Vue and Svelte
+
+**Specialist handoffs.** Reviewers recommend deeper passes instead of delegating; for example, go-reviewer may name `go-error-reviewer`, `go-concurrency-reviewer`, `go-performance-reviewer`, `go-modernizer`, `go-observability-reviewer`, `database-reviewer` or `security-scanner`. After the first reviews return, collect every recommendation with its location and reason. Run each recommended role once, when its skill file resolves and it has not already reviewed that scope in this review, with the same review target, its filtered context and the recommendation reasons. Run one follow-up round only. Record each recommendation not run — role unavailable, follow-up round already used, or the earlier pass did not receive that file — as uncovered scope with its reason in the Step 4 summary; never drop it.
 
 ## Step 4 — Collect and Deduplicate Findings
 

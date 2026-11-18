@@ -9,7 +9,7 @@ Used by `gan-evaluator` to score implementation quality on UI / interactive feat
 | # | Criterion | Pass if |
 |---|-----------|---------|
 | 1.1 | Every scenario has a test | Each scenario in the gan-planner output appears as its own `test()` block in the named spec file |
-| 1.2 | All scenario tests pass | `npx playwright test` green for the spec file |
+| 1.2 | All scenario tests pass | `npx --no -- playwright test <spec>` (or the project's test script) green for the spec file |
 | 1.3 | Persistence verified | The happy-path test includes `page.reload()` and re-asserts the created/changed state |
 | 1.4 | Timing verified | Critical assertions use a bounded `{ timeout: <ms> }` |
 | 1.5 | URL state verified | Every scenario that changes the URL asserts `expect(page).toHaveURL(...)`. N/A if no scenario changes the URL |

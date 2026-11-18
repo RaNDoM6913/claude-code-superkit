@@ -65,7 +65,7 @@ Key design decisions:
 /review --full      --> git ls-files (all tracked files)
 ```
 
-It also gathers structured context: `git diff --stat`, full diff hunks, and recent commits (for intent).
+It first resolves and records the base and head for that target (stopping with `REVIEW NOT RUN` when the base cannot be resolved), then gathers structured context from that same target: diff stat, full diff hunks, and recent commits (for intent). In PR mode these come from the PR via `gh`, not from the local checkout.
 
 ### Step 2: Map files to agents
 

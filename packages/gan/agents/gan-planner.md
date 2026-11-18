@@ -133,7 +133,7 @@ Coverage: read <paths>; NOT FOUND: <paths | none>
 - <path> (exists | new) — <observable change>
 
 ## Test files to be added
-- <spec path> — <S-ids>; run: <package script | npx playwright test <spec>>
+- <spec path> — <S-ids>; run: <package script | npx --no -- playwright test <spec>>
 - Environment: Playwright <package.json:line>; config <path>; auth helper <file:line> (each or NOT FOUND)
 ```
 

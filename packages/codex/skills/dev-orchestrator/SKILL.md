@@ -222,6 +222,8 @@ For each skill, review the selected diff/base and changed-file list against the 
 
 Read the umbrella’s `### Specialist routing` table. Dispatch each outstanding `route` row once, within authorized concurrency, with its hand-off, the task and the reviewed revision. Reuse `completed` reports. List `not found locally` rows as uncovered in Phase 15, and stop here if that coverage is mandatory. Consolidate specialist findings with the other reviews.
 
+Collect the specialist handoffs that reviewer reports recommend instead of delegating (for example go-reviewer naming `go-error-reviewer`, `go-concurrency-reviewer`, `go-performance-reviewer`, `go-modernizer`, `go-observability-reviewer`, `database-reviewer` or `security-scanner`). Run each recommended role once, when its skill resolves and it has not already reviewed that scope in this phase, with the same reviewed revision, its changed files, the task and the recommendation reason; consolidate its findings with the rest. Run one follow-up round only. List each recommendation not run — role unavailable or follow-up round already used — with its reason under Phase 15 Open Questions, and stop here if that coverage is mandatory.
+
 Triage findings:
 - CRITICAL or WARNING at HIGH/MEDIUM confidence -> fix before proceeding.
 - LOW confidence / ambiguous -> carry into the **Open Questions** section of the Phase 15 report.

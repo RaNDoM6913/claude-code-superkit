@@ -218,6 +218,8 @@ Then dispatch reviewer agents **in parallel** — every row whose pattern matche
 
 Pass each agent the changed-file list and task description. Each runs its own two-stage discipline (discover, then triage by Severity + Confidence). If **ui-reviewer** returns a `### Specialist routing` table (frontend-ui umbrella), dispatch every row whose Status is `route` in parallel — prompt: that row's hand-off plus the task description — and triage those reports with the rest; list `not found locally` rows as unreviewed scopes in the Phase 15 Open Questions.
 
+Reviewers never dispatch agents; they name deeper passes on their `Specialist follow-up:` line (go-reviewer names go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, database-reviewer or security-scanner; other reviewers use the same line). Read that line in every report; each entry other than `none` names an agent, often a `file:line`, and a reason. Each named agent not yet dispatched in this phase and present in `.claude/agents/` → dispatch it once, all in parallel, with the changed files of its type (go-* specialists: the `*.go` files go-reviewer received), the task description and one `Follow-up requested by <reviewer>: <file:line — reason>` line per entry naming it; triage its report with the rest. An agent already dispatched in this phase is not re-run. One follow-up wave per phase: entries named only by follow-up-wave reports, and agents not in `.claude/agents/`, go to the Phase 15 Open Questions as `specialist follow-up not run: <agent> — requested by <reviewer> for <file:line — reason> — <not installed | follow-up cap reached>`.
+
 Go path, opt-in: if a gopls MCP server is registered, Go edits use `go_symbol_references` (blast radius) before touching a definition and `go_diagnostics` after — never assume the server is wired.
 
 Triage findings — route, don't drop:
@@ -225,7 +227,7 @@ Triage findings — route, don't drop:
 - LOW confidence / ambiguous → carry into the **Open Questions** section of the Phase 15 report.
 - A clean review (0 findings) is a valid result — do not pad it.
 
-**Done when:** all CRITICAL/WARNING findings fixed or explicitly deferred with reason.
+**Done when:** all CRITICAL/WARNING findings fixed or explicitly deferred with reason, and every `Specialist follow-up` entry was dispatched or recorded for the Phase 15 Open Questions.
 
 ## Phase 13 — Critic (Complex only)
 
@@ -279,6 +281,7 @@ Emit only after all non-skipped phases completed:
 
 ### Open Questions (LOW-confidence review items — surfaced, not dropped)
 - file:line — suspicion + what would confirm it (omit section if none)
+- specialist follow-up not run: <agent> — requested by <reviewer> for <file:line — reason> — <not installed | follow-up cap reached>
 
 ### Metrics
 | Metric | Value |
@@ -300,4 +303,5 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Gate verdicts consumed verbatim; failed gate → retry at `max` effort, say so.
 - No completion claims over failing builds/tests; report only after all non-skipped phases.
 - LOW-confidence findings go to Open Questions, never silently dropped.
+- Reviewer `Specialist follow-up` entries → one follow-up wave of installed, not-yet-run agents; the rest go to Open Questions with a reason.
 - Conventional commits: `feat|fix|docs|refactor|chore|test|perf(scope): description`.

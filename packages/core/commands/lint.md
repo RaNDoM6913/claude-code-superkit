@@ -12,9 +12,11 @@ Auto-detect the project's formatters and linters from stack-marker files and run
 
 ## Hard Rules
 
-- Run the formatter before the linter for each stack (format first, then check).
-- Prefer a Makefile `lint` / `fmt` target over the raw tool when one exists — it may carry project-specific setup.
+- Without `--fix`, never write files: the default run uses only check-only commands — a format check lists unformatted files, it does not rewrite them.
+- Run the format step before the linter for each stack (format check, or the formatter under `--fix`, then lint).
+- Prefer a Makefile `lint` / `fmt` target over the raw tool when one exists — it may carry project-specific setup — but in the default run only after reading its recipe and confirming it is check-only (Step 2).
 - Run only the commands in the Step 2 table (and the Step 4 `--fix` variants); never invent linters, flags, or tools not listed there.
+- Never install a missing tool: JS tools run as `npx --no -- <bin>` (plain `npx` downloads a missing package; `--no` refuses instead, and `--` keeps the tool's flags away from npx) — a refusal or `command not found` is `unavailable`.
 - Treat `--fix` as a modifier combinable with any scope, not as a scope of its own.
 - `--fix` rewrites files in place — apply it only to the Step 4 format and auto-fix commands, never to check-only commands (`go vet`, `tsc --noEmit`, `mypy`, `flake8`).
 - Report every detected in-scope linter, including PASS and unavailable ones; one block per detected in-scope linter.
@@ -35,22 +37,22 @@ Done-when: `scope` is exactly one of `backend` / `frontend` / `all`, and `fix` i
 
 Scan the project for stack markers and map each present marker to its commands. Detect with Bash only: `test -f <marker>` for files, `grep -qF '<section>' pyproject.toml` for a config section (fixed-string `-F` so the `[...]` in section names like `[tool.ruff]` is matched literally, not as a regex character class), `command -v <tool>` for a tool on PATH.
 
-| Marker | Format Command | Lint Command | Stack |
+| Marker | Format Check (default, writes nothing) | Lint Command | Stack |
 |--------|---------------|-------------|-------|
-| `go.mod` | `gofmt -w .` | `go vet ./...` | Go |
-| `go.mod` + `golangci-lint` in PATH | `gofmt -w .` | `golangci-lint run` | Go (extended) |
-| `package.json` + `.eslintrc*` / `eslint.config.*` | — | `npx eslint .` | ESLint |
+| `go.mod` | `gofmt -l .` | `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go vet ./...` | Go |
+| `go.mod` + `golangci-lint` in PATH | `gofmt -l .` | `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none golangci-lint run --fix=false` | Go (extended) |
+| `package.json` + `.eslintrc*` / `eslint.config.*` | — | `npx --no -- eslint .` | ESLint |
 | `package.json` + `tsconfig.json` | — | `npx --no -- tsc --noEmit` | TypeScript |
-| `package.json` + prettier config (`.prettierrc*`, `prettier.config.*`, or a `prettier` key in `package.json`) | `npx prettier --write .` | `npx prettier --check .` | Prettier |
-| `pyproject.toml` + `[tool.ruff]` | `ruff format .` | `ruff check .` | Python (ruff) |
-| `pyproject.toml` + `[tool.black]` | `black .` | — | Python (black) |
+| `package.json` + prettier config (`.prettierrc*`, `prettier.config.*`, or a `prettier` key in `package.json`) | `npx --no -- prettier --check .` | — | Prettier |
+| `pyproject.toml` + `[tool.ruff]` | `ruff format --check .` | `ruff check --no-fix .` | Python (ruff) |
+| `pyproject.toml` + `[tool.black]` | `black --check .` | — | Python (black) |
 | `pyproject.toml` + `[tool.flake8]` / `setup.cfg` | — | `flake8` | Python (flake8) |
 | `pyproject.toml` + `[tool.mypy]` | — | `mypy .` | Python (mypy) |
-| `Cargo.toml` | `cargo fmt` | `cargo clippy -- -D warnings` | Rust |
+| `Cargo.toml` | `RUSTUP_AUTO_INSTALL=0 cargo fmt -- --check` | `RUSTUP_AUTO_INSTALL=0 cargo clippy --offline -- -D warnings` | Rust |
 | `Makefile` with `lint` target | — | `make lint` | Makefile |
-| `Makefile` with `fmt` target | `make fmt` | — | Makefile |
+| `Makefile` with `fmt` target | `make fmt` — only when its recipe is check-only | — | Makefile |
 
-A `—` cell means that stack has no command for that slot — skip it. If a `Makefile` with `lint` / `fmt` targets exists, prefer them over the raw tool for that slot — they may include project-specific setup.
+A `—` cell means that stack has no command for that slot — skip it. `--fix=false` and `--no-fix` keep a project config that enables fixes (`fix: true`, `fix = true`) from writing during the default run. If a `Makefile` with `lint` / `fmt` targets exists, prefer them over the raw tool for that slot — they may include project-specific setup. In the default run, first read the target's recipe in the `Makefile`: a recipe that writes files (`gofmt -w`, `--write`, `--fix`, `ruff format` or `black` without `--check`, `cargo fmt` without `--check`, `go fmt`) is not run — use the raw tool's check-only command from this table for that slot and say so in the report. A `fmt` target is usually a writer; it runs unread only under `--fix`.
 
 Done-when: every marker present in the repo is mapped to its format/lint commands; the set of detected linters is fixed.
 
@@ -72,22 +74,23 @@ Done-when: the working directory (or set of directories) for the chosen scope is
 
 ## Step 4 — Run Linters
 
-For each in-scope linter, run format first, then check. Skip any table cell shown as `—`.
+For each in-scope linter, run the format step first, then lint. Skip any table cell shown as `—`.
 
-- **fix = false** — run the linter's Format Command then its Lint Command from the Step 2 table.
-- **fix = true** — replace the table's Format Command with the auto-fix variant below, then still run the Lint Command. A detected linter with no fix variant listed here runs its table Lint Command unchanged (check-only):
+- **fix = false** — run the linter's Format Check then its Lint Command from the Step 2 table. Nothing is written: a format check reports the files that need formatting (`gofmt -l` prints them and still exits 0 — any listed file is a Format FAIL).
+- **fix = true** — replace the table's Format Check with the writer below, then still run the Lint Command. A detected linter with no writer listed here runs its table Lint Command unchanged (check-only):
   - Go: `gofmt -w .`
-  - ESLint: `npx eslint . --fix`
-  - Prettier: `npx prettier --write .`
+  - ESLint: `npx --no -- eslint . --fix`
+  - Prettier: `npx --no -- prettier --write .`
   - ruff: `ruff check . --fix && ruff format .`
   - black: `black .`
   - Rust: `cargo fmt` then `cargo clippy --fix --allow-dirty`
+  - Makefile: `make fmt`
 
 For a TypeScript project, run both ESLint and `npx --no -- tsc --noEmit` — ESLint catches style, `tsc` catches types. `tsc --noEmit`, `mypy`, `flake8`, and `go vet` are check-only, so `--fix` leaves them unchanged.
 
-If a tool named in the table is not installed (command not found), mark it `unavailable` and continue with the remaining linters.
+If a tool named in the table is not installed (command not found, or `npx --no` refuses because the package is not installed locally), mark it `unavailable` and continue with the remaining linters — never install it.
 
-Done-when: every detected in-scope linter has either produced output or been marked `unavailable`.
+Done-when: every detected in-scope linter has either produced output or been marked `unavailable`, and no file was written unless fix = true.
 
 ## Output
 
@@ -113,7 +116,7 @@ Filled example:
 ## Lint Results
 
 ### Go (extended)
-- Command: `golangci-lint run`
+- Command: `golangci-lint run --fix=false`
 - Result: 2 issues found
 - Details: cmd/main.go:14 ineffassign · internal/db/pool.go:88 errcheck
 
@@ -130,8 +133,10 @@ Filled example:
 
 ## Recap — non-negotiables
 
-- Format before check, per stack; Makefile `lint` / `fmt` targets win over raw tools.
+- Default run writes nothing: format checks only; writers run only under `--fix`.
+- Format step before lint, per stack; Makefile `lint` / `fmt` targets win over raw tools — in the default run only when their recipe is check-only.
 - Run only Step 2 table commands and Step 4 `--fix` variants — `--fix` is a modifier that rewrites files in place, never a scope.
+- Missing tool → `unavailable`, never installed; JS tools run as `npx --no -- <bin>`.
 - Empty or unrecognized scope → `all`; never narrow by guessing.
 - For TypeScript run both ESLint and `tsc --noEmit`; check-only tools stay unchanged under `--fix`.
 - Not done until every in-scope linter ran or was reported `unavailable`.
