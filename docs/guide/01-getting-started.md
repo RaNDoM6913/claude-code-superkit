@@ -68,7 +68,7 @@ chmod +x $PROJECT/scripts/hooks/*.sh
 cp $SUPERKIT/core/CLAUDE.md ./CLAUDE.md
 ```
 
-After manual install, edit `settings.json` to wire stack hooks into the `PostToolUse` array (see Chapter 5 for the format).
+After manual install, edit `settings.json` to wire stack hooks into the `PostToolUse` group whose matcher is `Edit|Write` — not the `Bash` group, where they never fire (see Chapter 5 for the format).
 
 ## First Commands to Try
 
@@ -112,6 +112,6 @@ cat .claude/settings.json | jq '.enabledPlugins | keys'
 
 1. Run `/superkit-init` in Claude Code — auto-generates filled CLAUDE.md and architecture docs from your code
 2. Install plugins: `/plugins` → install superpowers, github, context7, code-review
-3. Set your hook profile: `export CLAUDE_HOOK_PROFILE=standard`
+3. Check your hook profile: the installer pins it in `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE` (change it there — see Chapter 15)
 4. Try `/review --full` or `/dev <task>`
 5. Read Chapter 2 to understand how the component types work together

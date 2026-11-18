@@ -245,11 +245,13 @@ Hook profiles let users control which hooks run based on their workflow:
 | `standard` | Normal development | Format + lint + typecheck |
 | `strict` | Pre-commit, code review | Everything including `go vet` |
 
-Set the profile via environment variable:
+Set the profile in `.claude/settings.json` (the superkit installer writes it there from `--profile`); Claude Code passes settings `env` to hooks and applies it over a shell export in most sessions:
 
-```bash
-export CLAUDE_HOOK_PROFILE=strict
+```json
+{ "env": { "CLAUDE_HOOK_PROFILE": "strict" } }
 ```
+
+Without that key, a shell `export CLAUDE_HOOK_PROFILE=strict` before starting `claude` works too.
 
 The hooks already check this at the top:
 

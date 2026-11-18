@@ -36,7 +36,7 @@ bash setup.sh
 # Select "Frontend UI" when prompted for stacks
 ```
 
-The installer copies all agents, rules, hooks, and the skill into your `.claude/` directory and wires the three hooks into `settings.json` on `PostToolUse`.
+The installer copies all agents, rules, hooks, and the skill into your `.claude/` directory and wires the three hooks into the `PostToolUse` group of `settings.json` whose matcher covers `Edit` and `Write` (they only act on edited files).
 
 ### Non-interactive install
 

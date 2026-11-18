@@ -1,5 +1,5 @@
 {
-  "_comment": "frontend-ui package hooks. Merged into root .claude/settings.json at install time by lib/settings-builder.js.",
+  "_comment": "Reference only: the installer does not read this file. lib/settings-builder.js wires every packages/frontend-ui/hooks/*.sh into the root .claude/settings.json PostToolUse group whose matcher covers Edit and Write, exactly as shown here. Copy this block when installing by hand.",
   "hooks": {
     "PostToolUse": [
       {

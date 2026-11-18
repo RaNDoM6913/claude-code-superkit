@@ -18,6 +18,8 @@ Coarse-grained selector that every profile-aware hook reads at the top of its sc
 
 ### How to set a profile
 
+**Installed projects:** the installer pins your choice in `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE` (a merge re-install keeps a value you already set there). Claude Code writes settings `env` entries into its process environment, replacing the shell's value in most sessions, so while that key is set the shell recipes below do not change the profile. Edit the key, or override it for yourself in `.claude/settings.local.json` (it takes precedence over the shared `.claude/settings.json`). The shell recipes apply when no settings file sets the key.
+
 ```bash
 # One session
 CLAUDE_HOOK_PROFILE=fast claude
@@ -151,6 +153,8 @@ Auto-populated by the harness or by the kit's own scripts. **Do not set these ma
 ---
 
 ## 6. Setting variables — recipes
+
+`CLAUDE_HOOK_PROFILE` recipes take effect only when no settings file pins `env.CLAUDE_HOOK_PROFILE` (see §1); the `CLAUDE_DISABLE_*` flags are not written by the installer.
 
 ```bash
 # One-shot: fast profile for a quick fix

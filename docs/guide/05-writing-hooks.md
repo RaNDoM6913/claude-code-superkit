@@ -103,7 +103,7 @@ fi
 | `standard` | All core hooks + stack formatters | Normal development (default) |
 | `strict` | Everything + go vet / cargo check on every edit + Stop verification | Pre-release, critical code |
 
-Set it: `export CLAUDE_HOOK_PROFILE=strict`
+Set it in `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE` (the installer writes your choice there); in most sessions a shell `export` does not override a value pinned in settings — see [Chapter 15](15-env-vars-and-hook-profiles.md).
 
 ## Performance: SHA256 Hash Caching
 

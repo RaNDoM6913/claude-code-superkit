@@ -234,7 +234,7 @@ All 16 commands with flags and examples: **[Chapter 1](docs/guide/01-getting-sta
 
 > ⚠️ **Critical:** Hook scripts MUST be tracked in git. If your `.gitignore` contains `.claude/scripts/`, remove that line immediately. Without tracked hooks, other developers get zero enforcement. Check with `git ls-files .claude/scripts/hooks/ | head` — it must list your hook files.
 
-Set `CLAUDE_HOOK_PROFILE` environment variable:
+The installer pins `CLAUDE_HOOK_PROFILE` in `.claude/settings.json` → `env` (from `--profile` or the prompt); edit it there to switch, since Claude Code applies settings `env` over a shell export in most sessions:
 
 | Profile | Behavior |
 |---------|----------|

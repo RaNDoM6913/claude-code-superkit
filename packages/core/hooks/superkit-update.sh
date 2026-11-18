@@ -22,10 +22,27 @@
 #      against the clone's HEAD/worktree blob (that is the *new* content, useless as
 #      a pristine test).
 #   4. A file absent in the consumer is created (that is not a clobber). Hooks stay +x.
-#   5. Coverage: core agents/commands/hooks(.sh,.py)/rules/skills, hooks/lib/*.sh,
-#      stack-agents (+ references), stack-hooks, stack-rules, and helpers/statusline.cjs
-#      — all under the same pristine rule (a forked statusline is preserved).
-#   6. Report one compact line at SessionStart, plus the preserved paths when any.
+#   5. Coverage — the same roots lib/installer.js installs: core agents/commands/
+#      hooks(.sh,.py)/rules/skills, hooks/lib/*.sh, stack-agents (+ references),
+#      stack-hooks, stack-rules, the self-contained packages listed in
+#      SUPERKIT_STACKS (frontend-3d / frontend-ui: agents, hooks, skills, rules,
+#      commands), the extras in SUPERKIT_EXTRAS (flat <name>.md agents and bundled
+#      <name>/agent.md + scan.sh + patterns/*.txt under .claude/scripts/<name>/),
+#      and helpers/statusline.cjs — all under the same pristine rule (a forked
+#      statusline is preserved).
+#   6. ui-reviewer.md has two package owners (core and the frontend-ui umbrella)
+#      and ONE destination. Exactly one is selected (frontend-ui in SUPERKIT_STACKS
+#      → the umbrella, else core). The installed copy changes only when that is an
+#      upgrade or a refresh: a pristine older copy of the selected variant is
+#      refreshed; a pristine core copy is upgraded when the umbrella is selected
+#      (pristine here also means byte-identical to the core's current source — a
+#      cross-variant compare, not the new content). A pristine umbrella is NEVER
+#      replaced with core: it is kept and noted. A customised copy is preserved
+#      and reported as a conflict.
+#   7. Report one compact line at SessionStart, plus the preserved paths when any.
+#   8. The meta file is PARSED, never sourced (no command substitution can run
+#      from it), and stack/extra names that do not match ^[a-z0-9][a-z0-9-]*$
+#      are ignored.
 #
 # Two independent triggers for sync:
 #   1. Install-version lags source-version (someone pulled the clone but did not
@@ -38,8 +55,42 @@ if [ ! -f "$META_FILE" ]; then
   exit 0  # superkit source not tracked, skip
 fi
 
-source "$META_FILE"
-SUPERKIT_STACKS="${SUPERKIT_STACKS:-}"
+# Parse KEY="value" lines for the known keys only (contract 8). Values are taken
+# literally: no expansion, no command substitution.
+SUPERKIT_SOURCE=""; SUPERKIT_VERSION=""; SUPERKIT_STACKS=""; SUPERKIT_EXTRAS=""
+while IFS= read -r meta_line || [ -n "$meta_line" ]; do
+  meta_line="${meta_line%$'\r'}"
+  case "$meta_line" in SUPERKIT_*=*) ;; *) continue ;; esac
+  meta_key="${meta_line%%=*}"
+  meta_val="${meta_line#*=}"
+  case "$meta_val" in
+    \"*\") meta_val="${meta_val#\"}"; meta_val="${meta_val%\"}" ;;
+    \'*\') meta_val="${meta_val#\'}"; meta_val="${meta_val%\'}" ;;
+  esac
+  case "$meta_key" in
+    SUPERKIT_SOURCE)  SUPERKIT_SOURCE="$meta_val" ;;
+    SUPERKIT_VERSION) SUPERKIT_VERSION="$meta_val" ;;
+    SUPERKIT_STACKS)  SUPERKIT_STACKS="$meta_val" ;;
+    SUPERKIT_EXTRAS)  SUPERKIT_EXTRAS="$meta_val" ;;
+  esac
+done < "$META_FILE"
+
+# valid_names <space-separated list> → only the entries matching
+# ^[a-z0-9][a-z0-9-]*$ (explicit character lists: no locale-dependent ranges;
+# globbing off so an entry like "*" is never expanded).
+valid_names() {
+  local n out=""
+  set -f
+  for n in $1; do
+    case "$n" in [abcdefghijklmnopqrstuvwxyz0123456789]*) ;; *) continue ;; esac
+    case "$n" in *[!abcdefghijklmnopqrstuvwxyz0123456789-]*) continue ;; esac
+    out="$out $n"
+  done
+  set +f
+  printf '%s' "${out# }"
+}
+SUPERKIT_STACKS="$(valid_names "$SUPERKIT_STACKS")"
+SUPERKIT_EXTRAS="$(valid_names "$SUPERKIT_EXTRAS")"
 
 # Verify source exists (safety exits)
 if [ ! -d "$SUPERKIT_SOURCE" ]; then
@@ -233,12 +284,55 @@ sync_file() {
   fi
 }
 
+# ── ui-reviewer collision policy (contract 6; mirrors lib/installer.js) ──
+UI_REVIEWER="ui-reviewer.md"
+UI_CORE_REL="core/agents/$UI_REVIEWER"
+UI_UMBRELLA_REL="frontend-ui/agents/$UI_REVIEWER"
+UI_SELECTED_REL="$UI_CORE_REL"
+if in_list "frontend-ui" "$SUPERKIT_STACKS" && [ -f "$PACKAGES/$UI_UMBRELLA_REL" ]; then
+  UI_SELECTED_REL="$UI_UMBRELLA_REL"
+fi
+
+# ui_pristine <consumer_abs_path> <variant-rel> — a released-tag blob of that
+# variant, or byte-identical to the variant's current source file.
+ui_pristine() {
+  is_pristine "$1" "$2" && return 0
+  [ -f "$PACKAGES/$2" ] && cmp -s "$1" "$PACKAGES/$2"
+}
+
+UI_NOTE=""
+sync_ui_reviewer() {
+  local src="$PACKAGES/$UI_SELECTED_REL" dst="$CLAUDE_DIR/agents/$UI_REVIEWER"
+  [ -f "$src" ] || return 0
+  if [ ! -e "$dst" ]; then
+    mkdir -p "$(dirname "$dst")" 2>/dev/null
+    cp "$src" "$dst" 2>/dev/null && SYNCED=$((SYNCED + 1))
+    return 0
+  fi
+  cmp -s "$src" "$dst" && return 0   # already the selected, current variant
+  # refresh the selected variant, or upgrade a pristine core to the umbrella
+  if is_pristine "$dst" "$UI_SELECTED_REL" \
+     || { [ "$UI_SELECTED_REL" = "$UI_UMBRELLA_REL" ] && ui_pristine "$dst" "$UI_CORE_REL"; }; then
+    cp "$src" "$dst" 2>/dev/null && SYNCED=$((SYNCED + 1))
+    return 0
+  fi
+  # never downgrade a pristine umbrella to core
+  if [ "$UI_SELECTED_REL" = "$UI_CORE_REL" ] && ui_pristine "$dst" "$UI_UMBRELLA_REL"; then
+    UI_NOTE="kept the frontend-ui umbrella $dst — frontend-ui is not in SUPERKIT_STACKS, so it is neither replaced with core nor refreshed"
+    return 0
+  fi
+  PRESERVED=$((PRESERVED + 1))
+  [ -n "$PRESERVED_TMP" ] && printf '%s  (ui-reviewer conflict: kept your customised copy; selected packages/%s was not installed)\n' "$dst" "$UI_SELECTED_REL" >> "$PRESERVED_TMP"
+}
+
 # ── Core agents ──────────────────────────────────────────────────────
 for f in "$PACKAGES/core/agents/"*.md; do
   [ -f "$f" ] || continue
   b=$(basename "$f")
+  [ "$b" = "$UI_REVIEWER" ] && continue   # contract 6 — see sync_ui_reviewer
   sync_file "$f" "$CLAUDE_DIR/agents/$b" "core/agents/$b"
 done
+sync_ui_reviewer
 
 # ── Core commands ────────────────────────────────────────────────────
 for f in "$PACKAGES/core/commands/"*.md; do
@@ -322,6 +416,73 @@ for stack in $SUPERKIT_STACKS; do
   fi
 done
 
+# ── Self-contained packages (only those listed in SUPERKIT_STACKS) ───
+# Same list and layout as lib/installer.js SELF_CONTAINED_PACKAGES. Only
+# top-level hooks/*.sh are shipped (hooks/tests/ never is). Internal-manifest
+# basenames are skipped here too, so no package file can shadow one.
+SELF_CONTAINED_PACKAGES="frontend-3d frontend-ui"
+for pkg in $SUPERKIT_STACKS; do
+  in_list "$pkg" "$SELF_CONTAINED_PACKAGES" || continue
+  PKG_DIR="$PACKAGES/$pkg"
+  [ -d "$PKG_DIR" ] || continue
+  for f in "$PKG_DIR/agents/"*.md; do
+    [ -f "$f" ] || continue
+    b=$(basename "$f")
+    [ "$b" = "$UI_REVIEWER" ] && continue   # contract 6 — see sync_ui_reviewer
+    sync_file "$f" "$CLAUDE_DIR/agents/$b" "$pkg/agents/$b"
+  done
+  for f in "$PKG_DIR/hooks/"*.sh; do
+    [ -f "$f" ] || continue
+    b=$(basename "$f")
+    if in_list "$b" "$SUPERKIT_INTERNAL_HOOKS"; then
+      SKIPPED=$((SKIPPED + 1)); continue
+    fi
+    sync_file "$f" "$CLAUDE_DIR/scripts/hooks/$b" "$pkg/hooks/$b" exec
+  done
+  for skill_dir in "$PKG_DIR/skills/"*/; do
+    [ -d "$skill_dir" ] || continue
+    skill_name=$(basename "$skill_dir")
+    for sf in "$skill_dir"*; do
+      [ -f "$sf" ] || continue
+      b=$(basename "$sf")
+      sync_file "$sf" "$CLAUDE_DIR/skills/$skill_name/$b" "$pkg/skills/$skill_name/$b"
+    done
+  done
+  for f in "$PKG_DIR/rules/"*.md; do
+    [ -f "$f" ] || continue
+    b=$(basename "$f")
+    if in_list "$b" "$SUPERKIT_INTERNAL_RULES"; then
+      SKIPPED=$((SKIPPED + 1)); continue
+    fi
+    sync_file "$f" "$CLAUDE_DIR/rules/$b" "$pkg/rules/$b"
+  done
+  for f in "$PKG_DIR/commands/"*.md; do
+    [ -f "$f" ] || continue
+    b=$(basename "$f")
+    sync_file "$f" "$CLAUDE_DIR/commands/$b" "$pkg/commands/$b"
+  done
+done
+
+# ── Extras (SUPERKIT_EXTRAS, same layout as lib/installer.js) ────────
+#   packages/extras/<name>.md       → .claude/agents/<name>.md
+#   packages/extras/<name>/agent.md → .claude/agents/<name>.md
+#     + scan.sh (+x) and patterns/*.txt → .claude/scripts/<name>/
+for extra in $SUPERKIT_EXTRAS; do
+  case "$extra" in ""|.*|*/*) continue ;; esac   # never leave packages/extras/
+  EXTRA_DIR="$PACKAGES/extras/$extra"
+  if [ -f "$PACKAGES/extras/$extra.md" ]; then
+    sync_file "$PACKAGES/extras/$extra.md" "$CLAUDE_DIR/agents/$extra.md" "extras/$extra.md"
+  elif [ -f "$EXTRA_DIR/agent.md" ]; then
+    sync_file "$EXTRA_DIR/agent.md" "$CLAUDE_DIR/agents/$extra.md" "extras/$extra/agent.md"
+    sync_file "$EXTRA_DIR/scan.sh" "$CLAUDE_DIR/scripts/$extra/scan.sh" "extras/$extra/scan.sh" exec
+    for f in "$EXTRA_DIR/patterns/"*.txt; do
+      [ -f "$f" ] || continue
+      b=$(basename "$f")
+      sync_file "$f" "$CLAUDE_DIR/scripts/$extra/patterns/$b" "extras/$extra/patterns/$b"
+    done
+  fi
+done
+
 # ── ADR template (project root, create-if-missing only) ──────────────
 # dev.md Phase 2 + superkit-init.md reference docs-templates/adr-template.md at
 # the PROJECT root (NOT .claude/ — note CLAUDE_DIR points at .claude). Create it
@@ -356,6 +517,7 @@ rm -f "$META_FILE.bak"
 
 # ── Report (compact — lands in every session start) ──────────────────
 echo "superkit-update: $SYNCED synced · $PRESERVED preserved (locally customized) · $SKIPPED skipped (internal) · $OLD_VERSION → $NEW_VERSION"
+[ -n "$UI_NOTE" ] && echo "  note: $UI_NOTE"
 if [ "$PRESERVED" -gt 0 ] && [ -n "$PRESERVED_TMP" ] && [ -f "$PRESERVED_TMP" ]; then
   while IFS= read -r dpath; do
     [ -z "$dpath" ] && continue

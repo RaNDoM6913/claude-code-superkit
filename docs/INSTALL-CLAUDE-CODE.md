@@ -20,30 +20,30 @@ bash setup.sh
 
 | Flag | Description |
 |------|-------------|
-| `--stacks=go,typescript` | Pre-select language stacks |
-| `--profile=strict` | Set hook profile (fast/standard/strict) |
-| `--extras=bot-reviewer` | Include extra agents |
+| `--stacks=go,typescript` | Pre-select stacks (go, typescript, python, rust, frontend-3d, frontend-ui); unknown names are rejected before anything is written |
+| `--profile=strict` | Set hook profile (fast/standard/strict) — written to `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE` |
+| `--extras=bot-reviewer` | Include extra agents (bot-reviewer, design-system-reviewer, red-blue-auditor); unknown names are rejected |
 | `--codex` | Also install Codex CLI support |
 | `--no-docs` | Skip doc scaffolding |
 | `--no-superpowers` | Skip superpowers plugin |
-| `--defaults` | Non-interactive mode for CI/CD |
+| `--defaults` | Non-interactive mode for CI/CD (an existing `.claude/` is merged) |
 
 ### What the installer does
 
 1. **Checks prerequisites** — Node.js 18+, git, Claude CLI
 2. **Installs superpowers plugin** — auto-clones from GitHub if missing
-3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup + replace), or abort
+3. **Handles existing .claude/** — merge (add new, skip existing), overwrite (backup to `.claude.bak/` + replace), or abort. Merge never rebuilds `settings.json` from defaults: your keys and values win, superkit only adds missing hooks (deduped by matcher + command), plugins (an existing `true`/`false` is kept) and `env.CLAUDE_HOOK_PROFILE` (kept if you already set it); the previous file is saved as `.claude/settings.json.bak-<timestamp>`, and an invalid `settings.json` is left untouched with a warning. Existing permissions are never changed.
 4. **[1/4] Asks your stack** — Go, TypeScript, Python, Rust, Frontend 3D, Frontend UI (multi-select)
 5. **[2/4] Asks extras** — bot-reviewer, design-system-reviewer (red-blue-auditor is flag-only via `--extras=red-blue-auditor`, which also installs its `scan.sh` + `patterns/` in `.claude/scripts/red-blue-auditor/`)
-6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything)
+6. **[3/4] Asks hook profile** — fast (minimal), standard (balanced), strict (everything); the default is a valid `CLAUDE_HOOK_PROFILE` already exported in your shell, else standard
 7. **[4/4] Asks plugins** — 4 base (superpowers, github, context7, code-review) + 3 optional (code-simplifier, playwright, frontend-design)
 8. **Copies files**:
-   - 31 core agents + up to 22 stack/package agents (9 stack + 4 frontend-3d + 6 frontend-ui + 3 extras) → `.claude/agents/`
+   - 31 core agents + up to 22 stack/package agents (9 stack + 4 frontend-3d + 6 frontend-ui + 3 extras) → `.claude/agents/`. `ui-reviewer.md` exists in core and in frontend-ui; exactly one is installed (the frontend-ui umbrella when Frontend UI is selected, otherwise core). In merge mode an existing unmodified superkit copy is refreshed (same variant) or upgraded from core to the umbrella; an umbrella is never downgraded to core, and a customised copy is kept and reported as a conflict
    - 16 commands (15 core + 1 frontend-3d) → `.claude/commands/`
    - 26 core hooks + up to 16 stack/package hooks (9 stack + 4 frontend-3d + 3 frontend-ui) → `.claude/scripts/hooks/`
    - 7 rules + up to 12 stack/package rules (2 stack + 3 frontend-3d + 7 frontend-ui) → `.claude/rules/`
    - 11 core skills + up to 7 package skills (6 frontend-3d + 1 frontend-ui) → `.claude/skills/`
-   - `settings.json` with hook wiring + enabledPlugins
+   - `settings.json` with hook wiring (stack/package hooks go into the `PostToolUse` group whose matcher covers `Edit` and `Write`) + enabledPlugins + `env.CLAUDE_HOOK_PROFILE`
    - `CLAUDE.md` template
 9. **Scaffolds docs** (optional) — `docs/architecture/` templates + project tree
 10. **Validates** — checks JSON, hook permissions, file presence
@@ -57,7 +57,7 @@ bash setup.sh
 | `standard` | All core + stack hooks | Daily development (default) |
 | `strict` | Everything + go vet/cargo check per edit | Pre-release, critical code |
 
-Set in your shell: `export CLAUDE_HOOK_PROFILE=standard`
+The installer writes your choice to `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE`. Claude Code applies settings `env` over the shell in most sessions, so change the profile there (or, for yourself only, in `.claude/settings.local.json`) rather than with a shell `export`. See [Chapter 15](guide/15-env-vars-and-hook-profiles.md).
 
 ## Option 2: Manual Copy
 
@@ -97,12 +97,13 @@ chmod +x .claude/scripts/hooks/*.sh
 
 ## Post-Installation
 
-### 1. Set hook profile
+### 1. Check the hook profile
 
-Add to `~/.zshrc` or `~/.bashrc`:
+The installer already pinned it in `.claude/settings.json`:
 ```bash
-export CLAUDE_HOOK_PROFILE=standard
+jq -r '.env.CLAUDE_HOOK_PROFILE' .claude/settings.json   # fast | standard | strict
 ```
+To change it, edit that value (or set `env.CLAUDE_HOOK_PROFILE` in `.claude/settings.local.json` for a personal override).
 
 ### 2. Install plugins
 
@@ -162,6 +163,8 @@ The `evolve-check` hook also runs at session start (every 24h) and suggests `/su
 bash setup.sh
 # Choose [m] merge — adds new files, keeps your existing customizations
 ```
+
+Merge adds missing files and merges `settings.json`; it does not refresh files you already have (apart from refreshing or upgrading an unmodified `ui-reviewer.md`, see above). Unmodified superkit files are refreshed by the `superkit-update.sh` SessionStart hook when `.claude/.superkit-meta` points at a superkit clone with a newer `VERSION`: it covers core, stack, the selected frontend-ui / frontend-3d packages and the recorded extras (including `.claude/scripts/red-blue-auditor/`), and preserves and lists every file you customised.
 
 ## Troubleshooting
 

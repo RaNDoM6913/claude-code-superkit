@@ -35,7 +35,7 @@ fi
 - `standard` -- normal development. Formatters and type-checkers run after each edit.
 - `strict` -- pre-release or critical code. Adds `go vet` / `cargo check` on every edit plus final verification at session end.
 
-Set per-session: `export CLAUDE_HOOK_PROFILE=strict`
+Set it in `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE` (the installer pins your choice there), or in `.claude/settings.local.json` for yourself only. In most sessions a shell `export` applies only when no settings file sets the key — see [Chapter 15](15-env-vars-and-hook-profiles.md).
 
 ## Session Continuity
 

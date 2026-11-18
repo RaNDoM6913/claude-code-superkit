@@ -54,7 +54,7 @@ function parseArgs(argv) {
       continue;
     }
     if (arg.startsWith('--stacks=')) {
-      opts.stacks = arg.split('=')[1].split(',').map(s => {
+      opts.stacks = arg.slice('--stacks='.length).split(',').map(s => s.trim()).filter(Boolean).map(s => {
         const map = { go: 'go', ts: 'typescript', typescript: 'typescript', py: 'python', python: 'python', rust: 'rust' };
         return map[s.toLowerCase()] || s.toLowerCase();
       });
@@ -69,7 +69,7 @@ function parseArgs(argv) {
       continue;
     }
     if (arg.startsWith('--extras=')) {
-      opts.extras = arg.split('=')[1].split(',').map(s => {
+      opts.extras = arg.slice('--extras='.length).split(',').map(s => s.trim()).filter(Boolean).map(s => {
         const map = { bot: 'bot-reviewer', design: 'design-system-reviewer' };
         return map[s.toLowerCase()] || s.toLowerCase();
       });
@@ -103,9 +103,14 @@ Usage:
 
 Options:
   --defaults              Use default settings, no interactive prompts
-  --stacks=go,ts,py,rust  Select language stacks (comma-separated)
-  --profile=standard      Hook profile: fast, standard, strict
-  --extras=bot,design,red-blue-auditor  Select extras (comma-separated)
+                          (an existing .claude/ is merged, not replaced)
+  --stacks=go,ts,py,rust  Select stacks (comma-separated): go, typescript (ts),
+                          python (py), rust, frontend-3d, frontend-ui
+  --profile=standard      Hook profile: fast, standard, strict — written to
+                          .claude/settings.json env.CLAUDE_HOOK_PROFILE
+                          (default: a valid shell CLAUDE_HOOK_PROFILE, else standard)
+  --extras=bot,design,red-blue-auditor  Select extras (comma-separated); unknown
+                          stack/extra names are rejected before anything is written
   --plugins=playwright    Optional plugins (comma-separated)
   --codex                 Also install for Codex CLI (Claude + Codex)
   --codex-only            Install/update only Codex assets; no prompts or Claude setup
@@ -123,6 +128,8 @@ Examples:
 Run from your project root (must be a git repository).
 Requires: Node.js 18+, git. Use codex CLI for --codex-only; otherwise claude CLI.
 Codex re-runs update pristine managed skills with backups; custom files are preserved.
+Merge into an existing .claude/ adds missing files only and merges settings.json
+key by key (your values win; backup: .claude/settings.json.bak-<timestamp>).
 `);
 }
 

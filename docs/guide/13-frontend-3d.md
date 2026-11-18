@@ -41,7 +41,7 @@ cp $SUPERKIT/frontend-3d/commands/*.md    $PROJECT/commands/
 chmod +x $PROJECT/scripts/hooks/*.sh
 ```
 
-After manual install, add the four hooks to the `PostToolUse` array in `settings.json` (see Chapter 5 for the format).
+After manual install, add the four hooks to the `Edit|Write` group of the `PostToolUse` array in `settings.json` (see Chapter 5 for the format).
 
 ## Agents
 

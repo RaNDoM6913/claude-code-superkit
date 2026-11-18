@@ -77,11 +77,11 @@ If auto-install in setup.sh failed (network error, etc.):
    ```bash
    chmod +x .claude/scripts/hooks/*.sh
    ```
-4. Check hook profile is set:
+4. Check the hook profile — the installer pins it in `.claude/settings.json`, which Claude Code applies over your shell in most sessions:
    ```bash
-   echo $CLAUDE_HOOK_PROFILE
-   # Should be: fast, standard, or strict
-   # Set it: export CLAUDE_HOOK_PROFILE=standard
+   jq -r '.env.CLAUDE_HOOK_PROFILE' .claude/settings.json
+   # Should be: fast, standard, or strict. "fast" skips everything except the safety hooks.
+   # Change it there (or in .claude/settings.local.json for yourself only).
    ```
 
 ### "/review" returns no results
@@ -93,7 +93,7 @@ If auto-install in setup.sh failed (network error, etc.):
 ### "/audit" dispatches no agents
 - Verify agent files exist in `.claude/agents/`
 - Check that `audit-frontend.md`, `audit-backend.md` etc. are present
-- If using merge mode, some agents may not have been copied — re-run setup.sh with overwrite
+- If using merge mode, existing files were kept as they were (merge only adds missing files) — re-run setup.sh with overwrite if an old copy is in the way
 
 ### Statusline shows no context percentage (`ctx` bar)
 - On Claude Code builds that pass a native context window, the `ctx ██████░░░░ NN%` segment appears automatically.
@@ -102,13 +102,23 @@ If auto-install in setup.sh failed (network error, etc.):
 
 ### settings.json is corrupted
 ```bash
-# If backup exists (created during setup)
-cp .claude/settings.json.bak .claude/settings.json
+# Merge-mode re-runs back up the previous file before writing (newest last):
+ls .claude/settings.json.bak-*
+cp "$(ls .claude/settings.json.bak-* | tail -1)" .claude/settings.json
 
 # Or regenerate: re-run setup.sh with overwrite mode
 bash /path/to/claude-code-superkit/setup.sh
 # Choose [o] overwrite when prompted
 ```
+
+### Merge left my settings.json unchanged / "not valid JSON"
+- Merge mode never rebuilds `settings.json` from defaults. Your keys, permissions, `env`, plugin `true`/`false` values and hooks are kept; superkit only adds hooks, plugins and `env.CLAUDE_HOOK_PROFILE` that are missing.
+- "not valid JSON … left untouched" means nothing was applied: fix the JSON (`jq empty .claude/settings.json`) and re-run, or copy entries from `packages/core/settings.json` by hand.
+- "kept your permissions unchanged; N superkit default deny rule(s) not added": copy the `permissions.deny` entries you want from `packages/core/settings.json`.
+- "stack hook entries from an older superkit install … can be removed": installers before this fix wired stack hooks (e.g. `typecheck-on-edit.sh`, `go-*-on-edit.sh`) into the `PostToolUse` `Bash` group, where they never fire. The merge added them to the `Edit|Write` group; delete the listed entries from the `Bash` group when convenient.
+
+### "ui-reviewer conflict" during install or update
+`.claude/agents/ui-reviewer.md` has two superkit owners: core and the frontend-ui umbrella. Exactly one is installed — the umbrella when Frontend UI is selected (or listed in `SUPERKIT_STACKS` in `.claude/.superkit-meta`), otherwise core. An unmodified superkit copy is refreshed (same variant) or upgraded from core to the umbrella automatically; an umbrella is never downgraded to core (the updater notes that it kept it); a customised file is kept and reported. Compare it with the selected source (`packages/frontend-ui/agents/ui-reviewer.md` or `packages/core/agents/ui-reviewer.md`) and merge by hand.
 
 ### Superpowers skills not found by Claude
 ```bash
@@ -149,11 +159,8 @@ cd claude-code-superkit && bash setup.sh
 cd my-project && bash /path/to/claude-code-superkit/setup.sh
 ```
 
-### Forgetting to set CLAUDE_HOOK_PROFILE
-Add to your shell profile (`~/.zshrc`, `~/.bashrc`):
-```bash
-export CLAUDE_HOOK_PROFILE=standard
-```
+### Changing CLAUDE_HOOK_PROFILE in the shell has no effect
+The installer writes the profile to `.claude/settings.json` → `env.CLAUDE_HOOK_PROFILE`, and Claude Code applies settings `env` over the shell in most sessions. Edit the value there, or set `env.CLAUDE_HOOK_PROFILE` in `.claude/settings.local.json` for a personal override.
 
 ### Editing settings.json manually and breaking JSON
 Always validate after manual edits:
