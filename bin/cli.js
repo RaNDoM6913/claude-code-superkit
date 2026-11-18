@@ -99,7 +99,7 @@ claude-code-superkit v${VERSION} — interactive installer
 
 Usage:
   bash setup.sh [options]                # from a cloned superkit repo (current)
-  npx claude-code-superkit@1.5.4 [options] # when version 1.5.4 is available in npm
+  npx claude-code-superkit@1.6.0 [options] # when version 1.6.0 is available in npm
 
 Options:
   --defaults              Use default settings, no interactive prompts

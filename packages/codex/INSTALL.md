@@ -104,12 +104,12 @@ portion is fresh, merged, or overwritten. `--codex-only` rejects `--codex`,
 `--stacks`, `--extras`, `--profile`, and `--plugins` together. `--defaults`,
 `--no-docs`, and `--no-superpowers` are accepted but unnecessary in standalone mode.
 
-### v1.5.4 release artifact
+### v1.6.0 release artifact
 
-The v1.5.4 package archive includes both installers, the Claude layer and optional
+The v1.6.0 package archive includes both installers, the Claude layer and optional
 GAN sources; `--codex-only` selects only Codex assets for your project. Use the
-package archive attached to the [v1.5.4 GitHub release](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.4),
-or create the same package format from a reviewed v1.5.4 checkout:
+package archive attached to the [v1.6.0 GitHub release](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.6.0),
+or create the same package format from a reviewed v1.6.0 checkout:
 
 ```bash
 npm pack --ignore-scripts --pack-destination /path/to/artifacts
@@ -123,15 +123,15 @@ node /path/to/extracted/package/bin/cli.js --codex-only
 ```
 
 The archive includes the installer, skill sources, hook script/template, and legacy baseline.
-The archive version is 1.5.4. Re-run the extracted installer to update an existing
+The archive version is 1.6.0. Re-run the extracted installer to update an existing
 project under the same preservation and backup policy. GitHub release archives
 and the tagged checkout are usable independently of npm registry availability.
-Version 1.5.4 is also [published on npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.4).
+Version 1.6.0 is also [published on npm](https://www.npmjs.com/package/claude-code-superkit/v/1.6.0).
 The equivalent command from your target Git project is
-`npx claude-code-superkit@1.5.4 --codex-only`.
-Published v1.5.4 artifacts use the **gpt-6.1-sol / medium** subagent default above
-with the earlier **gpt-6-astra / high** coordinator; `gpt-6.2-astra` ships with the
-next release (v1.5.3 artifacts retained gpt-5.6-sol / medium).
+`npx claude-code-superkit@1.6.0 --codex-only`.
+Published v1.6.0 artifacts use the **gpt-6.2-astra / high** coordinator and the
+**gpt-6.1-sol / medium** subagent default above (v1.5.4 artifacts used the
+gpt-6-astra coordinator; v1.5.3 artifacts retained gpt-5.6-sol / medium).
 
 ### Use and manual installations
 
@@ -154,7 +154,7 @@ create `.agents/skills/` before copying and preserve any existing same-name fold
 The optional **Claude** extra `--extras=red-blue-auditor` places its helper at
 `.claude/scripts/red-blue-auditor/scan.sh` with a sibling `patterns/` directory.
 Codex-only installation supplies the native review skill. Its static review
-also works without this helper. The v1.5.4 helper ships 35 patterns. In normal
+also works without this helper. The v1.6.0 helper ships 35 patterns. In normal
 mode exit 1 means at least one match. In `--exit-on-critical` mode exit 2 means
 a CRITICAL match, and exit 0 can include other matches. Exit 3 indicates a
 missing patterns directory and 4 a usage/target error. Inspect reported pattern

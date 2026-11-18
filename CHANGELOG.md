@@ -4,6 +4,10 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+## [1.6.0] — 2026-11-18
+
+**Codex agent refresh by GPT-6.2 Astra (xhigh) and a cross-checked Claude layer.** Astra carried the v1.5.4 Claude fixes into 53 native Codex roles and the review, dev, test, lint and audit workflows (G10: 46 adopted, 7 kept), switched new Codex installs to `gpt-6.2-astra / high`, and cross-checked the Claude package: 21 findings, all fixed by Opus with every diff reviewed by the orchestrator. Highlights: installer merge no longer overwrites `.claude/settings.json`, stack hooks are wired to Edit|Write instead of Bash, the updater covers frontend packages and extras and no longer sources its meta file, `--profile` takes effect, 14 rules are really path-scoped through `paths:`, `/review` resolves its range and dispatches specialist follow-ups, `/lint` is check-only without `--fix`, and eight Go reference facts are corrected. 188 product tests, 16 core-hook suites, a 74-check updater suite and 79 mirror invariants pass; component counts are unchanged.
+
 - **Installer and updater fixed (crosscheck B01–B04 plus three issues found while fixing them):**
   - **Merge keeps your settings (B01):** "Merge — skip existing" (and `--defaults`) used to overwrite `.claude/settings.json` with package defaults, dropping user hooks, permissions, env and plugins. Merge now uses the existing file as the base, only adds missing superkit hooks (deduplicated per event and matcher), plugins and keys, never changes an existing value or the user's `permissions`, writes a timestamped `settings.json.bak-<ts>` first, skips the write when nothing changes and leaves invalid JSON untouched with a warning.
   - **Stack hooks fire on edits again:** `buildSettings` attached every stack/package hook (Go, TypeScript, ruff, cargo, frontend-ui, frontend-3d) to `PostToolUse[0]`, which has been the `Bash` group, so they never ran on Edit/Write. They now go to the group whose matcher covers Edit and Write (created if missing); a merge re-run adds them there and reports stale entries in the Bash group as removable.

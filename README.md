@@ -132,18 +132,24 @@ All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review
 
 ## 🆕 What's New
 
-**v1.5.4 — Claude agents reworked for Opus 5.5, reviewed and corrected by Fable 5.2** (see [CHANGELOG](CHANGELOG.md)):
+**v1.6.0 — Codex agent refresh by GPT-6.2 Astra and a cross-checked Claude layer** (see [CHANGELOG](CHANGELOG.md)):
 
-- 🧠 **All 56 Claude agents reworked for Opus 5.5:** each was rewritten, then independently reviewed by Fable 5.2 at `xhigh` effort, which supplied the exact fix text Opus applied — one agent per commit, with the commands and guides that call each agent fixed alongside.
-- 🔒 **Enforced tool allowlists:** agents now declare `tools:` instead of `allowed-tools:`, which Claude Code ignores on subagents (every agent used to inherit every tool). Agents no longer get tools they do not list.
-- 🧪 **Safer runs:** before/after side-effect fingerprints that see untracked files, no-download command forms (`GOTOOLCHAIN=local`, `npx --no --`, `sqlite3 -safe`), secrets never printed, and dozens of corrected framework, WCAG, SQL and platform facts.
-- 🪝 **Hooks fixed:** `subagent-stop-validate.sh` warns only on `[CRITICAL/…]` tags without an explicit acknowledgement (28-case suite); cargo, ruff and typecheck hooks never download on an edit. Behavior change: `cargo-check-on-edit.sh` now runs only in the `strict` profile, as documented.
-- 🔀 **Routing:** `/dev` dispatches frontend-ui specialists from the umbrella's routing table; `/review` and `/dev` send JSON, GraphQL and `.proto` contracts to api-contract-sync and ORM schemas to database-reviewer; `/workflow bugfix` passes tried fixes to debug-observer.
-- 🛡️ **red-blue-auditor:** `scan.sh` applies all 35 bundled patterns (5 were dead) and `--extras=red-blue-auditor` installs the agent with its scanner.
-- 🤖 **Codex (Astra):** G1–G9 role refinements from the Claude rework, a native red-blue audit skill (83 skills), and GPT-6.1 Sol as the default worker for new installations.
-- ✅ **Verification:** 142 product tests, 16 core-hook suites, 3 frontend UI hook suites and 79 mirror invariants pass; counts are unchanged.
+- 🤖 **Codex agent refresh (GPT-6.2 Astra, xhigh):** 53 native roles and the review, dev, test, lint and audit workflows carry the v1.5.4 Claude fixes (G10 record: 46 adopted, 7 kept); a shared side-effect procedure; local-only Go, Rust, Maven and Gradle commands. New installs select `gpt-6.2-astra / high`; existing Codex configs are preserved.
+- 🔍 **Models checking each other:** Astra cross-checked the Claude package and found 21 issues (0 critical). Opus fixed all of them and the orchestrator reviewed every diff.
+- 🛠️ **Installer merge keeps your settings:** "Merge — skip existing" used to overwrite `.claude/settings.json` (user hooks, permissions, env, plugins). It now merges into your file with a timestamped backup. The chosen `--profile` really applies through `env.CLAUDE_HOOK_PROFILE`, and `--stacks` / `--extras` names are validated.
+- 🪝 **Stack hooks fire on edits again:** Go, TypeScript, ruff, cargo and frontend hooks had been wired to the `Bash` matcher and never ran after Edit/Write. They are now in the Edit|Write group, and a merge re-run repairs existing installs.
+- 🔄 **Updater covers every package:** frontend-ui, frontend-3d and extras (including the red-blue scanner) now update under the pristine/preserve rule. The meta file is parsed rather than sourced. One ui-reviewer variant is kept and never downgraded.
+- 📏 **Rules really path-scoped:** 14 rules used `applyWhenPaths:`, which Claude Code ignores, so they loaded for every task. They now use `paths:`.
+- 🧭 **`/review`, `/dev`, `/lint`:**
+  - `/review` resolves its base and head per target. A PR review reads the PR itself, and an unresolvable target prints `REVIEW NOT RUN` instead of reporting a false clean.
+  - `/review` and `/dev` dispatch the specialists that reviewers name on `Specialist follow-up:` lines.
+  - `/lint` without `--fix` writes nothing.
+- 🧪 **Safer agents and corrected Go facts:**
+  - Go commands carry `GONOPROXY=none`, Rust runs as `RUSTUP_AUTO_INSTALL=0 cargo --offline`, and go-reviewer reports side effects.
+  - Eight Go reference errors are fixed: loopvar gating, `errors.As` with typed nil, `Unwrap` on `Join`, `%v` is not redaction, MVS, `go fix`, `b.Loop`.
+- ✅ **Verification:** 188 product tests, 16 core-hook suites, a 74-check updater suite, 79 mirror invariants and 28 stop-hook cases pass. Counts are unchanged.
 
-Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.5.3](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3) · [v1.5.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.2) · [v1.5.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.1) · [v1.5.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.0)
+Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.5.4](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.4) · [v1.5.3](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3) · [v1.5.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.2) · [v1.5.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.1) · [v1.5.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.0)
 
 ## 🚀 Installation
 
@@ -182,7 +188,7 @@ claude
 /review --full
 ```
 
-> **Distribution:** v1.5.4 is available on [npm](https://www.npmjs.com/package/claude-code-superkit/v/1.5.4) and as [GitHub release archives](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.4). From your target Git project, run `npx claude-code-superkit@1.5.4 --codex-only` for standalone Codex, or omit `--codex-only` for the Claude installer.
+> **Distribution:** v1.6.0 is available on [npm](https://www.npmjs.com/package/claude-code-superkit/v/1.6.0) and as [GitHub release archives](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.6.0). From your target Git project, run `npx claude-code-superkit@1.6.0 --codex-only` for standalone Codex, or omit `--codex-only` for the Claude installer.
 
 **`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
 - `CLAUDE.md` — populated with your tech stack, commands, conventions
@@ -201,7 +207,7 @@ Tell Codex:
 Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
 ```
 
-From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6.2-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.4 artifacts use the gpt-6-astra coordinator; v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
+From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6.2-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.4 artifacts used the gpt-6-astra coordinator; v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
 
 ### Which command do I use?
 
