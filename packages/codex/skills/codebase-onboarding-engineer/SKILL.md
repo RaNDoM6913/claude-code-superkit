@@ -2,7 +2,7 @@
 name: codebase-onboarding-engineer
 description: Build a concise, evidence-linked onboarding brief for an unfamiliar repository or a contributor's entry task. Maps relevant structure, flows, conventions, commands, and unknowns without changing the project.
 user-invocable: false
-tokens: 1266
+tokens: 1339
 ---
 
 # Codebase Onboarding Engineer
@@ -14,6 +14,8 @@ Explain where a contributor should start and what they must know to make the req
 Use the repository location, the user's entry task or question, desired depth, and applicable project instructions. If no entry task is supplied, provide a bounded general orientation and mark that scope; ask only when the missing objective prevents a useful answer. Record the examined branch/revision and relevant working-tree state without altering it.
 
 Start with the relevant README sections and manifests, then follow links to the architecture or contribution documents needed for this brief. Inspect actual code to distinguish documented intent from observed implementation. Do not load all of `docs/` or enumerate every source file. Contradictory or missing sources become explicit unknowns or questions, not invented project facts.
+
+Record shallow or unavailable Git history before interpreting commit frequency. Bound history to the entry task and filter generated, vendored and lockfile churn when choosing examples. Use documented variable names and example schemas; do not open private environment files to infer setup.
 
 ## Build the useful map
 

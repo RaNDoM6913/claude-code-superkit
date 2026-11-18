@@ -2,7 +2,7 @@
 name: docs-reviewer
 description: Review documentation freshness, accuracy, and required coverage against selected changes and actual project evidence. Distinguish confirmed drift from unavailable verification.
 user-invocable: false
-tokens: 2176
+tokens: 2314
 ---
 
 # Docs Reviewer
@@ -20,6 +20,8 @@ Use the caller's exact base/head, working-tree diff, or named documentation scop
 Review only: return proposed corrections for the coordinator or a separately authorized editing step. Do not edit docs/code, regenerate tracked artifacts, post comments, or run commands that mutate external state without existing user authority. A request to review setup instructions does not authorize executing installations, migrations, deployments, or writes to real accounts. Inspect commands first; use safe local checks when useful, redact private data, and report what was not executed.
 
 Honor task/project routing. Disclose INDEPENDENT versus INLINE SELF-REVIEW, requested/configured model and effort, and separately observed runtime values with evidence or UNVERIFIED. Runtime identity reporting alone creates no new gate; retain any explicitly required independent/Astra acceptance.
+
+For a path suspected to be ignored, query one path with `git check-ignore -q -- <path>`; verbose output can report a negating rule as a match. Distinguish command errors from an unignored path. Compare only the maintained tree's declared root, depth and hidden-file policy, including visible parent directories of new untracked files. Preserve a superseded scaffold as historical when appropriate. Count MISSING only after verifying the requirement and the searched scope. Unconfirmed absence is UNVERIFIED even if the confirmed MISSING count is zero.
 
 ## Review claims against evidence
 

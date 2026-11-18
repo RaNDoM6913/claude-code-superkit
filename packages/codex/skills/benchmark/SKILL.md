@@ -2,7 +2,7 @@
 name: benchmark
 description: Run scoped Go benchmarks and compare measurements without changing the user's checkout
 user-invocable: true
-tokens: 953
+tokens: 997
 ---
 
 # Go Benchmark Runner
@@ -21,14 +21,14 @@ Read applicable `AGENTS.md` instructions and discover available command/file too
 - Package target: resolve and validate the requested package/pattern within the intended module.
 - `--compare <ref>`: compare the current declared source state with a validated commit/ref.
 
-Treat request text as data, not shell syntax. Record source revision and relevant dirty changes, Go version, OS/architecture, CPU and benchmark flags/environment so results can be interpreted.
+Treat request text as data, not shell syntax. Apply `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none` even to `go version`. Compare the active workspace sum files before and after. Record source revision and relevant dirty changes, Go version, OS/architecture, CPU and benchmark flags/environment so results can be interpreted.
 
 ## Step 3: Run Benchmarks
 
 Use the project's configured command when present. A standalone example is:
 
 ```bash
-go test -run='^$' -bench=. -benchmem -count=6 -timeout=10m ./package/...
+GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go test -run='^$' -bench=. -benchmem -count=6 -timeout=10m ./package/...
 ```
 
 Replace the package with the verified scope. `-run='^$'` excludes ordinary tests; package initialization and `TestMain` may still run. Preserve command exit and full output in a unique task-owned result directory, not a shared `/tmp/bench-new.txt`. A timeout, compilation failure or no matched benchmarks is incomplete evidence. Record samples rather than inventing an average or claiming six repetitions guarantee statistical significance.

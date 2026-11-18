@@ -2,7 +2,7 @@
 name: test-runner
 description: Auto-detect and run project tests — supports Go, TypeScript, Python, Rust, and more
 user-invocable: true
-tokens: 1190
+tokens: 1583
 ---
 
 # Run Tests
@@ -13,7 +13,9 @@ Auto-detect the project's test runner and execute tests.
 
 Parse the user's request to determine scope and parameters. Accepted formats: `backend`, `frontend`, `e2e`, `all`, `--coverage`.
 
-Read applicable `AGENTS.md` instructions and discover the current runtime's command tools. Inspect the selected package's scripts/configuration and installed tool versions before execution. Prefer its existing package-manager scripts or installed binaries; the command examples below assume the corresponding local runner is already installed. Do not install missing tools implicitly. Inspect Make targets and setup/teardown effects before using them. Do not start infrastructure, change dependencies, contact a live service, or mutate a shared database without authority for that target; report unavailable prerequisites. Preserve existing work and test outputs that are not yours.
+Read applicable `AGENTS.md` instructions and discover the current runtime's command tools. Inspect the selected package's scripts/configuration and installed tool versions before execution. Prefer its existing package-manager scripts or installed binaries; the command examples below assume the corresponding local runner is already installed. Do not install missing tools implicitly. For npm workspaces with a confirmed installed runner, `npm_config_offline=true npx --no -- <bin> <args>` preserves its flags. Prefer the resolved local executable. Check the selected config, lifecycle scripts and setup/teardown effects first. Do not start infrastructure, change dependencies, contact a live service, or mutate a shared database without authority for that target; report unavailable prerequisites. Preserve existing work and test outputs that are not yours.
+
+Apply `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none` to **every** Go invocation, including version and coverage queries. Check the active workspace’s `go.work.sum` and module sums before and after execution. For Cargo set `RUSTUP_AUTO_INSTALL=0` and pass `--offline`; include `--locked` only with a tracked Cargo.lock. Without a tracked Cargo.lock, omit `--locked` and use a disposable copy when Cargo could create or rewrite it. If required dependencies or browsers are unavailable locally, report the affected suite as unavailable.
 
 ## Step 1 — Detect Test Runner
 
@@ -21,18 +23,19 @@ Scan the project root and subdirectories for stack markers:
 
 | Marker | Test Command | Stack |
 |--------|-------------|-------|
-| `go.mod` | `go test ./... -count=1` | Go |
+| `go.mod` | `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go test ./... -count=1` | Go |
 | `package.json` + vitest config | `./node_modules/.bin/vitest run` | Vitest |
 | `package.json` + jest config | `./node_modules/.bin/jest` | Jest |
 | `package.json` + playwright config | `./node_modules/.bin/playwright test` | Playwright (e2e) |
+| Cypress config + installed runner/browser | `./node_modules/.bin/cypress run` | Cypress (e2e) |
 | `pyproject.toml` / `pytest.ini` / `conftest.py` | `pytest` | Python (pytest) |
 | Existing unittest suite / configured unittest command | `python -m unittest discover` | Python (unittest) |
-| `Cargo.toml` | `cargo test` | Rust |
-| `pom.xml` | `mvn test` | Java (Maven) |
-| `build.gradle` | `./gradlew test` | Java/Kotlin (Gradle) |
+| `Cargo.toml` (example assumes tracked Cargo.lock) | `RUSTUP_AUTO_INSTALL=0 cargo test --offline --locked` | Rust |
+| `pom.xml` | `mvn --offline test` | Java (Maven) |
+| `build.gradle` | `./gradlew --offline test` | Java/Kotlin (Gradle) |
 | `Makefile` with `test` target | `make test` | Makefile |
 
-Prefer the project's configured test target after confirming its scope and effects. Marker files alone do not prove a runner is installed or configured.
+For Gradle, verify the matching wrapper distribution is already installed before invoking it. The wrapper can download Gradle before the build sees `--offline`. Prefer the project's configured target after confirming its scope and effects. Marker files alone do not prove a runner is installed or configured.
 
 ## Step 2 — Determine Scope
 
@@ -40,10 +43,10 @@ Based on the user's request:
 
 ### backend
 Run backend tests only:
-- **Go**: `go test ./... -count=1 -short`
+- **Go**: `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go test ./... -count=1 -short`
 - **Python**: `pytest tests/` or `pytest`
-- **Rust**: `cargo test`
-- **Java**: `mvn test` / `./gradlew test`
+- **Rust**: use the Cargo command and lockfile policy above
+- **Java**: `mvn --offline test` / `./gradlew --offline test`
 
 If the project is a monorepo, `cd` into the backend directory first (detect by `backend/`, `server/`, `api/`, or `src/` containing the go.mod/pyproject.toml).
 
@@ -68,14 +71,14 @@ Use the project's documented default suite. If absent, select the sole detected 
 
 ### --coverage
 Use coverage only when supported by the configured runner and installed plugins; keep its measurement scope explicit. Choose a fresh output path to avoid overwriting existing evidence:
-- **Go**: `-coverprofile=coverage.out` then `go tool cover -func=coverage.out`
+- **Go**: `-coverprofile=<fresh-path>` then `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go tool cover -func=<fresh-path>`
 - **Vitest/Jest**: `--coverage`
 - **pytest**: `--cov`
 - **Rust**: requires `cargo-tarpaulin` — `cargo tarpaulin`
 
 ## Step 3 — Run and Report
 
-Execute the selected command and preserve its original exit code, including when output is captured or summarized. A timeout, launch failure, missing tool, no tests collected or an all-skipped run is not a pass. Do not infer counts or coverage from a zero formatter/pipeline exit. Record full suitably redacted logs locally; summarize failures without losing the final runner result. After completion, report:
+Execute the selected command and preserve its original exit code, including when output is captured or summarized. A timeout, launch failure, missing tool, no tests collected or an all-skipped run is not a pass. Do not infer counts or coverage from a zero formatter/pipeline exit. If any required case was skipped, uncollected or missing from the selected target, report INCOMPLETE coverage even when other cases passed. Preserve any observed failure alongside incomplete coverage. Distinguish generated-case results from unrelated suite failures. Use UNKNOWN for a count the runner did not provide. Record full suitably redacted logs locally; summarize failures without losing the final runner result. After completion, report:
 
 ```
 ## Test Results

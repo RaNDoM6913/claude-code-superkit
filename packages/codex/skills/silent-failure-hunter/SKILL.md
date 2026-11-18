@@ -2,7 +2,7 @@
 name: silent-failure-hunter
 description: Review selected error paths for swallowed failures, misleading success, and unsafe recovery. Distinguish intentional fallback from lost propagation or observability using actual caller contracts.
 user-invocable: false
-tokens: 3993
+tokens: 4139
 ---
 
 # Silent Failure Hunter
@@ -16,6 +16,8 @@ Read applicable `AGENTS.md` first, then relevant error policy, architecture, and
 Review only. Propose fixes, but do not edit code, change logging/alerts, enqueue retries, trigger production failures, or perform external writes without a distinct authorized action. Tests or command examples are not permission to contact real services. Use safe, authorized local checks when needed and redact secrets/private data from logs, excerpts, and reports.
 
 Honor explicit task/project model and effort routing and acceptance ownership. Disclose INDEPENDENT versus INLINE SELF-REVIEW. Report requested/configured route separately from observed runtime values with evidence or UNVERIFIED; missing runtime identity alone creates no new gate. Mandatory independent/Astra acceptance remains pending when unavailable.
+
+For optional language facts prefer selected local source. Use a trusted `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none go version` or an isolated `python3 -I -S -B` with self-authored stdlib-only input when needed; skip rustup shims that could install a toolchain. Compare status and content before and after any permitted probe under the AGENTS.md side-effect procedure. Trace Bash conditional contexts through the last operand and verify the selected Python release's cancellation inheritance. Cite the line that drops the signal, and keep unverified scope separate from findings.
 
 ## Discover, trace, then triage
 

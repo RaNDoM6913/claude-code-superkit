@@ -2,7 +2,7 @@
 name: go-benchmark
 description: Go benchmarking methodology knowledge — testing.B API, benchstat comparison, sub-benchmarks, profile capture (-cpuprofile/-memprofile/-trace), reading output, dead-code elimination trap. Activate when Go code contains `func Benchmark*`, uses `testing.B`, or user asks about Go benchmarks, benchstat, or performance measurement methodology.
 user-invocable: false
-tokens: 1612
+tokens: 1933
 ---
 
 # Go Benchmark Methodology
@@ -11,9 +11,9 @@ Upstream: https://pkg.go.dev/testing#hdr-Benchmarks · https://pkg.go.dev/golang
 
 ## Why Methodology Matters
 
-A single run is a measurement, not an answer. Noise dwarfs changes under ~10%. Rules:
+Repeated samples expose variation. Choose the number of samples for the workload and comparison.
 
-1. `-count=6` minimum (statistical significance).
+1. Collect repeated samples under comparable conditions. Six samples alone cannot establish significance.
 2. Compare with `benchstat`, not eyeball percentages.
 3. Quiet machine — close heavy apps; plug in the laptop.
 4. Always use `-benchmem`. Allocations are usually what changed.
@@ -39,6 +39,7 @@ func BenchmarkUserLookup(b *testing.B) {
 ### Timing Control
 
 ```go
+b.StopTimer()
 for i := 0; i < b.N; i++ {
     data := buildHeavyInput(i)
     b.StartTimer()
@@ -47,7 +48,7 @@ for i := 0; i < b.N; i++ {
 }
 ```
 
-Prefer `b.ResetTimer` before the loop; per-iteration Start/Stop adds overhead.
+For a traditional `b.N` loop, reset after one-time setup. From Go 1.24, `for b.Loop() { … }` resets the timer on its first call and stops it on return of false. Per-iteration preparation inside either loop is timed unless explicitly excluded.
 
 ### Throughput
 
@@ -80,6 +81,11 @@ Target a slash pattern: `go test -bench=BenchmarkSort/n=1000`.
 
 ## Running
 
+Use `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none` for every example and
+version query below. Inspect the selected package’s initialization, tests and
+workspace sums first. Keep profiles, traces and benchmark logs in fresh
+task-owned paths. For strict offline execution use a network-isolated runner.
+
 ```bash
 go test -bench=. -benchmem -count=6 ./...
 go test -bench=BenchmarkJSON -benchtime=3s -count=10
@@ -92,7 +98,7 @@ go test -bench=. ./pkg/cache/...
 |------|---------|
 | `-bench regex` | Which benchmarks |
 | `-benchmem` | Always on — B/op + allocs/op |
-| `-count N` | Samples (≥ 6) |
+| `-count N` | Repeated measurements per configuration |
 | `-benchtime Xs` or `Nx` | Duration or fixed iterations |
 | `-cpu 1,2,4` | Vary GOMAXPROCS |
 | `-cpuprofile cpu.prof` | CPU profile |
@@ -126,10 +132,10 @@ Process-8            12.30m ± 2%     8.70m ± 1%  -29.27% (p=0.002 n=10)
 Process-8             4.80Ki ± 0%   1.20Ki ± 0%  -75.00% (p=0.002 n=10)
 ```
 
-- `± N%` — coefficient of variation; under 5% is stable.
+- `± N%` — relative confidence interval around the sample median at the selected confidence level.
 - `vs base` — relative delta; negative = faster/less.
 - `p=0.002` — Mann-Whitney p-value; `< 0.05` is significant.
-- `n=10` — sample size (may be trimmed for outliers).
+- `n=10` — sample count used in the comparison.
 
 If `p > 0.05`, benchstat prints `~` — don't claim a win on insignificant results.
 
@@ -148,7 +154,7 @@ go tool trace trace.out
 
 ## Dead Code Elimination Trap
 
-Benchmarks without a used result get eliminated. Classic failure: 0.3 ns/op for an operation that obviously can't be that fast.
+In a traditional `b.N` loop the compiler can eliminate unused work. The compiler treats calls inside the exact `for b.Loop() { … }` form specially. Classic failure: 0.3 ns/op for an operation that obviously can't be that fast.
 
 ```go
 // WRONG — result unused
@@ -185,33 +191,31 @@ Derived: ops/sec = `1e9 / ns/op`. Target "0 allocs/op" on hot paths.
 
 | Pitfall | Symptom | Fix |
 |---------|---------|-----|
-| `-count=1` | Can't distinguish noise | `-count=6` minimum |
+| `-count=1` | Cannot estimate run-to-run variation | Collect repeated independent measurements |
 | No benchstat / eyeballing percentages | False wins | Use benchstat; respect `p > 0.05` |
-| Setup inside loop | Measures setup + work | Pull out; `b.ResetTimer` |
+| Setup inside loop | Measures setup + work | Move one-time setup before the loop; for `b.N`, reset after setup |
 | Laptop on battery / thermal throttle | CPU downclocks | Plug in, close heavy apps |
-| `-benchtime=100x` in CI | 100 samples is nothing | `-benchtime=2s` or more |
+| `-benchtime=100x` in CI | 100 iterations form one measurement | Choose a duration or fixed workload suitable for the operation, and repeat measurements |
 | Comparing across Go versions / hardware | Apples to oranges | Same machine, same `go version` |
 | Ignoring `allocs/op` delta | CPU equal, allocs doubled | Read all three columns |
-| `b.ReportAllocs` missing | No allocation output | Add it |
+| Allocation cost is in scope but no measurement was recorded | Missing B/op and allocs/op | Use `-benchmem` or `b.ReportAllocs()` |
 
 ## Methodology Checklist
 
-Before claiming a win:
-
-- [ ] `-count=6`+
-- [ ] Quiet machine
-- [ ] `benchstat` shows `p < 0.05`
-- [ ] Inspected `B/op` and `allocs/op`
-- [ ] Sink or `runtime.KeepAlive` if result unconsumed
-- [ ] Reproduced on a second machine
+For a comparative claim, record comparable environments and independent repeated
+measurements, the effect estimate, the confidence interval and the configured
+test of significance. Inspect allocation metrics when the claim includes
+memory. Additional machines are relevant when the claim covers them.
 
 ## Review Checklist
 
-Flag:
-
-- **CRITICAL** — Benchmark result never consumed (missing sink) → measuring nothing
-- **WARNING** — `-count=1` in CI / PR templates
-- **WARNING** — Setup inside the loop, no `b.ResetTimer`
-- **WARNING** — No `-benchmem` / `b.ReportAllocs()` missing
-- **SUGGESTION** — No sub-benchmarks for a parameter sweep
-- **SUGGESTION** — Missing `b.SetBytes` in I/O / parsing benchmarks
+- A traditional `b.N` benchmark can lose its measured work to compiler
+  optimization. Inspect the benchmark body and compiler evidence before
+  reporting that failure. A missing sink on its own is insufficient, especially
+  for a call inside `for b.Loop() { … }`.
+- Report a single measurement as insufficient for a claimed distribution or
+  speedup. One run can still verify that a benchmark executes.
+- Check whether setup, cleanup and copying were intended to be timed.
+- If allocations or throughput are claimed, check the actual B/op, allocs/op or
+  bytes-per-operation basis. Choose sub-benchmarks when distinct input classes
+  need separate estimates.

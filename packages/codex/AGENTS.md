@@ -238,6 +238,38 @@ agreement; they do not alter the model conventions of shipped Claude assets.
   Report mandatory unknowns separately from observed failures; neither becomes
   success because a retry budget is exhausted.
 
+### Side effects
+
+When a review promises read-only checks, capture a fingerprint from the same
+repository root immediately before and after each tool run, including failures.
+
+1. Record `git --no-optional-locks status --short -uall`. For machine comparison
+   use its NUL-delimited `-z` form. Add `--ignored=matching` when the tool
+   produces ignored outputs. Status alone misses rewrites of already dirty files.
+2. Bind the index with `git ls-files --stage -z`. Get changed tracked names with
+   `git diff --name-only --no-renames --no-ext-diff --no-textconv -z HEAD --`
+   and unstaged names with the same command without HEAD. On an unborn branch use
+   the index entries and unstaged list. Add `git ls-files -o --exclude-standard -z`.
+   Use only inspected Git settings/attributes that are safe for the check.
+3. For each distinct name in bytewise order, hash its NUL-terminated path, type,
+   mode and local content digest (for example `git hash-object --no-filters --stdin`
+   over the file bytes). Record absence explicitly. Hash a symlink’s link text
+   without following it. Keep NUL framing throughout, including names with
+   spaces/newlines. Compare only hashes and status in the report.
+4. Include each known ignored output explicitly by the same method, even if it
+   already existed. For Go this includes the active workspace’s `go.work.sum` and
+   module sums. Verify a workspace outside the selected root only within scope.
+   Bound nested repositories, submodules and special files separately or mark
+   them UNVERIFIED. Never follow a path through a symlink to read outside scope.
+5. Require success from every enumeration and hash before comparing. On a
+   mismatch report the affected paths, permitted outputs and uncovered scope.
+   Stop dependent read-only checks and preserve the working tree for its owner.
+
+For local Go tools set `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none` on every
+invocation, including version probes. Use a verified cache and a network-isolated
+runner for strict offline checks. Project code, module verification and external
+tools have their own effects. Keep verification enabled and report missing inputs.
+
 ### Planning
 - Use the runtime's plan tool when available; otherwise keep a concise plan in
   the conversation or an authorized project note.

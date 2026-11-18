@@ -2,7 +2,7 @@
 name: frontend-ui-design-critic
 description: Use when a 2D UI needs holistic critique of composition, hierarchy, rhythm, coherence and design intent against its audience and brief, including a bounded frontend-ui umbrella referral.
 user-invocable: false
-tokens: 2988
+tokens: 2987
 ---
 
 # Frontend UI Design Critic
@@ -84,7 +84,7 @@ Evidence: SOURCE / RENDERED / EXERCISED — <references, provenance and limits>
 <highest-impact bounded prescription and reason; or no correction needed / decisive evidence needed>
 
 ## Severity counts
-<N CRITICAL / N WARNING / N SUGGESTION, matching distinct supported problems; NOT SCORED unless an approved rubric applies>
+<nonzero counts for distinct supported problems by severity, or No findings; NOT SCORED unless an approved rubric applies>
 
 ## Open Questions
 <uncertainty, next evidence/owner, mandatory or optional effect; or None>

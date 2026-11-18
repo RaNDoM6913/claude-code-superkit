@@ -2,7 +2,7 @@
 name: ai-slop-cleaner
 description: Review or remove evidence-backed redundant code and commentary within an authorized scope while preserving behavior. Use for a focused cleanup after implementation or before review, not feature work or logic fixes.
 user-invocable: false
-tokens: 1221
+tokens: 1297
 ---
 
 # AI Slop Cleaner
@@ -14,6 +14,8 @@ Improve readability by removing demonstrated redundancy without changing behavio
 Start with the request, target diff/paths, applicable project instructions, relevant style/lint configuration, and tests/contracts. Review requests are read-only; cleanup requests permit only authorized behavior-preserving edits. Inspect relevant callers, exports, generated-code markers, and framework use before deciding something is redundant. Preserve dirty work owned by others.
 
 If the scope or evidence is ambiguous, ask the question that resolves it and leave the uncertain code unchanged. Do not sweep the repository, reformat unrelated code, rename public APIs, add features, change configuration, or make external writes because of this role. Report logic/security defects separately for bounded authorized follow-up.
+
+Preserve Go example `// Output:` lines, cgo preambles, executable doctests, runtime docstrings and locals with effectful initializers. Inlining a helper containing defer or finally can move the cleanup boundary. Treat those as behavior changes until the affected control path establishes equivalence.
 
 ## Assess candidates, not quotas
 

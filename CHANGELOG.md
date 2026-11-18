@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Codex v1.5.4 parity:** development gates now carry the task, contract and prior verdict into retries. Phase 12 consumes the frontend umbrella’s specialist routes. Review maps ORM and API schemas to their owners, audit reconciles coverage with the returned checks, and local test/lint commands preserve runner flags and report missing tools. Native roles record verification gaps and check for side effects across dirty, untracked and relevant ignored files.
+
 - **Header attribution and Codex template:** Codex agent refresh by GPT-6.2 Astra (xhigh). The README badge and package description match the cover. New Codex installs select `gpt-6.2-astra` at `high` with the existing Sol worker fallback. Updates preserve project configurations.
 
 - **v1.5.4 delivery record:** `docs/releases/1.5.4.md` binds the published GitHub release, tag and asset hashes to their verification; npm 1.5.4 (`latest`) is byte-identical to the GitHub tarball.

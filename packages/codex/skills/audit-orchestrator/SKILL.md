@@ -2,7 +2,7 @@
 name: audit-orchestrator
 description: Run comprehensive parallel audit — dispatches specialized agents by scope (frontend, backend, infra, security)
 user-invocable: true
-tokens: 1702
+tokens: 1908
 ---
 
 # Audit Orchestrator
@@ -41,7 +41,7 @@ Only dispatch roles with available resolved skill files. Record unavailable role
    - **audit-infra** — Infrastructure checks: Docker security, exposed ports, env secrets, health checks, resource limits
    - **security-scanner** — Cross-cutting security: OWASP top-10, secrets in code, dependency vulnerabilities, auth bypass, CORS, rate limiting
 
-4. **Collect results** using the runtime's supported result tools; retain failures, unavailable coverage and partial returns.
+4. **Collect results** using the runtime's supported result tools; retain failures, unavailable coverage and partial returns. For each full audit-frontend, audit-backend or audit-infra report reconcile twelve distinct domain IDs with the native PASS/WARN/FAIL/UNKNOWN/N/A totals. Preserve the evidence and reason for each excluded domain in a scoped audit. Quote a no-target report and its Searched evidence verbatim. Missing/duplicated rows, absent search evidence or inconsistent totals are CONTRACT VIOLATION with partial coverage. Keep the original report. For security-scanner use the findings/summary contract below.
 
 5. **Merge and deduplicate** by root cause and impact, preserving distinct issues on the same line, role-specific severity/confidence, prior unresolved findings, and evidence gaps. Do not inflate severity or turn missing evidence into a demonstrated defect.
 
@@ -84,13 +84,13 @@ Roles / execution mode: {delegated or inline passes, unavailable roles}
 [results, justified N/A for absent frontend, or UNAVAILABLE with uncovered scope]
 
 ### Backend (audit-backend)
-[results, justified N/A for absent backend, or UNAVAILABLE with uncovered scope]
+[verbatim backend report, including NO BACKEND DETECTED and Searched lines when returned, or UNAVAILABLE with uncovered scope]
 
 ### Infrastructure (audit-infra)
 [results, justified N/A, or UNAVAILABLE with uncovered scope]
 
 ### Security (security-scanner)
-[results from agent]
+[verbatim findings, non-zero severity counts or No findings, residual unknowns and mitigation actions]
 
 ### Grand Summary
 | Agent | PASS | WARN | FAIL | UNKNOWN | N/A | Coverage | Progression |
@@ -98,7 +98,7 @@ Roles / execution mode: {delegated or inline passes, unavailable roles}
 | frontend | X | Y | Z | U | N | ... | ... |
 | backend | X | Y | Z | U | N | ... | ... |
 | infra | X | Y | Z | U | N | ... | ... |
-| security | X | Y | Z | U | N | ... | ... |
+| security | — | — | — | — | — | <scanner finding summary and coverage> | ... |
 
 ### Required Action Items
 1. [agent] file:line or evidence reference — supported defect or mandatory evidence gap
@@ -106,9 +106,9 @@ Roles / execution mode: {delegated or inline passes, unavailable roles}
 Overall progression: ALLOWED | BLOCKED — mandatory criteria and unresolved conditions
 ```
 
-Preserve each role's native findings: security-scanner uses CRITICAL/WARNING/SUGGESTION plus HIGH/MEDIUM/LOW confidence; audit-infra supplies per-check status and finding severity/confidence. Status counts are coverage evidence, not severity counts or a completion percentage. Do not mechanically convert CRITICAL to FAIL without the applicable criterion, or drop a required WARNING because its name differs. If a role supplies only findings, derive status only from its actual coverage/evidence; absent evidence remains UNKNOWN. PASS requires complete assigned coverage, fulfilled mandatory conditions and no unresolved material issue. Optional concerns may remain WARN; any required unknown, unavailable review or pending mandatory acceptance makes overall progression BLOCKED even with zero FAILs. A scoped clean audit does not establish universal OWASP coverage or authorize remediation, deployment or release.
+Preserve each role's native findings: security-scanner uses CRITICAL/WARNING/SUGGESTION plus HIGH/MEDIUM/LOW confidence; audit-infra supplies per-check status and finding severity/confidence. An omitted severity counts as zero only within an explicitly supplied security summary. A missing report or unknown criterion stays UNKNOWN. Status counts describe domain coverage. Do not mechanically convert CRITICAL to FAIL without the applicable criterion, or drop a required WARNING because its name differs. If a role supplies only findings, derive status only from its actual coverage/evidence; absent evidence remains UNKNOWN. PASS requires complete assigned coverage, fulfilled mandatory conditions and no unresolved material issue. Optional concerns may remain WARN; any required unknown, unavailable review or pending mandatory acceptance makes overall progression BLOCKED even with zero FAILs. A scoped clean audit does not establish universal OWASP coverage or authorize remediation, deployment or release.
 
 ## Notes
 - Parallel execution and isolated worker contexts depend on the available runtime; report the mode actually used.
 - Overlapping checks (e.g., SQL injection in both backend and security) are deduplicated
-- For targeted re-audit after fixes, specify a narrower scope
+- For a re-audit, pass the previous finding IDs and file:line references, the remediated paths and the required regression scope.

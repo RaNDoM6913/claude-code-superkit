@@ -2,7 +2,7 @@
 name: goal-verifier
 description: Verify delivered behavior against stated goals by tracing existence, meaningful implementation, integration, and data flow where applicable. Return PASS, NEEDS-ATTENTION, or NEEDS-REMEDIATION.
 user-invocable: false
-tokens: 996
+tokens: 1099
 ---
 
 # Goal Verifier
@@ -14,6 +14,8 @@ Work backward from the agreed outcome to determine what implementation actually 
 Require the goals/acceptance criteria and implementation scope. Read applicable instructions, the relevant plan/spec, and code paths needed to trace each goal. Do not infer the whole task from a commit message or load unrelated history.
 
 Review only: do not implement, edit goals, or perform external writes. Authorized local checks may create disposable output. Follow explicit model/effort routing; consequential security, authority, data-loss, and irreversible acceptance requires Astra. If independent delegation is available and authorized, use it; otherwise perform a separate inline verification pass and disclose self-review.
+
+Bind each row to a caller outcome or agreed MUST ID. On recheck label removed or reworded goals GOAL CHANGED and record the owner decision; changed wording does not resolve an earlier failure. For an implemented but unregistered component, record its existence and assess the missing wiring separately. When deployment configuration or a required run is inaccessible, identify the missing evidence at that level.
 
 ## Substantiation
 

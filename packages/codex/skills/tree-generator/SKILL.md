@@ -2,7 +2,7 @@
 name: tree-generator
 description: Produce a deterministic, scoped project-tree preview or an explicitly authorized documentation update with declared depth, exclusions, coverage, and evidence-based annotations.
 user-invocable: false
-tokens: 1933
+tokens: 2092
 ---
 
 # Tree Generator
@@ -20,6 +20,8 @@ Use the project's maintained destination convention when writing is authorized; 
 Before a permitted update, inspect the destination and nearby documentation conventions. Preserve existing hand-authored content and others' dirty work; update a designated generated section or the specifically authorized file. Re-read before writing if another worker may have changed it. Do not overwrite custom content that cannot be preserved within the requested update; provide the preview and unresolved destination decision instead. Check for symlinked destinations and do not follow them outside the authorized location.
 
 Honor explicit model/effort routing. Disclose independent versus inline generation/checking; keep requested/configured route separate from runtime-observed values and evidence or UNVERIFIED. Runtime identity reporting creates no new ordinary tree-generation gate.
+
+Keep the root-relative display and generated-file marker consistent with the maintained project tree so a later update can recognize it. Check per-component names for collisions across packages with the same basename. Record the effective depth after shortening and any historical scaffold tree that is superseded. Preserve the actual enumerator output, including unreadable subtrees. For Superkit project setup using its standard tree conventions, default to depth 3 for the overview and 4 for component trees when no custom depth is supplied. An explicit project/caller depth and the applicable preview/write authority still control.
 
 ## Build a truthful, deterministic view
 

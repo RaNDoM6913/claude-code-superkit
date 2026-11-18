@@ -2,7 +2,7 @@
 name: review-orchestrator
 description: Coordinate requested code review or required review gates by identifying changed scope, selecting available reviewers, and consolidating evidence and findings.
 user-invocable: true
-tokens: 2068
+tokens: 2276
 ---
 
 # Unified Orchestrated Code Review
@@ -50,14 +50,15 @@ Based on file extension and path patterns, build a dispatch plan. Each pattern m
 | File Pattern | Agents |
 |---|---|
 | `*.go` (excluding `*_test.go`, `migrations/`) | **go-reviewer**, **security-scanner** |
-| `migrations/*.sql` or `db/migrate/*.sql` | **migration-reviewer** |
+| SQL migration paths | **migration-reviewer**, **database-reviewer** |
+| ORM schema/models (including Prisma and Drizzle), query SQL including sqlc | **database-reviewer** |
 | `*.tsx` | **ts-reviewer**, **design-system-reviewer** |
 | `*.vue`, `*.svelte` | **design-system-reviewer** |
 | `*.ts` | **ts-reviewer** |
 | `*.py` | **py-reviewer**, **security-scanner** |
 | `*.rs` | **rs-reviewer** |
-| `**/bot*/**/*.go` or `**/bot*/**/*.py` | **bot-reviewer** |
-| `*.yaml` / `*.yml` (OpenAPI/config) | **api-contract-sync** (if available) |
+| Bot code in Go, Python, TypeScript, JavaScript or Rust | **bot-reviewer** |
+| OpenAPI/Swagger definitions in YAML or JSON, GraphQL schemas, protobuf API contracts | **api-contract-sync** |
 
 Rules:
 - A single agent is dispatched **at most once** even if multiple files match
@@ -75,7 +76,7 @@ Inspect available delegation tools and authorization before dispatch. For indepe
 - py-reviewer (if triggered)
 - rs-reviewer (if triggered)
 - bot-reviewer (if triggered)
-- migration-reviewer (if triggered)
+- migration-reviewer and database-reviewer (as mapped above)
 - design-system-reviewer (if triggered)
 
 **Parallel Group 2 (cross-cutting)**:
@@ -84,7 +85,9 @@ Inspect available delegation tools and authorization before dispatch. For indepe
 
 Groups 1 and 2 can run concurrently when their assigned scopes are independent and runtime capacity permits. Reviewers may not recursively delegate unless assigned.
 
-For each agent, inject the `REVIEW_CONTEXT` block into the prompt:
+Use the goal-verifier verdict track when an implementation plan binds the reviewed changes to specific goals. Give it the matching plan, requested outcomes and **all** reviewed hunks. Record absence of a matching plan when relevant. Capture its Overall verdict, goal-level evidence, issues and verification gaps verbatim alongside the reviewer findings.
+
+For each findings-based reviewer, inject the `REVIEW_CONTEXT` block into the prompt:
 
 ```
 You are reviewing code changes.
@@ -115,9 +118,11 @@ Report findings in your standard format, plus coverage (COMPLETE/PARTIAL/UNAVAIL
 - **py-reviewer**: `*.py` hunks
 - **rs-reviewer**: `*.rs` hunks
 - **migration-reviewer**: `*.sql` migration hunks only
-- **security-scanner**: all hunks (cross-cutting concern)
+- **database-reviewer**: migration, ORM, schema and query changes with their callers
+- **api-contract-sync**: API definitions and corresponding changed producers/consumers
+- **security-scanner**: all hunks in the assigned security review
 - **bot-reviewer**: bot-related file hunks only
-- **design-system-reviewer**: `*.tsx` / `*.vue` / `*.svelte` UI component hunks
+- **design-system-reviewer**: relevant UI component hunks, including TSX, Vue and Svelte
 
 ## Step 4 — Collect and Deduplicate Findings
 
@@ -138,11 +143,9 @@ After all agents complete:
 
 4. **Summary table**:
 
-| Agent | Blocking | Important | Nit | Status |
-|-------|----------|-----------|-----|--------|
-| go-reviewer | 0 | 2 | 1 | PASS |
-| ts-reviewer | 1 | 0 | 3 | FAIL |
-| ... | | | | |
+| Agent | Non-zero findings by severity (or No findings) | Coverage | Status and grounds |
+|-------|-----------------------------------------------|----------|--------------------|
+| <role> | <counts> | <covered and unreviewed scope> | <PASS / WARN / FAIL and reason> |
 
 Status: **FAIL** if a supported blocking finding or unresolved mandatory acceptance condition prevents progression; distinguish defects from missing evidence. **WARN** for non-blocking concerns or partial optional coverage. **PASS** only when assigned coverage is complete, mandatory conditions are met, and remaining items are nits-only or clean. Carry each reviewer's coverage and evidence status into the summary; no findings is not proof of complete review.
 

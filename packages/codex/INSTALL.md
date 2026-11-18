@@ -150,6 +150,15 @@ this installer never writes to `~/.codex` or `~/.agents`.
 Automated installation includes all 83 skills below. For manual selection only,
 create `.agents/skills/` before copying and preserve any existing same-name folders.
 
+The optional **Claude** extra `--extras=red-blue-auditor` places its helper at
+`.claude/scripts/red-blue-auditor/scan.sh` with a sibling `patterns/` directory.
+Codex-only installation supplies the native review skill. Its static review
+also works without this helper. The v1.5.4 helper ships 35 patterns. In normal
+mode exit 1 means at least one match. In `--exit-on-critical` mode exit 2 means
+a CRITICAL match, and exit 0 can include other matches. Exit 3 indicates a
+missing patterns directory and 4 a usage/target error. Inspect reported pattern
+errors and coverage even after exit 0.
+
 ### 9 Command Skills (user-invocable)
 
 | Skill | Description |
@@ -163,6 +172,13 @@ create `.agents/skills/` before copying and preserve any existing same-name fold
 | `new-migration` | Discover the migration tool/dialect and scaffold its native format without applying it |
 | `migrate` | Inspect status by default; apply or roll back an explicitly authorized, bounded set |
 | `benchmark` | Run available Go benchmarks; compare an isolated baseline with installed tools |
+
+The standalone catalog has no `workflow` or `superkit-init` command. For bug
+triage, give `debug-observer` the symptom and prior failed fixes. For
+characterization, give `test-generator` the unchanged code and ask it to pin
+current behavior before a refactor. For project setup trees, request
+`tree-generator` with the intended destinations and depths (3 for the
+overview, 4 for components). A missing role leaves that step uncovered.
 
 ### 37 Agent Skills (available roles)
 
@@ -178,7 +194,7 @@ Codex agent refresh by GPT-6.2 Astra (xhigh). This catalog includes core and ext
 | `code-reviewer` | Quality — generic code review |
 | `comment-rot-analyzer` | Quality |
 | `security-scanner` | Security — evidence-backed application and CI/agent trust-path review |
-| `red-blue-auditor` | Security — read-only Red / Blue / Auditor cross-check; explicit task selection, no new automatic caller |
+| `red-blue-auditor` | Security — explicitly selected static review of agent configuration, with optional scanner evidence |
 | `silent-failure-hunter` | Quality |
 | `audit-frontend` | Audit — 12 frontend checks against assigned product, data and toolchain contracts; evidence gaps explicit |
 | `audit-backend` | Audit — 12 backend domains against assigned API, data-access and operational contracts; evidence gaps explicit |
@@ -268,7 +284,7 @@ default_subagent_reasoning_effort = "medium"
 
 Skills are instructions used by the agent that loads them; skill frontmatter does not select the execution model. The agent defaults apply when a dispatch omits model or effort. Explicit task routing should select the intended model and effort, with substantive Sol review at `high` and critical decisions accepted by Astra. The supported effort levels and model availability depend on the installed runtime and account.
 
-These settings were checked against Codex CLI `0.162.0-alpha.17.2` and the [official configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference). They declare routing; they do not prove a live task ran on that model. Model behavioral acceptance remains pending. The owner-required Astra authorship rule for Superkit contributors is documented in [WORKING_AGREEMENT.md](../../docs/WORKING_AGREEMENT.md).
+Codex CLI `0.169.0-alpha.11.1` listed `gpt-6.2-astra` and supported the configured `high` effort in its local model catalog on November 18, 2026. The settings describe requested routing. See the [configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference). Model behavioral acceptance remains pending. The owner-required Astra authorship rule for Superkit contributors is documented in [WORKING_AGREEMENT.md](../../docs/WORKING_AGREEMENT.md).
 
 ## Native hooks and trust
 

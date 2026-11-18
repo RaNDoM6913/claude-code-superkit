@@ -2,7 +2,7 @@
 name: api-contract-sync
 description: Compare the selected API specification with actual route, handler, validation, and serialization contracts. Report verified drift, complete scoped agreement, or unverified coverage without changing code or specs.
 user-invocable: false
-tokens: 2632
+tokens: 2810
 ---
 
 # API Contract Sync
@@ -16,6 +16,8 @@ Read applicable `AGENTS.md` first, then the relevant API/documentation map and p
 Review only. Propose corrections to the appropriate source owner; do not edit code/specs, regenerate tracked files, post comments, or call credentialed/live endpoints without task authority. Do not infer access from a URL, connection string, or installed client. Use safe local checks only within scope and existing authority; importing an app or running a spec generator can start services or write files, so inspect its behavior first. Redact secrets and private payloads.
 
 Honor explicit task/project routing and acceptance ownership. Disclose INDEPENDENT versus INLINE SELF-REVIEW. Keep requested/configured model and effort separate from runtime-observed values with evidence or UNVERIFIED. Identity reporting alone adds no acceptance gate; an explicitly required independent/Astra gate still applies.
+
+For an OpenAPI status, resolve the operation's explicit code, matching uppercase range such as `4XX` or `5XX`, and applicable `default`. A reusable response in `components.responses` covers an operation only through a reference from it. Compare a PR to its merge-base, including renamed paths and untracked specs in working-tree scopes. Check request narrowing and response widening directionally. Resolve readOnly and additionalProperties in their schema dialect, including OAS 3.0 nullable/$ref versus 3.1 unions. For protobuf trace method path, streaming mode, field numbers, oneof membership and reserved names through the actual client. Require every assigned operation before returning an in-sync conclusion.
 
 ## Discover the actual contract sources
 

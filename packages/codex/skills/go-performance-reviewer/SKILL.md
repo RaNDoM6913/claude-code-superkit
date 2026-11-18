@@ -2,7 +2,7 @@
 name: go-performance-reviewer
 description: Review assigned Go performance paths and claims using workload, profiling, benchmark, allocation, GC, contention, I/O, pool, and cache evidence.
 user-invocable: false
-tokens: 3804
+tokens: 4030
 ---
 
 # Go Performance Reviewer
@@ -19,6 +19,8 @@ Review only. Propose corrections or a bounded measurement plan; do not edit sour
 
 Honor routing and acceptance ownership. Disclose INDEPENDENT versus INLINE SELF-REVIEW, requested/configured model and effort, and separately observed runtime identity or UNVERIFIED; absent identity alone creates no ordinary review gate. Cover the assigned area yourself without spawning reviewers. Related specialist work is a recommendation for the caller, not new authority.
 
+Prefer the selected local source. Even `go version` can switch or fetch toolchains: use a trusted local Go with `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none`, inspect inherited GOFLAGS and workspace membership. In a workspace, `go doc`, `go list` and `go vet` can create or change `go.work.sum` offline. If writes are outside scope, use source or an authorized isolated copy. For a permitted check, apply the AGENTS.md side-effect comparison from the repository root, including existing ignored workspace sums by content. Report `Side effects: <observed | none within checked scope | not checked and why>`. Never use applying vet fixes or network-backed vulnerability queries for this review.
+
 ## Discover, measure, and triage
 
 Gather plausible candidates, then read complete relevant functions, callers, resource owners, and tests before emitting findings. Evaluate all applicable domains below across the assignment, recording reviewed, justified N/A, or unreviewed areas. Searches and checklists cannot emit findings immediately. Preserve meaningful uncertainty in Open Questions, discard disproved candidates, and report evidence/conclusions rather than private reasoning steps.
@@ -27,7 +29,7 @@ Gather plausible candidates, then read complete relevant functions, callers, res
 
 Bind any profile/benchmark to its commit or binary, command/options, toolchain, platform, input/workload, concurrency, duration/sample settings, and environment. Confirm baseline and candidate are comparable and representative of the claim. Distinguish CPU cost, elapsed latency/tails, throughput, allocation rate, retained memory, queueing and external waits. Include effect size and uncertainty, not only a percentage or p-value. Do not claim a regression from incomparable runs or gains from static syntax changes.
 
-Inspect whether the benchmark measures the operation claimed: setup/cleanup and timer placement, initialized/reset state, compiler elimination, results retained where needed, realistic input sizes, warm/cold cache behavior, concurrency, network/DB stubs, and omitted work. `b.Loop` is available from Go 1.24 with specific compiler/timing semantics; correct `b.N` benchmarks remain valid. Do not call any form universally compiler-proof. Confirm selected-version behavior before rewriting advice.
+Inspect whether the benchmark measures the operation claimed: setup/cleanup and timer placement, initialized/reset state, compiler elimination, results retained where needed, realistic input sizes, warm/cold cache behavior, concurrency, network/DB stubs, and omitted work. `b.Loop` is available from Go 1.24 with specific compiler/timing semantics; correct `b.N` benchmarks remain valid. Do not call any form universally compiler-proof. Confirm selected-version behavior before rewriting advice. The first successful `b.Loop()` resets the timer, so setup before it is excluded; an extra `ResetTimer` there is unnecessary. A change between `b.N` and `b.Loop()` can change a benchmark baseline.
 
 Repeated comparable samples and tools such as benchstat can characterize noise. Choose repetitions, confidence/significance policy, and practical thresholds for the actual question; neither exactly ten runs nor one p-value cutoff guarantees validity or business significance. Avoid simultaneous competing variants on shared constrained hardware; check environmental drift and experimental ordering. Benchmark instrumentation, race checking, coverage, and profiling introduce overhead and must be disclosed. Missing measurement is UNVERIFIED or a required gate gap; it does not by itself prove slow code. Static evidence may establish complexity or an unbounded resource path, but not its measured magnitude or production frequency.
 
@@ -105,7 +107,7 @@ Verification:
   ASSUMED: <unchecked workload/behavior or none>
   NOT FOUND / SKIPPED: <missing sources or unperformed checks and reasons>
 Prior findings: <unresolved references/disposition or none>
-Summary: <N> CRITICAL / <N> WARNING / <N> SUGGESTION / <N> open questions
+Summary: <nonzero finding counts by severity, or No findings; open questions separately>
 Progression: ALLOWED | BLOCKED — <task criteria and mandatory unresolved conditions>
 ```
 

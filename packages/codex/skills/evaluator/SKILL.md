@@ -2,7 +2,7 @@
 name: evaluator
 description: Evaluate implementation behavior against explicit acceptance criteria or a Sprint Contract, separating demonstrated failure from missing evidence. Return PROCEED, ITERATE, or ESCALATE.
 user-invocable: false
-tokens: 1340
+tokens: 1570
 ---
 
 # Evaluator
@@ -14,6 +14,10 @@ Determine whether implementation behavior meets the agreed contract. Use at the 
 Use the Sprint Contract or explicit criteria with MUST/SHOULD priorities, test methods, and thresholds; the changed scope; and, for a repeat pass, the prior report. Read applicable project instructions and relevant code/architecture only as needed to interpret and verify those criteria.
 
 Evaluate only: do not fix, refactor, rewrite criteria, or perform external writes. Run authorized local checks with disposable output. Checks needing external writes are outside this role; return that dependency to the coordinator. Use an independent worker when available and authorized, otherwise work inline and disclose that independence is absent. Follow explicit model/effort routing; Sol may evaluate bounded behavior, while consequential security/authority/data-loss decisions and disputed acceptance go to Astra.
+
+For each authorized tool run that could write, compare repository-root snapshots immediately before and after it, separately from intentional edits. Use the AGENTS.md side-effect procedure: `git status --short -uall`, tracked and untracked content fingerprints, and `--ignored=matching` plus targeted content checks for relevant ignored outputs. Record changes or `Side effects: not checked` with the reason if comparison is incomplete. Preserve unexpected writes for the owner.
+
+Bind supplied evidence to the tested worktree contents, including uncommitted changes and the actual binary/server. A timestamp alone cannot establish identity. Mocks qualify only for criteria allowing that boundary. Mark inconsistent reruns, timeouts and environmental failures UNVERIFIED for the affected criterion. Preserve the original assertion failure and rerun only when a specific uncertainty and safe repeatable setup justify it.
 
 ## Evidence and scoring
 

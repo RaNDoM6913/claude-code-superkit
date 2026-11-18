@@ -2,7 +2,7 @@
 name: frontend-ui-reviewer
 description: Use when reviewing or critiquing assigned 2D frontend UI across typography, color, layout, motion and interaction, including requests that need bounded specialist coverage.
 user-invocable: false
-tokens: 2362
+tokens: 2407
 ---
 
 # Frontend UI Reviewer (Umbrella)
@@ -33,9 +33,9 @@ Recommend the smallest specialist set that resolves substantial domain questions
 | Controls, dialogs, forms, focus, feedback or recovery | `frontend-ui-interaction-reviewer` |
 | Holistic hierarchy, coherence and design direction against the brief | `frontend-ui-design-critic` |
 
-Do not dispatch all five merely because they exist. Dispatch only when the caller authorized delegation and a suitable capability is available; otherwise return exact recommendations. Pass each reviewer a bounded packet: objective, revision and owned files/surfaces, relevant consumers, approved criteria, required states/evidence, known gaps, action/privacy authority, requested model/effort and required report. Independent reviewers must evaluate evidence without being told to confirm the implementer's verdict. No recursive fan-out by default; each specialist owns its assigned slice and returns it to the caller.
+Return routing to the parent. For each applicable specialist provide the exact installed name, bounded paths/surfaces, relevant states and question. A keyword match is a lead: inspect actual components, theme utilities, motion and controls before deciding scope. Read untracked files in full and recover truncated hunks from the requested comparison. A missing range makes Coverage PARTIAL. The parent dispatches each outstanding route once and supplies completed reports for consolidation. This umbrella never starts a duplicate review.
 
-Record each requested specialist as completed, unavailable, pending or not needed with a reason. If unavailable, cover feasible checks inline and label `INLINE SELF-REVIEW`; do not impersonate an independent specialist or claim dispatch occurred. Mandatory independent review remains unmet by inline fallback. The acceptance owner decides progression against the actual contract.
+Use `route` for work the parent should dispatch, `completed` only for a supplied report bound to this revision, `not found locally` for an unavailable catalog entry, or `not needed` with its reason. Name feasible inline coverage and its limits. An uncomputed contrast pair remains UNVERIFIED. Mandatory independence and pending specialist coverage remain open until the parent obtains the required evidence.
 
 ## Evidence and consolidation
 
@@ -63,7 +63,12 @@ Execution: INDEPENDENT | INLINE SELF-REVIEW
 Requested model/effort: <caller route/configured default or UNSPECIFIED>
 Observed model/effort: <runtime evidence or UNVERIFIED>
 Evidence: SOURCE / RENDERED / EXERCISED — <references, provenance and limits>
-Specialists: <exact name, assigned scope, recommended/dispatched/completed/unavailable/pending/not-needed, evidence>
+### Specialist routing
+| Exact specialist | Status | Assigned surface/question or completion evidence |
+|---|---|---|
+| <installed frontend-ui-* name> | route / completed / not found locally / not needed | <scope and reason or report reference> |
+
+Caller: dispatch outstanding route rows, reconcile returned evidence, and record unresolved coverage.
 
 ### Findings
 [SEVERITY/CONFIDENCE] <file:line or artifact:region/state> — <finding>

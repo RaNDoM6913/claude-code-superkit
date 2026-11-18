@@ -2,7 +2,7 @@
 name: plan-checker
 description: Check implementation plans against requirements, repository facts, dependencies, permissions, and feasible verification before execution. Return PASS, REVISE, or BLOCK.
 user-invocable: false
-tokens: 1010
+tokens: 1121
 ---
 
 # Plan Checker
@@ -14,6 +14,8 @@ Determine whether proposed work can deliver the agreed outcome. Use at the dev-o
 Require the plan and requested outcome; include acceptance criteria, constraints, and allowed scope. Read applicable project instructions and referenced files/interfaces needed to check consequential assumptions. Load architecture documents selectively. Missing optional documentation is not itself a failure; a missing requirement needed to decide feasibility is a gap.
 
 Review only. Do not rewrite the plan, implement fixes, or perform external writes. Authorized local checks may create disposable output. Follow explicit model/effort routing; consequential architecture, security, authority, data-loss, or irreversible decisions require Astra acceptance. If delegation is unavailable or unauthorized, review inline and state that this is not independent review.
+
+Use the caller's original task or explicitly agreed goals to test the plan. Several plausible plan files require the caller's selection. For absent inputs name `NOT FOUND: plan` or `NOT FOUND: goals` and mark affected checks UNVERIFIED. On a recheck identify a deleted or weakened blocker as CRITERION CHANGED, retaining its prior ID until the contract owner accepts the revision. Treat an unknown goal-critical feasibility check as blocking.
 
 ## Check what determines feasibility
 

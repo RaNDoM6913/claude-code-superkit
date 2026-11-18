@@ -2,7 +2,7 @@
 name: scaffold-endpoint
 description: Implement or scaffold a requested API endpoint using verified local architecture and an explicit request, response, error, and authorization contract. Use for endpoint work, not an unrelated framework rewrite.
 user-invocable: false
-tokens: 1682
+tokens: 1996
 ---
 
 # Scaffold Endpoint
@@ -18,6 +18,10 @@ Locate the actual route registration, handlers, schemas/DTOs, middleware, domain
 Before creating files or registering a route, establish whether the task adds a new endpoint or changes an existing one. Inspect target paths and the composed method/path/group identity for existing definitions. Resolve unintended overwrite, duplicate or shadowing conflicts against the actual router contract before writing; an explicitly authorized modification of that endpoint is not itself a collision blocker.
 
 Establish the method/path, path/query/body shape, validation, response shape/statuses, error cases, authn/authz and resource ownership, business effect, and persistence needs. Use explicit task requirements and verified project conventions; ask a focused question when an unresolved contract changes behavior or access. Do not guess privileged access, destructive semantics, or user-visible business rules.
+
+For each authorized tool run that could write, compare repository-root snapshots immediately before and after it, separately from intentional edits. Use the AGENTS.md side-effect procedure: `git status --short -uall`, tracked and untracked content fingerprints, and `--ignored=matching` plus targeted content checks for relevant ignored outputs. Record changes or `Side effects: not checked` with the reason if comparison is incomplete. Preserve unexpected writes for the owner.
+
+Compare verification against a pre-change baseline where it is available and relevant. Trace new errors in unchanged callers back to changed signatures. Check ambiguous routes using the router's actual method, normalized parameter names and precedence. For authorized checks prefer the project's installed local tools; Go uses `GOTOOLCHAIN=local GOPROXY=off GONOPROXY=none` and test compilation when a build omits test callers. Python syntax checks establish syntax only. For Cargo, verify the installed toolchain, disable auto-install and network, and use `--locked` only with a tracked lockfile. Report unavailable checks explicitly. Place a new handler alongside existing resource handlers if that is the actual ownership convention and existing behavior can be preserved.
 
 ## Implement within authority
 

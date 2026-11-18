@@ -2,7 +2,7 @@
 name: comment-rot-analyzer
 description: Review comments, docstrings, TODOs, and code references for verified contradictions with surrounding behavior. Preserve meaningful rationale and operational annotations.
 user-invocable: false
-tokens: 1745
+tokens: 1880
 ---
 
 # Comment Rot Analyzer
@@ -16,6 +16,8 @@ Read applicable `AGENTS.md` first and relevant commenting/tooling conventions. E
 Review only. Return proposed corrections; do not remove comments, alter code, resolve tickets, or post messages unless a distinct user request authorizes that action. Do not run external writes while checking a reference. Redact secrets/private data in examples and report excerpts.
 
 Honor explicit routing and applicable acceptance ownership. Disclose INDEPENDENT versus INLINE SELF-REVIEW and keep requested/configured model/effort separate from observed runtime values with evidence or UNVERIFIED. Missing runtime identity alone adds no new acceptance gate; required independence/Astra acceptance remains pending if unavailable.
+
+Attribute a change to the diff's actual left-side blob (including rename-from path, merge-base or specified parent). A truncated hunk or missing local object leaves attribution partial. Search ticket IDs literally and verify complete identifiers in commit subjects. Check whether apparent prose participates in doctests, rustdoc, Go example output, cgo, type declarations or runtime docstrings. Generated/ignored symbols and incomplete search output cannot prove a stale reference. Cite repeated false claims at each observed location.
 
 ## Verify the claim before calling it rot
 

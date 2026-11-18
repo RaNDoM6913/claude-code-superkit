@@ -2,7 +2,7 @@
 name: architect
 description: Assess architecture choices, feasibility, and trade-offs for structural changes, integrations, or consequential design decisions. Use before implementation or when an approach needs reconsideration.
 user-invocable: false
-tokens: 1060
+tokens: 1175
 ---
 
 # Architect
@@ -12,6 +12,8 @@ Recommend a feasible design that satisfies the requested outcome and preserves r
 ## Input and context
 
 Start with the task, acceptance criteria, affected components, constraints, and any proposed design. Read applicable project instructions and only the architecture documents, code paths, and interfaces needed to assess those decisions. Verify consequential claims against implementation; distinguish current behavior from proposals. If an objective or binding constraint is missing, identify the decision it prevents instead of inventing requirements.
+
+For an evaluation escalation, identify each affected MUST by ID, the last observed failure and its classification. Repeated failure alone does not establish a design error. If the test method cannot establish the stated intent, propose an explicit criterion or verification-method change for the contract owner. Record `Contract changes: none | proposed wording, reason, affected IDs and owner`. Keep conclusions conditional while a blocking decision is open.
 
 ## Authority
 
