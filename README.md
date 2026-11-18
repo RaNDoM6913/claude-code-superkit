@@ -18,45 +18,92 @@
 
 ---
 
-Battle-tested in a production app with 68+ endpoints and 50 database migrations. Features double-verification code review, 4-layer documentation enforcement, AgentShield security scanning, and [SkillsMP](https://skillsmp.com) marketplace integration.
+A production-tested toolkit that turns Claude Code into a disciplined engineering team: a 16-phase `/dev` orchestrator, reviewers whose findings are double-checked, documentation that cannot drift, and safety hooks on every edit. The same roles ship as native skills for Codex.
 
 <table>
 <tr>
-<td width="50%">
+<td width="50%" valign="top">
 
-### 🔍 Double-Verification Review
-Independent second agent re-checks every finding before it reaches you.
-`/review --comment` posts inline on GitHub PRs.
+### 🔍 Double-verified review
+A second agent re-checks every finding before it reaches you. `/review --comment` posts it on the PR.
 
 </td>
-<td width="50%">
+<td width="50%" valign="top">
 
-### 📄 4-Layer Doc Enforcement
-Rule + auto-commands + BLOCKING hook + Stop hook.
-Maps every changed file to its required arch doc — commit blocked if missing.
-*Example: edit `app/api/users.go` → commit blocked until `docs/architecture/api-reference.md` is staged.*
+### 📄 Docs that cannot drift
+Every changed file maps to its architecture doc. The commit is blocked until that doc is staged.
 
 </td>
 </tr>
 <tr>
-<td width="50%">
+<td width="50%" valign="top">
 
-### 🛡️ Security Scanning
-AgentShield (102 rules) + Red/Blue adversarial audit.
-`.claude/settings.json` guarded against CVE-2025-59536 hijacks. CI-ready via `/security-scan`.
+### 🛡️ Security built in
+AgentShield (102 rules), a red/blue adversarial audit and a guard against hijacked `.claude/settings.json` (CVE-2025-59536).
 
 </td>
-<td width="50%">
+<td width="50%" valign="top">
 
-### 🤖 GAN Adversarial Loop
-Optional three-agent harness: planner → generator → evaluator.
-Your feature is attacked against binary rubrics before it ships (Playwright required).
+### 🤝 Two harnesses, one kit
+56 Claude agents on Opus 5.5 and 83 native Codex skills on GPT-6.2 Astra, each layer checked by the other model family.
 
 </td>
 </tr>
 </table>
 
----
+## 🚀 Installation
+
+**Claude Code** (Node.js 18+, macOS / Linux / Windows), from your project:
+
+```bash
+npx claude-code-superkit@1.6.0
+```
+
+**Codex CLI only** — no Claude files are written:
+
+```bash
+npx claude-code-superkit@1.6.0 --codex-only
+```
+
+Then open Claude Code and run **`/superkit-init`**. It scans your code and writes a filled-in `CLAUDE.md`, architecture docs, project trees and rules with your real paths.
+
+<details>
+<summary><b>More install options</b> — clone, flags, CI, plugins, updating</summary>
+
+<br>
+
+**From a clone:**
+
+```bash
+git clone https://github.com/RaNDoM6913/claude-code-superkit
+cd claude-code-superkit
+bash setup.sh                                          # interactive
+bash setup.sh --stacks=go,typescript --profile=strict  # explicit
+bash setup.sh --defaults                               # non-interactive (CI)
+```
+
+**Plugins** (inside Claude Code): `/plugins` → superpowers, github, context7, code-review.
+
+**Existing `.claude/`?** Choose *Merge*. Your `settings.json` is kept and a timestamped backup is written before superkit adds its wiring.
+
+**Codex from a prompt:** tell Codex `Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md`.
+
+**Staying current:** a SessionStart hook updates unmodified superkit files and reports the ones you customized. Run `/superkit-evolve` to fix documentation drift.
+
+Release archives and checksums: [v1.6.0 on GitHub](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.6.0) · [npm](https://www.npmjs.com/package/claude-code-superkit/v/1.6.0) · [Detailed install guide](docs/INSTALL-CLAUDE-CODE.md)
+
+</details>
+
+### Which command do I use?
+
+| I want to… | Use |
+|------------|-----|
+| Ship a feature end to end | `/dev <task>` |
+| Review a PR or branch | `/review --comment` |
+| Fix a bug | `/workflow bugfix` |
+| Set up a new repo | `/superkit-init` |
+| Understand an unfamiliar codebase | `codebase-onboarding-engineer` agent |
+| Refresh docs after drift | `/superkit-evolve` |
 
 ## 🔄 How `/dev` Works
 
@@ -64,45 +111,23 @@ Your feature is attacked against binary rubrics before it ships (Playwright requ
   <img src="docs/assets/dev-flow.png" alt="/dev — 16-phase development orchestrator, phases 0–15: Planning (7 steps) → Execution (5 steps) → Quality (4 steps)" width="960">
 </p>
 
-The full path has **16 phases, numbered 0–15**, starting with **Read Docs** and ending with **Report**. Required phases depend on task complexity; see the [phase sequence and skip rules](docs/guide/08-orchestration.md#the-dev-pipeline-16-phases).
-
-**Example:** `/dev add rate limiting to login`
-1. Reads project context and relevant architecture docs, then assesses the task
-2. Plans the change, defines its sprint contract and validates the plan
-3. Implements, evaluates, verifies and tests the change
-4. goal-verifier checks the result against the original goal before code review
-5. Scope-selected reviewers run in parallel; complex tasks also pass the critic gate
-6. Updates documentation and reports outcomes, verification evidence and remaining work
+**16 phases, numbered 0–15**, from *Read Docs* to *Report*. Small tasks skip phases they don't need ([skip rules](docs/guide/08-orchestration.md#the-dev-pipeline-16-phases)).
 
 <details>
-<summary><strong>Claude prompt engineering</strong> — methodology and safeguards</summary>
+<summary><b>Example:</b> <code>/dev add rate limiting to login</code></summary>
 
-### Opus 5.5 agent rework and Fable second pass
+<br>
 
-All 56 Claude agents were **written by Opus 5.5 and reviewed and corrected by Fable 5.2 at `xhigh` effort**: Fable supplied the exact replacement text for every defect it found, and Opus applied it. Each agent got an independent read-only Fable review that checked its rules, output contract and examples against each other and its tool and platform facts against official docs, local `--help` output and throwaway fixtures; the fixes landed one agent per commit, with consumer commands and guides fixed in the same pass and anything outside an agent's file logged in the CHANGELOG. An A/B run showed `xhigh` finds about twice as many real defects as `medium`. Typical catches: side-effect checks that missed untracked files, commands that could download toolchains or packages, output lines the SubagentStop hook misread, and factual errors in framework, WCAG and SQL rules. Agents now declare an enforced `tools:` allowlist (Claude Code ignores `allowed-tools:` on subagents).
-
-### Claude prompt hardening (v1.5.0)
-
-The **v1.5.0 Claude-layer hardening** used Claude Fable 5 to engineer instructions for the Opus executor. Its 117 prompt surfaces (56 agents, 16 commands, 22 skills, 20 rules) went through a four-step pipeline — a 16-agent audit of every file, a written failure-mode playbook, a full rewrite, then independent adversarial verification where one model instance writes and a separate one attacks. That historical pass used ~200 subagents with 0 unresolved escalations, followed by a consistency sweep. The Claude-layer countermeasures include:
-
-| Opus failure mode | Countermeasure baked into every file |
-|-------------------|--------------------------------------|
-| Lost-in-the-middle | Hard Rules at the top + Recap at the bottom |
-| Premature "done" | Done-gates — generators verify artifacts on disk and run what they generate |
-| Invented APIs / files | Evidence Gates (findings only with `file:line` actually read; `NOT FOUND` over invention) + a real-API honesty pass |
-| Vague judgment calls | Decision tables with explicit defaults |
-| Vocabulary drift | One canonical severity / confidence / verdict enum set |
-| Fractional numbering | Linear phases / steps everywhere |
-
-Contracts instead of vibes — Opus executes best when every judgment call is a decision table and every output has an exact contract.
-
-All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review, like the earlier Claude Fable 5 hardening, apply to the Claude layer; GPT role sources and Codex configuration are maintained separately.
+1. Reads project context and the relevant architecture docs, then sizes the task
+2. Plans the change, writes its sprint contract and validates the plan
+3. Implements, evaluates, verifies and tests the change
+4. goal-verifier checks the result against the original goal
+5. Reviewers chosen for the changed files run in parallel; complex tasks also pass the critic gate
+6. Updates documentation and reports the outcome, the evidence and what is left
 
 </details>
 
 ## 📦 What's Inside
-
-**One kit, two harnesses** — Claude Code (Opus 5.5) and Codex CLI (current source defaults: GPT-6.2 Astra coordinator, GPT-6.1 Sol workers). v1.5.3 introduced standalone Codex installation with safe updates, Astra-authored GPT role sources, compatible workflows and two bounded native hook handlers. Native firing was exercised in a disposable POSIX/macOS fixture; broader workflow/model qualification remains separate.
 
 | Component | Count | What you get |
 |-----------|-------|--------------|
@@ -118,7 +143,9 @@ All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review
 | **Plugins** | 4 base + 3 optional | superpowers · github · context7 · code-review (+ code-simplifier · playwright · frontend-design) |
 
 <details>
-<summary><b>Full component list</b> — every agent, command, hook, rule, and skill by name</summary>
+<summary><b>Full component list</b> — every agent, command, hook, rule and skill by name</summary>
+
+<br>
 
 - **Core agents (31):** code-reviewer, security-scanner, silent-failure-hunter, comment-rot-analyzer, ai-slop-cleaner, database-reviewer, migration-reviewer, docs-reviewer, api-contract-sync, ui-reviewer, visual-reviewer, test-generator, e2e-test-generator, audit-backend, audit-frontend, audit-infra, health-checker, pre-deploy-validator, dependency-checker, debug-observer, tree-generator, scaffold-endpoint, architect, plan-checker, evaluator, goal-verifier, critic, minimal-change-engineer, reality-checker, codebase-onboarding-engineer, behavioral-nudge-engine
 - **Stack agents (19):** go-reviewer, go-error-reviewer, go-concurrency-reviewer, go-performance-reviewer, go-modernizer, go-observability-reviewer, ts-reviewer, py-reviewer, rs-reviewer, presentation-reviewer, r3f-scene-reviewer, ui-design-reviewer, frontend-perf-reviewer, ui-reviewer (umbrella), ui-typography-reviewer, ui-color-reviewer, ui-motion-reviewer, ui-interaction-reviewer, ui-design-critic
@@ -129,117 +156,55 @@ All Claude agents use the `opus` alias. The Opus 5.5 rework and Fable 5.2 review
 
 </details>
 
-## 🆕 What's New
-
-**v1.6.0 — Codex agent refresh by GPT-6.2 Astra and a cross-checked Claude layer** (see [CHANGELOG](CHANGELOG.md)):
-
-- 🤖 **Codex agent refresh (GPT-6.2 Astra, xhigh):** 53 native roles and the review, dev, test, lint and audit workflows carry the v1.5.4 Claude fixes (G10 record: 46 adopted, 7 kept); a shared side-effect procedure; local-only Go, Rust, Maven and Gradle commands. New installs select `gpt-6.2-astra / high`; existing Codex configs are preserved.
-- 🔍 **Models checking each other:** Astra cross-checked the Claude package and found 21 issues (0 critical). Opus fixed all of them and the orchestrator reviewed every diff.
-- 🛠️ **Installer merge keeps your settings:** "Merge — skip existing" used to overwrite `.claude/settings.json` (user hooks, permissions, env, plugins). It now merges into your file with a timestamped backup. The chosen `--profile` really applies through `env.CLAUDE_HOOK_PROFILE`, and `--stacks` / `--extras` names are validated.
-- 🪝 **Stack hooks fire on edits again:** Go, TypeScript, ruff, cargo and frontend hooks had been wired to the `Bash` matcher and never ran after Edit/Write. They are now in the Edit|Write group, and a merge re-run repairs existing installs.
-- 🔄 **Updater covers every package:** frontend-ui, frontend-3d and extras (including the red-blue scanner) now update under the pristine/preserve rule. The meta file is parsed rather than sourced. One ui-reviewer variant is kept and never downgraded.
-- 📏 **Rules really path-scoped:** 14 rules used `applyWhenPaths:`, which Claude Code ignores, so they loaded for every task. They now use `paths:`.
-- 🧭 **`/review`, `/dev`, `/lint`:**
-  - `/review` resolves its base and head per target. A PR review reads the PR itself, and an unresolvable target prints `REVIEW NOT RUN` instead of reporting a false clean.
-  - `/review` and `/dev` dispatch the specialists that reviewers name on `Specialist follow-up:` lines.
-  - `/lint` without `--fix` writes nothing.
-- 🧪 **Safer agents and corrected Go facts:**
-  - Go commands carry `GONOPROXY=none`, Rust runs as `RUSTUP_AUTO_INSTALL=0 cargo --offline`, and go-reviewer reports side effects.
-  - Eight Go reference errors are fixed: loopvar gating, `errors.As` with typed nil, `Unwrap` on `Join`, `%v` is not redaction, MVS, `go fix`, `b.Loop`.
-- ✅ **Verification:** 188 product tests, 16 core-hook suites, a 74-check updater suite, 79 mirror invariants and 28 stop-hook cases pass. Counts are unchanged.
-
-Previous releases: [CHANGELOG](CHANGELOG.md) · [v1.5.4](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.4) · [v1.5.3](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.3) · [v1.5.2](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.2) · [v1.5.1](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.1) · [v1.5.0](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.5.0)
-
-## 🚀 Installation
-
-### Claude Code (recommended)
-
-**1. Clone + install** (works on macOS, Linux, Windows with Node.js 18+):
-
-```bash
-git clone https://github.com/RaNDoM6913/claude-code-superkit
-cd claude-code-superkit
-bash setup.sh
-
-# With explicit options:
-bash setup.sh --stacks=go,typescript --profile=strict --codex
-
-# Non-interactive (CI/CD):
-bash setup.sh --defaults
-```
-
-`bash setup.sh` is an interactive Node.js installer that selects your stack, hook profile, and plugins. Zero dependencies beyond Node.js. See [detailed guide](docs/INSTALL-CLAUDE-CODE.md).
-
-**2. Open Claude Code, 3. install plugins, 4. run setup, 5. verify:**
-
-```bash
-# 2. Open Claude Code
-claude
-
-# 3. Install plugins
-/plugins
-# → install: superpowers, github, context7, code-review
-
-# 4. Run intelligent setup (auto-fills docs from your code!)
-/superkit-init
-
-# 5. Verify
-/review --full
-```
-
-> **Distribution:** v1.6.0 is available on [npm](https://www.npmjs.com/package/claude-code-superkit/v/1.6.0) and as [GitHub release archives](https://github.com/RaNDoM6913/claude-code-superkit/releases/tag/v1.6.0). From your target Git project, run `npx claude-code-superkit@1.6.0 --codex-only` for standalone Codex, or omit `--codex-only` for the Claude installer.
-
-**`/superkit-init`** scans your codebase and generates **filled** documentation — no more manual TODO filling:
-- `CLAUDE.md` — populated with your tech stack, commands, conventions
-- `docs/architecture/*.md` — generated from actual code analysis
-- `docs/trees/*.md` — project structure trees
-- `.claude/rules/` — configured with your real file paths
-
-Use `--non-interactive` for quick setup without checkpoints.
-
-> **Already set up?** Run `/superkit-evolve` anytime to detect and fix documentation drift (stale migration counters, missing docs for new components, outdated trees).
-
-### Codex CLI
-
-Tell Codex:
-```
-Fetch and follow instructions from https://raw.githubusercontent.com/RaNDoM6913/claude-code-superkit/main/packages/codex/INSTALL.md
-```
-
-From your target project, run `bash /path/to/claude-code-superkit/setup.sh --codex-only` for a noninteractive Codex-only install/update. It never calls Claude or writes `.claude`. Use `--codex` for the existing combined Claude + Codex route. Defaults: **gpt-6.2-astra / high** coordinator and **gpt-6.1-sol / medium** subagents (v1.5.4 artifacts used the gpt-6-astra coordinator; v1.5.3 artifacts used gpt-5.6-sol); updates do not change existing consumer configs.
-
-### Which command do I use?
-
-| I want to… | Use |
-|------------|-----|
-| Ship a feature end-to-end | `/dev <task>` |
-| Review a PR / branch | `/review --comment` |
-| Fix a bug | `/workflow bugfix` |
-| Set up a new repo | `/superkit-init` |
-| Understand an unfamiliar codebase | dispatch `codebase-onboarding-engineer` |
-| Refresh docs after drift | `/superkit-evolve` |
-
 ## ⌨️ Key Commands
 
 | Command | What it does |
 |---------|-------------|
-| `/dev <task>` | 16-phase orchestrator: read-docs → understand → architect → pseudocode → plan → contract → validate → implement → evaluate → verify → test → goals → review → critic → docs → report |
-| `/review [--comment]` | Detect changes → dispatch reviewers → **double-verify** findings → unified report (optionally post GitHub PR comments) |
-| `/audit [--health]` | Parallel audit: up to 4 agents (frontend, backend, infra, security); `--health` = 9-check health dashboard (runs tests and a build) |
-| `/workflow <template>` | Predefined flows: `bugfix`, `hotfix`, `spike`, `refactor`, `dep-upgrade`, `security-audit` |
-| `/superkit-init` | Intelligent setup: scan codebase → generate **filled** docs → configure rules with real paths |
-| `/superkit-evolve` | Detect and fix documentation drift (stale counters, missing docs, outdated trees) |
-| `/pair` | AI pair programming — Driver, Navigator, TDD, Review, Debug modes |
-| `/security-scan` | AgentShield scan of `.claude/` configs (102 rules) |
+| `/dev <task>` | 16-phase orchestrator: read docs → plan → contract → implement → verify → test → review → docs → report |
+| `/review [--comment]` | Resolve the diff range → dispatch reviewers → **double-verify** findings → one report (optionally posted on the PR) |
+| `/audit [--health]` | Up to 4 parallel auditors (frontend, backend, infra, security); `--health` = 9-check dashboard |
+| `/workflow <template>` | `bugfix` · `hotfix` · `spike` · `refactor` · `dep-upgrade` · `security-audit` |
+| `/superkit-init` | Scan the codebase → generate **filled** docs → configure rules with real paths |
+| `/superkit-evolve` | Detect and fix documentation drift |
+| `/pair` | Pair programming: Driver, Navigator, TDD, Review, Debug |
+| `/security-scan` | AgentShield scan of `.claude/` (102 rules) |
 | `/commit` | Conventional commit with secret scanning |
 
 All 16 commands with flags and examples: **[Chapter 1](docs/guide/01-getting-started.md)**.
 
-## 🔧 Hook Profiles
+## 🆕 What's New in v1.6.0
 
-> ⚠️ **Critical:** Hook scripts MUST be tracked in git. If your `.gitignore` contains `.claude/scripts/`, remove that line immediately. Without tracked hooks, other developers get zero enforcement. Check with `git ls-files .claude/scripts/hooks/ | head` — it must list your hook files.
+> [!TIP]
+> **Codex agent refresh by GPT-6.2 Astra** — and the two model families now check each other. Astra cross-checked the Claude layer (21 findings, all fixed); Claude reviewed Astra's Codex work.
 
-The installer pins `CLAUDE_HOOK_PROFILE` in `.claude/settings.json` → `env` (from `--profile` or the prompt); edit it there to switch, since Claude Code applies settings `env` over a shell export in most sessions:
+- 🛠️ **Merge keeps your settings** — re-running the installer no longer overwrites `.claude/settings.json`; `--profile` really applies.
+- 🪝 **Stack hooks fire on edits again** — Go, TypeScript, ruff, cargo and frontend hooks were wired to `Bash` and never ran after Edit/Write.
+- 📏 **Rules are really path-scoped** — 14 rules used a key Claude Code ignores and loaded for every task.
+- 🧭 **Sharper commands** — `/review` never reports an empty diff as clean, `/lint` without `--fix` writes nothing.
+
+<details>
+<summary><b>Everything in v1.6.0</b></summary>
+
+<br>
+
+- 🤖 **Codex (GPT-6.2 Astra, xhigh):** 53 native roles and the review, dev, test, lint and audit workflows carry the v1.5.4 Claude fixes (G10: 46 adopted, 7 kept); a shared side-effect procedure; local-only Go, Rust, Maven and Gradle commands. New installs select `gpt-6.2-astra / high`; existing Codex configs are preserved.
+- 🔄 **Updater covers every package:** frontend-ui, frontend-3d and extras now update under the pristine/preserve rule; the meta file is parsed, not sourced; one ui-reviewer variant, never downgraded.
+- 🧭 **`/review` and `/dev`** resolve base and head per target, read PRs from the PR, and dispatch the specialists reviewers name on `Specialist follow-up:` lines.
+- 🧪 **Safer agents:** `GONOPROXY=none` on Go commands, `RUSTUP_AUTO_INSTALL=0 cargo --offline`, go-reviewer reports side effects; eight Go reference facts corrected.
+- ✅ **Verification:** 188 product tests, 16 core-hook suites, a 74-check updater suite, 79 mirror invariants and 28 stop-hook cases pass.
+
+Full history: [CHANGELOG](CHANGELOG.md) · [all releases](https://github.com/RaNDoM6913/claude-code-superkit/releases)
+
+</details>
+
+## 📖 Reference
+
+<details>
+<summary><b>🔧 Hook profiles</b> — fast · standard · strict</summary>
+
+<br>
+
+The installer pins `CLAUDE_HOOK_PROFILE` in `.claude/settings.json` → `env`; edit it there to switch.
 
 | Profile | Behavior |
 |---------|----------|
@@ -247,60 +212,79 @@ The installer pins `CLAUDE_HOOK_PROFILE` in `.claude/settings.json` → `env` (f
 | `standard` (default) | All core hooks + stack formatters |
 | `strict` | Everything + go vet / golangci-lint / cargo check on every edit + stop verification |
 
-Disable specific hooks without editing `settings.json`: `CLAUDE_DISABLED_HOOKS=hook1,hook2`. Full env-var reference: **[Chapter 15](docs/guide/15-env-vars-and-hook-profiles.md)**.
+Disable single hooks with `CLAUDE_DISABLED_HOOKS=hook1,hook2`. Full reference: **[Chapter 15](docs/guide/15-env-vars-and-hook-profiles.md)**.
 
-## 🛡️ Security
+> ⚠️ **Hook scripts must be tracked in git.** If `.gitignore` lists `.claude/scripts/`, remove it — otherwise teammates get no enforcement. Check: `git ls-files .claude/scripts/hooks/ | head`.
 
-### Untrusted `.claude/settings.json` (CVE-2025-59536)
-
-`.claude/settings.json` tells Claude Code which hooks to run on every tool call. A malicious `settings.json` committed to an untrusted repo can register a PreToolUse hook that executes arbitrary code the moment you open the project — this is a real **RCE + API token exfiltration** vector, documented by [Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/).
-
-Superkit mitigates this with the `audit-settings-source.sh` hook wired to `SessionStart`. On every session it inspects `.claude/settings.json`'s git history:
-
-- If the file was modified in the last 7 days by an author whose email doesn't match your `git config user.email` → the hook prints a loud warning with the offending commit hashes and authors, and drops a marker `${TMPDIR:-/tmp}/claude-untrusted-settings-<session>` so downstream hooks can downgrade decisions.
-- Fails open (`exit 0`) everywhere — this is an alert, not a block.
-
-**Opt-out for known-good repos:** `export CLAUDE_DISABLE_SETTINGS_AUDIT=1`.
-
-**Before opening any untrusted project:** read the diff first (`git log -p .claude/settings.json`), or start Claude Code with `--no-hooks` until you've vetted the file.
-
-### Scanning `.claude/` for misconfigurations
-
-Scan your `.claude/` configurations for vulnerabilities with [AgentShield](https://github.com/affaan-m/agentshield):
-
-```bash
-npx ecc-agentshield scan          # Quick scan (102 rules)
-npx ecc-agentshield scan --fix    # Auto-fix safe issues
-```
-
-Or use the built-in command: `/security-scan`.
-
-CI integration included — see `.github/workflows/security.yml`.
-
-## 🎨 Frontend Packages
-
-Two self-contained sibling packages — install one or both during `bash setup.sh`. Both run entirely on auto-dispatch: rules load only when you edit matching files, so the kit stays weightless on backend work.
-
-### 🖌️ `frontend-ui` — 2D UI & polish
-
-Six reviewers (umbrella + typography / color / motion / interaction / design-critic), seven path-scoped rules, three advisory hooks, and the opt-in **impeccable-craft** shape-then-build skill. The stack that stops AI-reflex design: banned-font detection, OKLCH color discipline, Emil Kowalski's 4-question animation framework, an 11-item reflex audit with hard thresholds.
-
-**6 agents · 7 rules · 3 hooks · 1 skill** — full reference: [docs/FRONTEND-UI.md](docs/FRONTEND-UI.md) · [Chapter 14](docs/guide/14-frontend-ui.md) · Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill)
-
-### 🎬 `frontend-3d` — scroll-driven 3D & animation
-
-Four reviewers (GSAP ScrollTrigger presentations, R3F scenes, 3D UI design, frontend perf), six skills distilled from 12+ hours of real debug pain (texture color distortion, timeline compression, UV mismatches), four hooks, three rules, and `/capture-screen` for turning React components into 3D-model textures.
-
-**4 agents · 6 skills · 4 hooks · 3 rules · 1 command** — full reference: [docs/FRONTEND-3D.md](docs/FRONTEND-3D.md) · [Chapter 13](docs/guide/13-frontend-3d.md)
-
-## 📚 Documentation, Showcase & Ecosystem
-
-**Guide:** 15 chapters + 3 worked examples — from first install to writing your own agents, hooks, and orchestrators.
+</details>
 
 <details>
-<summary>📖 Documentation (15 chapters + 3 examples)</summary>
+<summary><b>🛡️ Security</b> — CVE-2025-59536 guard, AgentShield, red/blue audit</summary>
 
-### Guide
+<br>
+
+**Untrusted `.claude/settings.json`.** A malicious `settings.json` in a cloned repo can register a hook that runs code the moment you open it — a real RCE and token-exfiltration vector ([Check Point Research](https://research.checkpoint.com/2026/rce-and-api-token-exfiltration-through-claude-code-project-files-cve-2025-59536/)). The `audit-settings-source.sh` SessionStart hook warns loudly when the file was changed in the last 7 days by someone other than you. It is an alert, not a block; opt out per repo with `CLAUDE_DISABLE_SETTINGS_AUDIT=1`.
+
+> ⚠️ **Before opening an untrusted project,** read `git log -p .claude/settings.json` or start Claude Code with `--no-hooks`.
+
+**Scan `.claude/` for misconfigurations** with [AgentShield](https://github.com/affaan-m/agentshield) — `npx ecc-agentshield scan` (102 rules), or the built-in `/security-scan`. CI workflow: `.github/workflows/security.yml`. For an adversarial pass, install the `red-blue-auditor` extra.
+
+</details>
+
+<details>
+<summary><b>🎨 Frontend packages</b> — 2D UI polish and scroll-driven 3D</summary>
+
+<br>
+
+Two optional, self-contained packages. Their rules load only when you edit matching files, so backend work stays light.
+
+| Package | What it does | Contents |
+|---------|--------------|----------|
+| 🖌️ **frontend-ui** | Stops AI-reflex design: banned fonts, OKLCH color discipline, a 4-question animation test, an 11-item reflex audit | 6 agents · 7 rules · 3 hooks · 1 skill — [docs](docs/FRONTEND-UI.md) · [Chapter 14](docs/guide/14-frontend-ui.md) |
+| 🎬 **frontend-3d** | GSAP ScrollTrigger, R3F scenes, 3D UI and perf reviewers; skills from real debugging (color distortion, timeline compression, UV mismatches) | 4 agents · 6 skills · 4 hooks · 3 rules · 1 command — [docs](docs/FRONTEND-3D.md) · [Chapter 13](docs/guide/13-frontend-3d.md) |
+
+Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill)
+
+</details>
+
+<details>
+<summary><b>🤖 Codex CLI</b> — 83 native skills, safe updates, two hook handlers</summary>
+
+<br>
+
+| Feature | Claude Code | Codex CLI |
+|---------|:-:|:-:|
+| Model (current source) | Opus (per agent) | **gpt-6.2-astra / high** coordinator; **gpt-6.1-sol / medium** subagent default |
+| Agents / Skills | 56 agents | 83 skills in `packages/codex/skills/` (9 commands + 37 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 83) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
+| Commands | 16 (slash commands) | 9 (user-invocable skills) |
+| Hooks | 42 shipped (26 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + 2 internal + Stop | 2 native handlers in 1 script: destructive-Git check + tracked/staged whitespace Stop check; review/trust required |
+| Rules | 19 shipped (7 core + 2 stack + 3 frontend-3d + 7 frontend-ui) + 1 internal | 1 file (`packages/codex/rules/default.rules` — approval policy DSL) |
+| Subagent dispatch | Agent tool | spawn_agent |
+
+- **Install / update:** `npx claude-code-superkit@1.6.0 --codex-only` from your project. Re-runs update unmodified skills with backups and keep anything you customized.
+- **Safety:** the installer grants no hook trust; review the hook definition through `/hooks`. Handlers run no project scripts and contact no services. POSIX only.
+- **How the roles were made:** Astra-authored native instructions, compared against the Claude rework in records [G1](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) · [G2–G6](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) · [G7–G9](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) · [G10](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G10-2026-11-18.md).
+
+Full guide: [Codex installation](packages/codex/INSTALL.md) · [Chapter 10](docs/guide/10-codex-support.md)
+
+</details>
+
+<details>
+<summary><b>🧪 How the agents are built</b> — Opus writes, Fable reviews, Astra cross-checks</summary>
+
+<br>
+
+- **Written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh).** Every Claude agent got an independent read-only Fable review that checked its rules, output contract and examples against official docs, local `--help` output and throwaway fixtures; Opus applied Fable's exact fix text, one agent per commit.
+- **Cross-checked by GPT-6.2 Astra.** In v1.6.0 Astra audited the Claude layer ([crosscheck](docs/superpowers/migrations/astra-native/evidence/claude-crosscheck-2026-11-18.md)) and Claude reviewed Astra's Codex work.
+- **Contracts instead of vibes.** Hard Rules on top and a Recap at the bottom, done-gates that run what they generate, `file:line` evidence gates, decision tables with explicit defaults and one severity / confidence / verdict vocabulary.
+- **Enforced tool allowlists.** Agents declare `tools:`, so a reviewer cannot write files it was never meant to touch.
+
+</details>
+
+<details>
+<summary><b>📚 Guide, examples and showcase</b> — 15 chapters, 3 worked examples</summary>
+
+<br>
 
 | Chapter | Topic |
 |---------|-------|
@@ -310,93 +294,38 @@ Four reviewers (GSAP ScrollTrigger presentations, R3F scenes, 3D UI design, fron
 | [04 — Writing Commands](docs/guide/04-writing-commands.md) | Orchestrator pattern, agent dispatch |
 | [05 — Writing Hooks](docs/guide/05-writing-hooks.md) | Hook types, JSON protocol, profiles |
 | [06 — Writing Skills](docs/guide/06-writing-skills.md) | Knowledge skills, dynamic content |
-| [07 — Writing Rules](docs/guide/07-writing-rules.md) | Always-in-context enforcement |
+| [07 — Writing Rules](docs/guide/07-writing-rules.md) | Always-on and path-scoped rules |
 | [08 — Orchestration](docs/guide/08-orchestration.md) | Full pipeline: /dev → agents → report |
 | [09 — Advanced Patterns](docs/guide/09-advanced-patterns.md) | Profiles, session continuity, CI/CD |
 | [10 — Codex CLI Support](docs/guide/10-codex-support.md) | Codex integration, tool mapping, skill discovery |
 | [11 — Documentation Architecture](docs/guide/11-documentation-architecture.md) | Doc templates, tree generation, enforcement |
 | [12 — Security Scanning](docs/guide/12-security-scanning.md) | AgentShield, CI, Red Team/Blue Team |
 | [13 — Frontend 3D](docs/guide/13-frontend-3d.md) | GSAP, Three.js, R3F agents, hooks, skills, rules |
-| [14 — Frontend UI](docs/guide/14-frontend-ui.md) | Typography, color, motion, interaction reviewers, rules, hooks |
-| [15 — Env Vars & Hook Profiles](docs/guide/15-env-vars-and-hook-profiles.md) | `CLAUDE_HOOK_PROFILE`, `CLAUDE_DISABLED_HOOKS`, full env-var reference |
+| [14 — Frontend UI](docs/guide/14-frontend-ui.md) | Typography, color, motion, interaction reviewers |
+| [15 — Env Vars & Hook Profiles](docs/guide/15-env-vars-and-hook-profiles.md) | `CLAUDE_HOOK_PROFILE`, `CLAUDE_DISABLED_HOOKS`, env reference |
 
-### Examples
+**Examples:** [Agent from scratch](docs/examples/agent-from-scratch.md) (Dockerfile reviewer) · [Command orchestrator](docs/examples/command-orchestrator.md) (`/deploy` in 4 phases) · [Hook pipeline](docs/examples/hook-pipeline.md) (format + lint on every edit)
 
-| Example | What you build |
-|---------|---------------|
-| [Agent from Scratch](docs/examples/agent-from-scratch.md) | Dockerfile reviewer agent (10 checks) |
-| [Command Orchestrator](docs/examples/command-orchestrator.md) | /deploy command with 4 phases |
-| [Hook Pipeline](docs/examples/hook-pipeline.md) | Format + lint on every edit |
+**Showcase:** [`packages/showcase/`](packages/showcase/) — the `.claude/` setup of a real production social app: 28 agents, 17 commands, 13 hooks, 11 skills, 6 rules.
 
 </details>
-
-**Showcase:** [`packages/showcase/`](packages/showcase/) — a real production social app's `.claude/` setup: 28 agents, 17 commands, 13 hooks, 11 skills, 6 rules.
 
 <details>
-<summary>🤝 Codex CLI Support</summary>
+<summary><b>🧩 Superpowers and ecosystem</b></summary>
 
-superkit works with both **Claude Code** and **OpenAI Codex CLI**:
+<br>
 
-| Feature | Claude Code | Codex CLI |
-|---------|:-:|:-:|
-| Model (current source) | Opus (per agent) | **gpt-6.2-astra / high** coordinator; **gpt-6.1-sol / medium** subagent default |
-| Agents / Skills | 56 agents | 83 skills in `packages/codex/skills/` (9 commands + 37 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 83) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
-| Commands | 16 (slash commands) | 9 (user-invocable skills) |
-| Hooks | 42 shipped (26 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + 2 internal + Stop | 2 native handlers in 1 script: destructive-Git check + tracked/staged whitespace Stop check; review/trust required |
-| Rules | 19 shipped (7 core + 2 stack + 3 frontend-3d + 7 frontend-ui) + 1 internal | 1 file (`packages/codex/rules/default.rules` — approval policy DSL) |
-| Knowledge Skills | 11 + 6 frontend-3d + 1 frontend-ui + 1 extra | 3 (project-architecture, writing-agents, writing-commands) |
-| Session continuity | Yes (hooks) | — |
-| Subagent dispatch | Agent tool | spawn_agent |
+Superkit is **complementary** to [Superpowers](https://github.com/obra/superpowers): superkit is the infrastructure (agents, hooks, commands, review pipeline), superpowers is the process (TDD, debugging, brainstorming, verification). Install both.
 
-`bash /path/to/claude-code-superkit/setup.sh --codex-only` (run from your target project) installs 83 skills + `default.rules`, a hook script/merge template, and absent AGENTS.md + config.toml with Astra/Sol defaults. Skills remain in `.codex/skills` with discovery links in `.agents/skills`. Re-runs update pristine managed skills and hook assets with backups; customized content, existing active hooks/config/rules/instructions and discovery entries are preserved and conflicts reported. Stock v1.5.2 skills are recognized offline; `--codex` remains additive. Native GPT roles have Astra-authored instructions; `native-skills.txt` protects native roles, adapted workflows and changed support sources from Claude-agent conversion. Backend, data, delivery and language review instructions assess findings against actual framework, database, toolchain and rollout contracts, including Go error/concurrency ownership, modernization, performance and observability. UI reviewers distinguish source analysis, rendered observations and interaction evidence. Core UI, frontend-ui aliases and frontend-3d reviewers remain distinct, including scroll/scene lifecycle and measured frontend performance. Bot review and product-nudge design retain platform, user-preference and action-authority boundaries. The three GAN roles remain a separate optional package with explicit plan, implementation and evaluation handoffs. The [Codex-only delivery plan](docs/superpowers/plans/2026-10-09-gpt-agent-roadmap-1.5.3.md) tracks standalone installation, preservation, compatibility and release preparation. Configuration, source ownership, and repository checks do not establish live model quality or availability.
-
-The installer grants no project/hook trust. A new active `.codex/hooks.json` is created only when absent, config is absent or exactly stock, and managed hook assets have no conflicts; otherwise use `.codex/superkit-hooks.json` for manual merging. Inspect the referenced script and review the definition through `/hooks`; script updates need separate review because definition-hash trust does not fully attest script content.
-
-The Git check never grants permission, opaque commands remain unassessed, and Stop does not prove tests/builds or untracked behavior. Handlers run no project scripts, read no transcripts and contact no external services. POSIX shell/Git-root wiring is unqualified for Windows/cloud; native firing needs separate runtime evidence.
-
-The [G1 Codex role comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G1-2026-11-10.md) records focused updates for consequential false comment guarantees, silent-failure runtime traps, and optional Go analyzer diagnostics. Existing native report contracts and review authority remain in place; local runtime probes and source checks do not establish model quality. Counts and published artifacts are unchanged.
-
-The [continued Codex comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G2-G6-2026-11-10.md) covers all G2–G6 roles, including review, audit, readiness, planning, acceptance, testing and implementation support, preserving sufficient native roles unchanged and recording selective refinements, local evidence limits and caller compatibility. The owner-authorized new `red-blue-auditor` brings the current source catalog to 83 skills; published artifacts remain unchanged.
-
-The [next comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G7-G9-2026-11-15.md) covers G7–G9 UI, frontend/3D and optional GAN planning roles: focused source-backed refinements with sufficient native roles kept unchanged. Evidence remains source-scoped; catalog counts and published artifacts are unchanged.
-
-The [G10 comparison](docs/superpowers/migrations/astra-native/evidence/GPT-claude-parity-G10-2026-11-18.md) records which v1.5.4 changes carry into the native Codex roles and command skills. The [Claude crosscheck](docs/superpowers/migrations/astra-native/evidence/claude-crosscheck-2026-11-18.md) gives the evidence and proposed corrections for the Claude package.
-
-Stop enumerates Git config keys only and skips both diffs with UNVERIFIED if any clean/process filter is configured, including unused/global Git LFS drivers, to avoid running conversion programs. It captures no filter values or changes Git config; filter-free repositories retain the whitespace check and one continuation.
-
-See [Codex Installation Guide](packages/codex/INSTALL.md) for safe updates, backups, hook/trust limits, local package artifacts and manual setup.
-
-Codex architecture references distinguish unconfigured templates from source-backed project facts. Output guidance measures completeness against the authorized change and supports scoped patches, read-only reports, and explicit implementation or verification gaps.
-
-Codex reviewer/workflow authoring guides preserve the selected role's verdict and authority contract, tie checks to actual project evidence, and distinguish unavailable verification from passing checks. Examples illustrate applicable conditions rather than universal project requirements.
+Curated skills, MCP servers, design resources and language packs: **[docs/recommendations.md](docs/recommendations.md)**, including the [SkillsMP](https://skillsmp.com) marketplace searchable through the built-in `skillsmp-search` skill.
 
 </details>
-
-### ⚡ Superpowers plugin
-
-Superkit is **complementary** to [Superpowers](https://github.com/obra/superpowers): superkit = infrastructure (agents, hooks, commands, review pipeline), superpowers = process (TDD, debugging, brainstorming, verification). Install both.
-
-### 🧩 Ecosystem & companions
-
-Curated skills, MCP servers, design/asset resources, community repos, and language packs that pair well with Superkit live in **[docs/recommendations.md](docs/recommendations.md)** — including the [SkillsMP](https://skillsmp.com) 500K+ skills marketplace searchable via the built-in `skillsmp-search` skill.
-
-### 📎 More
-
-- **[Troubleshooting](TROUBLESHOOTING.md)** — common issues, platform-specific guidance, FAQ
-- **[Detailed install guide](docs/INSTALL-CLAUDE-CODE.md)** — step-by-step setup with prerequisites
-- **[Design & tool recommendations](docs/recommendations.md)** — App Store, 3D, and animation tools
-
-## 👥 Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to add new stacks, agents, and hooks.
-
-## 📄 License
-
-MIT
 
 ---
 
 <div align="center">
+
+[Contributing](CONTRIBUTING.md) · [Troubleshooting](TROUBLESHOOTING.md) · [Install guide](docs/INSTALL-CLAUDE-CODE.md) · MIT License
 
 Made with ❤️ for the Claude Code community
 

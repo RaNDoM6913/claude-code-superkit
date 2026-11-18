@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **README restructured below the header (owner-approved prototype):** the header, tagline, badges and navigation are unchanged. Visible now: a short intro, four feature cards, two one-line `npx` installs (Claude and Codex-only) with clone/flags/CI/plugins/updating collapsed, the command chooser, the `/dev` diagram, the component table, key commands and a short v1.6.0 summary. Hook profiles, security, frontend packages, Codex CLI (comparison table kept, the long prose condensed to three points and the G1–G10 links), how the agents are built, the guide/examples/showcase and the ecosystem are collapsible blocks under "📖 Reference". 403 → 332 lines; checked with the GitHub Markdown API, which renders alerts only outside `<details>`.
+
 - **README badges:** the Codex badge is back in the shared uppercase style (`CODEX` | `GPT-6.2 ASTRA (XHIGH)`, same font, spacing and padding as its neighbours) instead of the four-word lowercase label; the two badge rows now sit in one centered block with a line break instead of two paragraphs, removing the large gap between them.
 
 ## [1.6.0] — 2026-11-18
