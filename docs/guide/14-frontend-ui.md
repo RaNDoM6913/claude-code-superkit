@@ -21,7 +21,7 @@ The package ships **6 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every comp
 
 **The agents** form an umbrella + specialists pattern. `ui-reviewer` is the top-level umbrella that scans your diff, runs a reflex audit against the AI-slop list, and returns a routing table naming the specialists the caller should dispatch: `ui-typography-reviewer` for font-family or type-scale changes, `ui-color-reviewer` for palette work, `ui-motion-reviewer` for transitions and animations, `ui-interaction-reviewer` for buttons, modals, drawers, and forms, and `ui-design-critic` for gestalt-level critique ("does this feel designed, or does it feel generated?"). Each specialist has its own dispatch rules — you can also invoke them directly by asking about their domain, and the umbrella steps aside.
 
-**The rules** use `applyWhenPaths` scoping so they auto-load only when you are editing UI files. `frontend-design-aesthetics` is the principles umbrella; `typography-guidelines`, `color-and-contrast`, `spatial-and-layout`, `motion-and-animation`, and `interaction-polish` are deep specialist rules; `ui-anti-patterns` is the rejection list (reflex fonts, banned colors, banned layouts). When you edit a `.tsx` file, Claude silently receives the four or five rules relevant to your change — no manual prompting required.
+**The rules** use `paths` scoping so they auto-load only when you are editing UI files. `frontend-design-aesthetics` is the principles umbrella; `typography-guidelines`, `color-and-contrast`, `spatial-and-layout`, `motion-and-animation`, and `interaction-polish` are deep specialist rules; `ui-anti-patterns` is the rejection list (reflex fonts, banned colors, banned layouts). When you edit a `.tsx` file, Claude silently receives the four or five rules relevant to your change — no manual prompting required.
 
 **The hooks** run on `PostToolUse` and are advisory-only (never block). `ui-banned-fonts-check` flags reflex-list fonts the moment you write `font-family: Inter`. `ui-color-check` catches pure `#000`/`#fff`, purple-to-blue gradients, gradient text, and cyan-on-black. `ui-animation-easing-check` catches every `ease-in` (not `ease-in-out`) in a CSS `transition`/`animation` declaration, `transition: all`, and `scale(0)` entrances. Every hook has a `CLAUDE_DISABLE_*` opt-out environment variable for when you know better than the hook does.
 
@@ -98,7 +98,7 @@ As soon as the `Edit` tool completes, three things happen in sequence.
   See .claude/rules/color-and-contrast.md and ui-anti-patterns.md
 ```
 
-**Second**, because the file path matches `applyWhenPaths` globs, the `typography-guidelines`, `color-and-contrast`, and `ui-anti-patterns` rules are now loaded in Claude's context. Claude sees both the stderr warnings and the rule text simultaneously.
+**Second**, because the file path matches the rules' `paths` globs, the `typography-guidelines`, `color-and-contrast`, and `ui-anti-patterns` rules are now loaded in Claude's context. Claude sees both the stderr warnings and the rule text simultaneously.
 
 **Third**, if you ask "review this" or "polish this," the `ui-reviewer` umbrella auto-dispatches. It runs its reflex audit, sees the font + color hits, reports them itself (each a WARNING; three or more become one CRITICAL "AI-reflex aesthetic" finding) and routes `ui-typography-reviewer` and `ui-color-reviewer` in its `### Specialist routing` table; the main session dispatches them. Findings read `[SEVERITY/CONFIDENCE] file:line — description` with `Evidence:` / `Rule:` / `Fix:` lines:
 

@@ -42,7 +42,7 @@ documentation:
 
 Adaptations include: rephrasing for internal consistency with superkit
 conventions, merging with material from other sources, adding
-`applyWhenPaths` frontmatter for auto-loading, and removing the
+`paths` frontmatter for path-scoped loading, and removing the
 skill-specific `teach` / `craft` flow scaffolding.
 
 ### Full Apache-2.0 license text

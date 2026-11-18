@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **Rules now actually path-scoped (crosscheck B21, extended to every package):** Claude Code reads only `paths:` in rule frontmatter and ignores unknown keys, so all 14 path-scoped rules (`applyWhenPaths:`) were loaded for every task. The key is now `paths:` in the 7 frontend-ui rules, the 3 frontend-3d rules, core `security` and `frontend-aesthetics`, and both Go stack rules; globs are unchanged. Guide 07 now documents `paths:` (and that `alwaysApply` is only a Superkit marker), guide 14, `docs/FRONTEND-UI.md`, the frontend-ui README/NOTICE and CLAUDE.md follow. Live loading in a Claude session not yet observed.
+
 - **Codex docs follow-up to the G10 refresh (reviewed by Claude):** the shipped `packages/codex/AGENTS.md` template and `INSTALL.md` catalog paragraph no longer open with the attribution sentence (it belongs in the README/About, not in user projects); README and `INSTALL.md` now state that published v1.5.4 artifacts still select the `gpt-6-astra` coordinator and `gpt-6.2-astra` ships with the next release.
 
 - **Codex v1.5.4 parity:** development gates now carry the task, contract and prior verdict into retries. Phase 12 consumes the frontend umbrella’s specialist routes. Review maps ORM and API schemas to their owners, audit reconciles coverage with the returned checks, and local test/lint commands preserve runner flags and report missing tools. Native roles record verification gaps and check for side effects across dirty, untracked and relevant ignored files.

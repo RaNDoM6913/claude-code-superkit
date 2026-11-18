@@ -1,6 +1,6 @@
 ---
 alwaysApply: false
-applyWhenPaths:
+paths:
   - "**/*.tsx"
   - "**/*.jsx"
   - "**/*.vue"

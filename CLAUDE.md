@@ -57,7 +57,7 @@ packages/
     agents/                 # 6 agents (ui-reviewer umbrella + typography / color / motion / interaction / design-critic)
     hooks/                  # 3 hooks (ui-banned-fonts-check, ui-color-check, ui-animation-easing-check) + tests/
     skills/                 # 1 skill (impeccable-craft, opt-in shape-then-build flow)
-    rules/                  # 7 rules (frontend-design-aesthetics, typography, color, spatial, motion, interaction, anti-patterns) — all applyWhenPaths-scoped
+    rules/                  # 7 rules (frontend-design-aesthetics, typography, color, spatial, motion, interaction, anti-patterns) — all `paths`-scoped
     NOTICE.md               # Apache-2.0 attribution for pbakaus/impeccable material
     README.md               # Package documentation
   gan/                      # NEW v1.4.0 — adversarial verification harness (optional, Playwright required)

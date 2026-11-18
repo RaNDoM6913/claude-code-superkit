@@ -3,7 +3,7 @@ name: frontend-design-aesthetics
 description: "Top-level principles for producing distinctive, production-grade frontend UI. Points at deeper rules (typography, color, motion, etc.). Auto-loaded when editing UI files."
 tokens: 1355
 alwaysApply: false
-applyWhenPaths:
+paths:
   - "**/*.tsx"
   - "**/*.jsx"
   - "**/*.ts"

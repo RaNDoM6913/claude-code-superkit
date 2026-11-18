@@ -1,6 +1,6 @@
 ---
 alwaysApply: false
-applyWhenPaths:
+paths:
   - "**/components/3d/**"
   - "**/three/**"
   - "**/scene/**"

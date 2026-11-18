@@ -3,7 +3,7 @@ name: spatial-and-layout
 description: "Spacing, layout, grids, responsive design — 4pt scale, rhythm over uniformity, container queries for components, viewport queries for pages. Auto-loaded when editing UI files."
 tokens: 1717
 alwaysApply: false
-applyWhenPaths:
+paths:
   - "**/*.tsx"
   - "**/*.jsx"
   - "**/*.ts"

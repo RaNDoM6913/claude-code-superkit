@@ -37,7 +37,7 @@ Both `frontend-3d` and `frontend-ui` can be installed together -- `frontend-3d` 
 
 1. **Auto-dispatch, not slash-commands.** There is no `/impeccable audit` or `/ui check`. The 6 agents fire automatically based on file patterns and user intent ("audit", "review", "polish", "critique"). The umbrella `ui-reviewer` scopes the diff and recommends which specialists to run; the orchestrator dispatches them in parallel. Users never have to remember which reviewer to call.
 
-2. **Path-scoped rules.** Every rule uses `applyWhenPaths` scoped to UI files (`**/*.tsx`, `**/*.jsx`, `**/*.ts`, `**/*.css`, `**/*.scss`, `**/*.html`, `**/*.vue`, `**/tailwind.config.*`, `**/*.tokens.*`). Backend edits never trigger UI rule-loading; UI edits never miss them.
+2. **Path-scoped rules.** Every rule uses `paths` scoped to UI files (`**/*.tsx`, `**/*.jsx`, `**/*.ts`, `**/*.css`, `**/*.scss`, `**/*.html`, `**/*.vue`, `**/tailwind.config.*`, `**/*.tokens.*`). Backend edits never trigger UI rule-loading; UI edits never miss them.
 
 3. **Zero slash commands, one opt-in skill.** The auto-review flow is the default. A single opt-in skill (`impeccable-craft`) covers the other direction -- *building from scratch with maximum intentionality* -- and is invoked only when the user explicitly asks for "craft from scratch" or the impeccable methodology.
 
@@ -68,7 +68,7 @@ Every agent's Phase 0 reads `CLAUDE.md`, `docs/architecture/frontend-*.md`, and 
 
 ## Rules
 
-All 7 rules share the same `applyWhenPaths` scope (UI files only) and `alwaysApply: false`. They auto-load together when Claude edits any UI file.
+All 7 rules share the same `paths` scope (UI files only) and `alwaysApply: false`. They auto-load together when Claude edits any UI file.
 
 ### 1. `frontend-design-aesthetics.md` -- top-level principles
 
@@ -431,7 +431,7 @@ When `y`, the installer copies from `packages/frontend-ui/` to the project's `.c
 - `hooks/*.sh` → `.claude/scripts/hooks/` (with hook entries added to `.claude/settings.json` `PostToolUse` section)
 - `skills/impeccable-craft/` → `.claude/skills/`
 
-No framework-specific configuration is needed -- the hooks trigger on file extension, the rules trigger on `applyWhenPaths` globs.
+No framework-specific configuration is needed -- the hooks trigger on file extension, the rules trigger on `paths` globs.
 
 **Next.js:** Drop-in. Works against the `app/`, `components/`, `src/` conventions out of the box.
 

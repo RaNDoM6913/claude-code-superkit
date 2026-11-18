@@ -4,7 +4,7 @@ Rules are short Markdown files that are loaded into every Claude Code conversati
 
 ## Rule Format
 
-Rules live in `.claude/rules/` as `.md` files with a single frontmatter field:
+Rules live in `.claude/rules/` as `.md` files. Claude Code reads one frontmatter field, `paths`; other keys are ignored.
 
 ```yaml
 ---
@@ -12,7 +12,19 @@ alwaysApply: true
 ---
 ```
 
-The `alwaysApply: true` flag ensures the rule is injected into Claude's context at the start of every conversation.
+A rule without `paths` is loaded at the start of every conversation. Superkit keeps `alwaysApply: true` on these as a readable marker; Claude Code itself does not read it.
+
+To load a rule only when Claude works with matching files, list glob patterns under `paths`:
+
+```yaml
+---
+alwaysApply: false
+paths:
+  - "**/*.go"
+---
+```
+
+Use `paths`, not `applyWhenPaths` or `globs`: Claude Code ignores those keys, so such a rule silently loads for every task.
 
 ## The Cardinal Rule: Keep Rules Short
 
@@ -93,7 +105,7 @@ alwaysApply: true
 The shipped file also carries **Investigate Before Answering**, **Surgical Changes**, a **Solution Ladder** (not needed / YAGNI → reuse → stdlib → native platform → installed dependency, with a *new* dependency the last resort), and a canonical **YAGNI anti-pattern** list — all balanced by a safety counterweight: input validation, error handling, security, and accessibility are never simplified away, and anything explicitly requested is never dropped.
 
 ### security.md (29 lines)
-Covers SQL injection, XSS, secrets, auth, input validation, file uploads, CORS.
+Covers SQL injection, XSS, secrets, auth, input validation, file uploads, CORS. Path-scoped through `paths` to source files (Go, TS/JS, Python, Rust, Java, Kotlin, Ruby, SQL and similar).
 
 ### git-workflow.md (14 lines)
 Covers conventional commits, no --no-verify, no force push, branch naming.
@@ -108,7 +120,7 @@ Auto-triggers the full `/dev` orchestration (16 phases) for substantial tasks �
 Auto-triggers individual commands (`/review`, `/test`, `/lint`, `/audit --health`, `/security-scan`) when specific conditions are met — without the user explicitly calling them. Includes the **highest priority trigger**: documentation verification before every commit. Works with the `doc-check-on-commit` hook which BLOCKS commits if docs are missing.
 
 ### frontend-aesthetics.md (53 lines)
-The only path-scoped rule of the seven (`applyWhenPaths: **/*.tsx|jsx|vue|svelte|css|scss`) — loads only when frontend files are touched. Baseline design taste for projects without the full frontend-ui package; the dedicated frontend-ui rules supersede it when installed.
+Path-scoped (`paths: **/*.tsx|jsx|vue|svelte|css|scss`) — loads only when frontend files are touched. Baseline design taste for projects without the full frontend-ui package; the dedicated frontend-ui rules supersede it when installed.
 
 ## Full Example: "no-orm" Rule
 

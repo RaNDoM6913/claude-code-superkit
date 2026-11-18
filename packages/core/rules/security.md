@@ -1,6 +1,6 @@
 ---
 alwaysApply: false
-applyWhenPaths:
+paths:
   - "**/*.go"
   - "**/*.ts"
   - "**/*.tsx"
