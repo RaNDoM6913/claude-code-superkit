@@ -4,6 +4,8 @@ All notable changes to claude-code-superkit are documented here.
 
 ## [Unreleased]
 
+- **README badges:** the Codex badge is back in the shared uppercase style (`CODEX` | `GPT-6.2 ASTRA (XHIGH)`, same font, spacing and padding as its neighbours) instead of the four-word lowercase label; the two badge rows now sit in one centered block with a line break instead of two paragraphs, removing the large gap between them.
+
 ## [1.6.0] — 2026-11-18
 
 **Codex agent refresh by GPT-6.2 Astra (xhigh) and a cross-checked Claude layer.** Astra carried the v1.5.4 Claude fixes into 53 native Codex roles and the review, dev, test, lint and audit workflows (G10: 46 adopted, 7 kept), switched new Codex installs to `gpt-6.2-astra / high`, and cross-checked the Claude package: 21 findings, all fixed by Opus with every diff reviewed by the orchestrator. Highlights: installer merge no longer overwrites `.claude/settings.json`, stack hooks are wired to Edit|Write instead of Bash, the updater covers frontend packages and extras and no longer sources its meta file, `--profile` takes effect, 14 rules are really path-scoped through `paths:`, `/review` resolves its range and dispatches specialist follow-ups, `/lint` is check-only without `--fix`, and eight Go reference facts are corrected. 188 product tests, 16 core-hook suites, a 74-check updater suite and 79 mirror invariants pass; component counts are unchanged.
