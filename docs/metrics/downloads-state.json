@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
   "repository": "RaNDoM6913/claude-code-superkit",
-  "checked_on": "2026-11-18",
+  "checked_on": "2026-11-19",
   "checked_on_timezone": "Europe/Minsk",
   "daily_data_timezone": "UTC",
   "refresh_mode": "manual_on_user_request",
   "automatic_collection_configured": false,
   "npm": {
     "package": "claude-code-superkit",
-    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-17/claude-code-superkit",
+    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-18/claude-code-superkit",
     "latest_available_day_source": "https://api.npmjs.org/downloads/point/last-day/claude-code-superkit",
     "first_publication_date": "2026-10-16",
     "coverage_start": "2026-10-16",
-    "data_through": "2026-11-17",
-    "total_downloads": 670,
+    "data_through": "2026-11-18",
+    "total_downloads": 795,
     "unobserved_ranges": [],
     "daily_downloads": {
       "2026-10-16": 275,
@@ -48,21 +48,22 @@
       "2026-11-14": 11,
       "2026-11-15": 18,
       "2026-11-16": 12,
-      "2026-11-17": 183
+      "2026-11-17": 183,
+      "2026-11-18": 125
     }
   },
   "git": {
     "source": "https://api.github.com/repos/RaNDoM6913/claude-code-superkit/traffic/clones",
     "coverage_start": "2026-10-19",
-    "data_through": "2026-11-17",
+    "data_through": "2026-11-18",
     "history_before_coverage_start": "unavailable",
-    "total_recorded_clones": 1440,
+    "total_recorded_clones": 1533,
     "unobserved_ranges": [],
     "last_api_window": {
-      "start": "2026-11-04",
-      "end": "2026-11-17",
-      "total_clones": 1334,
-      "unique_cloners": 402
+      "start": "2026-11-05",
+      "end": "2026-11-18",
+      "total_clones": 1391,
+      "unique_cloners": 407
     },
     "daily_clones": {
       "2026-10-19": 7,
@@ -94,10 +95,11 @@
       "2026-11-14": 16,
       "2026-11-15": 24,
       "2026-11-16": 428,
-      "2026-11-17": 492
+      "2026-11-17": 492,
+      "2026-11-18": 93
     },
     "unique_cloners": {
-      "total": 537,
+      "total": 576,
       "method": "unique cloners of the first saved API window plus the sum of daily unique cloners for each later UTC date; people active on several periods are counted once per period, so this is an upper bound on distinct people",
       "base_period": {
         "start": "2026-10-19",
@@ -121,7 +123,8 @@
         "2026-11-14": 10,
         "2026-11-15": 14,
         "2026-11-16": 92,
-        "2026-11-17": 191
+        "2026-11-17": 191,
+        "2026-11-18": 39
       },
       "unobserved_daily_uniques": "Dates before 2026-11-02 were saved only as one window aggregate; daily uniques for them are unavailable."
     }
@@ -335,6 +338,28 @@
       "release_archives_previous": 14,
       "release_archives_total": 20,
       "notes": "Full npm history 2026-10-16..2026-11-17 re-compared with saved days; Git clones window 2026-11-04..2026-11-17 (top-level 1334 clones, 402 uniques) re-checked against saved days. New day 2026-11-17: npm 183, clones 492, uniques 191 (v1.5.4 release day). 2026-11-18 not saved (unfinished UTC day). Release archive snapshot replaced (zip/tgz only, SHA256SUMS excluded); it includes maintainer verification downloads."
+    },
+    {
+      "checked_on": "2026-11-19",
+      "kind": "incremental",
+      "previous_npm_total": 670,
+      "npm_total": 795,
+      "previous_git_total": 1440,
+      "git_total": 1533,
+      "previous_unique_total": 537,
+      "unique_total": 576,
+      "npm_data_through": "2026-11-18",
+      "git_data_through": "2026-11-18",
+      "new_dates": [
+        "2026-11-18"
+      ],
+      "npm_added": 125,
+      "git_added": 93,
+      "unique_added": 39,
+      "corrections_to_saved_days": [],
+      "release_archives_previous": 20,
+      "release_archives_total": 20,
+      "notes": "Full npm history 2026-10-16..2026-11-18 re-compared with saved days; Git clones window 2026-11-05..2026-11-18 (top-level 1391 clones, 407 uniques) re-checked against saved days. New day 2026-11-18: npm 125, clones 93, uniques 39. 2026-11-19 not saved (unfinished UTC day). Release archive counts unchanged (zip/tgz only, SHA256SUMS excluded)."
     }
   ]
 }
