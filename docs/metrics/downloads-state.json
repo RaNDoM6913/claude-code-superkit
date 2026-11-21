@@ -1,19 +1,34 @@
 {
   "schema_version": 1,
   "repository": "RaNDoM6913/claude-code-superkit",
-  "checked_on": "2026-11-19",
-  "checked_on_timezone": "Europe/Minsk",
+  "checked_on": "2026-11-21",
+  "checked_on_timezone": "Europe/Warsaw",
   "daily_data_timezone": "UTC",
-  "refresh_mode": "manual_on_user_request",
-  "automatic_collection_configured": false,
+  "refresh_mode": "scheduled_every_2_days_plus_manual_on_user_request",
+  "automatic_collection_configured": true,
+  "automation": {
+    "runner": "Claude desktop app scheduled task on the maintainer computer",
+    "schedule": "every 2 days, 10:30 local time",
+    "runs_only_while_app_open": true,
+    "method": "deterministic helper following docs/DOWNLOAD_STATS.md; GET requests to npm and GitHub only",
+    "stops_on": [
+      "saved value would go down",
+      "API error",
+      "layout not found",
+      "local branch not in sync with main",
+      "counter files already modified"
+    ],
+    "started": "2026-11-21",
+    "user_telemetry": false
+  },
   "npm": {
     "package": "claude-code-superkit",
-    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-18/claude-code-superkit",
+    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-20/claude-code-superkit",
     "latest_available_day_source": "https://api.npmjs.org/downloads/point/last-day/claude-code-superkit",
     "first_publication_date": "2026-10-16",
     "coverage_start": "2026-10-16",
-    "data_through": "2026-11-18",
-    "total_downloads": 795,
+    "data_through": "2026-11-20",
+    "total_downloads": 845,
     "unobserved_ranges": [],
     "daily_downloads": {
       "2026-10-16": 275,
@@ -49,21 +64,23 @@
       "2026-11-15": 18,
       "2026-11-16": 12,
       "2026-11-17": 183,
-      "2026-11-18": 125
+      "2026-11-18": 125,
+      "2026-11-19": 35,
+      "2026-11-20": 15
     }
   },
   "git": {
     "source": "https://api.github.com/repos/RaNDoM6913/claude-code-superkit/traffic/clones",
     "coverage_start": "2026-10-19",
-    "data_through": "2026-11-18",
+    "data_through": "2026-11-19",
     "history_before_coverage_start": "unavailable",
-    "total_recorded_clones": 1533,
+    "total_recorded_clones": 1621,
     "unobserved_ranges": [],
     "last_api_window": {
-      "start": "2026-11-05",
-      "end": "2026-11-18",
-      "total_clones": 1391,
-      "unique_cloners": 407
+      "start": "2026-11-06",
+      "end": "2026-11-19",
+      "total_clones": 1453,
+      "unique_cloners": 415
     },
     "daily_clones": {
       "2026-10-19": 7,
@@ -96,10 +113,11 @@
       "2026-11-15": 24,
       "2026-11-16": 428,
       "2026-11-17": 492,
-      "2026-11-18": 93
+      "2026-11-18": 93,
+      "2026-11-19": 88
     },
     "unique_cloners": {
-      "total": 576,
+      "total": 610,
       "method": "unique cloners of the first saved API window plus the sum of daily unique cloners for each later UTC date; people active on several periods are counted once per period, so this is an upper bound on distinct people",
       "base_period": {
         "start": "2026-10-19",
@@ -124,7 +142,8 @@
         "2026-11-15": 14,
         "2026-11-16": 92,
         "2026-11-17": 191,
-        "2026-11-18": 39
+        "2026-11-18": 39,
+        "2026-11-19": 34
       },
       "unobserved_daily_uniques": "Dates before 2026-11-02 were saved only as one window aggregate; daily uniques for them are unavailable."
     }
@@ -360,6 +379,29 @@
       "release_archives_previous": 20,
       "release_archives_total": 20,
       "notes": "Full npm history 2026-10-16..2026-11-18 re-compared with saved days; Git clones window 2026-11-05..2026-11-18 (top-level 1391 clones, 407 uniques) re-checked against saved days. New day 2026-11-18: npm 125, clones 93, uniques 39. 2026-11-19 not saved (unfinished UTC day). Release archive counts unchanged (zip/tgz only, SHA256SUMS excluded)."
+    },
+    {
+      "checked_on": "2026-11-21",
+      "kind": "incremental",
+      "previous_npm_total": 795,
+      "npm_total": 845,
+      "previous_git_total": 1533,
+      "git_total": 1621,
+      "previous_unique_total": 576,
+      "unique_total": 610,
+      "npm_data_through": "2026-11-20",
+      "git_data_through": "2026-11-19",
+      "new_dates": [
+        "2026-11-19",
+        "2026-11-20"
+      ],
+      "npm_added": 50,
+      "git_added": 88,
+      "unique_added": 34,
+      "corrections_to_saved_days": [],
+      "release_archives_previous": 20,
+      "release_archives_total": 20,
+      "notes": "Automated refresh (update_counters.py). Full npm history 2026-10-16..2026-11-20 re-compared; Git clones window re-checked; unfinished UTC day 2026-11-21 not saved."
     }
   ]
 }
