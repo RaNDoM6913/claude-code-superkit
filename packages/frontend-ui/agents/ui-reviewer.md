@@ -1,7 +1,7 @@
 ---
 name: ui-reviewer
 description: 'Frontend UI review umbrella for 2D DOM UI (React/Vue/Svelte, Tailwind/CSS/CSS-in-JS) — reflex audit, a11y semantics, state coverage, responsive layout; emits a specialist routing block for the caller and merges specialist reports it is given. Dispatch automatically when: user asks for "audit", "review", "polish", or "critique" AND active edits are in .tsx/.jsx/.ts/.css/.scss/.html/.vue/.svelte files; 3+ frontend file edits have been completed in one task; before a commit that stages 2+ .tsx/.jsx/.css files. Do NOT dispatch for: backend code (.go, .py, .rs, .java, .rb, .cs, .kt); 3D / WebGL / Three.js / React Three Fiber code (frontend-3d: ui-design-reviewer / r3f-scene-reviewer); test files (*.test.*, *.spec.*); non-token config files (.json, .yaml, .toml) unless they are design-token configs (tailwind.config.*, tokens.*, theme.*).'
-tokens: 4035
+tokens: 4060
 model: opus
 tools: Read, Grep, Glob, Bash
 ---
@@ -45,7 +45,7 @@ Grep kept files for each signal (case-insensitive); count only hits in changed h
 |---|---|
 | `ui-typography-reviewer` | change a font family, font loading, weight or type-scale token |
 | `ui-color-reviewer` | add or replace color values or tokens, theme or dark/light mode |
-| `ui-motion-reviewer` | add or modify a transition, keyframes, animation, spring or easing |
+| `ui-motion-reviewer` | add or modify a transition, keyframes, animation, spring or easing, hover motion, or a custom drag or swipe gesture |
 | `ui-interaction-reviewer` | change a button, dialog, drawer, popover, menu, tooltip, toast, tab, form control, focus/keyboard handling, loading/empty/error UI or microcopy |
 | `ui-edge-case-reviewer` | add or change how user, API, store or locale data is rendered (row, card, table, list, count, badge, avatar), or number, date, plural, initials or truncation logic |
 | `ui-design-critic` | critique or holistic review requested; a new page, landing section or component system; or 5+ UI files — never a bug fix or single component |
@@ -53,7 +53,7 @@ Grep kept files for each signal (case-insensitive); count only hits in changed h
 ```
 typography:  font-|fontFamily|fontSize|fontWeight|next/font|@fontsource|fonts\.googleapis|line-height|letter-spacing
 color:       #[0-9a-f]{3,8}\b|rgba?\(|hsla?\(|oklch\(|oklab\(|color-mix\(|light-dark\(|--color|\b(bg|text|border|ring|fill|stroke|from|via|to)-(black|white|[a-z]+-[0-9]{2,3})\b|-gradient\(|\bbg-(linear|radial|conic)\b|dark:|prefers-color-scheme|data-theme
-motion:      transition|@keyframes|animation|cubic-bezier|AnimatePresence|useSpring|motion\.|animate-|duration-
+motion:      transition|@keyframes|animation|cubic-bezier|AnimatePresence|useSpring|motion\.|animate-|duration-|:hover|\bhover:|pointer(down|move)|mousemove|drag
 interaction: <button|onClick|role=|Dialog|Modal|Drawer|Sheet|Popover|Tooltip|Toast|<form|<input|<select|focus|onKey|aria-|disabled
 edge-case:   \.map\(|v-for|\{#each|\.length\b|truncate|ellipsis|line-clamp|nowrap|Intl\.|toLocale|toFixed|plural|\bago\b|new Date\(|<img\b|avatar|charAt\(|\.slice\(|substring|\bt\(
 ```

@@ -104,6 +104,11 @@ Files in this package that draw on this source:
   rendered value, take limits from the schema, test plausible extremes rather
   than random strings, keep design decisions separate from breaks) from the
   `break-ui` skill.
+- `agents/ui-motion-reviewer.md`: the pointer and gesture checks (hover
+  motion limited to hover-capable pointers, hold-to-confirm press and release
+  timing, pointer capture, second-touch and flick handling in custom drags)
+  and the `@starting-style` note, from the `review-animations`, `gestures`
+  and `emil-design-eng` skills.
 
 All wording, structure, severity rules and examples are our own; no prose was
 copied. Unlike section 2 (an earlier repository without a license), this
