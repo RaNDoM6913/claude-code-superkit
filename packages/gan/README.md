@@ -27,7 +27,7 @@ NEEDS-ATTENTION goes back to `gan-generator` with the failure list. So does NEED
 - **gan-generator** implements the code AND the Playwright tests against
   the plan.
 - **gan-evaluator** runs Playwright, checks anti-slop, scores against
-  the rubric. Adversarial — never returns PASS without a green Playwright run it executed itself; any critical failure forces NEEDS-REMEDIATION. (A blocked
+  the rubric. Adversarial — never returns PASS without a green Playwright run it executed itself; any critical failure forces NEEDS-REMEDIATION, and a scope violation (a change outside the plan, a weakened test, softened worst-case data, an invented data limit) is never PASS. (A blocked
   run — environment broken, can't even execute — is surfaced separately
   as BLOCKED.)
 

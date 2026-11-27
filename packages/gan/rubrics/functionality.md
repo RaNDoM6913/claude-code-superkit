@@ -53,6 +53,8 @@ Apply the first matching row, top to bottom:
 
 With all 15 criteria applicable: PASS = 15, NEEDS-ATTENTION = 12–14, NEEDS-REMEDIATION ≤ 11.
 
+The Claude `gan-evaluator` agent also withholds PASS on any ✗ under its `Scope:` checks (its Step 6 Scope gate); X / N is unchanged.
+
 BLOCKED is never a score outcome. `gan-evaluator` reports BLOCKED separately, only when the evaluation itself could not run.
 
 ## Critical failures (override any score)
