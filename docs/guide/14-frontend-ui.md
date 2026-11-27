@@ -146,7 +146,7 @@ One more nuance: the umbrella marks a concern `covered inline` when it is trivia
 
 **Stage 3 — Implement.** Production code. Each interactive element runs through the Animation Decision Framework. Every button gets `:active`. Every focus state uses `:focus-visible`. Every modal has scroll-lock + focus trap. Spacing is varied deliberately (tight for related, generous for transitional). `prefers-reduced-motion` rule is included.
 
-**Stage 4 — Polish.** Dispatch every specialist in parallel: typography, color, motion, interaction, design critic. Fix every CRITICAL. Address every WARNING unless documented. SUGGESTIONs are judgment calls. End with a summary of what was built, what was iterated on, and what was deliberately NOT done.
+**Stage 4 — Polish.** Dispatch every specialist in parallel: typography, color, motion, interaction, design critic, plus the edge-case reviewer when the UI renders user, API or locale data. Fix every CRITICAL. Address every WARNING unless documented. SUGGESTIONs are judgment calls. End with a summary of what was built, what was iterated on, and what was deliberately NOT done.
 
 **When to trigger it:** a new product, a new landing page, a redesign from scratch, a green-field component library. Any moment when you want to slow down and commit to a direction before shipping.
 

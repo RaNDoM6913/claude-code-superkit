@@ -1,7 +1,7 @@
 ---
 name: impeccable-craft
 description: Opt-in shape-then-build flow for creating a UI from scratch — gather brand context, commit to an aesthetic direction, then run the 4-stage craft cycle (Shape → Refine → Implement → Polish); invoke only when explicitly asked to craft a UI from scratch or use the impeccable approach.
-tokens: 1839
+tokens: 1907
 user-invocable: true
 license: Apache-2.0 (based on portions of pbakaus/impeccable — see https://github.com/RaNDoM6913/claude-code-superkit/blob/main/packages/frontend-ui/NOTICE.md)
 ---
@@ -32,8 +32,9 @@ four stages ending in a full specialist review pass.
 
 - **NEVER skip Stage 1 (Shape).** Building without a written brief is
   how AI-slop happens; the brief takes 3–5 minutes and saves hours.
-- **NEVER skip Stage 4 (Polish).** All 5 specialist reviewers must run;
-  a "90% done" implementation ships defaults they would catch.
+- **NEVER skip Stage 4 (Polish).** All 5 specialist reviewers must run,
+  plus `ui-edge-case-reviewer` when the UI renders user, API or locale
+  data; a "90% done" implementation ships defaults they would catch.
 - **Two user check-ins, always:** after Stage 1 (confirm the brief
   before Stage 2) and at the end of Stage 3 (confirm before Stage 4).
 - **Review triage is fixed:** fix every CRITICAL; address every WARNING
@@ -139,7 +140,9 @@ Run every specialist review, in order:
 2. Dispatch `ui-color-reviewer` on the palette.
 3. Dispatch `ui-motion-reviewer` on transitions.
 4. Dispatch `ui-interaction-reviewer` on components.
-5. Dispatch `ui-design-critic` on the whole result.
+5. Dispatch `ui-edge-case-reviewer` on components that render user,
+   API or locale data; skip it for untranslated static copy.
+6. Dispatch `ui-design-critic` on the whole result.
 
 Triage findings per the Hard Rules: CRITICAL → fix; WARNING → address
 or document why not; SUGGESTION → apply only if <5 minutes and
@@ -164,7 +167,8 @@ At the end of Stage 4, emit exactly this summary:
 - [ ] Stage 1 brief written and confirmed by the user before Stage 2.
 - [ ] User confirmed the implementation at the end of Stage 3.
 - [ ] All 5 specialists dispatched (typography, color, motion,
-      interaction, design-critic).
+      interaction, design-critic), plus edge-case where the UI renders
+      user, API or locale data.
 - [ ] Every CRITICAL fixed; every WARNING addressed or its skip reason
       documented.
 - [ ] Stage 1 brief saved to auto-memory as `project_brand_context.md`.

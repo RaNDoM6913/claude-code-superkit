@@ -403,13 +403,14 @@ Production code with attention to:
 
 ### Stage 4 -- Polish
 
-Recommend the 5 specialists; the orchestrator dispatches them in parallel on the first implementation:
+Recommend the 5 specialists, plus `ui-edge-case-reviewer` when the UI renders data; the orchestrator dispatches them in parallel on the first implementation:
 
 1. `ui-typography-reviewer` on type system.
 2. `ui-color-reviewer` on palette.
 3. `ui-motion-reviewer` on transitions.
 4. `ui-interaction-reviewer` on components.
-5. `ui-design-critic` on the whole result.
+5. `ui-edge-case-reviewer` on components that render user, API or locale data (skipped for untranslated static copy).
+6. `ui-design-critic` on the whole result.
 
 Fix every CRITICAL. Address every WARNING unless documented. SUGGESTIONs are judgment calls.
 
