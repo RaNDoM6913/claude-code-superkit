@@ -19,7 +19,7 @@ If you are building a scroll-driven 3D product showcase, see Chapter 13 (Fronten
 
 The package ships **7 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every component is designed around auto-dispatch — you almost never call these agents by name.
 
-**The agents** form an umbrella + specialists pattern. `ui-reviewer` is the top-level umbrella that scans your diff, runs a reflex audit against the AI-slop list, and returns a routing table naming the specialists the caller should dispatch: `ui-typography-reviewer` for font-family or type-scale changes, `ui-color-reviewer` for palette work, `ui-motion-reviewer` for transitions and animations, `ui-interaction-reviewer` for buttons, modals, drawers, and forms, and `ui-design-critic` for gestalt-level critique ("does this feel designed, or does it feel generated?"). Each specialist has its own dispatch rules — you can also invoke them directly by asking about their domain, and the umbrella steps aside.
+**The agents** form an umbrella + specialists pattern. `ui-reviewer` is the top-level umbrella that scans your diff, runs a reflex audit against the AI-slop list, and returns a routing table naming the specialists the caller should dispatch: `ui-typography-reviewer` for font-family or type-scale changes, `ui-color-reviewer` for palette work, `ui-motion-reviewer` for transitions and animations, `ui-interaction-reviewer` for buttons, modals, drawers, and forms, `ui-edge-case-reviewer` for components that render user, API or locale data (long names, 0 and 1 counts, missing fields), and `ui-design-critic` for gestalt-level critique ("does this feel designed, or does it feel generated?"). Each specialist has its own dispatch rules — you can also invoke them directly by asking about their domain, and the umbrella steps aside.
 
 **The rules** use `paths` scoping so they auto-load only when you are editing UI files. `frontend-design-aesthetics` is the principles umbrella; `typography-guidelines`, `color-and-contrast`, `spatial-and-layout`, `motion-and-animation`, and `interaction-polish` are deep specialist rules; `ui-anti-patterns` is the rejection list (reflex fonts, banned colors, banned layouts). When you edit a `.tsx` file, Claude silently receives the four or five rules relevant to your change — no manual prompting required.
 
@@ -126,7 +126,7 @@ You never say "call `ui-color-reviewer`." You say "review this" or edit a file. 
 
 **The entry point is almost always `ui-reviewer`.** It dispatches when the user asks for `audit`, `review`, `polish`, or `critique` AND active edits are in `.tsx/.jsx/.ts/.css/.scss/.html/.vue` files, or when 3+ frontend file edits have completed in a single task. On backend files (`.go`, `.py`, `.rs`) it explicitly opts out — no double-review with the wrong specialist.
 
-Inside `ui-reviewer`, Phase 1 scopes the diff (`git diff HEAD`) and Phase 2 greps the changed hunks for per-concern signals: typography-touching (anything with `font-family`, `font-weight`, type-scale tokens), color-touching (palette files, new `oklch`/`hsl`/`#hex` values, `bg-*`/`text-*` Tailwind classes), motion-touching (anything importing `motion/react` or touching `transition`/`animation`), interaction-touching (buttons, modals, drawers, forms), layout-touching (grid, flex, spacing tokens).
+Inside `ui-reviewer`, Phase 1 scopes the diff (`git diff HEAD`) and Phase 2 greps the changed hunks for per-concern signals: typography-touching (anything with `font-family`, `font-weight`, type-scale tokens), color-touching (palette files, new `oklch`/`hsl`/`#hex` values, `bg-*`/`text-*` Tailwind classes), motion-touching (anything importing `motion/react` or touching `transition`/`animation`), interaction-touching (buttons, modals, drawers, forms), data-touching (lists, counts, truncation, dates, plurals, avatars).
 
 **If a concern is non-trivial,** `ui-reviewer` marks the specialist `route` with a `file:line → question` hand-off; it does not dispatch — the caller does. If you changed `font-family` in `Hero.tsx` and added a new type-scale step in `tokens.css`, that's the typography specialist. If you introduced a new `--brand-primary` token and swapped six `bg-slate-*` classes, that's the color specialist. The caller dispatches all routed specialists in one message — they don't wait on each other.
 
@@ -213,7 +213,7 @@ Every hook writes its opt-out instruction in the warning itself (`Opt out: expor
 ## Next steps
 
 - Full package reference: `packages/frontend-ui/README.md`
-- All 6 agent contracts: `packages/frontend-ui/agents/`
+- All 7 agent contracts: `packages/frontend-ui/agents/`
 - All 7 rule files: `packages/frontend-ui/rules/`
 - Hook sources (and their opt-out env vars): `packages/frontend-ui/hooks/`
 - The `impeccable-craft` skill: `packages/frontend-ui/skills/impeccable-craft/SKILL.md`
