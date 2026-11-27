@@ -113,6 +113,10 @@ Files in this package that draw on this source:
   zoom, viewport height units, safe areas, tap highlight versus press
   feedback, `touch-action` on gesture surfaces, text selection) from the
   `mobile-native` skill.
+- `agents/ui-typography-reviewer.md`: the measure and size-specific tracking
+  checks (a line-length cap judged wherever it is set, one tracking value
+  never spread across every size, faces that adjust spacing by optical size)
+  from `ui-cheatsheet.md` and the `apple-design` skill.
 
 All wording, structure, severity rules and examples are our own; no prose was
 copied. Unlike section 2 (an earlier repository without a license), this
