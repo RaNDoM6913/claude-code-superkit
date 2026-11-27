@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "repository": "RaNDoM6913/claude-code-superkit",
-  "checked_on": "2026-11-26",
+  "checked_on": "2026-11-27",
   "checked_on_timezone": "Europe/Warsaw",
   "daily_data_timezone": "UTC",
   "refresh_mode": "scheduled_every_2_days_plus_manual_on_user_request",
@@ -23,12 +23,12 @@
   },
   "npm": {
     "package": "claude-code-superkit",
-    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-24/claude-code-superkit",
+    "source": "https://api.npmjs.org/downloads/range/2026-10-16:2026-11-25/claude-code-superkit",
     "latest_available_day_source": "https://api.npmjs.org/downloads/point/last-day/claude-code-superkit",
     "first_publication_date": "2026-10-16",
     "coverage_start": "2026-10-16",
-    "data_through": "2026-11-24",
-    "total_downloads": 880,
+    "data_through": "2026-11-25",
+    "total_downloads": 887,
     "unobserved_ranges": [],
     "daily_downloads": {
       "2026-10-16": 275,
@@ -70,7 +70,8 @@
       "2026-11-21": 10,
       "2026-11-22": 11,
       "2026-11-23": 5,
-      "2026-11-24": 9
+      "2026-11-24": 9,
+      "2026-11-25": 7
     }
   },
   "git": {
@@ -531,6 +532,28 @@
       "release_archives_previous": 20,
       "release_archives_total": 20,
       "notes": "Automated refresh (update_counters.py). Full npm history 2026-10-16..2026-11-24 re-compared; Git clones window re-checked; unfinished UTC day 2026-11-26 not saved."
+    },
+    {
+      "checked_on": "2026-11-27",
+      "kind": "incremental",
+      "previous_npm_total": 880,
+      "npm_total": 887,
+      "previous_git_total": 1957,
+      "git_total": 1957,
+      "previous_unique_total": 735,
+      "unique_total": 735,
+      "npm_data_through": "2026-11-25",
+      "git_data_through": "2026-11-25",
+      "new_dates": [
+        "2026-11-25"
+      ],
+      "npm_added": 7,
+      "git_added": 0,
+      "unique_added": 0,
+      "corrections_to_saved_days": [],
+      "release_archives_previous": 20,
+      "release_archives_total": 20,
+      "notes": "Automated refresh (update_counters.py). Full npm history 2026-10-16..2026-11-25 re-compared; Git clones window re-checked; unfinished UTC day 2026-11-27 not saved."
     }
   ]
 }
