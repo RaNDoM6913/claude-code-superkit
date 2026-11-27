@@ -21,7 +21,9 @@ gan-planner → gan-generator → gan-evaluator
 NEEDS-ATTENTION goes back to `gan-generator` with the failure list. So does NEEDS-REMEDIATION when the plan is sound and the defect is in the code or tests; the evaluator's `Next:` line names the owner.
 
 - **gan-planner** writes a plan with falsifiable scenarios (happy + empty
-  + error + auth) and a rubric.
+  + error + auth) and a rubric. The Claude agent adds a worst-case data
+  scenario for values that come from users or data, with limits cited from
+  the project's schema or marked `NOT FOUND`.
 - **gan-generator** implements the code AND the Playwright tests against
   the plan.
 - **gan-evaluator** runs Playwright, checks anti-slop, scores against
@@ -229,5 +231,7 @@ Adapted from `affaan-m/everything-claude-code` GAN pattern. Our adaptation diffe
 - Explicit rubric files (ui-quality.md, functionality.md) instead of
   agent-internal scoring
 - Optional, manual install (Playwright dependency is heavy)
+- Worst-case data scenario in the Claude agents: ideas adapted from
+  `emilkowalski/skills` (MIT, Emil Kowalski)
 
 License: MIT (consistent with rest of the kit).
