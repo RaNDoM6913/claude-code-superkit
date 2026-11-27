@@ -103,12 +103,16 @@ Files in this package that draw on this source:
 - `agents/ui-edge-case-reviewer.md`: the worst-case data approach (map every
   rendered value, take limits from the schema, test plausible extremes rather
   than random strings, keep design decisions separate from breaks) from the
-  `break-ui` skill.
+  `break-ui` skill; the relative-date cutoff from `ui-cheatsheet.md`.
 - `agents/ui-motion-reviewer.md`: the pointer and gesture checks (hover
   motion limited to hover-capable pointers, hold-to-confirm press and release
   timing, pointer capture, second-touch and flick handling in custom drags)
   and the `@starting-style` note, from the `review-animations`, `gestures`
   and `emil-design-eng` skills.
+- `agents/ui-interaction-reviewer.md`: the touch and mobile-web checks (input
+  zoom, viewport height units, safe areas, tap highlight versus press
+  feedback, `touch-action` on gesture surfaces, text selection) from the
+  `mobile-native` skill.
 
 All wording, structure, severity rules and examples are our own; no prose was
 copied. Unlike section 2 (an earlier repository without a license), this
