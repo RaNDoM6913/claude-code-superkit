@@ -6,7 +6,7 @@ Complete catalog of all components in the `frontend-ui` package -- the 2D-design
 
 | Component | Count |
 |-----------|-------|
-| Agents | 6 |
+| Agents | 7 |
 | Rules | 7 |
 | Hooks | 3 |
 | Skills | 1 |
@@ -35,7 +35,7 @@ Both `frontend-3d` and `frontend-ui` can be installed together -- `frontend-3d` 
 
 ## Philosophy
 
-1. **Auto-dispatch, not slash-commands.** There is no `/impeccable audit` or `/ui check`. The 6 agents fire automatically based on file patterns and user intent ("audit", "review", "polish", "critique"). The umbrella `ui-reviewer` scopes the diff and recommends which specialists to run; the orchestrator dispatches them in parallel. Users never have to remember which reviewer to call.
+1. **Auto-dispatch, not slash-commands.** There is no `/impeccable audit` or `/ui check`. The 7 agents fire automatically based on file patterns and user intent ("audit", "review", "polish", "critique"). The umbrella `ui-reviewer` scopes the diff and recommends which specialists to run; the orchestrator dispatches them in parallel. Users never have to remember which reviewer to call.
 
 2. **Path-scoped rules.** Every rule uses `paths` scoped to UI files (`**/*.tsx`, `**/*.jsx`, `**/*.ts`, `**/*.css`, `**/*.scss`, `**/*.html`, `**/*.vue`, `**/tailwind.config.*`, `**/*.tokens.*`). Backend edits never trigger UI rule-loading; UI edits never miss them.
 
@@ -60,6 +60,7 @@ All agents use `model: opus`. Output follows the standard format: `[SEVERITY/CON
 | `ui-color-reviewer` | Palette / theme / color-token changed; dark/light theme introduced or modified; new `oklch/hsl/rgb/hex` values; user asks about "palette/colors/theme/contrast/accessibility/dark mode" | Backend; 3D; tests | OKLCH-first audit, `#000`/`#fff` ban (WARNING per hit, never CRITICAL), tinted neutrals, chroma-peak-in-middle, 60-30-10 weight, purple→blue / cyan-on-black / gradient text (WARNING per hit), WCAG contrast computed per theme from resolved values (APCA never hand-computed), focus-ring contrast ≥3:1, theme-by-use-context justification | -- (terminal specialist) |
 | `ui-motion-reviewer` | `transition` / `@keyframes` / `animation` / `useSpring` / `AnimatePresence` / `motion.*` block added or modified; new easing `cubic-bezier`; user asks about "animation/motion/transition/easing/duration/spring" | Backend; 3D (R3F scroll-driven 3D is owned by `frontend-3d`); tests | 4-question framework (should it / why / easing / duration), `ease-in` (WARNING, never CRITICAL), `transition: all`, `scale(0)` entry, bounce/elastic on UI, animating `width/height/top/left/margin`, `prefers-reduced-motion` gap, keyboard-action animation | -- (terminal specialist; output is the Before/After/Why table) |
 | `ui-interaction-reviewer` | Button/modal/drawer/dialog/sheet/popover/dropdown/tooltip/form/input/select/toast/tab/menu changed; focus states changed; loading/empty/error UI changed; microcopy changed | Backend; 3D; tests | `:active` on buttons, icon-only `aria-label` (CRITICAL), modal vs popover `transform-origin`, tinted modal overlay, body scroll-lock + scrollbar-padding, focus trap (CRITICAL), `:focus-visible` not `:focus`, inline form errors, verb-not-noun button labels, prescriptive empty states, optimistic UI | -- (terminal specialist) |
+| `ui-edge-case-reviewer` | A component rendering user, API or locale data (row, card, table, count, badge, avatar) added or changed; number / date / plural / initials / truncation logic changed; "stress-test / edge cases / worst case"; routed by `ui-reviewer` | Backend, 3D/WebGL, tests; untranslated static copy; type scale, motion, focus, contrast | Value map with limits from schema / DB / API types (or `NOT FOUND`); plausible worst cases per value: long, short and non-Latin text, 0 / 1 / huge counts and plurals, translations, empty and huge lists, dates, missing media and optional fields | Fix per break with `file:line`; truncate-vs-wrap style choices as Open Questions; render checks as `needs verification` |
 | `ui-design-critic` | "critique / design review / holistic review / aesthetic audit / impression / does this feel designed"; major new UI surface (page, landing section, component system); 5+ UI files changed | Bug fixes, single-component changes, tiny polish passes; backend; 3D; tests; technical-audit requests (use `ui-reviewer` instead) | Articulate aesthetic direction in ONE sentence; scaled 11-item reflex audit (0 hits = commitment, 5+ = generated); composition & rhythm, hierarchy, conceptual coherence, memorability | -- (gestalt-level; does not produce file:line findings -- narrative format) |
 
 Every agent's Phase 0 reads `CLAUDE.md`, `docs/architecture/frontend-*.md`, and `.claude/rules/*` before reviewing -- findings are citations back to specific rule sections, not edicts.

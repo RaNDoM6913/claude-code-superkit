@@ -1,7 +1,7 @@
 {
   "name": "claude-code-superkit",
   "version": "1.6.0",
-  "description": "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh); Codex agent refresh by GPT-6.2 Astra (xhigh).",
+  "description": "Production-tested agents (57), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh); Codex agent refresh by GPT-6.2 Astra (xhigh).",
   "type": "module",
   "bin": {
     "claude-code-superkit": "./bin/cli.js",

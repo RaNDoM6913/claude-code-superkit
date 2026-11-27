@@ -1,6 +1,6 @@
 # claude-code-superkit
 
-Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh); Codex agent refresh by GPT-6.2 Astra (xhigh).
+Production-tested agents (57), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh); Codex agent refresh by GPT-6.2 Astra (xhigh).
 
 ## Contributor Working Agreement
 
@@ -54,7 +54,7 @@ packages/
     commands/               # 1 command (capture-screen)
     README.md               # Package documentation
   frontend-ui/              # Self-contained Frontend 2D UI package (typography, color, motion, interaction)
-    agents/                 # 6 agents (ui-reviewer umbrella + typography / color / motion / interaction / design-critic)
+    agents/                 # 7 agents (ui-reviewer umbrella + typography / color / motion / interaction / edge-case / design-critic)
     hooks/                  # 3 hooks (ui-banned-fonts-check, ui-color-check, ui-animation-easing-check) + tests/
     skills/                 # 1 skill (impeccable-craft, opt-in shape-then-build flow)
     rules/                  # 7 rules (frontend-design-aesthetics, typography, color, spatial, motion, interaction, anti-patterns) — all `paths`-scoped
@@ -117,7 +117,7 @@ VERSION                     # current release version (keep in sync with package
 
 | Component | Core | Stack | Frontend-3D | Frontend-UI | GAN | Extras | Showcase | Codex |
 |-----------|------|-------|-------------|-------------|-----|--------|----------|-------|
-| Agents | 31 | 9 | 4 | 6 | 3 | 3 | 28 | — |
+| Agents | 31 | 9 | 4 | 7 | 3 | 3 | 28 | — |
 | Skills | 11 | — | 6 | 1 | 3 | 1 | 11 | 83 |
 | Commands | 15 | — | 1 | — | — | — | 17 | 9 |
 | Hooks shipped | 26 | 9 | 4 | 3 | — | — | 13 | 2 handlers / 1 script |
@@ -126,7 +126,7 @@ VERSION                     # current release version (keep in sync with package
 | Rules shipped | 7 | 2 | 3 | 7 | — | — | 6 | 1 file |
 | Rules internal | 1 | — | — | — | — | — | — | — |
 
-**Totals (shipped to users):** agents=56, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself. Codex separately installs 83 skills and 2 native hook handlers in 1 script; these are not added to the Claude totals.
+**Totals (shipped to users):** agents=57, commands=16, hooks=42, skills=22, rules=19. Plus 2 internal hooks + 1 internal rule that only run inside the superkit repo itself. Codex separately installs 83 skills and 2 native hook handlers in 1 script; these are not added to the Claude totals.
 
 ## Conventions
 
@@ -148,7 +148,7 @@ After ANY change to agents, commands, hooks, rules, skills, plugins, or setup.sh
 1. **README.md** — counts in "What's Inside" table, Codex comparison table, showcase description, badges
 2. **CHANGELOG.md** — add entry under `[Unreleased]` (or current version)
 3. **CLAUDE.md** (this file) — counts table, structure section
-4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (56), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh); Codex agent refresh by GPT-6.2 Astra (xhigh)." Keep Claude component counts separate from Codex skills/handlers and keep the Claude-layer credit as written by Opus 5.5 and reviewed and corrected by Fable 5.2 (never "written by Fable"). — THIS IS MANDATORY AND MUST NOT BE SKIPPED
+4. **GitHub About** — `gh repo edit --description` if ANY count changed. Format: "Production-tested agents (57), commands (16), hooks (42), skills (22), and rules (19) for Claude Code; 83 skills and 2 native hook handlers for Codex. Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh); Codex agent refresh by GPT-6.2 Astra (xhigh)." Keep Claude component counts separate from Codex skills/handlers and keep the Claude-layer credit as written by Opus 5.5 and reviewed and corrected by Fable 5.2 (never "written by Fable"). — THIS IS MANDATORY AND MUST NOT BE SKIPPED
 5. **GitHub Release** — `gh release edit` if release already exists for this version
 
 ### Tier 2 — Update when relevant:

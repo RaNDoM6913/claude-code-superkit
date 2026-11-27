@@ -87,6 +87,30 @@ incorporated directly.
 
 ---
 
+## 3. emilkowalski/skills (MIT License)
+
+**Source:** https://github.com/emilkowalski/skills (reviewed at commit 64eb3de)
+**Author:** Emil Kowalski
+**License:** MIT License
+
+**Copyright notice:**
+```
+Copyright (c) 2026 Emil Kowalski
+```
+
+Files in this package that draw on this source:
+
+- `agents/ui-edge-case-reviewer.md`: the worst-case data approach (map every
+  rendered value, take limits from the schema, test plausible extremes rather
+  than random strings, keep design decisions separate from breaks) from the
+  `break-ui` skill.
+
+All wording, structure, severity rules and examples are our own; no prose was
+copied. Unlike section 2 (an earlier repository without a license), this
+source is MIT-licensed, so material may be adapted with this attribution.
+
+---
+
 ## How to update this notice
 
 When adding material from a new source:

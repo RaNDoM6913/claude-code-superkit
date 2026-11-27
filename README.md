@@ -10,7 +10,7 @@
 <div align="center">
 
 [![GitHub stars](https://img.shields.io/github/stars/RaNDoM6913/claude-code-superkit?style=for-the-badge&logo=github&logoColor=white&labelColor=1e293b&color=007EC6)](https://github.com/RaNDoM6913/claude-code-superkit/stargazers) [![npm downloads 887, GitHub clones 1957, unique cloners 735; data through 2026-11-25](docs/assets/badge-downloads.svg)](docs/DOWNLOAD_STATS.md) [![MIT license](docs/assets/badge-license.svg)](LICENSE)<br>
-![56 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex agent refresh by GPT-6.2 Astra (xhigh)](docs/assets/badge-codex.svg)
+![57 agents running on Opus 5.5](docs/assets/badge-56_agents-opus.svg) ![Claude agents written by Opus 5.5, reviewed and corrected by Fable 5.2 (xhigh)](docs/assets/badge-claude-hardening.svg) ![Codex agent refresh by GPT-6.2 Astra (xhigh)](docs/assets/badge-codex.svg)
 
 [🚀 Quick Start](#-installation) · [🔄 Workflow](#-how-dev-works) · [⌨️ Commands](#%EF%B8%8F-key-commands) · [📖 Guide](docs/guide/) · [❓ Troubleshooting](TROUBLESHOOTING.md) · [📋 Changelog](CHANGELOG.md)
 
@@ -45,7 +45,7 @@ AgentShield (102 rules), a red/blue adversarial audit and a guard against hijack
 <td width="50%" valign="top">
 
 ### 🤝 Two harnesses, one kit
-56 Claude agents on Opus 5.5 and 83 native Codex skills on GPT-6.2 Astra, each layer checked by the other model family.
+57 Claude agents on Opus 5.5 and 83 native Codex skills on GPT-6.2 Astra, each layer checked by the other model family.
 
 </td>
 </tr>
@@ -240,7 +240,7 @@ Two optional, self-contained packages. Their rules load only when you edit match
 
 | Package | What it does | Contents |
 |---------|--------------|----------|
-| 🖌️ **frontend-ui** | Stops AI-reflex design: banned fonts, OKLCH color discipline, a 4-question animation test, an 11-item reflex audit | 6 agents · 7 rules · 3 hooks · 1 skill — [docs](docs/FRONTEND-UI.md) · [Chapter 14](docs/guide/14-frontend-ui.md) |
+| 🖌️ **frontend-ui** | Stops AI-reflex design: banned fonts, OKLCH color discipline, a 4-question animation test, an 11-item reflex audit | 7 agents · 7 rules · 3 hooks · 1 skill — [docs](docs/FRONTEND-UI.md) · [Chapter 14](docs/guide/14-frontend-ui.md) |
 | 🎬 **frontend-3d** | GSAP ScrollTrigger, R3F scenes, 3D UI and perf reviewers; skills from real debugging (color distortion, timeline compression, UV mismatches) | 4 agents · 6 skills · 4 hooks · 3 rules · 1 command — [docs](docs/FRONTEND-3D.md) · [Chapter 13](docs/guide/13-frontend-3d.md) |
 
 Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Emil Kowalski's skill](https://github.com/emilkowalski/skill)
@@ -255,7 +255,7 @@ Credits: [Impeccable](https://github.com/pbakaus/impeccable) (Apache-2.0) · [Em
 | Feature | Claude Code | Codex CLI |
 |---------|:-:|:-:|
 | Model (current source) | Opus (per agent) | **gpt-6.2-astra / high** coordinator; **gpt-6.1-sol / medium** subagent default |
-| Agents / Skills | 56 agents | 83 skills in `packages/codex/skills/` (9 commands + 37 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 83) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
+| Agents / Skills | 57 agents | 83 skills in `packages/codex/skills/` (9 commands + 37 agents + 9 stack + 10 frontend-3d + 7 frontend-ui + 5 go-knowledge + 6 TGApp = 83) + 3 GAN mirrors in `packages/gan/skills/` (optional install) |
 | Commands | 16 (slash commands) | 9 (user-invocable skills) |
 | Hooks | 42 shipped (26 core + 9 stack + 4 frontend-3d + 3 frontend-ui) + 2 internal + Stop | 2 native handlers in 1 script: destructive-Git check + tracked/staged whitespace Stop check; review/trust required |
 | Rules | 19 shipped (7 core + 2 stack + 3 frontend-3d + 7 frontend-ui) + 1 internal | 1 file (`packages/codex/rules/default.rules` — approval policy DSL) |

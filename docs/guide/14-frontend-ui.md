@@ -17,7 +17,7 @@ If you are building a scroll-driven 3D product showcase, see Chapter 13 (Fronten
 
 ## What `frontend-ui` does
 
-The package ships **6 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every component is designed around auto-dispatch — you almost never call these agents by name.
+The package ships **7 agents, 7 rules, 3 hooks, and 1 opt-in skill**. Every component is designed around auto-dispatch — you almost never call these agents by name.
 
 **The agents** form an umbrella + specialists pattern. `ui-reviewer` is the top-level umbrella that scans your diff, runs a reflex audit against the AI-slop list, and returns a routing table naming the specialists the caller should dispatch: `ui-typography-reviewer` for font-family or type-scale changes, `ui-color-reviewer` for palette work, `ui-motion-reviewer` for transitions and animations, `ui-interaction-reviewer` for buttons, modals, drawers, and forms, and `ui-design-critic` for gestalt-level critique ("does this feel designed, or does it feel generated?"). Each specialist has its own dispatch rules — you can also invoke them directly by asking about their domain, and the umbrella steps aside.
 
